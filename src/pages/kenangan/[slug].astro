@@ -1,0 +1,137 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const angkatan = await getCollection('kelas');
+  return angkatan.map((kelas) => ({
+    params: { slug: kelas.id },
+    props: { kelas },
+  }));
+}
+
+const { kelas } = Astro.props;
+const { tahunAjaran, namaKelas, siswa } = kelas.data;
+const { Content } = await render(kelas);
+---
+
+<BaseLayout
+  title={`${namaKelas} — ${tahunAjaran}`}
+  description={`Album kenangan kelas ${namaKelas}, tahun ajaran ${tahunAjaran}.`}
+  noindex
+>
+  <section class="container page-header">
+    <a href="/kenangan" class="back-link">&larr; Semua Angkatan</a>
+    <p class="eyebrow">{tahunAjaran}</p>
+    <h1>{namaKelas}</h1>
+    <div class="prose intro">
+      <Content />
+    </div>
+  </section>
+
+  <section class="container yearbook-grid">
+    {siswa.map((anak) => (
+      <figure class="yearbook-card">
+        <div class="photo-frame">
+          {anak.foto ? (
+            <img src={anak.foto} alt="" loading="lazy" />
+          ) : (
+            <div class="photo-placeholder" aria-hidden="true">{anak.nama.charAt(0)}</div>
+          )}
+        </div>
+        <figcaption>
+          <p class="nama">{anak.nama}</p>
+          {anak.quote && <p class="quote">&ldquo;{anak.quote}&rdquo;</p>}
+        </figcaption>
+      </figure>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .intro {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .yearbook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 1.75rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .yearbook-card {
+    margin: 0;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease;
+  }
+
+  .yearbook-card:hover {
+    transform: rotate(-1deg) translateY(-2px);
+  }
+
+  .photo-frame {
+    aspect-ratio: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--accent-soft);
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--accent);
+  }
+
+  .yearbook-card figcaption {
+    text-align: center;
+    padding-top: 0.75rem;
+  }
+
+  .nama {
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    margin: 0.25rem 0 0;
+  }
+</style>

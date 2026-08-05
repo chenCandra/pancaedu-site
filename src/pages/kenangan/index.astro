@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const angkatan = (await getCollection('kelas')).sort((a, b) =>
+  b.data.tahunAjaran.localeCompare(a.data.tahunAjaran)
+);
+---
+
+<BaseLayout
+  title="Kenangan Kelas Binaan"
+  description="Album pribadi kelas-kelas yang pernah saya ampu sebagai wali kelas."
+  noindex
+>
+  <section class="container page-header">
+    <p class="eyebrow">Halaman Pribadi — Tidak untuk pencarian publik</p>
+    <h1>Kenangan Kelas Binaan</h1>
+    <p class="page-lede">
+      Album kecil untuk anak-anak yang pernah saya dampingi sebagai wali kelas, per tahun
+      ajaran.
+    </p>
+  </section>
+
+  <section class="container angkatan-grid">
+    {angkatan.length > 0 ? (
+      angkatan.map((kelas) => (
+        <a href={`/kenangan/${kelas.id}`} class="angkatan-card card">
+          <span class="badge badge-gold">{kelas.data.tahunAjaran}</span>
+          <h2>{kelas.data.namaKelas}</h2>
+          <span class="angkatan-count">{kelas.data.siswa.length} siswa</span>
+        </a>
+      ))
+    ) : (
+      <p>Belum ada album kelas.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .angkatan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1.25rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .angkatan-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+  }
+
+  .angkatan-card h2 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .angkatan-count {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+</style>

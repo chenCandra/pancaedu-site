@@ -4,9 +4,10 @@ interface Props {
   description: string;
   image?: string;
   article?: boolean;
+  noindex?: boolean;
 }
 
-const { title, description, image, article = false } = Astro.props;
+const { title, description, image, article = false, noindex = false } = Astro.props;
 const siteName = 'PancaEdu';
 const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -16,6 +17,7 @@ const ogImage = new URL(image ?? '/og-default.png', Astro.site);
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <meta property="og:type" content={article ? 'article' : 'website'} />
 <meta property="og:site_name" content={siteName} />

@@ -17,4 +17,21 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const kelas = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/kelas' }),
+  schema: z.object({
+    tahunAjaran: z.string(), // mis. "2023/2024"
+    namaKelas: z.string(), // mis. "XI IPA 2"
+    siswa: z
+      .array(
+        z.object({
+          nama: z.string(), // saran: nama depan/inisial saja, bukan nama lengkap
+          foto: z.string().optional(),
+          quote: z.string().optional(),
+        })
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { blog, kelas };

@@ -11,9 +11,10 @@ interface Props {
   image?: string;
   article?: boolean;
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
 }
 
-const { title, description, image, article, jsonLd } = Astro.props;
+const { title, description, image, article, jsonLd, noindex } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,7 +23,7 @@ const { title, description, image, article, jsonLd } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <SEO title={title} description={description} image={image} article={article} />
+    <SEO title={title} description={description} image={image} article={article} noindex={noindex} />
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
