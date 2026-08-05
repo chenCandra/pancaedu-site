@@ -1,0 +1,35 @@
+---
+// Placeholder slot iklan. Setelah akun Google AdSense disetujui:
+// 1. Tempel script verifikasi AdSense sekali di BaseLayout.astro <head>.
+// 2. Ganti isi <div class="ad-slot"> di bawah dengan tag <ins class="adsbygoogle">
+//    sesuai kode unit iklan dari dashboard AdSense.
+interface Props {
+  label?: string;
+}
+
+const { label = 'Iklan' } = Astro.props;
+---
+
+<div class="ad-slot" data-ad-placeholder>
+  <span class="ad-slot-label">{label}</span>
+</div>
+
+<style>
+  .ad-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90px;
+    margin: 2rem 0;
+    border: 1px dashed var(--border);
+    border-radius: 0.75rem;
+    background-color: var(--surface);
+  }
+
+  .ad-slot-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latestPosts = allPosts.slice(0, 6);
+---
+
+<BaseLayout
+  title="PancaEdu"
+  description="Artikel dan materi pelajaran ditulis oleh seorang guru & mahasiswa pascasarjana — refleksi mengajar, bahan ajar, dan catatan belajar."
+>
+  <section class="hero container">
+    <p class="eyebrow">Belajar &amp; berbagi</p>
+    <h1>Catatan seorang guru yang masih terus belajar.</h1>
+    <p class="hero-lede">
+      PancaEdu adalah ruang menulis pribadi saya — artikel seputar pendidikan &amp; studi
+      pascasarjana, serta materi pelajaran yang saya susun untuk dipakai siapa saja secara
+      gratis.
+    </p>
+    <div class="hero-actions">
+      <a href="/artikel" class="btn btn-primary">Baca Artikel</a>
+      <a href="/materi" class="btn btn-ghost">Jelajahi Materi Pelajaran</a>
+    </div>
+  </section>
+
+  {latestPosts.length > 0 && (
+    <section class="container latest">
+      <h2>Terbaru</h2>
+      <div class="post-grid">
+        {latestPosts.map((post) => <PostCard post={post} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 4rem 3rem;
+    max-width: 42rem;
+  }
+
+  .hero-lede {
+    font-size: 1.125rem;
+    color: var(--ink-soft);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .latest {
+    padding-block: 2rem 4rem;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+</style>

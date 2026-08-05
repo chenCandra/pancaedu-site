@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Palet terang: kertas gading hangat + tinta + teal + emas */
+  --paper: #fbf7ef;
+  --surface: #ffffff;
+  --ink: #232120;
+  --ink-soft: #5c5650;
+  --accent: #1f5c4f;
+  --accent-soft: #e3efe9;
+  --accent-ink: #ffffff;
+  --gold: #c97f1f;
+  --gold-soft: #fbeeda;
+  --border: #e4ddd0;
+  --shadow: 0 1px 2px rgba(35, 33, 32, 0.04), 0 8px 24px -12px rgba(35, 33, 32, 0.12);
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --max-width: 72rem;
+  --measure: 38rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #17191a;
+    --surface: #202224;
+    --ink: #ede9e2;
+    --ink-soft: #a49d92;
+    --accent: #56b89f;
+    --accent-soft: #1d332c;
+    --accent-ink: #0c1513;
+    --gold: #e8ac54;
+    --gold-soft: #362a17;
+    --border: #2e3133;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #17191a;
+  --surface: #202224;
+  --ink: #ede9e2;
+  --ink-soft: #a49d92;
+  --accent: #56b89f;
+  --accent-soft: #1d332c;
+  --accent-ink: #0c1513;
+  --gold: #e8ac54;
+  --gold-soft: #362a17;
+  --border: #2e3133;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --paper: #fbf7ef;
+  --surface: #ffffff;
+  --ink: #232120;
+  --ink-soft: #5c5650;
+  --accent: #1f5c4f;
+  --accent-soft: #e3efe9;
+  --accent-ink: #ffffff;
+  --gold: #c97f1f;
+  --gold-soft: #fbeeda;
+  --border: #e4ddd0;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--ink);
+  text-wrap: balance;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 500;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--accent);
+}
+
+.container {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose :is(h2, h3) {
+  margin-top: 1.75em;
+}
+
+.prose img {
+  border-radius: 0.75rem;
+  margin: 1.5em 0;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badge-gold {
+  background-color: var(--gold-soft);
+  color: var(--gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .btn {
+    transition: none;
+  }
+}

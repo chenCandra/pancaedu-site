@@ -1,0 +1,54 @@
+<div id="cookie-consent" class="cookie-consent" hidden>
+  <p>
+    Situs ini menggunakan cookie untuk mengukur trafik dan menampilkan iklan yang relevan
+    (termasuk dari Google AdSense). Dengan melanjutkan, Anda menyetujui
+    <a href="/kebijakan-privasi">Kebijakan Privasi</a> kami.
+  </p>
+  <button type="button" id="cookie-consent-accept" class="btn btn-primary">Mengerti</button>
+</div>
+
+<style>
+  .cookie-consent {
+    position: fixed;
+    inset-inline: 1rem;
+    bottom: 1rem;
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: 1rem 1.25rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .cookie-consent p {
+    flex: 1 1 16rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  .cookie-consent a {
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const KEY = 'pancaedu_cookie_consent';
+  const banner = document.getElementById('cookie-consent');
+  const acceptBtn = document.getElementById('cookie-consent-accept');
+
+  if (banner && !localStorage.getItem(KEY)) {
+    banner.hidden = false;
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    localStorage.setItem(KEY, '1');
+    if (banner) banner.hidden = true;
+  });
+</script>

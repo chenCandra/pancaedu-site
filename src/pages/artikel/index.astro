@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = (
+  await getCollection('blog', ({ data }) => data.category === 'artikel' && !data.draft)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Artikel" description="Kumpulan artikel seputar pendidikan, refleksi mengajar, dan catatan studi pascasarjana.">
+  <section class="container page-header">
+    <p class="eyebrow">Artikel</p>
+    <h1>Tulisan &amp; Opini</h1>
+    <p class="page-lede">Refleksi mengajar, catatan studi, dan pemikiran seputar dunia pendidikan.</p>
+  </section>
+
+  <section class="container post-grid">
+    {posts.length > 0 ? (
+      posts.map((post) => <PostCard post={post} />)
+    ) : (
+      <p>Belum ada artikel yang diterbitkan.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    padding-block: 1rem 4rem;
+  }
+</style>

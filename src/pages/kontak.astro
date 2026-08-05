@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Kontak" description="Cara menghubungi penulis PancaEdu.">
+  <article class="container prose page">
+    <p class="eyebrow">Kontak</p>
+    <h1>Hubungi Saya</h1>
+    <p>
+      Punya pertanyaan, masukan, atau ingin berdiskusi soal salah satu tulisan/materi di sini?
+      Silakan kirim email langsung:
+    </p>
+    <p>
+      <a class="btn btn-primary" href="mailto:halo@pancaedu.tech">halo@pancaedu.tech</a>
+    </p>
+    <p class="note">
+      *Ganti alamat email ini dengan email aktif Anda sebelum situs dipublikasikan.
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 4rem;
+  }
+
+  .note {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+</style>

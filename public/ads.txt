@@ -1,0 +1,3 @@
+# TODO: setelah akun Google AdSense disetujui, ganti baris di bawah dengan baris
+# resmi yang diberikan di dashboard AdSense (Sites -> ads.txt), formatnya:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

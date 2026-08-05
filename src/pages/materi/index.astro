@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = (
+  await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] as string[];
+---
+
+<BaseLayout title="Materi Pelajaran" description="Bahan ajar per mata pelajaran, disusun untuk dipakai gratis oleh guru maupun murid.">
+  <section class="container page-header">
+    <p class="eyebrow">Materi Pelajaran</p>
+    <h1>Bahan Ajar</h1>
+    <p class="page-lede">Disusun dari pengalaman mengajar sehari-hari, gratis dipakai siapa saja.</p>
+  </section>
+
+  {mapelList.length > 0 && (
+    <nav class="container mapel-filter" aria-label="Filter mata pelajaran">
+      {mapelList.map((mapel) => (
+        <a href={`#${mapel.toLowerCase()}`} class="badge badge-gold">{mapel}</a>
+      ))}
+    </nav>
+  )}
+
+  <section class="container post-grid">
+    {posts.length > 0 ? (
+      posts.map((post) => <PostCard post={post} />)
+    ) : (
+      <p>Belum ada materi yang diterbitkan.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .mapel-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block: 0.5rem 1.5rem;
+  }
+
+  .mapel-filter a {
+    text-decoration: none;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    padding-block: 1rem 4rem;
+  }
+</style>

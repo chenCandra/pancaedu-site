@@ -1,0 +1,43 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <p>&copy; {year} PancaEdu. Ditulis &amp; dikelola mandiri.</p>
+    <nav aria-label="Navigasi footer">
+      <a href="/kebijakan-privasi">Kebijakan Privasi</a>
+      <a href="/kontak">Kontak</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+
+  .site-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    padding-block: 2rem;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  .site-footer-inner nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .site-footer-inner a {
+    color: var(--ink-soft);
+  }
+
+  .site-footer-inner a:hover {
+    color: var(--accent);
+  }
+</style>

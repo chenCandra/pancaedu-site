@@ -1,0 +1,107 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.category === 'artikel' && !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, coverImage, youtubeId } = post.data;
+const { Content } = await render(post);
+
+const formattedDate = pubDate.toLocaleDateString('id-ID', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@type': 'Person', name: 'PancaEdu' },
+};
+---
+
+<BaseLayout title={title} description={description} image={coverImage} article jsonLd={jsonLd}>
+  <article class="container post">
+    <p class="eyebrow">Artikel</p>
+    <h1>{title}</h1>
+    <p class="post-date">Dipublikasikan {formattedDate}</p>
+
+    {coverImage && <img src={coverImage} alt="" class="post-cover" />}
+
+    {youtubeId && (
+      <div class="video-embed">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+          title={title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <AdSlot label="Iklan" />
+
+    {tags.length > 0 && (
+      <ul class="tag-list">
+        {tags.map((tag: string) => <li class="badge">{tag}</li>)}
+      </ul>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .post-date {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .post-cover {
+    border-radius: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  .video-embed {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin-block: 1.5rem;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .video-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+</style>
