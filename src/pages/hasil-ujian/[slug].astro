@@ -1,0 +1,241 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const daftar = await getCollection('hasilUjian');
+  return daftar.map((item) => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { namaKelas, namaUjian, tahunAjaran, pinHash, mapel, siswa } = item.data;
+const { Content } = await render(item);
+
+// Data nilai dikirim ke browser sudah di-encode base64 supaya tidak langsung
+// terbaca dari "View Source" — tapi tetap bisa dibongkar orang yang cukup
+// niat buka DevTools. Ini gerbang untuk mencegah orang iseng, bukan proteksi
+// sungguhan (sudah didiskusikan & disetujui pemilik untuk kasus ini).
+const dataEncoded = Buffer.from(JSON.stringify({ mapel, siswa })).toString('base64');
+---
+
+<BaseLayout
+  title={`${namaKelas} — ${namaUjian}`}
+  description={`Pengumuman ${namaUjian} kelas ${namaKelas}, tahun ajaran ${tahunAjaran}.`}
+  noindex
+>
+  <section class="container page-header">
+    <a href="/hasil-ujian" class="back-link">&larr; Semua Pengumuman</a>
+    <p class="eyebrow">{tahunAjaran}</p>
+    <h1>{namaKelas} — {namaUjian}</h1>
+    <div class="prose intro">
+      <Content />
+    </div>
+  </section>
+
+  <section class="container gate-section" data-pin-hash={pinHash} data-payload={dataEncoded}>
+    <form class="pin-form card" data-pin-form>
+      <label for="pin">Kode PIN kelas</label>
+      <div class="pin-row">
+        <input
+          type="text"
+          id="pin"
+          name="pin"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Minta kode ini ke wali kelas"
+          required
+        />
+        <button type="submit" class="btn btn-primary">Buka Nilai</button>
+      </div>
+      <p class="pin-error" data-pin-error hidden>Kode PIN salah. Coba lagi.</p>
+    </form>
+
+    <div class="nilai-wrap" data-nilai-wrap hidden>
+      <div class="table-scroll">
+        <table class="nilai-table" data-nilai-table></table>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  function renderTable(table: HTMLTableElement, mapel: string[], siswa: { noAbsen: number; nilai: Record<string, number> }[]) {
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    headRow.innerHTML = `<th>No. Absen</th>${mapel.map((m) => `<th>${m}</th>`).join('')}`;
+    thead.appendChild(headRow);
+
+    const tbody = document.createElement('tbody');
+    for (const s of siswa.slice().sort((a, b) => a.noAbsen - b.noAbsen)) {
+      const row = document.createElement('tr');
+      const cells = [
+        `<td>${s.noAbsen}</td>`,
+        ...mapel.map((m) => `<td>${s.nilai[m] ?? '—'}</td>`),
+      ];
+      row.innerHTML = cells.join('');
+      tbody.appendChild(row);
+    }
+
+    table.replaceChildren(thead, tbody);
+  }
+
+  const section = document.querySelector<HTMLElement>('[data-pin-hash]');
+  const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
+  const nilaiWrap = document.querySelector<HTMLElement>('[data-nilai-wrap]');
+  const table = document.querySelector<HTMLTableElement>('[data-nilai-table]');
+
+  if (section && form && errorEl && nilaiWrap && table) {
+    const expectedHash = section.dataset.pinHash!;
+    const payload = section.dataset.payload!;
+    const sessionKey = `hasil-ujian:${expectedHash}`;
+
+    const reveal = () => {
+      const { mapel, siswa } = JSON.parse(atob(payload));
+      renderTable(table, mapel, siswa);
+      form.hidden = true;
+      nilaiWrap.hidden = false;
+    };
+
+    // Sengaja pakai sessionStorage (bukan localStorage): hilang saat tab
+    // ditutup, jadi tidak "login permanen" di perangkat bersama/sekolah.
+    if (sessionStorage.getItem(sessionKey) === '1') {
+      reveal();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('#pin')!;
+      const hash = await sha256Hex(input.value.trim());
+
+      if (hash === expectedHash) {
+        errorEl.hidden = true;
+        sessionStorage.setItem(sessionKey, '1');
+        reveal();
+      } else {
+        errorEl.hidden = false;
+        input.select();
+      }
+    });
+  }
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .intro {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .gate-section {
+    padding-block: 1rem 4rem;
+    max-width: 40rem;
+  }
+
+  .pin-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Wajib lebih spesifik dari .pin-form di atas, kalau tidak atribut hidden
+     (dipakai buat menyembunyikan form setelah PIN benar) ketiban `display: flex`
+     dan tidak pernah benar-benar hilang — bug yang sama pernah terjadi di
+     CookieConsent.astro. */
+  .pin-form[hidden] {
+    display: none;
+  }
+
+  .pin-form label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pin-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pin-row input {
+    flex: 1 1 12rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .pin-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .nilai-wrap {
+    margin-top: 1.5rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background-color: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .nilai-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .nilai-table th,
+  .nilai-table td {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .nilai-table thead th {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--ink-soft);
+    background-color: var(--accent-soft);
+  }
+
+  .nilai-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const daftar = (await getCollection('hasilUjian')).sort((a, b) =>
+  b.data.tahunAjaran.localeCompare(a.data.tahunAjaran)
+);
+---
+
+<BaseLayout
+  title="Hasil Ujian"
+  description="Pengumuman hasil ujian per kelas. Butuh kode PIN dari wali kelas untuk melihat nilai."
+  noindex
+>
+  <section class="container page-header">
+    <p class="eyebrow">Pengumuman</p>
+    <h1>Hasil Ujian</h1>
+    <p class="page-lede">
+      Pilih kelas & ujian, lalu masukkan kode PIN yang dibagikan wali kelas untuk melihat nilai.
+      Halaman ini tidak ditautkan di menu dan tidak diindeks mesin pencari — jangan disebarkan
+      di luar kelas.
+    </p>
+  </section>
+
+  <section class="container daftar-grid">
+    {daftar.length > 0 ? (
+      daftar.map((item) => (
+        <a href={`/hasil-ujian/${item.id}`} class="ujian-card card">
+          <span class="badge badge-gold">{item.data.tahunAjaran}</span>
+          <h2>{item.data.namaKelas}</h2>
+          <span class="ujian-nama">{item.data.namaUjian}</span>
+        </a>
+      ))
+    ) : (
+      <p>Belum ada pengumuman hasil ujian.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .daftar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1.25rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .ujian-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+  }
+
+  .ujian-card h2 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .ujian-nama {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+</style>
