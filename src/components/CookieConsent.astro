@@ -15,6 +15,9 @@
     z-index: 50;
     display: flex;
     flex-wrap: wrap;
+    /* [hidden] di bawah wajib lebih spesifik dari rule ini, kalau tidak atribut
+       hidden (dipakai buat sembunyikan setelah tombol "Mengerti" diklik) akan
+       ketiban `display: flex` di atas dan tidak pernah benar-benar hilang. */
     align-items: center;
     gap: 1rem;
     max-width: 40rem;
@@ -35,6 +38,10 @@
 
   .cookie-consent a {
     color: var(--accent);
+  }
+
+  .cookie-consent[hidden] {
+    display: none;
   }
 </style>
 
