@@ -3,6 +3,7 @@ title: "Hukum Newton tentang Gerak — Ringkasan & Contoh Soal"
 description: "Ringkasan tiga Hukum Newton lengkap dengan contoh soal dan pembahasan untuk kelas X."
 category: materi
 mapel: "Fisika"
+kelas: "X"
 pubDate: 2026-02-10
 tags: ["gerak", "mekanika", "kelas 10"]
 youtubeId: "dQw4w9WgXcQ"

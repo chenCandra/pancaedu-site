@@ -12,7 +12,8 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, mapel, pubDate, updatedDate, tags, coverImage, youtubeId } = post.data;
+const { title, description, mapel, kelas, pubDate, updatedDate, tags, coverImage, youtubeId, simulasi } =
+  post.data;
 const { Content } = await render(post);
 
 const formattedDate = pubDate.toLocaleDateString('id-ID', {
@@ -35,7 +36,9 @@ const jsonLd = {
 
 <BaseLayout title={title} description={description} image={coverImage} article jsonLd={jsonLd}>
   <article class="container post">
-    <p class="eyebrow">Materi Pelajaran{mapel ? ` — ${mapel}` : ''}</p>
+    <p class="eyebrow">
+      Materi Pelajaran{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
+    </p>
     <h1>{title}</h1>
     <p class="post-date">Dipublikasikan {formattedDate}</p>
 
@@ -56,6 +59,27 @@ const jsonLd = {
     <div class="prose">
       <Content />
     </div>
+
+    {simulasi && (
+      <section class="lab-maya">
+        <h2>🧪 Lab Maya: {simulasi.judul}</h2>
+        <div class="sim-embed" style={`--sim-height: ${simulasi.tinggi}px`}>
+          <iframe
+            src={simulasi.url}
+            title={simulasi.judul}
+            loading="lazy"
+            allow="fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <p class="sim-footer">
+          {simulasi.sumber && <span class="sim-credit">Sumber: {simulasi.sumber}</span>}
+          <a href={simulasi.url} target="_blank" rel="noopener noreferrer">
+            Buka di tab baru &rarr;
+          </a>
+        </p>
+      </section>
+    )}
 
     <AdSlot label="Iklan" />
 
@@ -95,6 +119,38 @@ const jsonLd = {
     width: 100%;
     height: 100%;
     border: 0;
+  }
+
+  .lab-maya {
+    margin-block: 2.5rem;
+  }
+
+  .lab-maya h2 {
+    font-size: 1.375rem;
+  }
+
+  .sim-embed {
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    height: var(--sim-height, 600px);
+  }
+
+  .sim-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .sim-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.6rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
   }
 
   .tag-list {

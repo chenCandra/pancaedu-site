@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, category, mapel, pubDate, coverImage } = post.data;
+const { title, description, category, mapel, kelas, pubDate, coverImage, simulasi } = post.data;
 const basePath = category === 'materi' ? '/materi' : '/artikel';
 const formattedDate = pubDate.toLocaleDateString('id-ID', {
   day: 'numeric',
@@ -15,13 +15,15 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
 });
 ---
 
-<a href={`${basePath}/${post.id}`} class="post-card card">
+<a href={`${basePath}/${post.id}`} class="post-card card" data-kelas={kelas} data-mapel={mapel}>
   {coverImage && <img src={coverImage} alt="" loading="lazy" />}
   <div class="post-card-body">
     <div class="post-card-meta">
       <span class:list={['badge', category === 'materi' && 'badge-gold']}>
         {category === 'materi' ? (mapel ?? 'Materi') : 'Artikel'}
       </span>
+      {category === 'materi' && kelas && <span class="badge">Kelas {kelas}</span>}
+      {simulasi && <span class="badge">🧪 Lab Maya</span>}
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
     </div>
     <h3>{title}</h3>
@@ -36,6 +38,14 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
     overflow: hidden;
     text-decoration: none;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  /* Wajib lebih spesifik dari .post-card di atas, kalau tidak atribut hidden
+     (dipakai filter kelas/mapel di materi/index.astro) ketiban `display: flex`
+     dan tidak pernah benar-benar hilang — bug berulang yang sama seperti di
+     CookieConsent.astro & halaman hasil-ujian. */
+  .post-card[hidden] {
+    display: none;
   }
 
   .post-card:hover {
@@ -56,6 +66,7 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
 
   .post-card-meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.6rem;
     font-size: 0.8125rem;

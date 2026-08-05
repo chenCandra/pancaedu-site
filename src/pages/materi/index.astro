@@ -7,6 +7,7 @@ const posts = (
   await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft)
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const kelasList = ['X', 'XI', 'XII'].filter((k) => posts.some((p) => p.data.kelas === k));
 const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] as string[];
 ---
 
@@ -17,22 +18,88 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
     <p class="page-lede">Disusun dari pengalaman mengajar sehari-hari, gratis dipakai siapa saja.</p>
   </section>
 
-  {mapelList.length > 0 && (
-    <nav class="container mapel-filter" aria-label="Filter mata pelajaran">
-      {mapelList.map((mapel) => (
-        <a href={`#${mapel.toLowerCase()}`} class="badge badge-gold">{mapel}</a>
-      ))}
-    </nav>
+  {(kelasList.length > 0 || mapelList.length > 0) && (
+    <div class="container filters" data-filters>
+      {kelasList.length > 0 && (
+        <div class="filter-group">
+          <span class="filter-label">Kelas</span>
+          <div class="filter-row" role="group" aria-label="Filter kelas">
+            <button type="button" class="filter-btn badge" data-filter-kelas="" aria-pressed="true">Semua</button>
+            {kelasList.map((k) => (
+              <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">{k}</button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {mapelList.length > 0 && (
+        <div class="filter-group">
+          <span class="filter-label">Mapel</span>
+          <div class="filter-row" role="group" aria-label="Filter mata pelajaran">
+            <button type="button" class="filter-btn badge badge-gold" data-filter-mapel="" aria-pressed="true">Semua</button>
+            {mapelList.map((mapel) => (
+              <button type="button" class="filter-btn badge badge-gold" data-filter-mapel={mapel} aria-pressed="false">{mapel}</button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   )}
 
-  <section class="container post-grid">
+  <section class="container post-grid" data-post-grid>
     {posts.length > 0 ? (
       posts.map((post) => <PostCard post={post} />)
     ) : (
       <p>Belum ada materi yang diterbitkan.</p>
     )}
   </section>
+
+  <p class="container empty-state" data-empty-state hidden>
+    Tidak ada materi yang cocok dengan filter ini.
+  </p>
 </BaseLayout>
+
+<script>
+  const filters = document.querySelector<HTMLElement>('[data-filters]');
+  const grid = document.querySelector<HTMLElement>('[data-post-grid]');
+  const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+
+  if (filters && grid) {
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('a.post-card'));
+    let activeKelas = '';
+    let activeMapel = '';
+
+    const applyFilter = () => {
+      let visibleCount = 0;
+      for (const card of cards) {
+        const matchesKelas = !activeKelas || card.dataset.kelas === activeKelas;
+        const matchesMapel = !activeMapel || card.dataset.mapel === activeMapel;
+        const visible = matchesKelas && matchesMapel;
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      }
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+    };
+
+    filters.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+      if (!btn) return;
+
+      if (btn.dataset.filterKelas !== undefined) {
+        activeKelas = btn.dataset.filterKelas;
+        for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        }
+      } else if (btn.dataset.filterMapel !== undefined) {
+        activeMapel = btn.dataset.filterMapel;
+        for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-mapel]')) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        }
+      }
+      applyFilter();
+    });
+  }
+</script>
 
 <style>
   .page-header {
@@ -45,21 +112,51 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
     font-size: 1.0625rem;
   }
 
-  .mapel-filter {
+  .filters {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.75rem;
     padding-block: 0.5rem 1.5rem;
   }
 
-  .mapel-filter a {
-    text-decoration: none;
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .filter-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    border-color: currentColor;
   }
 
   .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1.5rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .empty-state {
+    color: var(--ink-soft);
     padding-block: 1rem 4rem;
   }
 </style>

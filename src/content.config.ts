@@ -8,11 +8,25 @@ const blog = defineCollection({
     description: z.string(),
     category: z.enum(['artikel', 'materi']),
     mapel: z.string().optional(),
+    kelas: z.enum(['X', 'XI', 'XII']).optional(), // jenjang kelas, dipakai khusus untuk materi
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     coverImage: z.string().optional(),
     youtubeId: z.string().optional(),
+    // "Lab maya" — embed simulasi interaktif (PhET, GeoGebra, Wordwall,
+    // LearningApps, dll). Hanya isi dengan URL dari sumber tepercaya: field
+    // ini dirender langsung sebagai iframe tanpa sandbox, dan isinya cuma
+    // ditulis lewat file konten (bukan input publik), jadi bukan celah XSS —
+    // tapi tetap risiko kalau sumbernya sembarangan/berubah sewaktu-waktu.
+    simulasi: z
+      .object({
+        url: z.string().url(),
+        judul: z.string(), // dipakai sebagai title iframe (aksesibilitas) & label di atas embed
+        sumber: z.string().optional(), // mis. "PhET Interactive Simulations", ditampilkan sebagai kredit
+        tinggi: z.number().default(600), // px — kebanyakan simulasi tidak 16:9 seperti video
+      })
+      .optional(),
     draft: z.boolean().default(false),
   }),
 });
