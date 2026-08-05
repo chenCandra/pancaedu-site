@@ -1,0 +1,114 @@
+backend:
+  name: github
+  repo: chenCandra/pancaedu-site
+  branch: main
+
+# Sveltia CMS otomatis menawarkan "Work with Local Repository" (baca/tulis
+# langsung ke folder proyek lewat browser Chrome/Edge, pakai File System
+# Access API) tanpa konfigurasi tambahan — tidak perlu login GitHub dulu.
+# Login GitHub (backend di atas) baru dipakai kalau CMS diakses dari domain
+# production nanti — butuh OAuth app terpisah, belum di-setup di tahap ini.
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "artikel"
+    label: "Artikel"
+    label_singular: "Artikel"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    filter: { field: "category", value: "artikel" }
+    fields:
+      - { label: "Judul", name: title, widget: string }
+      - { label: "Deskripsi Singkat", name: description, widget: text }
+      - { label: "Kategori", name: category, widget: hidden, default: "artikel" }
+      - label: "Tanggal Terbit"
+        name: pubDate
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: "Tanggal Update"
+        name: updatedDate
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        required: false
+      - { label: "Tags", name: tags, widget: list, required: false }
+      - label: "Gambar Cover"
+        name: coverImage
+        widget: image
+        required: false
+        hint: "Dipakai sebagai gambar sampul kartu & Open Graph (preview saat dibagikan)."
+      - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
+      - { label: "Isi Artikel", name: body, widget: markdown }
+
+  - name: "materi"
+    label: "Materi Pelajaran"
+    label_singular: "Materi"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    filter: { field: "category", value: "materi" }
+    fields:
+      - { label: "Judul", name: title, widget: string }
+      - { label: "Deskripsi Singkat", name: description, widget: text }
+      - { label: "Kategori", name: category, widget: hidden, default: "materi" }
+      - label: "Kelas"
+        name: kelas
+        widget: select
+        options: ["X", "XI", "XII"]
+        required: false
+      - label: "Mata Pelajaran"
+        name: mapel
+        widget: string
+        required: false
+        hint: "mis. Fisika, Matematika, Bahasa Indonesia"
+      - label: "Tanggal Terbit"
+        name: pubDate
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: "Tanggal Update"
+        name: updatedDate
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        required: false
+      - { label: "Tags", name: tags, widget: list, required: false }
+      - label: "Gambar Cover"
+        name: coverImage
+        widget: image
+        required: false
+        hint: "Dipakai sebagai gambar sampul kartu & Open Graph (preview saat dibagikan)."
+      - label: "Video YouTube (ID saja)"
+        name: youtubeId
+        widget: string
+        required: false
+        hint: "Dari youtube.com/watch?v=dQw4w9WgXcQ, isi dQw4w9WgXcQ saja (bukan link lengkap)."
+      - name: "simulasi"
+        label: "Lab Maya (Simulasi Interaktif)"
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - label: "URL Simulasi"
+            name: url
+            widget: string
+            hint: "Link embed dari PhET/GeoGebra/dsb, atau URL app JS hasil generate AI yang sudah kamu hosting sendiri."
+          - { label: "Judul Simulasi", name: judul, widget: string }
+          - label: "Sumber"
+            name: sumber
+            widget: string
+            required: false
+            hint: "mis. PhET Interactive Simulations — ditampilkan sebagai kredit."
+          - label: "Tinggi Embed (px)"
+            name: tinggi
+            widget: number
+            default: 600
+            required: false
+      - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
+      - { label: "Isi Materi", name: body, widget: markdown }
