@@ -1,0 +1,158 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  mapel?: string;
+  kelas?: string;
+  hasLab?: boolean;
+}
+
+const { title, description, href, mapel, kelas, hasLab } = Astro.props;
+---
+
+<section class="section featured">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Materi Unggulan</p>
+    <a href={href} class="featured-card" data-reveal data-tilt>
+      <div class="featured-visual" aria-hidden="true">
+        <span class="featured-orb"></span>
+        <span class="featured-grid"></span>
+      </div>
+      <div class="featured-body">
+        <div class="featured-meta">
+          {kelas && <span class="chip">Kelas {kelas}</span>}
+          {mapel && <span class="chip">{mapel}</span>}
+          {hasLab && <span class="chip chip-accent">🧪 Lab Maya</span>}
+        </div>
+        <h2 class="featured-title">{title}</h2>
+        <p class="featured-desc">{description}</p>
+        <span class="featured-link">Buka materi <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .featured-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: stretch;
+    margin-top: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    text-decoration: none;
+    color: var(--ink);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  }
+
+  .featured-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+  }
+
+  .featured-visual {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(155deg, var(--surface-solid), var(--paper));
+    min-height: 16rem;
+  }
+
+  .featured-orb {
+    position: absolute;
+    width: 16rem;
+    height: 16rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    background: radial-gradient(circle, rgba(59, 111, 237, 0.35), transparent 70%);
+    filter: blur(40px);
+    transform: translate(-50%, -50%);
+    transition: transform 0.6s ease;
+  }
+
+  .featured-card:hover .featured-orb {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  .featured-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 75%);
+    opacity: 0.6;
+  }
+
+  .featured-body {
+    padding: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .featured-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+  }
+
+  .chip-accent {
+    color: var(--accent);
+    border-color: rgba(59, 111, 237, 0.3);
+  }
+
+  .featured-title {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+  }
+
+  .featured-desc {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    max-width: 32rem;
+  }
+
+  .featured-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-top: 0.5rem;
+  }
+
+  .featured-link span {
+    transition: transform 0.25s ease;
+  }
+
+  .featured-card:hover .featured-link span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 48rem) {
+    .featured-card {
+      grid-template-columns: 1fr;
+    }
+    .featured-visual {
+      min-height: 10rem;
+    }
+  }
+</style>

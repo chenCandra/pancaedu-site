@@ -2,6 +2,7 @@
 title: "Refleksi Setahun Menjadi Wali Kelas"
 description: "Catatan pribadi soal suka duka mendampingi satu kelas penuh selama satu tahun ajaran."
 category: artikel
+topik: "Refleksi Mengajar"
 pubDate: 2026-01-15
 tags: ["wali kelas", "refleksi", "mengajar"]
 ---

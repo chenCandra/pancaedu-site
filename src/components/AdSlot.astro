@@ -21,9 +21,11 @@ const { label = 'Iklan' } = Astro.props;
     justify-content: center;
     min-height: 90px;
     margin: 2rem 0;
-    border: 1px dashed var(--border);
-    border-radius: 0.75rem;
-    background-color: var(--surface);
+    border: 1px dashed var(--glass-border);
+    border-radius: 1rem;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
   }
 
   .ad-slot-label {

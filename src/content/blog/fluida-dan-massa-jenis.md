@@ -11,6 +11,27 @@ simulasi:
   judul: "Simulasi Massa Jenis (Density)"
   sumber: "PhET Interactive Simulations, University of Colorado Boulder"
   tinggi: 620
+kuis:
+  - soal: "Rumus massa jenis adalah..."
+    pilihan: ["ρ = m × V", "ρ = m / V", "ρ = V / m", "ρ = m + V"]
+    jawaban: 1
+    penjelasan: "Massa jenis dihitung dengan membagi massa benda dengan volumenya (ρ = m/V)."
+  - soal: "Kalau massa jenis benda LEBIH KECIL dari massa jenis fluida, benda akan..."
+    pilihan: ["Tenggelam", "Melayang", "Terapung", "Meledak"]
+    jawaban: 2
+    penjelasan: "Massa jenis benda lebih kecil dari fluida → benda terapung, seperti kayu di air."
+  - soal: "Sebuah balok bermassa 540 gram punya volume 200 cm³. Berapa massa jenisnya?"
+    pilihan: ["1,8 g/cm³", "2,0 g/cm³", "2,7 g/cm³", "3,7 g/cm³"]
+    jawaban: 2
+    penjelasan: "ρ = 540/200 = 2,7 g/cm³ — sama seperti contoh soal di materi ini (dan karena 2,7 > 1, balok itu tenggelam di air)."
+  - soal: "Kayu bisa mengapung di air karena..."
+    pilihan:
+      - "Massa kayu selalu lebih ringan dari besi"
+      - "Massa jenis kayu lebih kecil dari massa jenis air"
+      - "Kayu tidak punya massa jenis"
+      - "Air selalu lebih berat dari benda padat"
+    jawaban: 1
+    penjelasan: "Yang menentukan terapung/tenggelam bukan massa mutlak, tapi perbandingan massa jenis benda terhadap fluidanya."
 ---
 
 Massa jenis (densitas) adalah besaran yang menyatakan seberapa rapat massa suatu

@@ -2,26 +2,66 @@
 const nav = [
   { href: '/artikel', label: 'Artikel' },
   { href: '/materi', label: 'Materi Pelajaran' },
+  { href: '/lab-maya', label: 'Lab Maya' },
+  { href: '/kenangan', label: 'Jejak Kelas' },
   { href: '/tentang', label: 'Tentang' },
   { href: '/kontak', label: 'Kontak' },
 ];
 ---
 
-<header class="site-header">
+<header class="site-header" data-site-nav>
   <div class="container site-header-inner">
     <a href="/" class="brand">PancaEdu</a>
-    <nav class="site-nav" aria-label="Navigasi utama">
+    <nav class="site-nav" id="site-nav-links" aria-label="Navigasi utama">
       {nav.map((item) => (
         <a href={item.href}>{item.label}</a>
       ))}
+      <a href="/cari" class="site-nav-icon-mobile">Cari</a>
+      <a href="/tersimpan" class="site-nav-icon-mobile">Tersimpan</a>
     </nav>
+    <div class="site-nav-icons">
+      <a href="/cari" class="site-nav-icon" aria-label="Cari artikel & materi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+      <a href="/tersimpan" class="site-nav-icon" aria-label="Bacaan tersimpan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </a>
+    </div>
+    <a href="/materi" class="btn btn-primary site-nav-cta" data-magnetic>Jelajahi Materi</a>
+    <button
+      type="button"
+      class="site-nav-toggle"
+      id="site-nav-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav-links"
+      aria-label="Buka menu navigasi"
+    >
+      <span class="site-nav-toggle-bar"></span>
+      <span class="site-nav-toggle-bar"></span>
+      <span class="site-nav-toggle-bar"></span>
+    </button>
   </div>
 </header>
 
 <style>
   .site-header {
-    border-bottom: 1px solid var(--border);
-    background-color: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .site-header[data-scrolled='true'] {
+    box-shadow: var(--shadow-sm);
   }
 
   .site-header-inner {
@@ -36,13 +76,17 @@ const nav = [
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.25rem;
-    color: var(--ink);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     text-decoration: none;
   }
 
   .site-nav {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 1.5rem;
   }
 
@@ -51,9 +95,209 @@ const nav = [
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9375rem;
+    position: relative;
+    transition: color 0.15s ease;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.35rem;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.25s ease;
   }
 
   .site-nav a:hover {
     color: var(--accent);
   }
+
+  .site-nav a:hover::after {
+    width: 100%;
+  }
+
+  .site-nav-cta {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+
+  /* Ikon Cari & Tersimpan — utilitas, sengaja dipisah dari nav teks utama
+     supaya nggak ikut nambah panjang daftar menu. */
+  .site-nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .site-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .site-nav-icon svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .site-nav-icon:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* Versi teks di dalam dropdown mobile — ikon .site-nav-icons disembunyikan
+     di mobile (lihat media query di bawah), diganti link teks biasa di sini
+     biar tetap bisa diakses tanpa nambah tombol ikon terpisah di header sempit. */
+  .site-nav-icon-mobile {
+    display: none;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3125rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .site-nav-toggle-bar {
+    width: 1.125rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--ink);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle[aria-expanded='true'] .site-nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 42rem) {
+    .site-nav-toggle {
+      display: flex;
+    }
+
+    .site-nav-cta {
+      display: none;
+    }
+
+    .site-nav-icons {
+      display: none;
+    }
+
+    .site-nav-icon-mobile {
+      display: block;
+    }
+
+    .site-nav {
+      position: absolute;
+      top: 100%;
+      inset-inline: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.5rem 0;
+      background: var(--surface);
+      backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-md);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+    }
+
+    .site-nav[data-open='true'] {
+      max-height: 20rem;
+      opacity: 1;
+    }
+
+    .site-nav a {
+      padding: 0.9rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .site-nav a:first-child {
+      border-top: none;
+    }
+
+    .site-nav a::after {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav {
+      transition: none;
+    }
+  }
 </style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-nav]');
+  const toggle = document.getElementById('site-nav-toggle');
+  const links = document.getElementById('site-nav-links');
+
+  if (header) {
+    const setScrolled = () => {
+      header.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false';
+    };
+    setScrolled();
+    window.addEventListener('scroll', setScrolled, { passive: true });
+  }
+
+  if (toggle && links) {
+    const close = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      links.removeAttribute('data-open');
+    };
+    const open = () => {
+      toggle.setAttribute('aria-expanded', 'true');
+      links.setAttribute('data-open', 'true');
+    };
+
+    toggle.addEventListener('click', () => {
+      if (toggle.getAttribute('aria-expanded') === 'true') close();
+      else open();
+    });
+
+    links.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // Tutup menu otomatis kalau layar dilebarkan melewati breakpoint mobile
+    // (mis. rotasi tablet) supaya tidak "nyangkut" terbuka di layar desktop.
+    const mq = window.matchMedia('(min-width: 42.01rem)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) close();
+    });
+  }
+</script>

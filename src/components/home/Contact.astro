@@ -1,0 +1,79 @@
+---
+---
+
+<section class="section contact">
+  <div class="container">
+    <div class="contact-panel" data-reveal>
+      <div class="noise" aria-hidden="true"></div>
+      <span class="contact-emoji" aria-hidden="true">👋</span>
+      <h2>Ada pertanyaan atau masukan?</h2>
+      <p>Saya senang mendengarnya — baik dari sesama guru, murid, atau siapa pun yang mampir.</p>
+      <a href="/kontak" class="btn btn-primary" data-magnetic>Hubungi Saya</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-panel {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 6vw, 4rem);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(155deg, var(--ink) 0%, #2a3a7a 55%, var(--accent-2) 130%);
+    color: #f4f7ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .contact-panel h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 600;
+    max-width: 32rem;
+    margin: 0;
+  }
+
+  .contact-emoji {
+    font-size: 2rem;
+    animation: wave 2.4s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    15% { transform: rotate(14deg); }
+    30% { transform: rotate(-8deg); }
+    45% { transform: rotate(14deg); }
+    60% { transform: rotate(0deg); }
+  }
+
+  .contact-panel p {
+    color: rgba(244, 247, 255, 0.75);
+    max-width: 28rem;
+    margin: 0;
+  }
+
+  .contact-panel .btn-primary {
+    /* Sengaja pakai warna tetap (bukan var(--ink)/var(--accent-ink)) — latar
+       panel ini juga tetap gradien navy-ungu di kedua mode, jadi tombolnya
+       ikut dikunci putih-solid + teks navy pekat supaya kontras selalu
+       terjaga, tidak ikut memudar saat HP mode gelap. */
+    background: #ffffff;
+    color: #12172c;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.35);
+  }
+
+  .contact-panel .btn-primary:hover {
+    background: #f4f7ff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-emoji {
+      animation: none;
+    }
+  }
+</style>

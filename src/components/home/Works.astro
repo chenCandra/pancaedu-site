@@ -1,0 +1,121 @@
+---
+interface WorkItem {
+  title: string;
+  description: string;
+  href: string;
+  tag: string;
+  hasLab?: boolean;
+}
+
+interface Props {
+  items: WorkItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="section works">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Materi &amp; Lab Maya Pilihan</p>
+    <div class="works-list">
+      {items.map((item) => (
+        <a href={item.href} class="work-row" data-reveal data-tilt>
+          <div class="work-row-main">
+            <span class="chip">{item.tag}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+          <div class="work-row-meta">
+            {item.hasLab && <span class="chip chip-accent">🧪 Lab Maya</span>}
+            <span class="work-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .works-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .work-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--ink);
+    transition: padding-inline 0.3s ease, background-color 0.3s ease;
+  }
+
+  .work-row:hover {
+    padding-inline: 1rem;
+    background-color: var(--surface);
+    border-radius: var(--radius-sm);
+  }
+
+  .work-row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .work-row-main h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .work-row-main p {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+    max-width: 34rem;
+  }
+
+  .work-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .work-arrow {
+    font-size: 1.25rem;
+    transition: transform 0.25s ease;
+  }
+
+  .work-row:hover .work-arrow {
+    transform: translateX(6px);
+  }
+
+  .chip {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .chip-accent {
+    color: var(--accent);
+    border-color: rgba(59, 111, 237, 0.3);
+  }
+
+  @media (max-width: 36rem) {
+    .work-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+</style>

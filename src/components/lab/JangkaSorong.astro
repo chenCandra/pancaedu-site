@@ -1,0 +1,366 @@
+---
+// Simulasi jangka sorong interaktif — Lab Maya.
+//
+// Sistem koordinat SVG dipakai langsung sebagai milimeter (1 unit SVG =
+// 1 mm), jadi translate(x,0) buat gerakin rahang tidak perlu konversi skala
+// terpisah di JS. Skala utama (0–100mm) & skala nonius (11 garis, jarak
+// 0.9mm/garis — konstruksi baku nonius 10 divisi/9mm) dibuat statis di sini
+// (build-time), cuma posisi grup rahang-gerak & highlight garis nonius yang
+// diubah JS saat drag.
+import '../../styles/lab.css';
+
+const mainTicks = Array.from({ length: 101 }, (_, i) => i); // 0..100 mm
+const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9mm)
+---
+
+<div class="jsl" data-jsl>
+  <div class="jsl-card card">
+    <div class="jsl-stage">
+      <svg
+        class="jsl-svg"
+        viewBox="-6 -4 116 58"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Ilustrasi jangka sorong mengukur sebuah benda"
+      >
+        <!-- Skala utama -->
+        <line x1="0" y1="12" x2="100" y2="12" class="jsl-baseline" />
+        {mainTicks.map((i) => (
+          <line
+            x1={i}
+            y1={i % 10 === 0 ? 4 : 8}
+            x2={i}
+            y2="12"
+            class={i % 10 === 0 ? 'jsl-tick jsl-tick-major' : 'jsl-tick'}
+          />
+        ))}
+        {mainTicks.filter((i) => i % 10 === 0).map((i) => (
+          <text x={i} y="2.5" class="jsl-label" text-anchor="middle">{i / 10}</text>
+        ))}
+
+        <!-- Rahang tetap (di posisi 0) -->
+        <rect x="-1" y="2" width="2" height="42" rx="0.6" class="jsl-jaw jsl-jaw-fixed" />
+
+        <!-- Benda yang diukur -->
+        <rect
+          data-object
+          x="0"
+          y="27"
+          width="10"
+          height="11"
+          rx="1.5"
+          class="jsl-object"
+        />
+
+        <!-- Rahang geser (posisinya di-translate lewat JS) -->
+        <g data-moving-jaw transform="translate(10,0)">
+          <rect x="-1" y="2" width="2" height="42" rx="0.6" class="jsl-jaw jsl-jaw-moving" />
+
+          <!-- Skala nonius, ikut nempel & bergerak bareng rahang -->
+          <line x1="0" y1="12" x2="9" y2="12" class="jsl-baseline jsl-baseline-nonius" />
+          {noniusTicks.map((i) => (
+            <line
+              data-nonius-tick={i}
+              x1={i * 0.9}
+              y1="12"
+              x2={i * 0.9}
+              y2={i % 5 === 0 ? 20 : 17}
+              class="jsl-tick jsl-tick-nonius"
+            />
+          ))}
+
+          <!-- Gagang buat digeser (target sentuh besar buat HP) -->
+          <g data-handle class="jsl-handle" tabindex="0" role="slider" aria-label="Geser rahang jangka sorong" aria-valuemin="0" aria-valuemax="90" aria-valuenow="10">
+            <rect x="-4.5" y="42" width="9" height="9" rx="2.5" class="jsl-handle-grip" />
+            <line x1="-2" y1="46.5" x2="2" y2="46.5" class="jsl-handle-bar" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Angka skala nonius ditulis di sini, bukan di dalam SVG — 11 angka
+         kalau dipaksa muat di lebar 9mm skala nonius bakal kepencet & tidak
+         kebaca. Badge ini HTML biasa jadi ukuran fontnya independen. -->
+    <div class="jsl-nonius-readout">
+      <span class="jsl-nonius-caption">Skala nonius</span>
+      <div class="jsl-nonius-badges" data-nonius-badges>
+        {noniusTicks.map((i) => (
+          <span class="jsl-nonius-badge" data-nonius-badge={i}>{i}</span>
+        ))}
+      </div>
+    </div>
+
+    <p class="jsl-hint" data-hint>👉 Geser gagang biru di bawah sampai rahangnya nyentuh benda kuning.</p>
+
+    <div class="jsl-controls" data-controls>
+      <label for="jsl-guess">Menurut bacaan kamu, berapa cm hasil pengukurannya?</label>
+      <div class="jsl-input-row">
+        <input
+          type="text"
+          inputmode="decimal"
+          id="jsl-guess"
+          data-guess
+          placeholder="contoh: 3,47"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-primary" data-check>Cek Jawaban</button>
+      </div>
+    </div>
+
+    <div class="jsl-result" data-result hidden>
+      <p class="jsl-result-headline" data-result-headline></p>
+      <p class="jsl-result-detail" data-result-detail></p>
+      <button type="button" class="btn btn-ghost" data-retry>🔄 Coba Lagi (Benda Baru)</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Style dasar (.jsl-card, .jsl-stage, .jsl-svg, tick, jaw, handle,
+     hint, controls, result, dst) ada di src/styles/lab.css — dipakai
+     bersama komponen lab lain. Di sini cuma style KHUSUS jangka sorong
+     (skala & badge nonius). */
+
+  .jsl-baseline-nonius {
+    stroke: var(--accent-2);
+  }
+
+  .jsl-tick-nonius {
+    stroke: var(--accent-2);
+    stroke-width: 0.35;
+    transition: stroke 0.2s ease, stroke-width 0.2s ease;
+  }
+
+  .jsl-tick-nonius[data-active='true'] {
+    stroke: var(--gold);
+    stroke-width: 0.7;
+  }
+
+  .jsl-nonius-readout {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .jsl-nonius-caption {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    flex-shrink: 0;
+  }
+
+  .jsl-nonius-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .jsl-nonius-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding-inline: 0.2rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    background: var(--accent-soft);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .jsl-nonius-badge[data-active='true'] {
+    background: var(--gold);
+    color: var(--accent-ink);
+    transform: scale(1.25);
+  }
+</style>
+
+<script>
+  const OBJECT_COLORS = ['#ffd66b', '#6ea8ff', '#a78bfa', '#7ee0c3', '#ff9b7a'];
+  const MIN_OBJECT_MM = 15; // 1,5 cm
+  const MAX_OBJECT_MM = 85; // 8,5 cm
+  const MAX_JAW_MM = 96; // batas kanan skala biar gak mepet ujung
+
+  function initJangkaSorong(root: HTMLElement) {
+    const svg = root.querySelector<SVGSVGElement>('.jsl-svg')!;
+    const movingJaw = root.querySelector<SVGGElement>('[data-moving-jaw]')!;
+    const handle = root.querySelector<SVGGElement>('[data-handle]')!;
+    const objectRect = root.querySelector<SVGRectElement>('[data-object]')!;
+    const noniusTicks = Array.from(root.querySelectorAll<SVGLineElement>('[data-nonius-tick]'));
+    const noniusBadges = Array.from(root.querySelectorAll<HTMLElement>('[data-nonius-badge]'));
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!;
+    const guessInput = root.querySelector<HTMLInputElement>('[data-guess]')!;
+    const checkBtn = root.querySelector<HTMLButtonElement>('[data-check]')!;
+    const resultBox = root.querySelector<HTMLElement>('[data-result]')!;
+    const resultHeadline = root.querySelector<HTMLElement>('[data-result-headline]')!;
+    const resultDetail = root.querySelector<HTMLElement>('[data-result-detail]')!;
+    const retryBtn = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+
+    let objectMm = 0;
+    let jawMm = 0;
+    let locked = false;
+    let dragging = false;
+    let dragStartClientX = 0;
+    let dragStartJawMm = 0;
+
+    const round1 = (n: number) => Math.round(n * 10) / 10;
+
+    function readingParts(mm: number) {
+      const su = Math.floor(mm); // skala utama (mm bulat)
+      const sn = Math.round((mm - su) * 10); // skala nonius (0-9)
+      return { su, sn: sn === 10 ? 0 : sn, suFixed: sn === 10 ? su + 1 : su };
+    }
+
+    function newRound() {
+      objectMm = round1(MIN_OBJECT_MM + Math.random() * (MAX_OBJECT_MM - MIN_OBJECT_MM));
+      objectRect.setAttribute('width', String(objectMm));
+      const color = OBJECT_COLORS[Math.floor(Math.random() * OBJECT_COLORS.length)];
+      root.style.setProperty('--object-color', color);
+
+      jawMm = MAX_JAW_MM; // mulai kebuka lebar
+      updateJawPosition();
+
+      locked = false;
+      dragging = false;
+      guessInput.value = '';
+      guessInput.disabled = false;
+      checkBtn.disabled = false;
+      controls.hidden = false;
+      resultBox.hidden = true;
+      hint.textContent = '👉 Geser gagang biru di bawah sampai rahangnya nyentuh benda kuning.';
+      hint.dataset.state = 'open';
+    }
+
+    function updateJawPosition() {
+      movingJaw.setAttribute('transform', `translate(${jawMm},0)`);
+      handle.setAttribute('aria-valuenow', String(jawMm));
+
+      const { suFixed, sn } = readingParts(jawMm);
+      noniusTicks.forEach((tick) => {
+        const idx = Number(tick.dataset.noniusTick);
+        tick.dataset.active = idx === sn ? 'true' : 'false';
+      });
+      noniusBadges.forEach((badge) => {
+        const idx = Number(badge.dataset.noniusBadge);
+        badge.dataset.active = idx === sn ? 'true' : 'false';
+      });
+
+      const closed = jawMm <= objectMm + 0.05;
+      if (!locked) {
+        hint.dataset.state = closed ? 'closed' : 'open';
+        hint.textContent = closed
+          ? '✓ Rahang sudah nempel ke benda — sekarang coba baca skalanya.'
+          : '👉 Geser gagang biru di bawah sampai rahangnya nyentuh benda kuning.';
+      }
+      void suFixed;
+    }
+
+    function clampJaw(mm: number) {
+      return Math.min(MAX_JAW_MM, Math.max(objectMm, mm));
+    }
+
+    function pxPerMm() {
+      const rect = svg.getBoundingClientRect();
+      // viewBox width = 116 (dari -6 sampai 110)
+      return rect.width / 116;
+    }
+
+    function onPointerDown(e: PointerEvent) {
+      if (locked) return;
+      dragging = true;
+      dragStartClientX = e.clientX;
+      dragStartJawMm = jawMm;
+      handle.setPointerCapture(e.pointerId);
+      handle.focus();
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!dragging) return;
+      const deltaPx = e.clientX - dragStartClientX;
+      const deltaMm = deltaPx / pxPerMm();
+      jawMm = round1(clampJaw(dragStartJawMm + deltaMm));
+      updateJawPosition();
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      if (!dragging) return;
+      dragging = false;
+      try {
+        handle.releasePointerCapture(e.pointerId);
+      } catch {
+        /* noop */
+      }
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (locked) return;
+      if (e.key === 'ArrowLeft') {
+        jawMm = round1(clampJaw(jawMm - 0.1));
+        updateJawPosition();
+        e.preventDefault();
+      } else if (e.key === 'ArrowRight') {
+        jawMm = round1(clampJaw(jawMm + 0.1));
+        updateJawPosition();
+        e.preventDefault();
+      }
+    }
+
+    function parseGuess(raw: string): number | null {
+      const normalized = raw.trim().replace(',', '.');
+      if (!normalized) return null;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function onCheck() {
+      const guess = parseGuess(guessInput.value);
+      if (guess === null) {
+        guessInput.focus();
+        return;
+      }
+
+      locked = true;
+      dragging = false;
+      guessInput.disabled = true;
+      checkBtn.disabled = true;
+
+      const currentReadingCm = round1(jawMm) / 10;
+      const trueObjectCm = round1(objectMm) / 10;
+      const closedProperly = jawMm <= objectMm + 0.05;
+      const isCorrect = Math.abs(guess - currentReadingCm) < 0.02;
+
+      resultBox.hidden = false;
+      resultBox.dataset.correct = String(isCorrect);
+      resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
+
+      const bacaanTxt = `Bacaan skala saat ini: <strong>${currentReadingCm.toFixed(2)} cm</strong>.`;
+      const bendaTxt = `Ukuran benda sebenarnya: <strong>${trueObjectCm.toFixed(2)} cm</strong>.`;
+      const closeTxt = closedProperly
+        ? ''
+        : ' Rahangnya belum full nempel ke benda, jadi bacaannya lebih besar dari ukuran aslinya — coba tutup rapat dulu di ronde berikutnya.';
+
+      resultDetail.innerHTML = `${bacaanTxt} ${bendaTxt}${closeTxt}`;
+    }
+
+    handle.addEventListener('pointerdown', onPointerDown);
+    handle.addEventListener('pointermove', onPointerMove);
+    handle.addEventListener('pointerup', onPointerUp);
+    handle.addEventListener('pointercancel', onPointerUp);
+    handle.addEventListener('keydown', onKeyDown);
+    checkBtn.addEventListener('click', onCheck);
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') onCheck();
+    });
+    retryBtn.addEventListener('click', newRound);
+
+    newRound();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-jsl]').forEach(initJangkaSorong);
+</script>

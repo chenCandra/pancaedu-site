@@ -3,31 +3,105 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  featured?: boolean;
+  hidden?: boolean;
 }
 
-const { post } = Astro.props;
-const { title, description, category, mapel, kelas, pubDate, coverImage, simulasi } = post.data;
+const { post, featured = false, hidden = false } = Astro.props;
+const { title, description, category, topik, mapel, kelas, pubDate, coverImage, simulasi } =
+  post.data;
 const basePath = category === 'materi' ? '/materi' : '/artikel';
 const formattedDate = pubDate.toLocaleDateString('id-ID', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
 });
+
+// Warna badge topik (artikel) — beda dari warna badge Kelas (materi) di
+// bawah, biar nggak nyampur makna saat dua-duanya ketampil bareng (mis.
+// section "Terbaru" di Beranda yang mixed artikel+materi).
+const topikBadgeClass: Record<string, string> = {
+  'Sains & Fakta Unik': 'badge-teal',
+  'Kurikulum Merdeka': '',
+  'Refleksi Mengajar': 'badge-rose',
+  Pustaka: 'badge-gold',
+};
+
+// Warna badge Kelas (materi) — X polos (biru default), XI ungu, XII indigo.
+const kelasBadgeClass: Record<string, string> = {
+  X: '',
+  XI: 'badge-purple',
+  XII: 'badge-indigo',
+};
+
+// Cover "buatan" (gradient + ikon garis tipis) buat kartu yang belum punya
+// coverImage asli — biar listing artikel nggak jadi tembok teks polos.
+// Ikonnya cuma dekorasi (opacity rendah di pojok), jadi nggak perlu presisi
+// sekelas icon library — cukup garis sederhana yang jelas maksudnya.
+// Warna diatur lewat CSS attribute selector di bawah (data-cover), ngikutin
+// pasangan warna yang sama dengan badge topik/kelas di atas.
+const topikIcon: Record<string, string> = {
+  'Sains & Fakta Unik':
+    '<path d="M9 2v6.3L3.6 17.6A2 2 0 0 0 5.3 21h13.4a2 2 0 0 0 1.7-3.4L15 8.3V2"/><path d="M8.5 2h7"/><path d="M8 13h8"/>',
+  'Kurikulum Merdeka':
+    '<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+  'Refleksi Mengajar':
+    '<path d="M21 11.5a8.4 8.4 0 0 1-8.4 8.4 8.3 8.3 0 0 1-3.8-.9L3 21l2-5.8a8.3 8.3 0 0 1-.9-3.8A8.4 8.4 0 0 1 12.5 3a8.4 8.4 0 0 1 8.5 8.5z"/>',
+  Pustaka:
+    '<path d="M4 20V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16"/><path d="M10 20V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v14"/><path d="M15.1 4.4l3.4 1a1 1 0 0 1 .7 1.2L16.4 20"/>',
+};
+const materiIcon =
+  '<circle cx="12" cy="12" r="1.2"/><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-60 12 12)"/>';
+
+const isMateri = category === 'materi';
+const coverIcon = isMateri ? materiIcon : topik ? topikIcon[topik] : undefined;
+const coverKey = isMateri ? kelas : topik;
 ---
 
-<a href={`${basePath}/${post.id}`} class="post-card card" data-kelas={kelas} data-mapel={mapel}>
-  {coverImage && <img src={coverImage} alt="" loading="lazy" />}
+<a
+  href={`${basePath}/${post.id}`}
+  class:list={['post-card card', featured && 'post-card--featured']}
+  data-kelas={kelas}
+  data-mapel={mapel}
+  data-topik={topik}
+  hidden={hidden}
+>
+  {coverImage ? (
+    <img src={coverImage} alt="" loading="lazy" />
+  ) : (
+    <div class="post-card-cover" data-category={category} data-cover={coverKey}>
+      {coverIcon && (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          set:html={coverIcon}
+        />
+      )}
+    </div>
+  )}
   <div class="post-card-body">
+    {featured && (
+      <p class="eyebrow post-card-eyebrow">{category === 'materi' ? 'Materi Terbaru' : 'Artikel Terbaru'}</p>
+    )}
     <div class="post-card-meta">
-      <span class:list={['badge', category === 'materi' && 'badge-gold']}>
-        {category === 'materi' ? (mapel ?? 'Materi') : 'Artikel'}
-      </span>
-      {category === 'materi' && kelas && <span class="badge">Kelas {kelas}</span>}
+      {category === 'materi' ? (
+        <span class="badge badge-gold">{mapel ?? 'Materi'}</span>
+      ) : (
+        <span class:list={['badge', topik && topikBadgeClass[topik]]}>{topik ?? 'Artikel'}</span>
+      )}
+      {category === 'materi' && kelas && (
+        <span class:list={['badge', kelasBadgeClass[kelas]]}>Kelas {kelas}</span>
+      )}
       {simulasi && <span class="badge">🧪 Lab Maya</span>}
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
     </div>
     <h3>{title}</h3>
     <p>{description}</p>
+    {featured && <span class="post-card-cta">Baca selengkapnya →</span>}
   </div>
 </a>
 
@@ -49,12 +123,74 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
   }
 
   .post-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
   }
 
-  .post-card img {
+  .post-card img,
+  .post-card-cover {
     aspect-ratio: 16 / 9;
     object-fit: cover;
+  }
+
+  .post-card-cover {
+    --cv-a: var(--accent);
+    --cv-b: var(--accent-2);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--cv-a), var(--cv-b));
+  }
+
+  /* Tekstur titik halus biar gradientnya nggak polos rata */
+  .post-card-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1.6px);
+    background-size: 15px 15px;
+    opacity: 0.4;
+  }
+
+  .post-card-cover svg {
+    position: absolute;
+    right: -0.75rem;
+    bottom: -1.1rem;
+    width: 6rem;
+    height: 6rem;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Pasangan warna cover per topik (artikel) — senada dengan badge di atas */
+  .post-card-cover[data-category='artikel'][data-cover='Sains & Fakta Unik'] {
+    --cv-a: var(--teal);
+    --cv-b: var(--accent);
+  }
+  .post-card-cover[data-category='artikel'][data-cover='Kurikulum Merdeka'] {
+    --cv-a: var(--accent);
+    --cv-b: var(--accent-2);
+  }
+  .post-card-cover[data-category='artikel'][data-cover='Refleksi Mengajar'] {
+    --cv-a: var(--rose);
+    --cv-b: var(--gold);
+  }
+  .post-card-cover[data-category='artikel'][data-cover='Pustaka'] {
+    --cv-a: var(--gold);
+    --cv-b: var(--rose);
+  }
+
+  /* Pasangan warna cover per kelas (materi) — senada dengan badge Kelas */
+  .post-card-cover[data-category='materi'][data-cover='X'] {
+    --cv-a: var(--accent);
+    --cv-b: var(--teal);
+  }
+  .post-card-cover[data-category='materi'][data-cover='XI'] {
+    --cv-a: var(--accent-2);
+    --cv-b: var(--accent);
+  }
+  .post-card-cover[data-category='materi'][data-cover='XII'] {
+    --cv-a: var(--indigo);
+    --cv-b: var(--accent-2);
   }
 
   .post-card-body {
@@ -86,5 +222,67 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Kartu unggulan (post terbaru) — layout menyamping di layar lebar biar
+     nggak sekadar kartu grid yang diperbesar, tapi terasa beda kedudukannya. */
+  .post-card--featured {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .post-card--featured img,
+  .post-card--featured .post-card-cover {
+    aspect-ratio: auto;
+    width: 44%;
+    flex-shrink: 0;
+  }
+
+  .post-card--featured .post-card-cover svg {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .post-card--featured .post-card-body {
+    padding: 2rem;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .post-card-eyebrow {
+    margin: 0;
+  }
+
+  .post-card--featured h3 {
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+
+  .post-card--featured p {
+    font-size: 1rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .post-card-cta {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .post-card--featured {
+      flex-direction: column;
+    }
+
+    .post-card--featured img,
+    .post-card--featured .post-card-cover {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .post-card--featured h3 {
+      font-size: 1.35rem;
+    }
   }
 </style>

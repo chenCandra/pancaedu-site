@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Hukum Coulomb</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #3b82f6;
+            --pos-charge: #ef4444;
+            --pos-glow: rgba(239, 68, 68, 0.4);
+            --neg-charge: #3b82f6;
+            --neg-glow: rgba(59, 130, 246, 0.4);
+            --neu-charge: #94a3b8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #f59e0b;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 12px;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            flex: 1;
+        }
+
+        @media (min-width: 900px) {
+            .main-container {
+                grid-template-columns: 360px 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .control-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .num-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2px 8px;
+        }
+
+        .num-input-wrapper input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 50px;
+            text-align: right;
+            outline: none;
+        }
+
+        .unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .q1-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--pos-charge);
+            box-shadow: 0 0 10px var(--pos-glow);
+        }
+
+        .q2-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--neg-charge);
+            box-shadow: 0 0 10px var(--neg-glow);
+        }
+
+        select {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            outline: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .canvas-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        /* Layar HP sempit: kurangi tinggi kanvas biar proporsinya nggak
+           kegedean dibanding lebarnya yang sempit (elemen di dalamnya juga
+           dibikin ikut mengecil lewat JS, lihat computeChargeRadius()). */
+        @media (max-width: 420px) {
+            .canvas-wrapper {
+                height: 250px;
+            }
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .canvas-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .results-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .result-highlight {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .force-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-highlight);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .interaction-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-attract {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+        }
+
+        .badge-repel {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
+        }
+
+        .badge-zero {
+            background: rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
+            border: 1px solid #94a3b8;
+        }
+
+        .formula-box {
+            background: #090d16;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .math-var {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .math-num {
+            color: #f59e0b;
+        }
+
+        /* Footer & Theory Helper */
+        .theory-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .theory-title {
+            color: var(--text-main);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 3a9 9 0 0 0 9 9 9 9 0 0 0-9 9 9 9 0 0 0-9-9 9 9 0 0 0 9-9z"></path>
+            </svg>
+            <h1>Laboratorium Maya: Hukum Coulomb</h1>
+        </div>
+        <span class="header-badge">SMA Kelas XII</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Panel Parameter
+                </span>
+            </div>
+
+            <!-- Muatan q1 -->
+            <div class="control-group q1-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="q1Slider">Muatan 1 (q₁)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="q1Num" min="-10" max="10" step="1" value="2">
+                        <span class="unit">μC</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q1Slider" min="-10" max="10" step="1" value="2">
+                </div>
+            </div>
+
+            <!-- Muatan q2 -->
+            <div class="control-group q2-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="q2Slider">Muatan 2 (q₂)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="q2Num" min="-10" max="10" step="1" value="-2">
+                        <span class="unit">μC</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q2Slider" min="-10" max="10" step="1" value="-2">
+                </div>
+            </div>
+
+            <!-- Jarak r -->
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="rSlider">Jarak Antar Muatan (r)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="rNum" min="1" max="10" step="0.5" value="5">
+                        <span class="unit">cm</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="rSlider" min="1" max="10" step="0.5" value="5">
+                </div>
+            </div>
+
+            <!-- Permitivitas Medium -->
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="mediumSelect">Medium Pembias</label>
+                </div>
+                <select id="mediumSelect">
+                    <option value="1">Vakum / Udara (εᵣ = 1.0)</option>
+                    <option value="80">Air murni (εᵣ = 80.0)</option>
+                    <option value="2.1">Minyak / Parafin (εᵣ = 2.1)</option>
+                </select>
+            </div>
+
+            <!-- Options & Reset -->
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px;">
+                <label style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" id="chkFieldLines" checked style="accent-color: var(--accent-cyan);">
+                    Tampilkan Garis Medan
+                </label>
+            </div>
+
+            <button class="btn-reset" id="btnReset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                Reset Eksperimen
+            </button>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Visualisasi Interaktif
+                </span>
+                <span id="interactionBadge" class="interaction-badge badge-attract">Tarik-Menarik</span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction">💡 Sentuh & geser bola muatan untuk mengubah jarak (r)</div>
+            </div>
+
+            <!-- Results & Formula -->
+            <div class="results-panel">
+                <div class="result-highlight">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Gaya Coulomb (F)</div>
+                        <div class="force-val" id="forceValue">14.38 N</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Notasi Ilmiah</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="forceSciValue">1.448 × 10¹ N</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Kalkulasi Substitusi Real-time:</div>
+                <div class="formula-box" id="formulaBox">
+                    F = k · (|q₁ · q₂|) / (εᵣ · r²)<br>
+                    F = (8.99×10⁹) · (|2×10⁻⁶| · |-2×10⁻⁶|) / (1 · 0.05²) = <span class="math-num">14.384 N</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Ringkasan Konsep Hukum Coulomb</div>
+        Gaya elektrostatik (<span style="color: var(--accent-cyan);">F</span>) berbanding lurus dengan hasil kali kedua muatan (<span style="color: var(--pos-charge);">q₁</span>, <span style="color: var(--neg-charge);">q₂</span>) dan berbanding terbalik dengan kuadrat jarak (<span style="color: #f59e0b;">r</span>) di antara keduanya.
+        Muatan sejenis akan <strong>tolak-menolak</strong>, sedangkan muatan berlawanan jenis akan <strong>tarik-menarik</strong>.
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const k = 8.99e9; // Konstanta Coulomb (N*m^2/C^2)
+
+        // DOM Elements
+        const q1Slider = document.getElementById('q1Slider');
+        const q1Num = document.getElementById('q1Num');
+        const q2Slider = document.getElementById('q2Slider');
+        const q2Num = document.getElementById('q2Num');
+        const rSlider = document.getElementById('rSlider');
+        const rNum = document.getElementById('rNum');
+        const mediumSelect = document.getElementById('mediumSelect');
+        const chkFieldLines = document.getElementById('chkFieldLines');
+        const btnReset = document.getElementById('btnReset');
+
+        const forceValueEl = document.getElementById('forceValue');
+        const forceSciValueEl = document.getElementById('forceSciValue');
+        const formulaBoxEl = document.getElementById('formulaBox');
+        const interactionBadgeEl = document.getElementById('interactionBadge');
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // State Variables
+        let q1 = 2;   // in microCoulombs (uC)
+        let q2 = -2;  // in microCoulombs (uC)
+        let r = 5;    // in cm
+        let er = 1;   // relative permittivity
+        let showFieldLines = true;
+
+        // Interactive Dragging State
+        let isDragging = false;
+        let activeCharge = null; // 1 or 2
+        let chargePos = { q1: { x: 0, y: 0 }, q2: { x: 0, y: 0 } };
+        let chargeRadius = 24; // di-update tiap render() lewat computeChargeRadius()
+
+        // Kanvas ini didesain buat lebar ~600-900px. Di HP (seringnya
+        // 300-380px), radius bola & jarak "padding" tepi kalau dipaksa
+        // pakai angka fixed jadi keliatan kegedean/kepenuhan dibanding
+        // ruang yang tersedia. Dua fungsi ini bikin ukurannya ikut
+        // menyusut proporsional buat layar sempit.
+        function computeChargeRadius(width) {
+            return Math.max(14, Math.min(24, width / 15));
+        }
+
+        function computeMinPadding(width) {
+            return Math.max(36, Math.min(80, width * 0.18));
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            render();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function syncInputs(source) {
+            if (source === 'q1Slider') q1Num.value = q1Slider.value;
+            if (source === 'q1Num') q1Slider.value = q1Num.value;
+            if (source === 'q2Slider') q2Num.value = q2Slider.value;
+            if (source === 'q2Num') q2Slider.value = q2Num.value;
+            if (source === 'rSlider') rNum.value = rSlider.value;
+            if (source === 'rNum') rSlider.value = rNum.value;
+
+            q1 = parseFloat(q1Num.value) || 0;
+            q2 = parseFloat(q2Num.value) || 0;
+            r = parseFloat(rNum.value) || 1;
+            er = parseFloat(mediumSelect.value) || 1;
+            showFieldLines = chkFieldLines.checked;
+
+            calculateAndRender();
+        }
+
+        // Attach listeners
+        [q1Slider, q1Num].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [q2Slider, q2Num].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [rSlider, rNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        mediumSelect.addEventListener('change', () => syncInputs());
+        chkFieldLines.addEventListener('change', () => syncInputs());
+
+        btnReset.addEventListener('click', () => {
+            q1Slider.value = 2;
+            q1Num.value = 2;
+            q2Slider.value = -2;
+            q2Num.value = -2;
+            rSlider.value = 5;
+            rNum.value = 5;
+            mediumSelect.value = "1";
+            chkFieldLines.checked = true;
+            syncInputs();
+        });
+
+        function computeCoulombForce() {
+            const q1_C = q1 * 1e-6;
+            const q2_C = q2 * 1e-6;
+            const r_m = r / 100;
+
+            if (r_m === 0) return 0;
+            const F = (k * Math.abs(q1_C * q2_C)) / (er * (r_m * r_m));
+            return F;
+        }
+
+        function formatScientific(num) {
+            if (num === 0) return "0 N";
+            const exp = Math.floor(Math.log10(num));
+            const mantissa = (num / Math.pow(10, exp)).toFixed(2);
+
+            // Superscript map for numbers
+            const superscripts = {
+                '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+                '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+            };
+            const expStr = exp.toString().split('').map(char => superscripts[char] || char).join('');
+
+            return `${mantissa} × 10${expStr} N`;
+        }
+
+        function updateResults(F) {
+            // Main Big Display
+            if (F >= 1000) {
+                forceValueEl.textContent = F.toExponential(3) + " N";
+            } else if (F >= 1) {
+                forceValueEl.textContent = F.toFixed(2) + " N";
+            } else if (F > 0) {
+                forceValueEl.textContent = F.toFixed(4) + " N";
+            } else {
+                forceValueEl.textContent = "0.00 N";
+            }
+
+            forceSciValueEl.textContent = formatScientific(F);
+
+            // Interaction Badge
+            if (q1 * q2 < 0) {
+                interactionBadgeEl.textContent = "Tarik-Menarik";
+                interactionBadgeEl.className = "interaction-badge badge-attract";
+            } else if (q1 * q2 > 0) {
+                interactionBadgeEl.textContent = "Tolak-Menolak";
+                interactionBadgeEl.className = "interaction-badge badge-repel";
+            } else {
+                interactionBadgeEl.textContent = "Tidak Ada Gaya";
+                interactionBadgeEl.className = "interaction-badge badge-zero";
+            }
+
+            // Formula Breakdown HTML
+            const r_m = (r / 100).toFixed(3);
+            formulaBoxEl.innerHTML = `
+<span class="math-var">F</span> = (k · |q₁ · q₂|) / (εᵣ · r²)
+<br><span class="math-var">F</span> = (${k.toExponential(2)}) · (|${q1}×10⁻⁶| · |${q2}×10⁻⁶|) / (${er} · ${r_m}²)
+<br><span class="math-var">F</span> = <span class="math-num">${F.toFixed(4)} N</span>
+            `.trim();
+        }
+
+        function drawSphere(x, y, charge, label) {
+            ctx.save();
+
+            // Color selection
+            let mainColor, glowColor;
+            if (charge > 0) {
+                mainColor = '#ef4444';
+                glowColor = 'rgba(239, 68, 68, 0.4)';
+            } else if (charge < 0) {
+                mainColor = '#3b82f6';
+                glowColor = 'rgba(59, 130, 246, 0.4)';
+            } else {
+                mainColor = '#94a3b8';
+                glowColor = 'rgba(148, 163, 184, 0.2)';
+            }
+
+            // Sphere Outer Glow
+            ctx.beginPath();
+            ctx.arc(x, y, chargeRadius + 8, 0, Math.PI * 2);
+            ctx.fillStyle = glowColor;
+            ctx.fill();
+
+            // 3D Gradient Sphere
+            const grad = ctx.createRadialGradient(
+                x - chargeRadius * 0.3, y - chargeRadius * 0.3, chargeRadius * 0.1,
+                x, y, chargeRadius
+            );
+            if (charge > 0) {
+                grad.addColorStop(0, '#fca5a5');
+                grad.addColorStop(0.5, '#ef4444');
+                grad.addColorStop(1, '#991b1b');
+            } else if (charge < 0) {
+                grad.addColorStop(0, '#93c5fd');
+                grad.addColorStop(0.5, '#3b82f6');
+                grad.addColorStop(1, '#1e3a8a');
+            } else {
+                grad.addColorStop(0, '#cbd5e1');
+                grad.addColorStop(0.5, '#64748b');
+                grad.addColorStop(1, '#334155');
+            }
+
+            ctx.beginPath();
+            ctx.arc(x, y, chargeRadius, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Charge Symbol (+ / -) — font ikut proporsi radius biar konsisten
+            // di segala ukuran layar.
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.round(chargeRadius * 0.85)}px system-ui`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const sign = charge > 0 ? '+' : (charge < 0 ? '−' : '0');
+            ctx.fillText(sign, x, y);
+
+            // Charge Name Label & Value
+            ctx.font = `600 ${Math.round(chargeRadius * 0.5)}px system-ui`;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillText(`${label} = ${charge > 0 ? '+' : ''}${charge} μC`, x, y - chargeRadius - 14);
+
+            ctx.restore();
+        }
+
+        function drawArrow(fromX, fromY, toX, toY, color, label) {
+            const headLen = 10;
+            const dx = toX - fromX;
+            const dy = toY - fromY;
+            const angle = Math.atan2(dy, dx);
+
+            // Don't draw tiny arrows
+            if (Math.hypot(dx, dy) < 5) return;
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 3.5;
+
+            // Arrow Shaft
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            // Arrow Head
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Vector Label
+            ctx.font = 'bold 12px system-ui';
+            ctx.fillText(label, (fromX + toX) / 2, fromY - 12);
+
+            ctx.restore();
+        }
+
+        function drawFieldLines(x1, y1, x2, y2) {
+            if (!showFieldLines || q1 === 0 || q2 === 0) return;
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.lineWidth = 1.5;
+
+            const numLines = 8;
+            for (let i = 0; i < numLines; i++) {
+                const angle = (i / numLines) * Math.PI * 2;
+                ctx.beginPath();
+
+                // Curved bezier lines simulating field paths
+                const cpYOffset = (i % 2 === 0 ? 1 : -1) * (40 + i * 10);
+                ctx.moveTo(x1, y1);
+                ctx.quadraticCurveTo((x1 + x2) / 2, y1 + cpYOffset, x2, y2);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawRuler(x1, y1, x2, y2) {
+            const rulerY = y1 + chargeRadius + 30;
+            ctx.save();
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+
+            // Ruler Main Line
+            ctx.beginPath();
+            ctx.moveTo(x1, rulerY);
+            ctx.lineTo(x2, rulerY);
+            ctx.stroke();
+
+            // End Ticks
+            ctx.beginPath();
+            ctx.moveTo(x1, rulerY - 6);
+            ctx.lineTo(x1, rulerY + 6);
+            ctx.moveTo(x2, rulerY - 6);
+            ctx.lineTo(x2, rulerY + 6);
+            ctx.stroke();
+
+            // Distance Label Box
+            const midX = (x1 + x2) / 2;
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(midX - 35, rulerY - 10, 70, 20);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.strokeRect(midX - 35, rulerY - 10, 70, 20);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = 'bold 11px system-ui';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`r = ${r} cm`, midX, rulerY);
+
+            ctx.restore();
+        }
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+
+            ctx.clearRect(0, 0, width, height);
+
+            chargeRadius = computeChargeRadius(width);
+
+            // Calculate pixel scale for r (range 1cm to 10cm mapped to canvas padding)
+            const minPadding = computeMinPadding(width);
+            const maxDistancePx = width - minPadding * 2;
+            const pxPerCm = maxDistancePx / 10;
+            const distancePx = r * pxPerCm;
+
+            const centerY = height / 2 - 10;
+            const centerX = width / 2;
+
+            chargePos.q1 = { x: centerX - distancePx / 2, y: centerY };
+            chargePos.q2 = { x: centerX + distancePx / 2, y: centerY };
+
+            // 1. Draw Field Lines
+            drawFieldLines(chargePos.q1.x, chargePos.q1.y, chargePos.q2.x, chargePos.q2.y);
+
+            // 2. Draw Distance Ruler
+            drawRuler(chargePos.q1.x, chargePos.q1.y, chargePos.q2.x, chargePos.q2.y);
+
+            // 3. Draw Vector Force Arrows
+            const F = computeCoulombForce();
+            if (F > 0 && q1 !== 0 && q2 !== 0) {
+                // Scaled arrow length (logarithmic scale so it fits nicely on screen)
+                const maxArrowLen = 110;
+                const minArrowLen = 25;
+                const arrowLen = Math.min(maxArrowLen, minArrowLen + Math.log10(1 + F) * 25);
+
+                const sameSign = (q1 * q2 > 0);
+
+                if (sameSign) {
+                    // Tolak-menolak (Arrows point outwards away from each other)
+                    drawArrow(chargePos.q1.x, chargePos.q1.y, chargePos.q1.x - arrowLen, chargePos.q1.y, '#f87171', 'F₁₂');
+                    drawArrow(chargePos.q2.x, chargePos.q2.y, chargePos.q2.x + arrowLen, chargePos.q2.y, '#f87171', 'F₂₁');
+                } else {
+                    // Tarik-menarik (Arrows point inwards towards each other)
+                    const innerLen = Math.min(arrowLen, (distancePx / 2) - chargeRadius);
+                    drawArrow(chargePos.q1.x, chargePos.q1.y, chargePos.q1.x + innerLen, chargePos.q1.y, '#60a5fa', 'F₁₂');
+                    drawArrow(chargePos.q2.x, chargePos.q2.y, chargePos.q2.x - innerLen, chargePos.q2.y, '#60a5fa', 'F₂₁');
+                }
+            }
+
+            // 4. Draw Charge Spheres
+            drawSphere(chargePos.q1.x, chargePos.q1.y, q1, 'q₁');
+            drawSphere(chargePos.q2.x, chargePos.q2.y, q2, 'q₂');
+        }
+
+        function calculateAndRender() {
+            const F = computeCoulombForce();
+            updateResults(F);
+            render();
+        }
+
+        function getCanvasCoords(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handlePointerDown(evt) {
+            const pos = getCanvasCoords(evt);
+
+            // Check if touch is on q1 or q2
+            const distQ1 = Math.hypot(pos.x - chargePos.q1.x, pos.y - chargePos.q1.y);
+            const distQ2 = Math.hypot(pos.x - chargePos.q2.x, pos.y - chargePos.q2.y);
+
+            if (distQ1 < chargeRadius + 15) {
+                isDragging = true;
+                activeCharge = 1;
+            } else if (distQ2 < chargeRadius + 15) {
+                isDragging = true;
+                activeCharge = 2;
+            }
+        }
+
+        function handlePointerMove(evt) {
+            if (!isDragging) return;
+            evt.preventDefault();
+
+            const pos = getCanvasCoords(evt);
+            const width = canvas.parentElement.clientWidth;
+            const minPadding = computeMinPadding(width);
+            const maxDistancePx = width - minPadding * 2;
+            const pxPerCm = maxDistancePx / 10;
+
+            const centerX = width / 2;
+            let newDistancePx;
+
+            if (activeCharge === 1) {
+                newDistancePx = Math.abs(centerX - pos.x) * 2;
+            } else {
+                newDistancePx = Math.abs(pos.x - centerX) * 2;
+            }
+
+            let newCm = newDistancePx / pxPerCm;
+            // Clamp distance to slider bounds [1cm, 10cm]
+            newCm = Math.max(1, Math.min(10, newCm));
+            newCm = Math.round(newCm * 2) / 2; // Step 0.5 cm
+
+            rSlider.value = newCm;
+            rNum.value = newCm;
+            q1 = parseFloat(q1Num.value);
+            q2 = parseFloat(q2Num.value);
+            r = newCm;
+
+            calculateAndRender();
+        }
+
+        function handlePointerUp() {
+            isDragging = false;
+            activeCharge = null;
+        }
+
+        // Attach Mouse & Touch Listeners to Canvas
+        canvas.addEventListener('mousedown', handlePointerDown);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+        window.addEventListener('touchmove', handlePointerMove, { passive: false });
+        window.addEventListener('touchend', handlePointerUp);
+
+        // Initial Launch
+        window.onload = () => {
+            resizeCanvas();
+            syncInputs();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+---
+interface Props {
+  postId: string;
+}
+
+const { postId } = Astro.props;
+---
+
+<button type="button" class="bookmark-btn" data-bookmark-btn data-post-id={postId} aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-bookmark-icon>
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+  </svg>
+  <span data-bookmark-label>Tandai buat nanti</span>
+</button>
+
+<style>
+  .bookmark-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .bookmark-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .bookmark-btn:hover {
+    border-color: var(--border-strong);
+  }
+
+  .bookmark-btn[aria-pressed='true'] {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .bookmark-btn[aria-pressed='true'] svg {
+    fill: currentColor;
+  }
+</style>
+
+<script>
+  import { isBookmarked, toggleBookmark } from '../scripts/post-index';
+
+  document.querySelectorAll<HTMLButtonElement>('[data-bookmark-btn]').forEach((btn) => {
+    const id = btn.dataset.postId;
+    if (!id) return;
+    const label = btn.querySelector<HTMLElement>('[data-bookmark-label]');
+
+    const render = (saved: boolean) => {
+      btn.setAttribute('aria-pressed', String(saved));
+      if (label) label.textContent = saved ? 'Tersimpan' : 'Tandai buat nanti';
+    };
+    render(isBookmarked(id));
+
+    btn.addEventListener('click', () => {
+      render(toggleBookmark(id));
+    });
+  });
+</script>

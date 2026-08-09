@@ -1,43 +1,128 @@
 ---
 const year = new Date().getFullYear();
+const links = [
+  { href: '/materi', label: 'Materi' },
+  { href: '/artikel', label: 'Artikel' },
+  { href: '/kenangan', label: 'Jejak Kelas' },
+  { href: '/tentang', label: 'Tentang' },
+  { href: '/kontak', label: 'Kontak' },
+  { href: '/kebijakan-privasi', label: 'Kebijakan Privasi' },
+];
+
+const whatsappUrl = 'https://whatsapp.com/channel/0029VbE90E747XeKHqX9hj0u';
 ---
 
 <footer class="site-footer">
   <div class="container site-footer-inner">
-    <p>&copy; {year} PancaEdu. Ditulis &amp; dikelola mandiri.</p>
+    <a href="/" class="footer-brand">PancaEdu</a>
     <nav aria-label="Navigasi footer">
-      <a href="/kebijakan-privasi">Kebijakan Privasi</a>
-      <a href="/kontak">Kontak</a>
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
+
+    {whatsappUrl ? (
+      <a href={whatsappUrl} class="footer-whatsapp" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.8-.11a15 15 0 0 1-1.66-.61 12.2 12.2 0 0 1-4.72-4.17c-.35-.47-1.17-1.56-1.17-2.98s.75-2.12 1.02-2.4a1.1 1.1 0 0 1 .78-.36c.2 0 .39 0 .56.01.18.01.42-.07.65.5.24.6.82 2.06.9 2.2.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.36-.23.6-.14.24.09 1.53.72 1.79.85.26.13.43.19.5.3.06.11.06.63-.18 1.31Z"/>
+        </svg>
+        Channel WhatsApp
+      </a>
+    ) : (
+      <span class="footer-whatsapp footer-whatsapp-disabled" title="Segera hadir">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.8-.11a15 15 0 0 1-1.66-.61 12.2 12.2 0 0 1-4.72-4.17c-.35-.47-1.17-1.56-1.17-2.98s.75-2.12 1.02-2.4a1.1 1.1 0 0 1 .78-.36c.2 0 .39 0 .56.01.18.01.42-.07.65.5.24.6.82 2.06.9 2.2.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.36-.23.6-.14.24.09 1.53.72 1.79.85.26.13.43.19.5.3.06.11.06.63-.18 1.31Z"/>
+        </svg>
+        Channel WhatsApp <span class="footer-whatsapp-soon">segera hadir</span>
+      </span>
+    )}
+
+    <p class="footer-copy">&copy; {year} PancaEdu. Ditulis &amp; dikelola mandiri.</p>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--glass-border);
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
     margin-top: 4rem;
   }
 
   .site-footer-inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
     justify-content: space-between;
-    padding-block: 2rem;
-    font-size: 0.875rem;
-    color: var(--ink-soft);
+    gap: 1.5rem;
+    padding-block: 2.5rem;
+  }
+
+  .footer-brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
   }
 
   .site-footer-inner nav {
     display: flex;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
   }
 
-  .site-footer-inner a {
+  .site-footer-inner nav a {
+    font-size: 0.875rem;
+    text-decoration: none;
     color: var(--ink-soft);
+    transition: color 0.2s ease;
   }
 
-  .site-footer-inner a:hover {
+  .site-footer-inner nav a:hover {
     color: var(--accent);
+  }
+
+  .footer-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .footer-whatsapp svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  a.footer-whatsapp:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-soft);
+  }
+
+  .footer-whatsapp-disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .footer-whatsapp-soon {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .footer-copy {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    width: 100%;
+    order: 3;
+    margin: 0;
   }
 </style>

@@ -1,0 +1,203 @@
+---
+// Kuis pilihan ganda di akhir materi — feedback langsung tiap soal dijawab
+// (bukan submit-semua-baru-dinilai). Lihat schema `kuis` di content.config.ts.
+interface SoalKuis {
+  soal: string;
+  pilihan: string[];
+  jawaban: number;
+  penjelasan?: string;
+}
+
+interface Props {
+  soal: SoalKuis[] | undefined;
+}
+
+const { soal } = Astro.props;
+---
+
+{soal && soal.length > 0 && (
+  <section class="kuis card" data-kuis>
+    <div class="kuis-header">
+      <h2>🧠 Uji Pemahaman</h2>
+      <p class="kuis-score" data-kuis-score hidden></p>
+    </div>
+    <ol class="kuis-list">
+      {soal.map((item, qIndex) => (
+        <li class="kuis-item" data-kuis-item data-correct-index={item.jawaban}>
+          <p class="kuis-question">{qIndex + 1}. {item.soal}</p>
+          <div class="kuis-options" role="group" aria-label={`Pilihan jawaban soal ${qIndex + 1}`}>
+            {item.pilihan.map((opsi, oIndex) => (
+              <button type="button" class="kuis-option" data-kuis-option data-index={oIndex}>
+                {opsi}
+              </button>
+            ))}
+          </div>
+          {item.penjelasan && (
+            <p class="kuis-explanation" data-kuis-explanation hidden>💡 {item.penjelasan}</p>
+          )}
+        </li>
+      ))}
+    </ol>
+    <button type="button" class="btn kuis-reset" data-kuis-reset hidden>Coba Lagi</button>
+  </section>
+)}
+
+<style>
+  .kuis {
+    margin-block: 2.5rem;
+    padding: 1.75rem;
+  }
+
+  .kuis-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .kuis-header h2 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .kuis-score {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .kuis-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .kuis-item + .kuis-item {
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .kuis-question {
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+  }
+
+  .kuis-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .kuis-option {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .kuis-option:hover:not(:disabled) {
+    border-color: var(--border-strong);
+  }
+
+  .kuis-option:disabled {
+    cursor: default;
+  }
+
+  .kuis-option.kuis-correct {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .kuis-option.kuis-incorrect {
+    border-color: var(--rose);
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+
+  .kuis-explanation {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  .kuis-reset {
+    margin-top: 1.75rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-kuis]').forEach((quiz) => {
+    const items = Array.from(quiz.querySelectorAll<HTMLElement>('[data-kuis-item]'));
+    const scoreEl = quiz.querySelector<HTMLElement>('[data-kuis-score]');
+    const resetBtn = quiz.querySelector<HTMLButtonElement>('[data-kuis-reset]');
+    const answered = new Map<HTMLElement, boolean>();
+
+    const updateScore = () => {
+      if (!scoreEl || !resetBtn) return;
+      if (answered.size === items.length && items.length > 0) {
+        const correctCount = [...answered.values()].filter(Boolean).length;
+        scoreEl.hidden = false;
+        scoreEl.textContent = `Skor: ${correctCount} dari ${items.length} benar`;
+        resetBtn.hidden = false;
+      }
+    };
+
+    items.forEach((item) => {
+      const correctIndex = Number(item.dataset.correctIndex);
+      const options = Array.from(item.querySelectorAll<HTMLButtonElement>('[data-kuis-option]'));
+      const explanation = item.querySelector<HTMLElement>('[data-kuis-explanation]');
+
+      options.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (answered.has(item)) return; // sudah dijawab — dikunci, nggak bisa ganti
+
+          const chosen = Number(btn.dataset.index);
+          const isCorrect = chosen === correctIndex;
+          answered.set(item, isCorrect);
+
+          options.forEach((b, i) => {
+            b.disabled = true;
+            if (i === correctIndex) b.classList.add('kuis-correct');
+            else if (b === btn) b.classList.add('kuis-incorrect');
+          });
+
+          if (explanation) explanation.hidden = false;
+          updateScore();
+        });
+      });
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      answered.clear();
+      items.forEach((item) => {
+        item.querySelectorAll<HTMLButtonElement>('[data-kuis-option]').forEach((b) => {
+          b.disabled = false;
+          b.classList.remove('kuis-correct', 'kuis-incorrect');
+        });
+        const explanation = item.querySelector<HTMLElement>('[data-kuis-explanation]');
+        if (explanation) explanation.hidden = true;
+      });
+      if (scoreEl) scoreEl.hidden = true;
+      resetBtn.hidden = true;
+    });
+  });
+</script>

@@ -2,27 +2,161 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
 
 const posts = (
   await getCollection('blog', ({ data }) => data.category === 'artikel' && !data.draft)
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Artikel terbaru ditampilkan sebagai kartu unggulan di atas, sisanya di
+// grid biasa — biar halaman nggak langsung jadi tembok kartu seragam dari
+// baris pertama.
+const [featuredPost, ...restPosts] = posts;
+
+// Kartu di luar PAGE_SIZE pertama dirender tapi disembunyikan (hidden),
+// dimunculkan bertahap lewat tombol "Muat lebih banyak" — biar scroll-nya
+// nggak terasa tanpa ujung. Server-render semuanya (bukan cuma PAGE_SIZE
+// pertama) supaya tetap terindeks & tetap jalan tanpa JS.
+const PAGE_SIZE = 9;
+
+// Urutan tetap (bukan sekadar unique-dari-data) supaya tombol filternya
+// nggak lompat-lompat posisi tiap kali ada artikel baru diterbitkan.
+const topikOrder = ['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka'];
+const topikList = topikOrder.filter((t) => posts.some((p) => p.data.topik === t));
+const topikBadgeClass: Record<string, string> = {
+  'Sains & Fakta Unik': 'badge-teal',
+  'Kurikulum Merdeka': '',
+  'Refleksi Mengajar': 'badge-rose',
+  Pustaka: 'badge-gold',
+};
 ---
 
-<BaseLayout title="Artikel" description="Kumpulan artikel seputar pendidikan, refleksi mengajar, dan catatan studi pascasarjana.">
+<BaseLayout title="Artikel" description="Kumpulan artikel seputar pendidikan, refleksi mengajar, dan catatan belajar.">
   <section class="container page-header">
     <p class="eyebrow">Artikel</p>
     <h1>Tulisan &amp; Opini</h1>
     <p class="page-lede">Refleksi mengajar, catatan studi, dan pemikiran seputar dunia pendidikan.</p>
   </section>
 
-  <section class="container post-grid">
+  {topikList.length > 0 && (
+    <div class="container filters" data-filters>
+      <span class="filter-label">Topik</span>
+      <div class="filter-row" role="group" aria-label="Filter topik artikel">
+        <button type="button" class="filter-btn badge" data-filter-topik="" aria-pressed="true">Semua</button>
+        {topikList.map((topik) => (
+          <button
+            type="button"
+            class:list={['filter-btn badge', topikBadgeClass[topik]]}
+            data-filter-topik={topik}
+            aria-pressed="false"
+          >
+            {topik}
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {featuredPost && (
+    <section class="container featured-wrap" data-featured-wrap>
+      <PostCard post={featuredPost} featured />
+    </section>
+  )}
+
+  <section class="container post-grid" data-post-grid>
     {posts.length > 0 ? (
-      posts.map((post) => <PostCard post={post} />)
+      <>
+        {restPosts.slice(0, PAGE_SIZE).map((post) => <PostCard post={post} />)}
+        {restPosts.length > PAGE_SIZE && (
+          <div class="ad-divider" data-ad-divider>
+            <AdSlot label="Iklan" />
+          </div>
+        )}
+        {restPosts.slice(PAGE_SIZE).map((post) => <PostCard post={post} hidden />)}
+      </>
     ) : (
       <p>Belum ada artikel yang diterbitkan.</p>
     )}
   </section>
+
+  <p class="container empty-state" data-empty-state hidden>
+    Tidak ada artikel yang cocok dengan filter ini.
+  </p>
+
+  {restPosts.length > PAGE_SIZE && (
+    <div class="container load-more-wrap">
+      <button type="button" class="btn load-more-btn" data-load-more data-page-size={PAGE_SIZE}>
+        Muat lebih banyak
+      </button>
+    </div>
+  )}
 </BaseLayout>
+
+<script>
+  const filters = document.querySelector<HTMLElement>('[data-filters]');
+  const grid = document.querySelector<HTMLElement>('[data-post-grid]');
+  const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+  const featuredWrap = document.querySelector<HTMLElement>('[data-featured-wrap]');
+  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-load-more]');
+  const adDivider = document.querySelector<HTMLElement>('[data-ad-divider]');
+
+  if (grid) {
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('a.post-card'));
+    const pageSize = Number(loadMoreBtn?.dataset.pageSize) || cards.length;
+    let activeTopik = '';
+    // Berapa kartu yang boleh tampil di tampilan "Semua" (tanpa filter) —
+    // nambah tiap kali tombol "Muat lebih banyak" diklik.
+    let revealedCount = pageSize;
+
+    const applyFilter = () => {
+      let visibleCount = 0;
+      let matchedSoFar = 0;
+      for (const card of cards) {
+        const matchesTopik = !activeTopik || card.dataset.topik === activeTopik;
+        let visible = matchesTopik;
+        if (matchesTopik && !activeTopik) {
+          // Tanpa filter topik aktif: batasi ke revealedCount pertama, sisanya
+          // nunggu tombol "Muat lebih banyak". Begitu filter dipakai, semua
+          // kartu yang cocok langsung ditampilkan (nggak ikut dibatasi).
+          matchedSoFar++;
+          visible = matchedSoFar <= revealedCount;
+        }
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      }
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+      // Kartu unggulan & tombol muat-lebih cuma masuk akal di tampilan
+      // "Semua" — begitu filter topik aktif, sembunyikan keduanya biar nggak
+      // ganjil (topiknya bisa jadi beda dari yang lagi difilter).
+      if (featuredWrap) featuredWrap.hidden = activeTopik !== '';
+      if (loadMoreBtn) loadMoreBtn.hidden = activeTopik !== '' || revealedCount >= cards.length;
+      // Pembatas iklan cuma masuk akal di batas "halaman pertama" tampilan
+      // "Semua" — begitu filter topik aktif (daftarnya sudah dipersingkat),
+      // sembunyikan biar nggak nongol ganjil di tengah hasil filter.
+      if (adDivider) adDivider.hidden = activeTopik !== '';
+    };
+
+    if (filters) {
+      filters.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+        if (!btn || btn.dataset.filterTopik === undefined) return;
+
+        activeTopik = btn.dataset.filterTopik;
+        for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-topik]')) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        }
+        applyFilter();
+      });
+    }
+
+    loadMoreBtn?.addEventListener('click', () => {
+      revealedCount += pageSize;
+      applyFilter();
+    });
+
+    applyFilter();
+  }
+</script>
 
 <style>
   .page-header {
@@ -35,10 +169,69 @@ const posts = (
     font-size: 1.0625rem;
   }
 
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    padding-block: 0.5rem 1.5rem;
+  }
+
+  .filter-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    border-color: currentColor;
+  }
+
+  .featured-wrap {
+    padding-block: 0.5rem 0.5rem;
+  }
+
   .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1.5rem;
+    padding-block: 1rem 2rem;
+  }
+
+  /* Pembatas iklan melebar penuh, motongin ritme grid kartu yang seragam */
+  .ad-divider {
+    grid-column: 1 / -1;
+  }
+
+  .ad-divider[hidden] {
+    display: none;
+  }
+
+  .empty-state {
+    color: var(--ink-soft);
     padding-block: 1rem 4rem;
+  }
+
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding-block: 0 4rem;
+  }
+
+  .load-more-btn {
+    cursor: pointer;
+    font-family: var(--font-body);
   }
 </style>

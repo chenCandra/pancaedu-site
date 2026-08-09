@@ -1,22 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Palet terang: kertas gading hangat + tinta + teal + emas */
-  --paper: #fbf7ef;
-  --surface: #ffffff;
-  --ink: #232120;
-  --ink-soft: #5c5650;
-  --accent: #1f5c4f;
-  --accent-soft: #e3efe9;
+  /* Palet terang: gradasi biru → kuning muda, kartu kaca (glassmorphism) */
+  --paper: #eef3ff;
+  --bg-gradient: linear-gradient(150deg, #eaf1ff 0%, #f4f7ff 38%, #fff8e6 100%);
+  --surface: rgba(255, 255, 255, 0.6);
+  --surface-solid: #ffffff;
+  --ink: #1b2340;
+  --ink-soft: #57628a;
+  --ink-faint: #8891b8;
+  --accent: #3b6fed;
+  --accent-2: #7c6ff0;
+  --accent-soft: rgba(59, 111, 237, 0.14);
+  --accent-2-soft: rgba(124, 111, 240, 0.14);
   --accent-ink: #ffffff;
-  --gold: #c97f1f;
-  --gold-soft: #fbeeda;
-  --border: #e4ddd0;
-  --shadow: 0 1px 2px rgba(35, 33, 32, 0.04), 0 8px 24px -12px rgba(35, 33, 32, 0.12);
+  --gold: #b8860b;
+  --gold-soft: rgba(255, 214, 107, 0.35);
+  /* Warna tambahan buat badge klasifikasi artikel (topik) & Kelas materi —
+     sengaja beda dari --accent/--accent-2/--gold biar nggak nyampur makna
+     saat artikel & materi ketampil bareng (mis. section "Terbaru"). */
+  --teal: #0d9488;
+  --teal-soft: rgba(13, 148, 136, 0.14);
+  --rose: #e11d48;
+  --rose-soft: rgba(225, 29, 72, 0.14);
+  --indigo: #4f46e5;
+  --indigo-soft: rgba(79, 70, 229, 0.14);
+  --border: rgba(59, 111, 237, 0.16);
+  --border-strong: rgba(59, 111, 237, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-blur: 20px;
+  /* --shadow tetap dipertahankan (dipakai .card, cookie-consent, dst).
+     Tiga varian di bawah ini ditambahkan buat komponen baru (tombol, nav,
+     hero) yang butuh tingkat elevasi lebih halus — bukan pengganti. */
+  --shadow: 0 1px 2px rgba(27, 35, 64, 0.04), 0 16px 40px -16px rgba(59, 111, 237, 0.35);
+  --shadow-sm: 0 1px 2px rgba(27, 35, 64, 0.05);
+  --shadow-md: 0 12px 32px -12px rgba(27, 35, 64, 0.18);
+  --shadow-lg: 0 24px 60px -20px rgba(59, 111, 237, 0.35);
+  --glow-accent: 0 0 0 1px rgba(59, 111, 237, 0.15), 0 8px 24px -8px rgba(59, 111, 237, 0.35);
+  --noise-opacity: 0.035;
 
-  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --blob-blue: #6ea8ff;
+  --blob-yellow: #ffd66b;
+  --blob-indigo: #a78bfa;
+  --blob-opacity: 0.5;
+
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
   --max-width: 72rem;
   --measure: 38rem;
   color-scheme: light;
@@ -24,46 +57,105 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #17191a;
-    --surface: #202224;
-    --ink: #ede9e2;
-    --ink-soft: #a49d92;
-    --accent: #56b89f;
-    --accent-soft: #1d332c;
-    --accent-ink: #0c1513;
-    --gold: #e8ac54;
-    --gold-soft: #362a17;
-    --border: #2e3133;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    --paper: #0c1122;
+    --bg-gradient: linear-gradient(165deg, #0a0f24 0%, #14102b 55%, #1b1235 100%);
+    --surface: rgba(30, 35, 64, 0.55);
+    --surface-solid: #1a2140;
+    --ink: #eef1fb;
+    --ink-soft: #a6b0d4;
+    --ink-faint: #7885b0;
+    --accent: #7ea2ff;
+    --accent-2: #9c8bff;
+    --accent-soft: rgba(126, 162, 255, 0.16);
+    --accent-2-soft: rgba(156, 139, 255, 0.16);
+    --accent-ink: #0c1122;
+    --gold: #ffd873;
+    --gold-soft: rgba(255, 216, 115, 0.18);
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45, 212, 191, 0.16);
+    --rose: #fb7185;
+    --rose-soft: rgba(251, 113, 133, 0.16);
+    --indigo: #818cf8;
+    --indigo-soft: rgba(129, 140, 248, 0.16);
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+    --glow-accent: 0 0 0 1px rgba(126, 162, 255, 0.25), 0 8px 24px -8px rgba(126, 162, 255, 0.45);
+    --noise-opacity: 0.05;
+    --blob-opacity: 0.3;
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --paper: #17191a;
-  --surface: #202224;
-  --ink: #ede9e2;
-  --ink-soft: #a49d92;
-  --accent: #56b89f;
-  --accent-soft: #1d332c;
-  --accent-ink: #0c1513;
-  --gold: #e8ac54;
-  --gold-soft: #362a17;
-  --border: #2e3133;
+  --paper: #0c1122;
+  --bg-gradient: linear-gradient(165deg, #0a0f24 0%, #14102b 55%, #1b1235 100%);
+  --surface: rgba(30, 35, 64, 0.55);
+  --surface-solid: #1a2140;
+  --ink: #eef1fb;
+  --ink-soft: #a6b0d4;
+  --ink-faint: #7885b0;
+  --accent: #7ea2ff;
+  --accent-2: #9c8bff;
+  --accent-soft: rgba(126, 162, 255, 0.16);
+  --accent-2-soft: rgba(156, 139, 255, 0.16);
+  --accent-ink: #0c1122;
+  --gold: #ffd873;
+  --gold-soft: rgba(255, 216, 115, 0.18);
+  --teal: #2dd4bf;
+  --teal-soft: rgba(45, 212, 191, 0.16);
+  --rose: #fb7185;
+  --rose-soft: rgba(251, 113, 133, 0.16);
+  --indigo: #818cf8;
+  --indigo-soft: rgba(129, 140, 248, 0.16);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  --glow-accent: 0 0 0 1px rgba(126, 162, 255, 0.25), 0 8px 24px -8px rgba(126, 162, 255, 0.45);
+  --noise-opacity: 0.05;
+  --blob-opacity: 0.3;
   color-scheme: dark;
 }
 
 :root[data-theme='light'] {
-  --paper: #fbf7ef;
-  --surface: #ffffff;
-  --ink: #232120;
-  --ink-soft: #5c5650;
-  --accent: #1f5c4f;
-  --accent-soft: #e3efe9;
+  --paper: #eef3ff;
+  --bg-gradient: linear-gradient(150deg, #eaf1ff 0%, #f4f7ff 38%, #fff8e6 100%);
+  --surface: rgba(255, 255, 255, 0.6);
+  --surface-solid: #ffffff;
+  --ink: #1b2340;
+  --ink-soft: #57628a;
+  --ink-faint: #8891b8;
+  --accent: #3b6fed;
+  --accent-2: #7c6ff0;
+  --accent-soft: rgba(59, 111, 237, 0.14);
+  --accent-2-soft: rgba(124, 111, 240, 0.14);
   --accent-ink: #ffffff;
-  --gold: #c97f1f;
-  --gold-soft: #fbeeda;
-  --border: #e4ddd0;
+  --gold: #b8860b;
+  --gold-soft: rgba(255, 214, 107, 0.35);
+  --teal: #0d9488;
+  --teal-soft: rgba(13, 148, 136, 0.14);
+  --rose: #e11d48;
+  --rose-soft: rgba(225, 29, 72, 0.14);
+  --indigo: #4f46e5;
+  --indigo-soft: rgba(79, 70, 229, 0.14);
+  --border: rgba(59, 111, 237, 0.16);
+  --border-strong: rgba(59, 111, 237, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --shadow: 0 1px 2px rgba(27, 35, 64, 0.04), 0 16px 40px -16px rgba(59, 111, 237, 0.35);
+  --shadow-sm: 0 1px 2px rgba(27, 35, 64, 0.05);
+  --shadow-md: 0 12px 32px -12px rgba(27, 35, 64, 0.18);
+  --shadow-lg: 0 24px 60px -20px rgba(59, 111, 237, 0.35);
+  --glow-accent: 0 0 0 1px rgba(59, 111, 237, 0.15), 0 8px 24px -8px rgba(59, 111, 237, 0.35);
+  --noise-opacity: 0.035;
+  --blob-opacity: 0.5;
   color-scheme: light;
 }
 
@@ -77,7 +169,11 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--paper);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: var(--paper) var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -85,11 +181,117 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Bulatan gradien blur dekoratif — dipasang sekali di BaseLayout, tampil di
+   setiap halaman sebagai lapisan latar belakang (fixed, di belakang konten). */
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  opacity: var(--blob-opacity);
+  will-change: transform;
+}
+
+.bg-blob--1 {
+  width: 34rem;
+  height: 34rem;
+  top: -12rem;
+  left: -10rem;
+  background: var(--blob-blue);
+  animation: drift-a 24s ease-in-out infinite alternate;
+}
+
+.bg-blob--2 {
+  width: 28rem;
+  height: 28rem;
+  top: -6rem;
+  right: -12rem;
+  background: var(--blob-yellow);
+  animation: drift-b 28s ease-in-out infinite alternate;
+}
+
+.bg-blob--3 {
+  width: 30rem;
+  height: 30rem;
+  bottom: -14rem;
+  left: 18%;
+  background: var(--blob-indigo);
+  animation: drift-c 32s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(3rem, 2.5rem) scale(1.08); }
+}
+
+@keyframes drift-b {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-2.5rem, 3rem) scale(1.05); }
+}
+
+@keyframes drift-c {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(2rem, -2rem) scale(1.1); }
+}
+
 img,
 svg,
 video {
   max-width: 100%;
   display: block;
+}
+
+/* Cursor halus situs-penuh — dibuat oleh src/scripts/site-animations.js,
+   desktop saja (pointer: fine), hormat prefers-reduced-motion. */
+.site-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: -0.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--ink-faint);
+  pointer-events: none;
+  z-index: 999;
+  /* Tetap transparan sampai ada gerakan mouse ASLI (lihat site-animations.js)
+     — mencegah dot ini "nyangkut" kelihatan di posisi default sebelum
+     mouse pernah bergerak (mis. kalau deteksi pointer:coarse meleset di
+     perangkat/browser tertentu, atau saat screenshot diambil sebelum ada
+     interaksi mouse). Perangkat sentuh murni memang tidak pernah mengirim
+     mousemove asli, jadi otomatis nggak akan pernah kelihatan di HP. */
+  opacity: 0;
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, border-color 0.25s ease,
+    background-color 0.25s ease, opacity 0.2s ease;
+}
+
+.site-cursor--visible {
+  opacity: 1;
+}
+
+.site-cursor--active {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: -1.25rem;
+  background-color: var(--surface);
+  border-color: var(--accent);
+}
+
+@media (pointer: fine) {
+  body:has(.site-cursor) {
+    cursor: none;
+  }
+  body:has(.site-cursor) a,
+  body:has(.site-cursor) button {
+    cursor: none;
+  }
 }
 
 h1,
@@ -127,6 +329,21 @@ a {
   padding-inline: 1.5rem;
 }
 
+/* Dipakai section-section besar di Beranda (Hero, Featured, Bento, dst). */
+.section {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+/* PENTING: elemen [data-reveal] SENGAJA tidak diset opacity:0 di sini.
+   State awal "tersembunyi sebelum discroll" itu tugas JS (site-animations.js)
+   buat SET sendiri saat animasinya benar-benar jalan (gsap.set/fromTo, yang
+   immediate-render). Kalau state tersembunyi ditaruh di CSS statis kayak
+   sebelumnya, begitu skrip animasinya gagal load/jalan (jaringan lambat,
+   error di kode lain di halaman, dst) — SELURUH konten section itu hilang
+   permanen, bukan cuma animasinya yang gak jalan. Ini pernah kejadian
+   beneran (section Beranda nyaris kosong di HP), makanya default di CSS
+   HARUS "tampil", animasi cuma bonus kalau JS-nya berhasil. */
+
 .prose {
   max-width: var(--measure);
 }
@@ -156,37 +373,84 @@ a {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.9375rem;
-  padding: 0.7rem 1.35rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 999px;
   border: 1px solid transparent;
   text-decoration: none;
-  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+/* Ripple saat tombol diklik — dipicu dari src/scripts/site-animations.js,
+   berlaku otomatis di semua .btn di situs (bukan cuma Beranda). */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: ripple-expand 0.6s ease-out;
+  pointer-events: none;
+}
+
+:root[data-theme='dark'] .ripple {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .ripple {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
 }
 
 .btn-primary {
-  background-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: var(--accent-ink);
+  box-shadow: 0 10px 24px -8px rgba(59, 111, 237, 0.55);
 }
 
 .btn-primary:hover {
-  box-shadow: var(--shadow);
+  box-shadow: 0 14px 30px -8px rgba(59, 111, 237, 0.65);
 }
 
 .btn-ghost {
-  background-color: transparent;
-  border-color: var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-color: var(--glass-border);
   color: var(--ink);
 }
 
 .card {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
+}
+
+/* Noise texture (SVG feTurbulence, tanpa file gambar) — dipakai Hero &
+   panel Kontak di Beranda untuk tekstur halus di atas gradient. */
+.noise {
+  position: absolute;
+  inset: 0;
+  opacity: var(--noise-opacity);
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
 }
 
 .badge {
@@ -194,7 +458,7 @@ a {
   align-items: center;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
   background-color: var(--accent-soft);
   color: var(--accent);
@@ -205,11 +469,38 @@ a {
   color: var(--gold);
 }
 
+.badge-teal {
+  background-color: var(--teal-soft);
+  color: var(--teal);
+}
+
+.badge-rose {
+  background-color: var(--rose-soft);
+  color: var(--rose);
+}
+
+.badge-purple {
+  background-color: var(--accent-2-soft);
+  color: var(--accent-2);
+}
+
+.badge-indigo {
+  background-color: var(--indigo-soft);
+  color: var(--indigo);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .btn {
     transition: none;
+  }
+  .bg-blob {
+    animation: none;
+  }
+  .ripple {
+    animation: none;
+    display: none;
   }
 }

@@ -1,0 +1,25 @@
+---
+// Data buat /cari & /tersimpan — dirender sebagai JSON inline (bukan endpoint
+// terpisah yang perlu di-fetch) biar langsung tersedia begitu halaman kebuka,
+// tanpa request tambahan. Dipakai bareng oleh kedua halaman lewat
+// src/scripts/post-index.ts (readPostIndex()).
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const index = posts.map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  description: post.data.description,
+  category: post.data.category,
+  topik: post.data.topik ?? null,
+  mapel: post.data.mapel ?? null,
+  kelas: post.data.kelas ?? null,
+  pubDate: post.data.pubDate.toISOString(),
+  url: post.data.category === 'materi' ? `/materi/${post.id}` : `/artikel/${post.id}`,
+}));
+---
+
+<script type="application/json" id="post-index-data" set:html={JSON.stringify(index)} />

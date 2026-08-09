@@ -1,0 +1,358 @@
+---
+// Simulasi mikrometer sekrup interaktif — Lab Maya.
+//
+// Beda mekanisme sama jangka sorong: bukan skala nonius yang geser lurus,
+// tapi skala putar (thimble) 50 divisi yang BERPUTAR — 1 putaran penuh =
+// 0,5mm (jarak ulir), jadi tiap divisi = 0,5/50 = 0,01mm (ketelitian
+// mikrometer). Skala utama cuma dilabeli tiap 1mm & skala putar cuma
+// dilabeli tiap 5 divisi — PERSIS kayak alat aslinya (bukan disederhanakan
+// asal), karena itu juga cara bacanya yang sebenarnya diajarkan: baca
+// angka besar yang kelewatan, terus hitung garis kecil sampai ke penunjuk.
+// Ini sekalian jadi solusi buat masalah "angka kepadatan" yang kejadian di
+// versi jangka sorong.
+
+import '../../styles/lab.css';
+
+const DIAL_CX = 78;
+const DIAL_CY = 20;
+const DIAL_R_INNER = 10.5;
+const DIAL_R_MINOR = 12.5;
+const DIAL_R_MAJOR = 13.5;
+const DIAL_R_LABEL = 17;
+
+const thimbleTicks = Array.from({ length: 50 }, (_, i) => {
+  const angleDeg = (i / 50) * 360 - 90; // i=0 di posisi jam 12 (atas)
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const isMajor = i % 5 === 0;
+  const rOuter = isMajor ? DIAL_R_MAJOR : DIAL_R_MINOR;
+  return {
+    i,
+    isMajor,
+    x1: DIAL_CX + DIAL_R_INNER * Math.cos(angleRad),
+    y1: DIAL_CY + DIAL_R_INNER * Math.sin(angleRad),
+    x2: DIAL_CX + rOuter * Math.cos(angleRad),
+    y2: DIAL_CY + rOuter * Math.sin(angleRad),
+    lx: DIAL_CX + DIAL_R_LABEL * Math.cos(angleRad),
+    ly: DIAL_CY + DIAL_R_LABEL * Math.sin(angleRad),
+  };
+});
+
+// Skala utama: 0–10mm, 1 unit SVG = 6 unit per mm biar keliatan lega.
+const MM_TO_UNIT = 6;
+const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, ... 10
+---
+
+<div class="jsl msk" data-msk>
+  <div class="jsl-card card">
+    <div class="jsl-stage">
+      <svg
+        class="jsl-svg"
+        viewBox="-4 -6 92 60"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Ilustrasi mikrometer sekrup mengukur sebuah benda"
+      >
+        <!-- Skala utama -->
+        <line x1="0" y1="14" x2={10 * MM_TO_UNIT} y2="14" class="jsl-baseline" />
+        {mainTicks.map((mm) => (
+          <line
+            x1={mm * MM_TO_UNIT}
+            y1={mm % 1 === 0 ? 6 : 9}
+            x2={mm * MM_TO_UNIT}
+            y2="14"
+            class={mm % 1 === 0 ? 'jsl-tick jsl-tick-major' : 'jsl-tick'}
+          />
+        ))}
+        {mainTicks.filter((mm) => mm % 1 === 0).map((mm) => (
+          <text x={mm * MM_TO_UNIT} y="4.5" class="jsl-label" text-anchor="middle">{mm}</text>
+        ))}
+
+        <!-- Landasan (anvil, tetap di posisi 0) -->
+        <rect x="-1" y="16" width="2" height="20" rx="0.6" class="jsl-jaw jsl-jaw-fixed" />
+
+        <!-- Benda yang diukur -->
+        <rect data-object x="0" y="22" width="18" height="8" rx="1.3" class="jsl-object" />
+
+        <!-- Poros ukur (spindle, posisinya di-translate lewat JS) -->
+        <g data-moving-jaw transform={`translate(${18},0)`}>
+          <rect x="-1" y="16" width="2" height="20" rx="0.6" class="jsl-jaw jsl-jaw-moving" />
+
+          <!-- Garis penanda posisi di skala utama -->
+          <line x1="0" y1="10" x2="0" y2="14" class="jsl-index-line" />
+
+          <!-- Gagang buat digeser (target sentuh besar buat HP) -->
+          <g data-handle class="jsl-handle" tabindex="0" role="slider" aria-label="Putar/geser poros ukur mikrometer sekrup" aria-valuemin="5" aria-valuemax="98" aria-valuenow="18">
+            <rect x="-4.5" y="38" width="9" height="9" rx="2.5" class="jsl-handle-grip" />
+            <line x1="-2" y1="42.5" x2="2" y2="42.5" class="jsl-handle-bar" />
+          </g>
+        </g>
+
+        <!-- Dial skala putar (thimble) -->
+        <g class="msk-dial-frame">
+          <circle cx={DIAL_CX} cy={DIAL_CY} r={DIAL_R_MAJOR + 0.8} class="msk-dial-ring" />
+          <g data-thimble-dial transform={`rotate(0 ${DIAL_CX} ${DIAL_CY})`}>
+            {thimbleTicks.map((t) => (
+              <line
+                data-thimble-tick={t.i}
+                x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
+                class={t.isMajor ? 'jsl-tick jsl-tick-major msk-thimble-tick' : 'jsl-tick msk-thimble-tick'}
+              />
+            ))}
+            {thimbleTicks.filter((t) => t.isMajor).map((t) => (
+              <text x={t.lx} y={t.ly} class="jsl-label msk-thimble-label" text-anchor="middle" dominant-baseline="middle">{t.i}</text>
+            ))}
+          </g>
+          <!-- Penunjuk tetap (indeks) -->
+          <polygon
+            points={`${DIAL_CX - 1.2},${DIAL_CY - DIAL_R_MAJOR - 2.6} ${DIAL_CX + 1.2},${DIAL_CY - DIAL_R_MAJOR - 2.6} ${DIAL_CX},${DIAL_CY - DIAL_R_MAJOR - 0.6}`}
+            class="msk-pointer"
+          />
+        </g>
+      </svg>
+    </div>
+
+    <p class="jsl-hint" data-hint>👉 Geser gagang biru di bawah sampai porosnya nyentuh benda kuning.</p>
+
+    <div class="jsl-controls" data-controls>
+      <label for="msk-guess">Menurut bacaan kamu, berapa mm hasil pengukurannya?</label>
+      <div class="jsl-input-row">
+        <input
+          type="text"
+          inputmode="decimal"
+          id="msk-guess"
+          data-guess
+          placeholder="contoh: 4,37"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-primary" data-check>Cek Jawaban</button>
+      </div>
+    </div>
+
+    <div class="jsl-result" data-result hidden>
+      <p class="jsl-result-headline" data-result-headline></p>
+      <p class="jsl-result-detail" data-result-detail></p>
+      <button type="button" class="btn btn-ghost" data-retry>🔄 Coba Lagi (Benda Baru)</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .msk-dial-ring {
+    fill: var(--surface-solid);
+    stroke: var(--border-strong);
+    stroke-width: 0.4;
+  }
+
+  .msk-thimble-tick {
+    transition: stroke 0.15s ease, stroke-width 0.15s ease;
+  }
+
+  .msk-thimble-tick[data-active='true'] {
+    stroke: var(--gold);
+    stroke-width: 0.7;
+  }
+
+  .msk-thimble-label {
+    font-size: 2.6px;
+  }
+
+  .msk-pointer {
+    fill: var(--accent);
+  }
+
+  .jsl-index-line {
+    stroke: var(--gold);
+    stroke-width: 0.5;
+  }
+</style>
+
+<script>
+  const OBJECT_COLORS = ['#ffd66b', '#6ea8ff', '#a78bfa', '#7ee0c3', '#ff9b7a'];
+  const MIN_OBJECT_MM = 0.6;
+  const MAX_OBJECT_MM = 8.5;
+  const MAX_SPINDLE_MM = 9.6;
+  const MM_TO_UNIT = 6;
+
+  function initMikrometer(root: HTMLElement) {
+    const svg = root.querySelector<SVGSVGElement>('.jsl-svg')!;
+    const movingJaw = root.querySelector<SVGGElement>('[data-moving-jaw]')!;
+    const handle = root.querySelector<SVGGElement>('[data-handle]')!;
+    const objectRect = root.querySelector<SVGRectElement>('[data-object]')!;
+    const dial = root.querySelector<SVGGElement>('[data-thimble-dial]')!;
+    const thimbleTicks = Array.from(root.querySelectorAll<SVGLineElement>('[data-thimble-tick]'));
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!;
+    const guessInput = root.querySelector<HTMLInputElement>('[data-guess]')!;
+    const checkBtn = root.querySelector<HTMLButtonElement>('[data-check]')!;
+    const resultBox = root.querySelector<HTMLElement>('[data-result]')!;
+    const resultHeadline = root.querySelector<HTMLElement>('[data-result-headline]')!;
+    const resultDetail = root.querySelector<HTMLElement>('[data-result-detail]')!;
+    const retryBtn = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+
+    let objectMm = 0;
+    let spindleMm = 0;
+    let locked = false;
+    let dragging = false;
+    let dragStartClientX = 0;
+    let dragStartSpindleMm = 0;
+
+    const round2 = (n: number) => Math.round(n * 100) / 100;
+
+    function readingParts(mm: number) {
+      const suHalf = Math.floor(mm * 2) / 2; // skala utama, kelipatan 0,5mm
+      let sp = Math.round((mm - suHalf) / 0.01); // skala putar (0-49)
+      let su = suHalf;
+      if (sp >= 50) {
+        sp = 0;
+        su = round2(suHalf + 0.5);
+      }
+      return { su, sp };
+    }
+
+    function newRound() {
+      objectMm = round2(MIN_OBJECT_MM + Math.random() * (MAX_OBJECT_MM - MIN_OBJECT_MM));
+      objectRect.setAttribute('width', String(objectMm * MM_TO_UNIT));
+      const color = OBJECT_COLORS[Math.floor(Math.random() * OBJECT_COLORS.length)];
+      root.style.setProperty('--object-color', color);
+
+      spindleMm = MAX_SPINDLE_MM;
+      updateSpindlePosition();
+
+      locked = false;
+      dragging = false;
+      guessInput.value = '';
+      guessInput.disabled = false;
+      checkBtn.disabled = false;
+      controls.hidden = false;
+      resultBox.hidden = true;
+      hint.textContent = '👉 Geser gagang biru di bawah sampai porosnya nyentuh benda kuning.';
+      hint.dataset.state = 'open';
+    }
+
+    function updateSpindlePosition() {
+      const xUnit = spindleMm * MM_TO_UNIT;
+      movingJaw.setAttribute('transform', `translate(${xUnit},0)`);
+      handle.setAttribute('aria-valuenow', String(spindleMm));
+
+      const { sp } = readingParts(spindleMm);
+      const angleDeg = (sp / 50) * 360;
+      dial.setAttribute('transform', `rotate(${-angleDeg} 78 20)`);
+
+      thimbleTicks.forEach((tick) => {
+        const idx = Number(tick.dataset.thimbleTick);
+        tick.dataset.active = idx === sp ? 'true' : 'false';
+      });
+
+      const closed = spindleMm <= objectMm + 0.005;
+      if (!locked) {
+        hint.dataset.state = closed ? 'closed' : 'open';
+        hint.textContent = closed
+          ? '✓ Poros sudah nempel ke benda — sekarang coba baca skalanya.'
+          : '👉 Geser gagang biru di bawah sampai porosnya nyentuh benda kuning.';
+      }
+    }
+
+    function clampSpindle(mm: number) {
+      return Math.min(MAX_SPINDLE_MM, Math.max(objectMm, mm));
+    }
+
+    function pxPerUnit() {
+      const rect = svg.getBoundingClientRect();
+      // viewBox width = 92 (dari -4 sampai 88)
+      return rect.width / 92;
+    }
+
+    function onPointerDown(e: PointerEvent) {
+      if (locked) return;
+      dragging = true;
+      dragStartClientX = e.clientX;
+      dragStartSpindleMm = spindleMm;
+      handle.setPointerCapture(e.pointerId);
+      handle.focus();
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!dragging) return;
+      const deltaPx = e.clientX - dragStartClientX;
+      const deltaUnit = deltaPx / pxPerUnit();
+      const deltaMm = deltaUnit / MM_TO_UNIT;
+      spindleMm = round2(clampSpindle(dragStartSpindleMm + deltaMm));
+      updateSpindlePosition();
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      if (!dragging) return;
+      dragging = false;
+      try {
+        handle.releasePointerCapture(e.pointerId);
+      } catch {
+        /* noop */
+      }
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (locked) return;
+      if (e.key === 'ArrowLeft') {
+        spindleMm = round2(clampSpindle(spindleMm - 0.01));
+        updateSpindlePosition();
+        e.preventDefault();
+      } else if (e.key === 'ArrowRight') {
+        spindleMm = round2(clampSpindle(spindleMm + 0.01));
+        updateSpindlePosition();
+        e.preventDefault();
+      }
+    }
+
+    function parseGuess(raw: string): number | null {
+      const normalized = raw.trim().replace(',', '.');
+      if (!normalized) return null;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function onCheck() {
+      const guess = parseGuess(guessInput.value);
+      if (guess === null) {
+        guessInput.focus();
+        return;
+      }
+
+      locked = true;
+      dragging = false;
+      guessInput.disabled = true;
+      checkBtn.disabled = true;
+
+      const currentReadingMm = round2(spindleMm);
+      const trueObjectMm = round2(objectMm);
+      const closedProperly = spindleMm <= objectMm + 0.005;
+      const isCorrect = Math.abs(guess - currentReadingMm) < 0.005;
+
+      resultBox.hidden = false;
+      resultBox.dataset.correct = String(isCorrect);
+      resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
+
+      const bacaanTxt = `Bacaan skala saat ini: <strong>${currentReadingMm.toFixed(2)} mm</strong>.`;
+      const bendaTxt = `Ukuran benda sebenarnya: <strong>${trueObjectMm.toFixed(2)} mm</strong>.`;
+      const closeTxt = closedProperly
+        ? ''
+        : ' Porosnya belum full nempel ke benda, jadi bacaannya lebih besar dari ukuran aslinya — coba tutup rapat dulu di ronde berikutnya.';
+
+      resultDetail.innerHTML = `${bacaanTxt} ${bendaTxt}${closeTxt}`;
+    }
+
+    handle.addEventListener('pointerdown', onPointerDown);
+    handle.addEventListener('pointermove', onPointerMove);
+    handle.addEventListener('pointerup', onPointerUp);
+    handle.addEventListener('pointercancel', onPointerUp);
+    handle.addEventListener('keydown', onKeyDown);
+    checkBtn.addEventListener('click', onCheck);
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') onCheck();
+    });
+    retryBtn.addEventListener('click', newRound);
+
+    newRound();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-msk]').forEach(initMikrometer);
+</script>

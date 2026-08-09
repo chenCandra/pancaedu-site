@@ -2,67 +2,94 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import Hero from '../components/home/Hero.astro';
+import Featured from '../components/home/Featured.astro';
+import About from '../components/home/About.astro';
+import Counters from '../components/home/Counters.astro';
+import Bento from '../components/home/Bento.astro';
+import Works from '../components/home/Works.astro';
+import Timeline from '../components/home/Timeline.astro';
+import Quote from '../components/home/Quote.astro';
+import Contact from '../components/home/Contact.astro';
 
+// Semua angka & konten di bawah diambil dari data situs yang sesungguhnya
+// saat build — bukan angka atau contoh dikarang. Lihat catatan di
+// Counters.astro.
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const materiPosts = allPosts.filter((p) => p.data.category === 'materi');
 const latestPosts = allPosts.slice(0, 6);
+
+const uniqueMapel = [...new Set(materiPosts.map((p) => p.data.mapel).filter(Boolean))];
+const uniqueKelas = [...new Set(materiPosts.map((p) => p.data.kelas).filter(Boolean))];
+
+const counters = [
+  { icon: '📝', value: String(allPosts.length), suffix: '+', label: 'Artikel & Materi Diterbitkan' },
+  { icon: '📘', value: String(uniqueMapel.length || 1), suffix: '', label: 'Mata Pelajaran' },
+  { icon: '🏫', value: String(uniqueKelas.length || 1), suffix: '', label: 'Jenjang Kelas Tercakup' },
+  { icon: '🎉', value: '100', suffix: '%', label: 'Gratis Diakses' },
+];
+
+const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? allPosts[0];
+
+const workItems = materiPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4)
+  .map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    href: `/materi/${p.id}`,
+    tag: p.data.mapel ?? 'Materi',
+    hasLab: Boolean(p.data.simulasi),
+  }));
 ---
 
 <BaseLayout
   title="PancaEdu"
-  description="Artikel dan materi pelajaran ditulis oleh seorang guru & mahasiswa pascasarjana — refleksi mengajar, bahan ajar, dan catatan belajar."
+  description="Artikel dan materi pelajaran ditulis oleh seorang guru yang juga pembelajar — refleksi mengajar, bahan ajar, dan catatan belajar."
 >
-  <section class="hero container">
-    <p class="eyebrow">Belajar &amp; berbagi</p>
-    <h1>Catatan seorang guru yang masih terus belajar.</h1>
-    <p class="hero-lede">
-      PancaEdu adalah ruang menulis pribadi saya — artikel seputar pendidikan &amp; studi
-      pascasarjana, serta materi pelajaran yang saya susun untuk dipakai siapa saja secara
-      gratis.
-    </p>
-    <div class="hero-actions">
-      <a href="/artikel" class="btn btn-primary">Baca Artikel</a>
-      <a href="/materi" class="btn btn-ghost">Jelajahi Materi Pelajaran</a>
-    </div>
-  </section>
+  <Hero />
+  {featured && (
+    <Featured
+      title={featured.data.title}
+      description={featured.data.description}
+      href={`/materi/${featured.id}`}
+      mapel={featured.data.mapel}
+      kelas={featured.data.kelas}
+      hasLab={Boolean(featured.data.simulasi)}
+    />
+  )}
 
   {latestPosts.length > 0 && (
-    <section class="container latest">
-      <h2>Terbaru</h2>
-      <div class="post-grid">
-        {latestPosts.map((post) => <PostCard post={post} />)}
+    <section class="section latest">
+      <div class="container">
+        <p class="eyebrow" data-reveal>Terbaru</p>
+        <div class="post-grid">
+          {latestPosts.map((post) => <PostCard post={post} />)}
+        </div>
       </div>
     </section>
   )}
+
+  <About />
+  <Counters counters={counters} />
+  <Bento />
+  {workItems.length > 0 && <Works items={workItems} />}
+  <Timeline />
+  <Quote />
+  <Contact />
 </BaseLayout>
 
 <style>
-  .hero {
-    padding-block: 4rem 3rem;
-    max-width: 42rem;
-  }
-
-  .hero-lede {
-    font-size: 1.125rem;
-    color: var(--ink-soft);
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
   .latest {
-    padding-block: 2rem 4rem;
+    padding-top: 0;
   }
 
   .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1.5rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
   }
 </style>

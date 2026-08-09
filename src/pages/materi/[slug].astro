@@ -2,6 +2,11 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import BookmarkButton from '../../components/BookmarkButton.astro';
+import Kuis from '../../components/Kuis.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
@@ -12,9 +17,26 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, mapel, kelas, pubDate, updatedDate, tags, coverImage, youtubeId, simulasi } =
+const { title, description, mapel, kelas, pubDate, updatedDate, tags, coverImage, youtubeId, simulasi, kuis } =
   post.data;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// Rekomendasi "Baca Juga" — prioritaskan mapel+kelas yang sama (paling
+// relevan), lalu mapel saja, sisanya diisi materi terbaru lain biar slotnya
+// nggak pernah kosong.
+const related = (
+  await getCollection(
+    'blog',
+    ({ data, id }) => data.category === 'materi' && !data.draft && id !== post.id
+  )
+)
+  .sort((a, b) => {
+    const score = (p: typeof a) =>
+      (p.data.mapel === mapel ? 2 : 0) + (p.data.kelas === kelas ? 1 : 0);
+    const diff = score(b) - score(a);
+    return diff !== 0 ? diff : b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  })
+  .slice(0, 3);
 
 const formattedDate = pubDate.toLocaleDateString('id-ID', {
   day: 'numeric',
@@ -35,12 +57,18 @@ const jsonLd = {
 ---
 
 <BaseLayout title={title} description={description} image={coverImage} article jsonLd={jsonLd}>
+  <ReadingProgress />
   <article class="container post">
     <p class="eyebrow">
       Materi Pelajaran{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
     </p>
     <h1>{title}</h1>
-    <p class="post-date">Dipublikasikan {formattedDate}</p>
+    <div class="post-meta-row">
+      <p class="post-date">Dipublikasikan {formattedDate}</p>
+      <BookmarkButton postId={post.id} />
+    </div>
+
+    <TableOfContents headings={headings} />
 
     {coverImage && <img src={coverImage} alt="" class="post-cover" />}
 
@@ -81,6 +109,8 @@ const jsonLd = {
       </section>
     )}
 
+    <Kuis soal={kuis} />
+
     <AdSlot label="Iklan" />
 
     {tags.length > 0 && (
@@ -89,12 +119,22 @@ const jsonLd = {
       </ul>
     )}
   </article>
+
+  <RelatedPosts posts={related} />
 </BaseLayout>
 
 <style>
   .post {
     padding-block: 3rem 4rem;
     max-width: var(--measure);
+  }
+
+  .post-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
   .post-date {

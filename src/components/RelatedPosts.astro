@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  heading?: string;
+}
+
+const { posts, heading = 'Baca Juga' } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="container related">
+    <h2 class="related-heading">{heading}</h2>
+    <div class="related-grid">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+)}
+
+<style>
+  .related {
+    padding-block: 1rem 4rem;
+  }
+
+  .related-heading {
+    font-size: 1.375rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+  }
+</style>

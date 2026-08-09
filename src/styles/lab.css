@@ -1,0 +1,175 @@
+/* Style dasar yang dipakai bersama oleh semua widget Lab Maya bertema
+   "alat ukur" (JangkaSorong.astro, MikrometerSekrup.astro, dst) — dipisah
+   ke sini karena <style> di dalam komponen .astro di-scope otomatis per
+   file, jadi kelas yang sama tidak otomatis kepakai lintas komponen kalau
+   ditaruh di masing-masing file. Import file ini di frontmatter komponen
+   lab yang butuh ('../../styles/lab.css'). Style yang KHUSUS satu alat
+   (mis. skala nonius jangka sorong, dial mikrometer) tetap di <style>
+   komponennya masing-masing. */
+
+.jsl-card {
+  padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.jsl-stage {
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem clamp(0.5rem, 3vw, 1.5rem);
+}
+
+.jsl-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none; /* biar drag di HP nggak ikut nge-scroll halaman */
+  overflow: visible;
+}
+
+.jsl-baseline {
+  stroke: var(--ink-soft);
+  stroke-width: 0.3;
+}
+
+.jsl-tick {
+  stroke: var(--ink-soft);
+  stroke-width: 0.25;
+}
+
+.jsl-tick-major {
+  stroke: var(--ink);
+  stroke-width: 0.4;
+}
+
+.jsl-label {
+  font-size: 3.4px;
+  fill: var(--ink-soft);
+  font-family: var(--font-body);
+}
+
+.jsl-jaw {
+  fill: var(--ink);
+}
+
+.jsl-jaw-fixed {
+  fill: var(--accent);
+}
+
+.jsl-jaw-moving {
+  fill: var(--accent-2);
+}
+
+.jsl-object {
+  fill: var(--object-color, var(--gold));
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 0.2;
+  transition: fill 0.3s ease;
+}
+
+.jsl-handle {
+  cursor: grab;
+}
+
+.jsl-handle:active {
+  cursor: grabbing;
+}
+
+.jsl-handle-grip {
+  fill: var(--accent-2);
+  stroke: var(--surface-solid);
+  stroke-width: 0.5;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.25));
+}
+
+.jsl-handle:focus-visible .jsl-handle-grip {
+  stroke: var(--gold);
+  stroke-width: 0.8;
+}
+
+.jsl-handle-bar {
+  stroke: var(--accent-ink);
+  stroke-width: 0.5;
+  stroke-linecap: round;
+}
+
+.jsl-hint {
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.jsl-hint[data-state='closed'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.jsl-controls {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jsl-controls label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.jsl-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.jsl-input-row input {
+  flex: 1 1 10rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background-color: var(--surface-solid);
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.jsl-controls[hidden],
+.jsl-result[hidden] {
+  display: none;
+}
+
+.jsl-result {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  text-align: center;
+}
+
+.jsl-result[data-correct='true'] {
+  background: var(--gold-soft);
+}
+
+.jsl-result-headline {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  animation: jsl-pop 0.4s ease;
+}
+
+.jsl-result-detail {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  margin: 0 0 1rem;
+}
+
+@keyframes jsl-pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jsl-result-headline {
+    animation: none;
+  }
+}

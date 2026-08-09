@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import JangkaSorong from '../../components/lab/JangkaSorong.astro';
+import MikrometerSekrup from '../../components/lab/MikrometerSekrup.astro';
+
+const kategori = [
+  { id: 'panjang', label: 'Panjang', icon: '📏', ready: true },
+  { id: 'massa', label: 'Massa', icon: '⚖️', ready: false },
+  { id: 'waktu', label: 'Waktu', icon: '⏱️', ready: false },
+  { id: 'arus', label: 'Arus', icon: '⚡', ready: false },
+  { id: 'suhu', label: 'Suhu', icon: '🌡️', ready: false },
+];
+
+const alatPanjang = [
+  { id: 'jangka-sorong', label: 'Jangka Sorong', icon: '📐' },
+  { id: 'mikrometer-sekrup', label: 'Mikrometer Sekrup', icon: '🔩' },
+];
+---
+
+<BaseLayout
+  title="Lab Maya: Alat Ukur"
+  description="Latihan interaktif membaca alat ukur — jangka sorong, mikrometer sekrup, dan lainnya menyusul. Ukuran benda diacak tiap ronde, kamu yang menggeser & menebak hasilnya."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi/pengukuran-alat-ukur-dan-angka-penting" class="back-link">&larr; Kembali ke materi Pengukuran</a>
+    <p class="eyebrow">🧪 Lab Maya</p>
+    <h1>Eksplorasi Alat Ukur</h1>
+    <p class="page-lede">
+      Pilih besaran yang mau dilatih, geser alatnya sampai nempel ke benda, baca skalanya
+      sendiri, baru cek jawabanmu.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="au-tabs" role="tablist" aria-label="Pilih besaran" data-tabs="kategori">
+      {kategori.map((k) => (
+        <button
+          type="button"
+          role="tab"
+          class="au-tab"
+          id={`tab-${k.id}`}
+          aria-controls={`panel-${k.id}`}
+          aria-selected={k.id === 'panjang' ? 'true' : 'false'}
+          data-tab-target={k.id}
+          disabled={!k.ready}
+        >
+          <span aria-hidden="true">{k.icon}</span> {k.label}
+          {!k.ready && <span class="au-tab-badge">segera</span>}
+        </button>
+      ))}
+    </div>
+
+    {kategori.map((k) => (
+      <div
+        role="tabpanel"
+        id={`panel-${k.id}`}
+        aria-labelledby={`tab-${k.id}`}
+        class="au-panel"
+        data-panel="kategori"
+        hidden={k.id !== 'panjang'}
+      >
+        {k.ready ? (
+          k.id === 'panjang' ? (
+            <>
+              <div class="au-subtabs" role="tablist" aria-label="Pilih alat ukur panjang" data-tabs="panjang">
+                {alatPanjang.map((a, i) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    class="au-subtab"
+                    id={`subtab-${a.id}`}
+                    aria-controls={`subpanel-${a.id}`}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                    data-tab-target={a.id}
+                  >
+                    <span aria-hidden="true">{a.icon}</span> {a.label}
+                  </button>
+                ))}
+              </div>
+
+              <div role="tabpanel" id="subpanel-jangka-sorong" aria-labelledby="subtab-jangka-sorong" class="au-subpanel" data-panel="panjang" hidden={false}>
+                <JangkaSorong />
+              </div>
+              <div role="tabpanel" id="subpanel-mikrometer-sekrup" aria-labelledby="subtab-mikrometer-sekrup" class="au-subpanel" data-panel="panjang" hidden>
+                <MikrometerSekrup />
+              </div>
+            </>
+          ) : null
+        ) : (
+          <div class="au-soon card">
+            <span class="au-soon-icon" aria-hidden="true">🚧</span>
+            <h2>Lab {k.label} masih disiapkan</h2>
+            <p>Belum ada simulasinya di sini — nantikan update berikutnya ya.</p>
+          </div>
+        )}
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 40rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .au-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .au-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  .au-tab:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: var(--border-strong);
+  }
+
+  .au-tab[aria-selected='true'] {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+    color: var(--accent-ink);
+  }
+
+  .au-tab:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .au-tab-badge {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: var(--gold-soft);
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .au-panel[hidden] {
+    display: none;
+  }
+
+  .au-subtabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .au-subtab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .au-subtab[aria-selected='true'] {
+    background: var(--accent-soft);
+    border-color: var(--border-strong);
+    color: var(--accent);
+  }
+
+  .au-subpanel[hidden] {
+    display: none;
+  }
+
+  .au-soon {
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .au-soon-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .au-soon h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .au-soon p {
+    color: var(--ink-soft);
+    margin: 0;
+  }
+</style>
+
+<script>
+  function initTabGroup(container: HTMLElement, groupName: string) {
+    const tabButtons = Array.from(container.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(
+      document.querySelectorAll<HTMLElement>(`[data-panel="${groupName}"]`)
+    );
+
+    function activate(id: string) {
+      tabButtons.forEach((btn) => {
+        const isTarget = btn.dataset.tabTarget === id;
+        btn.setAttribute('aria-selected', String(isTarget));
+      });
+      panels.forEach((panel) => {
+        const match = panel.id === `panel-${id}` || panel.id === `subpanel-${id}`;
+        panel.hidden = !match;
+      });
+    }
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const id = btn.dataset.tabTarget!;
+        activate(id);
+        history.replaceState(null, '', `#${id}`);
+      });
+    });
+
+    return { activate, tabButtons };
+  }
+
+  const kategoriContainer = document.querySelector<HTMLElement>('[data-tabs="kategori"]');
+  const panjangContainer = document.querySelector<HTMLElement>('[data-tabs="panjang"]');
+
+  const kategoriTabs = kategoriContainer ? initTabGroup(kategoriContainer, 'kategori') : null;
+  const panjangTabs = panjangContainer ? initTabGroup(panjangContainer, 'panjang') : null;
+
+  // Deep-link lewat hash, mis. buka /lab-maya/alat-ukur#mikrometer-sekrup
+  // langsung nyorot tool itu (dipakai link dari artikel materi).
+  const hash = window.location.hash.replace('#', '');
+  if (hash === 'jangka-sorong' || hash === 'mikrometer-sekrup') {
+    panjangTabs?.activate(hash);
+  }
+</script>

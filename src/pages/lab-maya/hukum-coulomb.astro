@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Hukum Coulomb"
+  description="Simulasi interaktif Hukum Coulomb — geser jarak & besar muatan, lihat gaya tarik/tolaknya berubah langsung, lengkap dengan rincian perhitungannya."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Listrik Statis · Kelas XII</p>
+    <h1>Hukum Coulomb: Gaya Tarik & Tolak Antar Muatan</h1>
+    <p class="page-lede">
+      Dua muatan listrik selalu saling memberi gaya — tarik-menarik kalau beda jenis, tolak-menolak
+      kalau sejenis. Besarnya gaya itu (F) dihitung pakai Hukum Coulomb: berbanding lurus dengan
+      besar kedua muatan, dan berbanding terbalik dengan kuadrat jaraknya. Coba geser slider di
+      bawah atau tarik langsung bola muatannya — hasil & rumus substitusinya berubah langsung.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="coulomb-frame-wrap card">
+      <iframe
+        data-coulomb-frame
+        src="/lab-embeds/hukum-coulomb.html"
+        title="Simulasi Hukum Coulomb"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa gelapnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .coulomb-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .coulomb-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 1000px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
+  // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
+  // scrollbar ganda atau ruang kosong di bawah simulasi.
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-coulomb-frame]');
+
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    // Kontennya sendiri juga redraw canvas saat resize — kasih jeda dikit
+    // biar layout-nya settle dulu sebelum kita ukur ulang.
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

@@ -1,0 +1,71 @@
+---
+---
+
+<section class="section about">
+  <div class="container about-grid">
+    <p class="eyebrow" data-reveal>Tentang</p>
+    <div class="about-content">
+      <h2 class="about-title" data-reveal>
+        Ditulis oleh satu orang — guru, wali kelas, dan pembelajar yang tak pernah berhenti belajar.
+      </h2>
+      <p class="about-text" data-reveal>
+        Saya Panca — seorang guru yang sekaligus menjabat wali kelas dan operator pengelolaan
+        Dana BOS di sekolah tempat saya mengajar. PancaEdu adalah ruang menulis pribadi saya:
+        artikel seputar pendidikan, refleksi dari ruang kelas, dan materi pelajaran yang saya
+        susun sendiri untuk dipakai gratis oleh siapa saja yang membutuhkan.
+      </p>
+      <a href="/tentang" class="about-link" data-reveal>
+        Baca selengkapnya <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .about-content {
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .about-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 500;
+  }
+
+  .about-text {
+    font-size: 1.0625rem;
+    color: var(--ink-soft);
+  }
+
+  .about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+    width: fit-content;
+  }
+
+  .about-link span {
+    transition: transform 0.25s ease;
+  }
+
+  .about-link:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 40rem) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

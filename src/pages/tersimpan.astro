@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostIndexData from '../components/PostIndexData.astro';
+---
+
+<BaseLayout title="Tersimpan" description="Artikel & materi yang kamu tandai buat dibaca nanti.">
+  <section class="container page-header">
+    <p class="eyebrow">🔖 Tersimpan</p>
+    <h1>Bacaan Tersimpan</h1>
+    <p class="page-lede">
+      Artikel & materi yang kamu tandai lewat tombol "Tandai buat nanti" — cuma tersimpan di
+      perangkat/browser ini, bukan akun (jadi nggak ikut pindah kalau ganti HP/browser).
+    </p>
+  </section>
+
+  <section class="container result-list" data-result-list></section>
+  <p class="container result-empty" data-result-empty hidden>
+    Belum ada yang ditandai. Buka artikel atau materi, lalu klik "Tandai buat nanti".
+  </p>
+</BaseLayout>
+
+<PostIndexData />
+
+<script>
+  import { readPostIndex, getBookmarkIds, renderResultItem, removeBookmark } from '../scripts/post-index';
+
+  const list = document.querySelector<HTMLElement>('[data-result-list]');
+  const emptyState = document.querySelector<HTMLElement>('[data-result-empty]');
+  const index = readPostIndex();
+
+  function renderSaved() {
+    if (!list || !emptyState) return;
+    const ids = getBookmarkIds();
+    const saved = index.filter((post) => ids.includes(post.id));
+    list.innerHTML = saved.map((post) => renderResultItem(post, { removable: true })).join('');
+    emptyState.hidden = saved.length > 0;
+  }
+
+  renderSaved();
+
+  list?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-remove-bookmark]');
+    if (!btn) return;
+    const id = btn.dataset.removeBookmark;
+    if (!id) return;
+    removeBookmark(id);
+    renderSaved();
+  });
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block: 1rem 2rem;
+    max-width: 42rem;
+  }
+
+  .result-empty {
+    color: var(--ink-soft);
+    padding-block: 1rem 4rem;
+  }
+</style>

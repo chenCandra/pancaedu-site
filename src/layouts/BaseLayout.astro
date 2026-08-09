@@ -12,9 +12,14 @@ interface Props {
   article?: boolean;
   jsonLd?: Record<string, unknown>;
   noindex?: boolean;
+  // Matikan cursor kustom halus (site-cursor) di halaman yang butuh drag
+  // presisi (mis. Lab Maya) — cursor itu sengaja "telat" mengikuti mouse
+  // buat kesan halus di halaman biasa, tapi bikin interaksi drag terasa
+  // lag/nggak responsif.
+  disableCursor?: boolean;
 }
 
-const { title, description, image, article, jsonLd, noindex } = Astro.props;
+const { title, description, image, article, jsonLd, noindex, disableCursor } = Astro.props;
 ---
 
 <!doctype html>
@@ -29,12 +34,20 @@ const { title, description, image, article, jsonLd, noindex } = Astro.props;
     )}
     <!-- TODO: tempel script verifikasi Google AdSense di sini setelah akun disetujui -->
   </head>
-  <body>
+  <body data-disable-cursor={disableCursor ? 'true' : undefined}>
+    <div class="bg-blobs" aria-hidden="true">
+      <span class="bg-blob bg-blob--1"></span>
+      <span class="bg-blob bg-blob--2"></span>
+      <span class="bg-blob bg-blob--3"></span>
+    </div>
     <Header />
     <main>
       <slot />
     </main>
     <Footer />
     <CookieConsent />
+    <script>
+      import '../scripts/site-animations.js';
+    </script>
   </body>
 </html>

@@ -2,10 +2,19 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
 
 const posts = (
   await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft)
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Materi terbaru jadi kartu unggulan di atas, sisanya grid biasa — pola sama
+// dengan /artikel, lihat PostCard.astro untuk detail cover & layout kartunya.
+const [featuredPost, ...restPosts] = posts;
+
+// Total materi masih sedikit dibanding artikel, jadi halaman awal ditampilin
+// lebih kecil (6) supaya tombol "Muat lebih banyak" tetap kerasa gunanya.
+const PAGE_SIZE = 6;
 
 const kelasList = ['X', 'XI', 'XII'].filter((k) => posts.some((p) => p.data.kelas === k));
 const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] as string[];
@@ -46,9 +55,23 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
     </div>
   )}
 
+  {featuredPost && (
+    <section class="container featured-wrap" data-featured-wrap>
+      <PostCard post={featuredPost} featured />
+    </section>
+  )}
+
   <section class="container post-grid" data-post-grid>
     {posts.length > 0 ? (
-      posts.map((post) => <PostCard post={post} />)
+      <>
+        {restPosts.slice(0, PAGE_SIZE).map((post) => <PostCard post={post} />)}
+        {restPosts.length > PAGE_SIZE && (
+          <div class="ad-divider" data-ad-divider>
+            <AdSlot label="Iklan" />
+          </div>
+        )}
+        {restPosts.slice(PAGE_SIZE).map((post) => <PostCard post={post} hidden />)}
+      </>
     ) : (
       <p>Belum ada materi yang diterbitkan.</p>
     )}
@@ -57,47 +80,90 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
   <p class="container empty-state" data-empty-state hidden>
     Tidak ada materi yang cocok dengan filter ini.
   </p>
+
+  {restPosts.length > PAGE_SIZE && (
+    <div class="container load-more-wrap">
+      <button type="button" class="btn load-more-btn" data-load-more data-page-size={PAGE_SIZE}>
+        Muat lebih banyak
+      </button>
+    </div>
+  )}
 </BaseLayout>
 
 <script>
   const filters = document.querySelector<HTMLElement>('[data-filters]');
   const grid = document.querySelector<HTMLElement>('[data-post-grid]');
   const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+  const featuredWrap = document.querySelector<HTMLElement>('[data-featured-wrap]');
+  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-load-more]');
+  const adDivider = document.querySelector<HTMLElement>('[data-ad-divider]');
 
-  if (filters && grid) {
+  if (grid) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('a.post-card'));
+    const pageSize = Number(loadMoreBtn?.dataset.pageSize) || cards.length;
     let activeKelas = '';
     let activeMapel = '';
+    // Berapa kartu yang boleh tampil di tampilan "Semua" (tanpa filter) —
+    // nambah tiap kali tombol "Muat lebih banyak" diklik.
+    let revealedCount = pageSize;
 
     const applyFilter = () => {
+      const filterActive = activeKelas !== '' || activeMapel !== '';
       let visibleCount = 0;
+      let matchedSoFar = 0;
       for (const card of cards) {
         const matchesKelas = !activeKelas || card.dataset.kelas === activeKelas;
         const matchesMapel = !activeMapel || card.dataset.mapel === activeMapel;
-        const visible = matchesKelas && matchesMapel;
+        const matches = matchesKelas && matchesMapel;
+        let visible = matches;
+        if (matches && !filterActive) {
+          // Tanpa filter aktif: batasi ke revealedCount pertama, sisanya
+          // nunggu tombol "Muat lebih banyak". Begitu ada filter dipakai,
+          // semua kartu yang cocok langsung ditampilkan.
+          matchedSoFar++;
+          visible = matchedSoFar <= revealedCount;
+        }
         card.hidden = !visible;
         if (visible) visibleCount++;
       }
       if (emptyState) emptyState.hidden = visibleCount > 0;
+      // Kartu unggulan & tombol muat-lebih cuma masuk akal di tampilan
+      // "Semua" — begitu ada filter aktif, sembunyikan keduanya.
+      if (featuredWrap) featuredWrap.hidden = filterActive;
+      if (loadMoreBtn) loadMoreBtn.hidden = filterActive || revealedCount >= cards.length;
+      // Pembatas iklan cuma masuk akal di batas "halaman pertama" tampilan
+      // "Semua" — sembunyikan begitu filter Kelas/Mapel aktif.
+      if (adDivider) adDivider.hidden = filterActive;
     };
 
-    filters.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
-      if (!btn) return;
+    if (filters) {
+      filters.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+        if (!btn) return;
 
-      if (btn.dataset.filterKelas !== undefined) {
-        activeKelas = btn.dataset.filterKelas;
-        for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
-          b.setAttribute('aria-pressed', String(b === btn));
+        if (btn.dataset.filterKelas !== undefined) {
+          activeKelas = btn.dataset.filterKelas;
+          for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
+            b.setAttribute('aria-pressed', String(b === btn));
+          }
+        } else if (btn.dataset.filterMapel !== undefined) {
+          activeMapel = btn.dataset.filterMapel;
+          for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-mapel]')) {
+            b.setAttribute('aria-pressed', String(b === btn));
+          }
+        } else {
+          return;
         }
-      } else if (btn.dataset.filterMapel !== undefined) {
-        activeMapel = btn.dataset.filterMapel;
-        for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-mapel]')) {
-          b.setAttribute('aria-pressed', String(b === btn));
-        }
-      }
+        applyFilter();
+      });
+    }
+
+    loadMoreBtn?.addEventListener('click', () => {
+      revealedCount += pageSize;
       applyFilter();
     });
+
+    applyFilter();
   }
 </script>
 
@@ -148,15 +214,39 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
     border-color: currentColor;
   }
 
+  .featured-wrap {
+    padding-block: 0.5rem 0.5rem;
+  }
+
   .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1.5rem;
-    padding-block: 1rem 4rem;
+    padding-block: 1rem 2rem;
+  }
+
+  /* Pembatas iklan melebar penuh, motongin ritme grid kartu yang seragam */
+  .ad-divider {
+    grid-column: 1 / -1;
+  }
+
+  .ad-divider[hidden] {
+    display: none;
   }
 
   .empty-state {
     color: var(--ink-soft);
     padding-block: 1rem 4rem;
+  }
+
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding-block: 0 4rem;
+  }
+
+  .load-more-btn {
+    cursor: pointer;
+    font-family: var(--font-body);
   }
 </style>

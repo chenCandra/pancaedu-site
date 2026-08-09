@@ -7,10 +7,19 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     category: z.enum(['artikel', 'materi']),
+    // Sub-klasifikasi khusus category:artikel — dipakai buat badge warna &
+    // filter di /artikel, biar "Sains & Fakta Unik" nggak nyampur keliatan
+    // sama "Refleksi Mengajar" dst. Materi tidak pakai field ini (materi
+    // sudah punya mapel+kelas sendiri buat klasifikasi).
+    topik: z.enum(['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka']).optional(),
     mapel: z.string().optional(),
     kelas: z.enum(['X', 'XI', 'XII']).optional(), // jenjang kelas, dipakai khusus untuk materi
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    // preprocess: CMS (Sveltia) nyimpen field datetime opsional yang dikosongkan
+    // sebagai string kosong ('') alih-alih beneran dihapus dari frontmatter —
+    // z.coerce.date() nolak itu. String kosong diperlakukan sama seperti
+    // field-nya nggak ada (undefined), tanggal beneran tetap dicoerce normal.
+    updatedDate: z.preprocess((v) => (v === '' ? undefined : v), z.coerce.date().optional()),
     tags: z.array(z.string()).default([]),
     coverImage: z.string().optional(),
     youtubeId: z.string().optional(),
@@ -26,6 +35,19 @@ const blog = defineCollection({
         sumber: z.string().optional(), // mis. "PhET Interactive Simulations", ditampilkan sebagai kredit
         tinggi: z.number().default(600), // px — kebanyakan simulasi tidak 16:9 seperti video
       })
+      .optional(),
+    // Kuis pilihan ganda di akhir materi — feedback langsung per soal
+    // (bukan submit-semua-baru-dinilai). `jawaban` adalah index 0-based ke
+    // array `pilihan`. Khusus category:materi; artikel tidak pakai ini.
+    kuis: z
+      .array(
+        z.object({
+          soal: z.string(),
+          pilihan: z.array(z.string()).min(2),
+          jawaban: z.number().int().min(0),
+          penjelasan: z.string().optional(),
+        })
+      )
       .optional(),
     draft: z.boolean().default(false),
   }),

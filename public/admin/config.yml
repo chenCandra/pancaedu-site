@@ -110,5 +110,65 @@ collections:
             widget: number
             default: 600
             required: false
+      - name: "kuis"
+        label: "Kuis (Uji Pemahaman)"
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.soal}}"
+        hint: "Tampil di akhir materi, feedback langsung tiap soal dijawab. Boleh dikosongkan kalau belum sempat dibuat."
+        fields:
+          - { label: "Pertanyaan", name: soal, widget: string }
+          - label: "Pilihan Jawaban"
+            name: pilihan
+            widget: list
+            hint: "Tulis tiap pilihan satu per baris (minimal 2)."
+          - label: "Nomor Pilihan yang Benar"
+            name: jawaban
+            widget: number
+            value_type: int
+            hint: "Dihitung dari 0 — pilihan pertama = 0, kedua = 1, dst."
+          - label: "Penjelasan"
+            name: penjelasan
+            widget: text
+            required: false
+            hint: "Muncul setelah murid menjawab — jelaskan kenapa jawabannya begitu."
       - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
       - { label: "Isi Materi", name: body, widget: markdown }
+
+  - name: "kelas"
+    label: "Jejak Kelas (Buku Alumni)"
+    label_singular: "Angkatan"
+    folder: "src/content/kelas"
+    create: true
+    slug: "{{fields.tahunAjaran}}"
+    identifier_field: namaKelas
+    fields:
+      - label: "Tahun Ajaran"
+        name: tahunAjaran
+        widget: string
+        hint: 'Format bebas, mis. "2023/2024" — dipakai juga sebagai nama file, hindari karakter aneh.'
+      - label: "Nama Kelas"
+        name: namaKelas
+        widget: string
+        hint: 'mis. "XI IPA 2"'
+      - label: "Siswa"
+        name: siswa
+        widget: list
+        hint: "Tambahkan tiap siswa satu per satu — nama depan/inisial saja demi privasi."
+        fields:
+          - { label: "Nama", name: nama, widget: string, hint: "Nama depan/inisial saja, bukan nama lengkap." }
+          - label: "Foto"
+            name: foto
+            widget: image
+            required: false
+            hint: "Opsional — kalau kosong, tampil inisial nama sebagai pengganti foto."
+          - label: "Quote/Kesan-Pesan"
+            name: quote
+            widget: string
+            required: false
+      - label: "Catatan (opsional)"
+        name: body
+        widget: markdown
+        required: false
+        hint: "Teks pengantar di atas galeri foto, mis. cerita singkat soal kelas ini."

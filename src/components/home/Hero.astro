@@ -1,0 +1,336 @@
+---
+---
+
+<section class="hero" id="hero">
+  <div class="hero-mesh" aria-hidden="true"></div>
+  <div class="hero-aurora" aria-hidden="true">
+    <span class="aurora aurora--1"></span>
+    <span class="aurora aurora--2"></span>
+    <span class="aurora aurora--3"></span>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="hero-shapes" aria-hidden="true">
+    <span class="shape shape--1">✨</span>
+    <span class="shape shape--2">📘</span>
+    <span class="shape shape--3">💡</span>
+    <span class="sparkle sparkle--1">✨</span>
+    <span class="sparkle sparkle--2">✨</span>
+    <span class="sparkle sparkle--3">✨</span>
+  </div>
+
+  <div class="container hero-content">
+    <p class="eyebrow hero-eyebrow" data-reveal>PancaEdu — Ruang Belajar Digital</p>
+    <h1 class="hero-title" data-hero-title>
+      <span class="hero-line">Materi pelajaran yang dirancang</span>
+      <span class="hero-line">untuk dipahami,</span>
+      <span class="hero-line"><em>bukan sekadar dihafal.</em></span>
+    </h1>
+    <p class="hero-lede" data-reveal>
+      Artikel, bahan ajar, dan laboratorium virtual interaktif — disusun oleh seorang guru,
+      terbuka gratis untuk siapa saja.
+    </p>
+    <div class="hero-actions" data-reveal>
+      <a href="/materi" class="btn btn-primary" data-magnetic>Jelajahi Materi</a>
+      <a href="/tentang" class="btn btn-ghost" data-magnetic>Baca Cerita di Baliknya</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator" data-reveal aria-hidden="true">
+    <span class="hero-scroll-line"></span>
+    <span class="hero-scroll-label">Scroll</span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-mesh {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(59, 111, 237, 0.16), transparent 60%),
+      radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 214, 107, 0.16), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(124, 111, 240, 0.1), transparent 65%),
+      var(--paper);
+  }
+
+  :root[data-theme='dark'] .hero-mesh {
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(126, 162, 255, 0.24), transparent 60%),
+      radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 216, 115, 0.1), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(156, 139, 255, 0.16), transparent 65%),
+      var(--paper);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .hero-mesh {
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 15%, rgba(126, 162, 255, 0.24), transparent 60%),
+        radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 216, 115, 0.1), transparent 60%),
+        radial-gradient(ellipse 70% 60% at 50% 100%, rgba(156, 139, 255, 0.16), transparent 65%),
+        var(--paper);
+    }
+  }
+
+  .hero-aurora {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+  }
+
+  .aurora {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    will-change: transform;
+  }
+
+  .aurora--1 {
+    width: 30rem;
+    height: 30rem;
+    top: -8rem;
+    left: 8%;
+    background: radial-gradient(circle, rgba(110, 168, 255, 0.35), transparent 70%);
+    animation: aurora-a 20s ease-in-out infinite alternate;
+  }
+
+  .aurora--2 {
+    width: 26rem;
+    height: 26rem;
+    top: 10%;
+    right: 5%;
+    background: radial-gradient(circle, rgba(255, 214, 107, 0.28), transparent 70%);
+    animation: aurora-b 24s ease-in-out infinite alternate;
+  }
+
+  .aurora--3 {
+    width: 34rem;
+    height: 20rem;
+    bottom: -6rem;
+    left: 30%;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.24), transparent 70%);
+    animation: aurora-c 28s ease-in-out infinite alternate;
+  }
+
+  :root[data-theme='dark'] .aurora--2 {
+    background: radial-gradient(circle, rgba(255, 216, 115, 0.14), transparent 70%);
+  }
+
+  @keyframes aurora-a {
+    from { transform: translate(0, 0); }
+    to { transform: translate(4rem, 3rem); }
+  }
+  @keyframes aurora-b {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-3rem, 4rem); }
+  }
+  @keyframes aurora-c {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(2rem, -2rem) scale(1.1); }
+  }
+
+  .hero-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .shape {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    opacity: 0.85;
+    line-height: 1;
+    will-change: transform;
+  }
+
+  .shape--1 {
+    width: 3.75rem;
+    height: 3.75rem;
+    top: 18%;
+    right: 14%;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: var(--glow-accent);
+    animation: float-a 9s ease-in-out infinite;
+  }
+
+  .shape--2 {
+    width: 3.25rem;
+    height: 3.25rem;
+    bottom: 22%;
+    left: 10%;
+    font-size: 1.375rem;
+    animation: float-b 11s ease-in-out infinite;
+  }
+
+  .shape--3 {
+    width: 2.75rem;
+    height: 2.75rem;
+    top: 55%;
+    right: 8%;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    animation: float-a 7s ease-in-out infinite reverse;
+  }
+
+  .sparkle {
+    position: absolute;
+    font-size: 0.85rem;
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: twinkle 3.6s ease-in-out infinite;
+  }
+
+  .sparkle--1 {
+    top: 30%;
+    left: 20%;
+    animation-delay: 0.3s;
+  }
+
+  .sparkle--2 {
+    top: 68%;
+    right: 22%;
+    animation-delay: 1.4s;
+  }
+
+  .sparkle--3 {
+    top: 12%;
+    left: 55%;
+    animation-delay: 2.3s;
+  }
+
+  @keyframes float-a {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1.25rem); }
+  }
+  @keyframes float-b {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(1rem) rotate(8deg); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.15) rotate(20deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 46rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    padding-block: 6rem 4rem;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6.5vw, 5rem);
+    font-weight: 600;
+  }
+
+  .hero-title .hero-line {
+    display: block;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-lede {
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    color: var(--ink-soft);
+    max-width: 34rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-scroll-line {
+    width: 1px;
+    height: 2.5rem;
+    background: linear-gradient(var(--ink-faint), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+    animation: scroll-drip 2.2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-drip {
+    0% { top: -100%; }
+    60%, 100% { top: 100%; }
+  }
+
+  .hero-scroll-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora,
+    .shape,
+    .sparkle,
+    .hero-scroll-line::after {
+      animation: none !important;
+    }
+    .sparkle {
+      display: none;
+    }
+  }
+</style>
