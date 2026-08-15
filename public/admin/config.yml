@@ -2,12 +2,19 @@ backend:
   name: github
   repo: chenCandra/pancaedu-site
   branch: main
+  # Worker auth terpisah (proyek sveltia-cms-auth resmi, di-deploy sendiri
+  # di C:\xampp\htdocs\sveltia-cms-auth, nama Worker "pancaedu-cms-auth")
+  # -- dibutuhkan supaya login GitHub bisa dipakai dari /admin situs live,
+  # bukan cuma mode "Work with Local Repository". Client ID/Secret OAuth App
+  # GitHub-nya disimpan sebagai secret di Worker itu, TIDAK di sini.
+  base_url: https://pancaedu-cms-auth.gravi-tazy.workers.dev
 
 # Sveltia CMS otomatis menawarkan "Work with Local Repository" (baca/tulis
 # langsung ke folder proyek lewat browser Chrome/Edge, pakai File System
 # Access API) tanpa konfigurasi tambahan — tidak perlu login GitHub dulu.
-# Login GitHub (backend di atas) baru dipakai kalau CMS diakses dari domain
-# production nanti — butuh OAuth app terpisah, belum di-setup di tahap ini.
+# Login GitHub (backend di atas) dipakai kalau CMS diakses dari domain
+# production (pancaedu.web.id/admin) -- OAuth app + Worker auth-nya sudah
+# di-setup (lihat base_url di atas).
 
 media_folder: "public/images"
 public_folder: "/images"
@@ -155,18 +162,26 @@ collections:
       - label: "Siswa"
         name: siswa
         widget: list
-        hint: "Tambahkan tiap siswa satu per satu — nama depan/inisial saja demi privasi."
+        hint: "Tambahkan tiap siswa satu per satu."
+        summary: "{{fields.namaLengkap}}"
         fields:
-          - { label: "Nama", name: nama, widget: string, hint: "Nama depan/inisial saja, bukan nama lengkap." }
+          - { label: "Nama Lengkap", name: namaLengkap, widget: string }
+          - { label: "Nama Panggilan", name: namaPanggilan, widget: string, required: false }
+          - { label: "Desa Tempat Tinggal", name: desa, widget: string, required: false }
+          - label: "Akun Instagram"
+            name: instagram
+            widget: string
+            required: false
+            hint: 'Username saja, mis. "budi.s" — boleh pakai "@" di depan atau tidak, sama saja.'
+          - label: "Kata Mutiara/Pesan/Kesan"
+            name: quote
+            widget: string
+            required: false
           - label: "Foto"
             name: foto
             widget: image
             required: false
             hint: "Opsional — kalau kosong, tampil inisial nama sebagai pengganti foto."
-          - label: "Quote/Kesan-Pesan"
-            name: quote
-            widget: string
-            required: false
       - label: "Catatan (opsional)"
         name: body
         widget: markdown

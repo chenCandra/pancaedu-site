@@ -1,0 +1,32 @@
+name: Deploy ke Cloudflare Workers
+
+# Jalan otomatis tiap ada commit baru ke main -- termasuk commit yang
+# dibuat Sveltia CMS sendiri (edit lewat /admin di situs live), jadi
+# perubahan konten langsung tayang tanpa perlu build+deploy manual.
+# "workflow_dispatch" biar bisa dipicu manual dari tab Actions kalau perlu.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Butuh secret CLOUDFLARE_API_TOKEN -- lihat catatan setup di
+      # README.md bagian "Auto-deploy (GitHub Actions)".
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

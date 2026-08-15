@@ -29,21 +29,31 @@ const { Content } = await render(kelas);
   </section>
 
   <section class="container yearbook-grid">
-    {siswa.map((anak) => (
-      <figure class="yearbook-card">
-        <div class="photo-frame">
-          {anak.foto ? (
-            <img src={anak.foto} alt="" loading="lazy" />
-          ) : (
-            <div class="photo-placeholder" aria-hidden="true">{anak.nama.charAt(0)}</div>
-          )}
-        </div>
-        <figcaption>
-          <p class="nama">{anak.nama}</p>
-          {anak.quote && <p class="quote">&ldquo;{anak.quote}&rdquo;</p>}
-        </figcaption>
-      </figure>
-    ))}
+    {siswa.map((anak) => {
+      const panggilanDesa = [anak.namaPanggilan, anak.desa].filter(Boolean).join(' — ');
+      const igUsername = anak.instagram?.replace(/^@/, '');
+      return (
+        <figure class="yearbook-card">
+          <div class="photo-frame">
+            {anak.foto ? (
+              <img src={anak.foto} alt="" loading="lazy" />
+            ) : (
+              <div class="photo-placeholder" aria-hidden="true">{anak.namaLengkap.charAt(0)}</div>
+            )}
+          </div>
+          <figcaption>
+            <p class="nama">{anak.namaLengkap}</p>
+            {panggilanDesa && <p class="panggilan-desa">{panggilanDesa}</p>}
+            {igUsername && (
+              <a class="instagram" href={`https://instagram.com/${igUsername}`} target="_blank" rel="noopener noreferrer">
+                @{igUsername}
+              </a>
+            )}
+            {anak.quote && <p class="quote">&ldquo;{anak.quote}&rdquo;</p>}
+          </figcaption>
+        </figure>
+      );
+    })}
   </section>
 </BaseLayout>
 
@@ -126,6 +136,24 @@ const { Content } = await render(kelas);
     font-family: var(--font-display);
     font-weight: 600;
     margin: 0;
+  }
+
+  .panggilan-desa {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    margin: 0.15rem 0 0;
+  }
+
+  .instagram {
+    display: inline-block;
+    font-size: 0.8125rem;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 0.25rem;
+  }
+
+  .instagram:hover {
+    text-decoration: underline;
   }
 
   .quote {

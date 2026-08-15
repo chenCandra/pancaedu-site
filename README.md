@@ -58,10 +58,44 @@ konten di [`src/content.config.ts`](src/content.config.ts) berubah.
    langsung ditulis ke file lokal (`src/content/blog/*.md`, gambar ke `public/images/`).
 4. Review perubahannya seperti biasa, lalu commit & push lewat Git seperti biasa.
 
-**Pakai dari situs production (setelah deploy):** perlu setup tambahan yang belum
-dikerjakan di tahap ini — bikin GitHub OAuth App, lalu deploy Worker autentikasi kecil
-(mis. [`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth)) supaya tombol
-"Sign In with GitHub" di `/admin` bisa dipakai dari domain publik.
+**Pakai dari situs production (`pancaedu.web.id/admin`):** sudah bisa, login pakai tombol
+**"Sign In with GitHub"**. Ini jalan lewat Worker autentikasi terpisah
+([`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth), di-clone & deploy sendiri
+di `C:\xampp\htdocs\sveltia-cms-auth`, nama Worker `pancaedu-cms-auth`) — Client ID/Secret
+OAuth App-nya tersimpan sebagai secret di Worker itu, `base_url`-nya dirujuk dari
+`backend.base_url` di [`public/admin/config.yml`](public/admin/config.yml). Kalau login
+tiba-tiba error, cek dulu apakah Client ID/Secret di Worker itu masih cocok dengan OAuth App
+GitHub-nya (Settings → Developer settings → OAuth Apps).
+
+⚠️ **Penting**: menyimpan lewat CMS cuma bikin *commit* ke GitHub — situs live **tidak**
+auto-update kecuali auto-deploy (lihat bagian Deploy di bawah) sudah aktif. Tanpa itu, harus
+ada yang jalankan deploy manual dulu.
+
+## 🚀 Deploy
+
+Situs ini di-deploy ke **Cloudflare Workers** (bukan Pages), domain `pancaedu.web.id`.
+
+**Manual, kapan saja, tanpa perlu bantuan siapa pun:**
+
+```sh
+npm run deploy
+```
+
+Ini menjalankan `astro build` lalu `wrangler deploy` sekali jalan. Butuh `wrangler` sudah
+login (`npx wrangler login`) ke akun Cloudflare yang sama dengan Worker `pancaedu-site`.
+
+**Otomatis (GitHub Actions)** — tiap push ke `main` (termasuk commit dari Sveltia CMS)
+otomatis build+deploy, lihat [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+Setup sekali saja:
+
+1. Cloudflare Dashboard → **My Profile → API Tokens → Create Token** → pakai template
+   **"Edit Cloudflare Workers"** (atau custom: permission `Workers Scripts: Edit` +
+   `Account Settings: Read`, scope ke akun ini saja). Salin token-nya.
+2. GitHub repo → **Settings → Secrets and variables → Actions → New repository secret**:
+   - Name: `CLOUDFLARE_API_TOKEN`
+   - Value: token dari langkah 1
+3. Selesai — push berikutnya ke `main` otomatis ke-deploy. Cek progressnya di tab
+   **Actions** repo GitHub.
 
 ## 👀 Want to learn more?
 

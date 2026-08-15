@@ -11,6 +11,11 @@ export default defineConfig({
   // celah itu di dev DAN production sekaligus.
   redirects: {
     '/admin': '/admin/index.html',
+    // Angkatan "Contoh — XI IPA 2" awalnya dibuat dengan nama file
+    // 2023-2024.md sebelum diisi data asli (XII F 1, 2026/2027) dan
+    // di-rename -- redirect ini jaga-jaga kalau URL lamanya sempat
+    // ke-share/ke-bookmark siapa pun sebelum rename.
+    '/kenangan/2023-2024': '/kenangan/2026-2027',
   },
   integrations: [
     sitemap({

@@ -61,9 +61,12 @@ const kelas = defineCollection({
     siswa: z
       .array(
         z.object({
-          nama: z.string(), // saran: nama depan/inisial saja, bukan nama lengkap
+          namaLengkap: z.string(),
+          namaPanggilan: z.string().optional(),
+          desa: z.string().optional(), // desa/kota tempat tinggal
+          instagram: z.string().optional(), // username saja, tanpa "@" (boleh diketik pakai "@", dibersihkan saat render)
+          quote: z.string().optional(), // kata mutiara/pesan/kesan
           foto: z.string().optional(),
-          quote: z.string().optional(),
         })
       )
       .default([]),
