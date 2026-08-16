@@ -104,16 +104,27 @@ const { Content } = await render(kelas);
   }
 
   .photo-frame {
+    position: relative;
     aspect-ratio: 1;
     border-radius: 0.5rem;
     overflow: hidden;
     background-color: var(--accent-soft);
   }
 
+  /* position:absolute + inset:0 (bukan width/height:100% biasa) supaya foto
+     selalu ngisi penuh bingkai kotak tanpa celah tipis di salah satu sisi --
+     lebih pasti daripada andalkan resolusi height:100% dari aspect-ratio
+     parent, yang di sebagian browser bisa nyisain celah sub-piksel. Foto
+     mayoritas potret (3:4, lebih tinggi dari lebar) dipotong object-fit:cover
+     buat masuk bingkai kotak -- object-position digeser sedikit ke atas
+     (bukan tengah persis) supaya wajah/kepala nggak gampang kepotong. */
   .photo-frame img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 25%;
   }
 
   .photo-placeholder {
