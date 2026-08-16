@@ -44,6 +44,16 @@ const { Content } = await render(kelas);
     </section>
   )}
 
+  {fotoBersama.length > 0 && siswa.length > 0 && (
+    <div class="container">
+      <div class="section-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-ornament">✦</span>
+        <span class="divider-line"></span>
+      </div>
+    </div>
+  )}
+
   <section class="container yearbook-grid">
     {siswa.map((anak) => {
       const panggilanDesa = [anak.namaPanggilan, anak.desa].filter(Boolean).join(' — ');
@@ -173,6 +183,29 @@ const { Content } = await render(kelas);
       transform: none;
       transition: none;
     }
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: 22rem;
+    margin: 0 auto;
+    padding-block: 0.5rem 2rem;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+  }
+
+  .divider-ornament {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--accent-soft);
   }
 
   .yearbook-grid {
