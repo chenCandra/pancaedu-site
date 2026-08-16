@@ -1,4 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
+
+const [homepage] = await getCollection('homepage');
+const { aboutTitle, aboutText } = homepage.data;
 ---
 
 <section class="section about">
@@ -6,13 +10,10 @@
     <p class="eyebrow" data-reveal>Tentang</p>
     <div class="about-content">
       <h2 class="about-title" data-reveal>
-        Ditulis oleh satu orang — guru, wali kelas, dan pembelajar yang tak pernah berhenti belajar.
+        {aboutTitle}
       </h2>
       <p class="about-text" data-reveal>
-        Saya Panca — seorang guru yang sekaligus menjabat wali kelas dan operator pengelolaan
-        Dana BOS di sekolah tempat saya mengajar. PancaEdu adalah ruang menulis pribadi saya:
-        artikel seputar pendidikan, refleksi dari ruang kelas, dan materi pelajaran yang saya
-        susun sendiri untuk dipakai gratis oleh siapa saja yang membutuhkan.
+        {aboutText}
       </p>
       <a href="/tentang" class="about-link" data-reveal>
         Baca selengkapnya <span aria-hidden="true">→</span>

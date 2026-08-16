@@ -20,6 +20,49 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
+  - name: "homepage"
+    label: "Halaman Depan"
+    # "files" (bukan "folder") -- singleton, cuma 1 entri buat diedit,
+    # beda dari Artikel/Materi/Jejak Kelas yang bisa nambah banyak.
+    files:
+      - name: "pengaturan"
+        label: "Redaksi Halaman Depan"
+        file: "src/content/homepage/index.md"
+        fields:
+          - label: "Quote Hero (judul besar paling atas)"
+            name: heroQuote
+            widget: text
+            hint: "Ditampilkan besar di paling atas halaman depan. Cocok pakai kutipan inspiratif tentang belajar/ilmu/sains."
+          - label: "Sumber Quote"
+            name: heroQuoteAuthor
+            widget: string
+            required: false
+            hint: 'mis. "Nelson Mandela" -- kosongkan kalau quote-nya orisinal/anonim.'
+          - label: "Subjudul Hero"
+            name: heroLede
+            widget: text
+          - label: "Judul Section Tentang"
+            name: aboutTitle
+            widget: string
+          - label: "Teks Section Tentang"
+            name: aboutText
+            widget: text
+          - label: "Kartu Keahlian & Peran"
+            name: bentoItems
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Ikon (emoji)", name: icon, widget: string }
+              - { label: "Judul", name: title, widget: string }
+              - { label: "Deskripsi", name: desc, widget: text }
+              - label: "Ukuran Kartu"
+                name: size
+                widget: select
+                options:
+                  - { label: "Kecil", value: "sm" }
+                  - { label: "Sedang", value: "md" }
+                  - { label: "Besar", value: "lg" }
+
   - name: "artikel"
     label: "Artikel"
     label_singular: "Artikel"

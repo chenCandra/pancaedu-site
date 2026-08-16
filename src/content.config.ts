@@ -106,4 +106,30 @@ const hasilUjian = defineCollection({
   }),
 });
 
-export const collections = { blog, kelas, hasilUjian };
+// Singleton -- cuma 1 file (src/content/homepage/index.md), bukan folder
+// isi banyak entri kayak koleksi lain. Nampung semua redaksi halaman
+// depan yang tadinya di-hardcode di komponen (Hero/About/Bento), supaya
+// bisa diedit lewat CMS (collection "files" di config.yml) tanpa perlu
+// sentuh kode tiap kali mau ganti kata-kata.
+const homepage = defineCollection({
+  loader: glob({ pattern: 'index.md', base: './src/content/homepage' }),
+  schema: z.object({
+    heroQuote: z.string(), // quote inspiratif di judul besar Hero
+    heroQuoteAuthor: z.string().optional(),
+    heroLede: z.string(), // subjudul di bawah quote
+    aboutTitle: z.string(), // judul section "Tentang" di beranda
+    aboutText: z.string(),
+    bentoItems: z
+      .array(
+        z.object({
+          icon: z.string(), // emoji
+          title: z.string(),
+          desc: z.string(),
+          size: z.enum(['sm', 'md', 'lg']),
+        })
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { blog, kelas, hasilUjian, homepage };

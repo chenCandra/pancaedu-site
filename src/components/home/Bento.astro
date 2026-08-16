@@ -1,42 +1,8 @@
 ---
-const items = [
-  {
-    icon: '🎓',
-    title: 'Wali Kelas',
-    desc: 'Mendampingi satu kelas penuh setiap tahun ajaran — presensi, komunikasi orang tua, sampai jadi tempat curhat pertama murid.',
-    size: 'lg',
-  },
-  {
-    icon: '⚛️',
-    title: 'Fisika',
-    desc: 'Mapel utama yang saya ampu & susun materinya di sini.',
-    size: 'sm',
-  },
-  {
-    icon: '🧪',
-    title: 'Lab Maya',
-    desc: 'Simulasi interaktif (PhET & lainnya) tertanam langsung di materi, bukan cuma teori.',
-    size: 'sm',
-  },
-  {
-    icon: '💰',
-    title: 'Operator Dana BOS',
-    desc: 'Mengelola administrasi keuangan sekolah di sela jam mengajar.',
-    size: 'md',
-  },
-  {
-    icon: '📚',
-    title: 'Pembelajar Sepanjang Hayat',
-    desc: 'Nggak berhenti belajar hal baru juga, di luar jam mengajar.',
-    size: 'md',
-  },
-  {
-    icon: '🎁',
-    title: 'Gratis untuk Siapa Saja',
-    desc: 'Semua artikel & materi terbuka tanpa biaya, tanpa akun.',
-    size: 'sm',
-  },
-];
+import { getCollection } from 'astro:content';
+
+const [homepage] = await getCollection('homepage');
+const { bentoItems: items } = homepage.data;
 ---
 
 <section class="section bento">
