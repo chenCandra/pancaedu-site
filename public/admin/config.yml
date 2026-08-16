@@ -30,14 +30,17 @@ collections:
         file: "src/content/homepage/index.md"
         fields:
           - label: "Quote Hero (judul besar paling atas)"
-            name: heroQuote
-            widget: text
-            hint: "Ditampilkan besar di paling atas halaman depan. Cocok pakai kutipan inspiratif tentang belajar/ilmu/sains."
-          - label: "Sumber Quote"
-            name: heroQuoteAuthor
-            widget: string
-            required: false
-            hint: 'mis. "Nelson Mandela" -- kosongkan kalau quote-nya orisinal/anonim.'
+            name: heroQuotes
+            widget: list
+            summary: "{{fields.quote}}"
+            hint: "Minimal 1, boleh banyak (mis. 10) -- tiap kali halaman dimuat/direfresh, satu quote dipilih ACAK dari daftar ini. Cocok pakai kutipan inspiratif tentang belajar/ilmu/sains."
+            fields:
+              - { label: "Quote", name: quote, widget: text }
+              - label: "Sumber"
+                name: author
+                widget: string
+                required: false
+                hint: 'mis. "Nelson Mandela" -- kosongkan kalau quote-nya orisinal/anonim.'
           - label: "Subjudul Hero"
             name: heroLede
             widget: text

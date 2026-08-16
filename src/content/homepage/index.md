@@ -1,6 +1,13 @@
 ---
-heroQuote: "Pendidikan adalah senjata paling ampuh untuk mengubah dunia."
-heroQuoteAuthor: "Nelson Mandela"
+heroQuotes:
+  - quote: "Pendidikan adalah senjata paling ampuh untuk mengubah dunia."
+    author: "Nelson Mandela"
+  - quote: "Aku tidak pernah mengajar murid-muridku, aku hanya mencoba menyediakan kondisi di mana mereka bisa belajar."
+    author: "Albert Einstein"
+  - quote: "Di suatu tempat, sesuatu yang luar biasa sedang menunggu untuk ditemukan."
+    author: "Carl Sagan"
+  - quote: "Satu anak, satu guru, satu buku, dan satu pena dapat mengubah dunia."
+    author: "Malala Yousafzai"
 heroLede: "Artikel, bahan ajar, dan laboratorium virtual interaktif — disusun oleh seorang guru, terbuka gratis untuk siapa saja."
 aboutTitle: "Ditulis oleh satu orang — seorang guru yang masih terus belajar."
 aboutText: "Saya Panca — guru yang juga menjabat wali kelas dan operator Dana BOS di sekolah tempat saya mengajar. PancaEdu adalah ruang menulis pribadi saya: artikel seputar pendidikan, refleksi dari ruang kelas, dan materi pelajaran yang masih terus saya susun sedikit demi sedikit, dibagikan gratis untuk siapa saja yang butuh."

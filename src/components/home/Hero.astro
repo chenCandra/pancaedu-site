@@ -2,7 +2,14 @@
 import { getCollection } from 'astro:content';
 
 const [homepage] = await getCollection('homepage');
-const { heroQuote, heroQuoteAuthor, heroLede } = homepage.data;
+const { heroQuotes, heroLede } = homepage.data;
+// Quote pertama dirender apa adanya di HTML statis (fallback buat
+// crawler/no-JS, dan hindar "flash" kosong sebelum JS sempat jalan) --
+// script inline di bawah nimpa ke pilihan ACAK begitu halaman dimuat,
+// beda tiap kali direfresh. Seluruh daftar quote ikut dikirim ke
+// browser lewat tag JSON (bukan cuma index-nya) supaya pemilihannya
+// murni di sisi klien, nggak perlu server request tambahan.
+const quotesJson = JSON.stringify(heroQuotes);
 ---
 
 <section class="hero" id="hero">
@@ -25,9 +32,9 @@ const { heroQuote, heroQuoteAuthor, heroLede } = homepage.data;
   <div class="container hero-content">
     <p class="eyebrow hero-eyebrow" data-reveal>PancaEdu — Ruang Belajar Digital</p>
     <h1 class="hero-title" data-hero-title>
-      <span class="hero-line">&ldquo;{heroQuote}&rdquo;</span>
+      <span class="hero-line" data-hero-quote-text>&ldquo;{heroQuotes[0].quote}&rdquo;</span>
     </h1>
-    {heroQuoteAuthor && <p class="hero-quote-author" data-reveal>— {heroQuoteAuthor}</p>}
+    <p class="hero-quote-author" data-hero-quote-author data-reveal>{heroQuotes[0].author && `— ${heroQuotes[0].author}`}</p>
     <p class="hero-lede" data-reveal>
       {heroLede}
     </p>
@@ -42,6 +49,30 @@ const { heroQuote, heroQuoteAuthor, heroLede } = homepage.data;
     <span class="hero-scroll-label">Scroll</span>
   </div>
 </section>
+
+<script type="application/json" id="hero-quotes-data" set:html={quotesJson} />
+<script is:inline>
+  (function () {
+    var dataEl = document.getElementById('hero-quotes-data');
+    var textEl = document.querySelector('[data-hero-quote-text]');
+    var authorEl = document.querySelector('[data-hero-quote-author]');
+    if (!dataEl || !textEl) return;
+
+    var quotes;
+    try {
+      quotes = JSON.parse(dataEl.textContent);
+    } catch (e) {
+      return;
+    }
+    if (!Array.isArray(quotes) || quotes.length === 0) return;
+
+    var pilihan = quotes[Math.floor(Math.random() * quotes.length)];
+    textEl.textContent = '“' + pilihan.quote + '”';
+    if (authorEl) {
+      authorEl.textContent = pilihan.author ? '— ' + pilihan.author : '';
+    }
+  })();
+</script>
 
 <style>
   .hero {
@@ -270,6 +301,12 @@ const { heroQuote, heroQuoteAuthor, heroLede } = homepage.data;
     font-weight: 600;
     color: var(--accent);
     margin-top: -0.75rem;
+  }
+
+  /* Kosong kalau quote yang lagi tampil (statis maupun hasil pilihan
+     acak JS) nggak punya author -- daripada baris kosong nyisa ruang. */
+  .hero-quote-author:empty {
+    display: none;
   }
 
   .hero-lede {

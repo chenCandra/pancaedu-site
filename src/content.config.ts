@@ -114,8 +114,18 @@ const hasilUjian = defineCollection({
 const homepage = defineCollection({
   loader: glob({ pattern: 'index.md', base: './src/content/homepage' }),
   schema: z.object({
-    heroQuote: z.string(), // quote inspiratif di judul besar Hero
-    heroQuoteAuthor: z.string().optional(),
+    // Beberapa quote inspiratif di judul besar Hero -- satu dipilih ACAK
+    // di browser tiap halaman dimuat/direfresh (lihat Hero.astro), bukan
+    // cuma satu quote tetap. Minimal 1 (biar tetap valid kalau baru mulai
+    // isi), idealnya beberapa (mis. 10) biar variasinya kerasa.
+    heroQuotes: z
+      .array(
+        z.object({
+          quote: z.string(),
+          author: z.string().optional(),
+        })
+      )
+      .min(1),
     heroLede: z.string(), // subjudul di bawah quote
     aboutTitle: z.string(), // judul section "Tentang" di beranda
     aboutText: z.string(),
