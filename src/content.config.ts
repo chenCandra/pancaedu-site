@@ -70,6 +70,17 @@ const kelas = defineCollection({
         })
       )
       .default([]),
+    // Foto landscape kegiatan/foto bareng seluruh kelas -- beda dari `siswa`
+    // (potret per-orang), ini buat momen kelompok (perpisahan, study tour,
+    // dst). Jumlahnya bebas, tampil di section terpisah sebelum grid siswa.
+    fotoBersama: z
+      .array(
+        z.object({
+          foto: z.string(),
+          keterangan: z.string().optional(), // mis. "Perpisahan Sekolah"
+        })
+      )
+      .default([]),
   }),
 });
 

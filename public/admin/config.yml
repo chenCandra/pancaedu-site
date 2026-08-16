@@ -182,6 +182,19 @@ collections:
             widget: image
             required: false
             hint: "Opsional — kalau kosong, tampil inisial nama sebagai pengganti foto."
+      - label: "Foto Bersama (Landscape)"
+        name: fotoBersama
+        widget: list
+        required: false
+        hint: "Foto kegiatan/foto bareng seluruh kelas (perpisahan, study tour, dst.) — pakai foto landscape (lebar), tampil sebelum daftar per-siswa. Jumlah bebas."
+        summary: "{{fields.keterangan}}"
+        fields:
+          - { label: "Foto", name: foto, widget: image }
+          - label: "Keterangan (opsional)"
+            name: keterangan
+            widget: string
+            required: false
+            hint: 'mis. "Perpisahan Sekolah", "Study Tour ke Jakarta"'
       - label: "Catatan (opsional)"
         name: body
         widget: markdown

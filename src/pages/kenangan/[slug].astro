@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { kelas } = Astro.props;
-const { tahunAjaran, namaKelas, siswa } = kelas.data;
+const { tahunAjaran, namaKelas, siswa, fotoBersama } = kelas.data;
 const { Content } = await render(kelas);
 ---
 
@@ -27,6 +27,22 @@ const { Content } = await render(kelas);
       <Content />
     </div>
   </section>
+
+  {fotoBersama.length > 0 && (
+    <section class="container bersama-section">
+      <h2 class="bersama-heading">Momen Bersama</h2>
+      <div class="bersama-grid">
+        {fotoBersama.map((momen, i) => (
+          <figure class={`bersama-card ${i % 2 === 0 ? 'tilt-left' : 'tilt-right'}`}>
+            <div class="bersama-frame">
+              <img src={momen.foto} alt={momen.keterangan ?? ''} loading="lazy" />
+            </div>
+            {momen.keterangan && <figcaption class="bersama-caption">{momen.keterangan}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="container yearbook-grid">
     {siswa.map((anak) => {
@@ -78,6 +94,85 @@ const { Content } = await render(kelas);
   .intro {
     font-size: 0.9375rem;
     color: var(--ink-soft);
+  }
+
+  .bersama-section {
+    padding-block: 0.5rem 3rem;
+  }
+
+  .bersama-heading {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+  }
+
+  .bersama-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 2.5rem 2rem;
+  }
+
+  /* Gaya "scrapbook" -- tiap foto dimiringkan dikit gantian arah, kayak
+     ditempel di album kenangan, beda sengaja dari grid rapi kartu siswa
+     di bawahnya. Rotasi di-nolkan lagi pas hover biar foto gampang
+     dilihat jelas. */
+  .bersama-card {
+    margin: 0;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+  }
+
+  .bersama-card.tilt-left {
+    transform: rotate(-1.5deg);
+  }
+
+  .bersama-card.tilt-right {
+    transform: rotate(1.5deg);
+  }
+
+  .bersama-card:hover {
+    transform: rotate(0deg) translateY(-3px) scale(1.015);
+  }
+
+  .bersama-frame {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--accent-soft);
+  }
+
+  .bersama-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bersama-caption {
+    text-align: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    padding-top: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bersama-card,
+    .bersama-card.tilt-left,
+    .bersama-card.tilt-right {
+      transform: none;
+      transition: none;
+    }
   }
 
   .yearbook-grid {
