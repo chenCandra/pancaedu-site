@@ -201,7 +201,7 @@ Kuat arus akan kita gunakan kembali ketika mempelajari **listrik dinamis**.
 
 ***
 
-# 🌡️ 05 — Suhu Termodinamik
+# 🌡️ 05 — Suhu 
 
 Ketika memegang es batu dan secangkir teh panas, kita dapat merasakan perbedaan kondisi termalnya.
 
