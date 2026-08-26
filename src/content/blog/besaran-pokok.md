@@ -11,7 +11,52 @@ tags:
 coverImage: /images/ChatGPT Image 26 Agu 2026, 20.56.24 (1).png
 youtubeId: ''
 simulasi: null
-kuis: []
+kuis:
+  - soal: Manakah pasangan besaran pokok dan satuan SI yang benar?
+    pilihan:
+      - Panjang — centimeter
+      - Massa — gram
+      - Waktu — sekon
+      - Suhu — derajat Celsius
+      - Volume — meter kubik
+    jawaban: 3
+    penjelasan: Sekon (s) merupakan satuan SI untuk besaran waktu. Centimeter dan gram memang digunakan dalam pengukuran, tetapi satuan SI untuk panjang adalah meter dan massa adalah kilogram. Volume merupakan besaran turunan, bukan besaran pokok.
+  - soal: 'Perhatikan pernyataan berikut:  "Panjang meja adalah 2 meter."  Dalam pernyataan tersebut, yang merupakan besaran adalah ....'
+    pilihan:
+      - '2'
+      - meter
+      - 2 meter
+      - panjang
+      - panjang meja
+    jawaban: 4
+    penjelasan: Besaran yang sedang diukur adalah panjang. Angka 2 merupakan nilai hasil pengukuran, sedangkan meter merupakan satuannya.
+  - soal: Di bawah ini yang seluruhnya merupakan besaran pokok adalah ....
+    pilihan:
+      - gaya, massa, kuat arus
+      - panjang, luas, massa
+      - massa, waktu, volume
+      - kecepatan, waktu, suhu
+      - panjang, massa, waktu
+    jawaban: 5
+    penjelasan: Panjang, massa, dan waktu merupakan tiga dari tujuh besaran pokok SI. Luas, volume, kecepatan, dan gaya merupakan besaran turunan.
+  - soal: Seorang siswa ingin mengukur kuat arus listrik yang mengalir pada sebuah rangkaian. Alat ukur yang paling tepat digunakan adalah ....
+    pilihan:
+      - amperemeter
+      - voltmeter
+      - termometer
+      - neraca
+      - jangka sorong
+    jawaban: 1
+    penjelasan: Kuat arus listrik merupakan salah satu besaran pokok dan diukur menggunakan amperemeter. Voltmeter digunakan untuk mengukur beda potensial, sedangkan alat lainnya digunakan untuk besaran yang berbeda.
+  - soal: Pasangan besaran pokok, satuan SI, dan simbol yang semuanya benar adalah ....
+    pilihan:
+      - Massa — gram — g
+      - Panjang — meter — m
+      - Waktu — menit — min
+      - Suhu — Celsius — °C
+      - Kuat arus — volt — V
+    jawaban: 2
+    penjelasan: Satuan SI untuk panjang adalah meter (m). Kilogram (kg) merupakan satuan SI massa, sekon (s) untuk waktu, kelvin (K) untuk suhu termodinamik, dan ampere (A) untuk kuat arus listrik.
 draft: false
 ---
 
@@ -468,29 +513,7 @@ Cobalah menghubungkan konsep yang baru saja kamu pelajari dengan benda di sekita
 
 ***
 
-# 🎯 Intinya
-
-Jika hari ini kamu hanya mengingat beberapa hal, pastikan kamu memahami ini:
-
-> **Besaran pokok adalah besaran yang menjadi dasar dalam Sistem Internasional (SI).**
-
-Ada **7 besaran pokok**:
-
-**Panjang → meter (m)**
-**Massa → kilogram (kg)**
-**Waktu → sekon (s)**
-**Kuat arus listrik → ampere (A)**
-**Suhu termodinamik → kelvin (K)**
-**Jumlah zat → mol (mol)**
-**Intensitas cahaya → kandela (cd)**
-
-Dan satu hal yang tidak kalah penting:
-
-> **Besaran adalah apa yang diukur. Satuan adalah pembanding yang digunakan untuk menyatakan hasil pengukuran.**
-
-***
-
-## 🚀 Siap Melanjutkan?
+# 🚀 Siap Melanjutkan?
 
 Kamu sudah mengenal **7 fondasi besaran dalam Fisika**.
 
