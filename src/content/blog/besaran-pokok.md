@@ -90,9 +90,9 @@ Misalnya:
 
 Di sini:
 
-**2** → nilai hasil pengukuran
-**meter** → satuan
-**panjang** → besaran yang diukur
+**2** → nilai hasil pengukuran, 
+**meter** → satuan, 
+**panjang** → besaran yang diukur.
 
 Jadi, jangan sampai tertukar.
 
