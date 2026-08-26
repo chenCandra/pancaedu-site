@@ -8,7 +8,7 @@ pubDate: 2026-08-26
 updatedDate: 2026-08-26
 tags:
   - Besaran Pokok
-coverImage: ''
+coverImage: /images/ChatGPT Image 26 Agu 2026, 20.56.24 (1).png
 youtubeId: ''
 simulasi: null
 kuis: []
