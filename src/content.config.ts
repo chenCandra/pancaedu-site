@@ -28,14 +28,24 @@ const blog = defineCollection({
     // ini dirender langsung sebagai iframe tanpa sandbox, dan isinya cuma
     // ditulis lewat file konten (bukan input publik), jadi bukan celah XSS —
     // tapi tetap risiko kalau sumbernya sembarangan/berubah sewaktu-waktu.
-    simulasi: z
-      .object({
-        url: z.string().url(),
-        judul: z.string(), // dipakai sebagai title iframe (aksesibilitas) & label di atas embed
-        sumber: z.string().optional(), // mis. "PhET Interactive Simulations", ditampilkan sebagai kredit
-        tinggi: z.number().default(600), // px — kebanyakan simulasi tidak 16:9 seperti video
-      })
-      .optional(),
+    // preprocess: widget object di Sveltia CMS yang dibiarkan kosong (tidak
+    // diisi sama sekali) tersimpan sebagai literal `null` di frontmatter,
+    // BUKAN field-nya dihilangkan -- z.object({...}).optional() cuma terima
+    // objek asli atau field absen (undefined), MENOLAK null (pesan errornya
+    // menyesatkan: "Expected object, received object", padahal maksudnya
+    // "received null" -- quirk typeof null === 'object' di JS/Zod). null
+    // diperlakukan sama seperti field-nya nggak ada.
+    simulasi: z.preprocess(
+      (v) => (v === null ? undefined : v),
+      z
+        .object({
+          url: z.string().url(),
+          judul: z.string(), // dipakai sebagai title iframe (aksesibilitas) & label di atas embed
+          sumber: z.string().optional(), // mis. "PhET Interactive Simulations", ditampilkan sebagai kredit
+          tinggi: z.number().default(600), // px — kebanyakan simulasi tidak 16:9 seperti video
+        })
+        .optional()
+    ),
     // Kuis pilihan ganda di akhir materi — feedback langsung per soal
     // (bukan submit-semua-baru-dinilai). `jawaban` adalah index 0-based ke
     // array `pilihan`. Khusus category:materi; artikel tidak pakai ini.
