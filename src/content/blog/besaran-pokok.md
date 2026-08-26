@@ -420,7 +420,7 @@ Besaran yang dibentuk dari kombinasi besaran pokok akan kita pelajari pada mater
 
 ***
 
-# ⚠️ Miskonsepsi Klasik
+## ⚠️ Miskonsepsi Klasik
 
 ### "Kilogram adalah besaran pokok."
 
@@ -464,7 +464,7 @@ Besaran tersebut akan kita kenal sebagai **besaran turunan**.
 
 ***
 
-# 🌍 Besaran Pokok di Sekitar Kita
+### 🌍 Besaran Pokok di Sekitar Kita
 
 Sekarang lihat benda atau aktivitas di sekitarmu.
 
@@ -486,7 +486,7 @@ Inilah yang akan membawa kita ke materi berikutnya.
 
 ***
 
-# 💡 Coba Pikirkan
+### 💡 Coba Pikirkan
 
 Bayangkan kamu sedang membuat meja.
 
@@ -511,7 +511,7 @@ Cobalah menghubungkan konsep yang baru saja kamu pelajari dengan benda di sekita
 
 ***
 
-# 🚀 Siap Melanjutkan?
+### 🚀 Siap Melanjutkan?
 
 Kamu sudah mengenal **7 fondasi besaran dalam Fisika**.
 
