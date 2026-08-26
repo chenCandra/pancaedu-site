@@ -90,9 +90,7 @@ Misalnya:
 
 Di sini:
 
-**2** → nilai hasil pengukuran, 
-**meter** → satuan, 
-**panjang** → besaran yang diukur.
+**2** → nilai hasil pengukuran, **meter** → satuan, **panjang** → besaran yang diukur.
 
 Jadi, jangan sampai tertukar.
 
@@ -108,7 +106,7 @@ Mari kita kenalan satu per satu.
 
 ***
 
-# 📏 01 — Panjang
+### 📏 01 — Panjang
 
 Panjang digunakan untuk menyatakan **jarak atau ukuran antara dua titik**.
 
@@ -143,7 +141,7 @@ Tetapi untuk mengukur diameter sebuah baut dengan teliti, kita membutuhkan **jan
 
 ***
 
-# ⚖️ 02 — Massa
+### ⚖️ 02 — Massa
 
 Massa menunjukkan **banyaknya materi yang terkandung dalam suatu benda** dan berkaitan dengan kelembaman benda.
 
@@ -190,7 +188,7 @@ Kita akan membahas berat lebih lanjut ketika mempelajari gaya.
 
 ***
 
-# ⏱️ 03 — Waktu
+### ⏱️ 03 — Waktu
 
 Waktu digunakan untuk menyatakan **durasi atau selang berlangsungnya suatu peristiwa**.
 
@@ -218,7 +216,7 @@ Dalam Fisika, waktu menjadi salah satu besaran yang sangat penting untuk menjela
 
 ***
 
-# ⚡ 04 — Kuat Arus Listrik
+### ⚡ 04 — Kuat Arus Listrik
 
 Ketika kamu menyalakan lampu, mengisi daya ponsel, atau menyalakan kipas, terjadi proses yang melibatkan **arus listrik**.
 
@@ -246,7 +244,7 @@ Kuat arus akan kita gunakan kembali ketika mempelajari **listrik dinamis**.
 
 ***
 
-# 🌡️ 05 — Suhu 
+### 🌡️ 05 — Suhu 
 
 Ketika memegang es batu dan secangkir teh panas, kita dapat merasakan perbedaan kondisi termalnya.
 
@@ -295,7 +293,7 @@ Kelvin **tidak menggunakan simbol derajat (°)**.
 
 ***
 
-# 🧪 06 — Jumlah Zat
+### 🧪 06 — Jumlah Zat
 
 Besaran ini mungkin terdengar paling asing dibandingkan enam besaran lainnya.
 
@@ -333,7 +331,7 @@ Mol merupakan salah satu **satuan dasar SI untuk besaran jumlah zat**.
 
 ***
 
-# 💡 07 — Intensitas Cahaya
+### 💡 07 — Intensitas Cahaya
 
 Besaran pokok terakhir adalah **intensitas cahaya**.
 
@@ -365,7 +363,7 @@ Dalam Fisika, intensitas cahaya memiliki **definisi dan satuan yang jelas**.
 
 ***
 
-# 🧠 Sekarang, Kenali 7 Besaran Pokok
+## 🧠 Sekarang, Kenali 7 Besaran Pokok
 
 Setelah mengenal semuanya, mari kita lihat kembali dalam satu tabel.
 
@@ -400,7 +398,7 @@ Kesalahan membedakan keduanya sering terlihat sederhana, tetapi dapat menyebabka
 
 ***
 
-# 🤔 Mengapa Hanya Ada Tujuh?
+## 🤔 Mengapa Hanya Ada Tujuh?
 
 Pertanyaan ini menarik.
 
