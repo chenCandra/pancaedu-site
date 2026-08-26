@@ -12,7 +12,7 @@ coverImage: ''
 youtubeId: ''
 simulasi: null
 kuis: []
-draft: true
+draft: false
 ---
 
 # Besaran Pokok
