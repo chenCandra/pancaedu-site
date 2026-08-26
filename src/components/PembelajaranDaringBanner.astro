@@ -1,0 +1,82 @@
+---
+// Banner PENGUMUMAN DARURAT (mis. kabut asap, cuaca ekstrem) -- cuma
+// dirender kalau modeDaring.aktif (dicek di index.astro sebelum komponen
+// ini dipanggil). Ruang Belajar sendiri PERMANEN & sudah ada di nav
+// terus -- banner ini bukan pintu satu-satunya ke sana, cuma penanda
+// "lagi ada situasi khusus" + arahan cepat. Sengaja kecil (bukan hero
+// baru) supaya tidak menyaingi Hero utama beranda.
+---
+
+<section class="container pd-banner-wrap">
+  <a href="/ruang-belajar" class="pd-banner">
+    <span class="pd-banner-icon">🎓</span>
+    <span class="pd-banner-text">
+      <strong>Pembelajaran Daring Sedang Berlangsung</strong>
+      <span>Akses materi dan aktivitas pembelajaran hari ini di Ruang Belajar.</span>
+    </span>
+    <span class="pd-banner-cta">Mulai Belajar &rarr;</span>
+  </a>
+</section>
+
+<style>
+  .pd-banner-wrap {
+    padding-block: 1.25rem 0;
+  }
+
+  .pd-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .pd-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pd-banner-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .pd-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .pd-banner-text strong {
+    font-size: 0.9375rem;
+  }
+
+  .pd-banner-text span:last-child {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+  }
+
+  .pd-banner-cta {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 30rem) {
+    .pd-banner-cta {
+      display: none;
+    }
+  }
+</style>

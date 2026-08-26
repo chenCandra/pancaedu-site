@@ -1,7 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.astro';
 import Hero from '../components/home/Hero.astro';
 import Featured from '../components/home/Featured.astro';
 import About from '../components/home/About.astro';
@@ -33,6 +34,9 @@ const counters = [
 
 const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? allPosts[0];
 
+const modeDaring = await getEntry('modeDaring', 'index');
+const daringAktif = modeDaring?.data.aktif ?? false;
+
 const workItems = materiPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4)
@@ -50,6 +54,7 @@ const workItems = materiPosts
   description="Artikel dan materi pelajaran ditulis oleh seorang guru yang juga pembelajar — refleksi mengajar, bahan ajar, dan catatan belajar."
 >
   <Hero />
+  {daringAktif && <PembelajaranDaringBanner />}
   {featured && (
     <Featured
       title={featured.data.title}

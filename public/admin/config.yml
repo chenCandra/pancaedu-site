@@ -66,6 +66,92 @@ collections:
                   - { label: "Sedang", value: "md" }
                   - { label: "Besar", value: "lg" }
 
+  - name: "mode-daring"
+    label: "Pengumuman Darurat (Ruang Belajar)"
+    # Singleton (pola sama seperti "Halaman Depan" di atas). Ruang Belajar
+    # SENDIRI permanen -- field ini CUMA ngontrol banner darurat di
+    # beranda (mis. kabut asap, cuaca ekstrem), bukan kemunculan fiturnya.
+    files:
+      - name: "pengaturan"
+        label: "Status Pengumuman Darurat"
+        file: "src/content/mode-daring/index.md"
+        fields:
+          - label: "Sedang Ada Pengumuman Darurat?"
+            name: aktif
+            widget: boolean
+            default: false
+            hint: "Kalau AKTIF: banner pengumuman muncul di beranda. Ruang Belajar sendiri SELALU ada di menu, tidak dipengaruhi field ini -- ini cuma buat nampilkan pengumuman situasional (mis. kabut asap, cuaca ekstrem). Matikan lagi begitu situasinya selesai."
+          - label: "Keterangan (opsional)"
+            name: keterangan
+            widget: text
+            required: false
+            hint: 'Alasan/periode, ditampilkan di banner beranda. Contoh: "Kualitas udara memburuk, KBM dari rumah s.d. pemberitahuan berikutnya."'
+
+  - name: "ruang-belajar"
+    label: "Ruang Belajar"
+    label_singular: "Sesi Belajar"
+    folder: "src/content/ruang-belajar"
+    create: true
+    slug: "{{fields.kelas}}-{{fields.mapel}}-{{fields.judul}}"
+    identifier_field: judul
+    summary: "{{fields.tanggal}} — {{fields.kelas}} {{fields.mapel}}: {{fields.judul}}"
+    fields:
+      - label: "Tanggal"
+        name: tanggal
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        hint: "Tanggal aktivitas ini muncul sebagai 'Hari Ini' -- dicocokkan ke tanggal HP/laptop siswa saat halaman dibuka. Juga dipakai sbg urutan di dalam daftar per Kelas+Mapel."
+      - label: "Kelas"
+        name: kelas
+        widget: select
+        options: ["X", "XI", "XII"]
+      - label: "Mata Pelajaran"
+        name: mapel
+        widget: string
+        hint: "mis. Fisika, Matematika, Bahasa Indonesia"
+      - { label: "Judul", name: judul, widget: string }
+      - label: "Deskripsi Singkat (opsional)"
+        name: deskripsi
+        widget: text
+        required: false
+        hint: "Kosongkan kalau mau otomatis pakai deskripsi dari Materi yang dirujuk di bawah."
+      - label: "Durasi (menit, opsional)"
+        name: durasi
+        widget: number
+        required: false
+        value_type: int
+      - label: "Tujuan Pembelajaran (opsional)"
+        name: tujuanPembelajaran
+        widget: list
+        required: false
+        hint: "Satu poin per baris, boleh dikosongkan."
+      - label: "Materi yang Dirujuk (opsional)"
+        name: materiSlug
+        widget: relation
+        collection: "materi"
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        required: false
+        hint: "Pilih dari Materi Pelajaran yang sudah ada -- Video & Lab Maya-nya otomatis ikut, TIDAK perlu diisi ulang di sini. Kalau belum ada materinya, kosongkan dulu (langkah 'Pelajari Materi' akan tampil 'belum tersedia')."
+      - label: "Link Latihan (opsional)"
+        name: latihanUrl
+        widget: string
+        required: false
+        hint: "Link platform apa saja -- Google Form, Wayground (Quizizz), Kahoot, LiveWorksheets, dll. Tempel link 'assign'/'join'-nya siswa di sini."
+      - label: "Link Tugas (opsional)"
+        name: tugasUrl
+        widget: string
+        required: false
+        hint: "Tempat siswa mengumpulkan tugas -- Google Form, Google Drive, atau platform lain, bebas."
+      - label: "Link Refleksi (opsional)"
+        name: refleksiUrl
+        widget: string
+        required: false
+        hint: "Link platform apa saja, biasanya Google Form."
+      - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
+
   - name: "artikel"
     label: "Artikel"
     label_singular: "Artikel"

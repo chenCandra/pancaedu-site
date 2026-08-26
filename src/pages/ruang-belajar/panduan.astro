@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const langkah = [
+  { ikon: '🎓', teks: 'Pilih menu Ruang Belajar.' },
+  { ikon: '🏫', teks: 'Lihat Pembelajaran Hari Ini (kalau ada), atau pilih kelasmu (X/XI/XII) di "Semua Pelajaran".' },
+  { ikon: '📚', teks: 'Pilih mata pelajaran yang ingin dipelajari.' },
+  { ikon: '👉', teks: 'Klik "Mulai Belajar".' },
+  { ikon: '🧭', teks: 'Ikuti langkah pembelajaran dari atas ke bawah: Materi → Video → Lab Maya → Latihan → Tugas → Refleksi.' },
+  { ikon: '📝', teks: 'Kerjakan latihan/tugas/refleksi lewat tombol yang tersedia (Google Form, Wayground, dsb).' },
+  { ikon: '✅', teks: 'Pastikan tugas berhasil dikirim sebelum menutup halaman.' },
+];
+---
+
+<BaseLayout
+  title="Cara Belajar di PancaEdu"
+  description="Panduan singkat mengikuti pembelajaran di Ruang Belajar PancaEdu, langkah demi langkah."
+>
+  <section class="container pd-panduan">
+    <a href="/ruang-belajar" class="small-back">&larr; Ruang Belajar</a>
+    <p class="eyebrow">Panduan Siswa</p>
+    <h1>Cara Belajar di PancaEdu</h1>
+    <p class="page-lede">
+      PancaEdu bukan aplikasi belajar yang rumit -- cukup ikuti 7 langkah ini setiap hari.
+    </p>
+
+    <ol class="pd-panduan-list">
+      {langkah.map((l, i) => (
+        <li class="pd-panduan-item">
+          <span class="pd-panduan-ikon" aria-hidden="true">{l.ikon}</span>
+          <div>
+            <span class="pd-panduan-nomor">Langkah {i + 1}</span>
+            <p>{l.teks}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <a href="/ruang-belajar" class="btn btn-primary">Mulai Belajar Sekarang &rarr;</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .pd-panduan {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pd-panduan-list {
+    list-style: none;
+    margin: 2rem 0 2.5rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pd-panduan-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+  }
+
+  .pd-panduan-ikon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .pd-panduan-nomor {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+
+  .pd-panduan-item p {
+    margin: 0.2rem 0 0;
+    color: var(--ink-soft);
+  }
+</style>

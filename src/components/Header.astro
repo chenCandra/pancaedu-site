@@ -1,11 +1,16 @@
 ---
+// Ruang Belajar itu fitur PERMANEN (semi-LMS), tapi SENGAJA TIDAK dapat
+// item teks sendiri di nav -- nav teks sudah penuh (6 item), nambah 1
+// lagi bikin kesan kepanjangan. Aksesnya lewat tombol CTA di kanan header
+// (lihat site-nav-cta di bawah), yang jauh lebih menonjol daripada teks
+// nav biasa lagipula -- cocok buat flagship section situs.
+// Tentang & Kontak SENGAJA tidak di sini -- sudah ada di footer (lihat
+// Footer.astro), nav header cukup yang paling sering dibuka.
 const nav = [
   { href: '/artikel', label: 'Artikel' },
   { href: '/materi', label: 'Materi Pelajaran' },
   { href: '/lab-maya', label: 'Lab Maya' },
   { href: '/kenangan', label: 'Jejak Kelas' },
-  { href: '/tentang', label: 'Tentang' },
-  { href: '/kontak', label: 'Kontak' },
 ];
 ---
 
@@ -13,6 +18,11 @@ const nav = [
   <div class="container site-header-inner">
     <a href="/" class="brand">PancaEdu</a>
     <nav class="site-nav" id="site-nav-links" aria-label="Navigasi utama">
+      {/* Tombol CTA "Ruang Belajar" disembunyikan di mobile (lihat media
+          query .site-nav-cta) -- link ini gantinya, MUNCUL CUMA di
+          dropdown mobile (pola sama seperti Cari/Tersimpan di bawah),
+          supaya siswa HP tetap punya jalan ke Ruang Belajar. */}
+      <a href="/ruang-belajar" class="site-nav-icon-mobile">🎓 Ruang Belajar</a>
       {nav.map((item) => (
         <a href={item.href}>{item.label}</a>
       ))}
@@ -32,7 +42,7 @@ const nav = [
         </svg>
       </a>
     </div>
-    <a href="/materi" class="btn btn-primary site-nav-cta" data-magnetic>Jelajahi Materi</a>
+    <a href="/ruang-belajar" class="btn btn-primary site-nav-cta" data-magnetic>Ruang Belajar</a>
     <button
       type="button"
       class="site-nav-toggle"
@@ -222,9 +232,13 @@ const nav = [
       align-items: stretch;
       gap: 0;
       padding: 0.5rem 0;
-      background: var(--surface);
-      backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+      /* --surface-solid (BUKAN --surface) -- dropdown ini melayang DI ATAS
+         konten halaman (bg-blobs warna-warni ikut kelihatan tembus di
+         belakangnya), beda dari header sendiri yang selalu di atas
+         background yang relatif konsisten. Transparan+blur tipis bikin
+         teks menu susah dibaca kalau kebetulan nimpa warna terang/blob --
+         solid penuh supaya keterbacaan terjamin di kondisi apa pun. */
+      background: var(--surface-solid);
       border-bottom: 1px solid var(--glass-border);
       box-shadow: var(--shadow-md);
       max-height: 0;

@@ -142,4 +142,60 @@ const homepage = defineCollection({
   }),
 });
 
-export const collections = { blog, kelas, hasilUjian, homepage };
+// Ruang Belajar — semi-LMS PERMANEN (bukan cuma fitur darurat): koleksi
+// ini cuma "jadwal + penghubung" (mata pelajaran apa, kelas mana, tanggal
+// berapa, ngarah ke mana), BUKAN penyimpan materi/video/lab itu sendiri.
+// Materi/video/lab selalu dirujuk lewat `materiSlug` ke entri "materi"
+// yang SUDAH ADA (collection blog, category:materi) -- prinsip "jangan
+// duplikasi materi". Latihan/Tugas/Refleksi diarahkan ke Google Form/
+// Wayground/dkk lewat URL biasa, bukan disimpan/dinilai di sini -- TIDAK
+// ADA akun/login/progress siswa (tetap 100% statis, tanpa server/database
+// -- ini prinsip yang DIPERTAHANKAN meski fiturnya sekarang permanen),
+// semua status ("tersedia"/"belum tersedia") murni DIHITUNG dari
+// ada-tidaknya field ini saat build, bukan disimpan terpisah.
+const ruangBelajar = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/ruang-belajar' }),
+  schema: z.object({
+    // Tanggal aktivitas ini "milik hari apa" -- dicocokkan ke tanggal HARI
+    // INI di BROWSER pengunjung (client-side, lihat halaman index-nya),
+    // BUKAN di-generate ulang tiap hari lewat rebuild -- situs ini statis,
+    // nggak ada server yang jalan tiap hari buat itu. Juga dipakai sebagai
+    // urutan default di dalam tiap kelompok Kelas+Mapel (mirip urutan
+    // silabus) di halaman daftar.
+    tanggal: z.coerce.date(),
+    kelas: z.enum(['X', 'XI', 'XII']),
+    mapel: z.string(),
+    judul: z.string(),
+    // Opsional -- kalau kosong, halaman detail pakai description dari
+    // materi yang dirujuk (materiSlug) sebagai fallback.
+    deskripsi: z.string().optional(),
+    durasi: z.number().int().positive().optional(), // menit
+    tujuanPembelajaran: z.array(z.string()).default([]),
+    // id entri collection "materi" (mis. "besaran-dan-satuan") -- video
+    // (youtubeId) & Lab Maya (simulasi) otomatis ikut dari situ, TIDAK
+    // diinput ulang di sini.
+    materiSlug: z.string().optional(),
+    latihanUrl: z.string().url().optional(), // Google Form, Wayground, dll -- bebas platform
+    tugasUrl: z.string().url().optional(), // Google Form / Drive / dll
+    refleksiUrl: z.string().url().optional(), // biasanya Google Form
+    draft: z.boolean().default(false),
+  }),
+});
+
+// Singleton (pola sama seperti `homepage` di atas). CATATAN PENTING:
+// Ruang Belajar sendiri sekarang PERMANEN (menu & halamannya selalu ada,
+// tidak lagi digerbangi field ini) -- `aktif` di sini SEKARANG cuma
+// ngontrol satu hal: banner pengumuman darurat di beranda (mis. "lagi ada
+// kabut asap, KBM dari rumah"), BUKAN kemunculan fitur Ruang Belajar itu
+// sendiri. TIDAK real-time: guru ganti lewat CMS -> commit -> auto-deploy
+// (GitHub Actions) -> situs baru ke-update -- sudah cukup buat
+// kebutuhannya, dan sengaja begitu supaya tetap TIDAK bergantung server.
+const modeDaring = defineCollection({
+  loader: glob({ pattern: 'index.md', base: './src/content/mode-daring' }),
+  schema: z.object({
+    aktif: z.boolean().default(false),
+    keterangan: z.string().optional(), // mis. alasan/periode, ditampilkan di banner darurat beranda
+  }),
+});
+
+export const collections = { blog, kelas, hasilUjian, homepage, ruangBelajar, modeDaring };

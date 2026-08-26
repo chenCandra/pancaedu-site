@@ -1,0 +1,275 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { kelas, mapel, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug, latihanUrl, tugasUrl, refleksiUrl } =
+  entry.data;
+
+// Materi/video/lab TIDAK disimpan ulang di sini -- selalu dirujuk dari
+// entri "materi" yang sudah ada (prinsip: jangan duplikasi materi).
+const materi = materiSlug ? await getEntry('blog', materiSlug) : undefined;
+const deskripsiTampil = deskripsi || materi?.data.description;
+
+const formattedDate = tanggal.toLocaleDateString('id-ID', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+// Learning Path -- 6 langkah tetap, status ("tersedia"/"belum tersedia")
+// murni dihitung dari ada-tidaknya data ini, BUKAN progress akun siswa.
+const langkah = [
+  {
+    nomor: '01',
+    label: 'Pelajari Materi',
+    ikon: '📖',
+    tersedia: Boolean(materi),
+    cta: 'Buka Materi',
+    href: materi ? `/materi/${materi.id}` : undefined,
+    externalTarget: false,
+    keterangan: materi ? materi.data.description : 'Materi belum tersedia untuk pembelajaran ini.',
+  },
+  {
+    nomor: '02',
+    label: 'Tonton Video',
+    ikon: '▶',
+    tersedia: Boolean(materi?.data.youtubeId),
+    cta: 'Tonton Video',
+    href: materi?.data.youtubeId ? `https://www.youtube.com/watch?v=${materi.data.youtubeId}` : undefined,
+    externalTarget: true,
+    keterangan: materi?.data.youtubeId ? 'Video pembelajaran di YouTube.' : 'Belum ada video untuk materi ini.',
+  },
+  {
+    nomor: '03',
+    label: 'Eksperimen / Lab Maya',
+    ikon: '🧪',
+    tersedia: Boolean(materi?.data.simulasi),
+    cta: 'Mulai Eksperimen',
+    href: materi?.data.simulasi?.url,
+    externalTarget: true,
+    keterangan: materi?.data.simulasi ? `Simulasi: ${materi.data.simulasi.judul}` : 'Belum ada simulasi untuk materi ini.',
+  },
+  {
+    nomor: '04',
+    label: 'Latihan',
+    ikon: '📝',
+    // Dua sumber -- link platform eksternal (latihanUrl -- Google Form,
+    // Wayground/Quizizz, Kahoot, dll, bebas apa saja), ATAU kuis bawaan
+    // yang sudah ada di halaman Materi (prinsip: pakai yang sudah ada,
+    // jangan duplikasi). latihanUrl diutamakan kalau dua-duanya ada.
+    tersedia: Boolean(latihanUrl) || Boolean(materi?.data.kuis?.length),
+    cta: latihanUrl ? 'Kerjakan Latihan' : 'Kerjakan Kuis',
+    href: latihanUrl || (materi?.data.kuis?.length ? `/materi/${materi.id}#kuis` : undefined),
+    externalTarget: Boolean(latihanUrl),
+    keterangan: latihanUrl
+      ? 'Latihan lewat link yang sudah disiapkan guru.'
+      : materi?.data.kuis?.length
+        ? 'Kuis uji pemahaman di halaman Materi.'
+        : 'Belum ada latihan untuk pembelajaran ini.',
+  },
+  {
+    nomor: '05',
+    label: 'Tugas',
+    ikon: '📤',
+    tersedia: Boolean(tugasUrl),
+    cta: 'Kerjakan / Kumpulkan Tugas',
+    href: tugasUrl,
+    externalTarget: true,
+    keterangan: tugasUrl ? 'Kerjakan/kumpulkan lewat link yang sudah disiapkan guru.' : 'Belum ada tugas untuk pembelajaran ini.',
+  },
+  {
+    nomor: '06',
+    label: 'Refleksi',
+    ikon: '💭',
+    tersedia: Boolean(refleksiUrl),
+    cta: 'Isi Refleksi',
+    href: refleksiUrl,
+    externalTarget: true,
+    keterangan: refleksiUrl ? 'Refleksi singkat lewat Google Form.' : 'Belum ada refleksi untuk pembelajaran ini.',
+  },
+];
+---
+
+<BaseLayout
+  title={`${judul} — Ruang Belajar`}
+  description={deskripsiTampil ?? `${mapel} Kelas ${kelas}: ${judul}`}
+>
+  <article class="container pd-detail">
+    <a href="/ruang-belajar" class="small-back">&larr; Semua Ruang Belajar</a>
+
+    <p class="eyebrow">{mapel} — Kelas {kelas}</p>
+    <h1>{judul}</h1>
+
+    <div class="pd-meta-row">
+      <span class="pd-meta">{formattedDate}</span>
+      {durasi && <span class="pd-meta">⏱ {durasi} menit</span>}
+    </div>
+
+    {deskripsiTampil && <p class="pd-lede">{deskripsiTampil}</p>}
+
+    {tujuanPembelajaran.length > 0 && (
+      <div class="pd-tujuan">
+        <p class="pd-tujuan-label">Tujuan Pembelajaran</p>
+        <ul>
+          {tujuanPembelajaran.map((t: string) => <li>{t}</li>)}
+        </ul>
+      </div>
+    )}
+
+    <div class="pd-path">
+      {langkah.map((l, i) => (
+        <div class={`pd-step ${l.tersedia ? '' : 'pd-step--kosong'}`}>
+          <div class="pd-step-line" aria-hidden="true">
+            <span class="pd-step-num">{l.nomor}</span>
+            {i < langkah.length - 1 && <span class="pd-step-connector"></span>}
+          </div>
+          <div class="pd-step-body">
+            <h2>{l.ikon} {l.label}</h2>
+            <p>{l.keterangan}</p>
+            {l.tersedia ? (
+              <a href={l.href} class="btn btn-primary" target={l.externalTarget ? '_blank' : undefined} rel={l.externalTarget ? 'noopener noreferrer' : undefined}>
+                {l.cta} {l.externalTarget ? '↗' : '→'}
+              </a>
+            ) : (
+              <span class="pd-step-unavailable">— Belum tersedia</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .pd-detail {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .pd-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pd-meta {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .pd-lede {
+    font-size: 1.0625rem;
+    color: var(--ink-soft);
+  }
+
+  .pd-tujuan {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .pd-tujuan-label {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .pd-tujuan ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .pd-tujuan li {
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+
+  .pd-path {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pd-step {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .pd-step-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .pd-step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+
+  .pd-step--kosong .pd-step-num {
+    background: var(--surface);
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+  }
+
+  .pd-step-connector {
+    width: 2px;
+    flex-grow: 1;
+    min-height: 2rem;
+    background: var(--border);
+    margin-block: 0.35rem;
+  }
+
+  .pd-step-body {
+    padding-bottom: 2rem;
+    flex-grow: 1;
+  }
+
+  .pd-step-body h2 {
+    font-size: 1.125rem;
+    margin: 0.35rem 0 0.35rem;
+  }
+
+  .pd-step-body p {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 0.85rem;
+  }
+
+  .pd-step-unavailable {
+    color: var(--ink-faint);
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+</style>

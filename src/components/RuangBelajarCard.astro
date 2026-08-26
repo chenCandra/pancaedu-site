@@ -1,0 +1,95 @@
+---
+// Kartu satu sesi Ruang Belajar -- dipakai di dua tempat: section
+// "Pembelajaran Hari Ini" dan grid Silabus per Mapel (dashboard). Satu
+// komponen, satu sumber kebenaran visual.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'ruangBelajar'>;
+  // Tanggal-ISO ("2026-08-26") ditaruh sebagai data-attribute buat
+  // dicocokkan JS di sisi klien (lihat index.astro) -- situs ini statis,
+  // "hari ini" cuma bisa dihitung di browser pengunjung, bukan saat build.
+  hidden?: boolean;
+}
+
+const { entry, hidden = false } = Astro.props;
+const { kelas, mapel, judul, deskripsi, durasi, tanggal } = entry.data;
+const tanggalIso = tanggal.toISOString().slice(0, 10);
+---
+
+<a
+  href={`/ruang-belajar/${entry.id}`}
+  class="pd-card"
+  data-pd-card
+  data-tanggal={tanggalIso}
+  data-kelas={kelas}
+  hidden={hidden}
+>
+  <div class="pd-card-tag">
+    <span class="badge">{mapel.toUpperCase()} — KELAS {kelas}</span>
+  </div>
+  <h3 class="pd-card-title">{judul}</h3>
+  {deskripsi && <p class="pd-card-desc">{deskripsi}</p>}
+  <div class="pd-card-footer">
+    {durasi && <span class="pd-card-durasi">⏱ {durasi} menit</span>}
+    <span class="pd-card-cta">Mulai Belajar &rarr;</span>
+  </div>
+</a>
+
+<style>
+  .pd-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pd-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .pd-card-title {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .pd-card-desc {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .pd-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pd-card-durasi {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .pd-card-cta {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

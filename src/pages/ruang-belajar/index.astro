@@ -1,0 +1,315 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RuangBelajarCard from '../../components/RuangBelajarCard.astro';
+
+// modeDaring SEKARANG cuma buat nampilin catatan darurat (mis. kabut asap)
+// kalau ada -- Ruang Belajar sendiri PERMANEN, tidak digerbangi field ini.
+const modeDaring = await getEntry('modeDaring', 'index');
+const aktif = modeDaring?.data.aktif ?? false;
+const keterangan = modeDaring?.data.keterangan;
+
+const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+
+const kelasList = ['X', 'XI', 'XII'].filter((k) => semua.some((p) => p.data.kelas === k));
+
+// Silabus -- dikelompokkan per Mata Pelajaran, urut tanggal ASCENDING di
+// dalam tiap kelompok (progres belajar dari sesi pertama ke terakhir,
+// beda dari "Hari Ini" yang butuh tanggal PERSIS hari ini). Ini yang bikin
+// Ruang Belajar tetap berguna dijelajahi kapan saja, bukan cuma pas ada
+// jadwal hari itu.
+const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
+  .sort((a, b) => a.localeCompare(b, 'id'))
+  .map((mapel) => ({
+    mapel,
+    entries: semua
+      .filter((p) => p.data.mapel === mapel)
+      .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf()),
+  }));
+---
+
+<BaseLayout
+  title="Ruang Belajar"
+  description="Ruang Belajar PancaEdu -- lihat apa yang harus dipelajari, ikuti langkahnya, lalu kerjakan latihan/tugasnya. Tersedia kapan saja."
+>
+  <section class="container pd-hero">
+    <div class="pd-hero-main">
+      <p class="eyebrow">🎓 Ruang Belajar</p>
+      <h1>Belajar Kapan Saja</h1>
+      <p class="pd-hero-lede">Lihat apa yang perlu dipelajari, ikuti langkahnya dari atas ke bawah, lalu kerjakan latihan/tugasnya.</p>
+
+      {aktif && keterangan && (
+        <div class="pd-alert">
+          <span class="pd-alert-icon" aria-hidden="true">📢</span>
+          <p>{keterangan}</p>
+        </div>
+      )}
+    </div>
+
+    <a href="/ruang-belajar/panduan" class="pd-panduan-link">
+      <span class="pd-panduan-icon" aria-hidden="true">💡</span>
+      Belum tahu cara belajar di PancaEdu? Baca panduannya &rarr;
+    </a>
+  </section>
+
+  <section class="container pd-hari-ini" data-pd-hari-ini hidden>
+    <h2 class="pd-section-title">📌 Pembelajaran Hari Ini</h2>
+    <p class="pd-tanggal" data-pd-tanggal></p>
+
+    <div class="pd-hari-ini-grid" data-pd-hari-ini-grid>
+      {semua.map((entry) => <RuangBelajarCard entry={entry} hidden />)}
+    </div>
+  </section>
+
+  {mapelGroups.length > 0 && (
+    <section class="container pd-silabus">
+      <h2 class="pd-section-title">Semua Pelajaran</h2>
+      <p class="pd-silabus-lede">Jelajahi berdasarkan kelas -- urut dari sesi paling awal ke terbaru, seperti silabus.</p>
+
+      <div class="pd-filter-row" role="group" aria-label="Filter kelas" data-pd-filters>
+        <button type="button" class="filter-btn badge" data-filter-kelas="" aria-pressed="true">Semua</button>
+        {kelasList.map((k) => (
+          <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">Kelas {k}</button>
+        ))}
+      </div>
+
+      {mapelGroups.map((group) => (
+        <div class="pd-mapel-group" data-pd-mapel-group>
+          <h3 class="pd-mapel-title">{group.mapel}</h3>
+          <div class="pd-grid">
+            {group.entries.map((entry) => <RuangBelajarCard entry={entry} />)}
+          </div>
+        </div>
+      ))}
+
+      <p class="pd-empty" data-pd-grid-empty hidden>Tidak ada pembelajaran untuk kelas ini.</p>
+    </section>
+  )}
+</BaseLayout>
+
+<script>
+  // "Hari ini" cuma bisa dihitung di browser pengunjung -- situs ini
+  // statis, dibangun sekali lalu di-deploy, jadi tanggal server saat build
+  // TIDAK bisa dipakai (bakal "hari ini" yang sama terus sampai rebuild
+  // berikutnya). Dihitung dari waktu LOKAL browser (bukan toISOString(),
+  // yang UTC) supaya cocok sama kalender yang dilihat siswa.
+  function todayIso(): string {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  const today = todayIso();
+
+  const tanggalEl = document.querySelector<HTMLElement>('[data-pd-tanggal]');
+  if (tanggalEl) {
+    const d = new Date();
+    tanggalEl.textContent = d.toLocaleDateString('id-ID', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  // Section "Hari Ini" DISEMBUNYIKAN SELURUHNYA (bukan cuma tampil pesan
+  // kosong) kalau tidak ada yang cocok -- Ruang Belajar permanen, jadi
+  // hari-hari biasa tanpa jadwal khusus tidak perlu terasa "kosong/rusak",
+  // cukup langsung lanjut ke "Semua Pelajaran" di bawahnya.
+  const hariIniSection = document.querySelector<HTMLElement>('[data-pd-hari-ini]');
+  const hariIniGrid = document.querySelector<HTMLElement>('[data-pd-hari-ini-grid]');
+  if (hariIniSection && hariIniGrid) {
+    let count = 0;
+    for (const card of hariIniGrid.querySelectorAll<HTMLElement>('[data-pd-card]')) {
+      const match = card.dataset.tanggal === today;
+      card.hidden = !match;
+      if (match) count++;
+    }
+    hariIniSection.hidden = count === 0;
+  }
+
+  // Filter Kelas (Semua/X/XI/XII) di "Semua Pelajaran" -- tiap kelompok
+  // Mapel disembunyikan seluruhnya kalau tidak ada sesi yang cocok filter
+  // (supaya tidak ada judul mapel nongkrong kosong tanpa isi).
+  const filters = document.querySelector<HTMLElement>('[data-pd-filters]');
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-pd-mapel-group]'));
+  const gridEmpty = document.querySelector<HTMLElement>('[data-pd-grid-empty]');
+
+  if (filters && groups.length > 0) {
+    let activeKelas = '';
+
+    const applyFilter = () => {
+      let anyVisible = false;
+      for (const group of groups) {
+        let groupHasVisible = false;
+        for (const card of group.querySelectorAll<HTMLElement>('[data-pd-card]')) {
+          const visible = !activeKelas || card.dataset.kelas === activeKelas;
+          card.hidden = !visible;
+          if (visible) groupHasVisible = true;
+        }
+        group.hidden = !groupHasVisible;
+        if (groupHasVisible) anyVisible = true;
+      }
+      if (gridEmpty) gridEmpty.hidden = anyVisible;
+    };
+
+    filters.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter-kelas]');
+      if (!btn) return;
+      activeKelas = btn.dataset.filterKelas ?? '';
+      for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      }
+      applyFilter();
+    });
+
+    applyFilter();
+  }
+</script>
+
+<style>
+  .pd-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    padding-block: 3rem 1.5rem;
+  }
+
+  .pd-hero-main {
+    min-width: 0;
+    max-width: var(--measure);
+  }
+
+  .pd-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pd-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: var(--gold-soft);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.1rem;
+    margin-top: 0.5rem;
+  }
+
+  .pd-alert-icon {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .pd-alert p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--ink);
+  }
+
+  .pd-section-title {
+    font-size: 1.375rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .pd-hari-ini {
+    padding-block: 1rem 2.5rem;
+  }
+
+  .pd-tanggal {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .pd-hari-ini-grid,
+  .pd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .pd-empty {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+
+  .pd-silabus {
+    padding-block: 1rem 3rem;
+  }
+
+  .pd-silabus-lede {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .pd-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    border-color: currentColor;
+  }
+
+  .pd-mapel-group {
+    margin-bottom: 2.5rem;
+  }
+
+  .pd-mapel-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .pd-mapel-title {
+    font-size: 1.0625rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pd-panduan-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    white-space: nowrap;
+  }
+
+  .pd-panduan-icon {
+    font-size: 1.375rem;
+    line-height: 1;
+  }
+
+  .pd-panduan-link:hover {
+    color: var(--accent);
+    border-color: var(--border-strong);
+  }
+
+  @media (max-width: 30rem) {
+    .pd-panduan-link {
+      white-space: normal;
+    }
+  }
+</style>
