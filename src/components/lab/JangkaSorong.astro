@@ -181,6 +181,8 @@ const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9
 </style>
 
 <script>
+  import { playClick } from '../../lib/clickSound';
+
   const OBJECT_COLORS = ['#ffd66b', '#6ea8ff', '#a78bfa', '#7ee0c3', '#ff9b7a'];
   const MIN_OBJECT_MM = 15; // 1,5 cm
   const MAX_OBJECT_MM = 85; // 8,5 cm
@@ -208,6 +210,7 @@ const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9
     let dragging = false;
     let dragStartClientX = 0;
     let dragStartJawMm = 0;
+    let lastSn = -1; // garis nonius aktif terakhir -- buat deteksi kapan harus "klik"
 
     const round1 = (n: number) => Math.round(n * 10) / 10;
 
@@ -224,7 +227,8 @@ const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9
       root.style.setProperty('--object-color', color);
 
       jawMm = MAX_JAW_MM; // mulai kebuka lebar
-      updateJawPosition();
+      lastSn = -1; // reset -- posisi awal ronde baru TIDAK boleh ikut bunyi klik
+      updateJawPosition(true);
 
       locked = false;
       dragging = false;
@@ -237,7 +241,7 @@ const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9
       hint.dataset.state = 'open';
     }
 
-    function updateJawPosition() {
+    function updateJawPosition(silent = false) {
       movingJaw.setAttribute('transform', `translate(${jawMm},0)`);
       handle.setAttribute('aria-valuenow', String(jawMm));
 
@@ -250,6 +254,15 @@ const noniusTicks = Array.from({ length: 11 }, (_, i) => i); // 0..10 (jarak 0.9
         const idx = Number(badge.dataset.noniusBadge);
         badge.dataset.active = idx === sn ? 'true' : 'false';
       });
+
+      // Garis nonius aktif baru saja berpindah (digeser/panah) -- bunyikan
+      // klik, mensimulasikan detent rahang jangka sorong asli. `silent`
+      // dipakai buat panggilan programatis (mis. reset ronde baru) yang
+      // BUKAN aksi user, supaya tidak ikut bunyi.
+      if (sn !== lastSn) {
+        if (!silent) playClick();
+        lastSn = sn;
+      }
 
       const closed = jawMm <= objectMm + 0.05;
       if (!locked) {

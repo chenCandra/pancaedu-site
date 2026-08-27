@@ -167,6 +167,8 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
 </style>
 
 <script>
+  import { playClick } from '../../lib/clickSound';
+
   const OBJECT_COLORS = ['#ffd66b', '#6ea8ff', '#a78bfa', '#7ee0c3', '#ff9b7a'];
   const MIN_OBJECT_MM = 0.6;
   const MAX_OBJECT_MM = 8.5;
@@ -195,6 +197,7 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
     let dragging = false;
     let dragStartClientX = 0;
     let dragStartSpindleMm = 0;
+    let lastSp = -1; // garis skala putar aktif terakhir -- buat deteksi kapan harus "klik"
 
     const round2 = (n: number) => Math.round(n * 100) / 100;
 
@@ -216,7 +219,8 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
       root.style.setProperty('--object-color', color);
 
       spindleMm = MAX_SPINDLE_MM;
-      updateSpindlePosition();
+      lastSp = -1; // reset -- posisi awal ronde baru TIDAK boleh ikut bunyi klik
+      updateSpindlePosition(true);
 
       locked = false;
       dragging = false;
@@ -229,7 +233,7 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
       hint.dataset.state = 'open';
     }
 
-    function updateSpindlePosition() {
+    function updateSpindlePosition(silent = false) {
       const xUnit = spindleMm * MM_TO_UNIT;
       movingJaw.setAttribute('transform', `translate(${xUnit},0)`);
       handle.setAttribute('aria-valuenow', String(spindleMm));
@@ -242,6 +246,15 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
         const idx = Number(tick.dataset.thimbleTick);
         tick.dataset.active = idx === sp ? 'true' : 'false';
       });
+
+      // Garis skala putar aktif baru saja berpindah (diputar/panah) --
+      // bunyikan klik, mensimulasikan ratchet mikrometer sekrup asli.
+      // `silent` dipakai buat panggilan programatis (reset ronde baru)
+      // yang BUKAN aksi user, supaya tidak ikut bunyi.
+      if (sp !== lastSp) {
+        if (!silent) playClick();
+        lastSp = sp;
+      }
 
       const closed = spindleMm <= objectMm + 0.005;
       if (!locked) {
