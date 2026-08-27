@@ -10,5 +10,8 @@ tujuanPembelajaran:
   - Menentukan dimensi suatu besaran turunan dari rumusnya.
   - Memeriksa konsistensi dimensi suatu persamaan Fisika.
 materiSlug: dimensi
+latihanUrl: ''
+tugasUrl: https://forms.gle/zxGQbGh9ToqqdVgn6
+refleksiUrl: ''
 draft: false
 ---
