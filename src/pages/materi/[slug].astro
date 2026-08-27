@@ -7,6 +7,7 @@ import RelatedPosts from '../../components/RelatedPosts.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import BookmarkButton from '../../components/BookmarkButton.astro';
 import Kuis from '../../components/Kuis.astro';
+import { extractYoutubeId } from '../../lib/youtube';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
@@ -17,8 +18,10 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, mapel, kelas, pubDate, updatedDate, tags, coverImage, youtubeId, simulasi, kuis } =
+const { title, description, mapel, kelas, pubDate, updatedDate, tags, coverImage, youtubeId: youtubeIdRaw, simulasi, kuis } =
   post.data;
+// Toleran kalau yang ditempel di CMS link lengkap, bukan ID doang.
+const youtubeId = youtubeIdRaw ? extractYoutubeId(youtubeIdRaw) : undefined;
 const { Content, headings } = await render(post);
 
 // Rekomendasi "Baca Juga" — prioritaskan mapel+kelas yang sama (paling

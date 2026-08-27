@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { extractYoutubeId } from '../../lib/youtube';
 
 export async function getStaticPaths() {
   const entries = await getCollection('ruangBelajar', ({ data }) => !data.draft);
@@ -29,8 +30,10 @@ const pengaturan = await getEntry('ruangBelajarPengaturan', 'index');
 const refleksiUrlTampil = refleksiUrl || pengaturan?.data.refleksiUrlGlobal;
 // Video punya Ruang Belajar sendiri diutamakan (mis. referensi eksternal
 // yang sengaja tidak ditampilkan di halaman Materi); fallback ke video
-// materi yang dirujuk kalau ada.
-const youtubeIdTampil = youtubeId || materi?.data.youtubeId;
+// materi yang dirujuk kalau ada. Toleran kalau yang ditempel link
+// lengkap, bukan ID doang.
+const youtubeIdRawTampil = youtubeId || materi?.data.youtubeId;
+const youtubeIdTampil = youtubeIdRawTampil ? extractYoutubeId(youtubeIdRawTampil) : undefined;
 
 const formattedDate = tanggal.toLocaleDateString('id-ID', {
   weekday: 'long',

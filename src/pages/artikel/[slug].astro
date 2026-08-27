@@ -6,6 +6,7 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import BookmarkButton from '../../components/BookmarkButton.astro';
+import { extractYoutubeId } from '../../lib/youtube';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.category === 'artikel' && !data.draft);
@@ -16,7 +17,9 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, topik, pubDate, updatedDate, tags, coverImage, youtubeId } = post.data;
+const { title, description, topik, pubDate, updatedDate, tags, coverImage, youtubeId: youtubeIdRaw } = post.data;
+// Toleran kalau yang ditempel di CMS link lengkap, bukan ID doang.
+const youtubeId = youtubeIdRaw ? extractYoutubeId(youtubeIdRaw) : undefined;
 const { Content, headings } = await render(post);
 
 // Rekomendasi "Baca Juga" — prioritaskan topik yang sama, sisanya diisi
