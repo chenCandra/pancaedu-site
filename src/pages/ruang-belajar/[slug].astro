@@ -21,6 +21,12 @@ const {
 // ceritanya -- lihat catatan youtubeId di content.config.ts.
 const materi = materiSlug ? await getEntry('blog', materiSlug) : undefined;
 const deskripsiTampil = deskripsi || materi?.data.description;
+
+// Link Refleksi GLOBAL (satu Form buat semua sesi) dipakai kalau sesi ini
+// tidak isi refleksiUrl sendiri -- lihat ruangBelajarPengaturan di
+// content.config.ts.
+const pengaturan = await getEntry('ruangBelajarPengaturan', 'index');
+const refleksiUrlTampil = refleksiUrl || pengaturan?.data.refleksiUrlGlobal;
 // Video punya Ruang Belajar sendiri diutamakan (mis. referensi eksternal
 // yang sengaja tidak ditampilkan di halaman Materi); fallback ke video
 // materi yang dirujuk kalau ada.
@@ -99,11 +105,11 @@ const langkah = [
     nomor: '06',
     label: 'Refleksi',
     ikon: '💭',
-    tersedia: Boolean(refleksiUrl),
+    tersedia: Boolean(refleksiUrlTampil),
     cta: 'Isi Refleksi',
-    href: refleksiUrl,
+    href: refleksiUrlTampil,
     externalTarget: true,
-    keterangan: refleksiUrl ? 'Refleksi singkat lewat Google Form.' : 'Belum ada refleksi untuk pembelajaran ini.',
+    keterangan: refleksiUrlTampil ? 'Refleksi singkat lewat Google Form.' : 'Belum ada refleksi untuk pembelajaran ini.',
   },
 ];
 ---

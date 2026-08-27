@@ -227,4 +227,18 @@ const modeDaring = defineCollection({
   }),
 });
 
-export const collections = { blog, kelas, hasilUjian, homepage, ruangBelajar, modeDaring };
+// Singleton (pola sama seperti `homepage`/`modeDaring` di atas). Link
+// Refleksi GLOBAL, dipakai sebagai fallback kalau sebuah sesi Ruang
+// Belajar TIDAK isi `refleksiUrl` sendiri -- supaya guru tidak perlu
+// tempel link Form yang sama berulang-ulang di tiap sesi. Kalau suatu
+// sesi memang butuh link refleksi khusus (beda dari biasanya), isi
+// `refleksiUrl` di sesi itu -- itu tetap menang, punya global ini cuma
+// dipakai kalau kosong.
+const ruangBelajarPengaturan = defineCollection({
+  loader: glob({ pattern: 'index.md', base: './src/content/ruang-belajar-pengaturan' }),
+  schema: z.object({
+    refleksiUrlGlobal: optionalUrl(),
+  }),
+});
+
+export const collections = { blog, kelas, hasilUjian, homepage, ruangBelajar, modeDaring, ruangBelajarPengaturan };

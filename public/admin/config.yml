@@ -87,6 +87,22 @@ collections:
             required: false
             hint: 'Alasan/periode, ditampilkan di banner beranda. Contoh: "Kualitas udara memburuk, KBM dari rumah s.d. pemberitahuan berikutnya."'
 
+  - name: "ruang-belajar-pengaturan"
+    label: "Pengaturan Ruang Belajar"
+    # Singleton -- link Refleksi GLOBAL, dipakai OTOMATIS di semua sesi
+    # Ruang Belajar yang tidak isi "Link Refleksi" sendiri. Jadi tidak
+    # perlu tempel link Form yang sama berulang-ulang tiap bikin sesi baru.
+    files:
+      - name: "pengaturan"
+        label: "Link Refleksi Global"
+        file: "src/content/ruang-belajar-pengaturan/index.md"
+        fields:
+          - label: "Link Refleksi Global (opsional)"
+            name: refleksiUrlGlobal
+            widget: string
+            required: false
+            hint: "Satu Form yang berlaku untuk SEMUA sesi Ruang Belajar (kelas berapa pun, mapel apa pun), kecuali sesi itu punya 'Link Refleksi' sendiri yang beda (itu tetap menang)."
+
   - name: "ruang-belajar"
     label: "Ruang Belajar"
     label_singular: "Sesi Belajar"
@@ -150,11 +166,11 @@ collections:
         widget: string
         required: false
         hint: "Tempat siswa mengumpulkan tugas -- Google Form, Google Drive, atau platform lain, bebas."
-      - label: "Link Refleksi (opsional)"
+      - label: "Link Refleksi Khusus Sesi Ini (opsional)"
         name: refleksiUrl
         widget: string
         required: false
-        hint: "Link platform apa saja, biasanya Google Form."
+        hint: "Kosongkan saja kalau sesi ini pakai Link Refleksi Global yang sudah diatur (lihat koleksi 'Pengaturan Ruang Belajar'). Isi di sini CUMA kalau sesi ini butuh Form refleksi yang beda dari biasanya."
       - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
 
   - name: "artikel"
