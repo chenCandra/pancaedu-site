@@ -1,6 +1,17 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// Helper -- widget string/url OPSIONAL di Sveltia CMS, kalau dikosongkan
+// (bukan diisi lalu dihapus lagi, tapi memang dibiarkan kosong dari awal),
+// tersimpan sebagai STRING KOSONG ('') di frontmatter, BUKAN field-nya
+// dihilangkan. z.string().url().optional() cuma terima URL asli atau field
+// absen (undefined) -- string kosong tetap "string", jadi LOLOS .optional()
+// tapi GAGAL di .url() (bukan URL valid). Sudah kejadian 2x (field
+// `simulasi` & field-field URL Ruang Belajar) -- makanya digeneralisasi
+// jadi helper di sini, dipakai di semua field url opsional biar nggak
+// kejadian lagi di field baru nanti.
+const optionalUrl = () => z.preprocess((v) => (v === '' ? undefined : v), z.string().url().optional());
+
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
@@ -185,9 +196,9 @@ const ruangBelajar = defineCollection({
     // (youtubeId) & Lab Maya (simulasi) otomatis ikut dari situ, TIDAK
     // diinput ulang di sini.
     materiSlug: z.string().optional(),
-    latihanUrl: z.string().url().optional(), // Google Form, Wayground, dll -- bebas platform
-    tugasUrl: z.string().url().optional(), // Google Form / Drive / dll
-    refleksiUrl: z.string().url().optional(), // biasanya Google Form
+    latihanUrl: optionalUrl(), // Google Form, Wayground, dll -- bebas platform
+    tugasUrl: optionalUrl(), // Google Form / Drive / dll
+    refleksiUrl: optionalUrl(), // biasanya Google Form
     draft: z.boolean().default(false),
   }),
 });
