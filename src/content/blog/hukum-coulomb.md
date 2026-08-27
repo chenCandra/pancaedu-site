@@ -221,28 +221,28 @@ Dua muatan menghasilkan gaya Coulomb sebesar F pada jarak r. Jika salah satu mua
 Jadi gaya yang baru menjadi **¾ kali** gaya semula (mengecil), meskipun salah satu muatannya diperbesar -- karena efek memperbesar jarak (dibagi kuadrat) lebih dominan daripada efek memperbesar muatan.
 
 <div class="mtr-note">
-🎓 <strong>Soal HOTS</strong> -- soal berikut butuh menggabungkan konsep kekekalan muatan (charge sharing) DENGAN Hukum Coulomb, bukan sekadar substitusi angka ke rumus.
+🎓 <strong>Soal HOTS</strong> -- soal berikut butuh menganalisis ARAH medan dari dua muatan sekaligus, bukan cuma substitusi angka ke rumus.
 </div>
 
-### Soal 4 — Konseptual: Muatan yang Disentuhkan
+### Soal 4 — Titik dengan Resultan Gaya Nol
 
-Dua bola konduktor identik, A dan B, bermuatan +8 μC dan −2 μC, terpisah sejauh 5 cm (0,05 m) dan saling tarik-menarik dengan gaya F₁.
-
-Kedua bola kemudian disentuhkan sesaat (sehingga muatan totalnya terbagi rata, karena ukurannya identik), lalu dipisahkan lagi ke jarak yang **sama**, 5 cm. Tentukan gaya Coulomb yang baru (F₂), dan jelaskan apakah sifatnya (tarik/tolak) berubah dari kondisi awal.
+Dua muatan sejenis, Q₁ = +2 μC dan Q₂ = +8 μC, diletakkan segaris dengan jarak 15 cm. Tentukan letak titik di ANTARA kedua muatan yang resultan gaya Coulomb-nya sama dengan nol.
 
 **Penyelesaian:**
 
-**Sebelum disentuhkan** -- F₁ dengan q₁ = 8 × 10⁻⁶ C, q₂ = 2 × 10⁻⁶ C, r = 0,05 m:
+Karena kedua muatan sejenis (sama-sama positif), medan dari Q₁ dan medan dari Q₂ di titik mana pun DI ANTARA keduanya saling berlawanan arah -- jadi titik nolnya memang mungkin ada di sana (beda kalau muatannya berbeda jenis, titik nolnya justru ada di LUAR garis hubung).
 
-<div class="mtr-formula">F₁ = (9 × 10⁹) × (8 × 10⁻⁶ × 2 × 10⁻⁶) / (0,05)² = 57,6 N (tarik-menarik, beda jenis)</div>
+Misalkan jarak titik itu dari Q₁ adalah *x*, maka jaraknya dari Q₂ = (15 − *x*) cm. Di titik itu, besar medan dari Q₁ harus sama dengan besar medan dari Q₂:
 
-**Saat disentuhkan** -- muatan total = q₁ + q₂ = (+8) + (−2) = **+6 μC**. Karena kedua bola identik, muatan ini terbagi RATA menjadi **+3 μC** di masing-masing bola (perhatikan: sekarang KEDUANYA bermuatan POSITIF, tandanya berubah dari kondisi awal!).
+<div class="mtr-formula">2/x² = 8/(15−x)² → √2/x = √8/(15−x) → (15−x)√2 = x√8</div>
 
-**Setelah dipisahkan lagi** -- F₂ dengan q₁' = q₂' = 3 × 10⁻⁶ C, r tetap 0,05 m:
+Sederhanakan (√8 = 2√2):
 
-<div class="mtr-formula">F₂ = (9 × 10⁹) × (3 × 10⁻⁶)² / (0,05)² = 32,4 N</div>
+<div class="mtr-formula">15√2 = x√2 + 2x√2 = 3x√2 → x = 15/3 = 5 cm</div>
 
-Jadi F₂ = 32,4 N, dan sifatnya berubah dari **tarik-menarik menjadi tolak-menolak** -- karena setelah disentuhkan, kedua bola sama-sama bermuatan positif (sejenis). Ini contoh kenapa memahami KONSEP di balik rumus itu penting, bukan cuma menghafal cara memasukkan angka.
+Jadi titik itu berada **5 cm dari Q₁** (dan otomatis **10 cm dari Q₂**). Titiknya lebih dekat ke muatan yang lebih KECIL (Q₁) -- masuk akal, karena jarak yang lebih dekat "mengompensasi" muatannya yang lebih kecil.
+
+*Cek: k(2)/(0,05)² dan k(8)/(0,10)² -- dua-duanya menghasilkan angka yang sama, jadi resultannya benar nol di titik itu.*
 
 ## 🪐 Hukum Coulomb vs Hukum Gravitasi Newton
 
