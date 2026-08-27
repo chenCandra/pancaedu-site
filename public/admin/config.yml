@@ -134,7 +134,12 @@ collections:
         value_field: "{{slug}}"
         display_fields: ["title"]
         required: false
-        hint: "Pilih dari Materi Pelajaran yang sudah ada -- Video & Lab Maya-nya otomatis ikut, TIDAK perlu diisi ulang di sini. Kalau belum ada materinya, kosongkan dulu (langkah 'Pelajari Materi' akan tampil 'belum tersedia')."
+        hint: "Pilih dari Materi Pelajaran yang sudah ada -- Lab Maya-nya otomatis ikut, TIDAK perlu diisi ulang di sini. Kalau belum ada materinya, kosongkan dulu (langkah 'Pelajari Materi' akan tampil 'belum tersedia')."
+      - label: "Video YouTube khusus sesi ini (opsional)"
+        name: youtubeId
+        widget: string
+        required: false
+        hint: "Cuma ID-nya (dari youtube.com/watch?v=XXXXXXXXXXX, isi XXXXXXXXXXX saja). Pakai ini kalau videonya BUKAN video milik sendiri/bukan konten resmi Materi (mis. video referensi orang lain) -- videonya CUMA muncul di sesi Ruang Belajar ini, TIDAK ikut tampil di halaman Materi. Kalau Materi yang dirujuk sudah punya video sendiri dan itu cukup, biarkan kosong di sini."
       - label: "Link Latihan (opsional)"
         name: latihanUrl
         widget: string

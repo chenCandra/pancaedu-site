@@ -11,13 +11,20 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { kelas, mapel, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug, latihanUrl, tugasUrl, refleksiUrl } =
-  entry.data;
+const {
+  kelas, mapel, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug,
+  youtubeId, latihanUrl, tugasUrl, refleksiUrl,
+} = entry.data;
 
-// Materi/video/lab TIDAK disimpan ulang di sini -- selalu dirujuk dari
-// entri "materi" yang sudah ada (prinsip: jangan duplikasi materi).
+// Materi/lab TIDAK disimpan ulang di sini -- selalu dirujuk dari entri
+// "materi" yang sudah ada (prinsip: jangan duplikasi materi). Video BEDA
+// ceritanya -- lihat catatan youtubeId di content.config.ts.
 const materi = materiSlug ? await getEntry('blog', materiSlug) : undefined;
 const deskripsiTampil = deskripsi || materi?.data.description;
+// Video punya Ruang Belajar sendiri diutamakan (mis. referensi eksternal
+// yang sengaja tidak ditampilkan di halaman Materi); fallback ke video
+// materi yang dirujuk kalau ada.
+const youtubeIdTampil = youtubeId || materi?.data.youtubeId;
 
 const formattedDate = tanggal.toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -43,11 +50,11 @@ const langkah = [
     nomor: '02',
     label: 'Tonton Video',
     ikon: '▶',
-    tersedia: Boolean(materi?.data.youtubeId),
+    tersedia: Boolean(youtubeIdTampil),
     cta: 'Tonton Video',
-    href: materi?.data.youtubeId ? `https://www.youtube.com/watch?v=${materi.data.youtubeId}` : undefined,
+    href: youtubeIdTampil ? `https://www.youtube.com/watch?v=${youtubeIdTampil}` : undefined,
     externalTarget: true,
-    keterangan: materi?.data.youtubeId ? 'Video pembelajaran di YouTube.' : 'Belum ada video untuk materi ini.',
+    keterangan: youtubeIdTampil ? 'Video pembelajaran di YouTube.' : 'Belum ada video untuk pembelajaran ini.',
   },
   {
     nomor: '03',
@@ -86,6 +93,7 @@ const langkah = [
     href: tugasUrl,
     externalTarget: true,
     keterangan: tugasUrl ? 'Kerjakan/kumpulkan lewat link yang sudah disiapkan guru.' : 'Belum ada tugas untuk pembelajaran ini.',
+    catatan: tugasUrl ? '⚠️ Presensi kehadiran hari ini didasarkan pada tugas ini terkirim atau tidak. Kalau tidak mengirim tugas, dianggap tidak hadir.' : undefined,
   },
   {
     nomor: '06',
@@ -136,6 +144,7 @@ const langkah = [
           <div class="pd-step-body">
             <h2>{l.ikon} {l.label}</h2>
             <p>{l.keterangan}</p>
+            {l.catatan && <p class="pd-step-catatan">{l.catatan}</p>}
             {l.tersedia ? (
               <a href={l.href} class="btn btn-primary" target={l.externalTarget ? '_blank' : undefined} rel={l.externalTarget ? 'noopener noreferrer' : undefined}>
                 {l.cta} {l.externalTarget ? '↗' : '→'}
@@ -265,6 +274,16 @@ const langkah = [
     color: var(--ink-soft);
     font-size: 0.9375rem;
     margin: 0 0 0.85rem;
+  }
+
+  .pd-step-catatan {
+    color: var(--rose) !important;
+    background: var(--rose-soft);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.8125rem !important;
+    font-weight: 600;
+    margin: -0.35rem 0 0.85rem !important;
   }
 
   .pd-step-unavailable {

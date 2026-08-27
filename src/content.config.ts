@@ -192,10 +192,18 @@ const ruangBelajar = defineCollection({
     deskripsi: z.string().optional(),
     durasi: z.number().int().positive().optional(), // menit
     tujuanPembelajaran: z.array(z.string()).default([]),
-    // id entri collection "materi" (mis. "besaran-dan-satuan") -- video
-    // (youtubeId) & Lab Maya (simulasi) otomatis ikut dari situ, TIDAK
-    // diinput ulang di sini.
+    // id entri collection "materi" (mis. "besaran-dan-satuan") -- Lab Maya
+    // (simulasi) otomatis ikut dari situ, TIDAK diinput ulang di sini.
     materiSlug: z.string().optional(),
+    // Video KHUSUS buat sesi Ruang Belajar ini -- SENGAJA terpisah dari
+    // `youtubeId` di Materi (bukan ditarik dari materiSlug seperti Lab
+    // Maya). Dipakai kalau video yang mau dipakai BUKAN konten milik
+    // sendiri (mis. video YouTube orang lain sebagai referensi tambahan)
+    // yang tidak ingin ditampilkan permanen di halaman Materi -- cuma
+    // relevan buat sesi belajar hari itu. Kalau diisi, ini yang dipakai
+    // duluan di langkah "Tonton Video"; kalau kosong, fallback ke
+    // youtubeId materi yang dirujuk (kalau ada).
+    youtubeId: z.string().optional(),
     latihanUrl: optionalUrl(), // Google Form, Wayground, dll -- bebas platform
     tugasUrl: optionalUrl(), // Google Form / Drive / dll
     refleksiUrl: optionalUrl(), // biasanya Google Form

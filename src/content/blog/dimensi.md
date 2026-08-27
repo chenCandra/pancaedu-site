@@ -6,7 +6,6 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-26
 tags: ["Dimensi", "Fisika Kelas X", "Analisis Dimensi"]
-youtubeId: "yqA4dz6qYxI"
 kuis:
   - soal: "Simbol dimensi yang digunakan untuk menyatakan besaran panjang adalah..."
     pilihan: ["M", "T", "L", "I"]
