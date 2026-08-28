@@ -1,0 +1,310 @@
+---
+// Simulasi amperemeter analog -- Lab Maya, kategori Arus.
+//
+// Beda dari 3 simulasi lain (jangka sorong, mikrometer, neraca): di sini
+// cuma ADA SATU skala (busur 0–50), bukan beberapa skala yang dijumlah.
+// Tapi cara baca amperemeter analog sungguhan justru punya langkah
+// tambahan yang khas & wajib diajarkan: hasil bacaan jarum HARUS dikonversi
+// pakai batas ukur yang lagi dipakai --
+//
+//   Arus = (penunjukan jarum / skala maksimum) × batas ukur
+//
+// -- jadi tetap ada "kombinasi 2 angka" yang harus digabung murid, senada
+// dengan pola simulasi lain di Lab Maya. Gaya visual (gradasi metalik,
+// dial trigonometri) SENGAJA disamakan dengan StopwatchAnalog/NeracaOhaus.
+import '../../styles/lab.css';
+
+const MAX_SCALE = 50;
+const GAUGE_CX = 50;
+const GAUGE_CY = 60;
+const R_INNER = 30;
+const R_MINOR = 34;
+const R_MAJOR = 37;
+const R_LABEL = 43;
+const ARC_START = -210; // derajat -- skala 0 (busur simetris ±120° dari atas)
+const ARC_SWEEP = 240;
+const NEEDLE_LEN = 33;
+
+const scaleTicks = Array.from({ length: MAX_SCALE + 1 }, (_, i) => {
+  const t = i / MAX_SCALE;
+  const angleDeg = ARC_START + t * ARC_SWEEP;
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const isMajor = i % 10 === 0;
+  const rOuter = isMajor ? R_MAJOR : R_MINOR;
+  return {
+    i,
+    isMajor,
+    x1: GAUGE_CX + R_INNER * Math.cos(angleRad),
+    y1: GAUGE_CY + R_INNER * Math.sin(angleRad),
+    x2: GAUGE_CX + rOuter * Math.cos(angleRad),
+    y2: GAUGE_CY + rOuter * Math.sin(angleRad),
+    lx: GAUGE_CX + R_LABEL * Math.cos(angleRad),
+    ly: GAUGE_CY + R_LABEL * Math.sin(angleRad),
+  };
+});
+
+const baseRad = (ARC_START * Math.PI) / 180;
+const needleTipX = GAUGE_CX + NEEDLE_LEN * Math.cos(baseRad);
+const needleTipY = GAUGE_CY + NEEDLE_LEN * Math.sin(baseRad);
+---
+
+<div class="jsl amp" data-amp>
+  <div class="jsl-card card">
+    <div class="jsl-stage">
+      <svg
+        class="jsl-svg"
+        viewBox="-4 -4 108 106"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Ilustrasi amperemeter analog"
+      >
+        <defs>
+          <linearGradient id="amp-case-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8b93a3" />
+            <stop offset="100%" stop-color="#5b6272" />
+          </linearGradient>
+        </defs>
+
+        <!-- Badan alat & muka skala -->
+        <rect x="0" y="0" width="100" height="96" rx="6" class="amp-case" />
+        <rect x="4" y="4" width="92" height="82" rx="4" class="amp-face" />
+
+        <!-- Busur skala 0–50 -->
+        {scaleTicks.map((t) => (
+          <line
+            x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
+            class={t.isMajor ? 'jsl-tick jsl-tick-major' : 'jsl-tick'}
+          />
+        ))}
+        {scaleTicks.filter((t) => t.isMajor).map((t) => (
+          <text x={t.lx} y={t.ly} class="jsl-label amp-label" text-anchor="middle" dominant-baseline="middle">{t.i}</text>
+        ))}
+
+        <text x={GAUGE_CX} y={GAUGE_CY - 8} class="amp-unit-label" text-anchor="middle">A</text>
+
+        <!-- Jarum, diputar lewat JS -->
+        <line data-needle x1={GAUGE_CX} y1={GAUGE_CY} x2={needleTipX} y2={needleTipY} class="amp-needle" />
+        <circle cx={GAUGE_CX} cy={GAUGE_CY} r="2" class="amp-pin" />
+
+        <!-- Terminal +/- (dekoratif, biar kelihatan alat sungguhan) -->
+        <circle cx="25" cy="86" r="3" class="amp-terminal" />
+        <text x="25" y="94" class="amp-terminal-label" text-anchor="middle">+</text>
+        <circle cx="75" cy="86" r="3" class="amp-terminal" />
+        <text x="75" y="94" class="amp-terminal-label" text-anchor="middle">−</text>
+      </svg>
+    </div>
+
+    <p class="amp-batas" data-batas>Batas ukur: <strong data-batas-value>...</strong></p>
+
+    <p class="jsl-hint" data-hint>⚡ Jarum sedang bergerak...</p>
+
+    <div class="jsl-controls" data-controls>
+      <label for="amp-guess">Menurut bacaan kamu, berapa Ampere arusnya?</label>
+      <div class="jsl-input-row">
+        <input
+          type="text"
+          inputmode="decimal"
+          id="amp-guess"
+          data-guess
+          placeholder="contoh: 0,64"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-primary" data-check>Cek Jawaban</button>
+      </div>
+    </div>
+
+    <div class="jsl-result" data-result hidden>
+      <p class="jsl-result-headline" data-result-headline></p>
+      <p class="jsl-result-detail" data-result-detail></p>
+      <button type="button" class="btn btn-ghost" data-retry>🔄 Coba Lagi (Arus Baru)</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Style dasar (.jsl-card, .jsl-stage, .jsl-svg, tick, label, hint,
+     controls, result, dst) ada di src/styles/lab.css. Di sini cuma style
+     KHUSUS amperemeter (badan alat, busur, jarum, terminal). */
+
+  .amp-case {
+    fill: url(#amp-case-fill);
+    stroke: var(--border-strong);
+    stroke-width: 0.4;
+  }
+
+  .amp-face {
+    fill: var(--surface-solid);
+    stroke: var(--border);
+    stroke-width: 0.3;
+  }
+
+  .amp-label {
+    font-size: 3.6px;
+  }
+
+  .amp-unit-label {
+    font-size: 5px;
+    font-weight: 700;
+    fill: var(--ink-soft);
+    font-family: var(--font-display);
+  }
+
+  /* Jarum diputar lewat CSS transform (bukan atribut SVG) -- sama seperti
+     StopwatchAnalog, biar transition-nya reliable lintas browser.
+     transform-origin dipatok di titik pivot (HARUS senilai sama dengan
+     GAUGE_CX/CY di markup). */
+  .amp-needle {
+    transform-origin: 50px 60px;
+    transition: transform 1.4s cubic-bezier(0.22, 0.9, 0.28, 1);
+    stroke: var(--accent);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+  }
+
+  .amp-pin {
+    fill: var(--ink);
+  }
+
+  .amp-terminal {
+    fill: var(--ink-soft);
+    stroke: var(--surface-solid);
+    stroke-width: 0.3;
+  }
+
+  .amp-terminal-label {
+    font-size: 4px;
+    font-weight: 700;
+    fill: var(--ink-soft);
+    text-anchor: middle;
+  }
+
+  .amp-batas {
+    margin: 0.85rem 0 0;
+    text-align: center;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .amp-batas strong {
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  import { playClick } from '../../lib/clickSound';
+
+  const MAX_SCALE = 50;
+  const ARC_SWEEP = 240;
+  const SWING_MS = 1400; // HARUS senilai sama dengan transition di CSS
+
+  // Batas ukur yang lazim dipakai di amperemeter sekolah.
+  const BATAS_UKUR_OPTIONS = [0.1, 0.5, 1, 5];
+
+  const fmtID = (n: number | string) => String(n).replace('.', ',');
+
+  function initAmperemeter(root: HTMLElement) {
+    const needle = root.querySelector<SVGLineElement>('[data-needle]')!;
+    const batasValueEl = root.querySelector<HTMLElement>('[data-batas-value]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!;
+    const guessInput = root.querySelector<HTMLInputElement>('[data-guess]')!;
+    const checkBtn = root.querySelector<HTMLButtonElement>('[data-check]')!;
+    const resultBox = root.querySelector<HTMLElement>('[data-result]')!;
+    const resultHeadline = root.querySelector<HTMLElement>('[data-result-headline]')!;
+    const resultDetail = root.querySelector<HTMLElement>('[data-result-detail]')!;
+    const retryBtn = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+
+    let batasUkur = BATAS_UKUR_OPTIONS[0];
+    let skalaTerbaca = 0; // 0..50, boleh pecahan (murid latihan interpolasi antar garis kecil)
+    let state: 'animating' | 'ready' | 'locked' = 'animating';
+
+    function setNeedleInstant(deg: number) {
+      needle.style.transition = 'none';
+      needle.style.transform = `rotate(${deg}deg)`;
+      void needle.getBoundingClientRect();
+      needle.style.transition = '';
+    }
+
+    function round2(n: number) {
+      return Math.round(n * 100) / 100;
+    }
+
+    function newRound() {
+      batasUkur = BATAS_UKUR_OPTIONS[Math.floor(Math.random() * BATAS_UKUR_OPTIONS.length)];
+      // Dibulatkan ke 0,5 terdekat -- angka yang lazim dipakai di soal buku
+      // teks (bukan pecahan aneh yang susah dibaca dari jarak antar garis).
+      skalaTerbaca = Math.round((4 + Math.random() * 42) * 2) / 2;
+      batasValueEl.textContent = `${fmtID(batasUkur)} A`;
+
+      state = 'animating';
+      setNeedleInstant(0);
+      guessInput.value = '';
+      guessInput.disabled = false;
+      checkBtn.disabled = true;
+      controls.hidden = false;
+      resultBox.hidden = true;
+      hint.dataset.state = 'open';
+      hint.textContent = '⚡ Jarum sedang bergerak...';
+
+      // Jarum "menyentak" ke posisi baru tiap ronde, niru gerak amperemeter
+      // sungguhan waktu arus mulai mengalir -- dipicu otomatis (bukan lewat
+      // tombol) karena beda dari stopwatch, di sini tidak ada konsep
+      // "mulai/berhenti" yang perlu ditekan murid.
+      requestAnimationFrame(() => {
+        const deg = (skalaTerbaca / MAX_SCALE) * ARC_SWEEP;
+        needle.style.transform = `rotate(${deg}deg)`;
+      });
+
+      window.setTimeout(() => {
+        state = 'ready';
+        checkBtn.disabled = false;
+        hint.dataset.state = 'closed';
+        hint.textContent = '✓ Jarum sudah stabil — sekarang coba baca skalanya.';
+        playClick();
+      }, SWING_MS);
+    }
+
+    function parseGuess(raw: string): number | null {
+      const normalized = raw.trim().replace(',', '.');
+      if (!normalized) return null;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function onCheck() {
+      if (state !== 'ready') return;
+      const guess = parseGuess(guessInput.value);
+      if (guess === null) {
+        guessInput.focus();
+        return;
+      }
+
+      state = 'locked';
+      guessInput.disabled = true;
+      checkBtn.disabled = true;
+
+      const arus = round2((skalaTerbaca / MAX_SCALE) * batasUkur);
+      const tolerance = Math.max(0.005, batasUkur * 0.02);
+      const isCorrect = Math.abs(guess - arus) < tolerance;
+
+      resultBox.hidden = false;
+      resultBox.dataset.correct = String(isCorrect);
+      resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
+
+      const caraTxt = `📐 Cara bacanya: Penunjukan jarum = <strong>${fmtID(skalaTerbaca)}</strong> (dari skala maksimum ${MAX_SCALE}) + Batas ukur = <strong>${fmtID(batasUkur)} A</strong> → Arus = (skala ÷ ${MAX_SCALE}) × batas ukur = (${fmtID(skalaTerbaca)} ÷ ${MAX_SCALE}) × ${fmtID(batasUkur)} = <strong>${fmtID(arus)} A</strong>.`;
+      const bacaanTxt = `Arus sebenarnya: <strong>${fmtID(arus)} A</strong>.`;
+
+      resultDetail.innerHTML = `${bacaanTxt}<br><br>${caraTxt}`;
+    }
+
+    checkBtn.addEventListener('click', onCheck);
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') onCheck();
+    });
+    retryBtn.addEventListener('click', newRound);
+
+    newRound();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-amp]').forEach(initAmperemeter);
+</script>

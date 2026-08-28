@@ -68,14 +68,14 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
         ))}
 
         <!-- Landasan (anvil, tetap di posisi 0) -->
-        <rect x="-1" y="16" width="2" height="20" rx="0.6" class="jsl-jaw jsl-jaw-fixed" />
+        <rect x="-0.6" y="16" width="1.2" height="20" rx="0.4" class="jsl-jaw jsl-jaw-fixed" />
 
         <!-- Benda yang diukur -->
         <rect data-object x="0" y="22" width="18" height="8" rx="1.3" class="jsl-object" />
 
         <!-- Poros ukur (spindle, posisinya di-translate lewat JS) -->
         <g data-moving-jaw transform={`translate(${18},0)`}>
-          <rect x="-1" y="16" width="2" height="20" rx="0.6" class="jsl-jaw jsl-jaw-moving" />
+          <rect x="-0.6" y="16" width="1.2" height="20" rx="0.4" class="jsl-jaw jsl-jaw-moving" />
 
           <!-- Garis penanda posisi di skala utama -->
           <line x1="0" y1="10" x2="0" y2="14" class="jsl-index-line" />
@@ -149,7 +149,7 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
 
   .msk-thimble-tick[data-active='true'] {
     stroke: var(--gold);
-    stroke-width: 0.7;
+    stroke-width: 0.42;
   }
 
   .msk-thimble-label {
@@ -162,7 +162,7 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
 
   .jsl-index-line {
     stroke: var(--gold);
-    stroke-width: 0.5;
+    stroke-width: 0.35;
   }
 </style>
 
@@ -344,13 +344,23 @@ const mainTicks = Array.from({ length: 21 }, (_, i) => i * 0.5); // 0, 0.5, 1, .
       resultBox.dataset.correct = String(isCorrect);
       resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
 
+      // Sama seperti jangka sorong -- jawaban dibuka disertai rincian cara
+      // baca Skala Utama (SU) + Skala Putar (SP), pakai istilah yang sama
+      // dengan materi (lihat alat-ukur.md: "Hasil pengukuran = skala utama
+      // + skala putar"), bukan "skala nonius" (istilah itu khusus jangka
+      // sorong) -- biar konsisten dan murid tidak bingung dua istilah beda
+      // alat tertukar.
+      const { su, sp } = readingParts(currentReadingMm);
+      const spMm = round2(sp * 0.01);
+      const caraTxt = `📐 Cara bacanya: Skala Utama (SU) = <strong>${su.toFixed(2)} mm</strong> + Skala Putar (SP) = garis ke-<strong>${sp}</strong> × 0,01 mm = <strong>${spMm.toFixed(2)} mm</strong> → ${su.toFixed(2)} + ${spMm.toFixed(2)} = <strong>${currentReadingMm.toFixed(2)} mm</strong>.`;
+
       const bacaanTxt = `Bacaan skala saat ini: <strong>${currentReadingMm.toFixed(2)} mm</strong>.`;
       const bendaTxt = `Ukuran benda sebenarnya: <strong>${trueObjectMm.toFixed(2)} mm</strong>.`;
       const closeTxt = closedProperly
         ? ''
         : ' Porosnya belum full nempel ke benda, jadi bacaannya lebih besar dari ukuran aslinya — coba tutup rapat dulu di ronde berikutnya.';
 
-      resultDetail.innerHTML = `${bacaanTxt} ${bendaTxt}${closeTxt}`;
+      resultDetail.innerHTML = `${bacaanTxt} ${bendaTxt}${closeTxt}<br><br>${caraTxt}`;
     }
 
     handle.addEventListener('pointerdown', onPointerDown);

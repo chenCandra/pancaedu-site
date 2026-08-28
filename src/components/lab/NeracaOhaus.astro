@@ -1,0 +1,579 @@
+---
+// Simulasi neraca tiga lengan (mis. Ohaus 311gram) -- Lab Maya, kategori
+// Massa. Alat ini yang diajarkan di kelas X buat ngukur massa lebih presisi
+// daripada timbangan digital biasa.
+//
+// Cara bacanya SENGAJA dibuat mengikuti pola yang sama dengan simulasi lab
+// lain (jumlahkan beberapa skala): jangka sorong = skala utama + nonius,
+// mikrometer sekrup = skala utama + skala putar, neraca ini = skala ratusan
+// + skala puluhan + skala satuan. Bedanya: ada TIGA lengan yang digeser
+// terpisah (bukan satu rahang/poros), dan targetnya bukan "nempel ke
+// benda" tapi "neraca setimbang" (ditunjukkan lewat indikator di bawah) --
+// itu juga cara kerja neraca sungguhan: geser anak timbangnya sampai
+// setimbang, baru dijumlah bacaan ketiga lengannya.
+import '../../styles/lab.css';
+
+const BEAM_X0 = 18; // titik 0 gram tiap lengan (unit SVG)
+const BEAM_W = 90; // panjang area skala tiap lengan -- SAMA buat ketiganya
+                    // (walau rentang gramnya beda-beda) biar visualnya sejajar
+
+const RATUSAN = { y: 10, max: 500, step: 100, unit: BEAM_W / 500 };
+const PULUHAN = { y: 32, max: 100, step: 10, unit: BEAM_W / 100 };
+const SATUAN = { y: 54, max: 10, step: 0.1, unit: BEAM_W / 10 };
+
+const notchesRatusan = Array.from({ length: RATUSAN.max / RATUSAN.step + 1 }, (_, i) => i * RATUSAN.step);
+const notchesPuluhan = Array.from({ length: PULUHAN.max / PULUHAN.step + 1 }, (_, i) => i * PULUHAN.step);
+// Skala satuan dibuat dari indeks (bukan perkalian float langsung) biar
+// tidak kena masalah presisi 0.1+0.1+0.1... yang lazim di JS.
+const satuanTicks = Array.from({ length: 101 }, (_, i) => ({ i, gram: i / 10, major: i % 10 === 0 }));
+---
+
+<div class="jsl nrc" data-nrc>
+  <div class="jsl-card card">
+    <div class="jsl-stage">
+      <svg
+        class="jsl-svg"
+        viewBox="-10 -8 132 96"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Ilustrasi neraca tiga lengan menimbang sebuah benda"
+        data-nrc-svg
+      >
+        <defs>
+          <linearGradient id="nrc-metal-base" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8b93a3" />
+            <stop offset="100%" stop-color="#5b6272" />
+          </linearGradient>
+          <linearGradient id="nrc-metal-beam" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#eef0f3" />
+            <stop offset="60%" stop-color="#d6dae1" />
+            <stop offset="100%" stop-color="#aeb4c0" />
+          </linearGradient>
+          <linearGradient id="nrc-pan-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f3f4f6" />
+            <stop offset="100%" stop-color="#c7ccd5" />
+          </linearGradient>
+        </defs>
+
+        <!-- Bagian yang DIAM (rangka/dudukan) -- base cor, tiang, & penanda
+             titik-nol jarum. Cuma bagian lengan+piringan di bawah ini yang
+             gerak (lihat data-beam-assembly / data-pan-assembly), biar
+             muridnya kebayang alat aslinya bukan cuma garis-garis abstrak. -->
+        <rect x="-8" y="70" width="112" height="9" rx="2" class="nrc-base" />
+        <rect x="10" y="10" width="8" height="62" rx="1.5" class="nrc-pillar" />
+        <!-- Penanda tetap posisi "seimbang" buat jarum penunjuk -->
+        <polygon points="118,32 123,29 123,35" class="nrc-pointer-ref" />
+
+        <!-- Piringan tempat benda diletakkan -- ikut naik/turun dikit
+             (data-pan-assembly) berlawanan arah sama gerak lengan, niru
+             gerakan neraca sungguhan waktu belum setimbang. -->
+        <g data-pan-assembly>
+          <rect x="-2" y="60" width="4" height="12" class="nrc-pan-post" />
+          <ellipse cx="0" cy="60" rx="8" ry="2.4" class="nrc-pan" />
+          <rect data-object x="-6" y="47" width="12" height="10" rx="1.5" class="jsl-object" />
+          <text x="0" y="43" class="nrc-stand-caption" text-anchor="middle">Benda</text>
+        </g>
+
+        <!-- Rangkaian lengan (skala ratusan/puluhan/satuan + jarum) -- ini
+             yang DIGESER murid, dan seluruh grupnya ikut miring dikit lewat
+             JS (data-beam-assembly, rotate di sekitar titik engsel di atas
+             tiang) tergantung sudah seimbang atau belum. Riasan "batang
+             logam" (nrc-beam-bar) ditaruh di belakang tiap skala biar
+             kelihatan seperti lengan besi sungguhan, bukan cuma garis. -->
+        <g data-beam-assembly>
+          <!-- Lengan skala ratusan (0–500 g, kelipatan 100) -->
+          <rect x={BEAM_X0 - 3} y={RATUSAN.y - 6.5} width={BEAM_W + 10} height="8" rx="1.3" class="nrc-beam-bar" />
+          <text x={BEAM_X0 - 4} y={RATUSAN.y + 1.2} class="nrc-beam-caption" text-anchor="end">Ratusan</text>
+          <line x1={BEAM_X0} y1={RATUSAN.y} x2={BEAM_X0 + BEAM_W} y2={RATUSAN.y} class="jsl-baseline" />
+          {notchesRatusan.map((g) => (
+            <line
+              x1={BEAM_X0 + g * RATUSAN.unit} y1={RATUSAN.y - 6}
+              x2={BEAM_X0 + g * RATUSAN.unit} y2={RATUSAN.y}
+              class="jsl-tick jsl-tick-major"
+            />
+          ))}
+          {notchesRatusan.map((g) => (
+            <text x={BEAM_X0 + g * RATUSAN.unit} y={RATUSAN.y - 8} class="jsl-label" text-anchor="middle">{g}</text>
+          ))}
+          <g data-rider="ratusan" class="jsl-handle nrc-rider" tabindex="0" role="slider"
+             aria-label="Skala ratusan, 0 sampai 500 gram, kelipatan 100"
+             aria-valuemin="0" aria-valuemax={RATUSAN.max} aria-valuenow="0"
+             transform={`translate(${BEAM_X0},${RATUSAN.y})`}>
+            <circle cx="0" cy="4.5" r="4.5" class="jsl-handle-hit" />
+            <polygon points="0,0 -2.2,4.5 2.2,4.5" class="nrc-rider-tri" />
+            <rect x="-2.2" y="4.5" width="4.4" height="3" rx="0.6" class="nrc-rider-body" />
+          </g>
+
+          <!-- Lengan skala puluhan (0–100 g, kelipatan 10) -->
+          <rect x={BEAM_X0 - 3} y={PULUHAN.y - 6.5} width={BEAM_W + 10} height="8" rx="1.3" class="nrc-beam-bar" />
+          <text x={BEAM_X0 - 4} y={PULUHAN.y + 1.2} class="nrc-beam-caption" text-anchor="end">Puluhan</text>
+          <line x1={BEAM_X0} y1={PULUHAN.y} x2={BEAM_X0 + BEAM_W} y2={PULUHAN.y} class="jsl-baseline" />
+          {notchesPuluhan.map((g) => (
+            <line
+              x1={BEAM_X0 + g * PULUHAN.unit} y1={PULUHAN.y - 6}
+              x2={BEAM_X0 + g * PULUHAN.unit} y2={PULUHAN.y}
+              class="jsl-tick jsl-tick-major"
+            />
+          ))}
+          {notchesPuluhan.map((g) => (
+            <text x={BEAM_X0 + g * PULUHAN.unit} y={PULUHAN.y - 8} class="jsl-label" text-anchor="middle">{g}</text>
+          ))}
+          <g data-rider="puluhan" class="jsl-handle nrc-rider" tabindex="0" role="slider"
+             aria-label="Skala puluhan, 0 sampai 100 gram, kelipatan 10"
+             aria-valuemin="0" aria-valuemax={PULUHAN.max} aria-valuenow="0"
+             transform={`translate(${BEAM_X0},${PULUHAN.y})`}>
+            <circle cx="0" cy="4.5" r="4.5" class="jsl-handle-hit" />
+            <polygon points="0,0 -2.2,4.5 2.2,4.5" class="nrc-rider-tri" />
+            <rect x="-2.2" y="4.5" width="4.4" height="3" rx="0.6" class="nrc-rider-body" />
+          </g>
+
+          <!-- Lengan skala satuan (0–10 g, halus tiap 0,1 g) -->
+          <rect x={BEAM_X0 - 3} y={SATUAN.y - 6.5} width={BEAM_W + 10} height="8" rx="1.3" class="nrc-beam-bar" />
+          <text x={BEAM_X0 - 4} y={SATUAN.y + 1.2} class="nrc-beam-caption" text-anchor="end">Satuan</text>
+          <line x1={BEAM_X0} y1={SATUAN.y} x2={BEAM_X0 + BEAM_W} y2={SATUAN.y} class="jsl-baseline" />
+          {satuanTicks.map((t) => (
+            <line
+              x1={BEAM_X0 + t.gram * SATUAN.unit} y1={t.major ? SATUAN.y - 6 : SATUAN.y - 3.5}
+              x2={BEAM_X0 + t.gram * SATUAN.unit} y2={SATUAN.y}
+              class={t.major ? 'jsl-tick jsl-tick-major' : 'jsl-tick'}
+            />
+          ))}
+          {satuanTicks.filter((t) => t.major).map((t) => (
+            <text x={BEAM_X0 + t.gram * SATUAN.unit} y={SATUAN.y - 8} class="jsl-label" text-anchor="middle">{t.gram}</text>
+          ))}
+          <g data-rider="satuan" class="jsl-handle nrc-rider" tabindex="0" role="slider"
+             aria-label="Skala satuan, 0 sampai 10 gram, halus tiap 0,1 gram"
+             aria-valuemin="0" aria-valuemax={SATUAN.max} aria-valuenow="0"
+             transform={`translate(${BEAM_X0},${SATUAN.y})`}>
+            <circle cx="0" cy="4.5" r="4.5" class="jsl-handle-hit" />
+            <polygon points="0,0 -2.2,4.5 2.2,4.5" class="nrc-rider-tri" />
+            <rect x="-2.2" y="4.5" width="4.4" height="3" rx="0.6" class="nrc-rider-body" />
+          </g>
+
+          <!-- Jarum penunjuk, ikut miring bareng lengannya -- ketemu sama
+               penanda segitiga (nrc-pointer-ref di atas, yang diam) kalau
+               sudah pas seimbang. -->
+          <line x1={BEAM_X0 + BEAM_W} y1={PULUHAN.y} x2="118" y2={PULUHAN.y} class="nrc-pointer-needle" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Indikator setimbang -- pengganti "jarum" neraca sungguhan. Titik
+         hijau di tengah = setimbang, bukan penentu benar/salah jawaban
+         (itu tetap dicek dari angka yang diketik), cuma bantu murid tahu
+         kapan bacaan ketiga lengannya sudah pas mewakili massa benda. -->
+    <div class="nrc-gauge" data-gauge data-balanced="false">
+      <span class="nrc-gauge-label">Kurang berat</span>
+      <div class="nrc-gauge-track">
+        <div class="nrc-gauge-zone"></div>
+        <div class="nrc-gauge-dot" data-gauge-dot></div>
+      </div>
+      <span class="nrc-gauge-label">Kelebihan</span>
+    </div>
+
+    <p class="jsl-hint" data-hint>👉 Geser tiap lengan sampai neracanya setimbang.</p>
+
+    <div class="jsl-controls" data-controls>
+      <label for="nrc-guess">Menurut bacaan kamu, berapa gram massa bendanya?</label>
+      <div class="jsl-input-row">
+        <input
+          type="text"
+          inputmode="decimal"
+          id="nrc-guess"
+          data-guess
+          placeholder="contoh: 234,5"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-primary" data-check>Cek Jawaban</button>
+      </div>
+    </div>
+
+    <div class="jsl-result" data-result hidden>
+      <p class="jsl-result-headline" data-result-headline></p>
+      <p class="jsl-result-detail" data-result-detail></p>
+      <button type="button" class="btn btn-ghost" data-retry>🔄 Coba Lagi (Benda Baru)</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Style dasar (.jsl-card, .jsl-stage, .jsl-svg, tick, baseline, label,
+     object, hint, controls, result, dst) ada di src/styles/lab.css. Di sini
+     cuma style KHUSUS neraca (dudukan, anak timbang/rider, indikator
+     setimbang). */
+
+  /* Rangka diam: base cor & tiang -- metalik gelap, senada sama palet
+     "besi" yang sudah dipakai di JangkaSorong (biar terasa satu keluarga
+     alat, bukan gaya baru yang beda sendiri). */
+  .nrc-base {
+    fill: url(#nrc-metal-base);
+    stroke: var(--border-strong);
+    stroke-width: 0.2;
+  }
+
+  .nrc-pillar {
+    fill: url(#nrc-metal-base);
+  }
+
+  .nrc-pointer-ref {
+    fill: var(--ink-soft);
+  }
+
+  svg[data-nrc-svg][data-balanced='true'] .nrc-pointer-ref {
+    fill: var(--gold);
+  }
+
+  /* Piringan (ikut naik-turun dikit lewat data-pan-assembly) & batangnya. */
+  .nrc-pan-post {
+    fill: var(--ink-soft);
+  }
+
+  .nrc-pan {
+    fill: url(#nrc-pan-fill);
+    stroke: var(--border-strong);
+    stroke-width: 0.3;
+  }
+
+  [data-pan-assembly] {
+    transition: transform 0.25s ease;
+  }
+
+  /* Batang lengan (dekoratif, di belakang skala) -- biar kelihatan seperti
+     bilah logam sungguhan, bukan cuma garis tipis melayang. */
+  .nrc-beam-bar {
+    fill: url(#nrc-metal-beam);
+    stroke: var(--border-strong);
+    stroke-width: 0.15;
+  }
+
+  /* Seluruh rangkaian lengan+jarum ikut miring dikit via JS (rotate di
+     sekitar engsel di ujung tiang) tergantung sudah seimbang atau belum --
+     transition di sini yang bikin gerakannya kelihatan halus/animasi,
+     bukan meloncat tiba-tiba. */
+  [data-beam-assembly] {
+    transition: transform 0.25s ease;
+  }
+
+  .nrc-pointer-needle {
+    stroke: var(--accent);
+    stroke-width: 0.6;
+    stroke-linecap: round;
+  }
+
+  svg[data-nrc-svg][data-balanced='true'] .nrc-pointer-needle {
+    stroke: var(--gold);
+  }
+
+  .nrc-stand-caption,
+  .nrc-beam-caption {
+    font-size: 3px;
+    fill: var(--ink-soft);
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  /* Anak timbang (rider) tiap lengan -- segitiga kecil yang nunjuk pas ke
+     garis skala, dikasih target sentuh lingkaran transparan (.jsl-handle-hit,
+     kelas ini dari lab.css tapi belum ada aturan warnanya, jadi dideklarasi
+     lokal di sini) biar gampang digeser di HP. */
+  .jsl-handle-hit {
+    fill: var(--accent-2);
+    opacity: 0.22;
+    transition: opacity 0.15s ease;
+  }
+
+  .jsl-handle:hover .jsl-handle-hit,
+  .jsl-handle:focus-visible .jsl-handle-hit {
+    opacity: 0.42;
+  }
+
+  .nrc-rider-tri {
+    fill: var(--accent-2);
+  }
+
+  .nrc-rider-body {
+    fill: var(--accent-2);
+    stroke: var(--surface-solid);
+    stroke-width: 0.4;
+  }
+
+  .jsl-handle:focus-visible .nrc-rider-body {
+    stroke: var(--gold);
+    stroke-width: 0.7;
+  }
+
+  .nrc-gauge {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .nrc-gauge-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+  }
+
+  .nrc-gauge-track {
+    position: relative;
+    flex: 1;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+  }
+
+  /* Zona ini cuma penuntun visual kasar (lebih lebar dari toleransi
+     "setimbang" yang sebenarnya dipakai di JS) -- biar murid gampang lihat
+     ke arah mana titiknya harus digeser, bukan patokan presisi. */
+  .nrc-gauge-zone {
+    position: absolute;
+    left: 45%;
+    width: 10%;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--gold-soft);
+  }
+
+  .nrc-gauge-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--accent-2);
+    border: 2px solid var(--surface-solid);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%);
+    transition: left 0.12s ease, background-color 0.2s ease;
+  }
+
+  .nrc-gauge[data-balanced='true'] .nrc-gauge-dot {
+    background: var(--gold);
+  }
+</style>
+
+<script>
+  import { playClick } from '../../lib/clickSound';
+
+  const OBJECT_COLORS = ['#ffd66b', '#6ea8ff', '#a78bfa', '#7ee0c3', '#ff9b7a'];
+  const MIN_OBJECT_G = 15;
+  const MAX_OBJECT_G = 595; // total maksimum ketiga lengan (500+100+10=610), disisakan jarak
+  const GAUGE_RANGE = 25; // rentang gram yang dipetakan ke lebar indikator (cuma buat visual)
+  const VIEWBOX_W = 132;
+  const BEAM_X0 = 18;
+
+  // Titik engsel (di ujung atas tiang) tempat rangkaian lengan berputar --
+  // HARUS senilai sama seperti di markup (rect tiang x=10..18, y=10..72).
+  const PIVOT_X = 14;
+  const PIVOT_Y = 32;
+  const MAX_ANGLE_DEG = 9; // sudut miring maksimum lengan (pas GAUGE_RANGE gram selisih)
+  const PAN_BOB_MAX = 3; // pergeseran naik/turun maksimum piringan (unit SVG)
+
+  const BEAMS = {
+    ratusan: { y: 10, max: 500, step: 100, unit: 90 / 500 },
+    puluhan: { y: 32, max: 100, step: 10, unit: 90 / 100 },
+    satuan: { y: 54, max: 10, step: 0.1, unit: 90 / 10 },
+  } as const;
+
+  type BeamKey = keyof typeof BEAMS;
+
+  function initNeraca(root: HTMLElement) {
+    const svg = root.querySelector<SVGSVGElement>('.jsl-svg')!;
+    const beamAssembly = root.querySelector<SVGGElement>('[data-beam-assembly]')!;
+    const panAssembly = root.querySelector<SVGGElement>('[data-pan-assembly]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!;
+    const guessInput = root.querySelector<HTMLInputElement>('[data-guess]')!;
+    const checkBtn = root.querySelector<HTMLButtonElement>('[data-check]')!;
+    const resultBox = root.querySelector<HTMLElement>('[data-result]')!;
+    const resultHeadline = root.querySelector<HTMLElement>('[data-result-headline]')!;
+    const resultDetail = root.querySelector<HTMLElement>('[data-result-detail]')!;
+    const retryBtn = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+    const gaugeRoot = root.querySelector<HTMLElement>('[data-gauge]')!;
+    const gaugeDot = root.querySelector<HTMLElement>('[data-gauge-dot]')!;
+
+    const round1 = (n: number) => Math.round(n * 10) / 10;
+
+    let objectMass = 0;
+    let locked = false;
+    const values: Record<BeamKey, number> = { ratusan: 0, puluhan: 0, satuan: 0 };
+
+    function pxPerSvgUnit() {
+      const rect = svg.getBoundingClientRect();
+      return rect.width / VIEWBOX_W;
+    }
+
+    function updateGauge() {
+      const total = round1(values.ratusan + values.puluhan + values.satuan);
+      const diff = round1(total - objectMass);
+      const balanced = Math.abs(diff) < 0.05;
+      const clamped = Math.max(-GAUGE_RANGE, Math.min(GAUGE_RANGE, diff));
+      const pct = 50 + (clamped / GAUGE_RANGE) * 45;
+      gaugeDot.style.left = `${pct}%`;
+      gaugeRoot.dataset.balanced = String(balanced);
+
+      // Gambar ikut "goyang" beneran -- lengan miring ke arah kelebihan
+      // beban, piringan naik/turun berlawanan arah, niru gerak neraca
+      // sungguhan waktu belum setimbang. Kalau sudah pas, jarumnya lurus
+      // ketemu penanda segitiga (warnanya juga ikut berubah, lihat CSS).
+      const angle = (clamped / GAUGE_RANGE) * MAX_ANGLE_DEG;
+      beamAssembly.setAttribute('transform', `rotate(${angle} ${PIVOT_X} ${PIVOT_Y})`);
+      panAssembly.setAttribute('transform', `translate(0 ${-(angle / MAX_ANGLE_DEG) * PAN_BOB_MAX})`);
+      svg.dataset.balanced = String(balanced);
+
+      if (!locked) {
+        hint.dataset.state = balanced ? 'closed' : 'open';
+        hint.textContent = balanced
+          ? '✓ Sudah setimbang — sekarang coba baca skalanya.'
+          : diff < 0
+            ? '👉 Kurang berat, geser salah satu lengan ke kanan sampai setimbang.'
+            : '👉 Kelebihan, geser salah satu lengan ke kiri sampai setimbang.';
+      }
+      return { total, balanced };
+    }
+
+    // Satu fungsi generik dipakai buat ketiga lengan -- step & rentangnya
+    // beda-beda (100 / 10 / 0,1) tapi mekanisme geser+snap+klik+keyboardnya
+    // sama persis, jadi tidak perlu ditulis 3x.
+    function attachRider(key: BeamKey) {
+      const cfg = BEAMS[key];
+      const el = root.querySelector<SVGGElement>(`[data-rider="${key}"]`)!;
+      let dragging = false;
+      let dragStartClientX = 0;
+      let dragStartValue = 0;
+      let lastSnap = -1;
+
+      function apply(raw: number, silent = false) {
+        const clamped = Math.min(cfg.max, Math.max(0, raw));
+        const snapped = round1(Math.round(clamped / cfg.step) * cfg.step);
+        values[key] = snapped;
+        el.setAttribute('transform', `translate(${BEAM_X0 + snapped * cfg.unit},${cfg.y})`);
+        el.setAttribute('aria-valuenow', String(snapped));
+        if (snapped !== lastSnap) {
+          if (!silent) playClick();
+          lastSnap = snapped;
+        }
+        updateGauge();
+      }
+
+      function onDown(e: PointerEvent) {
+        if (locked) return;
+        dragging = true;
+        dragStartClientX = e.clientX;
+        dragStartValue = values[key];
+        el.setPointerCapture(e.pointerId);
+        el.focus();
+      }
+
+      function onMove(e: PointerEvent) {
+        if (!dragging) return;
+        const deltaPx = e.clientX - dragStartClientX;
+        const deltaUnit = deltaPx / pxPerSvgUnit();
+        const deltaGram = deltaUnit / cfg.unit;
+        apply(dragStartValue + deltaGram);
+      }
+
+      function onUp(e: PointerEvent) {
+        if (!dragging) return;
+        dragging = false;
+        try {
+          el.releasePointerCapture(e.pointerId);
+        } catch {
+          /* noop */
+        }
+      }
+
+      function onKeyDown(e: KeyboardEvent) {
+        if (locked) return;
+        if (e.key === 'ArrowLeft') {
+          apply(values[key] - cfg.step);
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          apply(values[key] + cfg.step);
+          e.preventDefault();
+        }
+      }
+
+      el.addEventListener('pointerdown', onDown);
+      el.addEventListener('pointermove', onMove);
+      el.addEventListener('pointerup', onUp);
+      el.addEventListener('pointercancel', onUp);
+      el.addEventListener('keydown', onKeyDown);
+
+      return { apply, reset: (v: number) => apply(v, true) };
+    }
+
+    const riders = {
+      ratusan: attachRider('ratusan'),
+      puluhan: attachRider('puluhan'),
+      satuan: attachRider('satuan'),
+    };
+
+    function newRound() {
+      objectMass = round1(MIN_OBJECT_G + Math.random() * (MAX_OBJECT_G - MIN_OBJECT_G));
+      const color = OBJECT_COLORS[Math.floor(Math.random() * OBJECT_COLORS.length)];
+      root.style.setProperty('--object-color', color);
+
+      riders.ratusan.reset(0);
+      riders.puluhan.reset(0);
+      riders.satuan.reset(0);
+
+      locked = false;
+      guessInput.value = '';
+      guessInput.disabled = false;
+      checkBtn.disabled = false;
+      controls.hidden = false;
+      resultBox.hidden = true;
+      updateGauge();
+    }
+
+    function parseGuess(raw: string): number | null {
+      const normalized = raw.trim().replace(',', '.');
+      if (!normalized) return null;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function onCheck() {
+      const guess = parseGuess(guessInput.value);
+      if (guess === null) {
+        guessInput.focus();
+        return;
+      }
+
+      locked = true;
+      guessInput.disabled = true;
+      checkBtn.disabled = true;
+
+      const { total: currentReadingG, balanced } = updateGauge();
+      const trueObjectG = objectMass;
+      const isCorrect = Math.abs(guess - currentReadingG) < 0.05;
+
+      resultBox.hidden = false;
+      resultBox.dataset.correct = String(isCorrect);
+      resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
+
+      const caraTxt = `📐 Cara bacanya: Skala Ratusan = <strong>${values.ratusan} g</strong> + Skala Puluhan = <strong>${values.puluhan} g</strong> + Skala Satuan = <strong>${values.satuan.toFixed(1)} g</strong> → ${values.ratusan} + ${values.puluhan} + ${values.satuan.toFixed(1)} = <strong>${currentReadingG.toFixed(1)} g</strong>.`;
+      const bacaanTxt = `Bacaan skala saat ini: <strong>${currentReadingG.toFixed(1)} g</strong>.`;
+      const bendaTxt = `Massa benda sebenarnya: <strong>${trueObjectG.toFixed(1)} g</strong>.`;
+      const closeTxt = balanced
+        ? ''
+        : ' Neracanya belum setimbang, jadi bacaan skalanya belum tentu sama dengan massa benda — coba setimbangkan dulu di ronde berikutnya.';
+
+      resultDetail.innerHTML = `${bacaanTxt} ${bendaTxt}${closeTxt}<br><br>${caraTxt}`;
+    }
+
+    checkBtn.addEventListener('click', onCheck);
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') onCheck();
+    });
+    retryBtn.addEventListener('click', newRound);
+
+    newRound();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-nrc]').forEach(initNeraca);
+</script>

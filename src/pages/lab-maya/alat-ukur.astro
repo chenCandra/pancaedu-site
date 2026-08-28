@@ -2,13 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import JangkaSorong from '../../components/lab/JangkaSorong.astro';
 import MikrometerSekrup from '../../components/lab/MikrometerSekrup.astro';
+import NeracaOhaus from '../../components/lab/NeracaOhaus.astro';
+import StopwatchAnalog from '../../components/lab/StopwatchAnalog.astro';
+import Amperemeter from '../../components/lab/Amperemeter.astro';
+import Termometer from '../../components/lab/Termometer.astro';
 
 const kategori = [
   { id: 'panjang', label: 'Panjang', icon: '📏', ready: true },
-  { id: 'massa', label: 'Massa', icon: '⚖️', ready: false },
-  { id: 'waktu', label: 'Waktu', icon: '⏱️', ready: false },
-  { id: 'arus', label: 'Arus', icon: '⚡', ready: false },
-  { id: 'suhu', label: 'Suhu', icon: '🌡️', ready: false },
+  { id: 'massa', label: 'Massa', icon: '⚖️', ready: true },
+  { id: 'waktu', label: 'Waktu', icon: '⏱️', ready: true },
+  { id: 'arus', label: 'Arus', icon: '⚡', ready: true },
+  { id: 'suhu', label: 'Suhu', icon: '🌡️', ready: true },
 ];
 
 const alatPanjang = [
@@ -19,7 +23,7 @@ const alatPanjang = [
 
 <BaseLayout
   title="Lab Maya: Alat Ukur"
-  description="Latihan interaktif membaca alat ukur — jangka sorong, mikrometer sekrup, dan lainnya menyusul. Ukuran benda diacak tiap ronde, kamu yang menggeser & menebak hasilnya."
+  description="Latihan interaktif membaca alat ukur — panjang, massa, waktu, arus, sampai suhu. Nilainya diacak tiap ronde, kamu yang mengoperasikan & menebak hasilnya."
   disableCursor
 >
   <section class="container page-header">
@@ -86,6 +90,14 @@ const alatPanjang = [
                 <MikrometerSekrup />
               </div>
             </>
+          ) : k.id === 'massa' ? (
+            <NeracaOhaus />
+          ) : k.id === 'waktu' ? (
+            <StopwatchAnalog />
+          ) : k.id === 'arus' ? (
+            <Amperemeter />
+          ) : k.id === 'suhu' ? (
+            <Termometer />
           ) : null
         ) : (
           <div class="au-soon card">

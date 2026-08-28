@@ -28,17 +28,17 @@
 
 .jsl-baseline {
   stroke: var(--ink-soft);
-  stroke-width: 0.3;
+  stroke-width: 0.22;
 }
 
 .jsl-tick {
   stroke: var(--ink-soft);
-  stroke-width: 0.25;
+  stroke-width: 0.18;
 }
 
 .jsl-tick-major {
   stroke: var(--ink);
-  stroke-width: 0.4;
+  stroke-width: 0.3;
 }
 
 .jsl-label {
@@ -47,8 +47,14 @@
   font-family: var(--font-body);
 }
 
+/* Rahang (jaw) SENGAJA dikasih garis tepi gelap tipis -- tanpa ini,
+   warnanya terlalu mirip skala nonius (sama-sama nuansa biru/ungu),
+   gampang disalahartikan sebagai "garis skala raksasa" alih-alih
+   komponen mekanis alat ukurnya sendiri. */
 .jsl-jaw {
   fill: var(--ink);
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.15;
 }
 
 .jsl-jaw-fixed {
@@ -68,6 +74,13 @@
 
 .jsl-handle {
   cursor: grab;
+  /* Browser otomatis gambar kotak fokus default (biasanya hitam solid,
+     mengikuti bounding box elemen) begitu grup ini difokus (drag/tap
+     ikut memanggil .focus() buat aksesibilitas keyboard) -- kotaknya
+     jadi menutupi skala nonius di baliknya. Dimatikan di sini, diganti
+     indikator fokus custom yang lebih halus (lihat :focus-visible pada
+     elemen anak grip/wheel-nya masing-masing). */
+  outline: none;
 }
 
 .jsl-handle:active {

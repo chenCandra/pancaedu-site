@@ -1,0 +1,246 @@
+---
+// Simulasi termometer laboratorium (raksa/alkohol) -- Lab Maya, kategori
+// Suhu. Beda dari alat-alat lain: cuma SATU skala linear (persis skala
+// utama jangka sorong, cuma digambar vertikal), jadi kelasnya "jsl-tick /
+// jsl-tick-major / jsl-label / jsl-baseline" yang sama dipakai lagi apa
+// adanya di sini -- ini yang bikin "nuansa senada" beneran (bukan cuma
+// mirip-mirip warna, tapi literally kelas CSS yang sama).
+//
+// Cairan di dalam tabung "naik" (animasi, lewat CSS transform: scaleY di
+// JS) ke suhu acak tiap ronde -- niru proses pemuaian cairan termometer
+// beneran waktu kena suhu -- baru murid baca posisinya & tebak angkanya.
+import '../../styles/lab.css';
+
+const MIN_TEMP = -10;
+const MAX_TEMP = 110;
+const TUBE_TOP_Y = 8;
+const TUBE_BOTTOM_Y = 92;
+
+function tempToY(temp: number) {
+  return TUBE_BOTTOM_Y - ((temp - MIN_TEMP) / (MAX_TEMP - MIN_TEMP)) * (TUBE_BOTTOM_Y - TUBE_TOP_Y);
+}
+
+const scaleTicks: { temp: number; y: number; isMajor: boolean }[] = [];
+for (let t = MIN_TEMP; t <= MAX_TEMP; t += 2) {
+  scaleTicks.push({ temp: t, y: tempToY(t), isMajor: t % 10 === 0 });
+}
+---
+
+<div class="jsl term" data-term>
+  <div class="jsl-card card">
+    <div class="jsl-stage">
+      <svg
+        class="jsl-svg"
+        viewBox="18 -6 78 128"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Ilustrasi termometer laboratorium"
+      >
+        <!-- Papan/kartu belakang (dekoratif, termometer lab beneran sering
+             ditempel di kartu skala kayak gini) -->
+        <rect x="28" y="-2" width="62" height="116" rx="5" class="term-backing" />
+
+        <!-- Tabung kaca + bohlam bawah -->
+        <rect x="44" y="6" width="12" height="90" rx="6" class="term-tube" />
+        <circle cx="50" cy="99" r="11" class="term-bulb" />
+
+        <!-- Cairan -- kolom di dalam tabung di-scale tingginya lewat JS
+             (data-liquid, transform-origin di dasar tabung), bohlamnya
+             SELALU penuh (reservoir). -->
+        <circle cx="50" cy="99" r="8" class="term-liquid-bulb" />
+        <rect data-liquid x="47" y={TUBE_TOP_Y} width="6" height={TUBE_BOTTOM_Y - TUBE_TOP_Y} class="term-liquid" />
+
+        <!-- Skala (persis pola skala utama jangka sorong, digambar vertikal) -->
+        <line x1="56" y1={TUBE_TOP_Y} x2="56" y2={TUBE_BOTTOM_Y} class="jsl-baseline" />
+        {scaleTicks.map((t) => (
+          <line
+            x1="56" y1={t.y}
+            x2={t.isMajor ? 66 : 62} y2={t.y}
+            class={t.isMajor ? 'jsl-tick jsl-tick-major' : 'jsl-tick'}
+          />
+        ))}
+        {scaleTicks.filter((t) => t.isMajor).map((t) => (
+          <text x="68" y={t.y + 1.2} class="jsl-label term-label" text-anchor="start">{t.temp}</text>
+        ))}
+        <text x="50" y="112" class="term-unit-label" text-anchor="middle">°C</text>
+      </svg>
+    </div>
+
+    <p class="jsl-hint" data-hint>🌡️ Cairan sedang naik...</p>
+
+    <div class="jsl-controls" data-controls>
+      <label for="term-guess">Menurut bacaan kamu, berapa °C suhunya?</label>
+      <div class="jsl-input-row">
+        <input
+          type="text"
+          inputmode="decimal"
+          id="term-guess"
+          data-guess
+          placeholder="contoh: 36,5"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-primary" data-check>Cek Jawaban</button>
+      </div>
+    </div>
+
+    <div class="jsl-result" data-result hidden>
+      <p class="jsl-result-headline" data-result-headline></p>
+      <p class="jsl-result-detail" data-result-detail></p>
+      <button type="button" class="btn btn-ghost" data-retry>🔄 Coba Lagi (Suhu Baru)</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Style dasar (.jsl-card, .jsl-stage, .jsl-svg, tick, baseline, label,
+     hint, controls, result, dst) ada di src/styles/lab.css. Di sini cuma
+     style KHUSUS termometer (kartu belakang, tabung kaca, cairan). */
+
+  .term-backing {
+    fill: var(--surface);
+    stroke: var(--border);
+    stroke-width: 0.3;
+  }
+
+  .term-tube {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: var(--border-strong);
+    stroke-width: 0.4;
+  }
+
+  .term-bulb {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: var(--border-strong);
+    stroke-width: 0.4;
+  }
+
+  /* Cairan berwarna merah -- warna khas termometer alkohol lab sekolah
+     (bukan raksa perak), lebih gampang dibaca kontrasnya. Tinggi kolomnya
+     di-scale lewat JS (transform: scaleY), jangkarnya di DASAR tabung
+     (transform-origin) supaya naiknya dari bawah, bukan dari tengah. */
+  .term-liquid-bulb {
+    fill: #e0483e;
+  }
+
+  .term-liquid {
+    fill: #e0483e;
+    transform-origin: 50px 92px;
+    transition: transform 1.6s cubic-bezier(0.22, 0.9, 0.28, 1);
+  }
+
+  .term-label {
+    font-size: 3.6px;
+  }
+
+  .term-unit-label {
+    font-size: 3.6px;
+    font-weight: 700;
+    fill: var(--ink-soft);
+    font-family: var(--font-display);
+  }
+</style>
+
+<script>
+  import { playClick } from '../../lib/clickSound';
+
+  const MIN_TEMP = -10;
+  const MAX_TEMP = 110;
+  const RISE_MS = 1600; // HARUS senilai sama dengan transition di CSS
+
+  const fmtID = (n: number | string) => String(n).replace('.', ',');
+
+  function initTermometer(root: HTMLElement) {
+    const liquid = root.querySelector<SVGRectElement>('[data-liquid]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!;
+    const guessInput = root.querySelector<HTMLInputElement>('[data-guess]')!;
+    const checkBtn = root.querySelector<HTMLButtonElement>('[data-check]')!;
+    const resultBox = root.querySelector<HTMLElement>('[data-result]')!;
+    const resultHeadline = root.querySelector<HTMLElement>('[data-result-headline]')!;
+    const resultDetail = root.querySelector<HTMLElement>('[data-result-detail]')!;
+    const retryBtn = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+
+    let targetTemp = 0;
+    let state: 'rising' | 'ready' | 'locked' = 'rising';
+
+    function setLiquidInstant(frac: number) {
+      liquid.style.transition = 'none';
+      liquid.style.transform = `scaleY(${frac})`;
+      void liquid.getBoundingClientRect();
+      liquid.style.transition = '';
+    }
+
+    function newRound() {
+      // Dibulatkan ke 0,5°C terdekat -- resolusi baca yang wajar buat
+      // skala tiap 2°C (murid latihan interpolasi ke tengah-tengah garis).
+      targetTemp = Math.round((-5 + Math.random() * 110) * 2) / 2;
+
+      state = 'rising';
+      setLiquidInstant(0);
+      guessInput.value = '';
+      guessInput.disabled = false;
+      checkBtn.disabled = true;
+      controls.hidden = false;
+      resultBox.hidden = true;
+      hint.dataset.state = 'open';
+      hint.textContent = '🌡️ Cairan sedang naik...';
+
+      // Naiknya otomatis tiap ronde (bukan lewat tombol) -- niru proses
+      // pemuaian termometer beneran waktu suhunya berubah, bukan sesuatu
+      // yang "ditekan" murid.
+      requestAnimationFrame(() => {
+        const frac = (targetTemp - MIN_TEMP) / (MAX_TEMP - MIN_TEMP);
+        liquid.style.transform = `scaleY(${frac})`;
+      });
+
+      window.setTimeout(() => {
+        state = 'ready';
+        checkBtn.disabled = false;
+        hint.dataset.state = 'closed';
+        hint.textContent = '✓ Cairan sudah stabil — sekarang coba baca skalanya.';
+        playClick();
+      }, RISE_MS);
+    }
+
+    function parseGuess(raw: string): number | null {
+      const normalized = raw.trim().replace(',', '.');
+      if (!normalized) return null;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function onCheck() {
+      if (state !== 'ready') return;
+      const guess = parseGuess(guessInput.value);
+      if (guess === null) {
+        guessInput.focus();
+        return;
+      }
+
+      state = 'locked';
+      guessInput.disabled = true;
+      checkBtn.disabled = true;
+
+      const isCorrect = Math.abs(guess - targetTemp) < 0.4;
+
+      resultBox.hidden = false;
+      resultBox.dataset.correct = String(isCorrect);
+      resultHeadline.textContent = isCorrect ? 'Benar! 🎉' : 'Kurang tepat, coba baca lagi ya.';
+
+      const bacaanTxt = `Suhu sebenarnya: <strong>${fmtID(targetTemp)}°C</strong>.`;
+      const caraTxt = `📐 Cara bacanya: lihat permukaan cairan terhadap garis skala di sampingnya -- kalau pas di antara dua garis kecil (kelipatan 2°C), perkirakan titik tengahnya. Garis besar (kelipatan 10°C) buat patokan hitung cepat.`;
+
+      resultDetail.innerHTML = `${bacaanTxt}<br><br>${caraTxt}`;
+    }
+
+    checkBtn.addEventListener('click', onCheck);
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') onCheck();
+    });
+    retryBtn.addEventListener('click', newRound);
+
+    newRound();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-term]').forEach(initTermometer);
+</script>
