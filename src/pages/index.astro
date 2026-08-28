@@ -20,16 +20,24 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const materiPosts = allPosts.filter((p) => p.data.category === 'materi');
+const artikelPosts = allPosts.filter((p) => p.data.category === 'artikel');
 const latestPosts = allPosts.slice(0, 6);
 
-const uniqueMapel = [...new Set(materiPosts.map((p) => p.data.mapel).filter(Boolean))];
-const uniqueKelas = [...new Set(materiPosts.map((p) => p.data.kelas).filter(Boolean))];
+const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).length;
+
+// Jumlah simulasi Lab Maya TIDAK dihitung dari content collection (alat
+// ukurnya komponen kode, bukan entri konten) -- di-hardcode di sini, tapi
+// tetap angka NYATA (bukan dikarang), samain manual tiap kali nambah
+// simulasi baru. Per 2026-08-28: Jangka Sorong, Mikrometer Sekrup, Neraca
+// Ohaus, Stopwatch Analog, Amperemeter, Termometer (lihat
+// src/pages/lab-maya/alat-ukur.astro).
+const LAB_MAYA_SIMULASI_COUNT = 6;
 
 const counters = [
-  { icon: '📝', value: String(allPosts.length), suffix: '+', label: 'Artikel & Materi Diterbitkan' },
-  { icon: '📘', value: String(uniqueMapel.length || 1), suffix: '', label: 'Mata Pelajaran' },
-  { icon: '🏫', value: String(uniqueKelas.length || 1), suffix: '', label: 'Jenjang Kelas Tercakup' },
-  { icon: '🎉', value: '100', suffix: '%', label: 'Gratis Diakses' },
+  { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },
+  { icon: '✍️', value: String(artikelPosts.length), suffix: '', label: 'Artikel' },
+  { icon: '🧪', value: String(LAB_MAYA_SIMULASI_COUNT), suffix: '', label: 'Simulasi Lab Maya' },
+  { icon: '🎥', value: String(ruangBelajarSesi), suffix: '', label: 'Sesi Pembelajaran Daring' },
 ];
 
 const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? allPosts[0];
