@@ -1,77 +1,281 @@
 ---
-title: "Mengenal Ragam Energi"
-description: "Energi punya banyak bentuk — kinetik, potensial, panas, sampai energi nuklir. Kenalan sama ragam-ragam energi di sekitar kita."
+title: "Bentuk-bentuk Energi"
+description: "Kenalan sama berbagai bentuk energi -- kinetik, potensial (gravitasi & elastis), termal, kimia, listrik, cahaya, bunyi, sampai nuklir -- lengkap rumus, satuan, dan contohnya masing-masing."
 category: materi
-mapel: "Fisika"
+mapel: Fisika
 kelas: X
-pubDate: 2023-11-04
-tags: ["Energi", "Fisika Kelas X"]
+pubDate: 2026-08-29
+tags: ["Energi", "Fisika Kelas X", "Fase E"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/energy-transformation-lab.html"
+  judul: "Energy Transformation Lab"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1050
 kuis:
-  - soal: "Energi yang dimiliki benda karena posisi/ketinggiannya disebut..."
-    pilihan: ["Energi kinetik", "Energi potensial", "Energi termal", "Energi kimia"]
+  - soal: "Energi yang dimiliki benda karena geraknya disebut..."
+    pilihan: ["Energi potensial", "Energi kinetik", "Energi termal", "Energi kimia"]
     jawaban: 1
-    penjelasan: "Energi potensial terkait posisi atau ketinggian suatu benda dalam medan gravitasi."
-  - soal: "Air terjun terasa 'kuat' saat jatuh karena energi potensialnya berubah menjadi..."
-    pilihan: ["Energi kimia", "Energi listrik", "Energi kinetik", "Energi nuklir"]
+    penjelasan: "Energi kinetik adalah energi yang dimiliki benda karena bergerak, dirumuskan Ek = ½mv²."
+  - soal: "Sebuah benda bermassa 2 kg bergerak dengan kecepatan 3 m/s. Energi kinetiknya adalah..."
+    pilihan: ["3 J", "6 J", "9 J", "18 J"]
     jawaban: 2
-    penjelasan: "Air di atas punya energi potensial besar; saat jatuh, energi itu berubah jadi energi kinetik (energi gerak)."
-  - soal: "Rumus E = mc² berkaitan erat dengan energi jenis apa?"
-    pilihan: ["Energi kimia", "Energi nuklir", "Energi listrik", "Energi angin"]
+    penjelasan: "Ek = ½mv² = ½ × 2 × 3² = ½ × 2 × 9 = 9 J."
+  - soal: "Manakah pernyataan yang benar tentang 'energi angin' dan 'energi air'?"
+    pilihan: ["Keduanya bentuk energi yang berdiri sendiri, terpisah dari energi kinetik", "Keduanya sebenarnya adalah SUMBER energi -- bentuk energinya tetap energi kinetik (angin/air yang bergerak)", "Energi angin adalah energi potensial, energi air adalah energi kinetik", "Keduanya bukan termasuk energi sama sekali"]
     jawaban: 1
-    penjelasan: "E = mc² adalah dasar reaksi nuklir — menjelaskan kesetaraan massa dan energi."
-  - soal: "Energi yang tersimpan dalam ikatan antar atom/molekul disebut..."
-    pilihan: ["Energi termal", "Energi kimia", "Energi cahaya", "Energi listrik"]
+    penjelasan: "Angin dan air yang bergerak punya energi kinetik -- 'energi angin' dan 'energi air' adalah istilah buat SUMBER energi (dari mana energi kinetik itu berasal), bukan bentuk energi yang baru."
+  - soal: "Karet gelang yang diregangkan menyimpan energi dalam bentuk..."
+    pilihan: ["Energi kinetik", "Energi potensial elastis", "Energi kimia", "Energi termal"]
     jawaban: 1
-    penjelasan: "Energi kimia dilepas atau diserap saat ikatan kimia berubah, misalnya saat bahan bakar dibakar."
+    penjelasan: "Energi potensial elastis tersimpan pada benda yang mengalami regangan/kompresi elastis, seperti karet gelang atau pegas yang ditekan."
+  - soal: "Rumus E = mc² berkaitan erat dengan bentuk energi..."
+    pilihan: ["Energi kimia", "Energi nuklir", "Energi listrik", "Energi bunyi"]
+    jawaban: 1
+    penjelasan: "E = mc² (rumus Einstein) menjelaskan kesetaraan massa dan energi -- dasar dari reaksi nuklir, yang melepaskan energi dalam jumlah sangat besar dari perubahan massa inti atom yang kecil."
 draft: false
 ---
 
-Hallo Sahabat Edu,  
-Kali ini kita akan membahas tentang Energi dan bagaimana mereka berperan dalam kehidupan kita.
+<style>
+.mtr-table-wrap, .mtr-cards { margin-block: 2rem; }
 
-Energi adalah salah satu konsep penting dalam fisika, dan kita semua bergantung padanya dalam kehidupan sehari-hari. Namun, tahukah kamu bahwa energi memiliki banyak bentuk yang berbeda?.
+.mtr-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--shadow-sm);
+}
 
-1.  **Energi Kinetik:**  
-    Ketika suatu benda bergerak, ia memiliki energi kinetik. *Semakin besar massa benda dan semakin cepat ia bergerak, semakin banyak energi kinetik yang dimilikinya*. Perhatikan sebuah mobil yang melaju di jalan raya, semakin cepat mobil itu bergerak maka akan semakin besar pula Energi Kinetiknya. Persamaan sederhana untuk energi kinetik adalah:  
-    ![Energi Kinetik](/images/migrated/Screenshot-2023-11-04-095718.png)  
-    dengan  
-    EK = energi kinetik (J)  
-    m = massa benda (kg)  
-    v = kecepatan benda (m/s).
-2.  **Energi Potensial:**  
-    Energi potensial terkait dengan posisi atau ketinggian suatu benda dalam medan gravitasi. Semakin tinggi benda di atas permukaan tanah, semakin besar energi potensialnya. Pernahkah Anda membayangkan mengapa air terjun terlihat begitu kuat ketika air jatuh dari ketinggian? Itu karena air memiliki energi potensial yang besar ketika berada di atas. Ketika air jatuh, energi potensialnya berubah menjadi energi kinetik, yang membuat air bergerak cepat. Persamaan sederhana untuk energi potensial gravitasi adalah :  
-    ![Energi-Potensial](/images/migrated/Screenshot-2023-11-04-100510.png)  
-    dengan  
-    EP = energi potensial gravitasi (J)  
-    m = massa benda (kg)  
-    g = percepatan gravitasi (10 m/s2)  
-    h = posisi benda pada ketinggian tertentu (m)
-3.  **Energi Termal**:  
-    Energi termal adalah energi yang terkait dengan panas. Semua benda memiliki sedikit energi termal karena atom dan molekul di dalamnya bergerak. Semakin panas benda, semakin banyak energi termal yang dimilikinya. Ini adalah dasar dari proses pemanasan, pendinginan, dan berbagai aplikasi teknologi termal. Dalam rumah kita, sistem pemanas dan pendingin bekerja berdasarkan prinsip energi termal ini.  
-    Kita dapat melihat contoh energi termal dalam berbagai situasi sehari-hari. Misalnya, saat kamu memasak di atas kompor, energi termal digunakan untuk memanaskan makanan. Ketika kamu merasa panas saat berjemur di bawah matahari, itu adalah karena energi termal matahari yang meresap ke kulit kita.
-4.  **Energi Listrik:  
-    **Energi listrik adalah bentuk energi yang paling sering digunakan dalam kehidupan sehari-hari.  Energi listrik dihasilkan melalui aliran elektron dalam konduktor listrik, seperti kabel dan sirkuit listrik. Muatan listrik Q memiliki medan listrik, kemudian muatan listrik lainnya q dipindahkan dari satu tempat ke tempat yang lain dalam pengaruh medan listrik Q, maka muatan listrik q memiliki energi. Secara matematis ditulis :  
-    ![Energi Listrik](/images/migrated/Screenshot-2023-11-04-102738.png)  
-    W = energi listrik (J)  
-    V = beda potensial atau tegangan listrik (Volt)  
-    I = kuat arus listrik (A)  
-    t = selang waktu (s)  
-    Kita berinteraksi dengan energi listrik setiap hari. Lampu yang menerangi ruangan, komputer yang kita gunakan, dan ponsel yang kita bawa semuanya menggunakan energi listrik. saat kita mengecas ponsel, itu adalah energi listrik yang mengisi daya baterai.
-5.  **Energi Nuklir:  
-    ![pembangkit-listrik-tenaga-nuklir](/images/migrated/Screenshot-2023-11-04-164240.png)**  
-    Energi nuklir terkait dengan reaksi nuklir yang melibatkan inti atom. Ketika inti atom pecah atau bergabung, energi dilepaskan. Energi nuklir mungkin paling dikenal dalam konteks pembangkit listrik tenaga nuklir. Di reaktor nuklir, inti atom uranium atau plutonium dipicu untuk mengalami reaksi nuklir, menghasilkan panas yang kemudian digunakan untuk menghasilkan listrik. Energi Nuklir adalah salah satu sumber energi terbarukan yang tidak menghasilkan emisi karbon, tetapi juga memunculkan isu-isu keamanan dan manajemen limbah radioaktif.  
-    Einstein merumuskan hubungan antara massa (m) dan energi (E) dalam rumus  
-    **E = mc².** Persamaan ini mengungkapkan bahwa massa dapat diubah menjadi energi, dan sebaliknya. Hal ini adalah prinsip dasar di balik reaksi nuklir dan bom atom.
-6.  **Energi Kimia:**  
-    Energi kimia adalah energi yang tersimpan dalam ikatan kimia. Ketika ikatan kimia diubah atau diputus, energi dilepaskan atau diserap. Misalnya, ketika bahan bakar seperti bensin atau batu bara dibakar, energi kimia di dalamnya dilepaskan dan digunakan untuk menghasilkan panas atau tenaga mekanik.  
-    Energi kimia sangat terkait dengan reaksi kimia dan prinsip termodinamika. Reaksi kimia menggambarkan bagaimana ikatan kimia antara atom dan molekul berubah, yang seringkali menyertai perubahan energi. Prinsip termodinamika membantu kita memahami aliran energi dalam sistem kimia dan menjelaskan konsep-konsep seperti entalpi, entropi, dan reaksi endotermis serta eksotermis.
-7.  **Energi Cahaya:  
-    ![Energi-cahaya-matahari](/images/migrated/Screenshot-2023-11-04-164412.png)**  
-    Energi cahaya adalah energi yang terkait dengan gelombang elektromagnetik yang terlihat, seperti cahaya tampak. Ini digunakan dalam berbagai aplikasi, termasuk penerangan, teknologi optik, dan fotovoltaik. Pemahaman tentang cahaya membantu kita merancang pencahayaan yang efisien dan perangkat optik yang canggih.
-8.  **Energi Angin:  
-    ![Pembangkit-listrik-tenaga angin](/images/migrated/Screenshot-2023-11-04-164112.png)**  
-    Energi angin adalah energi kinetik yang dihasilkan oleh gerakan angin. Ini dimanfaatkan dalam pembangkit listrik tenaga angin, di mana turbin angin mengubah energi kinetik angin menjadi energi listrik. Energi angin adalah salah satu sumber energi terbarukan yang sedang berkembang pesat.
-9.  **Energi Air:**  
-    Energi air, atau hidroenergi, adalah energi yang dihasilkan dari aliran air, seperti sungai, air terjun, atau gelombang laut. Pembangkit listrik tenaga air mengubah energi kinetik air menjadi energi listrik. Ini adalah sumber energi terbarukan yang penting dalam memasok listrik ke banyak daerah.
+.mtr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
 
-Sahabat, disekeliling kita penuh dengan energi dalam bentuk yang beraneka ragam. Energi-energi ini dapat berubah dari satu bentuk ke bentuk lainnya. Pemahaman tentang berbagai bentuk energi ini penting dalam kehidupan sehari-hari dan dalam pembelajaran fisika. Dengan pengetahuan ini, kita dapat lebih memahami bagaimana teknologi bekerja dan bagaimana kita dapat menggunakan energi secara lebih efisien. Selain itu, pemahaman ini juga membantu kita mempertimbangkan solusi energi yang lebih berkelanjutan untuk masa depan.
+.mtr-table th, .mtr-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.mtr-table thead th {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ink-soft);
+  background-color: var(--accent-soft);
+}
+
+.mtr-table tbody tr:last-child td { border-bottom: none; }
+.mtr-table td em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+.mtr-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.mtr-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.mtr-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+.mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
+.mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-note {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.mtr-note strong.mtr-wrong { color: var(--rose); }
+.mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-formula {
+  text-align: center;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin-block: 1rem;
+}
+
+.mtr-cta {
+  margin-block: 2.5rem 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
+</style>
+
+Di materi [Konsep Energi](/materi/konsep-energi), kita sudah kenalan sama definisi energi dan Hukum Kekekalan Energi. Sekarang saatnya kenalan sama berbagai **bentuk** energi yang ada di sekitar kita -- ternyata jauh lebih banyak dari yang kalian kira.
+
+## 🔀 Bentuk Energi vs Sumber Energi
+
+Sebelum masuk ke daftarnya, ada satu kekeliruan yang sering terjadi: mencampuradukkan **bentuk energi** dengan **sumber energi**.
+
+<div class="mtr-note">
+💡 <strong>Bentuk energi</strong> menjawab "energinya berwujud seperti apa?" (kinetik, potensial, termal, dst). <strong>Sumber energi</strong> menjawab "energinya berasal dari mana?" (matahari, angin, air, bahan bakar fosil, dst).
+</div>
+
+Contohnya, "energi angin" dan "energi air" sebenarnya bukan bentuk energi tersendiri -- angin dan air yang bergerak itu punya **energi kinetik** (karena geraknya), cuma sumbernya beda-beda. Pembangkit listrik tenaga angin dan tenaga air sama-sama pada akhirnya memanfaatkan energi kinetik buat memutar turbin. Sisi "sumber"-nya ini dibahas tuntas di materi [Sumber Energi](/materi/sumber-energi), lengkap klasifikasi terbarukan dan tak terbarukan.
+
+## 🏃 Energi Mekanik: Kinetik dan Potensial
+
+Dua bentuk energi ini paling sering ditemui di awal belajar Fisika, karena keduanya berkaitan langsung dengan gerak dan posisi benda.
+
+### Energi Kinetik
+
+Energi yang dimiliki benda karena **bergerak**. Semakin besar massa dan semakin cepat geraknya, semakin besar energi kinetiknya.
+
+<div class="mtr-formula">Eₖ = ½mv²</div>
+
+* **Eₖ** = energi kinetik (J)
+* **m** = massa benda (kg)
+* **v** = kecepatan benda (m/s)
+
+### Energi Potensial Gravitasi
+
+Energi yang dimiliki benda karena **posisi/ketinggiannya** dalam medan gravitasi. Air di puncak air terjun punya energi potensial besar -- begitu jatuh, energi ini berubah jadi energi kinetik.
+
+<div class="mtr-formula">Eₚ = mgh</div>
+
+* **Eₚ** = energi potensial gravitasi (J)
+* **m** = massa benda (kg)
+* **g** = percepatan gravitasi (≈ 10 m/s²)
+* **h** = ketinggian benda (m)
+
+### Energi Potensial Elastis
+
+Energi yang tersimpan pada benda elastis (pegas, karet gelang) saat **diregangkan atau ditekan** dari bentuk normalnya.
+
+<div class="mtr-formula">Eₚ = ½kx²</div>
+
+* **k** = konstanta elastisitas/pegas (N/m)
+* **x** = besar regangan/kompresi dari posisi normal (m)
+
+<div class="mtr-note">
+🔗 Energi kinetik dan energi potensial (gravitasi maupun elastis) bersama-sama disebut <strong>energi mekanik</strong> -- akan sering muncul lagi waktu kita belajar materi Usaha & Energi.
+</div>
+
+## ⚡ Bentuk-bentuk Energi Lainnya
+
+<div class="mtr-cards">
+<div class="mtr-cards-grid">
+  <div class="mtr-card">
+    <span class="mtr-card-icon">🌡️</span>
+    <h4>Energi Termal</h4>
+    <p>Terkait pergerakan partikel penyusun benda -- makin panas, makin besar energi termalnya.</p>
+  </div>
+  <div class="mtr-card">
+    <span class="mtr-card-icon">🧪</span>
+    <h4>Energi Kimia</h4>
+    <p>Tersimpan dalam ikatan kimia -- dilepas saat ikatan berubah, mis. bahan bakar dibakar.</p>
+  </div>
+  <div class="mtr-card">
+    <span class="mtr-card-icon">🔌</span>
+    <h4>Energi Listrik</h4>
+    <p>Terkait aliran muatan listrik dalam konduktor -- dihitung dari tegangan, arus, dan waktu.</p>
+  </div>
+  <div class="mtr-card">
+    <span class="mtr-card-icon">💡</span>
+    <h4>Energi Cahaya</h4>
+    <p>Terbawa oleh gelombang elektromagnetik yang terlihat -- dari matahari, lampu, dst.</p>
+  </div>
+  <div class="mtr-card">
+    <span class="mtr-card-icon">🔊</span>
+    <h4>Energi Bunyi</h4>
+    <p>Terbawa oleh gelombang bunyi -- getaran partikel udara (atau medium lain) yang merambat.</p>
+  </div>
+  <div class="mtr-card">
+    <span class="mtr-card-icon">☢️</span>
+    <h4>Energi Nuklir</h4>
+    <p>Dilepas saat inti atom pecah (fisi) atau bergabung (fusi) -- dasar dari E = mc².</p>
+  </div>
+</div>
+</div>
+
+## 📋 Ringkasan Bentuk Energi
+
+<div class="mtr-table-wrap">
+<div class="mtr-table-scroll">
+<table class="mtr-table">
+<thead>
+<tr><th>Bentuk Energi</th><th>Rumus (kalau ada)</th><th>Contoh</th></tr>
+</thead>
+<tbody>
+<tr><td>Kinetik</td><td><em>Eₖ = ½mv²</em></td><td>Mobil melaju, angin bertiup</td></tr>
+<tr><td>Potensial Gravitasi</td><td><em>Eₚ = mgh</em></td><td>Buah di pohon, air di bendungan</td></tr>
+<tr><td>Potensial Elastis</td><td><em>Eₚ = ½kx²</em></td><td>Pegas ditekan, busur panah ditarik</td></tr>
+<tr><td>Termal</td><td>--</td><td>Air mendidih, api unggun</td></tr>
+<tr><td>Kimia</td><td>--</td><td>Bensin, makanan, baterai</td></tr>
+<tr><td>Listrik</td><td><em>W = VIt</em></td><td>Aliran listrik di kabel</td></tr>
+<tr><td>Cahaya</td><td>--</td><td>Sinar matahari, lampu</td></tr>
+<tr><td>Bunyi</td><td>--</td><td>Suara, gelombang ultrasonik</td></tr>
+<tr><td>Nuklir</td><td><em>E = mc²</em></td><td>PLTN, reaksi fusi di matahari</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+## ⚠️ Kesalahan Umum
+
+<div class="mtr-note">
+<strong class="mtr-wrong">❌ "Energi angin dan energi air adalah bentuk energi tersendiri."</strong><br>
+Kurang tepat. <strong class="mtr-right">Keduanya sebenarnya energi kinetik</strong> -- angin dan air itu SUMBER-nya, bukan bentuk energi baru.
+</div>
+
+<div class="mtr-note">
+<strong class="mtr-wrong">❌ "Benda yang diam tidak punya energi apa pun."</strong><br>
+Salah. <strong class="mtr-right">Benda diam masih bisa punya energi potensial atau energi kimia</strong>, meskipun energi kinetiknya nol.
+</div>
+
+<div class="mtr-note">
+<strong class="mtr-wrong">❌ "Energi nuklir cuma soal bom atom."</strong><br>
+Terlalu sempit. <strong class="mtr-right">Energi nuklir juga dimanfaatkan buat pembangkit listrik (PLTN)</strong>, bahkan matahari sendiri bersinar karena reaksi nuklir (fusi) di intinya.
+</div>
+
+Sekarang coba lihat sendiri berbagai perubahan bentuk energi itu "hidup" di simulasi bawah ini -- nyalakan lampu, motor, pemanas, speaker, sampai amati tumbuhan yang mengubah cahaya matahari jadi energi kimia lewat fotosintesis.
+
+## 🎯 Intinya
+
+Kalau diamati baik-baik, hampir semua bentuk energi di atas sebenarnya bisa ditelusuri ke **pergerakan atau posisi partikel dalam skala tertentu** -- energi termal adalah gerak acak partikel penyusun benda, energi kimia adalah "posisi" elektron dalam ikatan atom, energi listrik adalah gerak muatan, bahkan energi cahaya adalah gelombang yang membawa energi lewat ruang.
+
+Dengan kata lain, **kinetik dan potensial bukan cuma "dua dari sekian bentuk energi" -- keduanya adalah pola dasar yang berulang di balik hampir semua bentuk energi lainnya**, cuma dalam skala dan konteks yang berbeda-beda. Memahami ini bikin daftar di atas terasa lebih masuk akal, bukan sekadar hafalan sembilan istilah terpisah.
+
+## 🤔 Coba Pikirkan
+
+Perhatikan sebuah senter yang menyala memakai baterai.
+
+1. Coba telusuri, bentuk energi apa saja yang terlibat, dari baterai sampai cahaya keluar dari senter?
+2. Kalau senter itu dipakai terus sampai baterainya habis, ke mana energi dari baterai itu akhirnya "pergi"?
+
+Ini pertanyaan yang sama seperti di materi Konsep Energi sebelumnya -- coba jawab lagi sekarang, apakah jawabanmu berubah setelah tahu berbagai bentuk energi di atas?
+
+<div class="mtr-cta">
+<p>Sekarang kamu sudah kenal berbagai bentuk energi. Saatnya lihat bagaimana energi berpindah dan berubah dari satu bentuk ke bentuk lainnya dalam kehidupan sehari-hari.</p>
+<a href="/materi/perubahan-energi" class="btn btn-primary">🔄 Lanjut ke Perubahan Energi →</a>
+</div>

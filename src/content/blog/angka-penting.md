@@ -1,11 +1,11 @@
 ---
-title: "Angka Penting: Aturan Baca & Hitungnya"
-description: "Belajar angka penting dari nol -- aturan menentukan jumlah angka penting, notasi ilmiah, sampai aturan operasi hitung (tambah, kurang, kali, bagi) yang paling sering bikin salah."
+title: "Angka Penting dan Notasi Ilmiah"
+description: "Belajar angka penting dari nol -- 8 aturan menentukan jumlah angka penting, notasi ilmiah, awalan satuan (kilo, mili, mikro, nano, dst), sampai aturan operasi hitung yang paling sering bikin salah."
 category: materi
 mapel: Fisika
 kelas: X
-pubDate: 2026-08-28
-tags: ["Angka Penting", "Fisika Kelas X", "Pengukuran"]
+pubDate: 2026-08-29
+tags: ["Angka Penting", "Notasi Ilmiah", "Fisika Kelas X", "Pengukuran"]
 kuis:
   - soal: "Berapa jumlah angka penting pada 3,0500?"
     pilihan: ["2", "3", "4", "5"]
@@ -27,6 +27,14 @@ kuis:
     pilihan: ["1", "2", "3", "4"]
     jawaban: 2
     penjelasan: "Ketiga angka (2, 3, 4) semuanya bukan nol, jadi semuanya dihitung sebagai angka penting -- totalnya 3."
+  - soal: "Bilangan 1500 ditandai dengan garis bawah HANYA pada angka pertama (angka '1') untuk menunjukkan angka penting terakhirnya. Berapa jumlah angka pentingnya?"
+    pilihan: ["1", "2", "3", "4"]
+    jawaban: 0
+    penjelasan: "Garis bawah menandai angka TERAKHIR yang dianggap penting. Kalau garis bawahnya ada di angka pertama (1), berarti cuma angka itu yang pasti -- jumlah angka pentingnya cuma 1."
+  - soal: "Sebuah kapasitor punya nilai 4,7 × 10⁻⁹ F (dibaca 4,7 nF, nano-farad). Berapa jumlah angka penting pada nilai tersebut?"
+    pilihan: ["1", "2", "9", "Tak terhingga"]
+    jawaban: 1
+    penjelasan: "Pada notasi ilmiah, yang dihitung sebagai angka penting HANYA digit pada koefisiennya (4,7) -- pangkat 10 (10⁻⁹, atau awalan 'nano' yang mewakilinya) tidak ikut dihitung. Jumlah angka pentingnya 2."
 draft: false
 ---
 
@@ -169,7 +177,25 @@ Contohnya, waktu kalian baca skala utama jangka sorong dan dapat hasil 2,34 cm: 
   <div class="mtr-step">
     <span class="mtr-step-num">5</span>
     <div class="mtr-step-body">
-      <p><strong>Angka nol di belakang, pada bilangan bulat tanpa koma, sifatnya ambigu (tidak jelas).</strong> Contoh: 1500 bisa berarti 2 angka penting (dibulatkan sampai ratusan) atau 4 angka penting (semua angkanya pasti) -- tergantung konteks. Cara paling aman menghindari keraguan ini: tulis dalam <strong>notasi ilmiah</strong>.</p>
+      <p><strong>Angka nol di belakang, pada bilangan bulat tanpa koma, sifatnya ambigu (tidak jelas)</strong> -- jumlahnya tergantung konteks. Supaya jelas, angka <strong>terakhir yang dianggap penting ditandai dengan garis bawah</strong>. Contoh: <strong>1<u>5</u>00</strong> berarti cuma 2 angka penting (nol di belakangnya cuma penanda tempat), sedangkan <strong>150<u>0</u></strong> berarti 4 angka penting (garis bawah di angka nol terakhir berarti semuanya dianggap pasti). Cara lain yang juga sering dipakai: tulis dalam <strong>notasi ilmiah</strong> (lihat bagian selanjutnya).</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">6</span>
+    <div class="mtr-step-body">
+      <p><strong>Pada notasi ilmiah (a,bcd × 10ⁿ), jumlah angka penting cuma dihitung dari koefisiennya (a,bcd) saja</strong> -- angka pada pangkat 10 (eksponen n) TIDAK ikut dihitung sebagai angka penting. Contoh: 4,20 × 10⁵ punya 3 angka penting (4, 2, 0), bukan 6.</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">7</span>
+    <div class="mtr-step-body">
+      <p><strong>Bilangan eksak (hasil membilang langsung, bukan hasil pengukuran alat) dianggap punya angka penting TAK TERHINGGA.</strong> Contoh: "3 buah apel" atau angka konversi seperti "1 jam = 60 menit" -- angka-angka ini pasti 100%, jadi tidak membatasi ketelitian hasil operasi hitung.</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">8</span>
+    <div class="mtr-step-body">
+      <p><strong>Dalam satu hasil pengukuran, hanya boleh ada SATU angka taksiran</strong> (perkiraan) di ujung akhir -- bukan dua atau lebih. Kalau jangka sorong terbaca 2,34 cm, angka 4 di ujung itu satu-satunya taksiran; menuliskan "2,344 cm" (dua angka taksiran) tidak dibenarkan kalau alatnya cuma bisa menaksir sampai situ.</p>
     </div>
   </div>
 </div>
@@ -193,8 +219,8 @@ Dengan cara ini, jumlah angka penting langsung kelihatan jelas dari angka-angka 
 <tr><th>Bilangan Biasa</th><th>Notasi Ilmiah</th><th>Jumlah Angka Penting</th></tr>
 </thead>
 <tbody>
-<tr><td>1500 (dianggap 2 AP)</td><td><em>1,5 × 10³</em></td><td>2</td></tr>
-<tr><td>1500 (dianggap 4 AP)</td><td><em>1,500 × 10³</em></td><td>4</td></tr>
+<tr><td>1<u>5</u>00</td><td><em>1,5 × 10³</em></td><td>2</td></tr>
+<tr><td>150<u>0</u></td><td><em>1,500 × 10³</em></td><td>4</td></tr>
 <tr><td>0,000045</td><td><em>4,5 × 10⁻⁵</em></td><td>2</td></tr>
 <tr><td>6.400.000</td><td><em>6,4 × 10⁶</em></td><td>2</td></tr>
 </tbody>
@@ -203,6 +229,42 @@ Dengan cara ini, jumlah angka penting langsung kelihatan jelas dari angka-angka 
 </div>
 
 Perhatikan dua baris pertama: sama-sama "1500", tapi jumlah angka pentingnya bisa beda tergantung apakah angka nolnya itu hasil pengukuran asli atau cuma pembulatan. Notasi ilmiah membuat maksud si penulis jadi jelas, tidak menebak-nebak lagi.
+
+## 📐 Awalan Satuan: Kilo, Mili, Mikro, Nano, dan Kawan-kawannya
+
+Selain notasi ilmiah, ada cara lain yang lebih sering dipakai sehari-hari buat menyingkat bilangan yang sangat besar atau sangat kecil: **awalan satuan** (prefiks). Awalan ini sebenarnya cuma "nama panggilan" buat pangkat 10 tertentu -- daripada menulis 10⁻³, cukup tempelkan awalan "mili" di depan satuannya.
+
+<div class="mtr-table-wrap">
+<div class="mtr-table-scroll">
+<table class="mtr-table">
+<thead>
+<tr><th>Awalan</th><th>Simbol</th><th>Faktor Pengali</th><th>Contoh</th></tr>
+</thead>
+<tbody>
+<tr><td>Tera</td><td>T</td><td><em>10¹²</em></td><td>1 TB (terabyte)</td></tr>
+<tr><td>Giga</td><td>G</td><td><em>10⁹</em></td><td>1 GHz (gigahertz)</td></tr>
+<tr><td>Mega</td><td>M</td><td><em>10⁶</em></td><td>1 MW (megawatt)</td></tr>
+<tr><td>Kilo</td><td>k</td><td><em>10³</em></td><td>1 km (kilometer)</td></tr>
+<tr><td>(satuan dasar)</td><td>--</td><td><em>10⁰</em></td><td>1 m, 1 g, 1 s</td></tr>
+<tr><td>Desi</td><td>d</td><td><em>10⁻¹</em></td><td>1 dL (desiliter)</td></tr>
+<tr><td>Senti</td><td>c</td><td><em>10⁻²</em></td><td>1 cm (sentimeter)</td></tr>
+<tr><td>Mili</td><td>m</td><td><em>10⁻³</em></td><td>1 mA (miliampere)</td></tr>
+<tr><td>Mikro</td><td>μ</td><td><em>10⁻⁶</em></td><td>1 μC (mikrocoulomb)</td></tr>
+<tr><td>Nano</td><td>n</td><td><em>10⁻⁹</em></td><td>1 nF (nanofarad)</td></tr>
+<tr><td>Piko</td><td>p</td><td><em>10⁻¹²</em></td><td>1 pF (pikofarad)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+Cara pakainya tinggal kalikan angka di depan awalan dengan faktor pengalinya:
+
+<div class="mtr-formula">5 mA = 5 × 10⁻³ A = 0,005 A</div>
+<div class="mtr-formula">250 nm = 250 × 10⁻⁹ m = 2,5 × 10⁻⁷ m</div>
+
+<div class="mtr-note">
+🔗 Awalan-awalan ini bukan hal asing -- kamu sudah sering ketemu di materi <a href="/materi/hukum-coulomb">Hukum Coulomb</a> dan <a href="/materi/medan-listrik">Medan Listrik</a> (muatan ditulis dalam μC atau nC). Sekarang kamu tahu μC itu sebenarnya cuma cara singkat menulis × 10⁻⁶ C.
+</div>
 
 ## ➕ Aturan Operasi Hitung: Penjumlahan & Pengurangan
 
@@ -288,11 +350,20 @@ Kalkulator tidak tahu berapa ketelitian alat ukur kalian. <strong class="mtr-rig
 Beda. <strong class="mtr-right">Tambah-kurang berpatokan pada angka di belakang koma, sedangkan kali-bagi berpatokan pada total angka penting.</strong> Tertukar keduanya adalah kesalahan paling umum di soal ujian.
 </div>
 
-## Intinya
+## 🎯 Intinya
 
-- Angka penting = angka pasti + satu angka taksiran, mencerminkan ketelitian alat ukur yang dipakai
-- Angka nol bisa jadi angka penting atau bukan, tergantung posisinya -- notasi ilmiah membantu menghindari keraguan ini
-- Penjumlahan/pengurangan dibulatkan berdasarkan angka di belakang koma paling sedikit; perkalian/pembagian berdasarkan total angka penting paling sedikit
-- Semakin teliti alat ukurnya (lihat materi Alat Ukur & Lab Maya), semakin banyak angka penting yang boleh dituliskan -- bukan sebaliknya
+Kalau dirangkum jadi satu kalimat, semua aturan di atas sebenarnya menjaga **satu prinsip yang sama: hasil akhir tidak boleh terlihat lebih teliti daripada bagian yang paling tidak teliti di dalamnya** -- persis seperti rantai yang kekuatannya ditentukan oleh mata rantai paling lemah, bukan yang paling kuat.
 
-Paham angka penting bukan cuma buat lulus ujian -- ini kebiasaan ilmiah supaya hasil pengukuran kalian jujur soal seberapa teliti alat yang dipakai, tidak dilebih-lebihkan dan tidak juga dikurangi.
+Itu sebabnya penjumlahan berpatokan pada angka desimal paling sedikit, perkalian berpatokan pada angka penting paling sedikit, dan kenapa menuliskan "2,344 cm" padahal jangka sorongnya cuma bisa menaksir sampai "2,34 cm" itu bukan ketelitian ekstra -- itu kebohongan kecil. Sekali kalian paham prinsip tunggal ini, aturan-aturan di atas berhenti terasa seperti daftar hafalan terpisah, karena semuanya cuma penerapan dari ide yang sama.
+
+## 🤔 Coba Pikirkan
+
+Kamu mengukur diameter sebuah kawat tipis pakai mikrometer sekrup dan mendapat hasil **0,45 mm**. Temanmu mengukur kawat yang sama pakai jangka sorong dan mendapat hasil **0,4 mm**.
+
+1. Berapa jumlah angka penting dari masing-masing hasil?
+2. Kalau kedua hasil itu dijumlahkan (misalnya buat menghitung total ketebalan dua kawat yang ditumpuk), berapa hasil akhirnya menurut aturan angka penting?
+3. Menurutmu, kenapa dua alat yang berbeda bisa menghasilkan jumlah angka desimal yang berbeda untuk benda yang seharusnya sama?
+
+Coba kerjakan sendiri dulu -- kalau masih ragu, buka lagi bagian aturan operasi hitung dan materi <a href="/materi/alat-ukur">Alat Ukur</a> di atas.
+
+Materi selanjutnya kita bahas apa yang terjadi kalau benda yang sama diukur lebih dari sekali -- lanjut ke <a href="/materi/pengukuran-alat-ukur-dan-angka-penting">Pengukuran Tunggal & Pengukuran Berulang</a>.

@@ -358,4 +358,4 @@ Wajar kalau kepikiran "terus ini dipakai buat apa di kehidupan nyata?" — jawab
 - Metode ilmiah punya 6 langkah: **Identifikasi Masalah → Rumusan Masalah → Hipotesis → Penelitian → Analisis Data → Kesimpulan**
 - Kalian sendiri sebenarnya udah sering pakai metode ilmiah tanpa sadar — misalnya pas ngira-ngira kenapa hp kalian nge-lag terus nyoba benerin sendiri
 
-Materi selanjutnya kita mulai masuk ke besaran & pengukuran — biar teori "ngamatin & ngukur" tadi nggak cuma jadi teori doang. 🚀
+Sebelum ngamatin & ngukur beneran, ada dua bekal penting dulu yang perlu kalian kuasai: cara jaga diri aman di [Keselamatan Kerja di Laboratorium](/materi/keselamatan-kerja-di-laboratorium), sama cara [Merancang dan Melakukan Penyelidikan Ilmiah](/materi/merancang-dan-melakukan-penyelidikan-ilmiah) biar percobaan kalian nanti benar-benar bisa dipertanggungjawabkan — baru setelah itu kita masuk ke besaran & pengukuran. 🚀

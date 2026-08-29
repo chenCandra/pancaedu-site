@@ -6,6 +6,11 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-08-26
 tags: ["Medan Listrik", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/medan-listrik.html"
+  judul: "Medan Listrik di Sekitar Muatan"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1000
 kuis:
   - soal: "Medan listrik di suatu titik didefinisikan sebagai..."
     pilihan: ["Jumlah muatan yang ada di titik tersebut", "Gaya listrik yang bekerja pada satu satuan muatan uji positif di titik itu", "Jarak antara dua muatan", "Energi potensial listrik di titik itu"]
@@ -199,3 +204,5 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- arah medannya, ru
 * ⚡ Arah medan: menjauh dari muatan positif, menuju muatan negatif.
 * ⚡ Kalau ada muatan q di dalam medan E, gaya yang dialaminya **F = qE**.
 * ⚡ Medan listrik tetap "ada" di ruang sekitar muatan, meski belum ada muatan lain yang merasakannya.
+
+Sekarang coba geser sendiri titik ujinya di simulasi berikut -- lihat langsung bagaimana medan listrik berubah arah dan kekuatannya di tiap posisi, dan coba selesaikan Tantangan HOTS di atas: cari titik di mana medan totalnya persis nol.

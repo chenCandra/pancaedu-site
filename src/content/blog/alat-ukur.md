@@ -100,7 +100,7 @@ draft: false
 
 ## 🔧 Mengenal Alat Ukur
 
-Coba lihat benda-benda di sekitar kalian. Bagaimana cara mengetahui panjang meja, massa sebuah benda, waktu yang diperlukan untuk berlari, atau suhu air?
+Setelah belajar besaran pokok, besaran turunan, dan [dimensi](/materi/dimensi), sekarang saatnya masuk ke sisi paling praktis: bagaimana besaran-besaran itu benar-benar diukur. Coba lihat benda-benda di sekitar kalian. Bagaimana cara mengetahui panjang meja, massa sebuah benda, waktu yang diperlukan untuk berlari, atau suhu air?
 
 Kita tidak bisa hanya mengandalkan perkiraan. Dalam Fisika, kita membutuhkan pengukuran agar hasilnya dapat dinyatakan dengan angka dan satuan yang jelas. Untuk melakukan pengukuran, kita menggunakan **alat ukur**.
 
@@ -316,3 +316,5 @@ Tanpa satuan, angka hasil pengukuran dapat menjadi tidak bermakna. Angka 7,4 saj
 Bayangkan kalian mendapatkan sebuah kawat tipis. Guru meminta kalian menentukan diameter kawat tersebut. Ada tiga alat di meja: penggaris, jangka sorong, dan mikrometer sekrup.
 
 Menurut kalian, alat mana yang paling sesuai? Coba pikirkan bukan hanya dari sisi "alat mana yang paling teliti", tetapi juga alat mana yang paling sesuai dengan ukuran benda dan kebutuhan pengukuran.
+
+Materi selanjutnya kita bahas cara menuliskan hasil bacaan alat-alat ini dengan benar -- lanjut ke [Angka Penting dan Notasi Ilmiah](/materi/angka-penting).

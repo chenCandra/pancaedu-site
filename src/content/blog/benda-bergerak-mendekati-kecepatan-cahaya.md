@@ -26,6 +26,8 @@ kuis:
 draft: false
 ---
 
+Materi ini merangkum tiga hal yang sudah dibahas satu per satu di materi [Dilatasi Waktu](/materi/dilatasi-waktu), [Kontraksi Panjang](/materi/kontraksi-panjang), dan [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik) -- sekarang dilihat sekaligus dalam satu gambaran utuh.
+
 Menurut fisika modern, jika sebuah benda (yang memiliki massa saat diam) bergerak sangat cepat hampir sama dengan kecepatan cahaya, maka kita yang diam akan melihat bahwa benda itu :
 
 1.  Massanya semakin bertambah, dan saat mencapai kecepatan cahaya, massanya menjadi tak terhingga.
@@ -40,3 +42,5 @@ Benda itu sendiri akan merasakan bahwa:
 1.  Kecepatannya semakin melambat. Saat mencapai kecepatan cahaya,  dia merasa diam saja.
 2.  “Tunnel vision”: jika benda itu bisa melihat, semua sumber cahaya (sebenarnya foton) akan semakin merapat, sampai saat mencapai kecepatan cahaya, semua sumber cahaya tampak berasal dari satu titik di depannya, bahkan yang seharusnya ada di belakangnya. Ini terjadi karena benda tersebut telah berkecepatan sama dengan si cahaya.
 3.  Jika benda tersebut bisa melihat, segala sumber cahaya “di depan” dirinya akan semakin terlihat biru, dan segala sumber cahaya “di belakang”-nya akan semakin terlihat merah. Pada kecepatan cahaya, pergeseran frekuensi gelombang elektromagnetik ini (yang disebut dengan efek Doppler; pada praktiknya sama seperti perbedaan bunyi sirine yang mendatangi lalu menjauhi kita) mengakibatkan tak ada lagi sumber cahaya yang bisa ia lihat baik di depan maupun belakangnya, karena semua frekuensi gelombang cahaya tersebut telah bergeser ke frekuensi gelombang elektromagnetik tak kasat mata.
+
+Sudah paham teorinya? Saatnya uji pemahaman kalian lewat [Latihan Soal Relativitas Khusus](/materi/latihan-soal-relativitas-khusus).

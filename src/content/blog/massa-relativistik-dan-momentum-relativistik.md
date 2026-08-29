@@ -28,7 +28,7 @@ draft: false
 
 ## Massa Relativistik
 
-Massa relativistik adalah massa yang dimiliki oleh suatu benda yang bergerak dengan kecepatan mendekati kecepatan cahaya. Massa relativistik berbeda dari massa diam, yaitu massa yang dimiliki oleh benda yang diam atau bergerak dengan kecepatan rendah. Massa relativistik dapat dihitung dengan menggunakan rumus berikut:
+Setelah kenalan sama [dilatasi waktu](/materi/dilatasi-waktu) dan [kontraksi panjang](/materi/kontraksi-panjang), sekarang giliran besaran ketiga yang ikut berubah kalau benda bergerak sangat cepat: massa. Massa relativistik adalah massa yang dimiliki oleh suatu benda yang bergerak dengan kecepatan mendekati kecepatan cahaya. Massa relativistik berbeda dari massa diam, yaitu massa yang dimiliki oleh benda yang diam atau bergerak dengan kecepatan rendah. Massa relativistik dapat dihitung dengan menggunakan rumus berikut:
 
 ![Massa Relativistik](/images/migrated/Screenshot-2024-01-14-213128.png)
 
@@ -43,3 +43,5 @@ Momentum relativistik dapat dihitung dengan menggunakan rumus berikut:![MOmentum
 ![MOmentum Relativistik](/images/migrated/Screenshot-2024-01-14-213457.png)
 
 Dari rumus tersebut, dapat dilihat bahwa jika kecepatan benda sama dengan nol, maka momentum relativistiknya sama dengan nol. Jika kecepatan benda mendekati kecepatan cahaya, maka momentum relativistiknya akan semakin besar.
+
+Sekarang kita sudah kenal tiga efek utama relativitas khusus -- waktu, panjang, dan massa. Lihat rangkumannya sekaligus di materi [Apa yang Terjadi Jika Benda Bergerak Mendekati Kecepatan Cahaya?](/materi/benda-bergerak-mendekati-kecepatan-cahaya).

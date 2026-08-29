@@ -299,4 +299,4 @@ Umumnya benar tapi ada batasnya -- <strong class="mtr-right">kalau ada kesalahan
 - Laporan pengukuran berulang mengikuti 5 langkah: rata-rata → selisih tiap data → kuadratkan & jumlahkan → hitung Δx → laporkan x = (x̄ ± Δx) satuan
 - Jumlah angka desimal x̄ harus disamakan dengan Δx -- angka lebih dari itu tidak lagi bisa dipercaya
 
-Materi selanjutnya kita mulai membahas besaran yang punya arah, bukan cuma nilai -- namanya vektor.
+Ini melengkapi rangkaian materi Pengukuran -- kalau butuh diulang, urutannya: <a href="/materi/besaran-dan-satuan">Besaran dan Satuan</a> → <a href="/materi/besaran-pokok">Besaran Pokok</a> → <a href="/materi/besaran-turunan">Besaran Turunan</a> → <a href="/materi/dimensi">Dimensi</a> → <a href="/materi/alat-ukur">Alat Ukur</a> → <a href="/materi/angka-penting">Angka Penting</a> → materi ini.

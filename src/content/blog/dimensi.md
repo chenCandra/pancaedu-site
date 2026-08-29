@@ -131,7 +131,7 @@ draft: false
 
 ## 🔎 Apa Itu Dimensi?
 
-Ketika kita belajar besaran turunan, kita melihat bahwa satuan suatu besaran bisa berasal dari gabungan satuan besaran pokok. Misalnya, kecepatan memiliki satuan m/s, sedangkan gaya memiliki satuan kg·m/s².
+Ketika kita belajar [besaran turunan](/materi/besaran-turunan), kita melihat bahwa satuan suatu besaran bisa berasal dari gabungan satuan besaran pokok. Misalnya, kecepatan memiliki satuan m/s, sedangkan gaya memiliki satuan kg·m/s².
 
 Nah, ada cara lain untuk menunjukkan hubungan tersebut tanpa bergantung pada nama satuannya. Cara itu disebut **dimensi**.
 
@@ -402,3 +402,5 @@ Dengan memahami dimensi, kita memiliki salah satu alat untuk memeriksa apakah hu
 <div class="mtr-formula">[vt] = L</div>
 
 Artinya, hasil perkalian kecepatan dan waktu memiliki dimensi panjang — itulah yang terjadi pada persamaan **s = vt**.
+
+Sekarang setelah paham besaran pokok, besaran turunan, dan dimensi, saatnya melihat semuanya dari sudut pandang alat yang benar-benar dipakai untuk mengukur -- lanjut ke materi [Alat Ukur](/materi/alat-ukur).

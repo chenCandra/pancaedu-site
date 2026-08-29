@@ -99,6 +99,8 @@ draft: false
 .mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
+Di materi [Besaran dan Satuan](/materi/besaran-dan-satuan), kamu sudah kenalan sama definisi besaran, satuan, dan kenapa dunia butuh satuan baku. Sekarang kita masuk lebih dalam ke salah satu kelompok besaran yang jadi fondasi semuanya: **besaran pokok**.
+
 Pernahkah kamu mengukur panjang meja, menimbang buah, melihat waktu pada stopwatch, atau mengukur suhu tubuh? Tanpa kita sadari, kita sebenarnya sedang **mengukur besaran fisika**.
 
 Tapi ada satu pertanyaan menarik: **bagaimana orang di seluruh dunia bisa sepakat bahwa "1 meter" di Indonesia sama dengan "1 meter" di Jepang, Amerika, atau negara lainnya?**

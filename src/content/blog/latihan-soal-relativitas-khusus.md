@@ -26,6 +26,8 @@ kuis:
 draft: false
 ---
 
+Latihan ini menguji tiga konsep yang sudah dibahas satu per satu: [Dilatasi Waktu](/materi/dilatasi-waktu), [Kontraksi Panjang](/materi/kontraksi-panjang), dan [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik). Kalau masih ragu sama rumusnya, buka lagi materi terkait sebelum mengerjakan.
+
 ### Soal 1: Paradoks Kembar
 
 Dua orang kembar, Goku dan Boruto, berusia 15 tahun memiliki jam yang selalu menunjukkan waktu yang sama. Boruto tinggal di Bumi, sedangkan Goku berangkat ke planet NameX dan menempuh waktu 10 tahun dengan kecepatan 0,8 c, di mana c adalah kecepatan cahaya. Setelah sampai di planet NameX, Goku langsung kembali ke Bumi dengan kecepatan yang sama. Berapa usia Goku dan Boruto saat mereka bertemu kembali di Bumi?
@@ -46,7 +48,4 @@ Sebuah partikel bermassa 1 kg bergerak dengan kecepatan 0,5 c relatif terhadap s
 
 Sebuah roket bermassa 10.000 kg bergerak dengan kecepatan 0,99 c relatif terhadap Bumi. Berapa energi kinetik roket yang diukur oleh seorang pengamat di Bumi?
 
-Pembahasan untuk Latihan diatas ada di halaman berikut :  
-[Page Under Construction – pancaedu](https://pancaedu.site/page-under-construction/)
-
-Versi Halaman : 2023.02.150124.
+Coba kerjakan dulu sendiri sebelum mengecek jawabannya lewat kuis di bawah -- kalau masih bingung caranya, buka lagi ketiga materi yang ditautkan di atas untuk lihat rumus dan contoh soalnya masing-masing.

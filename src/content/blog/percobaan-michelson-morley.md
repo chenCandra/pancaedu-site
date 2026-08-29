@@ -30,7 +30,7 @@ draft: false
 
 ![percobaan Michelson morley](/images/migrated/Michelson-y-morley.jpg)
 
-Percobaan Michelson-Morley adalah salah satu percobaan paling penting dan terkenal dalam sejarah fisika, yang dilakukan pada tahun 1887 oleh Albert Michelson dan Edward Morley di tempat yang sekarang menjadi kampus Case Western Reserve University di Cleveland, Ohio, Amerika Serikat. Percobaan ini bertujuan untuk menguji hipotesis tentang keberadaan eter, yang pada waktu itu dianggap sebagai medium yang membantu perambatan gelombang cahaya.
+Di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) sempat disinggung soal percobaan yang jadi salah satu pemicu lahirnya teori itu. Percobaan Michelson-Morley adalah salah satu percobaan paling penting dan terkenal dalam sejarah fisika, yang dilakukan pada tahun 1887 oleh Albert Michelson dan Edward Morley di tempat yang sekarang menjadi kampus Case Western Reserve University di Cleveland, Ohio, Amerika Serikat. Percobaan ini bertujuan untuk menguji hipotesis tentang keberadaan eter, yang pada waktu itu dianggap sebagai medium yang membantu perambatan gelombang cahaya.
 
 ## Latar Belakang Percobaan
 
@@ -59,3 +59,5 @@ Percobaan Michelson-Morley juga menginspirasi banyak percobaan lain yang menguji
 ## Kesimpulan
 
 Percobaan Michelson-Morley adalah percobaan yang sangat berpengaruh dalam sejarah fisika, yang membantah hipotesis eter dan mendorong lahirnya teori relativitas khusus. Percobaan ini menunjukkan bahwa kecepatan cahaya adalah konstan dan tidak dipengaruhi oleh gerak relatif antara pengamat dan sumber cahaya. Percobaan ini juga menunjukkan bahwa ruang dan waktu bukanlah konsep yang sederhana dan baku, tetapi dapat berubah-ubah tergantung pada kecepatan relatif. Percobaan ini merupakan salah satu contoh bagaimana percobaan ilmiah dapat mengubah paradigma dan pemahaman kita tentang alam semesta.
+
+Salah satu konsekuensi paling terkenal dari "ruang dan waktu yang relatif" ini adalah **dilatasi waktu** -- baca lebih lanjut di materi [Dilatasi Waktu: Apa, Mengapa, dan Bagaimana?](/materi/dilatasi-waktu).

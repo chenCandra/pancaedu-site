@@ -29,11 +29,11 @@ draft: false
 
 ## Apa itu dilatasi waktu?
 
-Dilatasi waktu adalah fenomena fisika yang menyebabkan waktu berjalan lebih lambat bagi pengamat yang bergerak relatif terhadap pengamat lain. Ini berarti bahwa dua pengamat yang bergerak dengan kecepatan yang berbeda akan mengukur waktu yang berbeda untuk kejadian yang sama. Misalnya, jika Anda berada di dalam pesawat yang terbang dengan kecepatan tinggi, waktu Anda akan berjalan lebih lambat daripada waktu orang yang berada di bumi. Ini bukan karena jam Anda rusak, tetapi karena ruang dan waktu bersifat relatif, bukan absolut.
+Setelah kenalan sama [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) dan [Percobaan Michelson-Morley](/materi/percobaan-michelson-morley) yang melatarbelakanginya, sekarang saatnya bahas salah satu konsekuensinya yang paling terkenal. Dilatasi waktu adalah fenomena fisika yang menyebabkan waktu berjalan lebih lambat bagi pengamat yang bergerak relatif terhadap pengamat lain. Ini berarti bahwa dua pengamat yang bergerak dengan kecepatan yang berbeda akan mengukur waktu yang berbeda untuk kejadian yang sama. Misalnya, jika Anda berada di dalam pesawat yang terbang dengan kecepatan tinggi, waktu Anda akan berjalan lebih lambat daripada waktu orang yang berada di bumi. Ini bukan karena jam Anda rusak, tetapi karena ruang dan waktu bersifat relatif, bukan absolut.
 
 ## Mengapa dilatasi waktu terjadi?
 
-Dilatasi waktu terjadi karena adanya prinsip relativitas khusus yang dikemukakan oleh Albert Einstein pada tahun 1905. Prinsip ini menyatakan bahwa hukum fisika berlaku sama bagi semua pengamat yang bergerak dengan kecepatan konstan relatif terhadap satu sama lain, dan bahwa kecepatan cahaya di ruang hampa adalah konstan dan tidak bergantung pada kecepatan sumber atau pengamat. Dari prinsip ini, dapat diturunkan bahwa ruang dan waktu tidaklah tetap, tetapi dapat berubah-ubah tergantung pada kecepatan pengamat. Semakin cepat pengamat bergerak, semakin besar perubahan ruang dan waktu yang dialaminya. Perubahan ruang disebut kontraksi panjang, sedangkan perubahan waktu disebut dilatasi waktu.
+Dilatasi waktu terjadi karena adanya prinsip relativitas khusus yang dikemukakan oleh Albert Einstein pada tahun 1905. Prinsip ini menyatakan bahwa hukum fisika berlaku sama bagi semua pengamat yang bergerak dengan kecepatan konstan relatif terhadap satu sama lain, dan bahwa kecepatan cahaya di ruang hampa adalah konstan dan tidak bergantung pada kecepatan sumber atau pengamat. Dari prinsip ini, dapat diturunkan bahwa ruang dan waktu tidaklah tetap, tetapi dapat berubah-ubah tergantung pada kecepatan pengamat. Semakin cepat pengamat bergerak, semakin besar perubahan ruang dan waktu yang dialaminya. Perubahan ruang disebut [kontraksi panjang](/materi/kontraksi-panjang), sedangkan perubahan waktu disebut dilatasi waktu.
 
 ## Bagaimana rumus dilatasi waktu?
 
@@ -74,3 +74,5 @@ Berikut adalah salah satu contoh soal dan pembahasan dilatasi waktu:
 Untuk menyelesaikan soal tersebut, kita perlu mengetahui berapa lama waktu yang berlalu di pesawat ruang angkasa selama Dede melakukan perjalanan menurut Didi. Waktu ini dapat dihitung dengan menggunakan rumus dilatasi waktu, yaitu:  
 ![COntoh soal dilatasi waktu](/images/migrated/Screenshot-2024-01-13-215800.png)Dalam soal, kita diberikan bahwa t adalah 30 tahun, dan v adalah 0,75c. Dengan mengganti nilai-nilai ini ke dalam rumus, kita dapat menghitung tˈ sebagai berikut:  
 ![Contoh soal dilatasi waktu](/images/migrated/Screenshot-2024-01-14-203515.png)Jadi, waktu perjalanan yang dilakukan oleh Dede, menurut Didi adalah 45 tahun, sehingga umur Didi sekarang adalah 20 + 45 tahun = 65 sedangkan umur Dede adalah 20 + 30 Tahun = 50 tahun. DIsini terlihat bahwa usia Dede lebih muda daripada Didi.
+
+Selain waktu, benda yang bergerak sangat cepat juga "terlihat" berubah dari sisi panjangnya -- baca lanjutannya di materi [Kontraksi Panjang: Apa, Mengapa, dan Bagaimana](/materi/kontraksi-panjang).

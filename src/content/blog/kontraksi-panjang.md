@@ -28,7 +28,7 @@ draft: false
 
 ![Kontraksi Panjang](/images/migrated/Screenshot-2024-01-14-212815.png)
 
-Kontraksi panjang adalah fenomena fisika yang menyatakan bahwa panjang suatu benda yang bergerak relatif terhadap pengamat akan terlihat lebih pendek daripada panjang benda yang diam. Fenomena ini merupakan salah satu konsekuensi dari teori relativitas khusus yang dikemukakan oleh Albert Einstein pada tahun 1905. Teori relativitas khusus adalah teori yang menjelaskan hubungan antara ruang, waktu, massa, dan energi dalam kerangka acuan yang bergerak dengan kecepatan konstan.
+Di materi [Dilatasi Waktu](/materi/dilatasi-waktu) kita sudah lihat bagaimana waktu "melambat" bagi benda yang bergerak sangat cepat. Ternyata bukan cuma waktu -- ruang (panjang) juga ikut berubah. Kontraksi panjang adalah fenomena fisika yang menyatakan bahwa panjang suatu benda yang bergerak relatif terhadap pengamat akan terlihat lebih pendek daripada panjang benda yang diam. Fenomena ini merupakan salah satu konsekuensi dari teori relativitas khusus yang dikemukakan oleh Albert Einstein pada tahun 1905. Teori relativitas khusus adalah teori yang menjelaskan hubungan antara ruang, waktu, massa, dan energi dalam kerangka acuan yang bergerak dengan kecepatan konstan.
 
 ## Apa Itu Kontraksi Panjang?
 
@@ -38,7 +38,7 @@ Kontraksi panjang hanya terjadi pada arah gerak benda, sedangkan arah tegak luru
 
 ## Mengapa Kontraksi Panjang Terjadi?
 
-Kontraksi panjang terjadi karena adanya perbedaan waktu antara pengamat dan benda yang bergerak. Waktu yang dialami oleh pengamat dan benda yang bergerak tidak sama, tetapi relatif tergantung pada kecepatan masing-masing. Ini disebut sebagai dilatasi waktu, yaitu fenomena yang menyatakan bahwa waktu akan berjalan lebih lambat bagi benda yang bergerak dengan kecepatan tinggi daripada benda yang diam.
+Kontraksi panjang terjadi karena adanya perbedaan waktu antara pengamat dan benda yang bergerak. Waktu yang dialami oleh pengamat dan benda yang bergerak tidak sama, tetapi relatif tergantung pada kecepatan masing-masing. Ini disebut sebagai [dilatasi waktu](/materi/dilatasi-waktu), yaitu fenomena yang menyatakan bahwa waktu akan berjalan lebih lambat bagi benda yang bergerak dengan kecepatan tinggi daripada benda yang diam.
 
 Dilatasi waktu menyebabkan perbedaan panjang benda yang terukur oleh pengamat yang berbeda. Pengamat yang diam akan melihat benda yang bergerak dengan kecepatan tinggi sebagai benda yang lebih pendek, karena waktu yang dibutuhkan oleh benda untuk menempuh jarak tertentu lebih lama dari waktu yang dibutuhkan oleh pengamat untuk mengukur jarak tersebut. Sebaliknya, pengamat yang bergerak dengan kecepatan yang sama dengan benda akan melihat benda tersebut dengan panjang aslinya, karena waktu yang dibutuhkan oleh benda dan pengamat untuk menempuh jarak tertentu sama.
 
@@ -81,3 +81,5 @@ Jawab:
 Substitusikan nilai-nilai yang diketahui ke dalam rumus kontraksi panjang:
 
 ![COntoh soal kontraksi panjang](/images/migrated/Screenshot-2024-01-14-205716.png)
+
+Selain panjang dan waktu, ternyata massa benda yang bergerak sangat cepat juga ikut berubah -- baca lanjutannya di materi [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik).
