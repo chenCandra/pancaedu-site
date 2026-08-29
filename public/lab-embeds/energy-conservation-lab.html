@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Energy Conservation Lab</title>
+<style>
+  :root {
+    --bg-0: #0a0f1e;
+    --bg-1: #101a30;
+    --card-bg: #131f38;
+    --card-border: #24365a;
+    --ink: #f1f5f9;
+    --ink-muted: #94a3b8;
+    --ink-faint: #64748b;
+    --brand-a: #2dd4bf; /* teal -- ujung "keseimbangan" */
+    --brand-b: #a78bfa; /* violet -- ujung "mekanika" */
+    --ep-color: #60a5fa;
+    --ek-color: #f87171;
+    --em-color: #fbbf24;
+    --eth-color: #fb923c;
+    --ok: #34d399;
+    --warn: #f87171;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background:
+      radial-gradient(circle at 10% 0%, rgba(45, 212, 191, 0.07), transparent 45%),
+      radial-gradient(circle at 90% 100%, rgba(167, 139, 250, 0.08), transparent 45%),
+      var(--bg-0);
+    color: var(--ink);
+    font-family: var(--font);
+    min-height: 100vh;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  button, select { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand-a); outline-offset: 2px; }
+
+  .ecl-header {
+    background: linear-gradient(135deg, var(--card-bg), var(--bg-1));
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ecl-header-title { display: flex; align-items: center; gap: 10px; }
+  .ecl-header-icon { font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.5)); }
+  .ecl-header h1 {
+    font-size: 1.05rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--brand-a), var(--brand-b));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .ecl-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .ecl-brand-chip {
+    font-size: 0.7rem; font-weight: 700; color: var(--ink-muted);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+    padding: 4px 10px; border-radius: 999px;
+  }
+
+  .ecl-intro-box {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--brand-b);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 14px;
+    font-size: 0.83rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .ecl-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ecl-tab {
+    background: var(--card-bg); border: 1px solid var(--card-border); color: var(--ink-muted);
+    font-size: 0.82rem; font-weight: 700; padding: 8px 16px; border-radius: 999px;
+  }
+  .ecl-tab.is-active { color: var(--bg-0); background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+
+  .ecl-panel { display: none; flex-direction: column; gap: 14px; }
+  .ecl-panel.is-active { display: flex; }
+
+  /* ============ QUIZ PANELS ============ */
+  .ecl-quiz-panel {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md);
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .ecl-quiz-label {
+    font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--brand-a); display: flex; align-items: center; gap: 6px;
+  }
+  .ecl-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; }
+  .ecl-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .ecl-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .ecl-quiz-option {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--ink);
+    border-radius: var(--radius-sm); padding: 9px 12px; font-size: 0.82rem; text-align: left;
+    display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .ecl-quiz-option:hover:not(:disabled) { border-color: var(--brand-a); background: rgba(45, 212, 191, 0.07); }
+  .ecl-quiz-option .letter { font-weight: 800; color: var(--brand-a); flex-shrink: 0; }
+  .ecl-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .ecl-quiz-option.is-chosen { border-color: var(--brand-a); background: rgba(45, 212, 191, 0.12); }
+  .ecl-quiz-option.is-correct { border-color: var(--ok); background: rgba(52, 211, 153, 0.12); }
+  .ecl-quiz-option.is-wrong { border-color: var(--warn); background: rgba(248, 113, 113, 0.12); }
+
+  .ecl-feedback {
+    font-size: 0.85rem; line-height: 1.5; padding: 10px 14px; border-radius: var(--radius-sm);
+    border-left: 3px solid var(--ok); background: rgba(52, 211, 153, 0.08); display: none;
+  }
+  .ecl-feedback.is-visible { display: block; }
+  .ecl-feedback.is-wrong { border-left-color: var(--warn); background: rgba(248, 113, 113, 0.08); }
+
+  /* ============ PARAMETER ============ */
+  .ecl-param-card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md);
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .ecl-param-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .ecl-param-grid { grid-template-columns: 1fr 1fr; } }
+
+  .ecl-param-row { display: flex; flex-direction: column; gap: 6px; }
+  .ecl-param-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); }
+  .ecl-param-row input[type="range"] { width: 100%; accent-color: var(--brand-a); }
+  .ecl-param-value { color: var(--brand-a); font-family: 'Courier New', monospace; font-weight: 800; }
+
+  .ecl-select {
+    background: var(--bg-0); color: var(--ink); border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm); padding: 7px 10px; font-size: 0.82rem; font-weight: 600;
+  }
+
+  .ecl-friction-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .ecl-friction-label { font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); display: flex; align-items: center; gap: 6px; }
+
+  .ecl-switch {
+    width: 52px; height: 28px; border-radius: 999px; background: #334155; border: none; position: relative; flex-shrink: 0;
+    transition: background 0.25s ease;
+  }
+  .ecl-switch::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+    background: #e2e8f0; transition: transform 0.25s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .ecl-switch.is-on { background: linear-gradient(90deg, var(--eth-color), var(--warn)); }
+  .ecl-switch.is-on::after { transform: translateX(24px); }
+
+  .ecl-friction-slider-row { display: none; flex-direction: column; gap: 6px; }
+  .ecl-friction-slider-row.is-visible { display: flex; }
+  .ecl-friction-slider-row input[type="range"] { accent-color: var(--eth-color); }
+
+  /* ============ STAGE ============ */
+  .ecl-stage-card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
+    padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden;
+  }
+  .ecl-stage-card::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 24px 24px; pointer-events: none;
+  }
+
+  .ecl-drop-wrap { position: relative; z-index: 1; height: 220px; display: flex; }
+  .ecl-drop-track { position: relative; width: 90px; margin-inline: auto; height: 100%; }
+  .ecl-drop-rail { position: absolute; left: 50%; top: 0; bottom: 18px; width: 2px; background: repeating-linear-gradient(to bottom, rgba(148,163,184,0.4) 0 6px, transparent 6px 12px); transform: translateX(-50%); }
+  .ecl-drop-ground { position: absolute; left: -50px; right: -50px; bottom: 16px; height: 2px; background: rgba(148,163,184,0.5); }
+  .ecl-drop-ball {
+    position: absolute; left: 50%; top: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #93c5fd, #2563eb 60%, #1e3a8a);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transform: translate(-50%, 0);
+    display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 800; color: #fff;
+  }
+  .ecl-drop-hlabel { position: absolute; left: calc(50% + 26px); font-size: 0.68rem; color: var(--ink-faint); white-space: nowrap; }
+
+  .ecl-readout-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; position: relative; z-index: 1; font-family: 'Courier New', monospace; font-size: 0.78rem; }
+  .ecl-readout-chip { background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); border-radius: 999px; padding: 4px 10px; }
+  .ecl-readout-chip b { color: var(--ink); }
+
+  /* ============ BARS ============ */
+  .ecl-bars { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }
+  .ecl-bar-row { display: flex; align-items: center; gap: 10px; }
+  .ecl-bar-label { font-size: 0.72rem; font-weight: 700; width: 92px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
+  .ecl-bar-track { flex: 1; height: 1.05rem; background: rgba(255,255,255,0.05); border-radius: 999px; overflow: hidden; position: relative; }
+  .ecl-bar-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 0.1s linear; }
+  .ecl-bar-value { font-size: 0.72rem; font-weight: 700; width: 66px; text-align: right; flex-shrink: 0; font-family: 'Courier New', monospace; }
+
+  /* ============ GRAFIK ============ */
+  .ecl-graph-wrap { position: relative; z-index: 1; background: rgba(0,0,0,0.15); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px; }
+  .ecl-graph-wrap canvas { display: block; width: 100%; height: 140px; }
+  .ecl-graph-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; font-size: 0.65rem; font-weight: 700; }
+  .ecl-graph-legend span { display: flex; align-items: center; gap: 4px; }
+  .ecl-graph-legend i { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
+
+  /* ============ CONTROLS ============ */
+  .ecl-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .ecl-btn-primary {
+    background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border: none; color: var(--bg-0);
+    font-weight: 800; font-size: 0.85rem; padding: 10px 22px; border-radius: 999px;
+  }
+  .ecl-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .ecl-btn-secondary {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--ink-muted);
+    font-weight: 700; font-size: 0.85rem; padding: 10px 18px; border-radius: 999px;
+  }
+  .ecl-btn-secondary:hover { color: var(--ink); border-color: var(--warn); }
+
+  /* ============ OBSERVASI & PENJELASAN ============ */
+  .ecl-observe-box {
+    display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--card-border);
+    border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.82rem; color: var(--ink-muted); line-height: 1.7;
+  }
+  .ecl-observe-box.is-visible { display: block; }
+  .ecl-observe-box strong { color: var(--ink); }
+
+  .ecl-explain-panel {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md);
+    padding: 16px; display: none; flex-direction: column; gap: 10px;
+  }
+  .ecl-explain-panel.is-visible { display: flex; }
+  .ecl-explain-title { font-size: 0.95rem; font-weight: 800; }
+  .ecl-explain-text { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.65; }
+  .ecl-explain-text strong { color: var(--em-color); }
+
+  .ecl-note {
+    font-size: 0.72rem; color: var(--ink-faint); background: rgba(255,255,255,0.02);
+    border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px 12px; line-height: 1.5;
+  }
+
+  /* ============ LUNCURAN ============ */
+  .ecl-ramp-wrap { display: flex; gap: 14px; justify-content: center; position: relative; z-index: 1; flex-wrap: wrap; }
+  .ecl-ramp-col { flex: 1; min-width: 130px; max-width: 220px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .ecl-ramp-tag { font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+  .ecl-ramp-tag.a { color: var(--ok); border: 1px solid var(--ok); }
+  .ecl-ramp-tag.b { color: var(--eth-color); border: 1px solid var(--eth-color); }
+  .ecl-ramp-track { position: relative; width: 100%; height: 130px; }
+  .ecl-ramp-line { position: absolute; left: 6%; top: 8%; width: 88%; height: 2px; background: rgba(148,163,184,0.4); transform-origin: left top; transform: rotate(28deg); }
+  .ecl-ramp-ball {
+    position: absolute; width: 24px; height: 24px; border-radius: 50%; left: 6%; top: 8%;
+    background: radial-gradient(circle at 35% 30%, #93c5fd, #2563eb 60%, #1e3a8a);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+  }
+  .ecl-ramp-ground { position: absolute; left: 0; right: 0; bottom: 10px; height: 2px; background: rgba(148,163,184,0.5); }
+  .ecl-ramp-result { font-size: 0.72rem; color: var(--ink-muted); text-align: center; min-height: 32px; }
+  .ecl-ramp-result b { color: var(--ink); }
+
+  .ecl-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .ecl-legend-chip {
+    display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: var(--ink-faint);
+    background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 3px 9px; border-radius: 999px;
+  }
+</style>
+</head>
+<body>
+  <div class="ecl-header">
+    <div class="ecl-header-title">
+      <span class="ecl-header-icon">⚖️</span>
+      <div>
+        <h1>Energy Conservation Lab</h1>
+        <p>Eksplorasi Hukum Kekekalan Energi</p>
+      </div>
+    </div>
+    <span class="ecl-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <p class="ecl-intro-box">Di <strong>Energy Transformation Lab</strong> kamu sudah lihat energi bisa berubah bentuk. Sekarang pertanyaannya: <strong>kalau berubah bentuk, apakah energinya hilang?</strong> Jangan percaya dulu -- coba buktikan sendiri lewat eksperimen di bawah ini.</p>
+
+  <div class="ecl-tabs">
+    <button class="ecl-tab is-active" id="tabJatuh">🏀 Bola Jatuh</button>
+    <button class="ecl-tab" id="tabLuncur">🛝 Luncuran (2 Jalur)</button>
+  </div>
+
+  <!-- ================= PANEL: BOLA JATUH ================= -->
+  <div class="ecl-panel is-active" id="panelJatuh">
+
+    <div class="ecl-quiz-panel" id="predictPanel">
+      <span class="ecl-quiz-label">💭 Coba Prediksi</span>
+      <p class="ecl-quiz-question">Sebuah benda berada pada ketinggian tertentu lalu jatuh tanpa gesekan. Apa yang terjadi pada energi potensial dan energi kinetiknya?</p>
+      <div class="ecl-quiz-options" id="predictOptions"></div>
+    </div>
+
+    <div class="ecl-param-card">
+      <div class="ecl-param-grid">
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>⚖️ Massa (m)</span><span class="ecl-param-value" id="massVal">2 kg</span></div>
+          <input type="range" id="massSlider" min="1" max="10" step="1" value="2">
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>🏔️ Ketinggian Awal (h)</span><span class="ecl-param-value" id="heightVal">5 m</span></div>
+          <input type="range" id="heightSlider" min="1" max="20" step="1" value="5">
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>🌍 Percepatan Gravitasi (g)</span><span class="ecl-param-value" id="gVal">9,8 m/s²</span></div>
+          <select class="ecl-select" id="gSelect">
+            <option value="9.8">Bumi (9,8 m/s²)</option>
+            <option value="1.6">Bulan (1,6 m/s²)</option>
+            <option value="24.8">Jupiter (24,8 m/s²)</option>
+          </select>
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-friction-toggle-row">
+            <span class="ecl-friction-label">🔥 Gesekan / Hambatan</span>
+            <button class="ecl-switch" id="frictionSwitch" aria-pressed="false" aria-label="Aktifkan gesekan"></button>
+          </div>
+          <div class="ecl-friction-slider-row" id="frictionSliderRow">
+            <div class="ecl-param-label-row"><span>Intensitas Gesekan</span><span class="ecl-param-value" id="frictionVal">30%</span></div>
+            <input type="range" id="frictionSlider" min="5" max="70" step="5" value="30">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecl-stage-card">
+      <div class="ecl-drop-wrap">
+        <div class="ecl-drop-track">
+          <div class="ecl-drop-rail"></div>
+          <div class="ecl-drop-ground"></div>
+          <div class="ecl-drop-ball" id="dropBall">m</div>
+          <div class="ecl-drop-hlabel" id="dropHLabel" style="top:0;">h = 5 m</div>
+        </div>
+      </div>
+
+      <div class="ecl-readout-row">
+        <span class="ecl-readout-chip">h = <b id="roH">5.0</b> m</span>
+        <span class="ecl-readout-chip">v = <b id="roV">0.0</b> m/s</span>
+        <span class="ecl-readout-chip">t = <b id="roT">0.0</b> s</span>
+      </div>
+
+      <div class="ecl-bars" id="barsJatuh">
+        <div class="ecl-bar-row"><span class="ecl-bar-label">🏔️ Eₚ</span><div class="ecl-bar-track"><div class="ecl-bar-fill" id="barEp" style="background:var(--ep-color)"></div></div><span class="ecl-bar-value" id="valEp">0 J</span></div>
+        <div class="ecl-bar-row"><span class="ecl-bar-label">⚙️ Eₖ</span><div class="ecl-bar-track"><div class="ecl-bar-fill" id="barEk" style="background:var(--ek-color)"></div></div><span class="ecl-bar-value" id="valEk">0 J</span></div>
+        <div class="ecl-bar-row" id="rowEth" style="display:none;"><span class="ecl-bar-label">🔥 Eₜₕ</span><div class="ecl-bar-track"><div class="ecl-bar-fill" id="barEth" style="background:var(--eth-color)"></div></div><span class="ecl-bar-value" id="valEth">0 J</span></div>
+        <div class="ecl-bar-row"><span class="ecl-bar-label">⚖️ Eₘ</span><div class="ecl-bar-track"><div class="ecl-bar-fill" id="barEm" style="background:var(--em-color)"></div></div><span class="ecl-bar-value" id="valEm">0 J</span></div>
+      </div>
+
+      <div class="ecl-graph-wrap">
+        <canvas id="graphCanvas"></canvas>
+        <div class="ecl-graph-legend">
+          <span><i style="background:var(--ep-color)"></i>Eₚ</span>
+          <span><i style="background:var(--ek-color)"></i>Eₖ</span>
+          <span id="legendEth" style="display:none;"><i style="background:var(--eth-color)"></i>Eₜₕ</span>
+          <span><i style="background:var(--em-color)"></i>Eₘ (total)</span>
+        </div>
+      </div>
+
+      <div class="ecl-controls-row">
+        <button class="ecl-btn-primary" id="runBtn" disabled>▶ Mulai Eksperimen</button>
+        <button class="ecl-btn-secondary" id="resetBtn">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div class="ecl-feedback" id="predictFeedback"></div>
+
+    <div class="ecl-observe-box" id="observeBox">
+      <p>🔎 <strong>Amati polanya:</strong> Ketika benda semakin dekat ke tanah, bagaimana energi potensialnya? Bagaimana energi kinetiknya? Bagaimana dengan energi mekaniknya secara keseluruhan?</p>
+    </div>
+
+    <div class="ecl-explain-panel" id="explainPanel">
+      <span class="ecl-explain-title">⚖️ Apa yang Terjadi?</span>
+      <p class="ecl-explain-text" id="explainText"></p>
+    </div>
+
+    <div class="ecl-quiz-panel" id="challenge1" style="display:none;">
+      <span class="ecl-quiz-label">🎯 Tantangan 1</span>
+      <p class="ecl-quiz-question">Atur massa dan ketinggian benda sehingga energi potensial awal (Eₚ saat h maksimum) mencapai kira-kira <strong>100 J</strong> (g = Bumi).</p>
+      <button class="ecl-btn-secondary" id="checkChallenge1">Cek Sekarang</button>
+      <div class="ecl-feedback" id="challenge1Feedback"></div>
+    </div>
+
+    <div class="ecl-quiz-panel" id="challenge2" style="display:none;">
+      <span class="ecl-quiz-label">🎯 Tantangan 2</span>
+      <p class="ecl-quiz-question">Jalankan benda TANPA gesekan, lalu perhatikan energi mekaniknya (Eₘ) dari awal sampai menyentuh tanah. Menurutmu, energi mekaniknya...</p>
+      <div class="ecl-quiz-options" id="challenge2Options"></div>
+    </div>
+
+    <div class="ecl-quiz-panel" id="challenge3" style="display:none;">
+      <span class="ecl-quiz-label">🎯 Tantangan 3</span>
+      <p class="ecl-quiz-question">Aktifkan gesekan, lalu jalankan lagi. Ke mana sebagian energi mekanik berubah?</p>
+      <div class="ecl-quiz-options" id="challenge3Options"></div>
+    </div>
+
+    <p class="ecl-note">📝 <strong>Catatan simulasi:</strong> gesekan di sini disederhanakan sebagai persentase tetap dari energi yang dilepas saat jatuh, langsung berubah jadi energi termal -- bukan model hambatan udara yang sesungguhnya (yang membuat benda jatuh lebih lambat). Penyederhanaan ini dipakai supaya hubungan Eₚ + Eₖ + Eₜₕ = konstan lebih mudah diamati.</p>
+  </div>
+
+  <!-- ================= PANEL: LUNCURAN ================= -->
+  <div class="ecl-panel" id="panelLuncur">
+    <p class="ecl-intro-box">Bandingkan dua jalur yang persis sama tingginya -- satu tanpa gesekan, satu dengan gesekan. Perhatikan mana yang tiba di bawah dengan energi gerak lebih besar.</p>
+
+    <div class="ecl-param-card">
+      <div class="ecl-param-grid">
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>⚖️ Massa (m)</span><span class="ecl-param-value" id="rMassVal">2 kg</span></div>
+          <input type="range" id="rMassSlider" min="1" max="10" step="1" value="2">
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>🏔️ Ketinggian Awal (h)</span><span class="ecl-param-value" id="rHeightVal">5 m</span></div>
+          <input type="range" id="rHeightSlider" min="1" max="20" step="1" value="5">
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span>🔥 Intensitas Gesekan Jalur B</span><span class="ecl-param-value" id="rFrictionVal">30%</span></div>
+          <input type="range" id="rFrictionSlider" min="5" max="70" step="5" value="30">
+        </div>
+      </div>
+    </div>
+
+    <div class="ecl-stage-card">
+      <div class="ecl-ramp-wrap">
+        <div class="ecl-ramp-col">
+          <span class="ecl-ramp-tag a">🟢 Jalur A — Tanpa Gesekan</span>
+          <div class="ecl-ramp-track">
+            <div class="ecl-ramp-line"></div>
+            <div class="ecl-ramp-ground"></div>
+            <div class="ecl-ramp-ball" id="rampBallA"></div>
+          </div>
+          <div class="ecl-ramp-result" id="rampResultA">Eₖ akhir: -- J</div>
+        </div>
+        <div class="ecl-ramp-col">
+          <span class="ecl-ramp-tag b">🔴 Jalur B — Dengan Gesekan</span>
+          <div class="ecl-ramp-track">
+            <div class="ecl-ramp-line"></div>
+            <div class="ecl-ramp-ground"></div>
+            <div class="ecl-ramp-ball" id="rampBallB"></div>
+          </div>
+          <div class="ecl-ramp-result" id="rampResultB">Eₖ akhir: -- J · Eₜₕ: -- J</div>
+        </div>
+      </div>
+
+      <div class="ecl-controls-row">
+        <button class="ecl-btn-primary" id="rampRunBtn">▶ Jalankan Kedua Jalur</button>
+        <button class="ecl-btn-secondary" id="rampResetBtn">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div class="ecl-explain-panel is-visible">
+      <span class="ecl-explain-title">⚖️ Apa yang Terjadi?</span>
+      <p class="ecl-explain-text">Kedua bola mulai dengan energi potensial yang sama besar (massa & ketinggian sama). Di Jalur A, seluruh energi potensial berubah jadi energi kinetik -- makanya bola A tiba paling bawah dengan kecepatan (dan Eₖ) paling besar. Di Jalur B, sebagian energi potensial berubah jadi <strong>energi termal</strong> akibat gesekan, jadi Eₖ yang tersisa di bawah lebih kecil. Total energinya (Eₖ + Eₜₕ) di Jalur B tetap sama dengan Eₚ awal -- <strong>energinya tidak hilang, cuma sebagian berubah jadi panas.</strong></p>
+    </div>
+  </div>
+
+  <div class="ecl-legend" id="eclLegend"></div>
+
+  <script>
+    // ============ KONSTAN & FORM WARNA (selalu didampingi ikon+label) ============
+    const FORMS = {
+      potensial: { icon: '🏔️', label: 'Energi Potensial', color: 'var(--ep-color)' },
+      kinetik:   { icon: '⚙️', label: 'Energi Kinetik',   color: 'var(--ek-color)' },
+      mekanik:   { icon: '⚖️', label: 'Energi Mekanik',   color: 'var(--em-color)' },
+      termal:    { icon: '🔥', label: 'Energi Termal',    color: 'var(--eth-color)' },
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function renderLegend() {
+      const el = $('eclLegend');
+      el.innerHTML = '';
+      Object.values(FORMS).forEach((f) => {
+        const chip = document.createElement('span');
+        chip.className = 'ecl-legend-chip';
+        chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`;
+        el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    // ============ TAB SWITCH ============
+    $('tabJatuh').addEventListener('click', () => switchTab('jatuh'));
+    $('tabLuncur').addEventListener('click', () => switchTab('luncur'));
+    function switchTab(tab) {
+      $('tabJatuh').classList.toggle('is-active', tab === 'jatuh');
+      $('tabLuncur').classList.toggle('is-active', tab === 'luncur');
+      $('panelJatuh').classList.toggle('is-active', tab === 'jatuh');
+      $('panelLuncur').classList.toggle('is-active', tab === 'luncur');
+    }
+
+    /* =====================================================================
+       EKSPERIMEN 1: BOLA JATUH
+       ===================================================================== */
+    const massSlider = $('massSlider'), massVal = $('massVal');
+    const heightSlider = $('heightSlider'), heightVal = $('heightVal');
+    const gSelect = $('gSelect'), gVal = $('gVal');
+    const frictionSwitch = $('frictionSwitch'), frictionSliderRow = $('frictionSliderRow');
+    const frictionSlider = $('frictionSlider'), frictionVal = $('frictionVal');
+    const runBtn = $('runBtn'), resetBtn = $('resetBtn');
+
+    let mass = 2, height = 5, g = 9.8;
+    let frictionOn = false, frictionRate = 0.3;
+    let predictChoice = null;
+    let running = false;
+    let hasRunOnce = false;
+    let animRAF = null;
+    let animStartMs = 0;
+    let fallDuration = 0;
+    let em0 = 0;
+    let graphSamples = [];
+
+    const G_LABELS = { '9.8': 'Bumi (9,8 m/s²)', '1.6': 'Bulan (1,6 m/s²)', '24.8': 'Jupiter (24,8 m/s²)' };
+
+    function syncParamLabels() {
+      massVal.textContent = `${mass} kg`;
+      heightVal.textContent = `${height} m`;
+      gVal.textContent = G_LABELS[String(g)].split(' (')[1].replace(')', '');
+      frictionVal.textContent = `${frictionSlider.value}%`;
+    }
+
+    massSlider.addEventListener('input', () => { mass = parseFloat(massSlider.value); syncParamLabels(); if (!running) refreshStaticView(); });
+    heightSlider.addEventListener('input', () => { height = parseFloat(heightSlider.value); syncParamLabels(); if (!running) refreshStaticView(); });
+    gSelect.addEventListener('change', () => { g = parseFloat(gSelect.value); syncParamLabels(); if (!running) refreshStaticView(); });
+    frictionSlider.addEventListener('input', () => { frictionRate = parseFloat(frictionSlider.value) / 100; syncParamLabels(); });
+
+    frictionSwitch.addEventListener('click', () => {
+      frictionOn = !frictionOn;
+      frictionSwitch.classList.toggle('is-on', frictionOn);
+      frictionSwitch.setAttribute('aria-pressed', String(frictionOn));
+      frictionSliderRow.classList.toggle('is-visible', frictionOn);
+      $('rowEth').style.display = frictionOn ? '' : 'none';
+      $('legendEth').style.display = frictionOn ? '' : 'none';
+    });
+
+    // ============ PREDIKSI ============
+    const PREDICT_OPTIONS = ['Eₚ dan Eₖ sama-sama bertambah', 'Eₚ berkurang, Eₖ bertambah', 'Eₚ bertambah, Eₖ berkurang', 'Eₚ dan Eₖ sama-sama berkurang'];
+    const PREDICT_CORRECT = 1;
+
+    function renderOptions(containerId, options, handler) {
+      const container = $(containerId);
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'ecl-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    renderOptions('predictOptions', PREDICT_OPTIONS, onPredictChoice);
+
+    function onPredictChoice(index, btn, container) {
+      if (predictChoice !== null) return;
+      predictChoice = index;
+      container.querySelectorAll('.ecl-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      runBtn.disabled = false;
+    }
+
+    // ============ FISIKA: h(t), lalu Eth sebagai proporsi tetap dari energi
+    // yang "dilepas" (m g (h0-h)) -- caranya Ek+Eth SELALU = energi yang
+    // dilepas, jadi Ep+Ek+Eth = em0 konstan, PASTI, walau modelnya sederhana. ============
+    function fallDurationFor(h0, gg) { return Math.sqrt((2 * h0) / gg); }
+
+    function computeAt(tRaw) {
+      const t = Math.min(tRaw, fallDuration);
+      const fallen = 0.5 * g * t * t;
+      const hNow = Math.max(0, height - fallen);
+      const ep = mass * g * hNow;
+      const released = em0 - ep;
+      const eth = frictionOn ? frictionRate * released : 0;
+      const ek = released - eth;
+      const v = Math.sqrt(Math.max(0, (2 * ek) / mass));
+      return { t, hNow, ep, ek, eth, em: ep + ek + eth, v, landed: t >= fallDuration };
+    }
+
+    function refreshStaticView() {
+      fallDuration = fallDurationFor(height, g);
+      em0 = mass * g * height;
+      const snap = { t: 0, hNow: height, ep: em0, ek: 0, eth: 0, em: em0, v: 0 };
+      updateVisuals(snap);
+      $('dropHLabel').textContent = `h = ${height} m`;
+      graphSamples = [];
+      drawGraph();
+    }
+
+    function updateVisuals(s) {
+      $('roH').textContent = s.hNow.toFixed(1);
+      $('roV').textContent = s.v.toFixed(1);
+      $('roT').textContent = s.t.toFixed(1);
+
+      // Dihitung dari elemen sungguhan (bukan angka tebakan) supaya bola
+      // selalu berhenti pas di garis tanah, berapa pun ukuran layarnya.
+      const track = document.querySelector('.ecl-drop-track');
+      const ball = $('dropBall');
+      const travelPx = Math.max(0, track.clientHeight - 16 /* jarak tanah dari bawah */ - ball.offsetHeight);
+      const frac = height > 0 ? (height - s.hNow) / height : 0;
+      ball.style.top = `${frac * travelPx}px`;
+      $('dropBall').textContent = `${mass}kg`;
+
+      const maxVal = Math.max(em0, 1);
+      $('barEp').style.width = `${(s.ep / maxVal) * 100}%`;
+      $('barEk').style.width = `${(s.ek / maxVal) * 100}%`;
+      $('barEth').style.width = `${(s.eth / maxVal) * 100}%`;
+      $('barEm').style.width = `${(s.em / maxVal) * 100}%`;
+      $('valEp').textContent = s.ep.toFixed(1) + ' J';
+      $('valEk').textContent = s.ek.toFixed(1) + ' J';
+      $('valEth').textContent = s.eth.toFixed(1) + ' J';
+      $('valEm').textContent = s.em.toFixed(1) + ' J';
+    }
+
+    function drawGraph() {
+      const canvas = $('graphCanvas');
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      const w = wrap.clientWidth - 16;
+      const h = 140;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+
+      if (graphSamples.length < 2) return;
+      const maxE = Math.max(em0, 1);
+      const maxT = Math.max(fallDuration, 0.1);
+      const px = (t) => (t / maxT) * (w - 10) + 5;
+      const py = (e) => h - 10 - (e / maxE) * (h - 20);
+
+      function plot(key, color) {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        graphSamples.forEach((s, i) => {
+          const x = px(s.t), y = py(s[key]);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+
+      // grid halus
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = 10 + ((h - 20) / 4) * i;
+        ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke();
+      }
+
+      plot('ep', getComputedStyle(document.documentElement).getPropertyValue('--ep-color').trim());
+      plot('ek', getComputedStyle(document.documentElement).getPropertyValue('--ek-color').trim());
+      if (frictionOn) plot('eth', getComputedStyle(document.documentElement).getPropertyValue('--eth-color').trim());
+      plot('em', getComputedStyle(document.documentElement).getPropertyValue('--em-color').trim());
+    }
+
+    // ============ JALANKAN ============
+    runBtn.addEventListener('click', () => {
+      if (running) return;
+      fallDuration = fallDurationFor(height, g);
+      em0 = mass * g * height;
+      graphSamples = [];
+      running = true;
+      runBtn.disabled = true;
+      animStartMs = performance.now();
+      requestAnimationFrame(stepAnim);
+    });
+
+    function stepAnim(nowMs) {
+      const tSec = (nowMs - animStartMs) / 1000;
+      const s = computeAt(tSec);
+      updateVisuals(s);
+      graphSamples.push(s);
+      drawGraph();
+
+      if (!s.landed) {
+        animRAF = requestAnimationFrame(stepAnim);
+      } else {
+        running = false;
+        runBtn.disabled = false;
+        onRunComplete();
+      }
+    }
+
+    function onRunComplete() {
+      if (!hasRunOnce) {
+        hasRunOnce = true;
+        revealPredictFeedback();
+        $('observeBox').classList.add('is-visible');
+        revealExplain();
+        revealChallenges();
+      }
+    }
+
+    function revealPredictFeedback() {
+      const fb = $('predictFeedback');
+      const correct = predictChoice === PREDICT_CORRECT;
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      const msg = 'Energi potensial berkurang sementara energi kinetik bertambah -- perhatikan bar Eₚ mengecil dan Eₖ membesar tadi. Jumlah energi mekaniknya (Eₘ) tetap sama selama tidak ada gesekan.';
+      fb.innerHTML = correct ? `✅ <strong>Tepat!</strong> ${msg}` : `💡 <strong>Belum tepat.</strong> Coba perhatikan lagi bar energi di atas -- ${msg}`;
+      const options = $('predictOptions').querySelectorAll('.ecl-quiz-option');
+      options.forEach((btn, i) => {
+        if (i === PREDICT_CORRECT) btn.classList.add('is-correct');
+        else if (i === predictChoice) btn.classList.add('is-wrong');
+      });
+    }
+
+    function revealExplain() {
+      $('explainPanel').classList.add('is-visible');
+      $('explainText').innerHTML = frictionOn
+        ? `Ketika benda berada tinggi, sebagian besar energi mekaniknya berupa energi potensial. Saat jatuh, energi potensial berkurang dan energi kinetik bertambah -- tapi karena gesekan aktif, sebagian energi mekanik berubah jadi <strong>energi termal</strong> (panas). <strong>Energi tidak hilang -- energi cuma berubah bentuk atau berpindah.</strong>`
+        : `Ketika benda berada tinggi, sebagian besar energi mekaniknya berupa energi potensial. Saat benda jatuh, energi potensial berkurang dan energi kinetik bertambah sebesar itu juga. Tanpa gesekan, jumlah energi mekanik (Eₘ = Eₚ + Eₖ) <strong>tetap sama</strong> dari awal sampai akhir.`;
+    }
+
+    function revealChallenges() {
+      $('challenge1').style.display = '';
+      $('challenge2').style.display = '';
+      $('challenge3').style.display = '';
+      renderOptions('challenge2Options', ['Tetap', 'Bertambah', 'Berkurang'], (i, btn, c) => onSimpleChoice(i, btn, c, 0, () => '✅ Tepat! Tanpa gesekan, Eₘ tetap konstan sepanjang gerak jatuh -- itulah inti Hukum Kekekalan Energi Mekanik.', () => '💡 Coba jalankan lagi tanpa gesekan dan perhatikan bar Eₘ (emas) -- panjangnya tidak berubah dari awal sampai akhir.'));
+      renderOptions('challenge3Options', ['Hilang', 'Energi termal', 'Energi potensial tambahan', 'Tidak berubah'], (i, btn, c) => onSimpleChoice(i, btn, c, 1, () => '✅ Tepat! Sebagian energi mekanik berubah jadi energi termal akibat gesekan -- bukan hilang.', () => '💡 Belum tepat. Aktifkan gesekan, jalankan lagi, dan perhatikan bar 🔥 Eₜₕ yang muncul.'));
+    }
+
+    function onSimpleChoice(index, btn, container, correctIndex, correctMsgFn, wrongMsgFn) {
+      const feedbackId = container.parentElement.querySelector('.ecl-feedback') || (() => {
+        const div = document.createElement('div');
+        div.className = 'ecl-feedback';
+        container.parentElement.appendChild(div);
+        return div;
+      })();
+      if (container.dataset.answered === '1') return;
+      container.dataset.answered = '1';
+      container.querySelectorAll('.ecl-quiz-option').forEach((b, i) => {
+        b.disabled = true;
+        if (i === correctIndex) b.classList.add('is-correct');
+        else if (i === index) b.classList.add('is-wrong');
+      });
+      const correct = index === correctIndex;
+      feedbackId.classList.add('is-visible');
+      feedbackId.classList.toggle('is-wrong', !correct);
+      feedbackId.textContent = correct ? correctMsgFn() : wrongMsgFn();
+    }
+
+    // ============ TANTANGAN 1: cek Ep ~ 100J ============
+    $('checkChallenge1').addEventListener('click', () => {
+      const currentEp0 = mass * g * height; // Ep saat h maksimum, dengan g SAAT INI (g Bumi diasumsikan sesuai instruksi soal)
+      const gBumiEp0 = mass * 9.8 * height;
+      const fb = $('challenge1Feedback');
+      fb.classList.add('is-visible');
+      const diff = Math.abs(gBumiEp0 - 100);
+      const ok = diff <= 10;
+      fb.classList.toggle('is-wrong', !ok);
+      fb.innerHTML = ok
+        ? `✅ <strong>Tepat!</strong> Dengan m = ${mass} kg dan h = ${height} m, Eₚ = m·g·h ≈ ${gBumiEp0.toFixed(1)} J (g Bumi) -- sudah sangat dekat dengan target 100 J.`
+        : `💡 <strong>Belum pas.</strong> Saat ini Eₚ ≈ ${gBumiEp0.toFixed(1)} J (g Bumi). Coba ubah lagi massa atau ketinggiannya -- ingat rumus Eₚ = m × g × h.`;
+    });
+
+    // ============ RESET ============
+    resetBtn.addEventListener('click', () => {
+      if (animRAF) cancelAnimationFrame(animRAF);
+      running = false;
+      runBtn.disabled = predictChoice === null;
+      refreshStaticView();
+    });
+
+    window.addEventListener('resize', () => { if (!running) drawGraph(); });
+
+    syncParamLabels();
+    refreshStaticView();
+
+    /* =====================================================================
+       EKSPERIMEN 2: LUNCURAN (2 JALUR)
+       ===================================================================== */
+    const rMassSlider = $('rMassSlider'), rMassVal = $('rMassVal');
+    const rHeightSlider = $('rHeightSlider'), rHeightVal = $('rHeightVal');
+    const rFrictionSlider = $('rFrictionSlider'), rFrictionVal = $('rFrictionVal');
+    const rampRunBtn = $('rampRunBtn'), rampResetBtn = $('rampResetBtn');
+    const rampBallA = $('rampBallA'), rampBallB = $('rampBallB');
+    const rampResultA = $('rampResultA'), rampResultB = $('rampResultB');
+
+    let rMass = 2, rHeight = 5, rFrictionRate = 0.3;
+    let rampRunning = false;
+    let rampRAF = null;
+
+    function syncRampLabels() {
+      rMassVal.textContent = `${rMass} kg`;
+      rHeightVal.textContent = `${rHeight} m`;
+      rFrictionVal.textContent = `${rFrictionSlider.value}%`;
+    }
+    rMassSlider.addEventListener('input', () => { rMass = parseFloat(rMassSlider.value); syncRampLabels(); });
+    rHeightSlider.addEventListener('input', () => { rHeight = parseFloat(rHeightSlider.value); syncRampLabels(); });
+    rFrictionSlider.addEventListener('input', () => { rFrictionRate = parseFloat(rFrictionSlider.value) / 100; syncRampLabels(); });
+    syncRampLabels();
+
+    function positionRampBall(el, frac) {
+      // Jalur diagonal 28 derajat dari titik (6%, 8%) sepanjang ~88% lebar track
+      const track = el.parentElement;
+      const w = track.clientWidth, h = track.clientHeight;
+      const x0 = w * 0.06, y0 = h * 0.08;
+      const angle = 28 * Math.PI / 180;
+      const len = w * 0.88 / Math.cos(angle);
+      const x = x0 + Math.cos(angle) * len * frac;
+      const y = y0 + Math.sin(angle) * len * frac;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+    }
+
+    function resetRamp() {
+      if (rampRAF) cancelAnimationFrame(rampRAF);
+      rampRunning = false;
+      rampRunBtn.disabled = false;
+      positionRampBall(rampBallA, 0);
+      positionRampBall(rampBallB, 0);
+      rampResultA.textContent = 'Eₖ akhir: -- J';
+      rampResultB.textContent = 'Eₖ akhir: -- J · Eₜₕ: -- J';
+    }
+
+    rampRunBtn.addEventListener('click', () => {
+      if (rampRunning) return;
+      rampRunning = true;
+      rampRunBtn.disabled = true;
+      const em0r = rMass * 9.8 * rHeight;
+      const duration = 1800; // ms, animasi disamakan biar mudah dibandingkan visual
+      const start = performance.now();
+
+      function step(now) {
+        const frac = Math.min(1, (now - start) / duration);
+        positionRampBall(rampBallA, frac);
+        positionRampBall(rampBallB, frac);
+
+        if (frac >= 1) {
+          const ekA = em0r; // tanpa gesekan, semua Ep jadi Ek
+          const ethB = rFrictionRate * em0r;
+          const ekB = em0r - ethB;
+          rampResultA.innerHTML = `Eₖ akhir: <b>${ekA.toFixed(1)} J</b>`;
+          rampResultB.innerHTML = `Eₖ akhir: <b>${ekB.toFixed(1)} J</b> · Eₜₕ: <b>${ethB.toFixed(1)} J</b>`;
+          rampRunning = false;
+          rampRunBtn.disabled = false;
+        } else {
+          rampRAF = requestAnimationFrame(step);
+        }
+      }
+      rampRAF = requestAnimationFrame(step);
+    });
+
+    rampResetBtn.addEventListener('click', resetRamp);
+    window.addEventListener('load', resetRamp);
+    window.addEventListener('resize', () => { if (!rampRunning) resetRamp(); });
+  </script>
+</body>
+</html>

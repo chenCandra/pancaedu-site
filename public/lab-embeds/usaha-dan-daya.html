@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Usaha dan Daya</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --force-color: #ef4444;
+            --force-glow: rgba(239, 68, 68, 0.4);
+            --dist-color: #a78bfa;
+            --net-color: #facc15;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #facc15;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 12px;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
+        @media (min-width: 900px) { .main-container { grid-template-columns: 360px 1fr; } }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+        .control-label { font-size: 0.875rem; font-weight: 500; color: var(--text-main); }
+
+        .num-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2px 8px;
+        }
+
+        .num-input-wrapper input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 50px;
+            text-align: right;
+            outline: none;
+        }
+
+        .unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .slider-container { display: flex; align-items: center; gap: 10px; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+        .force-theme input[type="range"]::-webkit-slider-thumb { background: var(--force-color); box-shadow: 0 0 10px var(--force-glow); }
+        .dist-theme input[type="range"]::-webkit-slider-thumb { background: var(--dist-color); box-shadow: 0 0 10px rgba(167, 139, 250, 0.4); }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active { transform: scale(0.97); opacity: 0.9; }
+
+        .canvas-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+
+        @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+
+        canvas { display: block; width: 100%; height: 100%; }
+
+        .canvas-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .results-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .result-highlight {
+            background: rgba(250, 204, 21, 0.1);
+            border-left: 4px solid var(--net-color);
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .force-val { font-size: 1.4rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', Courier, monospace; }
+
+        .sub-results { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .sub-result {
+            flex: 1;
+            min-width: 110px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border-left: 3px solid var(--card-border);
+        }
+
+        .sub-result-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+        .sub-result-value { font-size: 0.9rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
+
+        .interaction-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .badge-positif { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.4); }
+        .badge-nol { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #94a3b8; }
+        .badge-negatif { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        .formula-box {
+            background: #090d16;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .math-var { color: #38bdf8; font-weight: bold; }
+        .math-num { color: #f59e0b; }
+
+        .theory-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+            <h1>Laboratorium Maya: Usaha dan Daya</h1>
+        </div>
+        <span class="header-badge">SMA Kelas X</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Panel Parameter
+                </span>
+            </div>
+
+            <div class="control-group force-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="forceSlider">Besar Gaya (F)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="forceNum" min="0" max="100" step="5" value="50">
+                        <span class="unit">N</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="forceSlider" min="0" max="100" step="5" value="50">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="angleSlider">Sudut Gaya (θ)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="angleNum" min="0" max="180" step="5" value="0">
+                        <span class="unit">°</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="angleSlider" min="0" max="180" step="5" value="0">
+                </div>
+            </div>
+
+            <div class="control-group dist-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="distSlider">Jarak Perpindahan (s)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="distNum" min="0" max="20" step="1" value="10">
+                        <span class="unit">m</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="distSlider" min="0" max="20" step="1" value="10">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="timeSlider">Waktu Tempuh (t)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="timeNum" min="0.5" max="20" step="0.5" value="5">
+                        <span class="unit">s</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="timeSlider" min="0.5" max="20" step="0.5" value="5">
+                </div>
+            </div>
+
+            <button class="btn-reset" id="btnReset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                Reset Eksperimen
+            </button>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Visualisasi Interaktif
+                </span>
+                <span id="statusBadge" class="interaction-badge badge-positif">Usaha Positif</span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction">💡 Ubah sudut gaya (θ) sampai 90° -- lihat apa yang terjadi pada usahanya!</div>
+            </div>
+
+            <div class="results-panel">
+                <div class="result-highlight">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Usaha (W)</div>
+                        <div class="force-val" id="workValue">0 J</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Daya (P)</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="powerValue">0 watt</div>
+                    </div>
+                </div>
+
+                <div class="sub-results">
+                    <div class="sub-result">
+                        <div class="sub-result-label">Komponen gaya searah gerak</div>
+                        <div class="sub-result-value" id="componentValue">0 N</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
+                <div class="formula-box" id="formulaBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Ringkasan Usaha dan Daya</div>
+        <span class="math-var">W</span> = F × s × cos θ -- usaha cuma dihitung dari komponen gaya yang SEARAH perpindahan. Kalau θ = 90°, usahanya nol meski ada gaya dan ada perpindahan.
+        <span class="math-var">P</span> = W / t -- daya mengukur seberapa CEPAT usaha itu dilakukan, bukan seberapa besar usahanya.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const forceSlider = document.getElementById('forceSlider');
+        const forceNum = document.getElementById('forceNum');
+        const angleSlider = document.getElementById('angleSlider');
+        const angleNum = document.getElementById('angleNum');
+        const distSlider = document.getElementById('distSlider');
+        const distNum = document.getElementById('distNum');
+        const timeSlider = document.getElementById('timeSlider');
+        const timeNum = document.getElementById('timeNum');
+        const btnReset = document.getElementById('btnReset');
+
+        const workValueEl = document.getElementById('workValue');
+        const powerValueEl = document.getElementById('powerValue');
+        const componentValueEl = document.getElementById('componentValue');
+        const formulaBoxEl = document.getElementById('formulaBox');
+        const statusBadgeEl = document.getElementById('statusBadge');
+
+        let force = 50, angle = 0, dist = 10, time = 5;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            render();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function syncInputs(source) {
+            if (source === 'forceSlider') forceNum.value = forceSlider.value;
+            if (source === 'forceNum') forceSlider.value = forceNum.value;
+            if (source === 'angleSlider') angleNum.value = angleSlider.value;
+            if (source === 'angleNum') angleSlider.value = angleNum.value;
+            if (source === 'distSlider') distNum.value = distSlider.value;
+            if (source === 'distNum') distSlider.value = distNum.value;
+            if (source === 'timeSlider') timeNum.value = timeSlider.value;
+            if (source === 'timeNum') timeSlider.value = timeNum.value;
+
+            force = parseFloat(forceNum.value) || 0;
+            angle = parseFloat(angleNum.value) || 0;
+            dist = parseFloat(distNum.value) || 0;
+            time = parseFloat(timeNum.value) || 0.5;
+
+            calculateAndRender();
+        }
+
+        [forceSlider, forceNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [angleSlider, angleNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [distSlider, distNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [timeSlider, timeNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+
+        btnReset.addEventListener('click', () => {
+            forceSlider.value = 50; forceNum.value = 50;
+            angleSlider.value = 0; angleNum.value = 0;
+            distSlider.value = 10; distNum.value = 10;
+            timeSlider.value = 5; timeNum.value = 5;
+            syncInputs();
+        });
+
+        function updateResults() {
+            const rad = (angle * Math.PI) / 180;
+            const component = force * Math.cos(rad);
+            const work = component * dist;
+            const power = time > 0 ? work / time : 0;
+
+            workValueEl.textContent = work.toFixed(1) + ' J';
+            powerValueEl.textContent = power.toFixed(1) + ' watt';
+            componentValueEl.textContent = component.toFixed(1) + ' N';
+
+            if (Math.abs(work) < 0.5) {
+                statusBadgeEl.textContent = 'Usaha Nol';
+                statusBadgeEl.className = 'interaction-badge badge-nol';
+            } else if (work > 0) {
+                statusBadgeEl.textContent = 'Usaha Positif';
+                statusBadgeEl.className = 'interaction-badge badge-positif';
+            } else {
+                statusBadgeEl.textContent = 'Usaha Negatif';
+                statusBadgeEl.className = 'interaction-badge badge-negatif';
+            }
+
+            let formula = `<span class="math-var">W</span> = F × s × cos θ = ${force} × ${dist} × cos(${angle}°) = ${force} × ${dist} × ${Math.cos(rad).toFixed(2)} = <span class="math-num">${work.toFixed(1)} J</span>`;
+            formula += `<br><span class="math-var">P</span> = W / t = ${work.toFixed(1)} / ${time} = <span class="math-num">${power.toFixed(1)} watt</span>`;
+            formulaBoxEl.innerHTML = formula;
+
+            return { work, power, component, rad };
+        }
+
+        function drawArrow(fromX, fromY, toX, toY, color, lineWidth, label) {
+            const dx = toX - fromX, dy = toY - fromY;
+            const len = Math.hypot(dx, dy);
+            if (len < 3) return;
+            const angleRad = Math.atan2(dy, dx);
+            const headLen = 8;
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(angleRad - Math.PI / 6), toY - headLen * Math.sin(angleRad - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(angleRad + Math.PI / 6), toY - headLen * Math.sin(angleRad + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+            if (label) {
+                ctx.font = 'bold 12px system-ui';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, (fromX + toX) / 2, Math.min(fromY, toY) - 10);
+            }
+            ctx.restore();
+        }
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, width, height);
+
+            const groundY = height * 0.7;
+            const blockSize = Math.max(32, Math.min(56, width / 9));
+            const blockX = width * 0.28;
+            const blockY = groundY - blockSize;
+            const blockCx = blockX + blockSize / 2;
+            const blockCy = blockY + blockSize / 2;
+
+            // Lintasan perpindahan (garis putus-putus)
+            ctx.save();
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.5)';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(blockX + blockSize, groundY + 14);
+            ctx.lineTo(width * 0.85, groundY + 14);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#a78bfa';
+            ctx.font = '11px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText(`s = ${dist} m`, (blockX + blockSize + width * 0.85) / 2, groundY + 30);
+            ctx.restore();
+
+            // Ground
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(20, groundY);
+            ctx.lineTo(width - 20, groundY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Block
+            ctx.save();
+            const grad = ctx.createLinearGradient(blockX, blockY, blockX, blockY + blockSize);
+            grad.addColorStop(0, '#475569');
+            grad.addColorStop(1, '#1e293b');
+            ctx.fillStyle = grad;
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(blockX, blockY, blockSize, blockSize, 8);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            const { rad } = updateResults();
+
+            // Gaya F pada sudut theta (0 derajat = horizontal ke kanan, sudut diukur ke atas)
+            const arrowLen = Math.min(width * 0.22, force * 1.6);
+            const fx = blockCx + arrowLen * Math.cos(-rad);
+            const fy = blockCy + arrowLen * Math.sin(-rad);
+            drawArrow(blockCx, blockCy, fx, fy, '#ef4444', 3.5, `F = ${force} N`);
+
+            // Komponen horizontal (searah gerak) -- putus-putus kuning
+            const compLen = arrowLen * Math.cos(rad);
+            if (Math.abs(compLen) > 3) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(250, 204, 21, 0.7)';
+                ctx.setLineDash([3, 3]);
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(blockCx, blockCy);
+                ctx.lineTo(blockCx + compLen, blockCy);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+            }
+        }
+
+        function calculateAndRender() {
+            render();
+        }
+
+        window.onload = () => {
+            resizeCanvas();
+            syncInputs();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Energy Conservation Lab"
+  description="Eksplorasi Hukum Kekekalan Energi — jatuhkan benda dari ketinggian tertentu (atau bandingkan dua jalur luncuran), amati energi potensial dan kinetik saling bertukar, dan buktikan sendiri bahwa energi tidak pernah hilang."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Energi · Kelas X</p>
+    <h1>Energy Conservation Lab</h1>
+    <p class="page-lede">
+      Lanjutan dari <a href="/lab-maya/energy-transformation-lab">Energy Transformation Lab</a> —
+      kalau energi bisa berubah bentuk, apakah energi itu hilang? Prediksi dulu, jatuhkan bendanya,
+      lalu buktikan sendiri lewat bar energi dan grafik real-time. Coba juga nyalakan gesekan, dan
+      bandingkan dua jalur luncuran berdampingan.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="ecl-frame-wrap card">
+      <iframe
+        data-ecl-frame
+        src="/lab-embeds/energy-conservation-lab.html"
+        title="Energy Conservation Lab"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa gelapnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .page-lede a {
+    color: var(--accent);
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .ecl-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ecl-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 1100px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
+  // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
+  // scrollbar ganda atau ruang kosong di bawah simulasi.
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-ecl-frame]');
+
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

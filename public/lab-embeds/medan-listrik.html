@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Medan Listrik</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --pos-charge: #ef4444;
+            --pos-glow: rgba(239, 68, 68, 0.4);
+            --neg-charge: #3b82f6;
+            --neg-glow: rgba(59, 130, 246, 0.4);
+            --test-point: #facc15;
+            --test-glow: rgba(250, 204, 21, 0.45);
+            --e1-color: #fb923c;
+            --e2-color: #a78bfa;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #facc15;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 12px;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            flex: 1;
+        }
+
+        @media (min-width: 900px) {
+            .main-container {
+                grid-template-columns: 360px 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: opacity 0.2s ease;
+        }
+
+        .control-group.is-disabled {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .control-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .num-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2px 8px;
+        }
+
+        .num-input-wrapper input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 50px;
+            text-align: right;
+            outline: none;
+        }
+
+        .unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .q1-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--pos-charge);
+            box-shadow: 0 0 10px var(--pos-glow);
+        }
+
+        .q2-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--neg-charge);
+            box-shadow: 0 0 10px var(--neg-glow);
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px 4px;
+        }
+
+        .toggle-row label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .canvas-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        @media (max-width: 420px) {
+            .canvas-wrapper {
+                height: 260px;
+            }
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .canvas-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .results-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .result-highlight {
+            background: rgba(250, 204, 21, 0.1);
+            border-left: 4px solid var(--test-point);
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .force-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-highlight);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .sub-results {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sub-result {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border-left: 3px solid var(--card-border);
+        }
+
+        .sub-result.e1 { border-left-color: var(--e1-color); }
+        .sub-result.e2 { border-left-color: var(--e2-color); }
+
+        .sub-result-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .sub-result-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .interaction-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-normal {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .badge-null {
+            background: rgba(250, 204, 21, 0.18);
+            color: var(--text-highlight);
+            border: 1px solid var(--test-point);
+            animation: pulse-null 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-null {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .formula-box {
+            background: #090d16;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .math-var {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .math-num {
+            color: #f59e0b;
+        }
+
+        .theory-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .theory-title {
+            color: var(--text-main);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <h1>Laboratorium Maya: Medan Listrik</h1>
+        </div>
+        <span class="header-badge">SMA Kelas XII</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Panel Parameter
+                </span>
+            </div>
+
+            <!-- Muatan Q1 -->
+            <div class="control-group q1-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="q1Slider">Muatan Sumber (Q₁)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="q1Num" min="-10" max="10" step="1" value="4">
+                        <span class="unit">μC</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q1Slider" min="-10" max="10" step="1" value="4">
+                </div>
+            </div>
+
+            <!-- Toggle Q2 -->
+            <div class="toggle-row">
+                <label for="chkQ2">
+                    <input type="checkbox" id="chkQ2" checked style="accent-color: var(--neg-charge);">
+                    Aktifkan muatan kedua (Q₂)
+                </label>
+            </div>
+
+            <!-- Muatan Q2 -->
+            <div class="control-group q2-theme" id="q2Group">
+                <div class="control-label-row">
+                    <label class="control-label" for="q2Slider">Muatan Sumber (Q₂)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="q2Num" min="-10" max="10" step="1" value="-1">
+                        <span class="unit">μC</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q2Slider" min="-10" max="10" step="1" value="-1">
+                </div>
+            </div>
+
+            <!-- Jarak r -->
+            <div class="control-group" id="rGroup">
+                <div class="control-label-row">
+                    <label class="control-label" for="rSlider">Jarak Q₁–Q₂ (r)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="rNum" min="4" max="24" step="1" value="12">
+                        <span class="unit">cm</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="rSlider" min="4" max="24" step="1" value="12">
+                </div>
+            </div>
+
+            <div class="toggle-row">
+                <label for="chkFieldGrid">
+                    <input type="checkbox" id="chkFieldGrid" checked style="accent-color: var(--accent-cyan);">
+                    Tampilkan peta arah medan
+                </label>
+            </div>
+
+            <button class="btn-reset" id="btnReset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                Reset Eksperimen
+            </button>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Visualisasi Interaktif
+                </span>
+                <span id="statusBadge" class="interaction-badge badge-normal">Menjelajah</span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction">💡 Geser bulatan emas (titik uji) buat menjelajah medan listrik di sekitarnya -- coba cari titik di mana medannya nol!</div>
+            </div>
+
+            <div class="results-panel">
+                <div class="result-highlight">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Medan Listrik Total di Titik Uji (E)</div>
+                        <div class="force-val" id="eValue">0 N/C</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Notasi Ilmiah</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="eSciValue">0 N/C</div>
+                    </div>
+                </div>
+
+                <div class="sub-results">
+                    <div class="sub-result e1">
+                        <div class="sub-result-label">E dari Q₁</div>
+                        <div class="sub-result-value" id="e1Value">0 N/C</div>
+                    </div>
+                    <div class="sub-result e2" id="e2SubResult">
+                        <div class="sub-result-label">E dari Q₂</div>
+                        <div class="sub-result-value" id="e2Value">0 N/C</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
+                <div class="formula-box" id="formulaBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Ringkasan Konsep Medan Listrik</div>
+        Tiap muatan sumber (<span style="color: var(--pos-charge);">Q₁</span>, <span style="color: var(--neg-charge);">Q₂</span>) menciptakan medan listrik di sekitarnya, <span class="math-var">E = kQ/r²</span>, arahnya menjauh dari muatan positif dan menuju muatan negatif.
+        Kalau ada lebih dari satu muatan sumber, medan totalnya adalah <strong>penjumlahan vektor</strong> (superposisi) dari tiap medan -- itu sebabnya E total di titik uji (<span style="color: var(--text-highlight);">bulatan emas</span>) bukan sekadar E₁ + E₂ biasa, kecuali kalau arah keduanya persis sejajar.
+    </div>
+
+    <script>
+        const k = 8.99e9; // Konstanta Coulomb (N*m^2/C^2)
+        const CANVAS_CM_SPAN = 30; // lebar kanvas dianggap mewakili 30 cm, TETAP (tidak ikut berubah pas r digeser) -- biar posisi titik uji stabil dipetakan ke koordinat fisik
+
+        const q1Slider = document.getElementById('q1Slider');
+        const q1Num = document.getElementById('q1Num');
+        const q2Slider = document.getElementById('q2Slider');
+        const q2Num = document.getElementById('q2Num');
+        const rSlider = document.getElementById('rSlider');
+        const rNum = document.getElementById('rNum');
+        const chkQ2 = document.getElementById('chkQ2');
+        const q2Group = document.getElementById('q2Group');
+        const rGroup = document.getElementById('rGroup');
+        const chkFieldGrid = document.getElementById('chkFieldGrid');
+        const btnReset = document.getElementById('btnReset');
+
+        const eValueEl = document.getElementById('eValue');
+        const eSciValueEl = document.getElementById('eSciValue');
+        const e1ValueEl = document.getElementById('e1Value');
+        const e2ValueEl = document.getElementById('e2Value');
+        const e2SubResultEl = document.getElementById('e2SubResult');
+        const formulaBoxEl = document.getElementById('formulaBox');
+        const statusBadgeEl = document.getElementById('statusBadge');
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let q1 = 4, q2 = -1, r = 12;
+        let q2Enabled = true;
+        let showFieldGrid = true;
+
+        let chargePos = { q1: { x: 0, y: 0 }, q2: { x: 0, y: 0 } };
+        let chargeRadius = 20;
+        let pxPerCm = 10;
+
+        // Titik uji -- posisinya dalam FRAKSI lebar/tinggi kanvas (0..1),
+        // bukan px absolut, supaya tetap di posisi relatif yang sama kalau
+        // kanvas di-resize (mis. rotasi HP).
+        let testPointFrac = { x: 0.5, y: 0.28 };
+        let isDraggingTest = false;
+
+        function computeChargeRadius(width) {
+            return Math.max(12, Math.min(22, width / 18));
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            render();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function syncInputs(source) {
+            if (source === 'q1Slider') q1Num.value = q1Slider.value;
+            if (source === 'q1Num') q1Slider.value = q1Num.value;
+            if (source === 'q2Slider') q2Num.value = q2Slider.value;
+            if (source === 'q2Num') q2Slider.value = q2Num.value;
+            if (source === 'rSlider') rNum.value = rSlider.value;
+            if (source === 'rNum') rSlider.value = rNum.value;
+
+            q1 = parseFloat(q1Num.value) || 0;
+            q2 = parseFloat(q2Num.value) || 0;
+            r = parseFloat(rNum.value) || 1;
+            showFieldGrid = chkFieldGrid.checked;
+
+            calculateAndRender();
+        }
+
+        [q1Slider, q1Num].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [q2Slider, q2Num].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [rSlider, rNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        chkFieldGrid.addEventListener('change', () => syncInputs());
+
+        chkQ2.addEventListener('change', () => {
+            q2Enabled = chkQ2.checked;
+            q2Group.classList.toggle('is-disabled', !q2Enabled);
+            rGroup.classList.toggle('is-disabled', !q2Enabled);
+            e2SubResultEl.style.display = q2Enabled ? '' : 'none';
+            calculateAndRender();
+        });
+
+        btnReset.addEventListener('click', () => {
+            q1Slider.value = 4; q1Num.value = 4;
+            q2Slider.value = -1; q2Num.value = -1;
+            rSlider.value = 12; rNum.value = 12;
+            chkQ2.checked = true;
+            chkFieldGrid.checked = true;
+            q2Group.classList.remove('is-disabled');
+            rGroup.classList.remove('is-disabled');
+            e2SubResultEl.style.display = '';
+            testPointFrac = { x: 0.5, y: 0.28 };
+            q2Enabled = true;
+            syncInputs();
+        });
+
+        // Medan (vektor) di satu titik kanvas (px), akibat semua muatan
+        // sumber yang aktif -- dipakai bareng buat titik uji & peta arah.
+        function fieldAtPx(px, py) {
+            let ex = 0, ey = 0;
+            const sources = [{ Q: q1, pos: chargePos.q1 }];
+            if (q2Enabled) sources.push({ Q: q2, pos: chargePos.q2 });
+
+            for (const s of sources) {
+                if (s.Q === 0) continue;
+                const dx = px - s.pos.x;
+                const dy = py - s.pos.y;
+                const distPx = Math.hypot(dx, dy);
+                if (distPx < chargeRadius * 0.6) continue; // terlalu dekat muatan, hindari nilai meledak
+                const distM = (distPx / pxPerCm) / 100;
+                const mag = (k * Math.abs(s.Q * 1e-6)) / (distM * distM);
+                const sign = s.Q >= 0 ? 1 : -1;
+                ex += sign * mag * (dx / distPx);
+                ey += sign * mag * (dy / distPx);
+            }
+            return { ex, ey, mag: Math.hypot(ex, ey) };
+        }
+
+        function scalarFieldFrom(Q, distPx) {
+            if (Q === 0 || distPx < chargeRadius * 0.6) return 0;
+            const distM = (distPx / pxPerCm) / 100;
+            return (k * Math.abs(Q * 1e-6)) / (distM * distM);
+        }
+
+        function formatScientific(num, unit) {
+            if (num === 0) return `0 ${unit}`;
+            const exp = Math.floor(Math.log10(num));
+            const mantissa = (num / Math.pow(10, exp)).toFixed(2);
+            const superscripts = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+            const expStr = exp.toString().split('').map(c => superscripts[c] || c).join('');
+            return `${mantissa} × 10${expStr} ${unit}`;
+        }
+
+        function formatBig(num, unit) {
+            if (num >= 1000 || (num > 0 && num < 0.01)) return num.toExponential(2) + ' ' + unit;
+            return num.toFixed(2) + ' ' + unit;
+        }
+
+        function updateResults() {
+            const testPx = { x: testPointFrac.x * canvas.parentElement.clientWidth, y: testPointFrac.y * canvas.parentElement.clientHeight };
+            const r1px = Math.hypot(testPx.x - chargePos.q1.x, testPx.y - chargePos.q1.y);
+            const E1 = scalarFieldFrom(q1, r1px);
+            const r1m = ((r1px / pxPerCm) / 100).toFixed(3);
+
+            const field = fieldAtPx(testPx.x, testPx.y);
+            const Etotal = field.mag;
+
+            e1ValueEl.textContent = formatBig(E1, 'N/C');
+
+            let E2 = 0, r2m = '0';
+            if (q2Enabled) {
+                const r2px = Math.hypot(testPx.x - chargePos.q2.x, testPx.y - chargePos.q2.y);
+                E2 = scalarFieldFrom(q2, r2px);
+                r2m = ((r2px / pxPerCm) / 100).toFixed(3);
+                e2ValueEl.textContent = formatBig(E2, 'N/C');
+            }
+
+            eValueEl.textContent = formatBig(Etotal, 'N/C');
+            eSciValueEl.textContent = formatScientific(Etotal, 'N/C');
+
+            // "Titik nol": E total jauh lebih kecil dari komponen terbesarnya
+            // (kalau cuma satu muatan aktif, E total tidak akan pernah nol --
+            // badge ini cuma relevan pas Q2 aktif & posisinya pas berlawanan).
+            const maxComponent = Math.max(E1, E2);
+            const isNull = q2Enabled && maxComponent > 0 && Etotal < maxComponent * 0.03;
+            if (isNull) {
+                statusBadgeEl.textContent = '🎯 Titik Nol Ditemukan!';
+                statusBadgeEl.className = 'interaction-badge badge-null';
+            } else {
+                statusBadgeEl.textContent = 'Menjelajah';
+                statusBadgeEl.className = 'interaction-badge badge-normal';
+            }
+
+            let formula = `<span class="math-var">E₁</span> = k|Q₁|/r₁² = (8.99×10⁹)(${Math.abs(q1)}×10⁻⁶)/(${r1m})² = <span class="math-num">${formatBig(E1, 'N/C')}</span>`;
+            if (q2Enabled) {
+                formula += `<br><span class="math-var">E₂</span> = k|Q₂|/r₂² = (8.99×10⁹)(${Math.abs(q2)}×10⁻⁶)/(${r2m})² = <span class="math-num">${formatBig(E2, 'N/C')}</span>`;
+                formula += `<br><span class="math-var">E_total</span> = |E₁ + E₂| (jumlah vektor, bukan skalar) = <span class="math-num">${formatBig(Etotal, 'N/C')}</span>`;
+            } else {
+                formula += `<br><span class="math-var">E_total</span> = E₁ (cuma satu muatan sumber aktif) = <span class="math-num">${formatBig(Etotal, 'N/C')}</span>`;
+            }
+            formulaBoxEl.innerHTML = formula;
+
+            return { testPx, field };
+        }
+
+        function drawSphere(x, y, charge, label) {
+            ctx.save();
+            let mainColor, glowColor;
+            if (charge > 0) { mainColor = '#ef4444'; glowColor = 'rgba(239, 68, 68, 0.4)'; }
+            else if (charge < 0) { mainColor = '#3b82f6'; glowColor = 'rgba(59, 130, 246, 0.4)'; }
+            else { mainColor = '#94a3b8'; glowColor = 'rgba(148, 163, 184, 0.2)'; }
+
+            ctx.beginPath();
+            ctx.arc(x, y, chargeRadius + 8, 0, Math.PI * 2);
+            ctx.fillStyle = glowColor;
+            ctx.fill();
+
+            const grad = ctx.createRadialGradient(x - chargeRadius * 0.3, y - chargeRadius * 0.3, chargeRadius * 0.1, x, y, chargeRadius);
+            if (charge > 0) { grad.addColorStop(0, '#fca5a5'); grad.addColorStop(0.5, '#ef4444'); grad.addColorStop(1, '#991b1b'); }
+            else { grad.addColorStop(0, '#93c5fd'); grad.addColorStop(0.5, '#3b82f6'); grad.addColorStop(1, '#1e3a8a'); }
+
+            ctx.beginPath();
+            ctx.arc(x, y, chargeRadius, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.round(chargeRadius * 0.85)}px system-ui`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(charge > 0 ? '+' : '−', x, y);
+
+            ctx.font = `600 ${Math.round(chargeRadius * 0.5)}px system-ui`;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillText(`${label} = ${charge > 0 ? '+' : ''}${charge} μC`, x, y - chargeRadius - 12);
+            ctx.restore();
+        }
+
+        function drawArrow(fromX, fromY, dirX, dirY, len, color, lineWidth) {
+            const mag = Math.hypot(dirX, dirY);
+            if (mag < 1e-9 || len < 2) return;
+            const ux = dirX / mag, uy = dirY / mag;
+            const toX = fromX + ux * len, toY = fromY + uy * len;
+            const headLen = Math.max(5, lineWidth * 2.2);
+            const angle = Math.atan2(uy, ux);
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawFieldGrid(width, height) {
+            if (!showFieldGrid) return;
+            const cols = 8, rows = 5;
+            const arrowLen = Math.max(10, Math.min(16, width / 45));
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const gx = ((i + 0.5) / cols) * width;
+                    const gy = ((j + 0.5) / rows) * height;
+                    // Lewati grid yang terlalu dekat sebuah muatan (arahnya
+                    // gampang liar/dominan di situ, bikin visual berantakan).
+                    const d1 = Math.hypot(gx - chargePos.q1.x, gy - chargePos.q1.y);
+                    const d2 = q2Enabled ? Math.hypot(gx - chargePos.q2.x, gy - chargePos.q2.y) : Infinity;
+                    if (d1 < chargeRadius * 1.8 || d2 < chargeRadius * 1.8) continue;
+
+                    const f = fieldAtPx(gx, gy);
+                    if (f.mag < 1e-6) continue;
+                    drawArrow(gx - (f.ex / f.mag) * arrowLen * 0.5, gy - (f.ey / f.mag) * arrowLen * 0.5, f.ex, f.ey, arrowLen, 'rgba(148, 163, 184, 0.45)', 1.3);
+                }
+            }
+        }
+
+        function drawTestPoint(x, y, field) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x, y, 11, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(250, 204, 21, 0.25)';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#facc15';
+            ctx.shadowColor = 'rgba(250, 204, 21, 0.6)';
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+
+            // Vektor E1 & E2 (tipis) + resultan (tebal, emas)
+            const maxLen = 70, minLen = 16;
+            const scaleLen = (mag) => Math.min(maxLen, minLen + Math.log10(1 + mag) * 8);
+
+            const r1px = Math.hypot(x - chargePos.q1.x, y - chargePos.q1.y);
+            const dx1 = x - chargePos.q1.x, dy1 = y - chargePos.q1.y;
+            const dirX1 = q1 >= 0 ? dx1 : -dx1;
+            const dirY1 = q1 >= 0 ? dy1 : -dy1;
+            const E1 = scalarFieldFrom(q1, r1px);
+            if (E1 > 0) drawArrow(x, y, dirX1, dirY1, scaleLen(E1), '#fb923c', 2);
+
+            if (q2Enabled) {
+                const r2px = Math.hypot(x - chargePos.q2.x, y - chargePos.q2.y);
+                const dx2 = x - chargePos.q2.x, dy2 = y - chargePos.q2.y;
+                const dirX2 = q2 >= 0 ? dx2 : -dx2;
+                const dirY2 = q2 >= 0 ? dy2 : -dy2;
+                const E2 = scalarFieldFrom(q2, r2px);
+                if (E2 > 0) drawArrow(x, y, dirX2, dirY2, scaleLen(E2), '#a78bfa', 2);
+            }
+
+            if (field.mag > 0) {
+                drawArrow(x, y, field.ex, field.ey, scaleLen(field.mag), '#facc15', 3.2);
+            }
+        }
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, width, height);
+
+            chargeRadius = computeChargeRadius(width);
+            pxPerCm = width / CANVAS_CM_SPAN;
+
+            const centerX = width / 2, centerY = height / 2;
+            const distPx = r * pxPerCm;
+            chargePos.q1 = { x: centerX - (q2Enabled ? distPx / 2 : 0), y: centerY };
+            chargePos.q2 = { x: centerX + distPx / 2, y: centerY };
+
+            drawFieldGrid(width, height);
+
+            const { testPx, field } = updateResults();
+
+            drawSphere(chargePos.q1.x, chargePos.q1.y, q1, 'Q₁');
+            if (q2Enabled) drawSphere(chargePos.q2.x, chargePos.q2.y, q2, 'Q₂');
+
+            drawTestPoint(testPx.x, testPx.y, field);
+        }
+
+        function calculateAndRender() {
+            render();
+        }
+
+        function getCanvasCoords(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function handlePointerDown(evt) {
+            const pos = getCanvasCoords(evt);
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            const testPx = { x: testPointFrac.x * width, y: testPointFrac.y * height };
+            const dist = Math.hypot(pos.x - testPx.x, pos.y - testPx.y);
+            if (dist < 22) {
+                isDraggingTest = true;
+            }
+        }
+
+        function handlePointerMove(evt) {
+            if (!isDraggingTest) return;
+            evt.preventDefault();
+            const pos = getCanvasCoords(evt);
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            testPointFrac = {
+                x: Math.max(0.02, Math.min(0.98, pos.x / width)),
+                y: Math.max(0.04, Math.min(0.96, pos.y / height)),
+            };
+            render();
+        }
+
+        function handlePointerUp() {
+            isDraggingTest = false;
+        }
+
+        canvas.addEventListener('mousedown', handlePointerDown);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+        canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+        window.addEventListener('touchmove', handlePointerMove, { passive: false });
+        window.addEventListener('touchend', handlePointerUp);
+
+        window.onload = () => {
+            resizeCanvas();
+            syncInputs();
+        };
+    </script>
+</body>
+</html>

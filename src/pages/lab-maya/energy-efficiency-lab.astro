@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Energy Efficiency Lab"
+  description="Eksplorasi efisiensi penggunaan energi — atur ruangan virtual (panas dari luar, jendela, pintu, insulasi, tirai), pilih teknologi pendingin (kipas, AC, ventilasi), dan cari strategi yang mencapai suhu nyaman dengan energi seminimal mungkin."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Energi · Kelas X</p>
+    <h1>Energy Efficiency Lab</h1>
+    <p class="page-lede">
+      Bukan cuma soal berapa banyak energi yang terpakai — tapi apakah hasil yang sama bisa dicapai
+      dengan energi lebih sedikit. Atur ruangan virtual dan teknologi pendinginnya, coba turunkan
+      suhu dari 30°C ke 24°C senemat mungkin, lalu bandingkan strategimu dengan strategi lain.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="eel-frame-wrap card">
+      <iframe
+        data-eel-frame
+        src="/lab-embeds/energy-efficiency-lab.html"
+        title="Energy Efficiency Lab"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa visualnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .eel-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .eel-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 1600px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
+  // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
+  // scrollbar ganda atau ruang kosong di bawah simulasi.
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-eel-frame]');
+
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

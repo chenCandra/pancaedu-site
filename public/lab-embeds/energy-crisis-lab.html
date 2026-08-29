@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Energy Crisis Lab</title>
+<style>
+  :root {
+    --bg: #060a14; --panel: #0d1526; --panel-2: #101a30; --border: #1c2a44; --border-soft: #16223a;
+    --ink: #e8edf7; --ink-muted: #93a3c2; --ink-faint: #5b6b8a;
+    --cyan: #22d3ee; --amber: #fbbf24; --green: #34d399; --red: #f87171; --violet: #a78bfa; --sky: #0ea5e9; --orange: #fb923c; --slate: #94a3b8;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: radial-gradient(circle at 20% 0%, #0b1224 0%, var(--bg) 60%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  .ecl-header { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .ecl-header-title { display: flex; align-items: center; gap: 10px; }
+  .ecl-header h1 { font-size: 1.05rem; font-weight: 800; background: linear-gradient(90deg, var(--cyan), var(--amber)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .ecl-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .ecl-brand-chip { font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: rgba(34,211,238,0.08); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+
+  .ecl-intro-box { background: var(--panel); border-left: 3px solid var(--cyan); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 0.83rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .ecl-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-card); }
+
+  .ecl-quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cyan); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .ecl-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; margin-bottom: 10px; }
+  .ecl-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .ecl-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .ecl-quiz-option { background: var(--panel-2); border: 1px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 0.82rem; text-align: left; display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease; }
+  .ecl-quiz-option:hover:not(:disabled) { border-color: var(--cyan); background: rgba(34,211,238,0.06); }
+  .ecl-quiz-option .letter { font-weight: 800; color: var(--cyan); flex-shrink: 0; }
+  .ecl-quiz-option:disabled { cursor: default; opacity: 0.65; }
+  .ecl-quiz-option.is-chosen { border-color: var(--cyan); background: rgba(34,211,238,0.1); }
+  .ecl-quiz-option.is-correct { border-color: var(--green); background: rgba(52,211,153,0.12); }
+  .ecl-quiz-option.is-wrong { border-color: var(--red); background: rgba(248,113,113,0.1); }
+
+  .ecl-feedback { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--green); background: rgba(52,211,153,0.08); display: none; margin-top: 8px; }
+  .ecl-feedback.is-visible { display: block; }
+  .ecl-feedback.is-wrong { border-left-color: var(--red); background: rgba(248,113,113,0.08); }
+  .ecl-locked-note { font-size: 0.78rem; color: var(--ink-faint); font-style: italic; }
+
+  h2.ecl-title { font-size: 1.02rem; font-weight: 800; margin-bottom: 8px; color: var(--ink); }
+
+  /* ===== City Visual ===== */
+  .ecl-sky-strip { border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; transition: background 0.6s ease; margin-bottom: 10px; }
+  .ecl-sky-time { font-family: 'Courier New', monospace; font-weight: 800; font-size: 0.95rem; }
+  .ecl-sky-icon { font-size: 1.3rem; }
+
+  .ecl-buildings-row { display: flex; justify-content: space-around; gap: 6px; padding: 10px 4px; flex-wrap: wrap; }
+  .ecl-building { display: flex; flex-direction: column; align-items: center; gap: 3px; transition: opacity 0.5s ease; }
+  .ecl-building .icon { font-size: 1.5rem; }
+  .ecl-building .label { font-size: 0.6rem; color: var(--ink-faint); font-weight: 700; }
+
+  .ecl-plants-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 8px; margin-top: 10px; }
+  .ecl-plant { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ecl-plant .icon { font-size: 1.25rem; }
+  .ecl-plant .label { font-size: 0.62rem; font-weight: 800; color: var(--ink-muted); }
+  .ecl-plant .out { font-size: 0.62rem; font-family: 'Courier New', monospace; font-weight: 700; }
+  .ecl-plant-bar { width: 100%; height: 5px; background: var(--border-soft); border-radius: 999px; overflow: hidden; margin-top: 2px; }
+  .ecl-plant-bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+
+  .ecl-status-banner { font-size: 0.8rem; font-weight: 700; padding: 8px 12px; border-radius: var(--radius-sm); margin-top: 10px; display: none; align-items: center; gap: 6px; }
+  .ecl-status-banner.is-visible { display: flex; }
+  .ecl-status-banner.shortage { background: rgba(248,113,113,0.12); border: 1px solid var(--red); color: #fecaca; }
+  .ecl-status-banner.overcap { background: rgba(251,191,36,0.12); border: 1px solid var(--amber); color: #fde68a; }
+  .ecl-status-banner.balanced { background: rgba(52,211,153,0.12); border: 1px solid var(--green); color: #a7f3d0; }
+
+  /* ===== Params ===== */
+  .ecl-param-grid { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 10px; }
+  .ecl-param-row { display: flex; flex-direction: column; gap: 6px; }
+  .ecl-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .ecl-param-label-row .lbl { display: flex; align-items: center; gap: 6px; }
+  .ecl-param-value { font-family: 'Courier New', monospace; font-weight: 800; }
+  input[type="range"] { width: 100%; }
+  .ecl-scenario-select { width: 100%; background: var(--panel-2); border: 1px solid var(--border); color: var(--ink); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700; margin-top: 6px; }
+
+  .ecl-result-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .ecl-result-chip { flex: 1; min-width: 110px; background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .ecl-result-chip .k { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); display: flex; align-items: center; gap: 4px; }
+  .ecl-result-chip .v { font-size: 1.0rem; font-weight: 800; font-family: 'Courier New', monospace; margin-top: 2px; }
+  .ecl-band-tag { font-size: 0.62rem; font-weight: 800; padding: 1px 7px; border-radius: 999px; margin-left: 4px; display: inline-block; }
+  .ecl-band-tag.low { color: var(--green); border: 1px solid var(--green); }
+  .ecl-band-tag.medium { color: var(--amber); border: 1px solid var(--amber); }
+  .ecl-band-tag.high { color: var(--red); border: 1px solid var(--red); }
+
+  .ecl-graph-wrap { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; margin-top: 10px; }
+  .ecl-graph-wrap canvas { display: block; width: 100%; height: 140px; }
+  .ecl-graph-legend { display: flex; gap: 12px; font-size: 0.68rem; color: var(--ink-faint); padding: 4px 4px 0; }
+  .ecl-graph-legend span { display: flex; align-items: center; gap: 4px; }
+  .ecl-graph-legend .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .ecl-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .ecl-btn-primary { background: linear-gradient(90deg, var(--cyan), var(--sky)); border: none; color: #04141d; font-weight: 800; font-size: 0.85rem; padding: 10px 22px; border-radius: 999px; }
+  .ecl-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .ecl-btn-secondary { background: var(--panel-2); border: 1px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 10px 18px; border-radius: 999px; }
+  .ecl-btn-secondary:hover { color: var(--ink); border-color: var(--cyan); }
+
+  .ecl-note { font-size: 0.72rem; color: var(--ink-faint); background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; line-height: 1.55; margin-top: 8px; }
+
+  .ecl-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ecl-tab { background: var(--panel); border: 1px solid var(--border); color: var(--ink-muted); font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 999px; }
+  .ecl-tab.is-active { color: #04141d; background: linear-gradient(90deg, var(--cyan), var(--amber)); border-color: transparent; }
+  .ecl-panel { display: none; flex-direction: column; gap: 14px; }
+  .ecl-panel.is-active { display: flex; }
+
+  .ecl-challenge-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .ecl-challenge-grid { grid-template-columns: 1fr 1fr; } }
+  .ecl-challenge-card { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .ecl-challenge-card h4 { font-size: 0.85rem; color: var(--amber); }
+  .ecl-challenge-card p { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.5; }
+  .ecl-challenge-result { font-size: 0.76rem; font-weight: 700; display: none; padding: 6px 8px; border-radius: var(--radius-sm); }
+  .ecl-challenge-result.is-visible { display: block; }
+  .ecl-challenge-result.pass { background: rgba(52,211,153,0.12); color: #a7f3d0; }
+  .ecl-challenge-result.fail { background: rgba(248,113,113,0.12); color: #fecaca; }
+
+  .ecl-reflect-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .ecl-reflect-list p { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.5; padding-left: 14px; border-left: 2px solid var(--violet); }
+
+  .ecl-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .ecl-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 3px 9px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="ecl-header">
+    <div class="ecl-header-title">
+      <span style="font-size:1.5rem;">🌍</span>
+      <div><h1>Energy Crisis Lab</h1><p>Ketika Kebutuhan Energi Terus Meningkat</p></div>
+    </div>
+    <span class="ecl-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <p class="ecl-intro-box">Kamu jadi <strong>operator energi Kota Panca</strong>. Sebelumnya kamu sudah belajar sumber terbarukan, sumber tak terbarukan, konsumsi, dan efisiensi energi secara terpisah -- sekarang semuanya digabung: <strong>kebutuhan energi meningkat, sumber energi terbatas, dan kamu harus menyusun strategi</strong> -- bukan cuma satu jawaban benar, tapi kombinasi yang paling masuk akal.</p>
+
+  <div class="ecl-card" id="predictCard">
+    <div class="ecl-quiz-label">💭 Coba Prediksi</div>
+    <p class="ecl-quiz-question">Sebuah kota sangat bergantung pada PLTS (panel surya). Apa masalah yang paling mungkin muncul pada malam hari?</p>
+    <div class="ecl-quiz-options" id="predictOptions"></div>
+    <div class="ecl-feedback" id="predictFeedback"></div>
+  </div>
+
+  <div class="ecl-card">
+    <p class="ecl-locked-note" id="lockedNote">🔒 Jawab prediksi di atas dulu untuk membuka Pusat Kendali Energi.</p>
+    <div id="dashboardBody" style="display:none;">
+
+      <h2 class="ecl-title">🏙️ Kota Panca -- Pusat Kendali Energi</h2>
+
+      <div class="ecl-sky-strip" id="skyStrip">
+        <span class="ecl-sky-time" id="skyTimeLabel">Jam 12:00</span>
+        <span class="ecl-sky-icon" id="skyIcon">☀️</span>
+      </div>
+
+      <div class="ecl-buildings-row" id="buildingsRow"></div>
+
+      <div class="ecl-plants-row" id="plantsRow"></div>
+
+      <div class="ecl-status-banner" id="statusBanner"></div>
+
+      <h2 class="ecl-title" style="margin-top:18px;">⚙️ Energy Mix (Kapasitas Terpasang)</h2>
+      <div class="ecl-param-grid" id="mixSliders"></div>
+
+      <div class="ecl-param-grid" style="margin-top:6px;">
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span class="lbl">🕐 Jam</span><span class="ecl-param-value" id="hourVal">14:00</span></div>
+          <input type="range" id="hourSlider" min="0" max="23" step="1" value="14">
+        </div>
+        <div class="ecl-param-row">
+          <div class="ecl-param-label-row"><span class="lbl">🌱 Efisiensi Kota</span><span class="ecl-param-value" id="effVal">0%</span></div>
+          <input type="range" id="effSlider" min="0" max="20" step="1" value="0">
+        </div>
+      </div>
+
+      <div class="ecl-param-row" style="margin-top:6px;">
+        <div class="ecl-param-label-row"><span class="lbl">📋 Skenario</span></div>
+        <select class="ecl-scenario-select" id="scenarioSelect">
+          <option value="normal">🌤️ Hari Normal</option>
+          <option value="malam">🌙 Malam Hari</option>
+          <option value="heatwave">🔥 Gelombang Panas (demand +37%)</option>
+          <option value="fuel">⛽ Bahan Bakar Terbatas</option>
+        </select>
+      </div>
+
+      <div class="ecl-result-row">
+        <div class="ecl-result-chip"><div class="k">⚡ Supply</div><div class="v" id="chipSupply">0 MW</div></div>
+        <div class="ecl-result-chip"><div class="k">📈 Demand</div><div class="v" id="chipDemand">0 MW</div></div>
+        <div class="ecl-result-chip"><div class="k">🌫️ Emisi</div><div class="v" id="chipEmission">--</div></div>
+        <div class="ecl-result-chip"><div class="k">💰 Cost</div><div class="v" id="chipCost">--</div></div>
+        <div class="ecl-result-chip"><div class="k">🔋 Reliability</div><div class="v" id="chipReliability">--</div></div>
+      </div>
+      <div id="fuelReserveRow" style="display:none;">
+        <div class="ecl-result-row">
+          <div class="ecl-result-chip"><div class="k">⛽ Fuel Reserve (Gas+Batubara)</div><div class="v" id="chipFuel">100%</div></div>
+        </div>
+      </div>
+
+      <div class="ecl-graph-wrap">
+        <div class="ecl-graph-legend">
+          <span><i class="dot" style="background:var(--amber)"></i>Demand</span>
+          <span><i class="dot" style="background:var(--cyan)"></i>Supply</span>
+        </div>
+        <canvas id="demandGraph"></canvas>
+      </div>
+
+      <div class="ecl-controls-row">
+        <button class="ecl-btn-primary" id="runBtn">▶ Jalankan 24 Jam</button>
+        <button class="ecl-btn-secondary" id="resetBtn">🔄 Reset Mix</button>
+      </div>
+
+      <div class="ecl-feedback" id="runFeedback"></div>
+
+      <div class="ecl-note">📌 Semua angka (kapasitas, indeks biaya, indeks emisi) adalah <strong>model simulasi</strong> untuk keperluan belajar -- bukan data pembangkit atau tarif listrik nyata. Indikator emisi merujuk pada emisi saat operasi/pembangkitan dalam model ini, bukan keseluruhan jejak lingkungan sepanjang siklus hidup (termasuk pembuatan panel surya/turbin, dsb).</div>
+    </div>
+  </div>
+
+  <div class="ecl-card" id="challengeCard" style="display:none;">
+    <div class="ecl-quiz-label" style="color:var(--amber);">🎯 Tantangan Strategi</div>
+    <div class="ecl-challenge-grid">
+      <div class="ecl-challenge-card">
+        <h4>Challenge 1 -- Emisi Rendah</h4>
+        <p>Penuhi demand <strong>~800 MW</strong> dengan <strong>emisi serendah mungkin</strong> (target: band Emisi = Low, Supply ≥ Demand).</p>
+        <button class="ecl-btn-secondary" data-challenge="1">✅ Cek Tantangan</button>
+        <div class="ecl-challenge-result" id="chResult1"></div>
+      </div>
+      <div class="ecl-challenge-card">
+        <h4>Challenge 2 -- Biaya Rendah</h4>
+        <p>Penuhi demand <strong>~1000 MW</strong> dengan <strong>biaya serendah mungkin</strong> (target: band Cost = Low/Medium, Supply ≥ Demand).</p>
+        <button class="ecl-btn-secondary" data-challenge="2">✅ Cek Tantangan</button>
+        <div class="ecl-challenge-result" id="chResult2"></div>
+      </div>
+      <div class="ecl-challenge-card">
+        <h4>Challenge 3 -- Target Emisi -30%</h4>
+        <p>Turunkan emisi kota <strong>30%</strong> dari mix acuan (default awal) <strong>tanpa</strong> menyebabkan shortage.</p>
+        <button class="ecl-btn-secondary" data-challenge="3">✅ Cek Tantangan</button>
+        <div class="ecl-challenge-result" id="chResult3"></div>
+      </div>
+      <div class="ecl-challenge-card">
+        <h4>Challenge 4 -- Gelombang Panas</h4>
+        <p>Aktifkan skenario Gelombang Panas, dan pastikan listrik tetap tersedia (Supply ≥ Demand) meski demand naik.</p>
+        <button class="ecl-btn-secondary" data-challenge="4">✅ Cek Tantangan</button>
+        <div class="ecl-challenge-result" id="chResult4"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecl-card" id="reflectCard" style="display:none;">
+    <div class="ecl-quiz-label" style="color:var(--violet);">🤔 Refleksi</div>
+    <div class="ecl-reflect-list">
+      <p>Mengapa tidak cukup hanya menggunakan satu sumber energi untuk seluruh kota?</p>
+      <p>Mengapa kebutuhan listrik bisa berubah sepanjang hari, bukan tetap konstan?</p>
+      <p>Mengapa energi terbarukan membutuhkan pengelolaan yang berbeda dibanding energi tak terbarukan?</p>
+      <p>Mengapa energi tak terbarukan masih banyak dipakai, padahal sudah tahu keterbatasannya?</p>
+      <p>Apakah menambah pembangkit selalu jadi solusi terbaik untuk masalah energi? Mengapa?</p>
+    </div>
+  </div>
+
+  <div class="ecl-legend" id="eclLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function renderLegend() {
+      const el = $('eclLegend');
+      [{icon:'⚡',label:'Supply'},{icon:'📈',label:'Demand'},{icon:'🌫️',label:'Emisi'},{icon:'💰',label:'Cost Index'},{icon:'🔋',label:'Reliability'}].forEach((f)=>{
+        const c = document.createElement('span'); c.className='ecl-legend-chip'; c.innerHTML=`<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(c);
+      });
+    }
+    renderLegend();
+
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A','B','C','D'];
+      options.forEach((opt,i)=>{
+        const btn=document.createElement('button'); btn.className='ecl-quiz-option';
+        btn.innerHTML=`<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click',()=>handler(i,btn,container)); container.appendChild(btn);
+      });
+    }
+
+    // ============ PREDIKSI ============
+    let predicted = null;
+    renderQuizOptions($('predictOptions'), ['Produksi listrik meningkat', 'Produksi listrik menurun (mendekati nol)', 'Batu bara otomatis terbentuk', 'Demand menjadi nol'], onPredict);
+    function onPredict(i, btn, container) {
+      if (predicted !== null) return;
+      predicted = i;
+      container.querySelectorAll('.ecl-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      $('lockedNote').style.display = 'none';
+      $('dashboardBody').style.display = '';
+      const fb = $('predictFeedback');
+      const correct = i === 1;
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      const msg = 'Panel surya menghasilkan listrik dari cahaya matahari -- begitu matahari terbenam, output-nya turun mendekati nol. Kota yang terlalu bergantung padanya butuh sumber lain (yang bisa dikendalikan) untuk menutupi malam hari.';
+      fb.innerHTML = correct ? `✅ <strong>Tepat!</strong> ${msg}` : `💡 <strong>Belum tepat.</strong> ${msg}`;
+      container.querySelectorAll('.ecl-quiz-option').forEach((b, idx) => { if (idx === 1) b.classList.add('is-correct'); else if (idx === i) b.classList.add('is-wrong'); });
+      revealSections();
+    }
+
+    function revealSections() {
+      $('challengeCard').style.display = '';
+      $('reflectCard').style.display = '';
+    }
+
+    // ============ KONFIGURASI SUMBER ============
+    const SOURCES = [
+      { id: 'surya', icon: '☀️', label: 'PLTS', color: '#fbbf24', max: 200, ef: 0, cost: 2, kind: 'variable' },
+      { id: 'angin', icon: '💨', label: 'PLTB', color: '#22d3ee', max: 150, ef: 0, cost: 3, kind: 'variable' },
+      { id: 'air',   icon: '💧', label: 'PLTA', color: '#0ea5e9', max: 250, ef: 0, cost: 2, kind: 'dispatchable' },
+      { id: 'gas',   icon: '🔥', label: 'PLTG', color: '#fb923c', max: 300, ef: 0.45, cost: 3, kind: 'dispatchable', fuel: true },
+      { id: 'batubara', icon: '🪨', label: 'PLTU', color: '#94a3b8', max: 500, ef: 0.9, cost: 2, kind: 'dispatchable', fuel: true },
+    ];
+    const DEFAULT_MIX = { surya: 100, angin: 60, air: 150, gas: 120, batubara: 150 };
+    const mix = { ...DEFAULT_MIX };
+
+    const PEAK_DEMAND = 850;
+    const DEMAND_FACTOR = [0.55,0.5,0.45,0.42,0.42,0.48,0.58,0.68,0.8,0.88,0.92,0.95,0.97,0.98,1.0,0.97,0.93,0.88,0.85,0.9,0.95,0.92,0.8,0.65];
+    const WIND_AVAIL = [0.4,0.35,0.3,0.28,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.68,0.6,0.55,0.5,0.55,0.6,0.65,0.6,0.5,0.45,0.4];
+
+    function solarAvail(h) { if (h < 6 || h > 18) return 0; return Math.max(0, Math.sin(Math.PI * (h - 6) / 12)); }
+    function hydroAvail(h) { return 0.82 + 0.06 * Math.sin(h * 0.4); }
+    function availabilityOf(sourceId, h, fuelReserve) {
+      if (sourceId === 'surya') return solarAvail(h);
+      if (sourceId === 'angin') return WIND_AVAIL[h];
+      if (sourceId === 'air') return hydroAvail(h);
+      if (sourceId === 'gas' || sourceId === 'batubara') {
+        if (fuelReserve !== undefined && fuelReserve <= 0) return 0;
+        return 0.95;
+      }
+      return 1;
+    }
+
+    let scenario = 'normal';
+    let fuelReserve = 100; // persen, hanya relevan skenario 'fuel'
+    let baselineEmission = null; // dicatat dari Jalankan pertama, dipakai Challenge 3
+
+    // ============ RENDER KONTROL ============
+    function renderMixSliders() {
+      const wrap = $('mixSliders');
+      wrap.innerHTML = '';
+      SOURCES.forEach((s) => {
+        const row = document.createElement('div');
+        row.className = 'ecl-param-row';
+        row.innerHTML = `
+          <div class="ecl-param-label-row">
+            <span class="lbl">${s.icon} ${s.label}</span>
+            <span class="ecl-param-value" style="color:${s.color}" id="mixVal-${s.id}">${mix[s.id]} MW</span>
+          </div>
+          <input type="range" id="mixSlider-${s.id}" min="0" max="${s.max}" step="10" value="${mix[s.id]}">
+        `;
+        wrap.appendChild(row);
+      });
+      SOURCES.forEach((s) => {
+        $(`mixSlider-${s.id}`).addEventListener('input', (e) => {
+          mix[s.id] = parseInt(e.target.value, 10);
+          $(`mixVal-${s.id}`).textContent = `${mix[s.id]} MW`;
+          computeAndRender();
+        });
+      });
+    }
+    renderMixSliders();
+
+    $('hourSlider').addEventListener('input', () => { computeAndRender(); });
+    $('effSlider').addEventListener('input', () => { $('effVal').textContent = `${$('effSlider').value}%`; computeAndRender(); });
+    $('scenarioSelect').addEventListener('change', () => {
+      scenario = $('scenarioSelect').value;
+      $('fuelReserveRow').style.display = scenario === 'fuel' ? '' : 'none';
+      if (scenario === 'fuel') fuelReserve = 100;
+      if (scenario === 'malam') $('hourSlider').value = 22;
+      if (scenario === 'heatwave') $('hourSlider').value = 14;
+      computeAndRender();
+    });
+
+    // ============ MODEL PERHITUNGAN ============
+    function computeState(h, mixObj, effPct, scenarioNow, fuelReserveNow) {
+      let demand = PEAK_DEMAND * DEMAND_FACTOR[h] * (1 - effPct / 100);
+      if (scenarioNow === 'heatwave') demand *= 1.375;
+
+      let supply = 0, emissionUnits = 0, costTotal = 0;
+      const outputs = {};
+      SOURCES.forEach((s) => {
+        const avail = availabilityOf(s.id, h, s.fuel && scenarioNow === 'fuel' ? fuelReserveNow : undefined);
+        const out = mixObj[s.id] * avail;
+        outputs[s.id] = out;
+        supply += out;
+        emissionUnits += out * s.ef;
+        costTotal += (mixObj[s.id] / 100) * s.cost;
+      });
+
+      const intensity = supply > 0 ? emissionUnits / supply : 0;
+      const emissionBand = intensity < 0.15 ? 'low' : intensity < 0.35 ? 'medium' : 'high';
+
+      const costBand = costTotal < 10 ? 'low' : costTotal < 18 ? 'medium' : 'high';
+
+      const variableOut = outputs.surya + outputs.angin;
+      const variableShare = supply > 0 ? variableOut / supply : 0;
+      const shortagePenalty = demand > 0 ? Math.max(0, (demand - supply) / demand) : 0;
+      let reliability = 100 - variableShare * 35 - shortagePenalty * 70;
+      reliability = Math.max(0, Math.min(100, reliability));
+      const reliabilityBand = reliability >= 75 ? 'high' : reliability >= 50 ? 'medium' : 'low';
+
+      const renewableOut = outputs.surya + outputs.angin + outputs.air;
+      const renewablePct = supply > 0 ? (renewableOut / supply) * 100 : 0;
+
+      const shortage = supply < demand;
+      const overcapacity = supply > demand * 1.2;
+
+      return { h, demand, supply, outputs, emissionUnits, intensity, emissionBand, costTotal, costBand, reliability, reliabilityBand, renewablePct, shortage, overcapacity, shortfallPct: shortage ? ((demand - supply) / demand) * 100 : 0 };
+    }
+
+    function bandTag(band, textMap) {
+      const label = textMap ? textMap[band] : band.charAt(0).toUpperCase() + band.slice(1);
+      return `<span class="ecl-band-tag ${band}">${label}</span>`;
+    }
+
+    // ============ RENDER KOTA ============
+    const BUILDINGS = [
+      { icon: '🏠', label: 'Rumah' }, { icon: '🏫', label: 'Sekolah' }, { icon: '🏥', label: 'RS' },
+      { icon: '🏭', label: 'Industri' }, { icon: '🚆', label: 'Transportasi' }, { icon: '💡', label: 'Fasum' },
+    ];
+    function renderBuildings() {
+      const row = $('buildingsRow');
+      row.innerHTML = '';
+      BUILDINGS.forEach((b) => {
+        const el = document.createElement('div');
+        el.className = 'ecl-building';
+        el.dataset.icon = b.icon;
+        el.innerHTML = `<span class="icon">${b.icon}</span><span class="label">${b.label}</span>`;
+        row.appendChild(el);
+      });
+    }
+    renderBuildings();
+
+    function renderPlants(state) {
+      const row = $('plantsRow');
+      row.innerHTML = '';
+      SOURCES.forEach((s) => {
+        const out = state.outputs[s.id];
+        const pct = s.max > 0 ? Math.min(100, (out / s.max) * 100) : 0;
+        const el = document.createElement('div');
+        el.className = 'ecl-plant';
+        el.innerHTML = `
+          <span class="icon">${s.icon}</span>
+          <span class="label" style="color:${s.color}">${s.label}</span>
+          <span class="out">${out.toFixed(0)} MW</span>
+          <div class="ecl-plant-bar"><div class="ecl-plant-bar-fill" style="width:${pct}%;background:${s.color}"></div></div>
+        `;
+        row.appendChild(el);
+      });
+    }
+
+    function updateSky(h) {
+      const isNight = h < 6 || h >= 19;
+      $('skyTimeLabel').textContent = `Jam ${String(h).padStart(2, '0')}:00`;
+      $('skyIcon').textContent = isNight ? '🌙' : '☀️';
+      $('skyStrip').style.background = isNight
+        ? 'linear-gradient(90deg, #0a1128, #131b36)'
+        : 'linear-gradient(90deg, #123049, #1b4a63)';
+    }
+
+    // Gedung meredup proporsional ke besar shortfall, dibatasi (clamp) supaya
+    // tidak sampai gelap total -- brief minta "jangan terlalu dramatis".
+    function dimFactorFromShortfall(shortfallPct) { return Math.min(0.65, (shortfallPct / 100) * 1.3); }
+    function updateBuildingsOpacity(state) {
+      const opacity = state.shortage ? Math.max(0.35, 1 - dimFactorFromShortfall(state.shortfallPct)) : 1;
+      document.querySelectorAll('.ecl-building').forEach((el) => { el.style.opacity = opacity; });
+    }
+
+    function updateStatusBanner(state) {
+      const el = $('statusBanner');
+      el.classList.add('is-visible');
+      if (state.shortage) {
+        el.className = 'ecl-status-banner is-visible shortage';
+        el.innerHTML = `⚠️ <strong>Energy Shortage</strong> -- supply ${state.supply.toFixed(0)} MW, demand ${state.demand.toFixed(0)} MW. Sebagian kota kekurangan listrik.`;
+      } else if (state.overcapacity) {
+        el.className = 'ecl-status-banner is-visible overcap';
+        el.innerHTML = `⚠️ <strong>Kapasitas Berlebih</strong> -- supply ${state.supply.toFixed(0)} MW jauh melebihi demand ${state.demand.toFixed(0)} MW. Kapasitas besar tetap punya konsekuensi biaya, walau listrik aman.`;
+      } else {
+        el.className = 'ecl-status-banner is-visible balanced';
+        el.innerHTML = `✅ <strong>Seimbang</strong> -- supply ${state.supply.toFixed(0)} MW mencukupi demand ${state.demand.toFixed(0)} MW tanpa kapasitas berlebih signifikan.`;
+      }
+    }
+
+    function updateChips(state) {
+      $('chipSupply').textContent = `${state.supply.toFixed(0)} MW`;
+      $('chipDemand').textContent = `${state.demand.toFixed(0)} MW`;
+      $('chipEmission').innerHTML = `${state.emissionUnits.toFixed(0)} ${bandTag(state.emissionBand, { low: 'Low', medium: 'Medium', high: 'High' })}`;
+      $('chipCost').innerHTML = `${state.costTotal.toFixed(1)} ${bandTag(state.costBand, { low: 'Low', medium: 'Medium', high: 'High' })}`;
+      $('chipReliability').innerHTML = `${state.reliability.toFixed(0)}% ${bandTag(state.reliabilityBand, { low: 'Low', medium: 'Medium', high: 'High' })}`;
+      if (scenario === 'fuel') $('chipFuel').textContent = `${fuelReserve.toFixed(0)}%`;
+    }
+
+    let lastState = null;
+    function computeAndRender() {
+      const h = parseInt($('hourSlider').value, 10);
+      $('hourVal').textContent = `${String(h).padStart(2, '0')}:00`;
+      const effPct = parseInt($('effSlider').value, 10);
+      const state = computeState(h, mix, effPct, scenario, fuelReserve);
+      lastState = state;
+      updateSky(h);
+      renderPlants(state);
+      updateBuildingsOpacity(state);
+      updateStatusBanner(state);
+      updateChips(state);
+      return state;
+    }
+    computeAndRender();
+
+    // ============ GRAFIK 24 JAM ============
+    function drawDualGraph(canvas, demandSeries, supplySeries) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 16, h = 130;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+      const maxY = Math.max(...demandSeries, ...supplySeries, 100) * 1.1;
+      const px = (i) => (i / 23) * (w - 10) + 5;
+      const py = (v) => h - 10 - (v / maxY) * (h - 20);
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      for (let i = 0; i <= 4; i++) { const y = 10 + ((h - 20) / 4) * i; ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke(); }
+      function line(series, color) {
+        ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 2.2;
+        series.forEach((v, i) => { const x = px(i), y = py(v); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+        ctx.stroke();
+      }
+      line(demandSeries, '#fbbf24');
+      line(supplySeries, '#22d3ee');
+    }
+
+    let firstRunDone = false;
+    $('runBtn').addEventListener('click', () => {
+      $('runBtn').disabled = true;
+      const effPct = parseInt($('effSlider').value, 10);
+      const demandSeries = [], supplySeries = [];
+      let hourIdx = 0;
+      let localFuel = scenario === 'fuel' ? fuelReserve : 100;
+      let shortageHours = 0;
+
+      function step() {
+        const state = computeState(hourIdx, mix, effPct, scenario, localFuel);
+        demandSeries.push(state.demand);
+        supplySeries.push(state.supply);
+        if (state.shortage) shortageHours++;
+
+        if (scenario === 'fuel') {
+          const fuelUsage = (state.outputs.gas + state.outputs.batubara) / 8; // laju pengurasan model
+          localFuel = Math.max(0, localFuel - fuelUsage);
+        }
+
+        $('hourSlider').value = hourIdx;
+        $('hourVal').textContent = `${String(hourIdx).padStart(2, '0')}:00`;
+        updateSky(hourIdx);
+        renderPlants(state);
+        updateBuildingsOpacity(state);
+        updateStatusBanner(state);
+        updateChips(state);
+        drawDualGraph($('demandGraph'), demandSeries, supplySeries);
+        lastState = state;
+
+        hourIdx++;
+        if (hourIdx <= 23) {
+          setTimeout(step, 90);
+        } else {
+          $('runBtn').disabled = false;
+          if (scenario === 'fuel') fuelReserve = localFuel;
+          if (!firstRunDone) {
+            firstRunDone = true;
+            // Acuan buat Challenge 3: emisi mix SAAT INI di jam siang, skenario normal,
+            // fuel reserve penuh -- direkam sekali di run pertama biar jadi baseline tetap.
+            baselineEmission = computeState(14, mix, 0, 'normal', 100).emissionUnits;
+          }
+          const finalState = state;
+          const fb = $('runFeedback');
+          fb.classList.add('is-visible');
+          fb.classList.toggle('is-wrong', shortageHours > 0);
+          if (shortageHours > 0) {
+            fb.innerHTML = `⚠️ <strong>Energy shortage terjadi di ${shortageHours} dari 24 jam.</strong> Coba tambah kapasitas sumber yang bisa diandalkan (PLTA/PLTG/PLTU) di jam-jam sibuk, atau naikkan efisiensi kota untuk menurunkan demand.`;
+          } else {
+            fb.innerHTML = `✅ <strong>Listrik tersedia sepanjang 24 jam.</strong> Rata-rata emisi: band ${finalState.emissionBand.toUpperCase()}, cost index band ${finalState.costBand.toUpperCase()}, reliability ${finalState.reliability.toFixed(0)}%. Coba kurangi kapasitas yang jarang terpakai penuh -- apakah masih bisa aman dengan biaya lebih rendah?`;
+          }
+          if (scenario === 'fuel' && localFuel <= 0) {
+            fb.innerHTML += ` <br>⛽ <strong>Cadangan bahan bakar (gas+batubara) habis</strong> sebelum 24 jam selesai -- kota terlalu bergantung pada sumber tak terbarukan.`;
+          }
+        }
+      }
+      step();
+    });
+
+    $('resetBtn').addEventListener('click', () => {
+      Object.assign(mix, DEFAULT_MIX);
+      renderMixSliders();
+      fuelReserve = 100;
+      firstRunDone = false;
+      $('runFeedback').classList.remove('is-visible');
+      computeAndRender();
+      const c = $('demandGraph'); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
+    });
+
+    // ============ TANTANGAN ============
+    function showChallengeResult(id, pass, text) {
+      const el = $(`chResult${id}`);
+      el.classList.add('is-visible');
+      el.classList.toggle('pass', pass);
+      el.classList.toggle('fail', !pass);
+      el.innerHTML = (pass ? '✅ ' : '💡 ') + text;
+    }
+
+    document.querySelectorAll('[data-challenge]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.challenge;
+        const state = lastState || computeAndRender();
+        if (id === '1') {
+          const demandOk = Math.abs(state.demand - 800) < 120;
+          const pass = demandOk && state.emissionBand === 'low' && !state.shortage;
+          showChallengeResult(1, pass, pass ? `Demand ${state.demand.toFixed(0)} MW terpenuhi dengan emisi band Low.` : `Demand saat ini ${state.demand.toFixed(0)} MW, emisi band ${state.emissionBand.toUpperCase()}. Coba dekati demand ~800 MW (atur jam) dan perbesar porsi surya/angin/air, kecilkan batubara.`);
+        } else if (id === '2') {
+          const demandOk = Math.abs(state.demand - 1000) < 150;
+          const pass = demandOk && (state.costBand === 'low' || state.costBand === 'medium') && !state.shortage;
+          showChallengeResult(2, pass, pass ? `Demand ${state.demand.toFixed(0)} MW terpenuhi dengan cost band ${state.costBand.toUpperCase()}.` : `Demand saat ini ${state.demand.toFixed(0)} MW, cost band ${state.costBand.toUpperCase()}. Coba naikkan efisiensi kota atau pilih kombinasi kapasitas yang tidak berlebihan.`);
+        } else if (id === '3') {
+          if (baselineEmission === null) { showChallengeResult(3, false, 'Jalankan simulasi minimal sekali dulu untuk mencatat emisi acuan.'); return; }
+          const target = baselineEmission * 0.7;
+          const pass = state.emissionUnits <= target && !state.shortage;
+          showChallengeResult(3, pass, pass ? `Emisi turun jadi ${state.emissionUnits.toFixed(0)} (acuan ${baselineEmission.toFixed(0)}) tanpa shortage.` : `Emisi saat ini ${state.emissionUnits.toFixed(0)}, target ≤ ${target.toFixed(0)} (30% di bawah acuan ${baselineEmission.toFixed(0)}). Kurangi porsi batubara/gas, tambah surya/angin/air.`);
+        } else if (id === '4') {
+          const pass = scenario === 'heatwave' && !state.shortage;
+          showChallengeResult(4, pass, pass ? `Skenario Gelombang Panas aktif, listrik tetap tersedia (supply ${state.supply.toFixed(0)} ≥ demand ${state.demand.toFixed(0)} MW).` : `Aktifkan skenario "Gelombang Panas" di dropdown Skenario, lalu pastikan supply ≥ demand.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

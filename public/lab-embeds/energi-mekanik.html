@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Energi Mekanik</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --ek-color: #ef4444;
+            --ep-color: #38bdf8;
+            --em-color: #facc15;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #facc15;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 12px;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
+        @media (min-width: 900px) { .main-container { grid-template-columns: 340px 1fr; } }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+        .control-label { font-size: 0.875rem; font-weight: 500; color: var(--text-main); }
+
+        .num-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2px 8px;
+        }
+
+        .num-input-wrapper input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 50px;
+            text-align: right;
+            outline: none;
+        }
+
+        .unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .slider-container { display: flex; align-items: center; gap: 10px; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
+        .mass-theme input[type="range"]::-webkit-slider-thumb { background: #a78bfa; box-shadow: 0 0 10px rgba(167, 139, 250, 0.4); }
+        .height-theme input[type="range"]::-webkit-slider-thumb { background: var(--ep-color); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+
+        .btn-play {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-play:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-play:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active { transform: scale(0.97); opacity: 0.9; }
+
+        .canvas-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+
+        @media (max-width: 420px) { .canvas-wrapper { height: 250px; } }
+
+        canvas { display: block; width: 100%; height: 100%; }
+
+        .canvas-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .results-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bar-row { display: flex; align-items: center; gap: 10px; }
+        .bar-label { font-size: 0.75rem; font-weight: 700; width: 76px; flex-shrink: 0; }
+        .bar-label.ek { color: var(--ek-color); }
+        .bar-label.ep { color: var(--ep-color); }
+        .bar-label.em { color: var(--em-color); }
+
+        .bar-track {
+            flex: 1;
+            height: 1.1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.15s ease;
+        }
+
+        .bar-fill.ek { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .bar-fill.ep { background: linear-gradient(90deg, #38bdf8, #0ea5e9); }
+        .bar-fill.em { background: linear-gradient(90deg, #facc15, #eab308); }
+
+        .bar-value { font-size: 0.75rem; font-weight: 700; width: 62px; text-align: right; flex-shrink: 0; font-family: 'Courier New', Courier, monospace; }
+
+        .formula-box {
+            background: #090d16;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .math-var { color: #38bdf8; font-weight: bold; }
+        .math-num { color: #f59e0b; }
+
+        .theory-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+        .action-row { display: flex; gap: 8px; }
+        .action-row > * { flex: 1; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <h1>Laboratorium Maya: Energi Mekanik</h1>
+        </div>
+        <span class="header-badge">SMA Kelas X</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Panel Parameter
+                </span>
+            </div>
+
+            <div class="control-group mass-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="massSlider">Massa Benda (m)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="massNum" min="1" max="10" step="1" value="2">
+                        <span class="unit">kg</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="massSlider" min="1" max="10" step="1" value="2">
+                </div>
+            </div>
+
+            <div class="control-group height-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="heightSlider">Ketinggian Awal (h)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="heightNum" min="1" max="20" step="1" value="10">
+                        <span class="unit">m</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="heightSlider" min="1" max="20" step="1" value="10">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="posSlider">Posisi Benda (jatuh sejauh)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="posNum" min="0" max="100" step="1" value="0">
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="posSlider" min="0" max="100" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="action-row">
+                <button class="btn-play" id="btnPlay">▶️ Jatuhkan Benda</button>
+                <button class="btn-reset" id="btnReset">🔄 Reset</button>
+            </div>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Visualisasi Interaktif
+                </span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction">💡 Geser slider posisi (atau tekan "Jatuhkan Benda"), amati Eₖ dan Eₚ saling bertukar</div>
+            </div>
+
+            <div class="results-panel">
+                <div class="bar-row">
+                    <span class="bar-label ek">Eₖ</span>
+                    <div class="bar-track"><div class="bar-fill ek" id="ekBar" style="width:0%"></div></div>
+                    <span class="bar-value" id="ekValue">0 J</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label ep">Eₚ</span>
+                    <div class="bar-track"><div class="bar-fill ep" id="epBar" style="width:100%"></div></div>
+                    <span class="bar-value" id="epValue">0 J</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label em">Em</span>
+                    <div class="bar-track"><div class="bar-fill em" id="emBar" style="width:100%"></div></div>
+                    <span class="bar-value" id="emValue">0 J</span>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan (posisi saat ini):</div>
+                <div class="formula-box" id="formulaBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Hukum Kekekalan Energi Mekanik</div>
+        <span class="math-var">Em</span> = <span style="color:var(--ek-color);">Eₖ</span> + <span style="color:var(--ep-color);">Eₚ</span> = konstan (selama tidak ada gesekan/hambatan udara). Semakin benda turun, Eₚ berkurang tapi Eₖ bertambah sebesar itu juga -- totalnya (Em, batang kuning) selalu tetap sama panjang.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const g = 10; // percepatan gravitasi disederhanakan
+
+        const massSlider = document.getElementById('massSlider');
+        const massNum = document.getElementById('massNum');
+        const heightSlider = document.getElementById('heightSlider');
+        const heightNum = document.getElementById('heightNum');
+        const posSlider = document.getElementById('posSlider');
+        const posNum = document.getElementById('posNum');
+        const btnPlay = document.getElementById('btnPlay');
+        const btnReset = document.getElementById('btnReset');
+
+        const ekBar = document.getElementById('ekBar');
+        const epBar = document.getElementById('epBar');
+        const emBar = document.getElementById('emBar');
+        const ekValueEl = document.getElementById('ekValue');
+        const epValueEl = document.getElementById('epValue');
+        const emValueEl = document.getElementById('emValue');
+        const formulaBoxEl = document.getElementById('formulaBox');
+
+        let mass = 2, height = 10, posPercent = 0;
+        let playing = false;
+        let playRAF = null;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            render();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function syncInputs(source) {
+            if (source === 'massSlider') massNum.value = massSlider.value;
+            if (source === 'massNum') massSlider.value = massNum.value;
+            if (source === 'heightSlider') heightNum.value = heightSlider.value;
+            if (source === 'heightNum') heightSlider.value = heightNum.value;
+            if (source === 'posSlider') posNum.value = posSlider.value;
+            if (source === 'posNum') posSlider.value = posNum.value;
+
+            mass = parseFloat(massNum.value) || 1;
+            height = parseFloat(heightNum.value) || 1;
+            posPercent = parseFloat(posNum.value) || 0;
+
+            calculateAndRender();
+        }
+
+        [massSlider, massNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [heightSlider, heightNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [posSlider, posNum].forEach(el => el.addEventListener('input', () => { stopPlay(); syncInputs(el.id); }));
+
+        function stopPlay() {
+            playing = false;
+            btnPlay.disabled = false;
+            if (playRAF) cancelAnimationFrame(playRAF);
+        }
+
+        btnPlay.addEventListener('click', () => {
+            if (playing) return;
+            posSlider.value = 0; posNum.value = 0;
+            posPercent = 0;
+            playing = true;
+            btnPlay.disabled = true;
+            const start = performance.now();
+            const durationMs = 2200;
+            function step(now) {
+                const t = Math.min(1, (now - start) / durationMs);
+                posPercent = t * 100;
+                posSlider.value = posPercent;
+                posNum.value = Math.round(posPercent);
+                calculateAndRender();
+                if (t < 1) {
+                    playRAF = requestAnimationFrame(step);
+                } else {
+                    playing = false;
+                    btnPlay.disabled = false;
+                }
+            }
+            playRAF = requestAnimationFrame(step);
+        });
+
+        btnReset.addEventListener('click', () => {
+            stopPlay();
+            massSlider.value = 2; massNum.value = 2;
+            heightSlider.value = 10; heightNum.value = 10;
+            posSlider.value = 0; posNum.value = 0;
+            syncInputs();
+        });
+
+        function updateResults() {
+            const frac = posPercent / 100; // 0 = di atas, 1 = di tanah
+            const currentHeight = height * (1 - frac);
+            const fallDist = height - currentHeight;
+            const ep = mass * g * currentHeight;
+            // Ek dari energi yang "hilang" dari Ep (kekal, tanpa gesekan)
+            const emTotal = mass * g * height;
+            const ek = emTotal - ep;
+
+            const maxVal = Math.max(emTotal, 1);
+            ekBar.style.width = `${(ek / maxVal) * 100}%`;
+            epBar.style.width = `${(ep / maxVal) * 100}%`;
+            emBar.style.width = `100%`;
+
+            ekValueEl.textContent = ek.toFixed(1) + ' J';
+            epValueEl.textContent = ep.toFixed(1) + ' J';
+            emValueEl.textContent = emTotal.toFixed(1) + ' J';
+
+            let formula = `<span class="math-var">Eₚ</span> = m × g × h = ${mass} × ${g} × ${currentHeight.toFixed(1)} = <span class="math-num">${ep.toFixed(1)} J</span>`;
+            formula += `<br><span class="math-var">Eₖ</span> = Em − Eₚ = ${emTotal.toFixed(1)} − ${ep.toFixed(1)} = <span class="math-num">${ek.toFixed(1)} J</span>`;
+            formula += `<br><span class="math-var">Em</span> = Eₖ + Eₚ = <span class="math-num">${emTotal.toFixed(1)} J</span> (selalu tetap)`;
+            formulaBoxEl.innerHTML = formula;
+
+            return { currentHeight, fallDist, ep, ek, emTotal, frac };
+        }
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const canvasHeight = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, width, canvasHeight);
+
+            const { frac } = updateResults();
+
+            const towerX = width * 0.32;
+            const topY = 30;
+            const groundY = canvasHeight - 30;
+            const towerHeightPx = groundY - topY;
+
+            // Menara/tiang tinggi (dekoratif)
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(towerX, topY);
+            ctx.lineTo(towerX, groundY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+
+            // Ground
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(20, groundY);
+            ctx.lineTo(width - 20, groundY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Skala ketinggian (label atas & bawah)
+            ctx.save();
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px system-ui';
+            ctx.textAlign = 'right';
+            ctx.fillText(`h = ${height} m`, towerX - 10, topY + 12);
+            ctx.fillText('tanah', towerX - 10, groundY + 4);
+            ctx.restore();
+
+            // Benda (bola) jatuh dari topY ke groundY sesuai frac
+            const ballR = Math.max(10, Math.min(18, width / 30));
+            const ballY = topY + frac * (towerHeightPx - ballR) ;
+            const ballX = towerX;
+
+            // Trail tipis (jejak jatuh)
+            ctx.save();
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.25)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(ballX, topY);
+            ctx.lineTo(ballX, ballY);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            const grad = ctx.createRadialGradient(ballX - 4, ballY - 4, 2, ballX, ballY, ballR);
+            grad.addColorStop(0, '#fca5a5');
+            grad.addColorStop(0.5, '#ef4444');
+            grad.addColorStop(1, '#991b1b');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.font = `bold ${Math.round(ballR * 0.7)}px system-ui`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${mass}kg`, ballX, ballY + ballR + 12);
+            ctx.restore();
+        }
+
+        function calculateAndRender() {
+            render();
+        }
+
+        window.onload = () => {
+            resizeCanvas();
+            syncInputs();
+        };
+    </script>
+</body>
+</html>

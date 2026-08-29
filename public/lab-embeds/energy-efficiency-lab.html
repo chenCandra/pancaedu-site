@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Energy Efficiency Lab</title>
+<style>
+  :root {
+    --sky-1: #e0f7ef; --sky-2: #e6f4fb; --sky-3: #f5fbf0;
+    --card-bg: #ffffff; --card-border: #d7ece3;
+    --ink: #1e2e2a; --ink-muted: #4f6b62; --ink-faint: #7f978d;
+    --brand-a: #10b981; --brand-b: #0ea5e9;
+    --hot: #f97316; --cold: #0ea5e9;
+    --ok: #16a34a; --warn: #dc2626;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 2px 14px rgba(16, 60, 45, 0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(180deg, var(--sky-2) 0%, var(--sky-1) 55%, var(--sky-3) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand-b); outline-offset: 2px; }
+
+  .eel-header { background: rgba(255,255,255,0.75); backdrop-filter: blur(6px); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .eel-header-title { display: flex; align-items: center; gap: 10px; }
+  .eel-header h1 { font-size: 1.05rem; font-weight: 800; background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .eel-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .eel-brand-chip { font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: rgba(16,185,129,0.08); border: 1px solid var(--card-border); padding: 4px 10px; border-radius: 999px; }
+
+  .eel-intro-box { background: rgba(255,255,255,0.65); border-left: 3px solid var(--brand-b); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 0.83rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .eel-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .eel-tab { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.82rem; font-weight: 700; padding: 8px 16px; border-radius: 999px; box-shadow: var(--shadow-card); }
+  .eel-tab.is-active { color: #fff; background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+
+  .eel-panel { display: none; flex-direction: column; gap: 14px; }
+  .eel-panel.is-active { display: flex; }
+  .eel-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-card); }
+
+  .eel-quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-a); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .eel-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; margin-bottom: 10px; }
+  .eel-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .eel-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .eel-quiz-option { background: #f7fcfa; border: 1px solid var(--card-border); color: var(--ink); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 0.82rem; text-align: left; display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease; }
+  .eel-quiz-option:hover:not(:disabled) { border-color: var(--brand-a); background: rgba(16,185,129,0.06); }
+  .eel-quiz-option .letter { font-weight: 800; color: var(--brand-a); flex-shrink: 0; }
+  .eel-quiz-option:disabled { cursor: default; opacity: 0.65; }
+  .eel-quiz-option.is-chosen { border-color: var(--brand-a); background: rgba(16,185,129,0.1); }
+  .eel-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.1); }
+  .eel-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.08); }
+
+  .eel-feedback { font-size: 0.85rem; line-height: 1.5; padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--ok); background: rgba(22,163,74,0.08); display: none; margin-top: 8px; }
+  .eel-feedback.is-visible { display: block; }
+  .eel-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+  .eel-locked-note { font-size: 0.78rem; color: var(--ink-faint); font-style: italic; }
+
+  .eel-param-grid { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 10px; }
+  @media (min-width: 720px) { .eel-param-grid { grid-template-columns: 1fr 1fr; } }
+  .eel-param-row { display: flex; flex-direction: column; gap: 6px; }
+  .eel-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .eel-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--brand-b); }
+  input[type="range"] { width: 100%; accent-color: var(--brand-b); }
+
+  .eel-choice-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .eel-choice-btn { background: #f7fcfa; border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+  .eel-choice-btn.is-active { color: #fff; background: var(--brand-a); border-color: transparent; }
+
+  .eel-tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 6px; }
+  .eel-tech-card { background: #f7fcfa; border: 1.5px solid var(--card-border); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .eel-tech-card.is-active { border-color: var(--brand-b); background: rgba(14,165,233,0.08); }
+  .eel-tech-icon { font-size: 1.4rem; }
+  .eel-tech-label { font-size: 0.72rem; font-weight: 700; }
+  .eel-tech-watt { font-size: 0.64rem; color: var(--ink-faint); font-family: 'Courier New', monospace; }
+
+  .eel-room-visual { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 14px 6px; flex-wrap: wrap; }
+  .eel-room-box { width: 130px; height: 100px; border-radius: var(--radius-sm); border: 3px solid var(--card-border); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; transition: background 0.4s ease, border-color 0.4s ease; background: #eef6f2; }
+  .eel-room-temp { font-size: 1.5rem; font-weight: 900; font-family: 'Courier New', monospace; }
+  .eel-room-icons { display: flex; gap: 4px; font-size: 1rem; }
+  .eel-sun-side { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 1.6rem; }
+  .eel-heat-arrow { font-size: 0.7rem; color: var(--hot); font-weight: 800; }
+
+  .eel-result-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .eel-result-chip { flex: 1; min-width: 110px; background: #f7fcfa; border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--card-border); }
+  .eel-result-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); }
+  .eel-result-chip .v { font-size: 1.05rem; font-weight: 800; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .eel-graph-wrap { background: #f7fcfa; border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px; margin-top: 10px; }
+  .eel-graph-wrap canvas { display: block; width: 100%; height: 120px; }
+
+  .eel-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .eel-btn-primary { background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border: none; color: #fff; font-weight: 800; font-size: 0.85rem; padding: 10px 22px; border-radius: 999px; }
+  .eel-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .eel-btn-secondary { background: #f1f5f4; border: 1px solid var(--card-border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 10px 18px; border-radius: 999px; }
+  .eel-btn-secondary:hover { color: var(--ink); border-color: var(--warn); }
+
+  .eel-score-box { text-align: center; margin-top: 10px; }
+  .eel-score-value { font-size: 2rem; font-weight: 900; font-family: 'Courier New', monospace; }
+  .eel-score-label { font-size: 0.7rem; color: var(--ink-faint); font-weight: 700; }
+
+  .eel-note { font-size: 0.72rem; color: var(--ink-faint); background: rgba(0,0,0,0.02); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px 12px; line-height: 1.5; margin-top: 8px; }
+
+  .eel-explain-cols { display: grid; gap: 10px; grid-template-columns: 1fr; margin-top: 10px; }
+  @media (min-width: 640px) { .eel-explain-cols { grid-template-columns: 1fr 1fr 1fr; } }
+  .eel-explain-col { background: #f7fcfa; border-radius: var(--radius-sm); padding: 10px 12px; }
+  .eel-explain-col h4 { font-size: 0.8rem; font-weight: 800; margin-bottom: 4px; color: var(--brand-a); }
+  .eel-explain-col p { font-size: 0.78rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .eel-compare-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .eel-compare-grid { grid-template-columns: 1fr 1fr; } }
+  .eel-compare-tag { font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; align-self: flex-start; margin-bottom: 8px; display: inline-block; }
+  .eel-compare-tag.a { color: var(--hot); border: 1px solid var(--hot); }
+  .eel-compare-tag.b { color: var(--brand-a); border: 1px solid var(--brand-a); }
+  .eel-compare-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 10px; }
+  .eel-compare-table th, .eel-compare-table td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--card-border); }
+  .eel-compare-table th { color: var(--ink-muted); font-size: 0.7rem; text-transform: uppercase; }
+
+  .eel-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .eel-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: var(--ink-muted); background: rgba(255,255,255,0.6); border: 1px solid var(--card-border); padding: 3px 9px; border-radius: 999px; }
+
+  h2.eel-title { font-size: 1.02rem; font-weight: 800; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <div class="eel-header">
+    <div class="eel-header-title">
+      <span style="font-size:1.5rem;">🏠</span>
+      <div><h1>Energy Efficiency Lab</h1><p>Eksplorasi Efisiensi Penggunaan Energi</p></div>
+    </div>
+    <span class="eel-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <p class="eel-intro-box">Di <strong>Energy Consumption Lab</strong> kamu belajar mengukur BERAPA BANYAK energi yang terpakai. Sekarang pertanyaannya beda: <strong>bisakah kita dapat hasil yang sama dengan energi lebih sedikit?</strong> Itulah efisiensi -- bukan sekadar "pakai listrik sedikit", tapi "pakai energi secara lebih cerdas".</p>
+
+  <div class="eel-tabs">
+    <button class="eel-tab is-active" data-tab="room">❄️ Smart Cooling Lab</button>
+    <button class="eel-tab" data-tab="compare">🔎 Bandingkan Strategi</button>
+  </div>
+
+  <!-- ================= TAB: SMART COOLING ================= -->
+  <div class="eel-panel is-active" id="panel-room">
+
+    <div class="eel-card" id="predictCard">
+      <div class="eel-quiz-label">💭 Coba Prediksi</div>
+      <p class="eel-quiz-question">Mana yang lebih mungkin MENGURANGI kebutuhan kerja AC pada siang hari yang terik?</p>
+      <div class="eel-quiz-options" id="predictOptions"></div>
+      <div class="eel-feedback" id="predictFeedback"></div>
+    </div>
+
+    <div class="eel-card">
+      <p class="eel-locked-note" id="lockedNote">🔒 Jawab prediksi di atas dulu untuk membuka kontrol ruangan.</p>
+      <div id="roomBody" style="display:none;">
+        <h2 class="eel-title">🌡️ Kondisi Ruangan</h2>
+        <div class="eel-param-grid">
+          <div class="eel-param-row">
+            <div class="eel-param-label-row"><span>☀️ Panas dari Luar</span><span class="eel-param-value" id="heatVal">6 / 10</span></div>
+            <input type="range" id="heatSlider" min="1" max="10" step="1" value="6">
+          </div>
+          <div class="eel-param-row">
+            <div class="eel-param-label-row"><span>🌍 Suhu Luar</span><span class="eel-param-value" id="outsideVal">32°C</span></div>
+            <input type="range" id="outsideSlider" min="18" max="38" step="1" value="32">
+          </div>
+          <div class="eel-param-row"><span class="eel-param-label-row"><span>🪟 Jendela</span></span><div class="eel-choice-row" id="windowChoice"></div></div>
+          <div class="eel-param-row"><span class="eel-param-label-row"><span>🚪 Pintu</span></span><div class="eel-choice-row" id="doorChoice"></div></div>
+          <div class="eel-param-row"><span class="eel-param-label-row"><span>🧱 Insulasi</span></span><div class="eel-choice-row" id="insulChoice"></div></div>
+          <div class="eel-param-row"><span class="eel-param-label-row"><span>🌤️ Tirai</span></span><div class="eel-choice-row" id="curtainChoice"></div></div>
+        </div>
+
+        <h2 class="eel-title" style="margin-top:16px;">⚙️ Teknologi Pendingin</h2>
+        <div class="eel-tech-grid" id="techGrid"></div>
+        <div class="eel-param-row" id="acSetRow" style="margin-top:10px;">
+          <div class="eel-param-label-row"><span>❄️ Set Temperature AC</span><span class="eel-param-value" id="acSetVal">22°C</span></div>
+          <input type="range" id="acSetSlider" min="18" max="30" step="1" value="22">
+        </div>
+
+        <div class="eel-room-visual">
+          <div class="eel-sun-side">☀️<span class="eel-heat-arrow" id="heatArrow">→</span></div>
+          <div class="eel-room-box" id="roomBox">
+            <div class="eel-room-temp" id="roomTempDisplay">30°C</div>
+            <div class="eel-room-icons" id="roomIcons"></div>
+          </div>
+        </div>
+
+        <div class="eel-result-row">
+          <div class="eel-result-chip"><div class="k">⚡ Daya</div><div class="v" id="curPower">0 W</div></div>
+          <div class="eel-result-chip"><div class="k">🔋 Energi</div><div class="v" id="curEnergy">0,000 kWh</div></div>
+          <div class="eel-result-chip"><div class="k">⏱️ Waktu</div><div class="v" id="curTime">0 menit</div></div>
+          <div class="eel-result-chip"><div class="k">🌡️ Suhu</div><div class="v" id="curTemp">30°C</div></div>
+        </div>
+
+        <div class="eel-graph-wrap"><canvas id="tempGraph"></canvas></div>
+        <div class="eel-graph-wrap"><canvas id="energyGraph"></canvas></div>
+
+        <div class="eel-controls-row">
+          <button class="eel-btn-primary" id="runBtn">▶ Jalankan (Mode Cepat)</button>
+          <button class="eel-btn-secondary" id="resetBtn">🔄 Reset</button>
+        </div>
+
+        <div class="eel-score-box" id="scoreBox" style="display:none;">
+          <div class="eel-score-value" id="scoreValue">--</div>
+          <div class="eel-score-label">🌱 Skor Efisiensi Simulasi (bukan efisiensi termodinamika)</div>
+        </div>
+
+        <div class="eel-feedback" id="runFeedback"></div>
+      </div>
+    </div>
+
+    <div class="eel-card" id="challengeCard" style="display:none;">
+      <div class="eel-quiz-label">🎯 Tantangan</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <p style="font-size:0.85rem;"><strong>1. Hemat Energi:</strong> Turunkan suhu ruangan dari 30°C ke 24°C dengan energi seminimal mungkin. Jalankan simulasi lalu lihat skormu di atas.</p>
+        <p style="font-size:0.85rem;"><strong>2. Smart Classroom:</strong> 30 siswa, suhu luar 32°C, matahari terik. <button class="eel-btn-secondary" id="presetSchool">Terapkan Kondisi Ini</button> lalu cari strategi ternyaman & paling hemat.</p>
+        <p style="font-size:0.85rem;"><strong>3. Tanpa AC:</strong> Buat ruangan senyaman mungkin TANPA memakai AC sama sekali. <button class="eel-btn-secondary" id="presetNoAC">Nonaktifkan AC</button> lalu coba kombinasi kipas, ventilasi, tirai, dan insulasi.</p>
+      </div>
+    </div>
+
+    <div class="eel-card" id="explainCard" style="display:none;">
+      <div class="eel-quiz-label" style="color:var(--brand-a);">🌱 Apa yang Kita Temukan?</div>
+      <div class="eel-explain-cols">
+        <div class="eel-explain-col"><h4>🔧 Teknologi</h4><p>Pilih alat yang sesuai kebutuhan -- AC untuk mendinginkan sungguhan, kipas untuk kenyamanan aliran udara (bukan menurunkan suhu).</p></div>
+        <div class="eel-explain-col"><h4>🏗️ Desain</h4><p>Insulasi baik & tirai mengurangi panas yang masuk duluan, sehingga AC tidak perlu bekerja seberat itu.</p></div>
+        <div class="eel-explain-col"><h4>🙋 Perilaku</h4><p>Menutup pintu/jendela saat AC menyala, memakai ventilasi saat udara luar lebih sejuk -- kebiasaan kecil yang berpengaruh.</p></div>
+      </div>
+      <p class="eel-note">💡 Efisiensi ≠ mengurangi aktivitas. Ruangan tetap bisa sejuk -- caranya yang perlu lebih cerdas, bukan targetnya yang dikurangi.</p>
+    </div>
+  </div>
+
+  <!-- ================= TAB: COMPARE ================= -->
+  <div class="eel-panel" id="panel-compare">
+    <div class="eel-card">
+      <p style="font-size:0.83rem;color:var(--ink-muted);margin-bottom:6px;">Strategi A: AC langsung tanpa bantuan apa pun. Strategi B: tirai + insulasi baik + AC. Kondisi ruangan lain disamakan.</p>
+      <div class="eel-compare-grid">
+        <div>
+          <span class="eel-compare-tag a">Strategi A -- AC Langsung</span>
+          <p style="font-size:0.78rem;color:var(--ink-faint);">Insulasi buruk, tirai off, jendela tertutup, AC set 22°C.</p>
+        </div>
+        <div>
+          <span class="eel-compare-tag b">Strategi B -- Dibantu Desain</span>
+          <p style="font-size:0.78rem;color:var(--ink-faint);">Insulasi baik, tirai on, jendela tertutup, AC set 22°C.</p>
+        </div>
+      </div>
+      <div class="eel-controls-row"><button class="eel-btn-primary" id="cmpRunBtn">▶ Bandingkan Kedua Strategi</button></div>
+      <table class="eel-compare-table">
+        <thead><tr><th>Parameter</th><th>Strategi A</th><th>Strategi B</th></tr></thead>
+        <tbody>
+          <tr><td>Suhu Akhir</td><td id="cmpATemp">--</td><td id="cmpBTemp">--</td></tr>
+          <tr><td>Waktu Capai Target</td><td id="cmpATime">--</td><td id="cmpBTime">--</td></tr>
+          <tr><td>Energi Terpakai</td><td id="cmpAEnergy">--</td><td id="cmpBEnergy">--</td></tr>
+        </tbody>
+      </table>
+      <div class="eel-feedback" id="cmpConclusion"></div>
+    </div>
+  </div>
+
+  <div class="eel-legend" id="eelLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    function renderLegend() {
+      const el = $('eelLegend');
+      [{icon:'🌡️',label:'Suhu Ruangan'},{icon:'⚡',label:'Daya'},{icon:'🔋',label:'Energi'},{icon:'🌱',label:'Skor Efisiensi'}].forEach((f)=>{
+        const c = document.createElement('span'); c.className='eel-legend-chip'; c.innerHTML=`<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(c);
+      });
+    }
+    renderLegend();
+
+    document.querySelectorAll('.eel-tab').forEach((b)=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+    function switchTab(tab){ document.querySelectorAll('.eel-tab').forEach((b)=>b.classList.toggle('is-active', b.dataset.tab===tab)); ['room','compare'].forEach((t)=>$(`panel-${t}`).classList.toggle('is-active', t===tab)); }
+
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A','B','C','D'];
+      options.forEach((opt,i)=>{
+        const btn=document.createElement('button'); btn.className='eel-quiz-option';
+        btn.innerHTML=`<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click',()=>handler(i,btn,container)); container.appendChild(btn);
+      });
+    }
+    function choiceRow(container, options, defaultId, onChange) {
+      container.innerHTML = '';
+      let active = defaultId;
+      options.forEach((o) => {
+        const btn = document.createElement('button');
+        btn.className = 'eel-choice-btn' + (o.id === defaultId ? ' is-active' : '');
+        btn.textContent = o.label;
+        btn.addEventListener('click', () => {
+          active = o.id;
+          container.querySelectorAll('.eel-choice-btn').forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          onChange(active);
+        });
+        container.appendChild(btn);
+      });
+      return () => active;
+    }
+
+    // ============ PREDIKSI ============
+    let predicted = null;
+    renderQuizOptions($('predictOptions'), ['Membiarkan tirai terbuka', 'Menggunakan tirai', 'Membuka semua pintu & jendela tanpa memperhatikan suhu luar', 'Menambah lampu di dalam ruangan'], onPredict);
+    function onPredict(i, btn, container) {
+      if (predicted !== null) return;
+      predicted = i;
+      container.querySelectorAll('.eel-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      $('lockedNote').style.display = 'none';
+      $('roomBody').style.display = '';
+    }
+
+    // ============ STATE RUANGAN ============
+    const room = {
+      heat: 6, outside: 32, window: 'tutup', door: 'tutup', insul: 'sedang', curtain: 'off',
+      tech: 'ac', acSet: 22,
+    };
+
+    choiceRow($('windowChoice'), [{id:'tutup',label:'Tertutup'},{id:'buka',label:'Terbuka'}], room.window, (v)=>{room.window=v;});
+    choiceRow($('doorChoice'), [{id:'tutup',label:'Tertutup'},{id:'buka',label:'Terbuka'}], room.door, (v)=>{room.door=v;});
+    choiceRow($('insulChoice'), [{id:'buruk',label:'Buruk'},{id:'sedang',label:'Sedang'},{id:'baik',label:'Baik'}], room.insul, (v)=>{room.insul=v;});
+    choiceRow($('curtainChoice'), [{id:'off',label:'Tidak Dipakai'},{id:'on',label:'Dipakai'}], room.curtain, (v)=>{room.curtain=v;});
+
+    $('heatSlider').addEventListener('input', () => { room.heat = parseFloat($('heatSlider').value); $('heatVal').textContent = `${room.heat} / 10`; });
+    $('outsideSlider').addEventListener('input', () => { room.outside = parseFloat($('outsideSlider').value); $('outsideVal').textContent = `${room.outside}°C`; });
+    $('acSetSlider').addEventListener('input', () => { room.acSet = parseFloat($('acSetSlider').value); $('acSetVal').textContent = `${room.acSet}°C`; });
+
+    const TECHS = [
+      { id: 'kipas', icon: '🌀', label: 'Kipas', watt: 45 },
+      { id: 'ac', icon: '❄️', label: 'AC', watt: 900 },
+      { id: 'ventilasi', icon: '🌬️', label: 'Ventilasi', watt: 20 },
+      { id: 'none', icon: '⭕', label: 'Tidak Ada', watt: 0 },
+    ];
+    let acDisabled = false;
+    function renderTechGrid() {
+      $('techGrid').innerHTML = '';
+      TECHS.forEach((t) => {
+        const card = document.createElement('button');
+        card.className = 'eel-tech-card' + (t.id === room.tech ? ' is-active' : '');
+        if (t.id === 'ac' && acDisabled) card.style.opacity = '0.35';
+        card.innerHTML = `<span class="eel-tech-icon">${t.icon}</span><span class="eel-tech-label">${t.label}</span><span class="eel-tech-watt">${t.watt} W</span>`;
+        card.addEventListener('click', () => {
+          if (t.id === 'ac' && acDisabled) return;
+          room.tech = t.id;
+          renderTechGrid();
+          $('acSetRow').style.display = room.tech === 'ac' ? '' : 'none';
+        });
+        $('techGrid').appendChild(card);
+      });
+    }
+    renderTechGrid();
+    $('acSetRow').style.display = room.tech === 'ac' ? '' : 'none';
+
+    // ============ MESIN SIMULASI (dipakai ulang buat Compare) ============
+    function simulate(cfg, onTick, onDone) {
+      let temp = 30;
+      let energy = 0;
+      let t = 0; // menit simulasi
+      const samples = [];
+      const targetTemp = 24;
+      const durationMin = 60; // durasi simulasi "nyata" yang direpresentasikan
+      const animMs = 2200;
+      const start = performance.now();
+
+      function insulFactor(v) { return v === 'buruk' ? 1.5 : v === 'baik' ? 0.5 : 1.0; }
+      function step(now) {
+        const frac = Math.min(1, (now - start) / animMs);
+        const tNow = frac * durationMin;
+        const dtMin = tNow - t;
+        t = tNow;
+
+        // Laju panas masuk (per menit, skala arbitrer -- model konsisten, bukan data nyata)
+        let gain = cfg.heat * 0.08 * insulFactor(cfg.insul);
+        if (cfg.window === 'buka' || cfg.door === 'buka') gain *= 1.6;
+        if (cfg.curtain === 'on') gain *= 0.7;
+
+        // Laju pendinginan tergantung teknologi
+        let cool = 0, powerW = 0;
+        if (cfg.tech === 'ac') {
+          const gap = Math.max(0, temp - cfg.acSet);
+          cool = Math.min(1.2, gap * 0.25);
+          powerW = 900 * (0.35 + Math.min(1, gap / 8) * 0.65); // AC kerja lebih ringan kalau gap kecil (insulasi bantu)
+        } else if (cfg.tech === 'ventilasi') {
+          if (cfg.outside < temp) { cool = (temp - cfg.outside) * 0.06; powerW = 20; }
+        } else if (cfg.tech === 'kipas') {
+          cool = 0; powerW = 45; // kipas TIDAK menurunkan suhu, cuma kenyamanan
+        }
+
+        temp = temp + (gain - cool) * dtMin;
+        temp = Math.max(16, Math.min(38, temp));
+        energy += (powerW / 1000) * (dtMin / 60); // kWh
+
+        samples.push({ t, temp, energy });
+        if (onTick) onTick({ temp, energy, t, powerW });
+
+        if (frac < 1) requestAnimationFrame(step);
+        else if (onDone) onDone({ temp, energy, t, samples, reachedTarget: Math.abs(temp - targetTemp) <= 1.5 });
+      }
+      requestAnimationFrame(step);
+    }
+
+    function drawGraph(canvas, samples, key, color, maxY) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 16, h = 110;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+      if (samples.length < 2) return;
+      const maxT = Math.max(samples[samples.length - 1].t, 1);
+      const px = (t) => (t / maxT) * (w - 10) + 5;
+      const py = (v) => h - 10 - (v / maxY) * (h - 20);
+      ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+      for (let i = 0; i <= 4; i++) { const y = 10 + ((h - 20) / 4) * i; ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke(); }
+      ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 2.2;
+      samples.forEach((s, i) => { const x = px(s.t), y = py(s[key]); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+      ctx.stroke();
+    }
+
+    // ============ JALANKAN ROOM ============
+    let hasRunOnce = false;
+    $('runBtn').addEventListener('click', () => {
+      $('runBtn').disabled = true;
+      const cfg = { ...room };
+      simulate(cfg, ({ temp, energy, t, powerW }) => {
+        $('curPower').textContent = `${powerW.toFixed(0)} W`;
+        $('curEnergy').textContent = `${energy.toFixed(3)} kWh`;
+        $('curTime').textContent = `${t.toFixed(0)} menit`;
+        $('curTemp').textContent = `${temp.toFixed(1)}°C`;
+        $('roomTempDisplay').textContent = `${temp.toFixed(1)}°C`;
+        const heatT = Math.max(0, Math.min(1, (temp - 18) / 16));
+        $('roomBox').style.background = `linear-gradient(180deg, rgba(14,165,233,${0.25 - heatT * 0.15}), rgba(249,115,22,${heatT * 0.25}))`;
+        $('roomIcons').textContent = cfg.tech === 'ac' ? '❄️' : cfg.tech === 'kipas' ? '🌀' : cfg.tech === 'ventilasi' ? '🌬️' : '';
+        $('heatArrow').style.opacity = Math.min(1, cfg.heat / 10);
+      }, (result) => {
+        $('runBtn').disabled = false;
+        drawGraph($('tempGraph'), result.samples, 'temp', '#f97316', 38);
+        drawGraph($('energyGraph'), result.samples, 'energy', '#0ea5e9', Math.max(0.3, result.energy * 1.2));
+
+        const score = computeScore(result);
+        $('scoreBox').style.display = '';
+        $('scoreValue').textContent = score;
+        $('scoreValue').style.color = score >= 70 ? '#16a34a' : score >= 40 ? '#f59e0b' : '#dc2626';
+
+        const fb = $('runFeedback');
+        fb.classList.add('is-visible');
+        fb.classList.toggle('is-wrong', !result.reachedTarget);
+        fb.innerHTML = result.reachedTarget
+          ? `✅ <strong>Strategi berhasil!</strong> Suhu akhir ${result.temp.toFixed(1)}°C, energi terpakai ${result.energy.toFixed(3)} kWh. Coba kurangi energinya lebih jauh lagi -- masih bisa lebih hemat?`
+          : `💡 <strong>Belum mencapai target 24°C</strong> (suhu akhir ${result.temp.toFixed(1)}°C). Coba pikirkan lagi: sumber panas mana yang masuk ke ruangan, dan berapa lama sistem pendingin harus bekerja?`;
+
+        if (!hasRunOnce) {
+          hasRunOnce = true;
+          revealPredictFeedback();
+          $('challengeCard').style.display = '';
+          $('explainCard').style.display = '';
+        }
+      });
+    });
+
+    function computeScore(result) {
+      if (!result.reachedTarget) return Math.max(0, Math.round(40 - result.energy * 20));
+      const energyPenalty = result.energy * 60; // makin besar energi, makin besar penalti
+      return Math.max(0, Math.min(100, Math.round(100 - energyPenalty)));
+    }
+
+    function revealPredictFeedback() {
+      const fb = $('predictFeedback');
+      const correct = predicted === 1;
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      const msg = 'Tirai menghalangi radiasi matahari langsung masuk lewat jendela -- mengurangi panas yang harus "dilawan" AC, jadi AC bisa bekerja lebih ringan.';
+      fb.innerHTML = correct ? `✅ <strong>Tepat!</strong> ${msg}` : `💡 <strong>Belum tepat.</strong> ${msg}`;
+      $('predictOptions').querySelectorAll('.eel-quiz-option').forEach((b, i) => { if (i === 1) b.classList.add('is-correct'); else if (i === predicted) b.classList.add('is-wrong'); });
+    }
+
+    $('resetBtn').addEventListener('click', () => {
+      $('curPower').textContent = '0 W'; $('curEnergy').textContent = '0,000 kWh'; $('curTime').textContent = '0 menit'; $('curTemp').textContent = '30°C';
+      $('roomTempDisplay').textContent = '30°C';
+      $('scoreBox').style.display = 'none';
+      $('runFeedback').classList.remove('is-visible');
+      ['tempGraph', 'energyGraph'].forEach((id) => { const c = $(id); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height); });
+    });
+
+    // ============ PRESET TANTANGAN ============
+    $('presetSchool').addEventListener('click', () => {
+      room.heat = 9; room.outside = 32; $('heatSlider').value = 9; $('heatVal').textContent = '9 / 10';
+      $('outsideSlider').value = 32; $('outsideVal').textContent = '32°C';
+      alert('Kondisi Smart Classroom diterapkan: panas dari luar tinggi, suhu luar 32°C. Sekarang atur jendela/pintu/insulasi/tirai dan pilih teknologi pendingin terbaik menurutmu, lalu Jalankan.');
+    });
+    $('presetNoAC').addEventListener('click', () => {
+      acDisabled = true;
+      if (room.tech === 'ac') room.tech = 'kipas';
+      renderTechGrid();
+      $('acSetRow').style.display = 'none';
+      alert('AC dinonaktifkan untuk tantangan ini. Coba kombinasikan kipas, ventilasi, tirai, dan insulasi untuk membuat ruangan senyaman mungkin.');
+    });
+
+    // ============ COMPARE ============
+    $('cmpRunBtn').addEventListener('click', () => {
+      $('cmpRunBtn').disabled = true;
+      const cfgA = { heat: 6, outside: 32, window: 'tutup', door: 'tutup', insul: 'buruk', curtain: 'off', tech: 'ac', acSet: 22 };
+      const cfgB = { heat: 6, outside: 32, window: 'tutup', door: 'tutup', insul: 'baik', curtain: 'on', tech: 'ac', acSet: 22 };
+      let doneCount = 0;
+      function handleDone(label, result) {
+        $(`cmp${label}Temp`).textContent = `${result.temp.toFixed(1)}°C`;
+        $(`cmp${label}Time`).textContent = `${result.t.toFixed(0)} menit`;
+        $(`cmp${label}Energy`).textContent = `${result.energy.toFixed(3)} kWh`;
+        doneCount++;
+        if (doneCount === 2) {
+          $('cmpRunBtn').disabled = false;
+          const concl = $('cmpConclusion');
+          concl.classList.add('is-visible');
+          const eA = parseFloat($('cmpAEnergy').textContent);
+          const eB = parseFloat($('cmpBEnergy').textContent);
+          concl.innerHTML = eB < eA
+            ? `📊 Strategi B memakai energi lebih sedikit (${eB.toFixed(3)} kWh) dibanding Strategi A (${eA.toFixed(3)} kWh) untuk mencapai suhu yang setara -- insulasi & tirai mengurangi beban kerja AC.`
+            : `📊 Kali ini Strategi A dan B menghasilkan energi yang mirip -- coba ubah parameter lain di tab Smart Cooling Lab untuk melihat kondisi yang lebih menonjolkan perbedaannya.`;
+        }
+      }
+      simulate(cfgA, null, (r) => handleDone('A', r));
+      simulate(cfgB, null, (r) => handleDone('B', r));
+    });
+  </script>
+</body>
+</html>

@@ -21,17 +21,147 @@ const customLabs = [
       'Geser jarak & besar muatan, lihat gaya tarik/tolaknya berubah langsung, lengkap rincian perhitungannya.',
     tag: 'Kelas XII · Listrik Statis',
   },
+  {
+    href: '/lab-maya/medan-listrik',
+    icon: '🧲',
+    title: 'Medan Listrik',
+    description:
+      'Geser titik uji di sekitar muatan, lihat arah & kekuatan medannya berubah langsung, dan coba temukan titik di mana medannya nol.',
+    tag: 'Kelas XII · Listrik Statis',
+  },
+  {
+    href: '/lab-maya/hukum-newton',
+    icon: '🚀',
+    title: 'Hukum Newton',
+    description:
+      'Atur massa, gaya dorong, dan gaya gesek, lihat percepatan berubah langsung sesuai Hukum II Newton, lengkap ilustrasi aksi-reaksi.',
+    tag: 'Kelas X · Mekanika',
+  },
+  {
+    href: '/lab-maya/usaha-dan-daya',
+    icon: '📐',
+    title: 'Usaha dan Daya',
+    description:
+      'Atur gaya, sudut, dan jarak perpindahan, lihat usaha dan daya berubah langsung -- termasuk kenapa usaha bisa jadi nol.',
+    tag: 'Kelas X · Mekanika',
+  },
+  {
+    href: '/lab-maya/energi-mekanik',
+    icon: '⚡',
+    title: 'Energi Mekanik',
+    description:
+      'Jatuhkan benda dari ketinggian tertentu, amati energi kinetik dan potensial saling bertukar, sementara energi totalnya tetap sama.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-transformation-lab',
+    icon: '🔋',
+    title: 'Energy Transformation Lab',
+    description:
+      'Nyalakan lima sistem berbeda (lampu, motor, pemanas, speaker, tumbuhan), amati energi mengalir dan berubah bentuk, lengkap prediksi dan tantangan.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-conservation-lab',
+    icon: '⚖️',
+    title: 'Energy Conservation Lab',
+    description:
+      'Jatuhkan benda dan bandingkan dua jalur luncuran, buktikan sendiri lewat bar energi & grafik real-time bahwa energi tidak pernah hilang.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/renewable-energy-lab',
+    icon: '🌱',
+    title: 'Renewable Energy Lab',
+    description:
+      'Atur sendiri panel surya, turbin angin, dan turbin air -- amati daya listrik yang dihasilkan berubah real-time, lalu bandingkan ketiganya.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-consumption-lab',
+    icon: '🔌',
+    title: 'Energy Consumption Lab',
+    description:
+      'Nyalakan alat-alat di Smart Room & Smart Classroom virtual, atur lama pemakaiannya, dan temukan hubungan antara daya, waktu, dan energi (E = P × t).',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/non-renewable-energy-lab',
+    icon: '⛏️',
+    title: 'Non-Renewable Energy Lab',
+    description:
+      'Operasikan mini pembangkit listrik tenaga uap berbahan bakar fosil, amati transformasi energinya, dan buktikan sendiri kenapa sumbernya disebut terbatas.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-efficiency-lab',
+    icon: '🏠',
+    title: 'Energy Efficiency Lab',
+    description:
+      'Atur ruangan virtual (panas luar, jendela, insulasi, tirai) dan teknologi pendingin (kipas, AC, ventilasi), lalu cari strategi mencapai suhu nyaman dengan energi seminimal mungkin.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-crisis-lab',
+    icon: '🌍',
+    title: 'Energy Crisis Lab',
+    description:
+      'Jadi operator energi Kota Panca -- atur kombinasi pembangkit surya, angin, air, gas, dan batu bara, hadapi malam hari dan gelombang panas, lalu cari strategi paling seimbang.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/energy-planning-lab',
+    icon: '🏙️',
+    title: 'Energy Planning Lab',
+    description:
+      'Jadi Energy Planner -- rancang sistem energi Panca City dari nol, bangun pembangkit dan baterai penyimpanan, lalu uji ketahanannya lewat berbagai skenario perencanaan jangka panjang.',
+    tag: 'Kelas X · Energi',
+  },
+  {
+    href: '/lab-maya/fluida-dan-massa-jenis',
+    icon: '🧊',
+    title: 'Simulasi Massa Jenis (Density)',
+    description:
+      'Simulasi dari PhET Interactive Simulations -- bandingkan massa, volume, dan massa jenis berbagai benda, dan lihat sendiri mana yang mengapung atau tenggelam.',
+    tag: 'Kelas XI · Fluida',
+  },
 ];
 
-// Materi yang punya field `simulasi` (embed PhET/GeoGebra/dsb di dalam
-// artikelnya sendiri) — otomatis ikut muncul di sini begitu ditambahkan,
-// nggak perlu edit halaman ini tiap kali nulis materi baru.
+// Slug lab-embeds yang SUDAH punya halaman /lab-maya/* sendiri lewat
+// customLabs di atas (asumsi konvensi: /lab-maya/{slug} membungkus
+// /lab-embeds/{slug}.html — konsisten di semua Lab Maya yang dibangun sejauh
+// ini). Dipakai buat nyaring materiWithSim di bawah, biar simulasi yang sama
+// nggak muncul dobel: sekali sebagai kartu simulasi murni, sekali lagi
+// sebagai kartu yang sebenarnya mengarah ke artikel materi lengkap.
+const customLabEmbedSlugs = new Set(
+  customLabs.map((lab) => lab.href.replace('/lab-maya/', ''))
+);
+
+// Sebagian besar Lab Maya bikinan sendiri (lab-embeds/*.html) otomatis
+// kesaring lewat pola URL di atas. Tapi ada simulasi EKSTERNAL (mis. PhET)
+// yang urlnya bukan /lab-embeds/*.html, jadi disaring lewat id post materi-
+// nya secara eksplisit di sini kalau sudah punya wrapper /lab-maya/* sendiri.
+const materiSimAlreadyWrapped = new Set(['fluida-dan-massa-jenis']);
+
+// Materi yang punya field `simulasi` (embed PhET/GeoGebra/dsb, atau Lab Maya
+// yang BELUM punya halaman /lab-maya/* sendiri) — otomatis ikut muncul di
+// sini begitu ditambahkan, nggak perlu edit halaman ini tiap kali nulis
+// materi baru. Yang simulasinya sudah terwakili di customLabs disaring biar
+// nggak dobel.
 const materiWithSim = (
   await getCollection(
     'blog',
     ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.simulasi)
   )
-).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+)
+  .filter((post) => {
+    if (materiSimAlreadyWrapped.has(post.id)) return false;
+    const url = post.data.simulasi?.url ?? '';
+    const match = url.match(/\/lab-embeds\/([^/]+)\.html$/);
+    const slug = match?.[1];
+    return !slug || !customLabEmbedSlugs.has(slug);
+  })
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <BaseLayout

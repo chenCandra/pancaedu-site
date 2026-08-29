@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Hukum Newton</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --push-color: #ef4444;
+            --push-glow: rgba(239, 68, 68, 0.4);
+            --friction-color: #a78bfa;
+            --net-color: #facc15;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #facc15;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 12px;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
+
+        @media (min-width: 900px) {
+            .main-container { grid-template-columns: 360px 1fr; }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: opacity 0.2s ease;
+        }
+
+        .control-group.is-disabled { opacity: 0.45; pointer-events: none; }
+
+        .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+        .control-label { font-size: 0.875rem; font-weight: 500; color: var(--text-main); }
+
+        .num-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2px 8px;
+        }
+
+        .num-input-wrapper input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 50px;
+            text-align: right;
+            outline: none;
+        }
+
+        .unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .slider-container { display: flex; align-items: center; gap: 10px; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+        .push-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--push-color);
+            box-shadow: 0 0 10px var(--push-glow);
+        }
+
+        .friction-theme input[type="range"]::-webkit-slider-thumb {
+            background: var(--friction-color);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px 4px;
+        }
+
+        .toggle-row label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active { transform: scale(0.97); opacity: 0.9; }
+
+        .canvas-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+
+        @media (max-width: 420px) { .canvas-wrapper { height: 240px; } }
+
+        canvas { display: block; width: 100%; height: 100%; }
+
+        .canvas-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .results-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .result-highlight {
+            background: rgba(250, 204, 21, 0.1);
+            border-left: 4px solid var(--net-color);
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .force-val { font-size: 1.4rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', Courier, monospace; }
+
+        .sub-results { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .sub-result {
+            flex: 1;
+            min-width: 110px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border-left: 3px solid var(--card-border);
+        }
+
+        .sub-result-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+        .sub-result-value { font-size: 0.9rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
+
+        .interaction-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-hukum1 {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .badge-hukum2 {
+            background: rgba(250, 204, 21, 0.15);
+            color: var(--text-highlight);
+            border: 1px solid var(--net-color);
+        }
+
+        .formula-box {
+            background: #090d16;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .math-var { color: #38bdf8; font-weight: bold; }
+        .math-num { color: #f59e0b; }
+
+        .theory-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+        .reaksi-panel {
+            background: rgba(167, 139, 250, 0.08);
+            border: 1px dashed rgba(167, 139, 250, 0.4);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        .reaksi-panel.is-active { display: block; }
+        .reaksi-panel strong { color: var(--friction-color); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <h1>Laboratorium Maya: Hukum Newton</h1>
+        </div>
+        <span class="header-badge">SMA Kelas X</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Panel Parameter
+                </span>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="massSlider">Massa Benda (m)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="massNum" min="1" max="20" step="1" value="5">
+                        <span class="unit">kg</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="massSlider" min="1" max="20" step="1" value="5">
+                </div>
+            </div>
+
+            <div class="control-group push-theme">
+                <div class="control-label-row">
+                    <label class="control-label" for="pushSlider">Gaya Dorong (F)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="pushNum" min="0" max="100" step="5" value="40">
+                        <span class="unit">N</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="pushSlider" min="0" max="100" step="5" value="40">
+                </div>
+            </div>
+
+            <div class="toggle-row">
+                <label for="chkFriction">
+                    <input type="checkbox" id="chkFriction" style="accent-color: var(--friction-color);">
+                    Aktifkan gaya gesek
+                </label>
+            </div>
+
+            <div class="control-group friction-theme is-disabled" id="frictionGroup">
+                <div class="control-label-row">
+                    <label class="control-label" for="frictionSlider">Gaya Gesek (f)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="frictionNum" min="0" max="100" step="5" value="15">
+                        <span class="unit">N</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="frictionSlider" min="0" max="100" step="5" value="15">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row">
+                    <label class="control-label" for="timeSlider">Lama Gaya Bekerja (t)</label>
+                    <div class="num-input-wrapper">
+                        <input type="number" id="timeNum" min="0" max="10" step="0.5" value="3">
+                        <span class="unit">s</span>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="timeSlider" min="0" max="10" step="0.5" value="3">
+                </div>
+            </div>
+
+            <div class="toggle-row">
+                <label for="chkReaksi">
+                    <input type="checkbox" id="chkReaksi" style="accent-color: var(--accent-cyan);">
+                    Tampilkan pasangan aksi-reaksi (Hukum III)
+                </label>
+            </div>
+
+            <button class="btn-reset" id="btnReset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                Reset Eksperimen
+            </button>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Visualisasi Interaktif
+                </span>
+                <span id="statusBadge" class="interaction-badge badge-hukum2">Hukum II</span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction">💡 Atur gaya dorong & gesekan, lihat percepatan yang dihasilkan</div>
+            </div>
+
+            <div class="reaksi-panel" id="reaksiPanel">
+                💭 <strong>Hukum III (Aksi-Reaksi):</strong> saat tangan mendorong balok dengan gaya F ke kanan (aksi), balok mendorong balik tangan dengan gaya F yang sama besar ke kiri (reaksi). Keduanya bekerja pada BENDA BERBEDA (tangan & balok), makanya tidak saling meniadakan.
+            </div>
+
+            <div class="results-panel">
+                <div class="result-highlight">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Percepatan (a)</div>
+                        <div class="force-val" id="accelValue">0 m/s²</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Gaya Total (ΣF)</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="netForceValue">0 N</div>
+                    </div>
+                </div>
+
+                <div class="sub-results">
+                    <div class="sub-result">
+                        <div class="sub-result-label">Kecepatan setelah t detik (v)</div>
+                        <div class="sub-result-value" id="velValue">0 m/s</div>
+                    </div>
+                    <div class="sub-result">
+                        <div class="sub-result-label">Jarak tempuh (s)</div>
+                        <div class="sub-result-value" id="distValue">0 m</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
+                <div class="formula-box" id="formulaBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Tiga Hukum Newton</div>
+        <strong style="color: var(--accent-cyan);">Hukum I</strong> (Kelembaman): benda diam/GLB kalau ΣF = 0.
+        <strong style="color: var(--text-highlight);">Hukum II</strong>: <span class="math-var">a = ΣF / m</span> -- percepatan berbanding lurus gaya total, berbanding terbalik massa.
+        <strong style="color: var(--friction-color);">Hukum III</strong> (Aksi-Reaksi): tiap gaya aksi selalu dibalas gaya reaksi yang sama besar, berlawanan arah, pada benda yang berbeda.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const massSlider = document.getElementById('massSlider');
+        const massNum = document.getElementById('massNum');
+        const pushSlider = document.getElementById('pushSlider');
+        const pushNum = document.getElementById('pushNum');
+        const chkFriction = document.getElementById('chkFriction');
+        const frictionGroup = document.getElementById('frictionGroup');
+        const frictionSlider = document.getElementById('frictionSlider');
+        const frictionNum = document.getElementById('frictionNum');
+        const timeSlider = document.getElementById('timeSlider');
+        const timeNum = document.getElementById('timeNum');
+        const chkReaksi = document.getElementById('chkReaksi');
+        const reaksiPanel = document.getElementById('reaksiPanel');
+        const btnReset = document.getElementById('btnReset');
+
+        const accelValueEl = document.getElementById('accelValue');
+        const netForceValueEl = document.getElementById('netForceValue');
+        const velValueEl = document.getElementById('velValue');
+        const distValueEl = document.getElementById('distValue');
+        const formulaBoxEl = document.getElementById('formulaBox');
+        const statusBadgeEl = document.getElementById('statusBadge');
+
+        let mass = 5, push = 40, frictionOn = false, friction = 15, time = 3;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            render();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function syncInputs(source) {
+            if (source === 'massSlider') massNum.value = massSlider.value;
+            if (source === 'massNum') massSlider.value = massNum.value;
+            if (source === 'pushSlider') pushNum.value = pushSlider.value;
+            if (source === 'pushNum') pushSlider.value = pushNum.value;
+            if (source === 'frictionSlider') frictionNum.value = frictionSlider.value;
+            if (source === 'frictionNum') frictionSlider.value = frictionNum.value;
+            if (source === 'timeSlider') timeNum.value = timeSlider.value;
+            if (source === 'timeNum') timeSlider.value = timeNum.value;
+
+            mass = parseFloat(massNum.value) || 1;
+            push = parseFloat(pushNum.value) || 0;
+            friction = parseFloat(frictionNum.value) || 0;
+            time = parseFloat(timeNum.value) || 0;
+
+            calculateAndRender();
+        }
+
+        [massSlider, massNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [pushSlider, pushNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [frictionSlider, frictionNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        [timeSlider, timeNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+
+        chkFriction.addEventListener('change', () => {
+            frictionOn = chkFriction.checked;
+            frictionGroup.classList.toggle('is-disabled', !frictionOn);
+            calculateAndRender();
+        });
+
+        chkReaksi.addEventListener('change', () => {
+            reaksiPanel.classList.toggle('is-active', chkReaksi.checked);
+            render();
+        });
+
+        btnReset.addEventListener('click', () => {
+            massSlider.value = 5; massNum.value = 5;
+            pushSlider.value = 40; pushNum.value = 40;
+            frictionSlider.value = 15; frictionNum.value = 15;
+            timeSlider.value = 3; timeNum.value = 3;
+            chkFriction.checked = false;
+            frictionOn = false;
+            frictionGroup.classList.add('is-disabled');
+            chkReaksi.checked = false;
+            reaksiPanel.classList.remove('is-active');
+            syncInputs();
+        });
+
+        function computeNetForce() {
+            const f = frictionOn ? friction : 0;
+            return Math.max(0, push - f);
+        }
+
+        function updateResults() {
+            const netForce = computeNetForce();
+            const accel = netForce / mass;
+            const vel = accel * time;
+            const dist = 0.5 * accel * time * time;
+            const isHukum1 = netForce === 0;
+
+            accelValueEl.textContent = accel.toFixed(2) + ' m/s²';
+            netForceValueEl.textContent = netForce.toFixed(1) + ' N';
+            velValueEl.textContent = vel.toFixed(2) + ' m/s';
+            distValueEl.textContent = dist.toFixed(2) + ' m';
+
+            if (isHukum1) {
+                statusBadgeEl.textContent = 'Hukum I';
+                statusBadgeEl.className = 'interaction-badge badge-hukum1';
+            } else {
+                statusBadgeEl.textContent = 'Hukum II';
+                statusBadgeEl.className = 'interaction-badge badge-hukum2';
+            }
+
+            const fStr = frictionOn ? `${push} − ${friction}` : `${push}`;
+            let formula = `<span class="math-var">ΣF</span> = ${fStr} = <span class="math-num">${netForce.toFixed(1)} N</span>`;
+            formula += `<br><span class="math-var">a</span> = ΣF / m = ${netForce.toFixed(1)} / ${mass} = <span class="math-num">${accel.toFixed(2)} m/s²</span>`;
+            if (isHukum1) {
+                formula += `<br><em>ΣF = 0 → sesuai Hukum I, benda tetap diam atau bergerak lurus beraturan (GLB).</em>`;
+            } else {
+                formula += `<br><span class="math-var">v</span> = a × t = ${accel.toFixed(2)} × ${time} = <span class="math-num">${vel.toFixed(2)} m/s</span>`;
+                formula += `<br><span class="math-var">s</span> = ½ × a × t² = <span class="math-num">${dist.toFixed(2)} m</span>`;
+            }
+            formulaBoxEl.innerHTML = formula;
+
+            return { netForce, accel };
+        }
+
+        function drawArrow(fromX, fromY, len, color, label, lineWidth) {
+            if (len < 3) return;
+            const toX = fromX + len;
+            const headLen = 8;
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, fromY);
+            ctx.stroke();
+            const dir = len > 0 ? 1 : -1;
+            ctx.beginPath();
+            ctx.moveTo(toX, fromY);
+            ctx.lineTo(toX - dir * headLen, fromY - headLen / 2);
+            ctx.lineTo(toX - dir * headLen, fromY + headLen / 2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.font = 'bold 12px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, fromX + len / 2, fromY - 12);
+            ctx.restore();
+        }
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, width, height);
+
+            const groundY = height * 0.68;
+            const blockSize = Math.max(36, Math.min(64, width / 8));
+            const blockX = width / 2 - blockSize / 2;
+            const blockY = groundY - blockSize;
+
+            // Ground line
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(20, groundY);
+            ctx.lineTo(width - 20, groundY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Block
+            ctx.save();
+            const grad = ctx.createLinearGradient(blockX, blockY, blockX, blockY + blockSize);
+            grad.addColorStop(0, '#475569');
+            grad.addColorStop(1, '#1e293b');
+            ctx.fillStyle = grad;
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(blockX, blockY, blockSize, blockSize, 8);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = `bold ${Math.round(blockSize * 0.28)}px system-ui`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${mass} kg`, blockX + blockSize / 2, blockY + blockSize / 2);
+            ctx.restore();
+
+            // Force arrows scaled logarithmically for legibility
+            const maxArrowLen = width * 0.28;
+            const scale = (f) => Math.min(maxArrowLen, f * 2.2);
+            const arrowY = blockY + blockSize / 2;
+
+            // Gaya dorong (kanan, biru/merah)
+            drawArrow(blockX + blockSize + 6, arrowY - 10, scale(push), '#ef4444', 'F dorong', 3.5);
+
+            // Gaya gesek (kiri, ungu), kalau aktif
+            if (frictionOn && friction > 0) {
+                drawArrow(blockX - 6, arrowY + 10, -scale(friction), '#a78bfa', 'f gesek', 3.5);
+            }
+
+            // Reaksi (Hukum III) -- panah kecil dari balok mendorong balik "tangan" di kanan
+            if (chkReaksi.checked) {
+                ctx.save();
+                ctx.fillStyle = '#cbd5e1';
+                ctx.font = '11px system-ui';
+                ctx.textAlign = 'center';
+                ctx.fillText('✋ tangan', blockX + blockSize + scale(push) + 24, arrowY - 26);
+                ctx.restore();
+                drawArrow(blockX + blockSize + scale(push) + 6, arrowY + 22, Math.min(40, scale(push) * 0.4), '#38bdf8', 'reaksi', 2.5);
+            }
+        }
+
+        function calculateAndRender() {
+            updateResults();
+            render();
+        }
+
+        window.onload = () => {
+            resizeCanvas();
+            syncInputs();
+        };
+    </script>
+</body>
+</html>

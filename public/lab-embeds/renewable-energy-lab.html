@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Renewable Energy Lab</title>
+<style>
+  :root {
+    --sky-1: #dbeeff;
+    --sky-2: #eaf7ee;
+    --sky-3: #fef9e7;
+    --card-bg: #ffffff;
+    --card-border: #dbe7e2;
+    --ink: #1e293b;
+    --ink-muted: #52667a;
+    --ink-faint: #8195a6;
+    --brand-a: #f59e0b; /* amber -- matahari */
+    --brand-b: #22c55e; /* hijau -- teknologi bersih */
+    --surya: #f59e0b;
+    --angin: #0ea5e9;
+    --air: #2563eb;
+    --geothermal: #dc2626;
+    --biomassa: #65a30d;
+    --ok: #16a34a;
+    --warn: #dc2626;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 2px 14px rgba(30, 41, 59, 0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 55%, var(--sky-3) 100%);
+    color: var(--ink);
+    font-family: var(--font);
+    min-height: 100vh;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  button, select { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand-b); outline-offset: 2px; }
+
+  .rel-header {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-card);
+  }
+  .rel-header-title { display: flex; align-items: center; gap: 10px; }
+  .rel-header-icon { font-size: 1.5rem; }
+  .rel-header h1 {
+    font-size: 1.05rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--brand-a), var(--brand-b));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .rel-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .rel-brand-chip {
+    font-size: 0.7rem; font-weight: 700; color: var(--ink-muted);
+    background: rgba(34, 197, 94, 0.08); border: 1px solid var(--card-border);
+    padding: 4px 10px; border-radius: 999px;
+  }
+
+  .rel-intro-box {
+    background: rgba(255,255,255,0.65);
+    border-left: 3px solid var(--brand-b);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 14px; font-size: 0.83rem; color: var(--ink-muted); line-height: 1.5;
+  }
+
+  .rel-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rel-tab {
+    background: var(--card-bg); border: 1px solid var(--card-border); color: var(--ink-muted);
+    font-size: 0.82rem; font-weight: 700; padding: 8px 16px; border-radius: 999px; box-shadow: var(--shadow-card);
+  }
+  .rel-tab.is-active { color: #fff; background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+
+  .rel-panel { display: none; flex-direction: column; gap: 14px; }
+  .rel-panel.is-active { display: flex; }
+
+  .rel-card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md);
+    padding: 16px; box-shadow: var(--shadow-card);
+  }
+
+  /* ============ QUIZ ============ */
+  .rel-quiz-panel { display: flex; flex-direction: column; gap: 10px; }
+  .rel-quiz-label {
+    font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--brand-b); display: flex; align-items: center; gap: 6px;
+  }
+  .rel-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; }
+  .rel-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .rel-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .rel-quiz-option {
+    background: #f8fafc; border: 1px solid var(--card-border); color: var(--ink);
+    border-radius: var(--radius-sm); padding: 9px 12px; font-size: 0.82rem; text-align: left;
+    display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .rel-quiz-option:hover:not(:disabled) { border-color: var(--brand-b); background: rgba(34, 197, 94, 0.06); }
+  .rel-quiz-option .letter { font-weight: 800; color: var(--brand-b); flex-shrink: 0; }
+  .rel-quiz-option:disabled { cursor: default; opacity: 0.65; }
+  .rel-quiz-option.is-chosen { border-color: var(--brand-b); background: rgba(34, 197, 94, 0.1); }
+  .rel-quiz-option.is-correct { border-color: var(--ok); background: rgba(22, 163, 74, 0.1); }
+  .rel-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220, 38, 38, 0.08); }
+
+  .rel-feedback {
+    font-size: 0.85rem; line-height: 1.5; padding: 10px 14px; border-radius: var(--radius-sm);
+    border-left: 3px solid var(--ok); background: rgba(22, 163, 74, 0.08); display: none;
+  }
+  .rel-feedback.is-visible { display: block; }
+  .rel-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220, 38, 38, 0.06); }
+
+  .rel-locked-hint { font-size: 0.76rem; color: var(--ink-faint); font-style: italic; }
+
+  /* ============ PARAM ============ */
+  .rel-param-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .rel-param-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .rel-param-row { display: flex; flex-direction: column; gap: 6px; }
+  .rel-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .rel-param-value { font-family: 'Courier New', monospace; font-weight: 800; }
+  .rel-param-row input[type="range"] { width: 100%; }
+
+  /* ============ STAGE ============ */
+  .rel-stage {
+    display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: nowrap;
+    padding: 10px 4px; overflow-x: auto;
+  }
+  .rel-flow-node { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 76px; flex-shrink: 0; }
+  .rel-flow-circle {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #f8fafc; border: 2px solid var(--card-border);
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    position: relative; transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .rel-flow-label { font-size: 0.66rem; font-weight: 700; color: var(--ink-muted); text-align: center; }
+  .rel-flow-conduit { width: 34px; height: 6px; border-radius: 999px; background: rgba(0,0,0,0.06); position: relative; overflow: hidden; flex-shrink: 0; }
+  .rel-flow-dot { position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: currentColor; transform: translate(-50%,-50%); left: 0%; opacity: 0; box-shadow: 0 0 6px currentColor; }
+  @keyframes rel-flow { 0% { left: 0%; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+
+  /* Panel surya: rotasi sinar */
+  .rel-sun-rays { position: absolute; inset: -8px; }
+  .rel-sun-rays::before {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.35);
+    animation: rel-pulse-ring 1.8s ease-out infinite;
+  }
+  @keyframes rel-pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.35); } 100% { box-shadow: 0 0 0 16px rgba(245, 158, 11, 0); } }
+
+  /* Turbin angin: baling-baling berputar */
+  .rel-turbine-blade { display: inline-block; transition: transform 0.1s linear; }
+
+  /* Air: gelombang */
+  .rel-water-wave { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+  .rel-water-wave::after {
+    content: ''; position: absolute; left: -20%; right: -20%; bottom: 0; height: 60%;
+    background: linear-gradient(180deg, rgba(37,99,235,0.15), rgba(37,99,235,0.35));
+  }
+
+  /* ============ OUTPUT ============ */
+  .rel-output-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    background: #f8fafc; border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 12px 16px;
+  }
+  .rel-output-label { font-size: 0.78rem; color: var(--ink-muted); font-weight: 700; }
+  .rel-output-value { font-size: 1.5rem; font-weight: 900; font-family: 'Courier New', monospace; }
+
+  .rel-formula-box {
+    background: #0f172a; color: #e2e8f0; padding: 10px 12px; border-radius: var(--radius-sm);
+    font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto;
+  }
+  .rel-formula-box .v { color: #fbbf24; font-weight: 700; }
+
+  .rel-bar-track { height: 1rem; background: #eef2f7; border-radius: 999px; overflow: hidden; border: 1px solid var(--card-border); margin-top: 8px; }
+  .rel-bar-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 0.15s ease; }
+
+  /* ============ EXPLAIN ============ */
+  .rel-explain-cols { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .rel-explain-cols { grid-template-columns: 1fr 1fr; } }
+  .rel-explain-col { background: #f8fafc; border-radius: var(--radius-sm); padding: 10px 12px; }
+  .rel-explain-col h4 { font-size: 0.78rem; font-weight: 800; margin-bottom: 6px; }
+  .rel-explain-col.good h4 { color: var(--ok); }
+  .rel-explain-col.limit h4 { color: var(--warn); }
+  .rel-explain-col ul { padding-left: 18px; font-size: 0.8rem; color: var(--ink-muted); line-height: 1.6; }
+
+  .rel-note {
+    font-size: 0.72rem; color: var(--ink-faint); background: rgba(0,0,0,0.02);
+    border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px 12px; line-height: 1.5;
+  }
+
+  /* ============ COMPARE ============ */
+  .rel-compare-table-wrap { overflow-x: auto; }
+  .rel-compare-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 480px; }
+  .rel-compare-table th, .rel-compare-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--card-border); }
+  .rel-compare-table th { color: var(--ink-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .rel-compare-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .rel-compare-bar-row { display: flex; align-items: center; gap: 10px; }
+  .rel-compare-bar-label { width: 90px; font-size: 0.78rem; font-weight: 700; flex-shrink: 0; }
+  .rel-compare-bar-track { flex: 1; height: 1.15rem; background: #eef2f7; border-radius: 999px; overflow: hidden; border: 1px solid var(--card-border); }
+  .rel-compare-bar-fill { height: 100%; border-radius: 999px; transition: width 0.2s ease; }
+  .rel-compare-bar-value { width: 76px; text-align: right; font-size: 0.78rem; font-weight: 700; font-family: 'Courier New', monospace; flex-shrink: 0; }
+
+  .rel-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .rel-legend-chip {
+    display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: var(--ink-muted);
+    background: rgba(255,255,255,0.6); border: 1px solid var(--card-border); padding: 3px 9px; border-radius: 999px;
+  }
+
+  h2.rel-title { font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+  /* ============ UPGRADE: GRAFIK PER SUMBER ============ */
+  .rel-graph-wrap { background: #f8fafc; border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px; margin-top: 10px; }
+  .rel-graph-wrap canvas { display: block; width: 100%; height: 110px; }
+  .rel-graph-caption { font-size: 0.7rem; color: var(--ink-faint); margin-bottom: 4px; }
+
+  /* ============ UPGRADE: TOGGLE SIANG/MALAM ============ */
+  .rel-daynight-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .rel-daynight-btn { background: #f8fafc; border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.8rem; font-weight: 700; padding: 7px 16px; border-radius: 999px; }
+  .rel-daynight-btn.is-active { color: #fff; background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+
+  /* ============ UPGRADE: MIX TAB ============ */
+  .rel-mix-row { display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 8px; }
+  .rel-mix-icon { font-size: 1.3rem; width: 28px; text-align: center; }
+  .rel-mix-label { flex: 1; font-size: 0.82rem; font-weight: 700; }
+  .rel-mix-value { font-family: 'Courier New', monospace; font-weight: 800; }
+  .rel-mix-total-row { display: flex; align-items: center; justify-content: space-between; background: #0f172a; color: #fff; border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 10px; }
+  .rel-mix-total-value { font-size: 1.6rem; font-weight: 900; font-family: 'Courier New', monospace; }
+
+  .rel-misconception { border-left: 3px solid var(--warn); background: rgba(220,38,38,0.05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 0.82rem; color: var(--ink-muted); line-height: 1.55; margin-top: 10px; }
+  .rel-misconception strong { color: var(--ink); }
+</style>
+</head>
+<body>
+  <div class="rel-header">
+    <div class="rel-header-title">
+      <span class="rel-header-icon">🌱</span>
+      <div>
+        <h1>Renewable Energy Lab</h1>
+        <p>Eksplorasi Energi Terbarukan</p>
+      </div>
+    </div>
+    <span class="rel-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <p class="rel-intro-box">Sama seperti di <strong>Energy Transformation Lab</strong>, di sini energi juga mengalir dan berubah bentuk -- bedanya, sekarang sumbernya dari alam. Coba eksplorasi tiga sumber energi terbarukan, atur sendiri parameternya, dan lihat apa yang memengaruhi besar daya listrik yang dihasilkan.</p>
+
+  <div class="rel-tabs">
+    <button class="rel-tab is-active" data-tab="surya">☀️ Surya</button>
+    <button class="rel-tab" data-tab="angin">💨 Angin</button>
+    <button class="rel-tab" data-tab="air">💧 Air</button>
+    <button class="rel-tab" data-tab="geothermal">🌋 Panas Bumi</button>
+    <button class="rel-tab" data-tab="biomassa">🌱 Biomassa</button>
+    <button class="rel-tab" data-tab="compare">⚡ Bandingkan</button>
+    <button class="rel-tab" data-tab="mix">🔀 Renewable Mix</button>
+  </div>
+
+  <!-- ============ TEMPLATE UNTUK TIAP SUMBER (diisi JS) ============ -->
+  <template id="sourcePanelTemplate">
+    <div class="rel-card rel-quiz-panel" data-part="predict">
+      <span class="rel-quiz-label">💭 Coba Prediksi</span>
+      <p class="rel-quiz-question" data-el="predictQ"></p>
+      <div class="rel-quiz-options" data-el="predictOptions"></div>
+      <div class="rel-feedback" data-el="predictFeedback"></div>
+    </div>
+
+    <div class="rel-card">
+      <h2 class="rel-title" data-el="paramTitle"></h2>
+      <p class="rel-locked-hint" data-el="lockedHint">🔒 Jawab prediksi di atas dulu untuk membuka kontrol simulasi.</p>
+      <div class="rel-param-grid" data-el="paramGrid" style="display:none;"></div>
+    </div>
+
+    <div class="rel-card" data-el="stageCard" style="display:none;">
+      <div class="rel-daynight-row" data-el="daynightRow" style="display:none;"></div>
+      <div class="rel-stage" data-el="stage"></div>
+      <div class="rel-output-row">
+        <span class="rel-output-label" data-el="outputLabel">Daya Listrik Dihasilkan</span>
+        <span class="rel-output-value" data-el="outputValue">0 W</span>
+      </div>
+      <div class="rel-bar-track"><div class="rel-bar-fill" data-el="outputBar"></div></div>
+      <p style="font-size:0.72rem;color:var(--ink-faint);margin-top:4px;">Rincian Perhitungan:</p>
+      <div class="rel-formula-box" data-el="formulaBox"></div>
+      <div class="rel-graph-wrap">
+        <p class="rel-graph-caption" data-el="graphCaption"></p>
+        <canvas data-el="graphCanvas"></canvas>
+      </div>
+    </div>
+
+    <div class="rel-card rel-quiz-panel" data-el="challengeCard" style="display:none;">
+      <span class="rel-quiz-label">🎯 Tantangan</span>
+      <p class="rel-quiz-question" data-el="challengeQ"></p>
+      <div data-el="challengeBody"></div>
+      <div class="rel-feedback" data-el="challengeFeedback"></div>
+    </div>
+
+    <div class="rel-card" data-el="explainCard" style="display:none;">
+      <h2 class="rel-title" data-el="explainTitle"></h2>
+      <p style="font-size:0.85rem;color:var(--ink-muted);line-height:1.6;margin-bottom:10px;" data-el="explainIntro"></p>
+      <div class="rel-explain-cols">
+        <div class="rel-explain-col good"><h4>✅ Kelebihan</h4><ul data-el="explainGood"></ul></div>
+        <div class="rel-explain-col limit"><h4>⚠️ Keterbatasan</h4><ul data-el="explainLimit"></ul></div>
+      </div>
+    </div>
+  </template>
+
+  <div class="rel-panel is-active" id="panel-surya"></div>
+  <div class="rel-panel" id="panel-angin"></div>
+  <div class="rel-panel" id="panel-air"></div>
+  <div class="rel-panel" id="panel-geothermal"></div>
+  <div class="rel-panel" id="panel-biomassa"></div>
+
+  <!-- ============ MIX ============ -->
+  <div class="rel-panel" id="panel-mix">
+    <div class="rel-card">
+      <h2 class="rel-title">🔀 Renewable Mix Challenge</h2>
+      <p style="font-size:0.83rem;color:var(--ink-muted);margin-bottom:12px;">Angka di bawah ini mengikuti pengaturan parameter terakhir yang kamu atur di tiap tab sumber energi. Atur kelima sumber sekaligus (bolak-balik antar tab) supaya totalnya mencapai target.</p>
+      <div id="mixRows"></div>
+      <div class="rel-mix-total-row">
+        <span>⚡ Total Output Gabungan</span>
+        <span class="rel-mix-total-value" id="mixTotal">0 W</span>
+      </div>
+      <p style="font-size:0.85rem;font-weight:700;margin-top:12px;">🎯 Target: <strong>1.000 W</strong></p>
+      <div class="rel-feedback" id="mixFeedback"></div>
+    </div>
+  </div>
+
+  <!-- ============ COMPARE ============ -->
+  <div class="rel-panel" id="panel-compare">
+    <div class="rel-card">
+      <h2 class="rel-title">⚡ Bandingkan Tiga Sumber Energi</h2>
+      <p style="font-size:0.83rem;color:var(--ink-muted);margin-bottom:12px;">Angka di bawah mengikuti pengaturan parameter terakhir yang kamu atur di masing-masing tab. Coba ubah dulu sliders di tab Surya/Angin/Air, lalu kembali ke sini.</p>
+      <div class="rel-compare-table-wrap">
+        <table class="rel-compare-table">
+          <thead><tr><th>Sumber</th><th>Bentuk Energi Awal</th><th>Mekanisme Konversi</th><th>Output</th><th>Ketergantungan Utama</th></tr></thead>
+          <tbody id="cmpTableBody"></tbody>
+        </table>
+      </div>
+      <div class="rel-compare-bars" id="cmpBars"></div>
+
+      <div class="rel-misconception">
+        ⚠️ <strong>Dua miskonsepsi yang perlu dihindari:</strong><br>
+        "Energi terbarukan = energi tanpa batas" -- <strong>tidak tepat.</strong> Sumbernya dapat diperbarui secara alami dalam skala waktu yang relevan, tapi ketersediaan &amp; kapasitas pemanfaatannya tetap terbatas (lihat sendiri bagaimana output berubah-ubah di tiap tab).<br><br>
+        "Energi terbarukan tidak punya dampak lingkungan sama sekali" -- <strong>tidak tepat.</strong> Dampaknya berbeda dari energi fosil (umumnya lebih rendah), tapi tetap ada dan perlu dipertimbangkan -- misalnya biomassa yang tetap menghasilkan emisi saat dibakar.
+      </div>
+    </div>
+
+    <div class="rel-card rel-quiz-panel">
+      <span class="rel-quiz-label">🎯 Tantangan 4 — Pilih Sumber</span>
+      <p class="rel-quiz-question">Sebuah daerah memiliki banyak sinar matahari tetapi hampir tidak memiliki aliran air yang cukup. Sumber energi mana yang paling masuk akal dikembangkan di sana?</p>
+      <div class="rel-quiz-options" id="cmpChallengeOptions"></div>
+      <div class="rel-feedback" id="cmpChallengeFeedback"></div>
+    </div>
+
+    <p class="rel-note">📝 Ingat: tidak ada sumber energi terbarukan yang "paling baik" secara mutlak -- pemilihannya selalu tergantung kondisi alam, kebutuhan, teknologi, biaya, dan lingkungan setempat.</p>
+  </div>
+
+  <div class="rel-legend" id="relLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const AIR_DENSITY = 1.2;   // kg/m3, kerapatan udara -- tetap, tidak jadi slider
+    const WATER_DENSITY = 1000; // kg/m3
+    const G = 9.8;
+
+    // ============ TAB ============
+    document.querySelectorAll('.rel-tab').forEach((btn) => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+    function switchTab(tab) {
+      document.querySelectorAll('.rel-tab').forEach((b) => b.classList.toggle('is-active', b.dataset.tab === tab));
+      ['surya', 'angin', 'air', 'geothermal', 'biomassa', 'compare', 'mix'].forEach((t) => {
+        $(`panel-${t}`).classList.toggle('is-active', t === tab);
+      });
+      if (tab === 'compare') refreshCompare();
+      if (tab === 'mix') refreshMix();
+    }
+
+    // ============ LEGENDA ============
+    function renderLegend() {
+      const el = $('relLegend');
+      el.innerHTML = '';
+      [
+        { icon: '☀️', label: 'Energi Surya', color: 'var(--surya)' },
+        { icon: '💨', label: 'Energi Angin', color: 'var(--angin)' },
+        { icon: '💧', label: 'Energi Air', color: 'var(--air)' },
+        { icon: '🌋', label: 'Panas Bumi', color: 'var(--geothermal)' },
+        { icon: '🌱', label: 'Biomassa', color: 'var(--biomassa)' },
+        { icon: '⚡', label: 'Energi Listrik', color: '#0f172a' },
+      ].forEach((f) => {
+        const chip = document.createElement('span');
+        chip.className = 'rel-legend-chip';
+        chip.style.color = f.color;
+        chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`;
+        el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    // ============ DEFINISI 3 SUMBER ============
+    const SOURCES = {
+      surya: {
+        color: 'var(--surya)',
+        title: '☀️ Panel Surya',
+        formAwal: 'Radiasi Cahaya',
+        mekanisme: 'Efek Fotovoltaik',
+        graphParam: 'intensity',
+        hasDayNight: true,
+        flowNodes: [
+          { icon: '☀️', label: 'Matahari' },
+          { icon: '🔲', label: 'Panel Surya' },
+          { icon: '⚡', label: 'Listrik' },
+          { icon: '💡', label: 'Beban' },
+        ],
+        predict: {
+          q: 'Apa yang terjadi pada daya listrik panel surya jika intensitas cahaya matahari meningkat?',
+          options: ['Berkurang', 'Tetap', 'Bertambah', 'Menjadi nol'],
+          correct: 2,
+        },
+        params: [
+          { key: 'intensity', label: '☀️ Intensitas Cahaya', unit: 'W/m²', min: 200, max: 1000, step: 50, default: 600 },
+          { key: 'area', label: '🔲 Luas Panel', unit: 'm²', min: 0.5, max: 5, step: 0.5, default: 2 },
+          { key: 'eff', label: '⚙️ Efisiensi Panel', unit: '%', min: 10, max: 25, step: 1, default: 18 },
+        ],
+        compute(p) {
+          const power = p.intensity * p.area * (p.eff / 100);
+          const formula = `P = I × A × η = ${p.intensity} × ${p.area} × ${(p.eff / 100).toFixed(2)} = <span class="v">${power.toFixed(1)} W</span>`;
+          return { power, eff: p.eff, formula, maxRef: 1000 * 5 * 0.25 };
+        },
+        challenge: { q: 'Atur panel surya sehingga menghasilkan daya minimal 150 W.', type: 'target', target: 150 },
+        explain: {
+          intro: 'Matahari menyediakan energi radiasi yang dimanfaatkan panel surya (sel fotovoltaik) untuk menghasilkan energi listrik secara langsung.',
+          good: ['Sumbernya melimpah dan gratis', 'Tidak menghasilkan emisi langsung saat digunakan', 'Bisa dipasang di berbagai lokasi, bahkan atap rumah'],
+          limit: ['Output sangat bergantung intensitas cahaya -- turun drastis saat mendung atau malam hari', 'Butuh luas area yang cukup besar untuk daya besar', 'Efisiensi panel komersial masih terbatas (10-25%)'],
+        },
+      },
+      angin: {
+        color: 'var(--angin)',
+        title: '💨 Turbin Angin',
+        formAwal: 'Energi Kinetik Angin',
+        mekanisme: 'Rotasi Turbin + Generator',
+        graphParam: 'speed',
+        flowNodes: [
+          { icon: '💨', label: 'Angin' },
+          { icon: '🌀', label: 'Turbin' },
+          { icon: '⚡', label: 'Listrik' },
+          { icon: '💡', label: 'Beban' },
+        ],
+        predict: {
+          q: 'Kalau kecepatan angin dinaikkan sedikit saja, apa yang terjadi pada daya listrik yang dihasilkan turbin?',
+          options: ['Naik sedikit, sebanding dengan kenaikan kecepatan', 'Naik jauh lebih besar dari kenaikan kecepatannya', 'Tidak berubah', 'Turun'],
+          correct: 1,
+        },
+        params: [
+          { key: 'speed', label: '💨 Kecepatan Angin', unit: 'm/s', min: 0, max: 20, step: 1, default: 8 },
+          { key: 'area', label: '🌀 Luas Sapuan Rotor', unit: 'm²', min: 1, max: 10, step: 1, default: 3 },
+          { key: 'eff', label: '⚙️ Efisiensi Turbin', unit: '%', min: 20, max: 40, step: 1, default: 30 },
+        ],
+        compute(p) {
+          const power = 0.5 * AIR_DENSITY * p.area * Math.pow(p.speed, 3) * (p.eff / 100);
+          const formula = `P = ½ × ρ × A × v³ × η = ½ × 1,2 × ${p.area} × ${p.speed}³ × ${(p.eff / 100).toFixed(2)} = <span class="v">${power.toFixed(1)} W</span>`;
+          return { power, eff: p.eff, formula, maxRef: 0.5 * AIR_DENSITY * 10 * Math.pow(20, 3) * 0.4 };
+        },
+        challenge: { q: 'Naikkan kecepatan angin sampai daya listriknya melewati 300 W.', type: 'target', target: 300 },
+        explain: {
+          intro: 'Angin yang bergerak memiliki energi kinetik. Turbin mengubah energi gerak angin jadi energi gerak putar (mekanik), lalu generator mengubahnya jadi energi listrik.',
+          good: ['Tidak butuh bahan bakar sama sekali', 'Bisa dipasang di darat maupun lepas pantai', 'Teknologinya sudah cukup matang dan luas dipakai'],
+          limit: ['Sangat bergantung kecepatan angin -- daya naik/turun drastis (naik pangkat tiga!) mengikuti perubahan kecepatan', 'Butuh lokasi dengan angin cukup kencang & konsisten', 'Menimbulkan suara & bisa mengganggu jalur burung'],
+        },
+      },
+      air: {
+        color: 'var(--air)',
+        title: '💧 Turbin Air (PLTA Mini)',
+        formAwal: 'Energi Potensial Air',
+        mekanisme: 'Aliran Turbin + Generator',
+        graphParam: 'debit',
+        flowNodes: [
+          { icon: '💧', label: 'Air' },
+          { icon: '🌀', label: 'Turbin' },
+          { icon: '⚡', label: 'Listrik' },
+          { icon: '💡', label: 'Beban' },
+        ],
+        predict: {
+          q: 'Kalau debit air (jumlah air yang mengalir tiap detik) diperbesar, apa yang terjadi pada daya listrik PLTA?',
+          options: ['Berkurang', 'Bertambah', 'Tetap sama', 'Tergantung warna airnya'],
+          correct: 1,
+        },
+        params: [
+          { key: 'debit', label: '💧 Debit Air (Q)', unit: 'm³/s', min: 0.02, max: 1, step: 0.02, default: 0.05 },
+          { key: 'height', label: '🏔️ Ketinggian Jatuh (h)', unit: 'm', min: 1, max: 20, step: 1, default: 3 },
+          { key: 'eff', label: '⚙️ Efisiensi Turbin', unit: '%', min: 60, max: 90, step: 1, default: 75 },
+        ],
+        compute(p) {
+          const power = WATER_DENSITY * G * p.debit * p.height * (p.eff / 100);
+          const formula = `P = ρ × g × Q × h × η = 1000 × 9,8 × ${p.debit} × ${p.height} × ${(p.eff / 100).toFixed(2)} = <span class="v">${power.toFixed(1)} W</span>`;
+          return { power, eff: p.eff, formula, maxRef: WATER_DENSITY * G * 1 * 20 * 0.9 };
+        },
+        challenge: { q: 'Atur ketinggian dan debit air sehingga daya listriknya melewati 2000 W.', type: 'target', target: 2000 },
+        explain: {
+          intro: 'Air yang berada di ketinggian punya energi potensial. Saat mengalir turun lewat turbin, energi potensial berubah jadi energi gerak, lalu generator mengubahnya jadi energi listrik.',
+          good: ['Bisa menghasilkan listrik yang stabil sepanjang waktu (selama air terus mengalir)', 'Air jauh lebih rapat dari udara, jadi daya yang dihasilkan cenderung lebih besar dibanding sumber lain di skala serupa', 'Teknologinya sudah sangat matang dan efisiensinya tinggi'],
+          limit: ['Butuh kondisi geografis yang sesuai -- ada aliran air dan beda ketinggian yang cukup', 'Pembangunan bendungan besar bisa mengubah ekosistem sungai', 'Tidak bisa dibangun di daerah yang minim sumber air'],
+        },
+      },
+      geothermal: {
+        color: 'var(--geothermal)',
+        title: '🌋 Pembangkit Listrik Tenaga Panas Bumi (PLTP)',
+        formAwal: 'Panas Bumi (Geotermal)',
+        mekanisme: 'Uap Bertekanan → Turbin + Generator',
+        graphParam: 'suhu',
+        flowNodes: [
+          { icon: '🌋', label: 'Reservoir Panas' },
+          { icon: '💨', label: 'Uap' },
+          { icon: '⚡', label: 'Listrik' },
+          { icon: '💡', label: 'Beban' },
+        ],
+        predict: {
+          q: 'Apa yang terjadi pada daya listrik PLTP jika suhu reservoir panas bumi meningkat?',
+          options: ['Berkurang', 'Tetap sama', 'Bertambah', 'Menjadi nol'],
+          correct: 2,
+        },
+        params: [
+          { key: 'suhu', label: '🌋 Suhu Reservoir', unit: '°C', min: 100, max: 300, step: 10, default: 180 },
+          { key: 'laju', label: '💨 Laju Alir Uap', unit: 'kg/s', min: 1, max: 10, step: 0.5, default: 4 },
+          { key: 'eff', label: '⚙️ Efisiensi Turbin', unit: '%', min: 10, max: 20, step: 1, default: 15 },
+        ],
+        compute(p) {
+          const power = p.laju * (p.suhu - 100) * 2 * (p.eff / 100);
+          const formula = `P = laju alir × (suhu − 100) × 2 × η = ${p.laju} × ${(p.suhu - 100).toFixed(0)} × 2 × ${(p.eff / 100).toFixed(2)} = <span class="v">${power.toFixed(1)} W</span> <br><span style="color:#94a3b8;">(rumus model simulasi -- bukan perhitungan entalpi uap sesungguhnya)</span>`;
+          return { power, eff: p.eff, formula, maxRef: 10 * 200 * 2 * 0.2 };
+        },
+        challenge: { q: 'Naikkan suhu reservoir dan laju alir uap sampai daya listriknya melewati 200 W.', type: 'target', target: 200 },
+        explain: {
+          intro: 'Panas dari dalam bumi memanaskan air jadi uap bertekanan tinggi. Uap ini memutar turbin, lalu generator mengubah energi gerak jadi energi listrik.',
+          good: ['Relatif stabil -- tidak tergantung cuaca, siang, atau malam', 'Bisa beroperasi hampir terus-menerus sebagai pasokan dasar (base-load)', 'Emisi operasional jauh lebih rendah dibanding pembangkit berbahan bakar fosil'],
+          limit: ['Hanya tersedia di lokasi dengan kondisi geologi yang sesuai (dekat aktivitas vulkanik/panas bumi)', 'Butuh investasi eksplorasi & pengeboran yang besar di awal', 'Berpotensi memengaruhi kestabilan tanah di sekitar lokasi kalau tidak dikelola hati-hati'],
+        },
+      },
+      biomassa: {
+        color: 'var(--biomassa)',
+        title: '🌱 Pembangkit Listrik Tenaga Biomassa',
+        formAwal: 'Energi Kimia Biomassa',
+        mekanisme: 'Pembakaran/Konversi → Panas → Listrik',
+        graphParam: 'massa',
+        flowNodes: [
+          { icon: '🌱', label: 'Biomassa' },
+          { icon: '🔥', label: 'Proses Konversi' },
+          { icon: '⚡', label: 'Listrik' },
+          { icon: '💡', label: 'Beban' },
+        ],
+        predict: {
+          q: 'Apa yang terjadi pada daya listrik yang dihasilkan jika massa biomassa yang diproses tiap jam ditambah?',
+          options: ['Berkurang', 'Tetap sama', 'Bertambah', 'Menjadi nol'],
+          correct: 2,
+        },
+        params: [
+          { key: 'massa', label: '🌱 Massa Biomassa', unit: 'kg/jam', min: 1, max: 20, step: 1, default: 8 },
+          { key: 'kalor', label: '🔥 Nilai Kalor', unit: 'MJ/kg', min: 10, max: 20, step: 1, default: 15 },
+          { key: 'eff', label: '⚙️ Efisiensi Konversi', unit: '%', min: 15, max: 30, step: 1, default: 22 },
+        ],
+        compute(p) {
+          const power = p.massa * p.kalor * (p.eff / 100) * 3;
+          const formula = `P = massa × nilai kalor × η × 3 = ${p.massa} × ${p.kalor} × ${(p.eff / 100).toFixed(2)} × 3 = <span class="v">${power.toFixed(1)} W</span> <br><span style="color:#94a3b8;">(angka "× 3" faktor skala simulasi, bukan konversi satuan energi penuh)</span>`;
+          return { power, eff: p.eff, formula, maxRef: 20 * 20 * 0.3 * 3 };
+        },
+        challenge: { q: 'Atur massa biomassa dan nilai kalornya sampai daya listriknya melewati 150 W.', type: 'target', target: 150 },
+        explain: {
+          intro: 'Biomassa (sisa tumbuhan, limbah organik) menyimpan energi kimia hasil fotosintesis. Lewat pembakaran atau proses konversi lain, energi kimia ini diubah jadi energi panas, lalu menggerakkan turbin/generator jadi energi listrik.',
+          good: ['Memanfaatkan limbah organik yang sudah ada (sisa pertanian, sampah organik)', 'Bisa menghasilkan listrik kapan saja -- tidak tergantung cuaca atau waktu', 'Membantu mengurangi limbah organik yang menumpuk'],
+          limit: ['⚠️ Pembakaran biomassa TETAP menghasilkan emisi -- bukan berarti "tanpa emisi", walau umumnya lebih rendah dari bahan bakar fosil kalau bahan bakunya dikelola berkelanjutan', 'Butuh pasokan bahan baku yang konsisten sepanjang waktu', 'Efisiensi konversi energinya cenderung lebih rendah dibanding sumber terbarukan lain'],
+        },
+      },
+    };
+
+    const paramState = {
+      surya: { intensity: 600, area: 2, eff: 18 },
+      angin: { speed: 8, area: 3, eff: 30 },
+      air: { debit: 0.05, height: 3, eff: 75 },
+      geothermal: { suhu: 180, laju: 4, eff: 15 },
+      biomassa: { massa: 8, kalor: 15, eff: 22 },
+    };
+    const predictState = { surya: null, angin: null, air: null, geothermal: null, biomassa: null };
+    const unlockedState = { surya: false, angin: false, air: false, geothermal: false, biomassa: false };
+    const challengeDone = { surya: false, angin: false, air: false, geothermal: false, biomassa: false };
+    const SOURCE_KEYS = ['surya', 'angin', 'air', 'geothermal', 'biomassa'];
+    let suryaDayNight = 'siang';
+    let suryaIntensityBeforeNight = 600;
+
+    // ============ BANGUN PANEL TIAP SUMBER ============
+    function buildSourcePanel(key) {
+      const src = SOURCES[key];
+      const container = $(`panel-${key}`);
+      const tpl = $('sourcePanelTemplate').content.cloneNode(true);
+      container.appendChild(tpl);
+
+      const root = container;
+      const q = (sel) => root.querySelector(sel);
+
+      q('[data-el="predictQ"]').textContent = src.predict.q;
+      renderQuizOptions(q('[data-el="predictOptions"]'), src.predict.options, (i, btn, c) => onPredict(key, i, btn, c));
+
+      q('[data-el="paramTitle"]').textContent = src.title;
+      const graphParamCfg = src.params.find((p) => p.key === src.graphParam);
+      q('[data-el="graphCaption"]').textContent = `📈 ${graphParamCfg.label.replace(/^[^\s]+\s/, '')} (${graphParamCfg.unit}) vs Output (W)`;
+
+      const paramGrid = q('[data-el="paramGrid"]');
+      src.params.forEach((p) => {
+        const row = document.createElement('div');
+        row.className = 'rel-param-row';
+        row.innerHTML = `
+          <div class="rel-param-label-row"><span>${p.label}</span><span class="rel-param-value" style="color:${src.color}" data-param-display="${p.key}">${paramState[key][p.key]} ${p.unit}</span></div>
+          <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${paramState[key][p.key]}" data-param-input="${p.key}" style="accent-color:${src.color}">
+        `;
+        paramGrid.appendChild(row);
+      });
+
+      // Toggle Siang/Malam -- cuma dipasang untuk sumber yang butuh (surya),
+      // karena ketersediaannya jelas berpola harian (poin brief: "Energi
+      // terbarukan tidak berarti selalu tersedia dalam jumlah yang sama").
+      if (src.hasDayNight) {
+        const dnRow = q('[data-el="daynightRow"]');
+        dnRow.style.display = '';
+        dnRow.innerHTML = `
+          <button class="rel-daynight-btn is-active" data-daynight="siang">☀️ Siang</button>
+          <button class="rel-daynight-btn" data-daynight="malam">🌙 Malam</button>
+        `;
+        dnRow.querySelectorAll('[data-daynight]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            dnRow.querySelectorAll('[data-daynight]').forEach((b) => b.classList.toggle('is-active', b === btn));
+            suryaDayNight = btn.dataset.daynight;
+            const intensityInput = paramGrid.querySelector('[data-param-input="intensity"]');
+            const intensityDisplay = root.querySelector('[data-param-display="intensity"]');
+            if (suryaDayNight === 'malam') {
+              suryaIntensityBeforeNight = paramState.surya.intensity;
+              paramState.surya.intensity = 0;
+              intensityInput.value = 200; // batas bawah slider tetap 200, tapi daya dipaksa dihitung dari nilai riil 0
+              intensityInput.disabled = true;
+              intensityDisplay.textContent = '~0 W/m² (malam hari)';
+            } else {
+              paramState.surya.intensity = suryaIntensityBeforeNight;
+              intensityInput.value = suryaIntensityBeforeNight;
+              intensityInput.disabled = false;
+              intensityDisplay.textContent = `${suryaIntensityBeforeNight} W/m²`;
+            }
+            onInteract(key);
+            refreshSource(key);
+          });
+        });
+      }
+
+      // Panggung / flow diagram
+      const stage = q('[data-el="stage"]');
+      src.flowNodes.forEach((node, i) => {
+        const nodeEl = document.createElement('div');
+        nodeEl.className = 'rel-flow-node';
+        const isSourceNode = i === 0;
+        const isDeviceNode = i === 1;
+        nodeEl.innerHTML = `<div class="rel-flow-circle" data-flow-circle="${i}">${nodeIconHTML(key, i)}</div><span class="rel-flow-label">${node.label}</span>`;
+        stage.appendChild(nodeEl);
+        if (i < src.flowNodes.length - 1) {
+          const conduit = document.createElement('div');
+          conduit.className = 'rel-flow-conduit';
+          conduit.style.color = src.color;
+          conduit.innerHTML = '<div class="rel-flow-dot d1"></div><div class="rel-flow-dot d2"></div>';
+          stage.appendChild(conduit);
+        }
+      });
+
+      // Tantangan
+      buildChallenge(key, q('[data-el="challengeCard"]'), q('[data-el="challengeQ"]'), q('[data-el="challengeBody"]'), q('[data-el="challengeFeedback"]'));
+
+      // Penjelasan
+      q('[data-el="explainTitle"]').textContent = `${src.title} -- Apa yang Perlu Diketahui?`;
+      q('[data-el="explainIntro"]').textContent = src.explain.intro;
+      const goodList = q('[data-el="explainGood"]');
+      src.explain.good.forEach((t) => { const li = document.createElement('li'); li.textContent = t; goodList.appendChild(li); });
+      const limitList = q('[data-el="explainLimit"]');
+      src.explain.limit.forEach((t) => { const li = document.createElement('li'); li.textContent = t; limitList.appendChild(li); });
+
+      // Listener slider
+      paramGrid.querySelectorAll('[data-param-input]').forEach((input) => {
+        input.addEventListener('input', () => {
+          const key2 = input.dataset.paramInput;
+          paramState[key][key2] = parseFloat(input.value);
+          root.querySelector(`[data-param-display="${key2}"]`).textContent = `${input.value} ${src.params.find((p) => p.key === key2).unit}`;
+          onInteract(key);
+          refreshSource(key);
+        });
+      });
+
+      refreshSource(key);
+    }
+
+    function nodeIconHTML(key, index) {
+      // index 0 = sumber alam, 1 = perangkat konversi -- dikasih elemen animasi khusus
+      if (index === 0 && key === 'surya') return `<span class="rel-sun-rays"></span>☀️`;
+      if (index === 0 && key === 'air') return `<span class="rel-water-wave"></span>💧`;
+      if (index === 1 && key === 'angin') return `<span class="rel-turbine-blade" data-turbine="angin">🌀</span>`;
+      if (index === 1 && key === 'air') return `<span class="rel-turbine-blade" data-turbine="air">🌀</span>`;
+      return SOURCES[key].flowNodes[index].icon;
+    }
+
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'rel-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+
+    function onPredict(key, index, btn, container) {
+      if (predictState[key] !== null) return;
+      predictState[key] = index;
+      container.querySelectorAll('.rel-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      unlockedState[key] = true;
+      const root = $(`panel-${key}`);
+      root.querySelector('[data-el="lockedHint"]').style.display = 'none';
+      root.querySelector('[data-el="paramGrid"]').style.display = '';
+      root.querySelector('[data-el="stageCard"]').style.display = '';
+    }
+
+    let interactedOnce = { surya: false, angin: false, air: false, geothermal: false, biomassa: false };
+    function onInteract(key) {
+      if (interactedOnce[key]) return;
+      interactedOnce[key] = true;
+      revealPredictFeedback(key);
+      revealChallengeAndExplain(key);
+    }
+
+    function revealPredictFeedback(key) {
+      const src = SOURCES[key];
+      const root = $(`panel-${key}`);
+      const fb = root.querySelector('[data-el="predictFeedback"]');
+      const correct = predictState[key] === src.predict.correct;
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      const msg = correctExplainFor(key);
+      fb.innerHTML = correct ? `✅ <strong>Tepat!</strong> ${msg}` : `💡 <strong>Belum tepat.</strong> Coba perhatikan lagi angka output di bawah saat kamu geser slidernya -- ${msg}`;
+      root.querySelectorAll('[data-el="predictOptions"] .rel-quiz-option').forEach((b, i) => {
+        if (i === src.predict.correct) b.classList.add('is-correct');
+        else if (i === predictState[key]) b.classList.add('is-wrong');
+      });
+    }
+
+    function correctExplainFor(key) {
+      if (key === 'surya') return 'Semakin besar intensitas cahaya matahari yang diterima, semakin besar pula energi yang bisa diubah panel jadi listrik.';
+      if (key === 'angin') return 'Daya angin berbanding dengan PANGKAT TIGA kecepatannya (P ∝ v³) -- jadi kenaikan kecepatan sedikit saja bisa membuat dayanya melonjak jauh lebih besar.';
+      if (key === 'air') return 'Semakin besar debit air yang mengalir, semakin besar energi yang bisa dipindahkan lewat turbin tiap detiknya.';
+      if (key === 'geothermal') return 'Semakin tinggi suhu reservoir, semakin besar energi panas yang tersimpan dalam uap -- sehingga semakin banyak energi yang bisa diubah jadi listrik lewat turbin.';
+      return 'Semakin banyak biomassa yang diproses tiap jam, semakin besar energi kimia yang tersedia untuk diubah jadi energi panas lalu listrik.';
+    }
+
+    function revealChallengeAndExplain(key) {
+      $(`panel-${key}`).querySelector('[data-el="challengeCard"]').style.display = '';
+      $(`panel-${key}`).querySelector('[data-el="explainCard"]').style.display = '';
+    }
+
+    function buildChallenge(key, card, qEl, bodyEl, fbEl) {
+      const src = SOURCES[key];
+      qEl.textContent = src.challenge.q;
+      const btn = document.createElement('button');
+      btn.className = 'rel-quiz-option';
+      btn.style.maxWidth = '220px';
+      btn.textContent = 'Cek Sekarang';
+      btn.addEventListener('click', () => {
+        const current = src.compute(paramState[key]).power;
+        const ok = current >= src.challenge.target;
+        fbEl.classList.add('is-visible');
+        fbEl.classList.toggle('is-wrong', !ok);
+        fbEl.innerHTML = ok
+          ? `✅ <strong>Tepat!</strong> Daya saat ini ${current.toFixed(1)} W, sudah mencapai target ${src.challenge.target} W.`
+          : `💡 <strong>Belum sampai.</strong> Daya saat ini baru ${current.toFixed(1)} W, target ${src.challenge.target} W -- coba naikkan parameternya lagi.`;
+      });
+      bodyEl.appendChild(btn);
+    }
+
+    // ============ GRAFIK: parameter utama vs Output ============
+    // Menyapu (sweep) parameter utama tiap sumber dari min ke max, sementara
+    // parameter lain dikunci ke nilai saat ini -- menunjukkan hubungan
+    // input-kondisi ke output-energi secara visual (bukan cuma angka).
+    function drawSourceGraph(key) {
+      const src = SOURCES[key];
+      const root = $(`panel-${key}`);
+      const canvas = root.querySelector('[data-el="graphCanvas"]');
+      if (!canvas) return;
+      const pCfg = src.params.find((p) => p.key === src.graphParam);
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 16, h = 94;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+
+      const steps = 24;
+      const points = [];
+      for (let i = 0; i <= steps; i++) {
+        const val = pCfg.min + ((pCfg.max - pCfg.min) * i) / steps;
+        const testParams = { ...paramState[key], [src.graphParam]: val };
+        points.push({ x: val, y: src.compute(testParams).power });
+      }
+      const maxY = Math.max(...points.map((p) => p.y), 1) * 1.1;
+      const px = (x) => ((x - pCfg.min) / (pCfg.max - pCfg.min)) * (w - 10) + 5;
+      const py = (y) => h - 10 - (y / maxY) * (h - 20);
+
+      ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+      for (let i = 0; i <= 3; i++) { const y = 10 + ((h - 20) / 3) * i; ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke(); }
+
+      ctx.beginPath(); ctx.strokeStyle = src.color.startsWith('var') ? getComputedStyle(document.documentElement).getPropertyValue(src.color.slice(4, -1)) : src.color;
+      ctx.lineWidth = 2.2;
+      points.forEach((p, i) => { const x = px(p.x), y = py(p.y); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+      ctx.stroke();
+
+      // Tanda posisi parameter saat ini
+      const curVal = key === 'surya' && suryaDayNight === 'malam' ? 0 : paramState[key][src.graphParam];
+      const curPower = src.compute(paramState[key]).power;
+      const cx = px(Math.max(pCfg.min, curVal)), cy = py(curPower);
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // ============ REFRESH VISUAL & OUTPUT ============
+    function refreshSource(key) {
+      const src = SOURCES[key];
+      const root = $(`panel-${key}`);
+      const result = src.compute(paramState[key]);
+      drawSourceGraph(key);
+
+      root.querySelector('[data-el="outputValue"]').textContent = `${result.power.toFixed(1)} W`;
+      root.querySelector('[data-el="outputValue"]').style.color = src.color;
+      root.querySelector('[data-el="formulaBox"]').innerHTML = result.formula;
+      const barPct = Math.min(100, (result.power / result.maxRef) * 100);
+      const bar = root.querySelector('[data-el="outputBar"]');
+      bar.style.width = `${barPct}%`;
+      bar.style.background = src.color;
+
+      // Animasi node aktif (glow) berdasarkan ada tidaknya output
+      const active = result.power > 1;
+      root.querySelectorAll('[data-flow-circle]').forEach((c) => {
+        c.style.boxShadow = active ? `0 0 14px 2px ${src.color}55` : 'none';
+        c.style.borderColor = active ? src.color : 'var(--card-border)';
+      });
+      root.querySelectorAll('.rel-flow-dot').forEach((dot, i) => {
+        dot.style.animation = active ? `rel-flow ${Math.max(0.6, 2.4 - result.power / result.maxRef * 1.8)}s linear infinite` : 'none';
+        dot.style.animationDelay = `${(i % 2) * 0.6}s`;
+        if (!active) dot.style.opacity = '0';
+      });
+
+      // Turbin berputar sesuai kecepatan relatif terhadap max
+      const turbineEl = root.querySelector(`[data-turbine="${key}"]`);
+      if (turbineEl) {
+        const speedFactor = key === 'angin' ? paramState.angin.speed / 20 : paramState.air.debit / 1;
+        const durationSec = speedFactor > 0.02 ? Math.max(0.15, 1.4 - speedFactor * 1.2) : 0;
+        turbineEl.style.animation = durationSec > 0 ? `rel-spin ${durationSec}s linear infinite` : 'none';
+      }
+    }
+
+    // ============ ANIMASI SPIN (dipasang lewat stylesheet dinamis) ============
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `@keyframes rel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
+    document.head.appendChild(styleTag);
+
+    // ============ COMPARE ============
+    const KETERGANTUNGAN = {
+      surya: 'Intensitas cahaya matahari (siang/malam)',
+      angin: 'Kecepatan angin',
+      air: 'Debit & ketinggian jatuh air',
+      geothermal: 'Suhu reservoir panas bumi (relatif stabil)',
+      biomassa: 'Pasokan bahan baku biomassa',
+    };
+    function refreshCompare() {
+      const results = SOURCE_KEYS.map((key) => ({ key, src: SOURCES[key], result: SOURCES[key].compute(paramState[key]) }));
+
+      const tbody = $('cmpTableBody');
+      tbody.innerHTML = results.map(({ key, src, result }) => `
+        <tr>
+          <td>${src.title.split(' ').slice(0, 1).join(' ')} ${src.flowNodes[0].icon} ${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+          <td>${src.formAwal}</td>
+          <td>${src.mekanisme}</td>
+          <td>${result.power.toFixed(1)} W</td>
+          <td>${KETERGANTUNGAN[key]}</td>
+        </tr>
+      `).join('');
+
+      const maxP = Math.max(...results.map((r) => r.result.power), 1);
+      const barsEl = $('cmpBars');
+      barsEl.innerHTML = '';
+      results.forEach(({ key, src, result }) => {
+        const div = document.createElement('div');
+        div.className = 'rel-compare-bar-row';
+        div.innerHTML = `
+          <span class="rel-compare-bar-label">${src.flowNodes[0].icon} ${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+          <div class="rel-compare-bar-track"><div class="rel-compare-bar-fill" style="width:${(result.power / maxP) * 100}%;background:${src.color}"></div></div>
+          <span class="rel-compare-bar-value">${result.power.toFixed(0)} W</span>
+        `;
+        barsEl.appendChild(div);
+      });
+    }
+
+    // ============ MIX (Tantangan 5: Renewable Mix) ============
+    const MIX_TARGET = 1000;
+    function refreshMix() {
+      const results = SOURCE_KEYS.map((key) => ({ key, src: SOURCES[key], result: SOURCES[key].compute(paramState[key]) }));
+      const total = results.reduce((s, r) => s + r.result.power, 0);
+
+      $('mixRows').innerHTML = results.map(({ key, src, result }) => `
+        <div class="rel-mix-row">
+          <span class="rel-mix-icon">${src.flowNodes[0].icon}</span>
+          <span class="rel-mix-label">${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+          <span class="rel-mix-value" style="color:${src.color}">${result.power.toFixed(1)} W</span>
+        </div>
+      `).join('');
+      $('mixTotal').textContent = `${total.toFixed(1)} W`;
+
+      const fb = $('mixFeedback');
+      fb.classList.add('is-visible');
+      const pass = total >= MIX_TARGET;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass
+        ? `✅ <strong>Target tercapai!</strong> Total output gabungan ${total.toFixed(1)} W, sudah melewati target 1.000 W. Ini contoh <strong>energy mix</strong> -- menggabungkan beberapa sumber energi terbarukan sekaligus.`
+        : `💡 <strong>Belum sampai.</strong> Total output gabungan baru ${total.toFixed(1)} W dari target 1.000 W. Coba kembali ke tab tiap sumber dan naikkan parameternya -- tidak harus satu sumber saja yang dimaksimalkan.`;
+    }
+
+    let cmpAnswered = false;
+    renderQuizOptions($('cmpChallengeOptions'), ['☀️ Surya', '💧 Air', '💨 Angin'], (i, btn, c) => {
+      if (cmpAnswered) return;
+      cmpAnswered = true;
+      const correct = i === 0;
+      c.querySelectorAll('.rel-quiz-option').forEach((b, j) => {
+        b.disabled = true;
+        if (j === 0) b.classList.add('is-correct');
+        else if (j === i) b.classList.add('is-wrong');
+      });
+      const fb = $('cmpChallengeFeedback');
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = correct
+        ? '✅ <strong>Tepat!</strong> Dengan sinar matahari melimpah tapi minim aliran air, energi surya paling masuk akal -- energi air butuh debit air yang cukup, sementara angin belum tentu tersedia konsisten di semua lokasi.'
+        : '💡 <strong>Coba pikirkan lagi.</strong> Daerah itu disebutkan "banyak sinar matahari" -- sumber energi mana yang paling langsung memanfaatkan itu?';
+    });
+
+    // ============ INIT ============
+    SOURCE_KEYS.forEach(buildSourcePanel);
+    refreshCompare();
+  </script>
+</body>
+</html>

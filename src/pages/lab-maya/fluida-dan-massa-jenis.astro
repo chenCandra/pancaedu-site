@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Simulasi Massa Jenis (Density)"
+  description="Simulasi interaktif massa jenis dari PhET Interactive Simulations (University of Colorado Boulder) -- bandingkan massa, volume, dan massa jenis berbagai benda, dan lihat sendiri mana yang mengapung atau tenggelam."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Fluida · Kelas XI</p>
+    <h1>Simulasi Massa Jenis (Density)</h1>
+    <p class="page-lede">
+      Simulasi ini bukan buatan PancaEdu -- dipinjam dari <strong>PhET Interactive Simulations</strong>
+      (University of Colorado Boulder), salah satu sumber simulasi Fisika interaktif paling
+      terpercaya dan gratis untuk pendidikan. Coba bandingkan massa, volume, dan massa jenis
+      berbagai balok, lalu lihat sendiri mana yang mengapung atau tenggelam di air.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="phet-frame-wrap card">
+      <iframe
+        src="https://phet.colorado.edu/sims/html/density/latest/density_en.html"
+        title="Simulasi Massa Jenis (Density) -- PhET Interactive Simulations"
+        loading="lazy"
+        allow="fullscreen"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Sumber: PhET Interactive Simulations, University of Colorado Boulder --
+      <a href="https://phet.colorado.edu/sims/html/density/latest/density_en.html" target="_blank" rel="noopener noreferrer">buka di tab baru &rarr;</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .phet-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .phet-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    /* PhET dihosting cross-origin -- tidak bisa dibaca contentDocument-nya
+       buat auto-resize (dibatasi same-origin policy browser), jadi tinggi
+       tetap seperti yang dipakai juga di embed materi/fluida-dan-massa-jenis. */
+    height: 620px;
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  .lab-note a {
+    color: var(--accent);
+  }
+</style>

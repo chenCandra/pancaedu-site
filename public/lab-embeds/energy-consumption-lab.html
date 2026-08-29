@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Energy Consumption Lab</title>
+<style>
+  :root {
+    --bg-0: #070b14;
+    --bg-1: #0c1220;
+    --card-bg: #111a2e;
+    --card-border: #223050;
+    --ink: #f1f5f9;
+    --ink-muted: #93a4c3;
+    --ink-faint: #5f7099;
+    --brand-a: #22d3ee; /* cyan */
+    --brand-b: #a3e635; /* lime -- "smart grid" */
+    --lvl-low: #4ade80;
+    --lvl-mid: #facc15;
+    --lvl-high: #f87171;
+    --ok: #4ade80;
+    --warn: #f87171;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background:
+      radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 0.08), transparent 45%),
+      radial-gradient(circle at 88% 100%, rgba(163, 230, 53, 0.07), transparent 45%),
+      var(--bg-0);
+    color: var(--ink);
+    font-family: var(--font);
+    min-height: 100vh;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand-b); outline-offset: 2px; }
+
+  .ecn-header {
+    background: linear-gradient(135deg, var(--card-bg), var(--bg-1));
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  }
+  .ecn-header-title { display: flex; align-items: center; gap: 10px; }
+  .ecn-header-icon { font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(163, 230, 53, 0.5)); }
+  .ecn-header h1 {
+    font-size: 1.05rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--brand-a), var(--brand-b));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .ecn-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .ecn-brand-chip {
+    font-size: 0.7rem; font-weight: 700; color: var(--ink-muted);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+    padding: 4px 10px; border-radius: 999px;
+  }
+
+  .ecn-intro-box {
+    background: rgba(255,255,255,0.03); border-left: 3px solid var(--brand-a);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px;
+    font-size: 0.83rem; color: var(--ink-muted); line-height: 1.5;
+  }
+
+  .ecn-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ecn-tab {
+    background: var(--card-bg); border: 1px solid var(--card-border); color: var(--ink-muted);
+    font-size: 0.82rem; font-weight: 700; padding: 8px 16px; border-radius: 999px;
+  }
+  .ecn-tab.is-active { color: var(--bg-0); background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+
+  .ecn-panel { display: none; flex-direction: column; gap: 14px; }
+  .ecn-panel.is-active { display: flex; }
+
+  .ecn-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 16px; }
+
+  /* ============ QUIZ ============ */
+  .ecn-quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-b); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .ecn-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; margin-bottom: 10px; }
+  .ecn-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .ecn-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .ecn-quiz-option {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--ink);
+    border-radius: var(--radius-sm); padding: 9px 12px; font-size: 0.82rem; text-align: left;
+    display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .ecn-quiz-option:hover:not(:disabled) { border-color: var(--brand-a); background: rgba(34, 211, 238, 0.07); }
+  .ecn-quiz-option .letter { font-weight: 800; color: var(--brand-a); flex-shrink: 0; }
+  .ecn-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .ecn-quiz-option.is-chosen { border-color: var(--brand-a); background: rgba(34, 211, 238, 0.1); }
+  .ecn-quiz-option.is-correct { border-color: var(--ok); background: rgba(74, 222, 128, 0.1); }
+  .ecn-quiz-option.is-wrong { border-color: var(--warn); background: rgba(248, 113, 113, 0.1); }
+
+  .ecn-feedback { font-size: 0.85rem; line-height: 1.5; padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--ok); background: rgba(74, 222, 128, 0.08); display: none; margin-top: 8px; }
+  .ecn-feedback.is-visible { display: block; }
+  .ecn-feedback.is-wrong { border-left-color: var(--warn); background: rgba(248, 113, 113, 0.08); }
+
+  .ecn-locked-note { font-size: 0.78rem; color: var(--ink-faint); font-style: italic; }
+
+  /* ============ DEVICE GRID ============ */
+  .ecn-device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+  .ecn-device-card {
+    background: rgba(255,255,255,0.02); border: 1.5px solid var(--card-border); border-radius: var(--radius-sm);
+    padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ecn-device-icon { font-size: 1.6rem; }
+  .ecn-device-label { font-size: 0.7rem; font-weight: 700; text-align: center; }
+  .ecn-device-watt { font-size: 0.64rem; color: var(--ink-faint); font-family: 'Courier New', monospace; }
+  .ecn-device-card.is-on { border-color: var(--brand-b); background: rgba(163, 230, 53, 0.09); box-shadow: 0 0 12px rgba(163, 230, 53, 0.15); }
+  .ecn-device-card.is-on .ecn-device-icon { filter: drop-shadow(0 0 6px rgba(163,230,53,0.6)); }
+
+  /* ============ DURASI ============ */
+  .ecn-duration-row { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .ecn-duration-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); }
+  .ecn-duration-value { color: var(--brand-a); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; accent-color: var(--brand-a); }
+  .ecn-chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .ecn-chip { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.72rem; font-weight: 700; padding: 5px 11px; border-radius: 999px; }
+  .ecn-chip:hover { border-color: var(--brand-a); color: var(--ink); }
+
+  /* ============ RUN ============ */
+  .ecn-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .ecn-btn-primary { background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border: none; color: var(--bg-0); font-weight: 800; font-size: 0.85rem; padding: 10px 22px; border-radius: 999px; }
+  .ecn-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .ecn-btn-secondary { background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 10px 18px; border-radius: 999px; }
+  .ecn-btn-secondary:hover { color: var(--ink); border-color: var(--warn); }
+
+  /* ============ METER & RESULT ============ */
+  .ecn-result-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .ecn-result-chip { flex: 1; min-width: 130px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--card-border); }
+  .ecn-result-chip .k { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); }
+  .ecn-result-chip .v { font-size: 1.05rem; font-weight: 800; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .ecn-meter-track { height: 1.3rem; background: rgba(255,255,255,0.04); border-radius: 999px; overflow: hidden; border: 1px solid var(--card-border); margin-top: 12px; }
+  .ecn-meter-fill { height: 100%; width: 0%; border-radius: 999px; transition: width 0.1s linear, background 0.3s ease; background: var(--lvl-low); }
+
+  .ecn-graph-wrap { background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px; margin-top: 12px; }
+  .ecn-graph-wrap canvas { display: block; width: 100%; height: 130px; }
+
+  .ecn-formula-box { background: #05070d; color: #e2e8f0; padding: 10px 12px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; margin-top: 10px; overflow-x: auto; }
+  .ecn-formula-box .v { color: var(--brand-b); font-weight: 700; }
+
+  /* ============ TARIF ============ */
+  .ecn-tarif-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 0.8rem; color: var(--ink-muted); }
+  .ecn-tarif-row input[type="number"] { width: 100px; background: var(--bg-0); border: 1px solid var(--card-border); color: var(--ink); border-radius: var(--radius-sm); padding: 6px 8px; }
+  .ecn-tarif-badge { font-size: 0.64rem; font-weight: 700; color: var(--ink-faint); background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 999px; }
+
+  /* ============ CHALLENGE ============ */
+  .ecn-note { font-size: 0.72rem; color: var(--ink-faint); background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 8px 12px; line-height: 1.5; margin-top: 6px; }
+  .ecn-calc-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .ecn-calc-row input[type="number"] { width: 90px; background: var(--bg-0); border: 1px solid var(--card-border); color: var(--ink); border-radius: var(--radius-sm); padding: 7px 10px; font-family: 'Courier New', monospace; }
+
+  /* ============ COMPARE ============ */
+  .ecn-compare-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .ecn-compare-grid { grid-template-columns: 1fr 1fr; } }
+  .ecn-compare-col { display: flex; flex-direction: column; gap: 8px; }
+  .ecn-compare-tag { font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+  .ecn-compare-tag.a { color: var(--brand-a); border: 1px solid var(--brand-a); }
+  .ecn-compare-tag.b { color: var(--brand-b); border: 1px solid var(--brand-b); }
+
+  .ecn-explain-cols { display: grid; gap: 10px; grid-template-columns: 1fr; margin-top: 10px; }
+  @media (min-width: 640px) { .ecn-explain-cols { grid-template-columns: 1fr 1fr; } }
+  .ecn-explain-col { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .ecn-explain-col h4 { font-size: 0.82rem; font-weight: 800; margin-bottom: 4px; color: var(--brand-a); }
+  .ecn-explain-col p { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.55; }
+
+  .ecn-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .ecn-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: var(--ink-faint); background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 3px 9px; border-radius: 999px; }
+
+  /* ============ SMART HOUSE: RUANGAN & SUB-MODE (upgrade) ============ */
+  .ecn-submode-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ecn-submode-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 999px; }
+  .ecn-submode-btn.is-active { color: var(--bg-0); background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); border-color: transparent; }
+  .ecn-submode-panel { display: none; }
+  .ecn-submode-panel.is-active { display: block; }
+
+  .ecn-room-section { margin-bottom: 16px; }
+  .ecn-room-section-title { font-size: 0.78rem; font-weight: 800; color: var(--ink-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .ecn-room-device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+
+  .ecn-speed-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .ecn-speed-label { font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); margin-right: 2px; }
+  .ecn-speed-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--ink-muted); font-size: 0.74rem; font-weight: 700; padding: 5px 11px; border-radius: 999px; }
+  .ecn-speed-btn.is-active { color: var(--bg-0); background: var(--brand-a); border-color: transparent; }
+
+  .ecn-profile-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .ecn-profile-btn { background: rgba(255,255,255,0.03); border: 1.5px solid var(--card-border); color: var(--ink-muted); font-size: 0.78rem; font-weight: 700; padding: 9px 14px; border-radius: var(--radius-sm); text-align: left; }
+  .ecn-profile-btn.is-active { border-color: var(--brand-b); background: rgba(163,230,53,0.1); color: var(--ink); }
+  .ecn-profile-btn small { display: block; font-weight: 500; color: var(--ink-faint); font-size: 0.68rem; margin-top: 2px; }
+
+  .ecn-clock-display { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.15rem; text-align: center; color: var(--brand-a); margin-top: 10px; }
+
+  .ecn-major-users { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .ecn-major-user-row { display: flex; justify-content: space-between; font-size: 0.8rem; background: rgba(255,255,255,0.03); padding: 7px 11px; border-radius: var(--radius-sm); border: 1px solid var(--card-border); }
+  .ecn-major-user-row .rank { color: var(--brand-b); font-weight: 800; margin-right: 6px; }
+
+  .ecn-peak-chip { border-color: var(--lvl-mid) !important; }
+  .ecn-peak-chip.is-over { border-color: var(--warn) !important; }
+
+  .ecn-mini-widget-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .ecn-mini-select { background: var(--bg-0); border: 1px solid var(--card-border); color: var(--ink); border-radius: var(--radius-sm); padding: 7px 10px; font-size: 0.82rem; }
+</style>
+</head>
+<body>
+  <div class="ecn-header">
+    <div class="ecn-header-title">
+      <span class="ecn-header-icon">🔌</span>
+      <div>
+        <h1>Energy Consumption Lab</h1>
+        <p>Eksplorasi Penggunaan dan Konsumsi Energi Listrik</p>
+      </div>
+    </div>
+    <span class="ecn-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <p class="ecn-intro-box">Di <strong>Renewable Energy Lab</strong> kamu belajar bagaimana energi alam diubah jadi listrik. Sekarang giliran sisi lainnya: <strong>setelah listrik tersedia, bagaimana kita memakainya?</strong> Masuk ke Smart House virtual ini, jelajahi tiap ruangan, nyalakan alat-alatnya, dan temukan sendiri apa yang benar-benar menentukan besar energi yang terpakai -- termasuk lewat simulasi satu hari penuh.</p>
+
+  <div class="ecn-tabs">
+    <button class="ecn-tab is-active" data-tab="room">🏠 Smart House</button>
+    <button class="ecn-tab" data-tab="school">🏫 Smart Classroom</button>
+    <button class="ecn-tab" data-tab="compare">⚖️ Bandingkan 2 Skenario</button>
+  </div>
+
+  <!-- ================= TAB: SMART ROOM ================= -->
+  <div class="ecn-panel is-active" id="panel-room">
+
+    <div class="ecn-card" id="roomPredictCard">
+      <div class="ecn-quiz-label">💭 Coba Prediksi</div>
+      <p class="ecn-quiz-question">Dua lampu digunakan: Lampu A = 10 W selama 10 jam. Lampu B = 100 W selama 1 jam. Lampu mana yang menggunakan energi lebih banyak?</p>
+      <div class="ecn-quiz-options" id="roomPredictOptions"></div>
+      <div class="ecn-feedback" id="roomPredictFeedback"></div>
+    </div>
+
+    <div class="ecn-card">
+      <p class="ecn-locked-note" id="roomLockedNote">🔒 Jawab prediksi di atas dulu untuk membuka Smart Room.</p>
+      <div id="roomBody" style="display:none;">
+
+        <div class="ecn-submode-row">
+          <button class="ecn-submode-btn is-active" data-submode="manual">🎮 Mode Manual</button>
+          <button class="ecn-submode-btn" data-submode="oneday">☀️ Mode Satu Hari</button>
+        </div>
+
+        <!-- ===== SUB-MODE: MANUAL ===== -->
+        <div class="ecn-submode-panel is-active" id="submode-manual">
+          <p style="font-size:0.8rem;color:var(--ink-muted);margin-bottom:10px;">Klik alat untuk menyalakan/mematikannya -- alat dikelompokkan per ruangan rumah:</p>
+          <div id="roomDeviceGrid"></div>
+          <p class="ecn-note">🧊 Kulkas dimodelkan menyala terus dengan <strong>daya konstan</strong> (bukan siklus on/off asli) -- model daya konstan untuk simulasi.</p>
+
+          <div class="ecn-duration-row">
+            <div class="ecn-duration-label-row"><span>⏱️ Durasi Pemakaian</span><span class="ecn-duration-value" id="roomDurationVal">2 jam</span></div>
+            <input type="range" id="roomDurationSlider" min="0.166" max="24" step="0.166" value="2">
+            <div class="ecn-chip-row" id="roomChips"></div>
+          </div>
+
+          <div class="ecn-controls-row">
+            <button class="ecn-btn-primary" id="roomRunBtn">▶ Jalankan Simulasi (Mode Cepat)</button>
+            <button class="ecn-btn-secondary" id="roomResetBtn">🔄 Reset</button>
+          </div>
+
+          <div class="ecn-result-row">
+            <div class="ecn-result-chip"><div class="k">⚡ Daya Total</div><div class="v" id="roomPTotal">0 W</div></div>
+            <div class="ecn-result-chip"><div class="k">🔋 Energi Terpakai</div><div class="v" id="roomETotal">0 kWh</div></div>
+            <div class="ecn-result-chip"><div class="k">💰 Estimasi Biaya</div><div class="v" id="roomCost">Rp 0</div></div>
+          </div>
+
+          <div class="ecn-meter-track"><div class="ecn-meter-fill" id="roomMeter"></div></div>
+          <div class="ecn-graph-wrap"><p style="font-size:0.72rem;color:var(--ink-faint);margin-bottom:4px;">📈 Daya vs Waktu</p><canvas id="roomPowerGraph"></canvas></div>
+          <div class="ecn-graph-wrap"><p style="font-size:0.72rem;color:var(--ink-faint);margin-bottom:4px;">📊 Energi vs Waktu</p><canvas id="roomGraph"></canvas></div>
+          <div class="ecn-formula-box" id="roomFormula"></div>
+
+          <div class="ecn-tarif-row">
+            <span>💰 Tarif simulasi:</span>
+            <span>Rp</span>
+            <input type="number" id="roomTarif" value="1500" min="100" step="100">
+            <span>/ kWh</span>
+            <span class="ecn-tarif-badge">nilai simulasi, bukan tarif PLN aktual</span>
+          </div>
+        </div>
+
+        <!-- ===== SUB-MODE: SATU HARI ===== -->
+        <div class="ecn-submode-panel" id="submode-oneday">
+          <p style="font-size:0.8rem;color:var(--ink-muted);margin-bottom:10px;">Jalankan pola pemakaian satu hari penuh (00:00 -- 24:00) berdasarkan profil rumah pilihanmu.</p>
+
+          <div class="ecn-profile-row" id="profileRow"></div>
+
+          <div class="ecn-speed-row">
+            <span class="ecn-speed-label">⏱️ Kecepatan:</span>
+            <button class="ecn-speed-btn" data-speed="1">1×</button>
+            <button class="ecn-speed-btn is-active" data-speed="10">⏩ 10×</button>
+            <button class="ecn-speed-btn" data-speed="60">⏩⏩ 60×</button>
+          </div>
+
+          <div class="ecn-controls-row">
+            <button class="ecn-btn-primary" id="oneDayRunBtn">▶ Jalankan Satu Hari</button>
+            <button class="ecn-btn-secondary" id="oneDayResetBtn">🔄 Reset</button>
+          </div>
+
+          <div class="ecn-clock-display" id="oneDayClock">00:00</div>
+
+          <div class="ecn-result-row">
+            <div class="ecn-result-chip"><div class="k">⚡ Daya Saat Ini</div><div class="v" id="oneDayPower">0 W</div></div>
+            <div class="ecn-result-chip ecn-peak-chip" id="oneDayPeakChip"><div class="k">⚡ Peak Power</div><div class="v" id="oneDayPeak">0 W</div></div>
+            <div class="ecn-result-chip"><div class="k">🔋 Daily Energy</div><div class="v" id="oneDayEnergy">0 kWh</div></div>
+          </div>
+
+          <div class="ecn-graph-wrap"><p style="font-size:0.72rem;color:var(--ink-faint);margin-bottom:4px;">📈 Daya vs Waktu (00:00 -- 24:00)</p><canvas id="oneDayPowerGraph"></canvas></div>
+          <div class="ecn-graph-wrap"><p style="font-size:0.72rem;color:var(--ink-faint);margin-bottom:4px;">📊 Energi Kumulatif vs Waktu</p><canvas id="oneDayEnergyGraph"></canvas></div>
+
+          <div id="majorUsersWrap" style="display:none;">
+            <p style="font-size:0.8rem;font-weight:700;color:var(--ink-muted);margin-top:12px;">🏆 Major Energy Users (hari ini)</p>
+            <div class="ecn-major-users" id="majorUsersList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecn-card" id="roomChallengeCard" style="display:none;">
+      <div class="ecn-quiz-label">🏠 Tantangan Smart Home</div>
+      <p class="ecn-quiz-question">Kamu punya batas penggunaan energi <strong>5 kWh per hari</strong>. Atur alat & set durasi ke <strong>24 jam</strong> (chip "1 hari"), lalu jalankan -- coba jangan sampai melebihi batasnya!</p>
+      <div class="ecn-feedback" id="roomBudgetFeedback"></div>
+    </div>
+
+    <div class="ecn-card" id="roomCalcChallengeCard" style="display:none;">
+      <div class="ecn-quiz-label">🎯 Tantangan Perhitungan</div>
+      <p class="ecn-quiz-question">Sebuah lampu berdaya 20 W. Berapa jam (t) lampu itu harus menyala supaya energi yang dipakai tepat <strong>0,1 kWh</strong>?</p>
+      <div class="ecn-calc-row">
+        <span>t =</span>
+        <input type="number" id="calcAnswer" step="0.1" placeholder="0.0">
+        <span>jam</span>
+        <button class="ecn-btn-secondary" id="calcCheckBtn">Cek Jawaban</button>
+      </div>
+      <div class="ecn-feedback" id="calcFeedback"></div>
+    </div>
+
+    <div class="ecn-card" id="newChallengesCard" style="display:none;">
+      <div class="ecn-quiz-label" style="color:var(--brand-b);">🎯 Tantangan Smart House</div>
+
+      <div style="margin-bottom:16px;">
+        <p class="ecn-quiz-question">🕵️ Energy Detective -- jalankan Mode Satu Hari dulu, lalu tebak: alat apa yang paling boros energi HARI INI?</p>
+        <div class="ecn-mini-widget-row">
+          <select class="ecn-mini-select" id="detectiveGuess"></select>
+          <button class="ecn-btn-secondary" id="detectiveCheckBtn">Cek Tebakan</button>
+        </div>
+        <div class="ecn-feedback" id="detectiveFeedback"></div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <p class="ecn-quiz-question">💚 Hemat Energi 20% -- setelah Mode Satu Hari pertamamu (jadi acuan), coba jalankan lagi dengan profil/kombinasi lain sampai Daily Energy turun minimal 20%.</p>
+        <div class="ecn-mini-widget-row">
+          <button class="ecn-btn-secondary" id="hemat20CheckBtn">Cek Penghematan</button>
+        </div>
+        <div class="ecn-feedback" id="hemat20Feedback"></div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <p class="ecn-quiz-question">⚡ Peak Power -- pastikan Peak Power hari ini tidak melebihi <strong>1.500 W</strong>.</p>
+        <div class="ecn-mini-widget-row">
+          <button class="ecn-btn-secondary" id="peakCheckBtn">Cek Peak Power</button>
+        </div>
+        <div class="ecn-feedback" id="peakFeedback"></div>
+      </div>
+
+      <div>
+        <p class="ecn-quiz-question">💡 Same Result, Less Energy -- rumah butuh penerangan selama <strong>6 jam</strong>. Semua pilihan lampu ini dianggap SAMA-SAMA cukup terang. Pilih yang energinya paling kecil:</p>
+        <div class="ecn-mini-widget-row">
+          <select class="ecn-mini-select" id="lampChoice">
+            <option value="40">Lampu Pijar -- 40 W</option>
+            <option value="15">Lampu Hemat Energi -- 15 W</option>
+            <option value="10">Lampu LED -- 10 W</option>
+          </select>
+          <span id="lampChoiceEnergy" style="font-family:'Courier New',monospace;font-weight:700;color:var(--brand-a);">0,060 kWh</span>
+          <button class="ecn-btn-secondary" id="lampChoiceCheckBtn">Cek Pilihan</button>
+        </div>
+        <div class="ecn-feedback" id="lampChoiceFeedback"></div>
+      </div>
+    </div>
+
+    <div class="ecn-card" id="roomExplainCard" style="display:none;">
+      <div class="ecn-quiz-label" style="color:var(--brand-a);">🔌 Apa yang Kita Temukan?</div>
+      <div class="ecn-explain-cols">
+        <div class="ecn-explain-col"><h4>⚡ Daya</h4><p>Seberapa CEPAT energi dipakai. Satuan: watt (W). Daya besar = alat "menyedot" energi lebih cepat tiap detiknya.</p></div>
+        <div class="ecn-explain-col"><h4>🔋 Energi</h4><p>Jumlah TOTAL energi yang sudah dipakai. Satuan: joule (J) atau kilowatt-hour (kWh). E = P × t.</p></div>
+      </div>
+      <p class="ecn-note" style="margin-top:10px;">💡 <strong>Daya ≠ Energi.</strong> Alat berdaya besar yang dipakai SEBENTAR belum tentu mengonsumsi energi lebih banyak daripada alat berdaya kecil yang dipakai LAMA -- seperti yang baru saja kamu buktikan lewat prediksi di atas.</p>
+    </div>
+  </div>
+
+  <!-- ================= TAB: SMART CLASSROOM ================= -->
+  <div class="ecn-panel" id="panel-school">
+    <div class="ecn-card">
+      <h2 style="font-size:1rem;font-weight:800;margin-bottom:4px;">🏫 Smart Classroom Challenge</h2>
+      <p style="font-size:0.83rem;color:var(--ink-muted);margin-bottom:10px;">Gunakan alat yang benar-benar diperlukan untuk kegiatan belajar selama <strong>6 jam</strong>, dengan energi seminimal mungkin.</p>
+      <div class="ecn-device-grid" id="schoolDeviceGrid"></div>
+
+      <div class="ecn-duration-row">
+        <div class="ecn-duration-label-row"><span>⏱️ Durasi KBM</span><span class="ecn-duration-value" id="schoolDurationVal">6 jam</span></div>
+        <input type="range" id="schoolDurationSlider" min="0.166" max="12" step="0.166" value="6">
+      </div>
+
+      <div class="ecn-controls-row">
+        <button class="ecn-btn-primary" id="schoolRunBtn">▶ Jalankan Simulasi (Mode Cepat)</button>
+        <button class="ecn-btn-secondary" id="schoolResetBtn">🔄 Reset</button>
+      </div>
+
+      <div class="ecn-result-row">
+        <div class="ecn-result-chip"><div class="k">⚡ Daya Total</div><div class="v" id="schoolPTotal">0 W</div></div>
+        <div class="ecn-result-chip"><div class="k">🔋 Energi Terpakai</div><div class="v" id="schoolETotal">0 kWh</div></div>
+      </div>
+
+      <div class="ecn-meter-track"><div class="ecn-meter-fill" id="schoolMeter"></div></div>
+      <div class="ecn-graph-wrap"><canvas id="schoolGraph"></canvas></div>
+      <div class="ecn-feedback" id="schoolFeedback"></div>
+    </div>
+  </div>
+
+  <!-- ================= TAB: BANDINGKAN ================= -->
+  <div class="ecn-panel" id="panel-compare">
+    <div class="ecn-card">
+      <p style="font-size:0.83rem;color:var(--ink-muted);margin-bottom:12px;">Bandingkan dua skenario bebas -- coba tiru contoh AC vs Kipas, atau ubah sendiri dayanya.</p>
+      <div class="ecn-compare-grid">
+        <div class="ecn-compare-col">
+          <span class="ecn-compare-tag a">Skenario A</span>
+          <div class="ecn-duration-row" style="margin-top:0;">
+            <div class="ecn-duration-label-row"><span>⚡ Daya</span><span class="ecn-duration-value" id="cmpAPowerVal">15 W</span></div>
+            <input type="range" id="cmpAPower" min="5" max="1000" step="5" value="15">
+            <div class="ecn-duration-label-row" style="margin-top:8px;"><span>⏱️ Durasi</span><span class="ecn-duration-value" id="cmpADurVal">10 jam</span></div>
+            <input type="range" id="cmpADur" min="0.166" max="24" step="0.166" value="10">
+          </div>
+        </div>
+        <div class="ecn-compare-col">
+          <span class="ecn-compare-tag b">Skenario B</span>
+          <div class="ecn-duration-row" style="margin-top:0;">
+            <div class="ecn-duration-label-row"><span>⚡ Daya</span><span class="ecn-duration-value" id="cmpBPowerVal">60 W</span></div>
+            <input type="range" id="cmpBPower" min="5" max="1000" step="5" value="60">
+            <div class="ecn-duration-label-row" style="margin-top:8px;"><span>⏱️ Durasi</span><span class="ecn-duration-value" id="cmpBDurVal">2 jam</span></div>
+            <input type="range" id="cmpBDur" min="0.166" max="24" step="0.166" value="2">
+          </div>
+        </div>
+      </div>
+
+      <div class="ecn-controls-row"><button class="ecn-btn-primary" id="cmpRunBtn">▶ Bandingkan</button></div>
+
+      <div class="ecn-result-row">
+        <div class="ecn-result-chip"><div class="k">Energi A</div><div class="v" id="cmpAResult" style="color:var(--brand-a);">-- kWh</div></div>
+        <div class="ecn-result-chip"><div class="k">Energi B</div><div class="v" id="cmpBResult" style="color:var(--brand-b);">-- kWh</div></div>
+      </div>
+      <div class="ecn-feedback" id="cmpConclusion"></div>
+      <p class="ecn-note">💭 Perhatikan: perangkat dengan daya lebih besar TIDAK SELALU mengonsumsi energi lebih banyak -- lama pemakaian sama pentingnya.</p>
+    </div>
+  </div>
+
+  <div class="ecn-legend" id="ecnLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function renderLegend() {
+      const el = $('ecnLegend');
+      [
+        { icon: '🟢', label: 'Konsumsi rendah' },
+        { icon: '🟡', label: 'Konsumsi sedang' },
+        { icon: '🔴', label: 'Konsumsi tinggi / lewat batas' },
+      ].forEach((f) => {
+        const chip = document.createElement('span');
+        chip.className = 'ecn-legend-chip';
+        chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`;
+        el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    document.querySelectorAll('.ecn-tab').forEach((btn) => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+    function switchTab(tab) {
+      document.querySelectorAll('.ecn-tab').forEach((b) => b.classList.toggle('is-active', b.dataset.tab === tab));
+      ['room', 'school', 'compare'].forEach((t) => $(`panel-${t}`).classList.toggle('is-active', t === tab));
+    }
+
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'ecn-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+
+    function fmtJam(j) {
+      if (j < 1) return `${Math.round(j * 60)} menit`;
+      return `${j.toFixed(j % 1 === 0 ? 0 : 1)} jam`;
+    }
+
+    function meterColor(pct) {
+      if (pct < 50) return getComputedStyle(document.documentElement).getPropertyValue('--lvl-low');
+      if (pct < 85) return getComputedStyle(document.documentElement).getPropertyValue('--lvl-mid');
+      return getComputedStyle(document.documentElement).getPropertyValue('--lvl-high');
+    }
+
+    /* =====================================================================
+       ENGINE SIMULASI (dipakai ulang oleh Room, School, Compare)
+       ===================================================================== */
+    function runEnergySim({ pTotalW, durationHours, meterEl, graphEl, meterMaxKWh, onProgress, onDone }) {
+      const pKW = pTotalW / 1000;
+      const totalE = pKW * durationHours;
+      const animMs = 1800;
+      const start = performance.now();
+      const samples = [];
+
+      function drawGraph() {
+        if (!graphEl) return;
+        const dpr = window.devicePixelRatio || 1;
+        const w = graphEl.parentElement.clientWidth - 16;
+        const h = 130;
+        graphEl.width = w * dpr; graphEl.height = h * dpr;
+        graphEl.style.width = w + 'px'; graphEl.style.height = h + 'px';
+        const ctx = graphEl.getContext('2d');
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+        if (samples.length < 2) return;
+        const maxE = Math.max(totalE, 0.01);
+        const maxT = Math.max(durationHours, 0.01);
+        const px = (t) => (t / maxT) * (w - 10) + 5;
+        const py = (e) => h - 10 - (e / maxE) * (h - 20);
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        for (let i = 0; i <= 4; i++) {
+          const y = 10 + ((h - 20) / 4) * i;
+          ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = '#a3e635';
+        ctx.lineWidth = 2.2;
+        samples.forEach((s, i) => { const x = px(s.t), y = py(s.e); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+        ctx.stroke();
+      }
+
+      function step(now) {
+        const frac = Math.min(1, (now - start) / animMs);
+        const tNow = frac * durationHours;
+        const eNow = pKW * tNow;
+        samples.push({ t: tNow, e: eNow });
+        if (meterEl) {
+          const pct = meterMaxKWh ? Math.min(100, (eNow / meterMaxKWh) * 100) : frac * 100;
+          meterEl.style.width = `${pct}%`;
+          meterEl.style.background = meterColor(pct);
+        }
+        drawGraph();
+        if (onProgress) onProgress(eNow, tNow);
+        if (frac < 1) requestAnimationFrame(step);
+        else { if (onDone) onDone(totalE, pTotalW); }
+      }
+      requestAnimationFrame(step);
+    }
+
+    /* =====================================================================
+       TAB: SMART ROOM
+       ===================================================================== */
+    const ROOMS = [
+      { id: 'keluarga', icon: '🛋️', label: 'Ruang Keluarga' },
+      { id: 'dapur', icon: '🍳', label: 'Dapur' },
+      { id: 'kamar', icon: '🛏️', label: 'Kamar' },
+      { id: 'mandi', icon: '🚿', label: 'Kamar Mandi' },
+      { id: 'belajar', icon: '💻', label: 'Ruang Belajar' },
+    ];
+    const ROOM_DEVICES = [
+      { id: 'lampu_keluarga', icon: '💡', label: 'Lampu', watt: 10, room: 'keluarga' },
+      { id: 'tv', icon: '📺', label: 'TV', watt: 100, room: 'keluarga' },
+      { id: 'kipas', icon: '🌀', label: 'Kipas', watt: 50, room: 'keluarga' },
+      { id: 'kulkas', icon: '🧊', label: 'Kulkas', watt: 150, room: 'dapur' },
+      { id: 'ricecooker', icon: '🍚', label: 'Rice Cooker', watt: 300, room: 'dapur' },
+      { id: 'ac', icon: '❄️', label: 'AC', watt: 500, room: 'kamar' },
+      { id: 'lampu_kamar', icon: '💡', label: 'Lampu Kamar', watt: 10, room: 'kamar' },
+      { id: 'pemanas_air', icon: '🚿', label: 'Pemanas Air', watt: 800, room: 'mandi' },
+      { id: 'laptop', icon: '💻', label: 'Laptop', watt: 60, room: 'belajar' },
+    ];
+    const roomOn = new Set(['lampu_keluarga']);
+    let roomPredicted = null;
+    let roomInteracted = false;
+    let dailyEnergyBaseline = null;
+    let lastOneDayResult = null;
+
+    renderQuizOptions($('roomPredictOptions'), ['Lampu A', 'Lampu B', 'Sama', 'Tidak dapat ditentukan'], onRoomPredict);
+    function onRoomPredict(i, btn, container) {
+      if (roomPredicted !== null) return;
+      roomPredicted = i;
+      container.querySelectorAll('.ecn-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      $('roomLockedNote').style.display = 'none';
+      $('roomBody').style.display = '';
+    }
+
+    function buildDeviceGrid(container, devices, onSet, activeSet) {
+      container.innerHTML = '';
+      devices.forEach((d) => {
+        const card = document.createElement('button');
+        card.className = 'ecn-device-card' + (activeSet.has(d.id) ? ' is-on' : '');
+        card.innerHTML = `<span class="ecn-device-icon">${d.icon}</span><span class="ecn-device-label">${d.label}</span><span class="ecn-device-watt">${d.watt} W</span>`;
+        card.addEventListener('click', () => {
+          if (activeSet.has(d.id)) activeSet.delete(d.id); else activeSet.add(d.id);
+          card.classList.toggle('is-on');
+          onSet();
+        });
+        container.appendChild(card);
+      });
+    }
+
+    function roomPTotal() {
+      return ROOM_DEVICES.filter((d) => roomOn.has(d.id)).reduce((s, d) => s + d.watt, 0);
+    }
+
+    // Grid alat dikelompokkan per ruangan (upgrade dari grid datar) -- tiap
+    // ruangan dapat judul + sub-grid sendiri, tapi tetap pakai kartu alat
+    // (.ecn-device-card) dan mekanisme klik yang sama seperti buildDeviceGrid.
+    function buildRoomHouseGrid(container, rooms, devices, activeSet, onChange) {
+      container.innerHTML = '';
+      rooms.forEach((room) => {
+        const devicesInRoom = devices.filter((d) => d.room === room.id);
+        if (devicesInRoom.length === 0) return;
+        const section = document.createElement('div');
+        section.className = 'ecn-room-section';
+        section.innerHTML = `<div class="ecn-room-section-title"><span>${room.icon}</span><span>${room.label}</span></div>`;
+        const grid = document.createElement('div');
+        grid.className = 'ecn-room-device-grid';
+        devicesInRoom.forEach((d) => {
+          const card = document.createElement('button');
+          card.className = 'ecn-device-card' + (activeSet.has(d.id) ? ' is-on' : '');
+          card.innerHTML = `<span class="ecn-device-icon">${d.icon}</span><span class="ecn-device-label">${d.label}</span><span class="ecn-device-watt">${d.watt} W</span>`;
+          card.addEventListener('click', () => {
+            if (activeSet.has(d.id)) activeSet.delete(d.id); else activeSet.add(d.id);
+            card.classList.toggle('is-on');
+            onChange();
+          });
+          grid.appendChild(card);
+        });
+        section.appendChild(grid);
+        container.appendChild(section);
+      });
+    }
+
+    buildRoomHouseGrid($('roomDeviceGrid'), ROOMS, ROOM_DEVICES, roomOn, () => { $('roomPTotal').textContent = `${roomPTotal()} W`; });
+    $('roomPTotal').textContent = `${roomPTotal()} W`;
+
+    // ============ SUB-MODE TOGGLE (Manual / Satu Hari) ============
+    document.querySelectorAll('.ecn-submode-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.submode;
+        document.querySelectorAll('.ecn-submode-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.submode === mode));
+        $('submode-manual').classList.toggle('is-active', mode === 'manual');
+        $('submode-oneday').classList.toggle('is-active', mode === 'oneday');
+      });
+    });
+
+    const ROOM_CHIPS = [
+      { label: '10 menit', jam: 10 / 60 },
+      { label: '30 menit', jam: 0.5 },
+      { label: '1 jam', jam: 1 },
+      { label: '2 jam', jam: 2 },
+      { label: '4 jam', jam: 4 },
+      { label: '8 jam', jam: 8 },
+      { label: '1 hari (24 jam)', jam: 24 },
+    ];
+    ROOM_CHIPS.forEach((c) => {
+      const btn = document.createElement('button');
+      btn.className = 'ecn-chip';
+      btn.textContent = c.label;
+      btn.addEventListener('click', () => { $('roomDurationSlider').value = c.jam; syncRoomDuration(); });
+      $('roomChips').appendChild(btn);
+    });
+
+    function syncRoomDuration() {
+      $('roomDurationVal').textContent = fmtJam(parseFloat($('roomDurationSlider').value));
+    }
+    $('roomDurationSlider').addEventListener('input', syncRoomDuration);
+    syncRoomDuration();
+
+    // Grafik daya di Mode Manual berupa garis DATAR (daya tidak berubah
+    // selama durasi berjalan, karena alat tidak diubah di tengah simulasi) --
+    // tetap edukatif untuk membedakan visual "daya konstan" vs "energi naik".
+    function drawFlatPowerGraph(canvas, pTotalW, durationHours) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 16, h = 90;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+      if (pTotalW <= 0) return;
+      const y = h - 15;
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.beginPath(); ctx.moveTo(5, 15); ctx.lineTo(w - 5, 15); ctx.stroke();
+      ctx.beginPath(); ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 2.2;
+      ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke();
+      ctx.fillStyle = '#93a4c3'; ctx.font = '10px sans-serif';
+      ctx.fillText(`${pTotalW} W konstan selama ${durationHours.toFixed(1)} jam`, 8, 12);
+    }
+
+    $('roomRunBtn').addEventListener('click', () => {
+      const pTotal = roomPTotal();
+      const durasi = parseFloat($('roomDurationSlider').value);
+      $('roomRunBtn').disabled = true;
+      drawFlatPowerGraph($('roomPowerGraph'), pTotal, durasi);
+      runEnergySim({
+        pTotalW: pTotal, durationHours: durasi, meterEl: $('roomMeter'), graphEl: $('roomGraph'), meterMaxKWh: 5,
+        onProgress: (e) => {
+          $('roomETotal').textContent = `${e.toFixed(3)} kWh`;
+          const tarif = parseFloat($('roomTarif').value) || 0;
+          $('roomCost').textContent = `Rp ${Math.round(e * tarif).toLocaleString('id-ID')}`;
+        },
+        onDone: (totalE) => {
+          $('roomRunBtn').disabled = false;
+          if (!roomInteracted) {
+            roomInteracted = true;
+            revealRoomPredictFeedback();
+            $('roomChallengeCard').style.display = '';
+            $('roomCalcChallengeCard').style.display = '';
+            $('newChallengesCard').style.display = '';
+            $('roomExplainCard').style.display = '';
+          }
+          if (Math.abs(durasi - 24) < 0.2) {
+            const fb = $('roomBudgetFeedback');
+            fb.classList.add('is-visible');
+            const overBudget = totalE > 5;
+            fb.classList.toggle('is-wrong', overBudget);
+            fb.innerHTML = overBudget
+              ? `⚠️ <strong>Batas energi terlampaui.</strong> Energi terpakai ${totalE.toFixed(2)} kWh, melebihi batas 5 kWh. Coba matikan salah satu alat berdaya besar.`
+              : `✅ <strong>Mantap!</strong> Energi terpakai ${totalE.toFixed(2)} kWh, masih di bawah batas 5 kWh. Sisa energi: ${(5 - totalE).toFixed(2)} kWh.`;
+          }
+        },
+      });
+    });
+
+    $('roomResetBtn').addEventListener('click', () => {
+      $('roomETotal').textContent = '0 kWh';
+      $('roomCost').textContent = 'Rp 0';
+      $('roomMeter').style.width = '0%';
+      $('roomBudgetFeedback').classList.remove('is-visible');
+      const ctx = $('roomGraph').getContext('2d');
+      ctx.clearRect(0, 0, $('roomGraph').width, $('roomGraph').height);
+      const pctx = $('roomPowerGraph').getContext('2d');
+      pctx.clearRect(0, 0, $('roomPowerGraph').width, $('roomPowerGraph').height);
+    });
+
+    function revealRoomPredictFeedback() {
+      // Catatan: 10 W x 10 jam = 0,1 kWh; 100 W x 1 jam = 0,1 kWh -- KEDUANYA
+      // SAMA. Ini pertanyaan "jebakan" yang disengaja: daya beda 10x lipat,
+      // tapi hasil kali daya x waktu-nya identik. Jawaban benarnya "Sama".
+      const fb = $('roomPredictFeedback');
+      fb.classList.add('is-visible');
+      const actuallyCorrect = 2; // index opsi "Sama"
+      const isRight = roomPredicted === actuallyCorrect;
+      fb.classList.toggle('is-wrong', !isRight);
+      fb.innerHTML = isRight
+        ? `✅ <strong>Tepat!</strong> Lampu A: 10 W × 10 jam = 0,1 kWh. Lampu B: 100 W × 1 jam = 0,1 kWh. Keduanya menghasilkan energi yang SAMA, walau dayanya beda 10 kali lipat -- inilah kenapa lama pemakaian sama pentingnya dengan besar daya.`
+        : `💡 <strong>Coba hitung lagi.</strong> Lampu A: 10 W × 10 jam = 0,1 kWh. Lampu B: 100 W × 1 jam = 0,1 kWh. Ternyata keduanya SAMA -- daya besar yang dipakai sebentar bisa setara dengan daya kecil yang dipakai lama.`;
+      $('roomPredictOptions').querySelectorAll('.ecn-quiz-option').forEach((b, i) => {
+        if (i === actuallyCorrect) b.classList.add('is-correct');
+        else if (i === roomPredicted) b.classList.add('is-wrong');
+      });
+    }
+
+    $('calcCheckBtn').addEventListener('click', () => {
+      const answer = parseFloat($('calcAnswer').value);
+      const fb = $('calcFeedback');
+      fb.classList.add('is-visible');
+      const correctT = 0.1 / (20 / 1000); // E / P(kW) = t
+      const ok = !isNaN(answer) && Math.abs(answer - correctT) < 0.05;
+      fb.classList.toggle('is-wrong', !ok);
+      fb.innerHTML = ok
+        ? `✅ <strong>Tepat!</strong> t = E / P = 0,1 kWh / 0,02 kW = 5 jam.`
+        : `💡 <strong>Belum tepat.</strong> Coba gunakan hubungan E = P × t, jadi t = E / P = 0,1 kWh / 0,02 kW.`;
+    });
+
+    /* =====================================================================
+       MODE SATU HARI (upgrade) -- pola pemakaian 00:00-24:00 per profil
+       ===================================================================== */
+    // Jam ON per alat, per profil. Interval [mulai, selesai) dalam jam
+    // desimal. Kulkas selalu [0,24] karena dimodelkan daya konstan terus
+    // menyala (lihat catatan di grid alat).
+    const SCHEDULES = {
+      hemat: {
+        lampu_keluarga: [[18, 21]], tv: [[19, 20.5]], kipas: [[14, 16]],
+        kulkas: [[0, 24]], ricecooker: [[6, 6.5]], ac: [[22, 23.5]],
+        lampu_kamar: [[21, 22.5]], pemanas_air: [[6, 6.3]], laptop: [[13, 15]],
+      },
+      normal: {
+        lampu_keluarga: [[18, 22]], tv: [[19, 22]], kipas: [[13, 17]],
+        kulkas: [[0, 24]], ricecooker: [[6, 7]], ac: [[21, 24]],
+        lampu_kamar: [[21, 23]], pemanas_air: [[6, 7], [18, 18.5]], laptop: [[8, 12], [13, 15]],
+      },
+      boros: {
+        lampu_keluarga: [[17, 23]], tv: [[15, 23]], kipas: [[10, 20]],
+        kulkas: [[0, 24]], ricecooker: [[6, 8]], ac: [[12, 24]],
+        lampu_kamar: [[19, 24]], pemanas_air: [[6, 7], [18, 19]], laptop: [[8, 16]],
+      },
+    };
+    const PROFILES = [
+      { id: 'hemat', icon: '🏠', label: 'Rumah Hemat', desc: 'Alat dipakai seperlunya, durasi singkat' },
+      { id: 'normal', icon: '🏠', label: 'Rumah Normal', desc: 'Pola pemakaian umum sehari-hari' },
+      { id: 'boros', icon: '🏠', label: 'Rumah Boros', desc: 'Banyak alat menyala lebih lama' },
+    ];
+    let activeProfile = 'normal';
+    let activeSpeed = 10;
+    let oneDayRunning = false;
+
+    function renderProfileRow() {
+      const row = $('profileRow');
+      row.innerHTML = '';
+      PROFILES.forEach((p) => {
+        const btn = document.createElement('button');
+        btn.className = 'ecn-profile-btn' + (p.id === activeProfile ? ' is-active' : '');
+        btn.innerHTML = `${p.icon} ${p.label}<small>${p.desc}</small>`;
+        btn.addEventListener('click', () => { activeProfile = p.id; renderProfileRow(); });
+        row.appendChild(btn);
+      });
+    }
+    renderProfileRow();
+
+    document.querySelectorAll('.ecn-speed-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeSpeed = parseInt(btn.dataset.speed, 10);
+        document.querySelectorAll('.ecn-speed-btn').forEach((b) => b.classList.toggle('is-active', b === btn));
+      });
+    });
+
+    function isOnAtHour(intervals, hour) {
+      return (intervals || []).some(([s, e]) => hour >= s && hour < e);
+    }
+    function powerAtHour(profile, hour) {
+      const schedule = SCHEDULES[profile];
+      let total = 0;
+      ROOM_DEVICES.forEach((d) => { if (isOnAtHour(schedule[d.id], hour)) total += d.watt; });
+      return total;
+    }
+
+    function drawSteppedGraph(canvas, points, colorHex, yMax, yLabel) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 16, h = 130;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+      if (points.length < 2) return;
+      const maxY = Math.max(yMax, 1);
+      const px = (t) => (t / 24) * (w - 10) + 5;
+      const py = (v) => h - 10 - (v / maxY) * (h - 20);
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      for (let i = 0; i <= 4; i++) { const y = 10 + ((h - 20) / 4) * i; ctx.beginPath(); ctx.moveTo(5, y); ctx.lineTo(w - 5, y); ctx.stroke(); }
+      ctx.beginPath(); ctx.strokeStyle = colorHex; ctx.lineWidth = 2;
+      points.forEach((p, i) => { const x = px(p.t), y = py(p.v); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+      ctx.stroke();
+    }
+
+    $('oneDayRunBtn').addEventListener('click', () => {
+      if (oneDayRunning) return;
+      oneDayRunning = true;
+      $('oneDayRunBtn').disabled = true;
+      const schedule = SCHEDULES[activeProfile];
+      const dt = 0.25; // langkah 15 menit -- 96 langkah sehari
+      const totalSteps = 24 / dt;
+      const totalDurationMs = activeSpeed === 1 ? 9000 : activeSpeed === 10 ? 3000 : 900;
+      const stepDelay = totalDurationMs / totalSteps;
+
+      let step = 0;
+      let energyWh = 0;
+      let peakPower = 0;
+      const powerPoints = [];
+      const energyPoints = [];
+      const perDeviceEnergy = {};
+      ROOM_DEVICES.forEach((d) => { perDeviceEnergy[d.id] = 0; });
+
+      const timer = setInterval(() => {
+        const hour = step * dt;
+        const pNow = powerAtHour(activeProfile, hour);
+        energyWh += pNow * dt;
+        peakPower = Math.max(peakPower, pNow);
+        powerPoints.push({ t: hour, v: pNow });
+        energyPoints.push({ t: hour, v: energyWh / 1000 });
+        ROOM_DEVICES.forEach((d) => { if (isOnAtHour(schedule[d.id], hour)) perDeviceEnergy[d.id] += (d.watt * dt) / 1000; });
+
+        const hh = String(Math.floor(hour)).padStart(2, '0');
+        const mm = String(Math.round((hour % 1) * 60)).padStart(2, '0');
+        $('oneDayClock').textContent = `${hh}:${mm}`;
+        $('oneDayPower').textContent = `${pNow.toFixed(0)} W`;
+        $('oneDayPeak').textContent = `${peakPower.toFixed(0)} W`;
+        $('oneDayPeakChip').classList.toggle('is-over', peakPower > 1500);
+        $('oneDayEnergy').textContent = `${(energyWh / 1000).toFixed(3)} kWh`;
+        drawSteppedGraph($('oneDayPowerGraph'), powerPoints, '#22d3ee', 1600, 'W');
+        drawSteppedGraph($('oneDayEnergyGraph'), energyPoints, '#a3e635', Math.max(energyWh / 1000, 0.5), 'kWh');
+
+        step++;
+        if (step > totalSteps) {
+          clearInterval(timer);
+          oneDayRunning = false;
+          $('oneDayRunBtn').disabled = false;
+          const dailyEnergy = energyWh / 1000;
+          const majorUsers = Object.entries(perDeviceEnergy)
+            .map(([id, e]) => ({ device: ROOM_DEVICES.find((d) => d.id === id), energy: e }))
+            .filter((u) => u.energy > 0)
+            .sort((a, b) => b.energy - a.energy);
+          lastOneDayResult = { profile: activeProfile, dailyEnergy, peakPower, majorUsers };
+          if (dailyEnergyBaseline === null) dailyEnergyBaseline = dailyEnergy;
+
+          $('majorUsersWrap').style.display = '';
+          $('majorUsersList').innerHTML = majorUsers.slice(0, 5).map((u, i) => `
+            <div class="ecn-major-user-row"><span><span class="rank">#${i + 1}</span>${u.device.icon} ${u.device.label}</span><span>${u.energy.toFixed(3)} kWh</span></div>
+          `).join('');
+
+          if (!roomInteracted) {
+            roomInteracted = true;
+            $('roomChallengeCard').style.display = '';
+            $('roomCalcChallengeCard').style.display = '';
+            $('newChallengesCard').style.display = '';
+            $('roomExplainCard').style.display = '';
+          }
+          renderDetectiveOptions();
+        }
+      }, stepDelay);
+    });
+
+    $('oneDayResetBtn').addEventListener('click', () => {
+      $('oneDayClock').textContent = '00:00';
+      $('oneDayPower').textContent = '0 W';
+      $('oneDayPeak').textContent = '0 W';
+      $('oneDayEnergy').textContent = '0 kWh';
+      $('oneDayPeakChip').classList.remove('is-over');
+      $('majorUsersWrap').style.display = 'none';
+      ['oneDayPowerGraph', 'oneDayEnergyGraph'].forEach((id) => { const c = $(id); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height); });
+    });
+
+    /* =====================================================================
+       TANTANGAN BARU: Energy Detective, Hemat 20%, Peak Power, Same Result
+       ===================================================================== */
+    function renderDetectiveOptions() {
+      const select = $('detectiveGuess');
+      select.innerHTML = ROOM_DEVICES.map((d) => `<option value="${d.id}">${d.icon} ${d.label}</option>`).join('');
+    }
+    renderDetectiveOptions();
+
+    $('detectiveCheckBtn').addEventListener('click', () => {
+      const fb = $('detectiveFeedback');
+      fb.classList.add('is-visible');
+      if (!lastOneDayResult) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Jalankan Mode Satu Hari dulu supaya ada data buat ditebak.'; return; }
+      const guess = $('detectiveGuess').value;
+      const actualTop = lastOneDayResult.majorUsers[0];
+      const correct = guess === actualTop.device.id;
+      fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = correct
+        ? `✅ <strong>Tepat!</strong> ${actualTop.device.icon} ${actualTop.device.label} memang paling boros hari ini (${actualTop.energy.toFixed(3)} kWh) -- bukan cuma soal daya besar, tapi daya × lama pemakaian.`
+        : `💡 <strong>Belum tepat.</strong> Yang paling boros hari ini justru ${actualTop.device.icon} <strong>${actualTop.device.label}</strong> (${actualTop.energy.toFixed(3)} kWh). Cek lagi daftar Major Energy Users di atas.`;
+    });
+
+    $('hemat20CheckBtn').addEventListener('click', () => {
+      const fb = $('hemat20Feedback');
+      fb.classList.add('is-visible');
+      if (!lastOneDayResult || dailyEnergyBaseline === null) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Jalankan Mode Satu Hari minimal 2 kali (acuan lalu perbandingan) dulu.'; return; }
+      const target = dailyEnergyBaseline * 0.8;
+      const pass = lastOneDayResult.dailyEnergy <= target;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass
+        ? `✅ <strong>Berhasil!</strong> Daily Energy turun jadi ${lastOneDayResult.dailyEnergy.toFixed(3)} kWh (acuan ${dailyEnergyBaseline.toFixed(3)} kWh) -- hemat ${(100 - (lastOneDayResult.dailyEnergy / dailyEnergyBaseline) * 100).toFixed(0)}%.`
+        : `💡 Daily Energy saat ini ${lastOneDayResult.dailyEnergy.toFixed(3)} kWh, target ≤ ${target.toFixed(3)} kWh (acuan ${dailyEnergyBaseline.toFixed(3)} kWh). Coba profil "Rumah Hemat" atau kurangi durasi alat berdaya besar.`;
+    });
+
+    $('peakCheckBtn').addEventListener('click', () => {
+      const fb = $('peakFeedback');
+      fb.classList.add('is-visible');
+      if (!lastOneDayResult) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Jalankan Mode Satu Hari dulu.'; return; }
+      const pass = lastOneDayResult.peakPower <= 1500;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass
+        ? `✅ <strong>Aman!</strong> Peak Power hari ini ${lastOneDayResult.peakPower.toFixed(0)} W, masih di bawah 1.500 W.`
+        : `⚡ <strong>Melebihi batas!</strong> Peak Power hari ini ${lastOneDayResult.peakPower.toFixed(0)} W. Ada beberapa alat berdaya besar (AC, Rice Cooker, Pemanas Air) yang menyala bersamaan -- coba atur jamnya supaya tidak bertabrakan.`;
+    });
+
+    function updateLampChoiceEnergy() {
+      const watt = parseFloat($('lampChoice').value);
+      const e = (watt * 6) / 1000;
+      $('lampChoiceEnergy').textContent = `${e.toFixed(3)} kWh`;
+    }
+    $('lampChoice').addEventListener('change', updateLampChoiceEnergy);
+    updateLampChoiceEnergy();
+
+    $('lampChoiceCheckBtn').addEventListener('click', () => {
+      const fb = $('lampChoiceFeedback');
+      fb.classList.add('is-visible');
+      const watt = parseFloat($('lampChoice').value);
+      const pass = watt === 10;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass
+        ? `✅ <strong>Tepat!</strong> Lampu LED (10 W × 6 jam = 0,060 kWh) memenuhi kebutuhan penerangan yang SAMA dengan energi paling kecil.`
+        : `💡 Semua lampu di sini dianggap sama terangnya -- yang membedakan cuma dayanya. Coba pilih yang dayanya paling kecil (Lampu LED, 10 W).`;
+    });
+
+    /* =====================================================================
+       TAB: SMART CLASSROOM
+       ===================================================================== */
+    const SCHOOL_DEVICES = [
+      { id: 'lampuKelas', icon: '💡', label: 'Lampu Kelas', watt: 40 },
+      { id: 'kipasKelas', icon: '🌀', label: 'Kipas', watt: 50 },
+      { id: 'proyektor', icon: '📽️', label: 'Proyektor', watt: 250 },
+      { id: 'komputerKelas', icon: '💻', label: 'Komputer', watt: 150 },
+      { id: 'acKelas', icon: '❄️', label: 'AC Kelas', watt: 900 },
+    ];
+    const schoolOn = new Set(['lampuKelas', 'proyektor']);
+
+    function schoolPTotal() {
+      return SCHOOL_DEVICES.filter((d) => schoolOn.has(d.id)).reduce((s, d) => s + d.watt, 0);
+    }
+    buildDeviceGrid($('schoolDeviceGrid'), SCHOOL_DEVICES, () => { $('schoolPTotal').textContent = `${schoolPTotal()} W`; }, schoolOn);
+    $('schoolPTotal').textContent = `${schoolPTotal()} W`;
+
+    function syncSchoolDuration() { $('schoolDurationVal').textContent = fmtJam(parseFloat($('schoolDurationSlider').value)); }
+    $('schoolDurationSlider').addEventListener('input', syncSchoolDuration);
+    syncSchoolDuration();
+
+    $('schoolRunBtn').addEventListener('click', () => {
+      const pTotal = schoolPTotal();
+      const durasi = parseFloat($('schoolDurationSlider').value);
+      $('schoolRunBtn').disabled = true;
+      runEnergySim({
+        pTotalW: pTotal, durationHours: durasi, meterEl: $('schoolMeter'), graphEl: $('schoolGraph'), meterMaxKWh: 6,
+        onProgress: (e) => { $('schoolETotal').textContent = `${e.toFixed(3)} kWh`; },
+        onDone: (totalE) => {
+          $('schoolRunBtn').disabled = false;
+          const fb = $('schoolFeedback');
+          fb.classList.add('is-visible');
+          const hemat = totalE <= 3;
+          fb.classList.toggle('is-wrong', !hemat);
+          fb.innerHTML = hemat
+            ? `✅ <strong>Cukup hemat!</strong> ${totalE.toFixed(2)} kWh untuk ${durasi.toFixed(1)} jam KBM dengan alat yang kamu pilih. Coba pikirkan lagi: alat mana yang benar-benar wajib menyala terus?`
+            : `💡 <strong>Masih cukup boros</strong> (${totalE.toFixed(2)} kWh). Coba pikirkan lagi: alat mana yang benar-benar wajib menyala terus selama KBM, dan mana yang bisa dimatikan sebagian waktu?`;
+        },
+      });
+    });
+
+    $('schoolResetBtn').addEventListener('click', () => {
+      $('schoolETotal').textContent = '0 kWh';
+      $('schoolMeter').style.width = '0%';
+      $('schoolFeedback').classList.remove('is-visible');
+      const ctx = $('schoolGraph').getContext('2d');
+      ctx.clearRect(0, 0, $('schoolGraph').width, $('schoolGraph').height);
+    });
+
+    /* =====================================================================
+       TAB: BANDINGKAN 2 SKENARIO
+       ===================================================================== */
+    function syncCmpLabels() {
+      $('cmpAPowerVal').textContent = `${$('cmpAPower').value} W`;
+      $('cmpADurVal').textContent = fmtJam(parseFloat($('cmpADur').value));
+      $('cmpBPowerVal').textContent = `${$('cmpBPower').value} W`;
+      $('cmpBDurVal').textContent = fmtJam(parseFloat($('cmpBDur').value));
+    }
+    ['cmpAPower', 'cmpADur', 'cmpBPower', 'cmpBDur'].forEach((id) => $(id).addEventListener('input', syncCmpLabels));
+    syncCmpLabels();
+
+    $('cmpRunBtn').addEventListener('click', () => {
+      const pA = parseFloat($('cmpAPower').value), tA = parseFloat($('cmpADur').value);
+      const pB = parseFloat($('cmpBPower').value), tB = parseFloat($('cmpBDur').value);
+      const eA = (pA / 1000) * tA;
+      const eB = (pB / 1000) * tB;
+      $('cmpAResult').textContent = `${eA.toFixed(3)} kWh`;
+      $('cmpBResult').textContent = `${eB.toFixed(3)} kWh`;
+
+      const concl = $('cmpConclusion');
+      concl.classList.add('is-visible');
+      concl.classList.remove('is-wrong');
+      let msg;
+      if (Math.abs(eA - eB) < 0.001) {
+        msg = `⚖️ Energinya SAMA (${eA.toFixed(3)} kWh) walau daya dan durasinya beda -- bukti nyata bahwa energi bergantung pada KOMBINASI daya dan waktu, bukan salah satunya saja.`;
+      } else if (eA > eB) {
+        msg = `📊 Skenario A (${pA} W × ${fmtJam(tA)}) menghasilkan energi LEBIH BESAR (${eA.toFixed(3)} kWh) dibanding Skenario B (${eB.toFixed(3)} kWh), meski dayanya lebih kecil dari B -- karena dipakai jauh lebih lama.`;
+      } else {
+        msg = `📊 Skenario B (${pB} W × ${fmtJam(tB)}) menghasilkan energi LEBIH BESAR (${eB.toFixed(3)} kWh) dibanding Skenario A (${eA.toFixed(3)} kWh).`;
+      }
+      concl.innerHTML = msg;
+    });
+  </script>
+</body>
+</html>

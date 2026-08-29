@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Renewable Energy Lab"
+  description="Eksplorasi energi terbarukan — atur sendiri parameter panel surya, turbin angin, dan turbin air, amati daya listrik yang dihasilkan berubah real-time, lalu bandingkan ketiganya."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Energi · Kelas X</p>
+    <h1>Renewable Energy Lab</h1>
+    <p class="page-lede">
+      Coba jadi "operator" tiga pembangkit energi terbarukan sekaligus — geser intensitas cahaya di
+      panel surya, kecepatan angin di turbin, sampai debit & ketinggian air di PLTA mini. Lihat
+      langsung apa yang benar-benar memengaruhi daya listrik yang dihasilkan, lalu bandingkan
+      ketiganya di tab Bandingkan.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="rel-frame-wrap card">
+      <iframe
+        data-rel-frame
+        src="/lab-embeds/renewable-energy-lab.html"
+        title="Renewable Energy Lab"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa visualnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .rel-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .rel-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 1700px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
+  // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
+  // scrollbar ganda atau ruang kosong di bawah simulasi.
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-rel-frame]');
+
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

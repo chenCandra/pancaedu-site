@@ -28,10 +28,15 @@ const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !dat
 // Jumlah simulasi Lab Maya TIDAK dihitung dari content collection (alat
 // ukurnya komponen kode, bukan entri konten) -- di-hardcode di sini, tapi
 // tetap angka NYATA (bukan dikarang), samain manual tiap kali nambah
-// simulasi baru. Per 2026-08-28: Jangka Sorong, Mikrometer Sekrup, Neraca
-// Ohaus, Stopwatch Analog, Amperemeter, Termometer (lihat
-// src/pages/lab-maya/alat-ukur.astro).
-const LAB_MAYA_SIMULASI_COUNT = 6;
+// simulasi baru. Per 2026-08-29: sama dengan jumlah entri di customLabs
+// pada src/pages/lab-maya/index.astro -- 1 Eksplorasi Alat Ukur (Jangka
+// Sorong, Mikrometer Sekrup, Neraca Ohaus, Stopwatch Analog, Amperemeter,
+// Termometer digabung 1 halaman) + Hukum Coulomb, Medan Listrik, Hukum
+// Newton, Usaha dan Daya, Energi Mekanik, Energy Transformation Lab, Energy
+// Conservation Lab, Renewable Energy Lab, Energy Consumption Lab,
+// Non-Renewable Energy Lab, Energy Efficiency Lab, Energy Crisis Lab,
+// Energy Planning Lab, Simulasi Massa Jenis (PhET, wrapper sendiri).
+const LAB_MAYA_SIMULASI_COUNT = 15;
 
 const counters = [
   { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },

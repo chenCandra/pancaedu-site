@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Energy Transformation Lab</title>
+<style>
+  :root {
+    --bg-0: #0a0f1e;
+    --bg-1: #10192f;
+    --card-bg: #141f38;
+    --card-border: #26365a;
+    --ink: #f1f5f9;
+    --ink-muted: #94a3b8;
+    --ink-faint: #64748b;
+    --brand-a: #fbbf24; /* amber -- ujung "sumber" spektrum energi */
+    --brand-b: #22d3ee; /* cyan -- ujung "elektrik" spektrum energi */
+    --ok: #34d399;
+    --warn: #f87171;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background:
+      radial-gradient(circle at 15% 0%, rgba(251, 191, 36, 0.07), transparent 45%),
+      radial-gradient(circle at 85% 100%, rgba(34, 211, 238, 0.08), transparent 45%),
+      var(--bg-0);
+    color: var(--ink);
+    font-family: var(--font);
+    min-height: 100vh;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand-b); outline-offset: 2px; }
+
+  /* ============ HEADER (identitas lab, BUKAN navbar situs) ============ */
+  .et-header {
+    background: linear-gradient(135deg, var(--card-bg), var(--bg-1));
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .et-header-title { display: flex; align-items: center; gap: 10px; }
+  .et-header-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
+  }
+  .et-header h1 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--brand-a), var(--brand-b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 0.2px;
+  }
+  .et-header p { font-size: 0.7rem; color: var(--ink-faint); margin-top: 1px; }
+  .et-brand-chip {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--card-border);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .et-main { flex: 1; display: flex; flex-direction: column; }
+
+  /* ============ SELECTOR ============ */
+  .et-intro-line {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .et-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .et-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 16px 14px;
+    text-align: left;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .et-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--brand-b);
+    box-shadow: 0 8px 24px rgba(34, 211, 238, 0.12);
+  }
+
+  .et-card-icons { font-size: 1.6rem; display: flex; align-items: center; gap: 6px; }
+  .et-card-icons .arrow { font-size: 0.9rem; color: var(--ink-faint); }
+  .et-card h3 { font-size: 0.95rem; font-weight: 700; }
+  .et-card-chain { font-size: 0.7rem; color: var(--ink-faint); line-height: 1.4; }
+
+  /* ============ DETAIL VIEW ============ */
+  .et-detail { display: none; flex-direction: column; gap: 14px; }
+  .et-detail.is-active { display: flex; }
+  .et-main.is-detail .et-selector { display: none; }
+
+  .et-back-btn {
+    align-self: flex-start;
+    background: none;
+    border: 1px solid var(--card-border);
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .et-back-btn:hover { color: var(--ink); border-color: var(--brand-b); }
+
+  .et-detail-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .et-detail-title h2 { font-size: 1.15rem; font-weight: 800; }
+  .et-detail-sub { font-size: 0.78rem; color: var(--ink-faint); background: rgba(255,255,255,0.04); padding: 3px 10px; border-radius: 999px; border: 1px solid var(--card-border); }
+
+  .et-intro-box {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--brand-a);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  /* ============ PREDIKSI & TANTANGAN (panel pilihan ganda) ============ */
+  .et-quiz-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .et-quiz-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand-a);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .et-quiz-question { font-size: 0.9rem; font-weight: 600; line-height: 1.45; }
+
+  .et-quiz-options { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .et-quiz-options { grid-template-columns: 1fr 1fr; } }
+
+  .et-quiz-option {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--card-border);
+    color: var(--ink);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    font-size: 0.82rem;
+    text-align: left;
+    display: flex;
+    gap: 8px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .et-quiz-option:hover:not(:disabled) { border-color: var(--brand-b); background: rgba(34, 211, 238, 0.06); }
+  .et-quiz-option .letter { font-weight: 800; color: var(--brand-b); flex-shrink: 0; }
+  .et-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .et-quiz-option.is-chosen { border-color: var(--brand-b); background: rgba(34, 211, 238, 0.1); }
+  .et-quiz-option.is-correct { border-color: var(--ok); background: rgba(52, 211, 153, 0.12); }
+  .et-quiz-option.is-wrong { border-color: var(--warn); background: rgba(248, 113, 113, 0.12); }
+
+  .et-feedback {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--ok);
+    background: rgba(52, 211, 153, 0.08);
+    display: none;
+  }
+  .et-feedback.is-visible { display: block; }
+  .et-feedback.is-wrong { border-left-color: var(--warn); background: rgba(248, 113, 113, 0.08); }
+
+  /* ============ PANGGUNG SIMULASI ============ */
+  .et-stage-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .et-stage-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+  }
+
+  .et-flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    z-index: 1;
+    min-height: 130px;
+  }
+
+  .et-module { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 92px; flex-shrink: 0; }
+  .et-module-circle {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #1e293b, #0b1120);
+    border: 2px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+  }
+  .et-module-label { font-size: 0.72rem; font-weight: 700; text-align: center; color: var(--ink-muted); }
+  .et-module-form { font-size: 0.62rem; font-weight: 700; text-align: center; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--card-border); color: var(--ink-faint); white-space: nowrap; }
+
+  .et-conduit {
+    flex: 1;
+    max-width: 160px;
+    height: 10px;
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+  }
+  .et-conduit-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .et-conduit-dot {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    left: 0%;
+  }
+  .et-conduit-dot.d2 { animation-delay: 0.5s; }
+  .et-conduit-dot.d3 { animation-delay: 1s; }
+
+  @keyframes et-flow {
+    0% { left: 0%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+  }
+
+  /* Perangkat aktif -- glow generik dulu, efek spesifik ditimpa per-jenis di bawah */
+  .et-module-circle.is-active { box-shadow: 0 0 22px 4px currentColor; border-color: currentColor; }
+
+  /* Lampu: kedip nyala + memancar */
+  .et-device--lampu.is-active .et-module-circle { animation: et-glow-pulse 1.6s ease-in-out infinite; }
+  @keyframes et-glow-pulse { 0%, 100% { filter: drop-shadow(0 0 6px currentColor); } 50% { filter: drop-shadow(0 0 16px currentColor); } }
+
+  /* Motor: berputar */
+  .et-device--motor.is-active .et-module-icon { display: inline-block; animation: et-spin 0.9s linear infinite; }
+  @keyframes et-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Pemanas: elemen berubah warna (dikendalikan lewat CSS var dari JS) */
+  .et-heater-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #475569, #475569);
+    margin-top: 6px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+  }
+  .et-heater-bar-fill {
+    height: 100%;
+    width: var(--heat-pct, 0%);
+    background: linear-gradient(90deg, #fbbf24, #f97316, #ef4444);
+    transition: width 0.4s ease;
+  }
+
+  /* Speaker: gelombang membesar */
+  .et-device--speaker.is-active .et-wave-ring {
+    animation: et-wave 1.4s ease-out infinite;
+  }
+  .et-wave-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    opacity: 0;
+  }
+  .et-wave-ring.w2 { animation-delay: 0.45s !important; }
+  .et-wave-ring.w3 { animation-delay: 0.9s !important; }
+  @keyframes et-wave { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.9); opacity: 0; } }
+
+  /* Tumbuhan: tumbuh perlahan + partikel naik */
+  .et-device--tumbuhan.is-active .et-module-icon { animation: et-grow 2s ease-in-out infinite; transform-origin: bottom center; }
+  @keyframes et-grow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+
+  .et-module-circle { position: relative; }
+
+  .et-output-badges {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    min-height: 30px;
+  }
+  .et-output-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .et-output-badge.is-visible { opacity: 1; transform: translateY(0); }
+
+  /* ============ KONTROL (saklar, reset, parameter) ============ */
+  .et-controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .et-switch-wrap { display: flex; align-items: center; gap: 10px; }
+  .et-switch-label { font-size: 0.82rem; font-weight: 700; color: var(--ink-muted); }
+
+  .et-switch {
+    width: 58px;
+    height: 32px;
+    border-radius: 999px;
+    background: #334155;
+    border: none;
+    position: relative;
+    transition: background 0.25s ease;
+    flex-shrink: 0;
+  }
+  .et-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    transition: transform 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .et-switch.is-on { background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); }
+  .et-switch.is-on::after { transform: translateX(26px); }
+  .et-switch:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .et-reset-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--card-border);
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  .et-reset-btn:hover { color: var(--ink); border-color: var(--warn); }
+
+  .et-param-box {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 280px;
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+  }
+  .et-param-box.is-visible { display: flex; }
+  .et-param-row { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--ink-muted); font-weight: 600; }
+  .et-param-box input[type="range"] {
+    width: 100%;
+    accent-color: var(--brand-a);
+  }
+
+  /* ============ PANEL PENJELASAN ============ */
+  .et-explain-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .et-explain-panel.is-visible { display: flex; }
+  .et-explain-title { font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .et-explain-grid { display: grid; gap: 10px; }
+  @media (min-width: 640px) { .et-explain-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .et-explain-block { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .et-explain-block .k { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 4px; }
+  .et-explain-block .v { font-size: 0.82rem; font-weight: 600; }
+
+  .et-explain-text { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.6; }
+
+  /* ============ LEGENDA BENTUK ENERGI ============ */
+  .et-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .et-legend-chip {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.68rem; font-weight: 700; color: var(--ink-faint);
+    background: rgba(255,255,255,0.03); border: 1px solid var(--card-border);
+    padding: 3px 9px; border-radius: 999px;
+  }
+
+  @media (max-width: 480px) {
+    .et-module { width: 76px; }
+    .et-module-circle { width: 54px; height: 54px; font-size: 1.4rem; }
+    .et-conduit { max-width: 90px; }
+  }
+</style>
+</head>
+<body>
+  <div class="et-header">
+    <div class="et-header-title">
+      <span class="et-header-icon">⚡</span>
+      <div>
+        <h1>Energy Transformation Lab</h1>
+        <p>Eksplorasi Bentuk dan Perubahan Energi</p>
+      </div>
+    </div>
+    <span class="et-brand-chip">🧪 Lab Maya PancaEdu</span>
+  </div>
+
+  <div class="et-main" id="etMain">
+    <div class="et-selector">
+      <p class="et-intro-line">Pilih salah satu sistem di bawah ini untuk mulai bereksperimen mengubah satu bentuk energi menjadi bentuk energi lainnya.</p>
+      <div class="et-card-grid" id="etCardGrid"></div>
+    </div>
+
+    <div class="et-detail" id="etDetail">
+      <button class="et-back-btn" id="etBackBtn">← Eksperimen Lain</button>
+
+      <div class="et-detail-title">
+        <h2 id="etTitle"></h2>
+        <span class="et-detail-sub" id="etSub"></span>
+      </div>
+
+      <p class="et-intro-box" id="etIntro"></p>
+
+      <!-- PREDIKSI -->
+      <div class="et-quiz-panel" id="etPredictPanel">
+        <span class="et-quiz-label">💭 Coba Prediksi</span>
+        <p class="et-quiz-question" id="etPredictQuestion"></p>
+        <div class="et-quiz-options" id="etPredictOptions"></div>
+      </div>
+
+      <!-- PANGGUNG -->
+      <div class="et-stage-card">
+        <div class="et-flow-row">
+          <div class="et-module" id="etSourceModule">
+            <div class="et-module-circle" id="etSourceCircle"><span class="et-module-icon" id="etSourceIcon"></span></div>
+            <span class="et-module-label" id="etSourceLabel"></span>
+            <span class="et-module-form" id="etSourceForm"></span>
+          </div>
+
+          <div class="et-conduit" id="etConduit">
+            <div class="et-conduit-dot d1"></div>
+            <div class="et-conduit-dot d2"></div>
+            <div class="et-conduit-dot d3"></div>
+          </div>
+
+          <div class="et-module" id="etTargetModule">
+            <div class="et-module-circle" id="etTargetCircle"><span class="et-module-icon" id="etTargetIcon"></span></div>
+            <span class="et-module-label" id="etTargetLabel"></span>
+          </div>
+        </div>
+
+        <div class="et-param-box" id="etParamBox">
+          <div class="et-param-row"><span>⏱️ Durasi Pemakaian</span><span id="etParamValue">0 s</span></div>
+          <input type="range" id="etParamSlider" min="0" max="10" step="1" value="0">
+        </div>
+
+        <div class="et-output-badges" id="etOutputBadges"></div>
+
+        <div class="et-controls-row">
+          <div class="et-switch-wrap">
+            <span class="et-switch-label">Sistem</span>
+            <button class="et-switch" id="etSwitch" disabled aria-pressed="false" aria-label="Nyalakan/matikan sistem"></button>
+          </div>
+          <button class="et-reset-btn" id="etResetBtn">🔄 Reset Eksperimen</button>
+        </div>
+      </div>
+
+      <div class="et-feedback" id="etFeedback"></div>
+
+      <!-- PENJELASAN -->
+      <div class="et-explain-panel" id="etExplainPanel">
+        <span class="et-explain-title">📘 Apa yang Terjadi?</span>
+        <div class="et-explain-grid">
+          <div class="et-explain-block"><div class="k">Energi Awal</div><div class="v" id="etExplainStart"></div></div>
+          <div class="et-explain-block"><div class="k">Energi Mengalir</div><div class="v" id="etExplainFlow"></div></div>
+          <div class="et-explain-block"><div class="k">Hasil Transformasi</div><div class="v" id="etExplainResult"></div></div>
+        </div>
+        <p class="et-explain-text" id="etExplainText"></p>
+      </div>
+
+      <!-- TANTANGAN -->
+      <div class="et-quiz-panel" id="etChallengePanel" style="display:none;">
+        <span class="et-quiz-label">⚡ Tantangan</span>
+        <p class="et-quiz-question" id="etChallengeQuestion"></p>
+        <div class="et-quiz-options" id="etChallengeOptions"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="et-legend" id="etLegend"></div>
+
+  <script>
+    // ============ DATA: bentuk-bentuk energi (warna + ikon dipakai konsisten,
+    // BUKAN warna saja -- selalu didampingi ikon & label demi aksesibilitas) ============
+    const FORMS = {
+      kimia:   { icon: '🧪', label: 'Energi Kimia',   color: '#4ade80' },
+      listrik: { icon: '⚡', label: 'Energi Listrik', color: '#fbbf24' },
+      cahaya:  { icon: '💡', label: 'Energi Cahaya',  color: '#67e8f9' },
+      panas:   { icon: '🔥', label: 'Energi Panas',   color: '#fb923c' },
+      gerak:   { icon: '⚙️', label: 'Energi Gerak',   color: '#60a5fa' },
+      bunyi:   { icon: '🔊', label: 'Energi Bunyi',   color: '#c084fc' },
+      radiasi: { icon: '☀️', label: 'Energi Radiasi', color: '#facc15' },
+    };
+
+    // ============ DATA: 5 eksperimen ============
+    const EXPERIMENTS = [
+      {
+        id: 'lampu',
+        icon: '🔋', arrowIcon: '💡',
+        title: 'Baterai → Lampu',
+        chainLabel: '🧪 → ⚡ → 💡',
+        deviceClass: 'et-device--lampu',
+        sourceIcon: '🔋', sourceLabel: 'Baterai', sourceForm: 'kimia',
+        targetIcon: '💡', targetLabel: 'Lampu',
+        flowForm: 'listrik',
+        outputs: ['cahaya', 'panas'],
+        intro: 'Baterai menyimpan energi kimia. Begitu dihubungkan ke lampu, energi itu mulai mengalir dan berubah bentuk. Coba amati apa yang terjadi.',
+        predict: {
+          q: 'Ketika baterai digunakan untuk menyalakan lampu, perubahan energi apa yang terjadi?',
+          options: ['Cahaya → listrik', 'Kimia → listrik → cahaya', 'Panas → cahaya', 'Gerak → listrik'],
+          correct: 1,
+        },
+        explain: 'Energi kimia yang tersimpan dalam baterai berubah menjadi energi listrik. Pada lampu, energi listrik kemudian berubah menjadi cahaya, dan sebagian energinya juga berubah menjadi panas -- itu sebabnya bohlam lampu terasa hangat setelah menyala lama.',
+        challenge: {
+          q: 'Kenapa bohlam lampu terasa hangat saat disentuh setelah lama menyala?',
+          options: ['Karena menyerap panas dari udara sekitar', 'Karena sebagian energi listrik berubah jadi panas, bukan cuma cahaya', 'Karena warnanya kuning', 'Karena baterainya panas'],
+          correct: 1,
+        },
+      },
+      {
+        id: 'motor',
+        icon: '🔋', arrowIcon: '⚙️',
+        title: 'Baterai → Motor',
+        chainLabel: '🧪 → ⚡ → ⚙️',
+        deviceClass: 'et-device--motor',
+        sourceIcon: '🔋', sourceLabel: 'Baterai', sourceForm: 'kimia',
+        targetIcon: '⚙️', targetLabel: 'Motor',
+        flowForm: 'listrik',
+        outputs: ['gerak', 'panas', 'bunyi'],
+        intro: 'Motor listrik sederhana bisa berputar kalau dihubungkan ke baterai. Sebelum menyalakannya, coba pikirkan dulu perubahan energi apa yang bakal terjadi.',
+        predict: {
+          q: 'Ketika baterai menyalakan motor, urutan perubahan energinya adalah...',
+          options: ['Gerak → listrik → kimia', 'Kimia → listrik → gerak', 'Listrik → kimia → gerak', 'Gerak → kimia → listrik'],
+          correct: 1,
+        },
+        explain: 'Sama seperti lampu, energi kimia dari baterai berubah dulu jadi energi listrik. Bedanya, di dalam motor energi listrik ini diubah jadi energi gerak (mekanik) oleh kumparan & magnet di dalamnya -- sebagian kecil energinya juga berubah jadi panas dan bunyi dengungan motor.',
+        challenge: {
+          q: 'Selain gerak, motor yang berputar lama biasanya juga terasa...',
+          options: ['Dingin', 'Hangat/panas', 'Tidak berubah sama sekali', 'Menyusut'],
+          correct: 1,
+        },
+      },
+      {
+        id: 'pemanas',
+        icon: '🔌', arrowIcon: '🔥',
+        title: 'Listrik → Pemanas',
+        chainLabel: '⚡ → 🔥',
+        deviceClass: 'et-device--pemanas',
+        sourceIcon: '🔌', sourceLabel: 'Sumber Listrik', sourceForm: 'listrik',
+        targetIcon: '🔥', targetLabel: 'Pemanas',
+        flowForm: 'listrik',
+        outputs: ['panas'],
+        hasParam: true,
+        intro: 'Alat seperti setrika atau pemanas air mengubah energi listrik langsung jadi panas. Coba nyalakan, lalu geser durasi pemakaiannya dan amati elemen pemanasnya.',
+        predict: {
+          q: 'Perubahan energi apa yang terjadi pada pemanas listrik?',
+          options: ['Listrik → panas', 'Panas → listrik', 'Kimia → panas', 'Gerak → panas'],
+          correct: 0,
+        },
+        explain: 'Elemen pemanas punya hambatan listrik yang tinggi -- saat arus listrik mengalir melewatinya, energi listrik langsung berubah jadi energi panas. Semakin lama dipakai, semakin banyak energi panas yang terkumpul di elemen tersebut (perhatikan warnanya makin merah).',
+        challenge: {
+          q: 'Kenapa elemen pemanas listrik berubah warna jadi kemerahan saat dipakai lebih lama?',
+          options: ['Karena terkena cahaya matahari', 'Karena suhunya semakin tinggi akibat energi panas yang terus terkumpul', 'Karena warnanya memang berubah sendiri tanpa sebab', 'Karena kehabisan listrik'],
+          correct: 1,
+        },
+      },
+      {
+        id: 'speaker',
+        icon: '🔌', arrowIcon: '🔊',
+        title: 'Listrik → Speaker',
+        chainLabel: '⚡ → 🔊',
+        deviceClass: 'et-device--speaker',
+        sourceIcon: '🔌', sourceLabel: 'Sumber Listrik', sourceForm: 'listrik',
+        targetIcon: '🔊', targetLabel: 'Speaker',
+        flowForm: 'listrik',
+        outputs: ['bunyi', 'panas'],
+        intro: 'Speaker mengubah sinyal listrik jadi getaran yang bisa kita dengar sebagai suara. Coba nyalakan dan amati gelombang yang dihasilkan.',
+        predict: {
+          q: 'Speaker mengubah energi listrik menjadi energi apa supaya kita bisa mendengar suara?',
+          options: ['Energi cahaya', 'Energi bunyi', 'Energi gerak', 'Energi kimia'],
+          correct: 1,
+        },
+        explain: 'Di dalam speaker ada kumparan dan magnet -- arus listrik yang berubah-ubah membuat kumparan itu bergetar, menggetarkan membran speaker, dan getaran itulah yang merambat di udara sebagai gelombang bunyi. Sebagian energi listriknya juga berubah jadi panas pada kumparan.',
+        challenge: {
+          q: 'Selain bunyi, speaker yang menyala keras dalam waktu lama biasanya jadi terasa...',
+          options: ['Semakin dingin', 'Hangat, karena ada energi yang berubah jadi panas juga', 'Semakin ringan', 'Tidak ada perubahan'],
+          correct: 1,
+        },
+      },
+      {
+        id: 'tumbuhan',
+        icon: '☀️', arrowIcon: '🌱',
+        title: 'Matahari → Tumbuhan',
+        chainLabel: '☀️ → 🧪',
+        deviceClass: 'et-device--tumbuhan',
+        sourceIcon: '☀️', sourceLabel: 'Matahari', sourceForm: 'radiasi',
+        targetIcon: '🌱', targetLabel: 'Tumbuhan',
+        flowForm: 'radiasi',
+        outputs: ['kimia'],
+        intro: 'Tumbuhan tidak makan seperti manusia, tapi tetap butuh energi. Dari mana energi itu berasal, dan disimpan dalam bentuk apa?',
+        predict: {
+          q: 'Melalui fotosintesis, tumbuhan mengubah energi matahari (radiasi/cahaya) menjadi energi apa yang tersimpan di dalam tubuhnya?',
+          options: ['Energi listrik', 'Energi kimia', 'Energi panas', 'Energi gerak'],
+          correct: 1,
+        },
+        explain: 'Lewat fotosintesis, energi radiasi/cahaya matahari yang diserap daun diubah menjadi energi kimia -- tersimpan dalam bentuk senyawa organik (seperti glukosa) di dalam tubuh tumbuhan. Energi kimia inilah yang nanti dipakai tumbuhan untuk tumbuh, dan juga menjadi sumber energi bagi makhluk hidup lain yang memakannya.',
+        challenge: {
+          q: 'Kenapa energi yang tersimpan dalam tumbuhan (misalnya buah atau batang) disebut energi kimia?',
+          options: ['Karena tumbuhan berwarna hijau', 'Karena energinya tersimpan dalam ikatan senyawa organik di dalam tubuhnya', 'Karena tumbuhan menyerap listrik dari tanah', 'Karena tumbuhan tidak punya energi sama sekali'],
+          correct: 1,
+        },
+      },
+    ];
+
+    // ============ STATE ============
+    let currentExp = null;
+    let predictChoice = null;
+    let isOn = false;
+    let hasRunOnce = false;
+    let challengeAnswered = false;
+
+    const $ = (id) => document.getElementById(id);
+    const mainEl = $('etMain');
+    const cardGrid = $('etCardGrid');
+    const detailEl = $('etDetail');
+    const legendEl = $('etLegend');
+
+    // ============ RENDER: kartu selector ============
+    function renderCards() {
+      cardGrid.innerHTML = '';
+      EXPERIMENTS.forEach((exp) => {
+        const btn = document.createElement('button');
+        btn.className = 'et-card';
+        btn.innerHTML = `
+          <div class="et-card-icons"><span>${exp.icon}</span><span class="arrow">→</span><span>${exp.arrowIcon}</span></div>
+          <h3>${exp.title}</h3>
+          <div class="et-card-chain">${exp.chainLabel}</div>
+        `;
+        btn.addEventListener('click', () => openExperiment(exp.id));
+        cardGrid.appendChild(btn);
+      });
+    }
+
+    // ============ RENDER: legenda bentuk energi ============
+    function renderLegend() {
+      legendEl.innerHTML = '';
+      Object.entries(FORMS).forEach(([key, f]) => {
+        const chip = document.createElement('span');
+        chip.className = 'et-legend-chip';
+        chip.style.color = f.color;
+        chip.innerHTML = `<span>${f.icon}</span><span style="color:var(--ink-faint)">${f.label}</span>`;
+        legendEl.appendChild(chip);
+      });
+    }
+
+    function formBadgeHTML(formKey) {
+      const f = FORMS[formKey];
+      return `<span>${f.icon}</span><span>${f.label}</span>`;
+    }
+
+    // ============ BUKA EKSPERIMEN ============
+    function openExperiment(id) {
+      currentExp = EXPERIMENTS.find((e) => e.id === id);
+      predictChoice = null;
+      isOn = false;
+      hasRunOnce = false;
+      challengeAnswered = false;
+
+      mainEl.classList.add('is-detail');
+      detailEl.classList.add('is-active');
+
+      $('etTitle').textContent = currentExp.title;
+      $('etSub').textContent = currentExp.chainLabel;
+      $('etIntro').textContent = currentExp.intro;
+
+      $('etSourceIcon').textContent = currentExp.sourceIcon;
+      $('etSourceLabel').textContent = currentExp.sourceLabel;
+      $('etSourceForm').innerHTML = formBadgeHTML(currentExp.sourceForm);
+      $('etSourceForm').style.color = FORMS[currentExp.sourceForm].color;
+      $('etSourceForm').style.borderColor = FORMS[currentExp.sourceForm].color;
+
+      $('etTargetIcon').textContent = currentExp.targetIcon;
+      $('etTargetLabel').textContent = currentExp.targetLabel;
+
+      $('etSourceModule').className = 'et-module';
+      $('etTargetModule').className = 'et-module ' + currentExp.deviceClass;
+      $('etSourceCircle').classList.remove('is-active');
+      $('etSourceCircle').style.color = '';
+      $('etTargetCircle').classList.remove('is-active');
+      $('etTargetCircle').style.color = '';
+      $('etTargetCircle').innerHTML = `<span class="et-module-icon" id="etTargetIcon">${currentExp.targetIcon}</span>`;
+
+      // Konduit
+      const conduit = $('etConduit');
+      conduit.style.color = FORMS[currentExp.flowForm].color;
+      conduit.querySelectorAll('.et-conduit-dot').forEach((dot) => {
+        dot.style.animation = 'none';
+        dot.style.opacity = '0';
+      });
+
+      // Parameter (cuma pemanas)
+      const paramBox = $('etParamBox');
+      paramBox.classList.toggle('is-visible', !!currentExp.hasParam);
+      $('etParamSlider').value = 0;
+      $('etParamValue').textContent = '0 s';
+
+      // Reset panel prediksi
+      $('etPredictPanel').style.display = '';
+      $('etPredictQuestion').textContent = currentExp.predict.q;
+      renderOptions('etPredictOptions', currentExp.predict.options, onPredictChoice);
+
+      // Reset switch
+      const sw = $('etSwitch');
+      sw.classList.remove('is-on');
+      sw.setAttribute('aria-pressed', 'false');
+      sw.disabled = true;
+
+      // Reset output badges
+      $('etOutputBadges').innerHTML = currentExp.outputs.map((key) => {
+        const f = FORMS[key];
+        return `<span class="et-output-badge" data-form="${key}" style="color:${f.color};border-color:${f.color}"><span>${f.icon}</span><span>${f.label}</span></span>`;
+      }).join('');
+
+      // Reset feedback & panel penjelasan/tantangan
+      $('etFeedback').className = 'et-feedback';
+      $('etFeedback').textContent = '';
+      $('etExplainPanel').classList.remove('is-visible');
+      $('etChallengePanel').style.display = 'none';
+
+      $('etExplainStart').innerHTML = formBadgeHTML(currentExp.sourceForm);
+      $('etExplainFlow').innerHTML = formBadgeHTML(currentExp.flowForm);
+      $('etExplainResult').innerHTML = currentExp.outputs.map((k) => formBadgeHTML(k)).join(' + ');
+      $('etExplainText').textContent = currentExp.explain;
+
+      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    }
+
+    function renderOptions(containerId, options, handler) {
+      const container = $(containerId);
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'et-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+
+    // ============ PREDIKSI ============
+    function onPredictChoice(index, btn, container) {
+      if (predictChoice !== null) return;
+      predictChoice = index;
+      container.querySelectorAll('.et-quiz-option').forEach((b) => (b.disabled = true));
+      btn.classList.add('is-chosen');
+      $('etSwitch').disabled = false;
+    }
+
+    // ============ SAKLAR (jalankan sistem) ============
+    $('etSwitch').addEventListener('click', () => {
+      if ($('etSwitch').disabled) return;
+      isOn = !isOn;
+      applyPowerState();
+      if (isOn) {
+        hasRunOnce = true;
+        revealPredictFeedback();
+        showExplainAndChallenge();
+      }
+    });
+
+    function applyPowerState() {
+      const sw = $('etSwitch');
+      sw.classList.toggle('is-on', isOn);
+      sw.setAttribute('aria-pressed', String(isOn));
+
+      $('etSourceCircle').classList.toggle('is-active', isOn);
+      $('etSourceCircle').style.color = isOn ? FORMS[currentExp.sourceForm].color : '';
+      $('etTargetCircle').classList.toggle('is-active', isOn);
+      $('etTargetCircle').style.color = isOn ? FORMS[currentExp.flowForm].color : '';
+
+      const conduit = $('etConduit');
+      conduit.querySelectorAll('.et-conduit-dot').forEach((dot, i) => {
+        dot.style.animation = isOn ? `et-flow 1.6s linear infinite` : 'none';
+        dot.style.animationDelay = isOn ? `${i * 0.5}s` : '0s';
+        if (!isOn) dot.style.opacity = '0';
+      });
+
+      $('etOutputBadges').querySelectorAll('.et-output-badge').forEach((badge) => {
+        badge.classList.toggle('is-visible', isOn);
+      });
+
+      if (currentExp.hasParam) refreshHeaterFill();
+    }
+
+    // ============ PARAMETER: durasi pemanas (satu-satunya slider kuantitatif) ============
+    $('etParamSlider').addEventListener('input', () => {
+      $('etParamValue').textContent = `${$('etParamSlider').value} s`;
+      refreshHeaterFill();
+    });
+
+    // Pasang heater bar di bawah modul target (khusus eksperimen pemanas), sekali saat dibuka
+    function ensureHeaterBar() {
+      const targetModule = $('etTargetModule');
+      let bar = document.getElementById('etHeaterBar');
+      if (currentExp.hasParam) {
+        if (!bar) {
+          bar = document.createElement('div');
+          bar.id = 'etHeaterBar';
+          bar.className = 'et-heater-bar';
+          bar.innerHTML = '<div class="et-heater-bar-fill" id="etHeaterBarFill"></div>';
+          targetModule.appendChild(bar);
+        }
+        bar.style.display = '';
+      } else if (bar) {
+        bar.style.display = 'none';
+      }
+    }
+
+    function refreshHeaterFill() {
+      const fill = document.getElementById('etHeaterBarFill');
+      if (!fill) return;
+      const durasi = parseFloat($('etParamSlider').value) || 0;
+      const pct = isOn ? Math.min(100, (durasi / 10) * 100) : 0;
+      fill.style.width = pct + '%';
+    }
+
+    // ============ FEEDBACK PREDIKSI ============
+    function revealPredictFeedback() {
+      const fb = $('etFeedback');
+      const correct = predictChoice === currentExp.predict.correct;
+      fb.classList.add('is-visible');
+      fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = correct
+        ? `✅ <strong>Tepat!</strong> ${currentExp.explain}`
+        : `💡 <strong>Belum tepat.</strong> Coba amati lagi animasi di atas -- ${currentExp.explain}`;
+
+      // Tandai pilihan di panel prediksi
+      const options = $('etPredictOptions').querySelectorAll('.et-quiz-option');
+      options.forEach((btn, i) => {
+        if (i === currentExp.predict.correct) btn.classList.add('is-correct');
+        else if (i === predictChoice) btn.classList.add('is-wrong');
+      });
+    }
+
+    function showExplainAndChallenge() {
+      $('etExplainPanel').classList.add('is-visible');
+      const cp = $('etChallengePanel');
+      cp.style.display = '';
+      $('etChallengeQuestion').textContent = currentExp.challenge.q;
+      renderOptions('etChallengeOptions', currentExp.challenge.options, onChallengeChoice);
+      challengeAnswered = false;
+    }
+
+    function onChallengeChoice(index, btn, container) {
+      if (challengeAnswered) return;
+      challengeAnswered = true;
+      const correct = index === currentExp.challenge.correct;
+      container.querySelectorAll('.et-quiz-option').forEach((b, i) => {
+        b.disabled = true;
+        if (i === currentExp.challenge.correct) b.classList.add('is-correct');
+        else if (i === index) b.classList.add('is-wrong');
+      });
+    }
+
+    // ============ RESET & NAVIGASI ============
+    $('etResetBtn').addEventListener('click', () => {
+      if (currentExp) openExperiment(currentExp.id);
+    });
+
+    $('etBackBtn').addEventListener('click', () => {
+      mainEl.classList.remove('is-detail');
+      detailEl.classList.remove('is-active');
+      currentExp = null;
+    });
+
+    // ============ INIT ============
+    renderCards();
+    renderLegend();
+
+    // Pasang heater bar tiap kali experiment dibuka (refresh isinya sudah
+    // ditangani lewat applyPowerState() & listener slider di atas).
+    const originalOpen = openExperiment;
+    openExperiment = function (id) {
+      originalOpen(id);
+      ensureHeaterBar();
+      refreshHeaterFill();
+    };
+  </script>
+</body>
+</html>

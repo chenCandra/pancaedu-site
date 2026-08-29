@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Usaha dan Daya"
+  description="Simulasi interaktif Usaha dan Daya — atur besar gaya, sudut, jarak perpindahan, dan waktu, lihat usaha dan daya berubah langsung, lengkap ilustrasi kenapa usaha bisa jadi nol."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Mekanika · Kelas X</p>
+    <h1>Usaha dan Daya: Gaya, Sudut, dan Perpindahan</h1>
+    <p class="page-lede">
+      Usaha cuma dihitung dari komponen gaya yang SEARAH perpindahan -- coba geser sudut gayanya
+      sampai 90°, lihat langsung kenapa usahanya bisa jadi nol meski gaya dan perpindahannya tetap
+      ada. Geser juga waktunya buat lihat bedanya usaha (seberapa banyak) dan daya (seberapa cepat).
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="ud-frame-wrap card">
+      <iframe
+        data-ud-frame
+        src="/lab-embeds/usaha-dan-daya.html"
+        title="Simulasi Usaha dan Daya"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa gelapnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .lab-wrap {
+    max-width: 60rem;
+    padding-block: 1rem 4rem;
+  }
+
+  .ud-frame-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ud-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 1000px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    border: 0;
+  }
+
+  .lab-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
+  // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
+  // scrollbar ganda atau ruang kosong di bawah simulasi.
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-ud-frame]');
+
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>
