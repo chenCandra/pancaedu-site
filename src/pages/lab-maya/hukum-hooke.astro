@@ -3,28 +3,27 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Lab Maya: Lab Energi Terbarukan"
-  description="Eksplorasi energi terbarukan — jelajahi scene virtual panel surya, turbin angin, PLTA, panas bumi, dan biomassa yang bisa diklik dan diamati langkah demi langkah, amati daya listrik yang dihasilkan berubah real-time, lalu bandingkan kelimanya."
+  title="Lab Maya: Hukum Hooke"
+  description="Laboratorium virtual Hukum Hooke -- gantungkan beban pada pegas, ukur pertambahan panjangnya dengan penggaris virtual, kumpulkan data, buat grafik F vs Δx, dan temukan sendiri konstanta pegasnya."
   disableCursor
 >
   <section class="container page-header">
     <a href="/materi" class="back-link">&larr; Semua Materi</a>
-    <p class="eyebrow">🧪 Lab Maya · Energi · Kelas X</p>
-    <h1>Lab Energi Terbarukan</h1>
+    <p class="eyebrow">🧪 Lab Maya · Mekanika · Kelas X</p>
+    <h1>Laboratorium Maya: Hukum Hooke</h1>
     <p class="page-lede">
-      Coba jadi "operator" lima pembangkit energi terbarukan sekaligus — geser intensitas cahaya di
-      panel surya, kecepatan angin di turbin, debit & ketinggian air di PLTA mini, suhu reservoir
-      panas bumi, sampai massa biomassa yang diproses. Klik tiap komponen buat lihat detailnya, ikuti
-      mode "Lihat Proses" langkah demi langkah, lalu bandingkan kelimanya di tab Bandingkan.
+      Gantungkan beban pada pegas (atau tarik langsung dengan gaya tertentu), amati pertambahan
+      panjangnya lewat penggaris virtual, ambil data, dan temukan sendiri hubungan F = k·Δx --
+      lengkap dengan konsep batas elastis dan penentuan konstanta pegas dari grafik.
     </p>
   </section>
 
   <section class="container lab-wrap">
-    <div class="rel-frame-wrap card">
+    <div class="hk-frame-wrap card">
       <iframe
-        data-rel-frame
-        src="/lab-embeds/renewable-energy-lab.html"
-        title="Lab Energi Terbarukan"
+        data-hk-frame
+        src="/lab-embeds/hukum-hooke.html"
+        title="Laboratorium Maya: Hukum Hooke"
         loading="lazy"
       ></iframe>
     </div>
@@ -63,15 +62,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     padding-block: 1rem 4rem;
   }
 
-  .rel-frame-wrap {
+  .hk-frame-wrap {
     padding: 0;
     overflow: hidden;
   }
 
-  .rel-frame-wrap iframe {
+  .hk-frame-wrap iframe {
     display: block;
     width: 100%;
-    height: 2100px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    height: 2600px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
     border: 0;
   }
 
@@ -87,7 +86,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
   // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
   // scrollbar ganda atau ruang kosong di bawah simulasi.
-  const iframe = document.querySelector<HTMLIFrameElement>('[data-rel-frame]');
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-hk-frame]');
 
   function resizeIframe() {
     if (!iframe?.contentDocument) return;

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorium Maya: Hukum Hooke</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-cyan: #38bdf8;
+            --force-color: #ef4444;
+            --force-glow: rgba(239, 68, 68, 0.4);
+            --spring-color: #a78bfa;
+            --net-color: #facc15;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-highlight: #facc15;
+            --ok: #4ade80;
+            --warn: #f87171;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark); color: var(--text-main); font-family: var(--font-family);
+            min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border);
+            padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; }
+        .header-title p { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }
+        .header-badge { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+        .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
+        .control-card { order: 2; } .canvas-card { order: 1; }
+        @media (min-width: 900px) { .main-container { grid-template-columns: 360px 1fr; } .control-card { order: 1; } .canvas-card { order: 2; } }
+
+        .card { background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+        .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
+
+        .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+        .control-label { font-size: 0.875rem; font-weight: 500; }
+
+        .chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .chip { background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--text-main); font-size: 0.78rem; font-weight: 700; padding: 7px 13px; border-radius: 999px; cursor: pointer; }
+        .chip.is-active { color: #04141d; background: linear-gradient(90deg, var(--accent-cyan), var(--spring-color)); border-color: transparent; }
+
+        .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+        .toggle-row label { font-size: 0.8rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        .btn-reset, .btn-primary, .btn-secondary { border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .btn-reset { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); color: #04141d; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--card-border); }
+        .btn-reset:active, .btn-primary:active, .btn-secondary:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; } .btn-row > * { flex: 1; min-width: 120px; }
+
+        .canvas-wrapper { position: relative; width: 100%; height: 340px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+        @media (max-width: 420px) { .canvas-wrapper { height: 280px; } }
+        canvas { display: block; width: 100%; height: 100%; }
+        .canvas-instruction { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; color: var(--text-muted); pointer-events: none; white-space: nowrap; text-align: center; max-width: 90%; }
+
+        .instrument-grid { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 560px) { .instrument-grid { grid-template-columns: repeat(3, 1fr); } }
+        .instrument { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; text-align: center; }
+        .instrument .icon { font-size: 1.2rem; }
+        .instrument .lbl { font-size: 0.64rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
+        .instrument .val { font-size: 0.95rem; font-weight: 800; font-family: 'Courier New', monospace; color: var(--text-highlight); margin-top: 2px; }
+
+        .results-panel { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .result-highlight { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--net-color); padding: 10px 14px; border-radius: 0 8px 8px 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+        .force-val { font-size: 1.4rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', Courier, monospace; }
+        .interaction-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .badge-ok { background: rgba(74,222,128,0.15); color: var(--ok); border: 1px solid rgba(74,222,128,0.4); }
+        .badge-warn { background: rgba(248,113,113,0.15); color: var(--warn); border: 1px solid rgba(248,113,113,0.4); }
+
+        .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; line-height: 1.6; color: #e2e8f0; overflow-x: auto; }
+        .math-var { color: #38bdf8; font-weight: bold; } .math-num { color: #f59e0b; }
+
+        .theory-card { background: rgba(30, 41, 59, 0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.825rem; color: var(--text-muted); line-height: 1.5; }
+        .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+        .quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px; }
+        .quiz-question { font-size: 0.88rem; font-weight: 600; line-height: 1.45; }
+        .quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .quiz-options { grid-template-columns: 1fr 1fr; } }
+        .quiz-option { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; padding: 9px 12px; font-size: 0.82rem; text-align: left; cursor: pointer; display: flex; gap: 8px; }
+        .quiz-option:hover:not(:disabled) { border-color: var(--accent-cyan); background: rgba(56,189,248,0.07); }
+        .quiz-option .letter { font-weight: 800; color: var(--accent-cyan); flex-shrink: 0; }
+        .quiz-option:disabled { cursor: default; opacity: 0.6; }
+        .quiz-option.is-chosen { border-color: var(--accent-cyan); background: rgba(56,189,248,0.1); }
+        .quiz-option.is-correct { border-color: var(--ok); background: rgba(74,222,128,0.12); }
+        .quiz-option.is-wrong { border-color: var(--warn); background: rgba(248,113,113,0.1); }
+
+        .feedback { font-size: 0.83rem; line-height: 1.5; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--ok); background: rgba(74,222,128,0.08); display: none; }
+        .feedback.is-visible { display: block; }
+        .feedback.is-wrong { border-left-color: var(--warn); background: rgba(248,113,113,0.08); }
+
+        .challenge-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+        @media (min-width: 720px) { .challenge-grid { grid-template-columns: 1fr 1fr; } }
+        .challenge-item { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .challenge-item h4 { font-size: 0.83rem; color: var(--text-highlight); }
+        .challenge-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+        .table-wrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 10px; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; min-width: 560px; }
+        table.data-table th, table.data-table td { text-align: right; padding: 7px 9px; border-bottom: 1px solid var(--card-border); font-family: 'Courier New', monospace; }
+        table.data-table th:first-child, table.data-table td:first-child { text-align: left; font-family: inherit; }
+        table.data-table th { color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase; background: rgba(255,255,255,0.02); }
+        table.data-table tbody tr:hover { background: rgba(56,189,248,0.05); }
+        .data-empty { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 16px; }
+
+        .graph-wrap { background: rgba(15,23,42,0.6); border: 1px solid var(--card-border); border-radius: 10px; padding: 8px; }
+        .graph-caption { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; text-align: center; }
+        .graph-wrap canvas { width: 100%; height: 200px; display: block; }
+
+        .compare-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .compare-grid { grid-template-columns: 1fr 1fr; } }
+        .compare-col { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .compare-tag { font-size: 0.7rem; font-weight: 800; padding: 2px 10px; border-radius: 999px; align-self: flex-start; }
+        .compare-tag.a { color: var(--force-color); border: 1px solid var(--force-color); }
+        .compare-tag.b { color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .compare-input-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; gap: 6px; }
+        .compare-input-row input[type="number"] { width: 70px; background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 6px; padding: 4px 6px; text-align: right; }
+        .compare-input-row select { background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 6px; padding: 4px 6px; }
+        .compare-result { margin-top: 6px; font-size: 0.85rem; font-weight: 700; font-family: 'Courier New', monospace; }
+        .compare-visual { display: flex; align-items: flex-end; justify-content: center; height: 90px; gap: 4px; }
+        .compare-spring-bar { width: 34px; border-radius: 4px 4px 0 0; transition: height 0.4s ease; }
+
+        .energy-bar-track { height: 1rem; background: #1e293b; border-radius: 999px; overflow: hidden; border: 1px solid var(--card-border); }
+        .energy-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #a78bfa, #f472b6); transition: width 0.3s ease; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+            <div><h1>Laboratorium Maya: Hukum Hooke</h1><p>Eksperimen elastisitas pegas berbasis data</p></div>
+        </div>
+        <span class="header-badge">SMA Kelas X</span>
+    </header>
+
+    <div class="main-container">
+        <div class="card control-card">
+            <div class="card-header"><span class="card-title">🔧 Panel Eksperimen</span></div>
+
+            <div class="control-group">
+                <div class="control-label-row"><span class="control-label">🧵 Kekakuan Pegas</span></div>
+                <div class="chip-row" id="springChips"></div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row"><span class="control-label">⚙️ Mode</span></div>
+                <div class="chip-row" id="modeChips"></div>
+            </div>
+
+            <div class="control-group" id="massGroup">
+                <div class="control-label-row"><span class="control-label">🪝 Beban</span></div>
+                <div class="chip-row" id="massChips"></div>
+            </div>
+
+            <div class="control-group" id="pullGroup" style="display:none;">
+                <div class="control-label-row"><span class="control-label" for="pullSlider">✋ Gaya Tarik (F)</span><span id="pullVal" style="font-family:monospace;color:var(--accent-cyan);font-weight:700;">0 N</span></div>
+                <input type="range" id="pullSlider" min="0" max="20" step="0.5" value="0" style="width:100%;">
+            </div>
+
+            <div class="toggle-row"><label for="chkOsilasi"><input type="checkbox" id="chkOsilasi">▶️ Lihat Osilasi saat beban berubah</label></div>
+            <div class="toggle-row" id="dampingRow" style="display:none;"><label for="chkDamping"><input type="checkbox" id="chkDamping" checked>🌊 Redam Cepat (mati kalau ingin osilasi lebih lama)</label></div>
+
+            <div class="btn-row">
+                <button class="btn-secondary" id="btnEnergy">⚡ Tampilkan Energi Elastis</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn-secondary" id="btnSave">💾 Simpan</button>
+                <button class="btn-secondary" id="btnLoad">📂 Pulihkan</button>
+            </div>
+            <button class="btn-reset" id="btnReset">↻ Reset Eksperimen</button>
+        </div>
+
+        <div class="card canvas-card">
+            <div class="card-header">
+                <span class="card-title">🧪 Eksperimen 1 -- Hubungan Gaya dan Pertambahan Panjang</span>
+                <span id="statusBadge" class="interaction-badge badge-ok">Daerah Elastis</span>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas"></canvas>
+                <div class="canvas-instruction" id="canvasInstruction">💡 Pilih beban, amati pegas memanjang, lalu baca penggaris di samping</div>
+            </div>
+
+            <div class="instrument-grid">
+                <div class="instrument"><div class="icon">⚖️</div><div class="lbl">MASSA</div><div class="val" id="instMass">0 g</div></div>
+                <div class="instrument"><div class="icon">💪</div><div class="lbl">GAYA (F)</div><div class="val" id="instForce">0 N</div></div>
+                <div class="instrument"><div class="icon">📏</div><div class="lbl">Δx</div><div class="val" id="instDx">0,0 cm</div></div>
+            </div>
+
+            <div class="results-panel">
+                <div class="result-highlight">
+                    <div><div style="font-size: 0.8rem; color: var(--text-muted);">Panjang Awal (L₀)</div><div class="force-val" style="font-size:1.1rem;" id="lZeroValue">20,0 cm</div></div>
+                    <div style="text-align:center;"><div style="font-size: 0.75rem; color: var(--text-muted);">Panjang Akhir (L)</div><div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-cyan);" id="lValue">20,0 cm</div></div>
+                    <div style="text-align: right;"><div style="font-size: 0.75rem; color: var(--text-muted);">Konstanta Pegas (k)</div><div style="font-size: 0.95rem; font-weight: 700; color: var(--spring-color);" id="kValue">100 N/m</div></div>
+                </div>
+
+                <div id="energyPanel" style="display:none;">
+                    <div class="control-label-row"><span style="font-size:0.78rem;color:var(--text-muted);">⚡ Energi Potensial Elastis (Ep = ½kΔx²)</span><span id="energyValue" style="font-family:monospace;font-weight:700;color:#f472b6;">0,00 J</span></div>
+                    <div class="energy-bar-track"><div class="energy-bar-fill" id="energyBar"></div></div>
+                </div>
+
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
+                <div class="formula-box" id="formulaBox"></div>
+                <div class="feedback" id="elasticNote"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ DATA LOGGER ============ -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">📌 Data Logger</span>
+            <div class="btn-row" style="margin:0;">
+                <button class="btn-secondary" id="btnLog">📌 Ambil Data</button>
+                <button class="btn-secondary" id="btnClearLast">Hapus Terakhir</button>
+                <button class="btn-secondary" id="btnClearAll">Hapus Semua</button>
+                <button class="btn-secondary" id="btnExportCsv">⬇️ Download CSV</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead><tr><th>No</th><th>m (g)</th><th>F (N)</th><th>L₀ (cm)</th><th>L (cm)</th><th>Δx (cm)</th><th>k terpakai (N/m)</th></tr></thead>
+                <tbody id="dataTableBody"></tbody>
+            </table>
+            <p class="data-empty" id="dataEmptyNote">Belum ada data. Atur beban lalu tekan "📌 Ambil Data".</p>
+        </div>
+    </div>
+
+    <!-- ============ GRAFIK F vs Δx + PENENTUAN k ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">📊 Grafik F vs Δx &amp; Penentuan Konstanta Pegas</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Kemiringan garis pada grafik F terhadap Δx menunjukkan konstanta pegas (k = F/Δx).</p>
+        <div class="graph-wrap"><p class="graph-caption">Gaya (F, sumbu-y) vs Pertambahan Panjang (Δx, sumbu-x)</p><canvas id="graphFdx"></canvas></div>
+        <div class="btn-row"><button class="btn-secondary" id="btnFindK">🔍 Tentukan Konstanta Pegas dari Data</button></div>
+        <div class="feedback" id="kFeedback"></div>
+    </div>
+
+    <!-- ============ COBA PIKIRKAN ============ -->
+    <div class="card">
+        <span class="quiz-label">🤔 Coba Pikirkan</span>
+        <p class="quiz-question">Dua pegas diberi gaya yang sama. Pegas A bertambah panjang 2 cm, Pegas B bertambah panjang 5 cm. Pegas mana yang konstanta pegasnya lebih besar?</p>
+        <div class="quiz-options" id="thinkOptions1"></div>
+        <div class="feedback" id="thinkFeedback1"></div>
+        <p class="quiz-question" style="margin-top:10px;">Jika gaya pada sebuah pegas digandakan (masih dalam daerah elastis), apa yang terjadi pada pertambahan panjangnya?</p>
+        <div class="quiz-options" id="thinkOptions2"></div>
+        <div class="feedback" id="thinkFeedback2"></div>
+    </div>
+
+    <!-- ============ TANTANGAN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🎯 Tantangan</span></div>
+        <div class="challenge-grid">
+            <div class="challenge-item"><h4>Tantangan 1</h4><p>Buat pegas mengalami pertambahan panjang tepat <strong>5 cm</strong> (toleransi ±0,3 cm).</p><button class="btn-secondary" data-challenge="1">Cek Sekarang</button><div class="feedback" id="chFeedback1"></div></div>
+            <div class="challenge-item"><h4>Tantangan 2</h4><p>Ambil minimal 3 data, lalu tentukan konstanta pegas dari grafik.</p><button class="btn-secondary" data-challenge="2">Cek Sekarang</button><div class="feedback" id="chFeedback2"></div></div>
+            <div class="challenge-item"><h4>Tantangan 3</h4><p>Dengan gaya yang sama, cari pengaturan pegas yang menghasilkan Δx <strong>paling kecil</strong>.</p><button class="btn-secondary" data-challenge="3">Cek Sekarang</button><div class="feedback" id="chFeedback3"></div></div>
+            <div class="challenge-item"><h4>Tantangan 4</h4><p>Buat dua data log (pegas berbeda, massa berbeda) dengan Δx yang <strong>sama</strong>.</p><button class="btn-secondary" data-challenge="4">Cek Data Log</button><div class="feedback" id="chFeedback4"></div></div>
+        </div>
+    </div>
+
+    <!-- ============ EKSPERIMEN 2: BANDINGKAN 2 PEGAS ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🧪 Eksperimen 2 -- Bandingkan Dua Pegas</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Beri massa yang sama pada dua pegas berbeda kekakuan, bandingkan pertambahan panjangnya.</p>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Pegas A</span>
+                <div class="compare-input-row"><span>k (N/m)</span><input type="number" id="cmpAk" value="100" min="10" max="500"></div>
+                <div class="compare-input-row"><span>Massa (g)</span><input type="number" id="cmpMass" value="500" min="10" max="2000"></div>
+                <div class="compare-result" id="cmpAResult" style="color:var(--force-color);">Δx = -- cm</div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Pegas B</span>
+                <div class="compare-input-row"><span>k (N/m)</span><input type="number" id="cmpBk" value="200" min="10" max="500"></div>
+                <div class="compare-input-row"><span>Massa (g)</span><span style="color:var(--text-muted);">(sama, di atas)</span></div>
+                <div class="compare-result" id="cmpBResult" style="color:var(--accent-cyan);">Δx = -- cm</div>
+            </div>
+        </div>
+        <div class="compare-visual">
+            <div class="compare-spring-bar" id="cmpBarA" style="background:var(--force-color);height:20px;"></div>
+            <div class="compare-spring-bar" id="cmpBarB" style="background:var(--accent-cyan);height:20px;"></div>
+        </div>
+        <div class="feedback is-visible" id="cmpFeedback"></div>
+    </div>
+
+    <div class="theory-card">
+        <div class="theory-title">📌 Ringkasan Hukum Hooke</div>
+        <span class="math-var">F</span> = k × Δx -- gaya yang meregangkan pegas berbanding LURUS dengan pertambahan panjangnya, selama masih di DAERAH ELASTIS (belum melewati batas elastis pegas). Semakin besar konstanta pegas (k), semakin kaku pegasnya, dan semakin kecil Δx untuk gaya yang sama.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const G = 9.8;
+        const L0_CM = 20; // panjang awal pegas (cm), tetap
+
+        // Ambang batas elastis (limitCm) sengaja dijaga di atas Δx yang bisa
+        // dicapai lewat kombinasi F=kΔx standar (mis. k=100,F=20N=>20cm) biar
+        // pengujian rumus dasar tidak "kesenggol" fitur deformasi permanen.
+        // Pegas Lunak paling gampang dieksplorasi ngelewatin batasnya (lewat
+        // Mode Tarik, F sampai 20N/k=50 = 40cm > 28cm).
+        const SPRINGS = {
+            lunak: { label: '🟢 Lunak', k: 50, limitCm: 28, color: '#4ade80' },
+            sedang: { label: '🟡 Sedang', k: 100, limitCm: 20, color: '#facc15' },
+            kaku: { label: '🔴 Kaku', k: 200, limitCm: 12, color: '#f87171' },
+        };
+        const MASS_OPTIONS = [0, 50, 100, 200, 500, 1000]; // gram, 0 = tanpa beban
+
+        let springKey = 'sedang';
+        let massG = 200;
+        let mode = 'beban'; // 'beban' | 'tarik'
+        let pullForce = 0;
+        let osilasiOn = false;
+        let dampingFast = true;
+        let energyVisible = false;
+        let permanentDeformCm = 0; // kalau > 0, pegas sudah pernah melewati batas elastis
+
+        function currentForce() {
+            if (mode === 'tarik') return pullForce;
+            return (massG / 1000) * G;
+        }
+        function currentK() { return SPRINGS[springKey].k; }
+        function computeDxCm(force, k) { return (force / k) * 100; } // meter -> cm
+
+        function renderSpringChips() {
+            const row = document.getElementById('springChips');
+            row.innerHTML = '';
+            Object.entries(SPRINGS).forEach(([key, s]) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip' + (key === springKey ? ' is-active' : '');
+                chip.textContent = `${s.label} (k=${s.k})`;
+                chip.addEventListener('click', () => { springKey = key; permanentDeformCm = 0; renderSpringChips(); syncAndRender(); });
+                row.appendChild(chip);
+            });
+        }
+        function renderModeChips() {
+            const row = document.getElementById('modeChips');
+            row.innerHTML = '';
+            [{ id: 'beban', label: '🪝 Gantung Beban' }, { id: 'tarik', label: '✋ Tarik Pegas' }].forEach((m) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip' + (m.id === mode ? ' is-active' : '');
+                chip.textContent = m.label;
+                chip.addEventListener('click', () => {
+                    mode = m.id;
+                    document.getElementById('massGroup').style.display = mode === 'beban' ? '' : 'none';
+                    document.getElementById('pullGroup').style.display = mode === 'tarik' ? '' : 'none';
+                    renderModeChips(); syncAndRender();
+                });
+                row.appendChild(chip);
+            });
+        }
+        function renderMassChips() {
+            const row = document.getElementById('massChips');
+            row.innerHTML = '';
+            MASS_OPTIONS.forEach((g) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip' + (g === massG ? ' is-active' : '');
+                chip.textContent = g === 0 ? 'Lepas' : (g >= 1000 ? `${g / 1000} kg` : `${g} g`);
+                chip.addEventListener('click', () => { massG = g; renderMassChips(); triggerLoadChange(); });
+                row.appendChild(chip);
+            });
+        }
+        renderSpringChips(); renderModeChips(); renderMassChips();
+
+        document.getElementById('pullSlider').addEventListener('input', (e) => {
+            pullForce = parseFloat(e.target.value);
+            document.getElementById('pullVal').textContent = pullForce.toFixed(1) + ' N';
+            triggerLoadChange();
+        });
+        document.getElementById('chkOsilasi').addEventListener('change', (e) => {
+            osilasiOn = e.target.checked;
+            document.getElementById('dampingRow').style.display = osilasiOn ? '' : 'none';
+        });
+        document.getElementById('chkDamping').addEventListener('change', (e) => { dampingFast = e.target.checked; });
+        document.getElementById('btnEnergy').addEventListener('click', () => {
+            energyVisible = !energyVisible;
+            document.getElementById('energyPanel').style.display = energyVisible ? '' : 'none';
+            document.getElementById('btnEnergy').textContent = energyVisible ? '⚡ Sembunyikan Energi Elastis' : '⚡ Tampilkan Energi Elastis';
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+            if (experimentData.length > 0 && !confirm('Reset akan menghapus semua data eksperimen yang sudah diambil. Lanjutkan?')) return;
+            springKey = 'sedang'; massG = 200; mode = 'beban'; pullForce = 0; permanentDeformCm = 0;
+            document.getElementById('pullSlider').value = 0; document.getElementById('pullVal').textContent = '0 N';
+            document.getElementById('massGroup').style.display = ''; document.getElementById('pullGroup').style.display = 'none';
+            experimentData = []; renderDataTable();
+            renderSpringChips(); renderModeChips(); renderMassChips();
+            syncAndRender();
+        });
+
+        // ============ FISIKA INTI ============
+        let currentDxCm = 0; // Δx yang sedang ditampilkan (animasi menuju target)
+        let targetDxCm = 0;
+        function computeAndDisplay() {
+            const k = currentK();
+            const F = currentForce();
+            let dxTarget = computeDxCm(F, k);
+            const limit = SPRINGS[springKey].limitCm;
+            const overLimit = dxTarget > limit;
+            if (overLimit) {
+                // Melewati batas elastis -- model sederhana: pegas terdeformasi
+                // permanen, panjang sisa bertambah, tapi TIDAK dihitung sebagai
+                // Δx elastis biasa (F=kΔx tidak lagi berlaku di sini).
+                permanentDeformCm = Math.max(permanentDeformCm, (dxTarget - limit) * 0.4);
+                dxTarget = limit + permanentDeformCm;
+            }
+            targetDxCm = dxTarget;
+
+            const L = L0_CM + currentDxCm;
+            document.getElementById('lZeroValue').textContent = L0_CM.toFixed(1) + ' cm';
+            document.getElementById('lValue').textContent = L.toFixed(1) + ' cm';
+            document.getElementById('kValue').textContent = k + ' N/m';
+            document.getElementById('instMass').textContent = mode === 'tarik' ? '--' : massG + ' g';
+            document.getElementById('instForce').textContent = F.toFixed(2) + ' N';
+            document.getElementById('instDx').textContent = currentDxCm.toFixed(1) + ' cm';
+
+            const badge = document.getElementById('statusBadge');
+            if (overLimit) { badge.textContent = 'Melewati Batas Elastis'; badge.className = 'interaction-badge badge-warn'; }
+            else { badge.textContent = 'Daerah Elastis'; badge.className = 'interaction-badge badge-ok'; }
+
+            let formula = mode === 'tarik'
+                ? `<span class="math-var">F</span> = ${F.toFixed(2)} N (diatur langsung)`
+                : `<span class="math-var">F</span> = m × g = ${(massG / 1000).toFixed(3)} × 9,8 = <span class="math-num">${F.toFixed(2)} N</span>`;
+            formula += `<br><span class="math-var">Δx</span> = F / k = ${F.toFixed(2)} / ${k} = <span class="math-num">${(F / k).toFixed(4)} m</span> = <span class="math-num">${(F / k * 100).toFixed(1)} cm</span>`;
+            if (overLimit) formula += `<br><em>⚠️ Δx yang dihitung (${(F / k * 100).toFixed(1)} cm) melewati batas elastis pegas ini (${limit} cm) -- di atas batas ini, F = kΔx TIDAK berlaku lagi, dan pegas mengalami deformasi permanen (tidak kembali 100% ke panjang awal).</em>`;
+            document.getElementById('formulaBox').innerHTML = formula;
+
+            const note = document.getElementById('elasticNote');
+            if (overLimit) {
+                note.classList.add('is-visible', 'is-wrong');
+                note.innerHTML = `⚠️ <strong>Batas elastis terlampaui!</strong> Batas elastis adalah batas maksimum regangan ketika pegas masih bisa kembali ke bentuk semula setelah gaya dihilangkan. Pegas ini sudah melewatinya -- coba tekan "Lepas" dan lihat, pegas tidak kembali 100% ke ${L0_CM} cm.`;
+            } else if (massG === 0 && mode === 'beban' && permanentDeformCm > 0) {
+                note.classList.add('is-visible', 'is-wrong');
+                note.innerHTML = `📏 Beban dilepas, tapi pegas cuma kembali ke <strong>${(L0_CM + permanentDeformCm).toFixed(1)} cm</strong> (bukan ${L0_CM} cm) -- ini deformasi permanen akibat pernah melewati batas elastis.`;
+            } else {
+                note.classList.remove('is-visible', 'is-wrong');
+            }
+
+            const ep = 0.5 * k * Math.pow(currentDxCm / 100, 2);
+            document.getElementById('energyValue').textContent = ep.toFixed(3) + ' J';
+            document.getElementById('energyBar').style.width = Math.min(100, (ep / 5) * 100) + '%';
+
+            return { F, k, dx: currentDxCm, overLimit };
+        }
+
+        // ============ ANIMASI PEGAS (menuju targetDxCm, dgn/tanpa osilasi) ============
+        let animId = null, animStart = 0, animFromCm = 0, animToCm = 0, animUsesOscillation = false;
+        function triggerLoadChange() {
+            computeAndDisplay(); // hitung target baru (tanpa mengubah currentDxCm dulu)
+            animFromCm = currentDxCm;
+            animToCm = targetDxCm;
+            animUsesOscillation = osilasiOn;
+            animStart = performance.now();
+            if (animId) cancelAnimationFrame(animId);
+            stepAnim();
+        }
+        function stepAnim() {
+            const now = performance.now();
+            const t = (now - animStart) / 1000;
+            const duration = animUsesOscillation ? (dampingFast ? 1.6 : 3.2) : 0.5;
+            if (t >= duration) {
+                currentDxCm = animToCm;
+                computeAndDisplay(); render();
+                animId = null;
+                return;
+            }
+            if (animUsesOscillation) {
+                const tau = dampingFast ? 0.35 : 0.9;
+                const omega = 9;
+                const amp = (animToCm - animFromCm) * 0.35;
+                // Interpolasi dasar menuju target (naik eksponensial), ditambah
+                // osilasi teredam di sekitarnya -- model getaran sederhana,
+                // bukan solusi persamaan gerak pegas-massa yang eksak.
+                const base = animFromCm + (animToCm - animFromCm) * (1 - Math.exp(-t / tau));
+                currentDxCm = base + amp * Math.cos(omega * t) * Math.exp(-t / tau);
+            } else {
+                const p = 1 - Math.pow(1 - t / duration, 3); // ease-out
+                currentDxCm = animFromCm + (animToCm - animFromCm) * p;
+            }
+            computeAndDisplay();
+            render();
+            animId = requestAnimationFrame(stepAnim);
+        }
+        function syncAndRender() { triggerLoadChange(); }
+
+        // ============ RENDER SCENE ============
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+            ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+            render();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function render() {
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, width, height);
+
+            const topY = 40;
+            const pxPerCm = Math.min(6, (height - 100) / 45);
+            const springX = width * 0.42;
+            const l0Px = L0_CM * pxPerCm;
+            const dxPx = currentDxCm * pxPerCm;
+            const bottomY = topY + l0Px + dxPx;
+
+            // Statif
+            ctx.save();
+            ctx.strokeStyle = '#64748b'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+            ctx.beginPath(); ctx.moveTo(springX - 60, topY); ctx.lineTo(springX + 60, topY); ctx.stroke();
+            ctx.lineWidth = 8;
+            ctx.beginPath(); ctx.moveTo(springX - 60, topY); ctx.lineTo(springX - 60, topY - 30); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(springX - 60, 10); ctx.lineTo(springX - 100, 10); ctx.lineTo(springX - 100, height - 10); ctx.lineTo(springX - 60, height - 10); ctx.stroke();
+            ctx.restore();
+
+            // Pegas (zigzag)
+            ctx.save();
+            const coils = 9;
+            const coilWidth = 16;
+            ctx.strokeStyle = SPRINGS[springKey].color; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(springX, topY);
+            const segLen = (bottomY - topY) / (coils * 2);
+            for (let i = 0; i < coils * 2; i++) {
+                const y = topY + segLen * (i + 1);
+                const x = springX + (i % 2 === 0 ? coilWidth : -coilWidth);
+                ctx.lineTo(x, y);
+            }
+            ctx.lineTo(springX, bottomY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Kait + beban
+            ctx.save();
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(springX, bottomY + 8, 8, 0, Math.PI * 1.6); ctx.stroke();
+            const showMass = mode === 'beban' && massG > 0;
+            if (showMass) {
+                const massSize = 20 + Math.min(20, massG / 60);
+                ctx.fillStyle = 'rgba(0,0,0,0.35)';
+                ctx.beginPath(); ctx.ellipse(springX, bottomY + 16 + massSize + 6, massSize * 0.6, 5, 0, 0, Math.PI * 2); ctx.fill();
+                const grad = ctx.createLinearGradient(springX - massSize / 2, bottomY + 16, springX - massSize / 2, bottomY + 16 + massSize);
+                grad.addColorStop(0, '#475569'); grad.addColorStop(1, '#1e293b');
+                ctx.fillStyle = grad; ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.roundRect(springX - massSize / 2, bottomY + 16, massSize, massSize, 5); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#e2e8f0'; ctx.font = `bold ${Math.round(massSize * 0.32)}px system-ui`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(massG >= 1000 ? `${massG / 1000}kg` : `${massG}g`, springX, bottomY + 16 + massSize / 2);
+
+                // Gaya berat & gaya pegas (setimbang)
+                ctx.strokeStyle = '#ef4444'; ctx.fillStyle = '#ef4444'; ctx.lineWidth = 2.5;
+                drawSmallArrow(springX + massSize / 2 + 14, bottomY + 16 + massSize / 2, 0, 26);
+                ctx.font = '10px system-ui'; ctx.textAlign = 'left';
+                ctx.fillText(`Fg=${currentForce().toFixed(1)}N`, springX + massSize / 2 + 20, bottomY + 16 + massSize / 2 + 30);
+                ctx.strokeStyle = '#a78bfa'; ctx.fillStyle = '#a78bfa';
+                drawSmallArrow(springX - massSize / 2 - 14, bottomY + 8, 0, -26);
+                ctx.fillText(`Fs=${currentForce().toFixed(1)}N`, springX - massSize / 2 - 60, bottomY + 8 - 30);
+            } else if (mode === 'tarik' && pullForce > 0) {
+                ctx.strokeStyle = '#ef4444'; ctx.fillStyle = '#ef4444'; ctx.lineWidth = 3;
+                drawSmallArrow(springX, bottomY + 10, 0, Math.min(60, pullForce * 3));
+                ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+                ctx.fillText(`F=${pullForce.toFixed(1)}N`, springX + 30, bottomY + 30);
+            }
+            ctx.restore();
+
+            // Penggaris vertikal
+            const rulerX = springX + 90;
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148,163,184,0.6)'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(rulerX, topY - 10); ctx.lineTo(rulerX, topY + 45 * pxPerCm); ctx.stroke();
+            ctx.fillStyle = '#94a3b8'; ctx.font = '9px system-ui'; ctx.textAlign = 'left';
+            for (let cm = 0; cm <= 45; cm += 5) {
+                const y = topY + cm * pxPerCm;
+                const long = cm % 10 === 0;
+                ctx.beginPath(); ctx.moveTo(rulerX, y); ctx.lineTo(rulerX + (long ? 10 : 6), y); ctx.stroke();
+                if (long) ctx.fillText(cm + 'cm', rulerX + 13, y + 3);
+            }
+            // Marker L0
+            ctx.strokeStyle = '#facc15'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(springX, topY + l0Px); ctx.lineTo(rulerX + 40, topY + l0Px); ctx.stroke();
+            ctx.setLineDash([]); ctx.fillStyle = '#facc15'; ctx.font = 'bold 10px system-ui';
+            ctx.fillText('L₀', rulerX + 44, topY + l0Px + 3);
+            // Marker L (kalau beda dari L0)
+            if (Math.abs(currentDxCm) > 0.1) {
+                ctx.strokeStyle = '#38bdf8'; ctx.setLineDash([3, 3]);
+                ctx.beginPath(); ctx.moveTo(springX, bottomY); ctx.lineTo(rulerX + 40, bottomY); ctx.stroke();
+                ctx.setLineDash([]); ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px system-ui';
+                ctx.fillText('L', rulerX + 44, bottomY + 3);
+            }
+            ctx.restore();
+        }
+        function drawSmallArrow(x, y, dx, dy) {
+            const toX = x + dx, toY = y + dy;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(toX, toY); ctx.stroke();
+            const ang = Math.atan2(dy, dx), headLen = 6;
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(ang - Math.PI / 6), toY - headLen * Math.sin(ang - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(ang + Math.PI / 6), toY - headLen * Math.sin(ang + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+        }
+
+        // ============ DATA LOGGER ============
+        let experimentData = [];
+        function renderDataTable() {
+            const tbody = document.getElementById('dataTableBody');
+            const empty = document.getElementById('dataEmptyNote');
+            if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; drawFdxGraph(); return; }
+            empty.style.display = 'none';
+            tbody.innerHTML = experimentData.map((d, i) => `<tr><td>${i + 1}</td><td>${d.m}</td><td>${d.F.toFixed(2)}</td><td>${d.L0.toFixed(1)}</td><td>${d.L.toFixed(1)}</td><td>${d.dx.toFixed(1)}</td><td>${d.k}</td></tr>`).join('');
+            drawFdxGraph();
+        }
+        document.getElementById('btnLog').addEventListener('click', () => {
+            const { F, k, dx } = computeAndDisplay();
+            experimentData.push({ m: mode === 'tarik' ? '--' : massG, F, L0: L0_CM, L: L0_CM + dx, dx, k });
+            renderDataTable();
+        });
+        document.getElementById('btnClearLast').addEventListener('click', () => { experimentData.pop(); renderDataTable(); });
+        document.getElementById('btnClearAll').addEventListener('click', () => { experimentData = []; renderDataTable(); });
+        document.getElementById('btnExportCsv').addEventListener('click', () => {
+            if (experimentData.length === 0) return;
+            let csv = 'No,Massa (g),F (N),L0 (cm),L (cm),Delta x (cm),k (N/m)\n';
+            experimentData.forEach((d, i) => { csv += `${i + 1},${d.m},${d.F.toFixed(3)},${d.L0.toFixed(1)},${d.L.toFixed(1)},${d.dx.toFixed(2)},${d.k}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'data-eksperimen-hukum-hooke.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // ============ GRAFIK F vs Δx + REGRESI ============
+        function linearFitSlope(points) {
+            const n = points.length;
+            if (n < 2) return null;
+            const sumX = points.reduce((s, p) => s + p.x, 0);
+            const sumY = points.reduce((s, p) => s + p.y, 0);
+            const sumXY = points.reduce((s, p) => s + p.x * p.y, 0);
+            const sumXX = points.reduce((s, p) => s + p.x * p.x, 0);
+            const denom = n * sumXX - sumX * sumX;
+            if (Math.abs(denom) < 1e-9) return null;
+            return (n * sumXY - sumX * sumY) / denom;
+        }
+        function drawFdxGraph() {
+            const canvasEl = document.getElementById('graphFdx');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvasEl.parentElement.clientWidth - 16, h = 190;
+            canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+            canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+            const c = canvasEl.getContext('2d');
+            c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+            const points = experimentData.map((d) => ({ x: d.dx / 100, y: d.F })); // x dalam meter biar k pas satuannya
+            if (points.length === 0) { c.fillStyle = '#64748b'; c.font = '11px system-ui'; c.textAlign = 'center'; c.fillText('Belum ada data -- ambil data dulu', w / 2, h / 2); return; }
+            const maxX = Math.max(...points.map((p) => p.x), 0.01) * 1.2;
+            const maxY = Math.max(...points.map((p) => p.y), 1) * 1.2;
+            const px = (x) => (x / maxX) * (w - 30) + 20;
+            const py = (y) => h - 20 - (y / maxY) * (h - 30);
+            c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(18, py(0)); c.lineTo(w - 8, py(0)); c.moveTo(18, 6); c.lineTo(18, h - 20); c.stroke();
+            c.fillStyle = '#94a3b8'; c.font = '9px system-ui'; c.textAlign = 'left'; c.fillText('Δx (m)', w - 45, h - 4); c.fillText('F (N)', 4, 14);
+            const slope = linearFitSlope(points);
+            if (slope !== null) {
+                c.strokeStyle = 'rgba(56,189,248,0.7)'; c.lineWidth = 2;
+                c.beginPath(); c.moveTo(px(0), py(0)); c.lineTo(px(maxX), py(slope * maxX)); c.stroke();
+            }
+            points.forEach((p) => { c.fillStyle = '#facc15'; c.beginPath(); c.arc(px(p.x), py(p.y), 4.5, 0, Math.PI * 2); c.fill(); });
+            if (slope !== null) { c.fillStyle = '#38bdf8'; c.font = 'bold 11px system-ui'; c.textAlign = 'left'; c.fillText(`kemiringan ≈ k = ${slope.toFixed(1)} N/m`, 24, 20); }
+        }
+        document.getElementById('btnFindK').addEventListener('click', () => {
+            const fb = document.getElementById('kFeedback');
+            fb.classList.add('is-visible');
+            if (experimentData.length < 2) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Ambil minimal 2 data dulu (beda beban) sebelum menentukan k dari grafik.'; return; }
+            const points = experimentData.map((d) => ({ x: d.dx / 100, y: d.F }));
+            const slope = linearFitSlope(points);
+            const actualK = currentK();
+            const close = slope !== null && Math.abs(slope - actualK) < actualK * 0.15;
+            fb.classList.toggle('is-wrong', !close);
+            fb.innerHTML = close
+                ? `✅ Kemiringan grafik ≈ <strong>${slope.toFixed(1)} N/m</strong> -- sangat dekat dengan k pegas ini (${actualK} N/m). Ini membuktikan k = F/Δx bisa ditentukan dari kemiringan grafik F vs Δx.`
+                : `📈 Kemiringan grafik saat ini ≈ ${slope ? slope.toFixed(1) : '--'} N/m. Coba ambil lebih banyak titik data dengan pegas yang SAMA (jangan ganti kekakuan di tengah eksperimen) untuk hasil regresi yang lebih akurat.`;
+        });
+
+        // ============ COBA PIKIRKAN ============
+        function renderQuizOptions(container, options, handler) {
+            container.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+                btn.addEventListener('click', () => handler(i, btn, container));
+                container.appendChild(btn);
+            });
+        }
+        let think1Answered = false, think2Answered = false;
+        renderQuizOptions(document.getElementById('thinkOptions1'), ['Pegas A', 'Pegas B', 'Keduanya sama', 'Tidak dapat ditentukan'], (i, btn, c) => {
+            if (think1Answered) return; think1Answered = true;
+            const correct = i === 0;
+            c.querySelectorAll('.quiz-option').forEach((b, j) => { b.disabled = true; if (j === 0) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+            const fb = document.getElementById('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+            fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'k = F/Δx -- dengan F sama, Δx yang lebih KECIL berarti k lebih BESAR (lebih kaku). Pegas A cuma bertambah 2 cm (lebih kaku) dibanding Pegas B yang 5 cm.';
+        });
+        renderQuizOptions(document.getElementById('thinkOptions2'), ['Δx menjadi dua kali lipat', 'Δx menjadi setengahnya', 'Δx tetap sama', 'Δx menjadi empat kali lipat'], (i, btn, c) => {
+            if (think2Answered) return; think2Answered = true;
+            const correct = i === 0;
+            c.querySelectorAll('.quiz-option').forEach((b, j) => { b.disabled = true; if (j === 0) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+            const fb = document.getElementById('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+            fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Δx = F/k -- karena hubungannya LINEAR (berbanding lurus), menggandakan F (selama masih di daerah elastis) membuat Δx ikut menjadi dua kali lipat.';
+        });
+
+        // ============ TANTANGAN ============
+        document.querySelectorAll('[data-challenge]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.challenge;
+                const { F, k, dx } = computeAndDisplay();
+                const fb = document.getElementById(`chFeedback${id}`);
+                fb.classList.add('is-visible');
+                let pass = false, msg = '';
+                if (id === '1') {
+                    pass = Math.abs(dx - 5) <= 0.3;
+                    msg = pass ? `Δx saat ini ${dx.toFixed(1)} cm -- sangat dekat dengan target 5 cm.` : `Δx saat ini ${dx.toFixed(1)} cm. Ingat Δx = F/k -- coba ganti beban atau kekakuan pegas.`;
+                } else if (id === '2') {
+                    pass = experimentData.length >= 3;
+                    msg = pass ? `Sudah ada ${experimentData.length} data -- coba tekan "🔍 Tentukan Konstanta Pegas" di atas.` : `Baru ada ${experimentData.length} data. Ambil minimal 3 data (📌 Ambil Data) dengan beban berbeda-beda dulu.`;
+                } else if (id === '3') {
+                    pass = springKey === 'kaku';
+                    msg = pass ? `Pegas Kaku (k=${SPRINGS.kaku.k} N/m) dipilih -- untuk F yang sama, ini menghasilkan Δx paling kecil di antara ketiga pilihan.` : `Pegas saat ini "${SPRINGS[springKey].label}". Coba pilih pegas "🔴 Kaku" -- k terbesar menghasilkan Δx terkecil untuk F yang sama.`;
+                } else if (id === '4') {
+                    const dxs = experimentData.map((d) => d.dx);
+                    pass = dxs.some((a, i) => dxs.some((b, j) => i !== j && Math.abs(a - b) < 0.3 && experimentData[i].k !== experimentData[j].k));
+                    msg = pass ? 'Ditemukan dua data dengan pegas/massa berbeda tapi Δx hampir sama!' : 'Belum ditemukan. Coba log data dengan pegas Lunak+massa kecil vs pegas Kaku+massa besar sampai Δx-nya mirip.';
+                }
+                fb.classList.toggle('is-wrong', !pass);
+                fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+            });
+        });
+
+        // ============ EKSPERIMEN 2: BANDINGKAN ============
+        function updateCompare() {
+            const kA = parseFloat(document.getElementById('cmpAk').value) || 1;
+            const kB = parseFloat(document.getElementById('cmpBk').value) || 1;
+            const m = parseFloat(document.getElementById('cmpMass').value) || 0;
+            const F = (m / 1000) * G;
+            const dxA = (F / kA) * 100, dxB = (F / kB) * 100;
+            document.getElementById('cmpAResult').textContent = `Δx = ${dxA.toFixed(2)} cm (F=${F.toFixed(2)}N)`;
+            document.getElementById('cmpBResult').textContent = `Δx = ${dxB.toFixed(2)} cm (F=${F.toFixed(2)}N)`;
+            const maxDx = Math.max(dxA, dxB, 1);
+            document.getElementById('cmpBarA').style.height = Math.max(6, (dxA / maxDx) * 80) + 'px';
+            document.getElementById('cmpBarB').style.height = Math.max(6, (dxB / maxDx) * 80) + 'px';
+            const fb = document.getElementById('cmpFeedback');
+            if (Math.abs(dxA - dxB) < 0.1) fb.innerHTML = `⚖️ Δx keduanya SAMA (${dxA.toFixed(2)} cm) -- k-nya kebetulan menghasilkan hasil yang sama.`;
+            else fb.innerHTML = `📊 Pegas ${dxA < dxB ? 'A' : 'B'} (k=${dxA < dxB ? kA : kB} N/m) mengalami Δx lebih KECIL -- konstanta pegasnya lebih besar (lebih kaku), sesuai <span class="math-var">Δx = F/k</span>.`;
+        }
+        ['cmpAk', 'cmpBk', 'cmpMass'].forEach((id) => document.getElementById(id).addEventListener('input', updateCompare));
+
+        // ============ LOCALSTORAGE ============
+        document.getElementById('btnSave').addEventListener('click', () => {
+            try { localStorage.setItem('pancaedu-hukum-hooke', JSON.stringify({ springKey, massG, mode, pullForce, experimentData })); alert('Eksperimen tersimpan di browser ini.'); }
+            catch (e) { alert('Gagal menyimpan.'); }
+        });
+        document.getElementById('btnLoad').addEventListener('click', () => {
+            try {
+                const raw = localStorage.getItem('pancaedu-hukum-hooke');
+                if (!raw) { alert('Belum ada eksperimen tersimpan.'); return; }
+                const data = JSON.parse(raw);
+                springKey = data.springKey || 'sedang'; massG = data.massG ?? 200; mode = data.mode || 'beban'; pullForce = data.pullForce || 0;
+                experimentData = data.experimentData || [];
+                document.getElementById('massGroup').style.display = mode === 'beban' ? '' : 'none';
+                document.getElementById('pullGroup').style.display = mode === 'tarik' ? '' : 'none';
+                document.getElementById('pullSlider').value = pullForce; document.getElementById('pullVal').textContent = pullForce.toFixed(1) + ' N';
+                renderSpringChips(); renderModeChips(); renderMassChips();
+                renderDataTable(); syncAndRender();
+                alert('Eksperimen dipulihkan.');
+            } catch (e) { alert('Gagal memulihkan data.'); }
+        });
+
+        window.onload = () => {
+            resizeCanvas();
+            triggerLoadChange();
+            updateCompare();
+            renderDataTable();
+        };
+    </script>
+</body>
+</html>

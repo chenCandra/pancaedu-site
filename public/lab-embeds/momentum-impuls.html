@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Virtual Collision Lab</title>
+<style>
+  :root {
+    --bg-1: #eef6ff; --bg-2: #fef9ec; --panel: #ffffff; --panel-2: #f4f8ff;
+    --border: #dbe6f5; --ink: #0f1b2d; --ink-muted: #51637d; --ink-faint: #8496b0;
+    --electric: #0ea5e9; --orange: #f97316; --lime: #84cc16; --violet: #8b5cf6; --yellow: #facc15;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #0b1220; --scene-bg-2: #131c33;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(14,42,90,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--electric); outline-offset: 2px; }
+
+  .clab-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .clab-header-title { display: flex; align-items: center; gap: 12px; }
+  .clab-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--electric), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 0.2px; }
+  .clab-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .clab-badge { font-size: 0.72rem; font-weight: 800; color: var(--electric); background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .clab-intro { background: var(--panel); border-left: 4px solid var(--violet); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+
+  .clab-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .clab-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .clab-card-title { font-size: 1.02rem; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+
+  .clab-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .clab-main-grid { grid-template-columns: 340px 1fr; } }
+
+  .clab-cart-panel { background: var(--panel-2); border-radius: var(--radius-md); padding: 12px; border: 2px solid transparent; }
+  .clab-cart-panel.a { border-color: rgba(14,165,233,0.35); }
+  .clab-cart-panel.b { border-color: rgba(249,115,22,0.35); }
+  .clab-cart-title { font-size: 0.85rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .clab-cart-panel.a .clab-cart-title { color: var(--electric); }
+  .clab-cart-panel.b .clab-cart-title { color: var(--orange); }
+
+  .clab-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .clab-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .clab-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--electric); }
+  .clab-cart-panel.b input[type="range"] { accent-color: var(--orange); }
+
+  .clab-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .clab-chip { background: #fff; border: 1.5px solid var(--border); color: var(--ink-muted); font-size: 0.74rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+  .clab-chip.is-active { color: #fff; background: linear-gradient(90deg, var(--electric), var(--violet)); border-color: transparent; }
+
+  .clab-scene-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 0%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #1e293b; box-shadow: inset 0 0 40px rgba(0,0,0,0.4); }
+  .clab-scene-wrap canvas { display: block; width: 100%; height: 320px; }
+  @media (max-width: 480px) { .clab-scene-wrap canvas { height: 260px; } }
+  .clab-scene-hint { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.12); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+
+  .clab-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .clab-btn-primary { background: linear-gradient(90deg, var(--electric), var(--violet)); border: none; color: #fff; font-weight: 800; font-size: 0.88rem; padding: 12px 26px; border-radius: 999px; box-shadow: 0 6px 18px rgba(139,92,246,0.35); }
+  .clab-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .clab-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .clab-btn-secondary:hover { color: var(--ink); border-color: var(--electric); }
+
+  .clab-speed-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .clab-speed-btn { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-size: 0.76rem; font-weight: 800; padding: 6px 13px; border-radius: 999px; }
+  .clab-speed-btn.is-active { color: #fff; background: var(--violet); border-color: transparent; }
+
+  .clab-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .clab-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .clab-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .clab-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .clab-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .clab-momentum-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .clab-momentum-col h4 { font-size: 0.76rem; font-weight: 800; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .clab-mom-row { display: flex; justify-content: space-between; font-size: 0.86rem; font-weight: 700; padding: 4px 0; font-family: 'Courier New', monospace; }
+  .clab-mom-bar-track { height: 14px; background: var(--panel-2); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); margin-top: 6px; }
+  .clab-mom-bar-fill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+  .clab-conserved-badge { text-align: center; font-weight: 800; font-size: 0.85rem; padding: 8px; border-radius: var(--radius-sm); margin-top: 8px; }
+  .clab-conserved-badge.ok { background: rgba(22,163,74,0.1); color: var(--ok); border: 1px solid rgba(22,163,74,0.3); }
+
+  .clab-formula-box { background: #0b1220; color: #e2e8f0; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .clab-formula-box .v { color: var(--yellow); font-weight: 700; }
+
+  .clab-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); display: flex; align-items: center; gap: 6px; }
+  .clab-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .clab-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .clab-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .clab-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .clab-quiz-option:hover:not(:disabled) { border-color: var(--electric); background: rgba(14,165,233,0.06); }
+  .clab-quiz-option .letter { font-weight: 900; color: var(--electric); flex-shrink: 0; }
+  .clab-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .clab-quiz-option.is-chosen { border-color: var(--electric); background: rgba(14,165,233,0.1); }
+  .clab-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .clab-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .clab-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .clab-feedback.is-visible { display: block; }
+  .clab-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .clab-challenge-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .clab-challenge-grid { grid-template-columns: 1fr 1fr; } }
+  .clab-challenge-item { background: var(--panel-2); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .clab-challenge-item h4 { font-size: 0.85rem; color: var(--orange); }
+  .clab-challenge-item p { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .clab-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+  table.clab-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; min-width: 680px; }
+  table.clab-table th, table.clab-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--border); font-family: 'Courier New', monospace; }
+  table.clab-table th:first-child, table.clab-table td:first-child { text-align: left; font-family: inherit; }
+  table.clab-table th { color: var(--ink-faint); font-size: 0.66rem; text-transform: uppercase; background: var(--panel-2); }
+  table.clab-table tbody tr:hover { background: rgba(14,165,233,0.05); }
+  .clab-empty-note { font-size: 0.82rem; color: var(--ink-faint); text-align: center; padding: 18px; }
+
+  .clab-graph-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .clab-graph-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .clab-graph-wrap { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; }
+  .clab-graph-caption { font-size: 0.7rem; color: var(--ink-faint); text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .clab-graph-wrap canvas { width: 100%; height: 150px; display: block; }
+
+  .clab-compare-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .clab-compare-grid { grid-template-columns: 1fr 1fr; } }
+  .clab-compare-col { background: var(--panel-2); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .clab-compare-tag { font-size: 0.7rem; font-weight: 900; padding: 3px 11px; border-radius: 999px; align-self: flex-start; }
+  .clab-compare-tag.a { color: var(--electric); border: 1.5px solid var(--electric); }
+  .clab-compare-tag.b { color: var(--orange); border: 1.5px solid var(--orange); }
+  .clab-compare-input-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; gap: 6px; }
+  .clab-compare-input-row input[type="number"] { width: 72px; background: #fff; border: 1px solid var(--border); color: var(--ink); border-radius: 6px; padding: 5px 7px; text-align: right; }
+  .clab-compare-result { margin-top: 4px; font-size: 0.9rem; font-weight: 800; font-family: 'Courier New', monospace; }
+
+  .clab-safety-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .clab-safety-grid { grid-template-columns: 1fr 1fr; } }
+  .clab-safety-col { border-radius: var(--radius-md); padding: 14px; border: 2px solid; }
+  .clab-safety-col.hard { border-color: var(--warn); background: rgba(220,38,38,0.04); }
+  .clab-safety-col.soft { border-color: var(--ok); background: rgba(22,163,74,0.04); }
+  .clab-safety-col h4 { font-size: 0.88rem; margin-bottom: 8px; }
+  .clab-safety-col.hard h4 { color: var(--warn); } .clab-safety-col.soft h4 { color: var(--ok); }
+
+  .clab-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .clab-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="clab-header">
+    <div class="clab-header-title">
+      <span style="font-size:1.8rem;">💥</span>
+      <div><h1>Virtual Collision Lab</h1><p>Eksperimen Momentum &amp; Impuls -- Bright Physics Lab</p></div>
+    </div>
+    <span class="clab-badge">🧪 Lab Maya PancaEdu · Kelas X</span>
+  </div>
+
+  <p class="clab-intro">Selamat datang di laboratorium tumbukan virtual! Atur dua kereta eksperimen -- massa, kecepatan, dan arahnya -- lalu tekan <strong>MULAI EKSPERIMEN</strong> dan saksikan sendiri bagaimana momentum berpindah saat keduanya bertumbukan. Bukan cuma dua lingkaran bergerak: kamu akan mengukur, mencatat data, dan membuktikan sendiri <strong>Hukum Kekekalan Momentum</strong>.</p>
+
+  <div class="clab-card">
+    <div class="clab-card-header"><span class="clab-card-title">🧪 Eksperimen 1-3 -- Tumbukan, Massa, Kecepatan &amp; Kekekalan Momentum</span></div>
+
+    <div class="clab-main-grid">
+      <div>
+        <div class="clab-cart-panel a">
+          <div class="clab-cart-title">🚗 Cart A</div>
+          <div class="clab-param-row">
+            <div class="clab-param-label-row"><span>Massa (mA)</span><span class="clab-param-value" id="mAVal">2 kg</span></div>
+            <div class="clab-chip-row" id="mAChips"></div>
+          </div>
+          <div class="clab-param-row">
+            <div class="clab-param-label-row"><span>Kecepatan (vA)</span><span class="clab-param-value" id="vAVal">+3 m/s</span></div>
+            <input type="range" id="vASlider" min="-8" max="8" step="0.5" value="3">
+          </div>
+        </div>
+
+        <div class="clab-cart-panel b">
+          <div class="clab-cart-title">🚙 Cart B</div>
+          <div class="clab-param-row">
+            <div class="clab-param-label-row"><span>Massa (mB)</span><span class="clab-param-value" id="mBVal">1 kg</span></div>
+            <div class="clab-chip-row" id="mBChips"></div>
+          </div>
+          <div class="clab-param-row">
+            <div class="clab-param-label-row"><span>Kecepatan (vB)</span><span class="clab-param-value" id="vBVal">-2 m/s</span></div>
+            <input type="range" id="vBSlider" min="-8" max="8" step="0.5" value="-2">
+          </div>
+        </div>
+
+        <div class="clab-param-row">
+          <div class="clab-param-label-row"><span>💥 Jenis Tumbukan</span></div>
+          <div class="clab-chip-row" id="collisionChips"></div>
+        </div>
+        <div class="clab-param-row" id="restitutionRow" style="display:none;">
+          <div class="clab-param-label-row"><span>Koefisien Restitusi (e)</span><span class="clab-param-value" id="eVal">0,5</span></div>
+          <input type="range" id="eSlider" min="0.1" max="0.9" step="0.1" value="0.5">
+        </div>
+
+        <div class="clab-param-row">
+          <div class="clab-param-label-row"><span>🛡️ Bumper (durasi tumbukan)</span></div>
+          <div class="clab-chip-row" id="bumperChips"></div>
+        </div>
+
+        <div class="clab-param-row">
+          <div class="clab-param-label-row"><span>🐢 Kecepatan Simulasi</span></div>
+          <div class="clab-speed-row" id="speedChips"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="clab-scene-wrap">
+          <canvas id="simCanvas"></canvas>
+          <div class="clab-scene-hint" id="sceneHint">⚡ Atur parameter, lalu tekan MULAI EKSPERIMEN</div>
+        </div>
+        <div class="clab-controls-row" style="margin-top:12px;">
+          <button class="clab-btn-primary" id="btnRun">▶ MULAI EKSPERIMEN</button>
+          <button class="clab-btn-secondary" id="btnReset">↻ Reset Posisi</button>
+        </div>
+
+        <div class="clab-data-panel" style="margin-top:14px;">
+          <div class="clab-data-chip"><div class="k">🚗 pA</div><div class="v" id="chipPA" style="color:var(--electric);">0 kg·m/s</div></div>
+          <div class="clab-data-chip"><div class="k">🚙 pB</div><div class="v" id="chipPB" style="color:var(--orange);">0 kg·m/s</div></div>
+          <div class="clab-data-chip"><div class="k">Σp Total</div><div class="v" id="chipPTotal">0 kg·m/s</div></div>
+          <div class="clab-data-chip"><div class="k">⏱️ Δt Tumbukan</div><div class="v" id="chipDt">0,10 s</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clab-momentum-panel">
+      <div class="clab-momentum-col">
+        <h4>Sebelum Tumbukan</h4>
+        <div class="clab-mom-row"><span>pA</span><span id="beforePA" style="color:var(--electric);">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>pB</span><span id="beforePB" style="color:var(--orange);">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>pTotal</span><span id="beforeTotal">-- kg·m/s</span></div>
+        <div class="clab-mom-bar-track"><div class="clab-mom-bar-fill" id="beforeBar" style="background:var(--violet);width:0%;"></div></div>
+      </div>
+      <div class="clab-momentum-col">
+        <h4>Sesudah Tumbukan</h4>
+        <div class="clab-mom-row"><span>pA'</span><span id="afterPA" style="color:var(--electric);">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>pB'</span><span id="afterPB" style="color:var(--orange);">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>pTotal'</span><span id="afterTotal">-- kg·m/s</span></div>
+        <div class="clab-mom-bar-track"><div class="clab-mom-bar-fill" id="afterBar" style="background:var(--violet);width:0%;"></div></div>
+      </div>
+    </div>
+    <div class="clab-conserved-badge ok" id="conservedBadge" style="display:none;">✅ MOMENTUM TOTAL TETAP -- Hukum Kekekalan Momentum terbukti!</div>
+
+    <div class="clab-data-panel">
+      <div class="clab-data-chip"><div class="k">⚡ Energi Kinetik Sebelum</div><div class="v" id="ekBefore">0 J</div></div>
+      <div class="clab-data-chip"><div class="k">⚡ Energi Kinetik Sesudah</div><div class="v" id="ekAfter">0 J</div></div>
+      <div class="clab-data-chip"><div class="k">Δp (A)</div><div class="v" id="chipDpA">0 kg·m/s</div></div>
+      <div class="clab-data-chip"><div class="k">💥 Impuls (I = ΔpA)</div><div class="v" id="chipImpulse" style="color:var(--violet);">0 N·s</div></div>
+    </div>
+    <div class="clab-feedback" id="energyNote"></div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Rincian Perhitungan:</div>
+    <div class="clab-formula-box" id="formulaBox"></div>
+  </div>
+
+  <!-- ============ ANALISIS IMPULS & GRAFIK ============ -->
+  <div class="clab-card">
+    <div class="clab-card-header"><span class="clab-card-title">💥 Eksperimen 4 -- Analisis Impuls (I = F·Δt = Δp)</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Grafik gaya (F) terhadap waktu (t) selama tumbukan berlangsung. Luas di bawah kurva = impuls -- dan itu harus SAMA dengan perubahan momentum (Δp).</p>
+    <div class="clab-graph-grid">
+      <div class="clab-graph-wrap"><p class="clab-graph-caption">F vs t (pulsa gaya tumbukan)</p><canvas id="graphFt"></canvas></div>
+      <div class="clab-graph-wrap"><p class="clab-graph-caption">p vs t (Cart A &amp; B)</p><canvas id="graphPt"></canvas></div>
+      <div class="clab-graph-wrap"><p class="clab-graph-caption">v vs t (Cart A &amp; B)</p><canvas id="graphVt"></canvas></div>
+    </div>
+    <div class="clab-data-panel">
+      <div class="clab-data-chip"><div class="k">Gaya Puncak (F)</div><div class="v" id="chipFpeak">0 N</div></div>
+      <div class="clab-data-chip"><div class="k">Gaya Rata-rata</div><div class="v" id="chipFavg">0 N</div></div>
+      <div class="clab-data-chip"><div class="k">Luas Grafik (≈Impuls)</div><div class="v" id="chipArea">0 N·s</div></div>
+      <div class="clab-data-chip"><div class="k">Impuls dari Δp</div><div class="v" id="chipImpulse2" style="color:var(--violet);">0 N·s</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SAFETY LAB ============ -->
+  <div class="clab-card">
+    <div class="clab-card-header"><span class="clab-card-title">🚗 Safety Lab -- Bumper Keras vs Lunak</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Untuk perubahan momentum (Δp) yang SAMA, bumper lunak memperlama waktu tumbukan (Δt) -- dan itu MENGURANGI gaya rata-rata yang dirasakan. Inilah prinsip di balik airbag dan sabuk pengaman.</p>
+    <div class="clab-safety-grid">
+      <div class="clab-safety-col hard">
+        <h4>🧱 Bumper Keras (Δt = 0,05 s)</h4>
+        <div class="clab-mom-row"><span>Δp</span><span id="safetyHardDp">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>F rata-rata</span><span id="safetyHardF" style="color:var(--warn);">-- N</span></div>
+      </div>
+      <div class="clab-safety-col soft">
+        <h4>🛏️ Bumper Lunak (Δt = 0,40 s)</h4>
+        <div class="clab-mom-row"><span>Δp</span><span id="safetySoftDp">-- kg·m/s</span></div>
+        <div class="clab-mom-row"><span>F rata-rata</span><span id="safetySoftF" style="color:var(--ok);">-- N</span></div>
+      </div>
+    </div>
+    <div class="clab-feedback is-visible" id="safetyConclusion"></div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="clab-card">
+    <span class="clab-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="clab-quiz-question">Dua benda memiliki massa berbeda tapi bergerak dengan kecepatan yang sama. Benda mana yang momentumnya lebih besar?</p>
+    <div class="clab-quiz-options" id="thinkOptions1"></div>
+    <div class="clab-feedback" id="thinkFeedback1"></div>
+    <p class="clab-quiz-question" style="margin-top:8px;">Mengapa airbag dapat mengurangi gaya yang diterima tubuh saat tabrakan?</p>
+    <div class="clab-quiz-options" id="thinkOptions2"></div>
+    <div class="clab-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="clab-card">
+    <div class="clab-card-header"><span class="clab-card-title">🎯 Tantangan</span></div>
+    <div class="clab-challenge-grid">
+      <div class="clab-challenge-item"><h4>Tantangan 1</h4><p>Buat momentum Cart A tepat <strong>10 kg·m/s</strong> (toleransi ±0,5).</p><button class="clab-btn-secondary" data-challenge="1">Cek Sekarang</button><div class="clab-feedback" id="chFb1"></div></div>
+      <div class="clab-challenge-item"><h4>Tantangan 2</h4><p>Buat momentum total (sebelum tumbukan) tepat <strong>0 kg·m/s</strong>.</p><button class="clab-btn-secondary" data-challenge="2">Cek Sekarang</button><div class="clab-feedback" id="chFb2"></div></div>
+      <div class="clab-challenge-item"><h4>Tantangan 3</h4><p>Jalankan satu tumbukan, buktikan momentum total sebelum = sesudah.</p><button class="clab-btn-secondary" data-challenge="3">Cek Sekarang</button><div class="clab-feedback" id="chFb3"></div></div>
+      <div class="clab-challenge-item"><h4>Tantangan 4</h4><p>Dapatkan impuls tepat <strong>I = 20 N·s</strong> (toleransi ±2) dari hasil tumbukan.</p><button class="clab-btn-secondary" data-challenge="4">Cek Sekarang</button><div class="clab-feedback" id="chFb4"></div></div>
+      <div class="clab-challenge-item"><h4>Tantangan 5</h4><p>Buat dua kereta bergerak <strong>berlawanan arah</strong> tetapi momentum totalnya nol.</p><button class="clab-btn-secondary" data-challenge="5">Cek Sekarang</button><div class="clab-feedback" id="chFb5"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ DATA LOGGER ============ -->
+  <div class="clab-card">
+    <div class="clab-card-header">
+      <span class="clab-card-title">📌 Data Logger</span>
+      <div class="clab-controls-row" style="margin:0;">
+        <button class="clab-btn-secondary" id="btnLog">📌 Ambil Data</button>
+        <button class="clab-btn-secondary" id="btnClearLast">Hapus Terakhir</button>
+        <button class="clab-btn-secondary" id="btnClearAll">Hapus Semua</button>
+        <button class="clab-btn-secondary" id="btnExportCsv">⬇️ Download CSV</button>
+      </div>
+    </div>
+    <div class="clab-table-wrap">
+      <table class="clab-table">
+        <thead><tr><th>No</th><th>mA</th><th>vA</th><th>pA</th><th>mB</th><th>vB</th><th>pB</th><th>pTotal</th><th>Δt</th><th>Impuls</th></tr></thead>
+        <tbody id="dataTableBody"></tbody>
+      </table>
+      <p class="clab-empty-note" id="dataEmptyNote">Belum ada data. Jalankan eksperimen lalu tekan "📌 Ambil Data".</p>
+    </div>
+    <div class="clab-controls-row">
+      <button class="clab-btn-secondary" id="btnSave">💾 Simpan Eksperimen</button>
+      <button class="clab-btn-secondary" id="btnLoad">📂 Pulihkan Eksperimen</button>
+    </div>
+  </div>
+
+  <!-- ============ BANDINGKAN ============ -->
+  <div class="clab-card">
+    <div class="clab-card-header"><span class="clab-card-title">⚖️ Bandingkan Dua Kondisi</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Dua kombinasi massa &amp; kecepatan berbeda bisa menghasilkan momentum yang SAMA.</p>
+    <div class="clab-compare-grid">
+      <div class="clab-compare-col">
+        <span class="clab-compare-tag a">Kondisi A</span>
+        <div class="clab-compare-input-row"><span>m (kg)</span><input type="number" id="cmpAm" value="1" min="0.1" max="10" step="0.1"></div>
+        <div class="clab-compare-input-row"><span>v (m/s)</span><input type="number" id="cmpAv" value="5" min="-10" max="10" step="0.5"></div>
+        <div class="clab-compare-result" style="color:var(--electric);" id="cmpAResult">p = -- kg·m/s</div>
+      </div>
+      <div class="clab-compare-col">
+        <span class="clab-compare-tag b">Kondisi B</span>
+        <div class="clab-compare-input-row"><span>m (kg)</span><input type="number" id="cmpBm" value="5" min="0.1" max="10" step="0.1"></div>
+        <div class="clab-compare-input-row"><span>v (m/s)</span><input type="number" id="cmpBv" value="1" min="-10" max="10" step="0.5"></div>
+        <div class="clab-compare-result" style="color:var(--orange);" id="cmpBResult">p = -- kg·m/s</div>
+      </div>
+    </div>
+    <div class="clab-feedback is-visible" id="cmpFeedback"></div>
+  </div>
+
+  <div class="clab-legend" id="clabLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // ============ STATE ============
+    let mA = 2, vA = 3, mB = 1, vB = -2;
+    let collisionType = 'lenting'; // 'lenting' | 'sebagian' | 'tidak'
+    let restitution = 0.5;
+    let bumper = 'sedang'; // 'keras' | 'sedang' | 'lunak'
+    let speedMult = 1;
+    let lastResult = null; // hasil tumbukan terakhir (untuk data logger & challenge)
+    let experimentData = [];
+
+    const MASS_OPTIONS = [0.5, 1, 2, 5];
+    const BUMPERS = { keras: { label: '🧱 Keras', dt: 0.05 }, sedang: { label: '⚙️ Sedang', dt: 0.15 }, lunak: { label: '🛏️ Lunak', dt: 0.4 } };
+    const SPEEDS = [0.25, 0.5, 1, 2];
+
+    function eFor(type) { return type === 'lenting' ? 1 : type === 'tidak' ? 0 : restitution; }
+
+    // ============ RENDER KONTROL ============
+    function renderMassChips(containerId, current, setter) {
+      const row = $(containerId);
+      row.innerHTML = '';
+      MASS_OPTIONS.forEach((m) => {
+        const chip = document.createElement('button');
+        chip.className = 'clab-chip' + (m === current() ? ' is-active' : '');
+        chip.textContent = m + ' kg';
+        chip.addEventListener('click', () => { setter(m); renderAllChips(); computeAndRender(); });
+        row.appendChild(chip);
+      });
+    }
+    function renderAllChips() {
+      renderMassChips('mAChips', () => mA, (v) => { mA = v; });
+      renderMassChips('mBChips', () => mB, (v) => { mB = v; });
+      const cRow = $('collisionChips'); cRow.innerHTML = '';
+      [{ id: 'lenting', label: '🟢 Lenting Sempurna' }, { id: 'sebagian', label: '🟠 Lenting Sebagian' }, { id: 'tidak', label: '🔵 Tidak Lenting' }].forEach((c) => {
+        const chip = document.createElement('button');
+        chip.className = 'clab-chip' + (c.id === collisionType ? ' is-active' : '');
+        chip.textContent = c.label;
+        chip.addEventListener('click', () => { collisionType = c.id; $('restitutionRow').style.display = c.id === 'sebagian' ? '' : 'none'; renderAllChips(); computeAndRender(); });
+        cRow.appendChild(chip);
+      });
+      const bRow = $('bumperChips'); bRow.innerHTML = '';
+      Object.entries(BUMPERS).forEach(([key, b]) => {
+        const chip = document.createElement('button');
+        chip.className = 'clab-chip' + (key === bumper ? ' is-active' : '');
+        chip.textContent = `${b.label} (${b.dt}s)`;
+        chip.addEventListener('click', () => { bumper = key; renderAllChips(); computeAndRender(); });
+        bRow.appendChild(chip);
+      });
+      const sRow = $('speedChips'); sRow.innerHTML = '';
+      SPEEDS.forEach((s) => {
+        const chip = document.createElement('button');
+        chip.className = 'clab-speed-btn' + (s === speedMult ? ' is-active' : '');
+        chip.textContent = s + '×' + (s < 1 ? ' 🐢' : '');
+        chip.addEventListener('click', () => { speedMult = s; renderAllChips(); });
+        sRow.appendChild(chip);
+      });
+    }
+    renderAllChips();
+
+    $('vASlider').addEventListener('input', (e) => { vA = parseFloat(e.target.value); computeAndRender(); });
+    $('vBSlider').addEventListener('input', (e) => { vB = parseFloat(e.target.value); computeAndRender(); });
+    $('eSlider').addEventListener('input', (e) => { restitution = parseFloat(e.target.value); $('eVal').textContent = restitution.toFixed(1); computeAndRender(); });
+
+    function renderLegend() {
+      const el = $('clabLegend');
+      [{ icon: '🚗', label: 'Cart A' }, { icon: '🚙', label: 'Cart B' }, { icon: '💥', label: 'Momentum & Impuls' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'clab-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    // ============ FISIKA: TUMBUKAN VIA KOEFISIEN RESTITUSI ============
+    // Satu rumus untuk ketiga jenis tumbukan -- e=1 (lenting sempurna),
+    // 0<e<1 (lenting sebagian), e=0 (tidak lenting -- keduanya bergabung).
+    function collide(m1, v1, m2, v2, e) {
+      if (e === 0) {
+        const vFinal = (m1 * v1 + m2 * v2) / (m1 + m2);
+        return { v1p: vFinal, v2p: vFinal };
+      }
+      const v1p = v1 - ((1 + e) * m2 * (v1 - v2)) / (m1 + m2);
+      const v2p = v2 + ((1 + e) * m1 * (v1 - v2)) / (m1 + m2);
+      return { v1p, v2p };
+    }
+
+    function computeAndRender() {
+      $('mAVal').textContent = mA + ' kg'; $('mBVal').textContent = mB + ' kg';
+      $('vAVal').textContent = (vA >= 0 ? '+' : '') + vA.toFixed(1) + ' m/s';
+      $('vBVal').textContent = (vB >= 0 ? '+' : '') + vB.toFixed(1) + ' m/s';
+
+      const pA = mA * vA, pB = mB * vB, pTotal = pA + pB;
+      $('chipPA').textContent = pA.toFixed(1) + ' kg·m/s';
+      $('chipPB').textContent = pB.toFixed(1) + ' kg·m/s';
+      $('chipPTotal').textContent = pTotal.toFixed(1) + ' kg·m/s';
+      $('chipDt').textContent = BUMPERS[bumper].dt.toFixed(2) + ' s';
+
+      $('beforePA').textContent = pA.toFixed(1) + ' kg·m/s';
+      $('beforePB').textContent = pB.toFixed(1) + ' kg·m/s';
+      $('beforeTotal').textContent = pTotal.toFixed(1) + ' kg·m/s';
+
+      renderScenePreview();
+      return { pA, pB, pTotal };
+    }
+
+    function runCollisionPhysics() {
+      const e = eFor(collisionType);
+      const { v1p, v2p } = collide(mA, vA, mB, vB, e);
+      const pA = mA * vA, pB = mB * vB, pTotal = pA + pB;
+      const pAp = mA * v1p, pBp = mB * v2p, pTotalp = pAp + pBp;
+      const dpA = pAp - pA;
+      const dt = BUMPERS[bumper].dt;
+      const impulse = dpA; // I = Δp (untuk cart A)
+      const favg = dt > 0 ? Math.abs(impulse) / dt : 0;
+      const fpeak = dt > 0 ? (Math.abs(impulse) * Math.PI) / (2 * dt) : 0; // pulsa setengah-sinus: I = Fpeak*(2dt/pi)
+      const ekBefore = 0.5 * mA * vA * vA + 0.5 * mB * vB * vB;
+      const ekAfter = 0.5 * mA * v1p * v1p + 0.5 * mB * v2p * v2p;
+      return { v1p, v2p, pA, pB, pTotal, pAp, pBp, pTotalp, dpA, dt, impulse, favg, fpeak, ekBefore, ekAfter, e };
+    }
+
+    function displayResult(r) {
+      $('afterPA').textContent = r.pAp.toFixed(1) + ' kg·m/s';
+      $('afterPB').textContent = r.pBp.toFixed(1) + ' kg·m/s';
+      $('afterTotal').textContent = r.pTotalp.toFixed(1) + ' kg·m/s';
+      const maxAbs = Math.max(Math.abs(r.pTotal), Math.abs(r.pTotalp), 1);
+      $('beforeBar').style.width = Math.min(100, (Math.abs(r.pTotal) / maxAbs) * 100) + '%';
+      $('afterBar').style.width = Math.min(100, (Math.abs(r.pTotalp) / maxAbs) * 100) + '%';
+      const conserved = Math.abs(r.pTotal - r.pTotalp) < 0.05;
+      $('conservedBadge').style.display = conserved ? '' : 'none';
+
+      $('ekBefore').textContent = r.ekBefore.toFixed(1) + ' J';
+      $('ekAfter').textContent = r.ekAfter.toFixed(1) + ' J';
+      $('chipDpA').textContent = r.dpA.toFixed(1) + ' kg·m/s';
+      $('chipImpulse').textContent = r.impulse.toFixed(1) + ' N·s';
+      $('chipImpulse2').textContent = r.impulse.toFixed(1) + ' N·s';
+      $('chipFpeak').textContent = r.fpeak.toFixed(1) + ' N';
+      $('chipFavg').textContent = r.favg.toFixed(1) + ' N';
+
+      const energyNote = $('energyNote');
+      energyNote.classList.add('is-visible');
+      if (r.e === 1) { energyNote.classList.remove('is-wrong'); energyNote.innerHTML = `✅ <strong>Tumbukan Lenting Sempurna:</strong> Energi kinetik SEBELUM (${r.ekBefore.toFixed(1)} J) dan SESUDAH (${r.ekAfter.toFixed(1)} J) sama -- momentum DAN energi kinetik sama-sama kekal.`; }
+      else { energyNote.classList.add('is-wrong'); energyNote.innerHTML = `⚠️ <strong>Perhatikan:</strong> Momentum tetap kekal, TAPI energi kinetik berkurang dari ${r.ekBefore.toFixed(1)} J jadi ${r.ekAfter.toFixed(1)} J -- energi "hilang" berubah jadi panas/bunyi/deformasi. <strong>Kekekalan momentum ≠ kekekalan energi kinetik.</strong>`; }
+
+      let formula = `<span class="v">Sebelum:</span> pA = ${mA}×${vA.toFixed(1)} = ${r.pA.toFixed(1)}, pB = ${mB}×${vB.toFixed(1)} = ${r.pB.toFixed(1)}, pTotal = ${r.pTotal.toFixed(1)} kg·m/s`;
+      formula += `<br><span class="v">Sesudah:</span> vA' = ${r.v1p.toFixed(2)} m/s, vB' = ${r.v2p.toFixed(2)} m/s`;
+      formula += `<br>pA' = ${r.pAp.toFixed(1)}, pB' = ${r.pBp.toFixed(1)}, pTotal' = <span class="v">${r.pTotalp.toFixed(1)} kg·m/s</span>`;
+      formula += `<br>ΔpA = pA' − pA = ${r.dpA.toFixed(1)} kg·m/s → <span class="v">I = ΔpA = ${r.impulse.toFixed(1)} N·s</span>`;
+      formula += `<br>F rata-rata = I/Δt = ${r.impulse.toFixed(1)}/${r.dt} = <span class="v">${r.favg.toFixed(1)} N</span>`;
+      $('formulaBox').innerHTML = formula;
+
+      lastResult = r;
+      drawFtGraph(r);
+      drawPtVtGraphs(r);
+      return r;
+    }
+
+    // ============ SCENE (canvas) ============
+    function resizeCanvas() {
+      const canvas = $('simCanvas');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      canvas.getContext('2d').setTransform(1, 0, 0, 1, 0, 0);
+      canvas.getContext('2d').scale(dpr, dpr);
+      renderScenePreview();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    let cartAx = 0.15, cartBx = 0.75; // posisi relatif 0..1 sepanjang track
+    let flashAlpha = 0, shakeAmt = 0, mergedCart = false;
+
+    function drawTrack(ctx, w, h) {
+      const trackY = h * 0.72;
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(56,189,248,0.04)'); grad.addColorStop(1, 'rgba(139,92,246,0.06)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(148,163,184,0.35)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(20, trackY); ctx.lineTo(w - 20, trackY); ctx.stroke();
+      ctx.setLineDash([8, 8]); ctx.strokeStyle = 'rgba(56,189,248,0.25)';
+      ctx.beginPath(); ctx.moveTo(20, trackY + 14); ctx.lineTo(w - 20, trackY + 14); ctx.stroke();
+      ctx.setLineDash([]);
+      return trackY;
+    }
+
+    function drawCart(ctx, x, y, color, label, velocity, momentum, wheelPhase) {
+      const w = 54, h = 30;
+      ctx.save();
+      ctx.translate(x, y);
+      // motion trail
+      if (Math.abs(velocity) > 0.3) {
+        for (let i = 1; i <= 4; i++) {
+          ctx.globalAlpha = 0.12 * (5 - i) / 4;
+          ctx.fillStyle = color;
+          ctx.beginPath(); ctx.roundRect(-w / 2 - i * 10 * Math.sign(velocity || 1), -h / 2, w, h, 8); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      // body
+      const bodyGrad = ctx.createLinearGradient(-w / 2, -h / 2, -w / 2, h / 2);
+      bodyGrad.addColorStop(0, color); bodyGrad.addColorStop(1, shadeColor(color, -30));
+      ctx.fillStyle = bodyGrad; ctx.strokeStyle = shadeColor(color, -50); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, 9); ctx.fill(); ctx.stroke();
+      // cabin
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.beginPath(); ctx.roundRect(-w / 4, -h / 2 - 10, w / 2, 12, 4); ctx.fill();
+      // wheels
+      ctx.fillStyle = '#1e293b';
+      [-w / 3, w / 3].forEach((wx) => {
+        ctx.save(); ctx.translate(wx, h / 2);
+        ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(7 * Math.cos(wheelPhase), 7 * Math.sin(wheelPhase)); ctx.stroke();
+        ctx.restore();
+      });
+      // label + momentum vector
+      ctx.fillStyle = '#0f172a'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText(label, 0, -h / 2 - 16);
+      if (Math.abs(momentum) > 0.2) {
+        const arrowLen = Math.max(16, Math.min(70, Math.abs(momentum) * 6));
+        const dir = Math.sign(momentum);
+        ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(0, -h / 2 - 24); ctx.lineTo(dir * arrowLen, -h / 2 - 24); ctx.stroke();
+        const hx = dir * arrowLen, hy = -h / 2 - 24;
+        ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx - dir * 7, hy - 4); ctx.lineTo(hx - dir * 7, hy + 4); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+    function shadeColor(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      let r = (num >> 16) + percent, g = ((num >> 8) & 0xff) + percent, b = (num & 0xff) + percent;
+      r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b));
+      return `rgb(${r},${g},${b})`;
+    }
+
+    function renderScenePreview() {
+      const canvas = $('simCanvas'), ctx = canvas.getContext('2d');
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const trackY = drawTrack(ctx, w, h);
+      const ax = 20 + cartAx * (w - 40), bx = 20 + cartBx * (w - 40);
+      if (mergedCart) {
+        drawCart(ctx, (ax + bx) / 2, trackY - 20, '#8b5cf6', 'AB', vA === vB ? vA : 0, 0, 0);
+      } else {
+        drawCart(ctx, ax, trackY - 20, '#0ea5e9', 'A', vA, mA * vA, 0);
+        drawCart(ctx, bx, trackY - 20, '#f97316', 'B', vB, mB * vB, 0);
+      }
+      if (flashAlpha > 0) {
+        ctx.save(); ctx.globalAlpha = flashAlpha; ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc((ax + bx) / 2, trackY - 20, 60 * (1.5 - flashAlpha), 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // ============ ANIMASI EKSPERIMEN ============
+    let animId = null;
+    function startExperiment() {
+      if (animId) return;
+      $('btnRun').disabled = true;
+      cartAx = 0.12; cartBx = 0.88; mergedCart = false; flashAlpha = 0;
+      const r = runCollisionPhysics();
+      const collided = { done: false };
+      const approachDurBase = 1.6; // detik dasar sebelum tumbukan (di-skala speedMult)
+      let start = performance.now();
+      let wheelPhase = 0;
+      let shakeT = 0;
+      $('sceneHint').textContent = '🚗 Kereta bergerak mendekat...';
+
+      function step(now) {
+        const dt = Math.min(0.05, (now - start) / 1000) * speedMult;
+        start = now;
+        wheelPhase += dt * 14 * (Math.abs(vA) + Math.abs(vB) + 1);
+
+        if (!collided.done) {
+          const relSpeed = Math.max(0.15, Math.abs(vA) + Math.abs(vB)) / 6;
+          cartAx += dt * relSpeed * 0.5 * (vA >= 0 ? 1 : -1) * 0.6 + dt * relSpeed * 0.3;
+          cartBx -= dt * relSpeed * 0.5 * (vB <= 0 ? 1 : -1) * 0.6 + dt * relSpeed * 0.3;
+          // paksa selalu saling mendekat agar tumbukan pasti terjadi (fokus konsep, bukan kinematika lintasan bebas)
+          if (cartAx >= cartBx - 0.06) {
+            collided.done = true;
+            cartAx = cartBx - 0.06;
+            flashAlpha = 1;
+            shakeT = 0.25;
+            $('sceneHint').textContent = '💥 TUMBUKAN! Mengamati perubahan momentum...';
+            displayResult(r);
+            if (r.e === 0) mergedCart = true;
+          }
+        } else {
+          shakeT -= dt;
+          flashAlpha = Math.max(0, flashAlpha - dt * 2.2);
+          if (mergedCart) {
+            const vFinal = r.v1p;
+            const mid = (cartAx + cartBx) / 2 + vFinal * dt * 0.08;
+            cartAx = mid; cartBx = mid;
+          } else {
+            cartAx += r.v1p * dt * 0.05;
+            cartBx += r.v2p * dt * 0.05;
+          }
+        }
+
+        renderScenePreview();
+        const outOfBounds = cartAx < -0.3 || cartAx > 1.3 || cartBx < -0.3 || cartBx > 1.3;
+        if (!outOfBounds) { animId = requestAnimationFrame(step); }
+        else { animId = null; $('btnRun').disabled = false; $('sceneHint').textContent = '✅ Eksperimen selesai -- coba "📌 Ambil Data" atau ubah parameter.'; }
+      }
+      animId = requestAnimationFrame(step);
+    }
+    $('btnRun').addEventListener('click', startExperiment);
+    $('btnReset').addEventListener('click', () => {
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+      $('btnRun').disabled = false;
+      cartAx = 0.15; cartBx = 0.75; mergedCart = false; flashAlpha = 0;
+      $('sceneHint').textContent = '⚡ Atur parameter, lalu tekan MULAI EKSPERIMEN';
+      computeAndRender(); renderScenePreview();
+    });
+
+    // ============ GRAFIK F-t (pulsa setengah-sinus, luas = impuls) ============
+    function drawFtGraph(r) {
+      const canvasEl = $('graphFt');
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvasEl.parentElement.clientWidth - 16, h = 130;
+      canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+      canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+      const c = canvasEl.getContext('2d');
+      c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+      const dt = r.dt, fpeak = r.fpeak;
+      const px = (t) => 20 + (t / dt) * (w - 30);
+      const py = (f) => h - 18 - (f / Math.max(fpeak, 1)) * (h - 30);
+      c.strokeStyle = 'rgba(0,0,0,0.08)'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(18, h - 18); c.lineTo(w - 8, h - 18); c.moveTo(18, 8); c.lineTo(18, h - 18); c.stroke();
+      // area terisi
+      c.beginPath(); c.moveTo(px(0), py(0));
+      let area = 0; const steps = 40;
+      for (let i = 0; i <= steps; i++) { const t = (i / steps) * dt; const f = fpeak * Math.sin((Math.PI * t) / dt); c.lineTo(px(t), py(f)); area += f * (dt / steps); }
+      c.lineTo(px(dt), py(0)); c.closePath();
+      c.fillStyle = 'rgba(139,92,246,0.18)'; c.fill();
+      c.strokeStyle = '#8b5cf6'; c.lineWidth = 2.5; c.stroke();
+      c.fillStyle = '#51637d'; c.font = '9px system-ui'; c.textAlign = 'left'; c.fillText('t (s)', w - 30, h - 4); c.fillText('F (N)', 4, 12);
+      $('chipArea').textContent = area.toFixed(1) + ' N·s';
+    }
+
+    function drawPtVtGraphs(r) {
+      const dt = r.dt;
+      const nSteps = 20;
+      const ptPoints = { A: [], B: [] }, vtPoints = { A: [], B: [] };
+      for (let i = 0; i <= nSteps; i++) {
+        const t = (i / nSteps) * dt;
+        const frac = t / dt;
+        const vAt = vA + (r.v1p - vA) * frac, vBt = vB + (r.v2p - vB) * frac;
+        ptPoints.A.push({ x: t, y: mA * vAt }); ptPoints.B.push({ x: t, y: mB * vBt });
+        vtPoints.A.push({ x: t, y: vAt }); vtPoints.B.push({ x: t, y: vBt });
+      }
+      drawDualLineGraph($('graphPt'), ptPoints.A, ptPoints.B, '#0ea5e9', '#f97316');
+      drawDualLineGraph($('graphVt'), vtPoints.A, vtPoints.B, '#0ea5e9', '#f97316');
+    }
+    function drawDualLineGraph(canvasEl, seriesA, seriesB, colorA, colorB) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvasEl.parentElement.clientWidth - 16, h = 130;
+      canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+      canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+      const c = canvasEl.getContext('2d');
+      c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+      const allY = [...seriesA, ...seriesB].map((p) => p.y);
+      const maxY = Math.max(...allY, 0.1), minY = Math.min(...allY, -0.1);
+      const maxX = Math.max(seriesA[seriesA.length - 1].x, 0.01);
+      const px = (x) => 18 + (x / maxX) * (w - 26);
+      const py = (y) => h - 16 - ((y - minY) / (maxY - minY || 1)) * (h - 26);
+      c.strokeStyle = 'rgba(0,0,0,0.08)'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(16, py(0)); c.lineTo(w - 6, py(0)); c.moveTo(16, 6); c.lineTo(16, h - 16); c.stroke();
+      function drawLine(series, color) {
+        c.beginPath(); c.strokeStyle = color; c.lineWidth = 2.3;
+        series.forEach((p, i) => { const x = px(p.x), y = py(p.y); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); });
+        c.stroke();
+      }
+      drawLine(seriesA, colorA); drawLine(seriesB, colorB);
+    }
+
+    // ============ SAFETY LAB ============
+    function updateSafetyLab() {
+      const r = runCollisionPhysics();
+      const dp = Math.abs(r.dpA);
+      const fHard = dp / BUMPERS.keras.dt;
+      const fSoft = dp / BUMPERS.lunak.dt;
+      $('safetyHardDp').textContent = dp.toFixed(1) + ' kg·m/s';
+      $('safetyHardF').textContent = fHard.toFixed(1) + ' N';
+      $('safetySoftDp').textContent = dp.toFixed(1) + ' kg·m/s';
+      $('safetySoftF').textContent = fSoft.toFixed(1) + ' N';
+      $('safetyConclusion').innerHTML = `💡 Δp SAMA (${dp.toFixed(1)} kg·m/s) di kedua kasus, tapi bumper lunak memperbesar Δt sehingga F rata-rata jauh lebih kecil (${fSoft.toFixed(1)} N vs ${fHard.toFixed(1)} N) -- <strong>gaya yang lebih kecil = lebih aman bagi penumpang.</strong> Inilah kenapa mobil modern dirancang dengan zona hancur (crumple zone) yang memperpanjang waktu tumbukan.`;
+    }
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'clab-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Answered = false, t2Answered = false;
+    renderQuizOptions($('thinkOptions1'), ['Benda dengan massa lebih kecil', 'Benda dengan massa lebih besar', 'Momentumnya sama', 'Tidak dapat ditentukan'], (i, btn, c) => {
+      if (t1Answered) return; t1Answered = true;
+      const correct = i === 1;
+      c.querySelectorAll('.clab-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'p = m×v -- dengan v sama, massa yang lebih besar menghasilkan momentum yang lebih besar juga.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Airbag menambah massa tubuh', 'Airbag memperlama waktu tumbukan (Δt), sehingga gaya rata-rata (F=Δp/Δt) mengecil', 'Airbag mengurangi momentum tubuh secara instan', 'Airbag menghilangkan gaya gesek'], (i, btn, c) => {
+      if (t2Answered) return; t2Answered = true;
+      const correct = i === 1;
+      c.querySelectorAll('.clab-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Perubahan momentum (Δp) saat tabrakan sudah tetap -- tapi airbag memperlama waktu (Δt) tubuh berhenti, sehingga F = Δp/Δt jadi jauh lebih kecil. Persis seperti Safety Lab di atas!';
+    });
+
+    // ============ TANTANGAN ============
+    document.querySelectorAll('[data-challenge]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.challenge;
+        const { pA, pB, pTotal } = computeAndRender();
+        const fb = $(`chFb${id}`);
+        fb.classList.add('is-visible');
+        let pass = false, msg = '';
+        if (id === '1') { pass = Math.abs(pA - 10) <= 0.5; msg = pass ? `pA saat ini ${pA.toFixed(1)} kg·m/s -- pas!` : `pA saat ini ${pA.toFixed(1)} kg·m/s. Ingat p=m×v -- coba kombinasi mA dan vA lain.`; }
+        else if (id === '2') { pass = Math.abs(pTotal) < 0.3; msg = pass ? `pTotal ${pTotal.toFixed(1)} kg·m/s -- sangat dekat nol!` : `pTotal saat ini ${pTotal.toFixed(1)} kg·m/s. Coba buat pA dan pB saling meniadakan (arah berlawanan, besar sama).`; }
+        else if (id === '3') { pass = lastResult && Math.abs(lastResult.pTotal - lastResult.pTotalp) < 0.05; msg = pass ? `pTotal sebelum ${lastResult.pTotal.toFixed(1)} = pTotal sesudah ${lastResult.pTotalp.toFixed(1)} kg·m/s -- terbukti kekal!` : 'Tekan "▶ MULAI EKSPERIMEN" dulu untuk menjalankan tumbukan.'; }
+        else if (id === '4') { pass = lastResult && Math.abs(Math.abs(lastResult.impulse) - 20) <= 2; msg = pass ? `Impuls terakhir ${lastResult ? lastResult.impulse.toFixed(1) : '--'} N·s -- pas target!` : `Impuls terakhir ${lastResult ? lastResult.impulse.toFixed(1) : 'belum ada, jalankan eksperimen dulu'} N·s. Coba ubah massa/kecepatan supaya ΔpA mendekati 20.`; }
+        else if (id === '5') { pass = (vA > 0 && vB < 0 || vA < 0 && vB > 0) && Math.abs(pTotal) < 0.3; msg = pass ? 'Dua kereta berlawanan arah dengan pTotal ≈ 0 -- tepat!' : 'Atur vA dan vB berlawanan tanda (satu positif, satu negatif) dengan besar momentum yang saling meniadakan.'; }
+        fb.classList.toggle('is-wrong', !pass);
+        fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+      });
+    });
+
+    // ============ DATA LOGGER ============
+    function renderDataTable() {
+      const tbody = $('dataTableBody'); const empty = $('dataEmptyNote');
+      if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      tbody.innerHTML = experimentData.map((d, i) => `<tr><td>${i + 1}</td><td>${d.mA}</td><td>${d.vA.toFixed(1)}</td><td>${d.pA.toFixed(1)}</td><td>${d.mB}</td><td>${d.vB.toFixed(1)}</td><td>${d.pB.toFixed(1)}</td><td>${d.pTotal.toFixed(1)}</td><td>${d.dt}</td><td>${d.impulse.toFixed(1)}</td></tr>`).join('');
+    }
+    $('btnLog').addEventListener('click', () => {
+      const r = lastResult || runCollisionPhysics();
+      experimentData.push({ mA, vA, pA: r.pA, mB, vB, pB: r.pB, pTotal: r.pTotal, dt: r.dt, impulse: r.impulse });
+      renderDataTable();
+    });
+    $('btnClearLast').addEventListener('click', () => { experimentData.pop(); renderDataTable(); });
+    $('btnClearAll').addEventListener('click', () => { experimentData = []; renderDataTable(); });
+    $('btnExportCsv').addEventListener('click', () => {
+      if (experimentData.length === 0) return;
+      let csv = 'No,mA,vA,pA,mB,vB,pB,pTotal,dt,Impuls\n';
+      experimentData.forEach((d, i) => { csv += `${i + 1},${d.mA},${d.vA.toFixed(2)},${d.pA.toFixed(2)},${d.mB},${d.vB.toFixed(2)},${d.pB.toFixed(2)},${d.pTotal.toFixed(2)},${d.dt},${d.impulse.toFixed(2)}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'data-eksperimen-momentum-impuls.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // ============ BANDINGKAN ============
+    function updateCompare() {
+      const mAc = parseFloat($('cmpAm').value) || 0, vAc = parseFloat($('cmpAv').value) || 0;
+      const mBc = parseFloat($('cmpBm').value) || 0, vBc = parseFloat($('cmpBv').value) || 0;
+      const pAc = mAc * vAc, pBc = mBc * vBc;
+      $('cmpAResult').textContent = `p = ${pAc.toFixed(1)} kg·m/s`;
+      $('cmpBResult').textContent = `p = ${pBc.toFixed(1)} kg·m/s`;
+      const fb = $('cmpFeedback');
+      if (Math.abs(pAc - pBc) < 0.1) fb.innerHTML = `⚖️ Momentum keduanya SAMA (${pAc.toFixed(1)} kg·m/s) walau massa dan kecepatannya beda jauh -- ini membuktikan p=mv bisa tercapai lewat kombinasi berbeda.`;
+      else fb.innerHTML = `📊 Kondisi ${Math.abs(pAc) > Math.abs(pBc) ? 'A' : 'B'} punya momentum lebih besar (${Math.max(Math.abs(pAc), Math.abs(pBc)).toFixed(1)} kg·m/s).`;
+    }
+    ['cmpAm', 'cmpAv', 'cmpBm', 'cmpBv'].forEach((id) => $(id).addEventListener('input', updateCompare));
+
+    // ============ LOCALSTORAGE ============
+    $('btnSave').addEventListener('click', () => {
+      try { localStorage.setItem('pancaedu-momentum-impuls', JSON.stringify({ mA, vA, mB, vB, collisionType, restitution, bumper, experimentData })); alert('Eksperimen tersimpan di browser ini.'); }
+      catch (e) { alert('Gagal menyimpan.'); }
+    });
+    $('btnLoad').addEventListener('click', () => {
+      try {
+        const raw = localStorage.getItem('pancaedu-momentum-impuls');
+        if (!raw) { alert('Belum ada eksperimen tersimpan.'); return; }
+        const data = JSON.parse(raw);
+        mA = data.mA ?? 2; vA = data.vA ?? 3; mB = data.mB ?? 1; vB = data.vB ?? -2;
+        collisionType = data.collisionType || 'lenting'; restitution = data.restitution ?? 0.5; bumper = data.bumper || 'sedang';
+        experimentData = data.experimentData || [];
+        $('vASlider').value = vA; $('vBSlider').value = vB; $('eSlider').value = restitution;
+        $('restitutionRow').style.display = collisionType === 'sebagian' ? '' : 'none';
+        renderAllChips(); renderDataTable(); computeAndRender();
+        alert('Eksperimen dipulihkan.');
+      } catch (e) { alert('Gagal memulihkan data.'); }
+    });
+
+    window.onload = () => {
+      resizeCanvas();
+      computeAndRender();
+      updateSafetyLab();
+      updateCompare();
+      renderDataTable();
+    };
+  </script>
+</body>
+</html>

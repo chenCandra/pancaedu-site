@@ -33,10 +33,11 @@ const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !dat
 // Sorong, Mikrometer Sekrup, Neraca Ohaus, Stopwatch Analog, Amperemeter,
 // Termometer digabung 1 halaman) + Hukum Coulomb, Medan Listrik, Hukum
 // Newton, Usaha dan Daya, Energi Mekanik, Energy Transformation Lab, Energy
-// Conservation Lab, Renewable Energy Lab, Energy Consumption Lab,
+// Conservation Lab, Lab Energi Terbarukan, Energy Consumption Lab,
 // Non-Renewable Energy Lab, Energy Efficiency Lab, Energy Crisis Lab,
-// Energy Planning Lab, Simulasi Massa Jenis (PhET, wrapper sendiri).
-const LAB_MAYA_SIMULASI_COUNT = 15;
+// Energy Planning Lab, Simulasi Massa Jenis (PhET, wrapper sendiri),
+// Hukum Hooke, Virtual Collision Lab (Momentum & Impuls).
+const LAB_MAYA_SIMULASI_COUNT = 17;
 
 const counters = [
   { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },
@@ -67,6 +68,7 @@ const workItems = materiPosts
   description="Artikel dan materi pelajaran ditulis oleh seorang guru yang juga pembelajar — refleksi mengajar, bahan ajar, dan catatan belajar."
 >
   <Hero />
+  <Counters counters={counters} />
   {daringAktif && <PembelajaranDaringBanner />}
   {featured && (
     <Featured
@@ -91,7 +93,6 @@ const workItems = materiPosts
   )}
 
   <About />
-  <Counters counters={counters} />
   <Bento />
   {workItems.length > 0 && <Works items={workItems} />}
   <Timeline />

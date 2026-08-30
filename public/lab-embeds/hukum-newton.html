@@ -17,6 +17,8 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --text-highlight: #facc15;
+            --ok: #4ade80;
+            --warn: #f87171;
             --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
@@ -49,11 +51,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .header-title { display: flex; align-items: center; gap: 12px; }
-        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+        .header-title h1 { font-size: 1.15rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+        .header-title p { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }
 
         .header-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -66,9 +71,13 @@
         }
 
         .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
+        .control-card { order: 2; }
+        .canvas-card { order: 1; }
 
         @media (min-width: 900px) {
             .main-container { grid-template-columns: 360px 1fr; }
+            .control-card { order: 1; }
+            .canvas-card { order: 2; }
         }
 
         .card {
@@ -86,6 +95,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 10px;
         }
@@ -170,11 +181,6 @@
             box-shadow: 0 0 10px var(--push-glow);
         }
 
-        .friction-theme input[type="range"]::-webkit-slider-thumb {
-            background: var(--friction-color);
-            box-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
-        }
-
         .toggle-row {
             display: flex;
             align-items: center;
@@ -191,38 +197,42 @@
             gap: 6px;
         }
 
-        .btn-reset {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        .surface-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .surface-btn {
+            flex: 1; min-width: 78px; background: var(--bg-dark); border: 1.5px solid var(--card-border);
+            color: var(--text-muted); font-size: 0.76rem; font-weight: 700; padding: 8px 6px; border-radius: 10px;
+            cursor: pointer; text-align: center;
+        }
+        .surface-btn.is-active { border-color: var(--friction-color); background: rgba(167,139,250,0.12); color: var(--text-main); }
+        .surface-btn small { display: block; font-weight: 500; color: var(--text-muted); font-size: 0.64rem; margin-top: 2px; }
+
+        .speed-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .speed-btn { flex: 1; background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.76rem; font-weight: 700; padding: 6px 4px; border-radius: 8px; cursor: pointer; }
+        .speed-btn.is-active { border-color: var(--accent-cyan); background: rgba(56,189,248,0.12); color: var(--text-main); }
+
+        .btn-reset, .btn-primary, .btn-secondary {
+            border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.2s;
         }
-
-        .btn-reset:active { transform: scale(0.97); opacity: 0.9; }
-
-        .canvas-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
+        .btn-reset { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); color: #04141d; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--card-border); }
+        .btn-reset:active, .btn-primary:active, .btn-secondary:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-row > * { flex: 1; min-width: 120px; }
 
         .canvas-wrapper {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 320px;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             border-radius: 12px;
             border: 1px solid var(--card-border);
             overflow: hidden;
         }
 
-        @media (max-width: 420px) { .canvas-wrapper { height: 240px; } }
+        @media (max-width: 420px) { .canvas-wrapper { height: 250px; } }
 
         canvas { display: block; width: 100%; height: 100%; }
 
@@ -235,7 +245,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             pointer-events: none;
             white-space: nowrap;
@@ -270,15 +280,15 @@
 
         .sub-result {
             flex: 1;
-            min-width: 110px;
+            min-width: 100px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
             padding: 8px 10px;
             border-left: 3px solid var(--card-border);
         }
 
-        .sub-result-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
-        .sub-result-value { font-size: 0.9rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
+        .sub-result-label { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; }
+        .sub-result-value { font-size: 0.88rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
 
         .interaction-badge {
             padding: 4px 10px;
@@ -288,17 +298,8 @@
             text-transform: uppercase;
         }
 
-        .badge-hukum1 {
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-        }
-
-        .badge-hukum2 {
-            background: rgba(250, 204, 21, 0.15);
-            color: var(--text-highlight);
-            border: 1px solid var(--net-color);
-        }
+        .badge-hukum1 { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.4); }
+        .badge-hukum2 { background: rgba(250, 204, 21, 0.15); color: var(--text-highlight); border: 1px solid var(--net-color); }
 
         .formula-box {
             background: #090d16;
@@ -306,7 +307,7 @@
             border-radius: 8px;
             border: 1px dashed #334155;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             line-height: 1.6;
             color: #e2e8f0;
             overflow-x: auto;
@@ -336,9 +337,71 @@
             color: var(--text-muted);
             display: none;
         }
-
         .reaksi-panel.is-active { display: block; }
         .reaksi-panel strong { color: var(--friction-color); }
+
+        /* ============ UPGRADE: quiz/challenge/think ============ */
+        .quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px; }
+        .quiz-question { font-size: 0.88rem; font-weight: 600; line-height: 1.45; }
+        .quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .quiz-options { grid-template-columns: 1fr 1fr; } }
+        .quiz-option {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-main);
+            border-radius: 8px; padding: 9px 12px; font-size: 0.82rem; text-align: left; cursor: pointer;
+            display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .quiz-option:hover:not(:disabled) { border-color: var(--accent-cyan); background: rgba(56,189,248,0.07); }
+        .quiz-option .letter { font-weight: 800; color: var(--accent-cyan); flex-shrink: 0; }
+        .quiz-option:disabled { cursor: default; opacity: 0.6; }
+        .quiz-option.is-chosen { border-color: var(--accent-cyan); background: rgba(56,189,248,0.1); }
+        .quiz-option.is-correct { border-color: var(--ok); background: rgba(74,222,128,0.12); }
+        .quiz-option.is-wrong { border-color: var(--warn); background: rgba(248,113,113,0.1); }
+
+        .feedback { font-size: 0.83rem; line-height: 1.5; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--ok); background: rgba(74,222,128,0.08); display: none; }
+        .feedback.is-visible { display: block; }
+        .feedback.is-wrong { border-left-color: var(--warn); background: rgba(248,113,113,0.08); }
+
+        .challenge-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+        @media (min-width: 720px) { .challenge-grid { grid-template-columns: 1fr 1fr; } }
+        .challenge-item { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .challenge-item h4 { font-size: 0.83rem; color: var(--text-highlight); }
+        .challenge-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+        .whatif-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+        .whatif-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-main); font-size: 0.78rem; font-weight: 700; padding: 10px; border-radius: 10px; cursor: pointer; text-align: left; }
+        .whatif-btn:hover { border-color: var(--accent-cyan); }
+        .whatif-result { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; min-height: 1.2em; }
+
+        /* ============ UPGRADE: data logger table ============ */
+        .table-wrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 10px; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 480px; }
+        table.data-table th, table.data-table td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--card-border); font-family: 'Courier New', monospace; }
+        table.data-table th:first-child, table.data-table td:first-child { text-align: left; font-family: inherit; }
+        table.data-table th { color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; background: rgba(255,255,255,0.02); }
+        table.data-table tbody tr:hover { background: rgba(56,189,248,0.05); }
+        .data-empty { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 16px; }
+
+        /* ============ UPGRADE: grafik ============ */
+        .graph-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        @media (min-width: 720px) { .graph-grid { grid-template-columns: 1fr 1fr; } }
+        .graph-wrap { background: rgba(15,23,42,0.6); border: 1px solid var(--card-border); border-radius: 10px; padding: 8px; }
+        .graph-caption { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; text-align: center; }
+        .graph-wrap canvas { width: 100%; height: 140px; display: block; }
+
+        .motion-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+        .motion-tab { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.76rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+        .motion-tab.is-active { color: #04141d; background: var(--accent-cyan); border-color: transparent; }
+
+        /* ============ UPGRADE: compare ============ */
+        .compare-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .compare-grid { grid-template-columns: 1fr 1fr; } }
+        .compare-col { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .compare-tag { font-size: 0.7rem; font-weight: 800; padding: 2px 10px; border-radius: 999px; align-self: flex-start; }
+        .compare-tag.a { color: var(--push-color); border: 1px solid var(--push-color); }
+        .compare-tag.b { color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .compare-input-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; gap: 6px; }
+        .compare-input-row input[type="number"] { width: 64px; background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 6px; padding: 4px 6px; text-align: right; }
+        .compare-result { margin-top: 6px; font-size: 0.85rem; font-weight: 700; font-family: 'Courier New', monospace; }
     </style>
 </head>
 <body>
@@ -349,13 +412,16 @@
                 <line x1="2" y1="12" x2="22" y2="12"></line>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
-            <h1>Laboratorium Maya: Hukum Newton</h1>
+            <div>
+                <h1>Laboratorium Maya: Hukum Newton</h1>
+                <p>Eksperimen mekanika interaktif berbasis data</p>
+            </div>
         </div>
         <span class="header-badge">SMA Kelas X</span>
     </header>
 
     <div class="main-container">
-        <div class="card">
+        <div class="card control-card">
             <div class="card-header">
                 <span class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -396,29 +462,22 @@
                 </label>
             </div>
 
-            <div class="control-group friction-theme is-disabled" id="frictionGroup">
-                <div class="control-label-row">
-                    <label class="control-label" for="frictionSlider">Gaya Gesek (f)</label>
-                    <div class="num-input-wrapper">
-                        <input type="number" id="frictionNum" min="0" max="100" step="5" value="15">
-                        <span class="unit">N</span>
-                    </div>
-                </div>
-                <div class="slider-container">
-                    <input type="range" id="frictionSlider" min="0" max="100" step="5" value="15">
-                </div>
+            <div class="control-group is-disabled" id="frictionGroup">
+                <div class="control-label-row"><span class="control-label">Permukaan Lintasan</span></div>
+                <div class="surface-row" id="surfaceRow"></div>
+                <div style="font-size:0.74rem;color:var(--text-muted);">Gaya gesek: <strong id="frictionReadout" style="color:var(--friction-color);">0 N</strong> (dihitung dari f = μ × m × g)</div>
             </div>
 
             <div class="control-group">
                 <div class="control-label-row">
                     <label class="control-label" for="timeSlider">Lama Gaya Bekerja (t)</label>
                     <div class="num-input-wrapper">
-                        <input type="number" id="timeNum" min="0" max="10" step="0.5" value="3">
+                        <input type="number" id="timeNum" min="0.5" max="10" step="0.5" value="3">
                         <span class="unit">s</span>
                     </div>
                 </div>
                 <div class="slider-container">
-                    <input type="range" id="timeSlider" min="0" max="10" step="0.5" value="3">
+                    <input type="range" id="timeSlider" min="0.5" max="10" step="0.5" value="3">
                 </div>
             </div>
 
@@ -428,29 +487,40 @@
                     Tampilkan pasangan aksi-reaksi (Hukum III)
                 </label>
             </div>
+            <div class="toggle-row">
+                <label for="chkDiagram">
+                    <input type="checkbox" id="chkDiagram" style="accent-color: var(--net-color);">
+                    📐 Tampilkan diagram gaya (N, mg, F, f)
+                </label>
+            </div>
 
-            <button class="btn-reset" id="btnReset">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-                Reset Eksperimen
-            </button>
+            <div class="control-group">
+                <div class="control-label-row"><span class="control-label">⏱️ Kecepatan Simulasi</span></div>
+                <div class="speed-row" id="speedRow"></div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-primary" id="btnRun">▶ Jalankan</button>
+                <button class="btn-reset" id="btnReset">🔄 Reset</button>
+            </div>
         </div>
 
         <div class="card canvas-card">
             <div class="card-header">
                 <span class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                    Visualisasi Interaktif
+                    Laboratorium Virtual
                 </span>
                 <span id="statusBadge" class="interaction-badge badge-hukum2">Hukum II</span>
             </div>
 
             <div class="canvas-wrapper">
                 <canvas id="simCanvas"></canvas>
-                <div class="canvas-instruction">💡 Atur gaya dorong & gesekan, lihat percepatan yang dihasilkan</div>
+                <div class="canvas-instruction" id="canvasInstruction">💡 Atur gaya dorong & gesekan, lalu tekan Jalankan</div>
             </div>
 
             <div class="reaksi-panel" id="reaksiPanel">
-                💭 <strong>Hukum III (Aksi-Reaksi):</strong> saat tangan mendorong balok dengan gaya F ke kanan (aksi), balok mendorong balik tangan dengan gaya F yang sama besar ke kiri (reaksi). Keduanya bekerja pada BENDA BERBEDA (tangan & balok), makanya tidak saling meniadakan.
+                💭 <strong>Hukum III (Aksi-Reaksi):</strong> saat tangan mendorong balok dengan gaya F ke kanan (aksi), balok mendorong balik tangan dengan gaya F yang sama besar ke kiri (reaksi). Keduanya bekerja pada BENDA BERBEDA (tangan & balok), makanya tidak saling meniadakan -- coba lihat dua vektor di atas, sama panjang tapi berlawanan arah.
             </div>
 
             <div class="results-panel">
@@ -466,14 +536,9 @@
                 </div>
 
                 <div class="sub-results">
-                    <div class="sub-result">
-                        <div class="sub-result-label">Kecepatan setelah t detik (v)</div>
-                        <div class="sub-result-value" id="velValue">0 m/s</div>
-                    </div>
-                    <div class="sub-result">
-                        <div class="sub-result-label">Jarak tempuh (s)</div>
-                        <div class="sub-result-value" id="distValue">0 m</div>
-                    </div>
+                    <div class="sub-result"><div class="sub-result-label">Gaya Gesek (f)</div><div class="sub-result-value" id="frictionValue">0 N</div></div>
+                    <div class="sub-result"><div class="sub-result-label">Kecepatan akhir (v)</div><div class="sub-result-value" id="velValue">0 m/s</div></div>
+                    <div class="sub-result"><div class="sub-result-label">Perpindahan (s)</div><div class="sub-result-value" id="distValue">0 m</div></div>
                 </div>
 
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
@@ -482,9 +547,121 @@
         </div>
     </div>
 
+    <!-- ============ EKSPERIMEN HUKUM I ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🧪 Eksperimen Hukum I -- Kelembaman</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;">Sebuah benda sudah bergerak dengan kecepatan tertentu di permukaan licin (gesekan dimatikan) dan tidak ada gaya dorong. Menurut Hukum I, benda ini akan <strong style="color:var(--text-main);">mempertahankan kecepatannya</strong> -- bukan otomatis berhenti.</p>
+        <div class="btn-row">
+            <button class="btn-secondary" id="btnHukum1">▶ Jalankan Eksperimen Hukum I (v₀ = 6 m/s, ΣF = 0)</button>
+        </div>
+        <div class="formula-box" id="hukum1Readout" style="display:none;"></div>
+    </div>
+
+    <!-- ============ APA YANG TERJADI JIKA... ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🔮 Apa yang Terjadi Jika...?</span></div>
+        <div class="whatif-grid" id="whatifGrid"></div>
+    </div>
+
+    <!-- ============ COBA PIKIRKAN ============ -->
+    <div class="card">
+        <span class="quiz-label">🤔 Coba Pikirkan</span>
+        <p class="quiz-question">Jika gaya total (ΣF) tetap sama tetapi massa benda diperbesar dua kali lipat, bagaimana percepatannya?</p>
+        <div class="quiz-options" id="thinkOptions"></div>
+        <div class="feedback" id="thinkFeedback"></div>
+    </div>
+
+    <!-- ============ TANTANGAN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🎯 Tantangan</span></div>
+        <div class="challenge-grid">
+            <div class="challenge-item">
+                <h4>Tantangan 1</h4>
+                <p>Atur massa, gaya, dan gesekan sehingga percepatan benda tepat <strong>5 m/s²</strong> (toleransi ±0,2).</p>
+                <button class="btn-secondary" data-challenge="1">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback1"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 2</h4>
+                <p>Buat benda <strong>tetap diam</strong> meskipun ada gaya dorong (ΣF = 0, F &gt; 0).</p>
+                <button class="btn-secondary" data-challenge="2">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback2"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 3</h4>
+                <p>Buat benda bergerak (ΣF &gt; 0) dengan percepatan <strong>sekecil mungkin</strong> (di bawah 0,5 m/s²).</p>
+                <button class="btn-secondary" data-challenge="3">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback3"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 4</h4>
+                <p>Ambil data (⏺) untuk dua kombinasi massa &amp; gaya berbeda yang menghasilkan <strong>percepatan sama</strong>.</p>
+                <button class="btn-secondary" data-challenge="4">Cek Data Log</button>
+                <div class="feedback" id="chFeedback4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ DATA LOGGER ============ -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">⏺ Data Logger</span>
+            <div class="btn-row" style="margin:0;">
+                <button class="btn-secondary" id="btnLog">⏺ Ambil Data</button>
+                <button class="btn-secondary" id="btnClearLast">Hapus Terakhir</button>
+                <button class="btn-secondary" id="btnClearAll">Hapus Semua</button>
+                <button class="btn-secondary" id="btnExportCsv">⬇ Export CSV</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead><tr><th>No</th><th>m (kg)</th><th>F (N)</th><th>f (N)</th><th>ΣF (N)</th><th>a (m/s²)</th></tr></thead>
+                <tbody id="dataTableBody"></tbody>
+            </table>
+            <p class="data-empty" id="dataEmptyNote">Belum ada data. Atur parameter lalu tekan "⏺ Ambil Data".</p>
+        </div>
+    </div>
+
+    <!-- ============ GRAFIK EKSPERIMEN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">📊 Grafik Eksperimen (dari Data Log)</span></div>
+        <div class="graph-grid">
+            <div class="graph-wrap"><p class="graph-caption">Gaya Total (F) vs Percepatan (a)</p><canvas id="graphFa"></canvas></div>
+            <div class="graph-wrap"><p class="graph-caption">Massa (m) vs Percepatan (a)</p><canvas id="graphMa"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ============ GRAFIK GERAK REAL-TIME ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">📈 Grafik Gerak Real-Time</span></div>
+        <div class="motion-tabs" id="motionTabs"></div>
+        <div class="graph-wrap"><canvas id="graphMotion"></canvas></div>
+    </div>
+
+    <!-- ============ BANDINGKAN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">⚖️ Bandingkan Dua Eksperimen</span></div>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Eksperimen A</span>
+                <div class="compare-input-row"><span>Massa (kg)</span><input type="number" id="cmpAm" value="5" min="1" max="20"></div>
+                <div class="compare-input-row"><span>Gaya (N)</span><input type="number" id="cmpAf" value="20" min="0" max="100"></div>
+                <div class="compare-result" id="cmpAResult" style="color:var(--push-color);">a = -- m/s²</div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Eksperimen B</span>
+                <div class="compare-input-row"><span>Massa (kg)</span><input type="number" id="cmpBm" value="10" min="1" max="20"></div>
+                <div class="compare-input-row"><span>Gaya (N)</span><input type="number" id="cmpBf" value="20" min="0" max="100"></div>
+                <div class="compare-result" id="cmpBResult" style="color:var(--accent-cyan);">a = -- m/s²</div>
+            </div>
+        </div>
+        <div class="btn-row"><button class="btn-secondary" id="btnCompare">Bandingkan</button></div>
+        <div class="feedback" id="cmpFeedback"></div>
+    </div>
+
     <div class="theory-card">
         <div class="theory-title">📌 Tiga Hukum Newton</div>
-        <strong style="color: var(--accent-cyan);">Hukum I</strong> (Kelembaman): benda diam/GLB kalau ΣF = 0.
+        <strong style="color: var(--accent-cyan);">Hukum I</strong> (Kelembaman): benda diam/GLB kalau ΣF = 0 -- benda yang sudah bergerak akan TERUS bergerak dengan kecepatan tetap, bukan berhenti sendiri.
         <strong style="color: var(--text-highlight);">Hukum II</strong>: <span class="math-var">a = ΣF / m</span> -- percepatan berbanding lurus gaya total, berbanding terbalik massa.
         <strong style="color: var(--friction-color);">Hukum III</strong> (Aksi-Reaksi): tiap gaya aksi selalu dibalas gaya reaksi yang sama besar, berlawanan arah, pada benda yang berbeda.
     </div>
@@ -499,28 +676,73 @@
         const pushNum = document.getElementById('pushNum');
         const chkFriction = document.getElementById('chkFriction');
         const frictionGroup = document.getElementById('frictionGroup');
-        const frictionSlider = document.getElementById('frictionSlider');
-        const frictionNum = document.getElementById('frictionNum');
+        const frictionReadout = document.getElementById('frictionReadout');
         const timeSlider = document.getElementById('timeSlider');
         const timeNum = document.getElementById('timeNum');
         const chkReaksi = document.getElementById('chkReaksi');
+        const chkDiagram = document.getElementById('chkDiagram');
         const reaksiPanel = document.getElementById('reaksiPanel');
         const btnReset = document.getElementById('btnReset');
+        const btnRun = document.getElementById('btnRun');
+        const canvasInstruction = document.getElementById('canvasInstruction');
 
         const accelValueEl = document.getElementById('accelValue');
         const netForceValueEl = document.getElementById('netForceValue');
+        const frictionValueEl = document.getElementById('frictionValue');
         const velValueEl = document.getElementById('velValue');
         const distValueEl = document.getElementById('distValue');
         const formulaBoxEl = document.getElementById('formulaBox');
         const statusBadgeEl = document.getElementById('statusBadge');
 
-        let mass = 5, push = 40, frictionOn = false, friction = 15, time = 3;
+        const G = 9.8;
+        const SURFACES = [
+            { id: 'es', icon: '🧊', label: 'Es', desc: 'sangat licin', mu: 0.05 },
+            { id: 'kayu', icon: '🪵', label: 'Kayu', desc: 'sedang', mu: 0.3 },
+            { id: 'kasar', icon: '🧱', label: 'Kasar', desc: 'besar', mu: 0.6 },
+        ];
+        let mass = 5, push = 40, frictionOn = false, surface = 'kayu', time = 3, v0 = 0;
+        let speedMult = 1;
+        const SPEEDS = [
+            { id: 'slow', label: '🐢 0,2×', mult: 0.2 },
+            { id: 'half', label: '0,5×', mult: 0.5 },
+            { id: 'normal', label: '1×', mult: 1 },
+            { id: 'fast', label: '2×', mult: 2 },
+            { id: 'faster', label: '4×', mult: 4 },
+        ];
+
+        // ============ SURFACE & SPEED BUTTONS ============
+        function renderSurfaceRow() {
+            const row = document.getElementById('surfaceRow');
+            row.innerHTML = '';
+            SURFACES.forEach((s) => {
+                const btn = document.createElement('button');
+                btn.className = 'surface-btn' + (s.id === surface ? ' is-active' : '');
+                btn.innerHTML = `${s.icon} ${s.label}<small>${s.desc}</small>`;
+                btn.addEventListener('click', () => { surface = s.id; renderSurfaceRow(); calculateAndRender(); });
+                row.appendChild(btn);
+            });
+        }
+        renderSurfaceRow();
+
+        function renderSpeedRow() {
+            const row = document.getElementById('speedRow');
+            row.innerHTML = '';
+            SPEEDS.forEach((s) => {
+                const btn = document.createElement('button');
+                btn.className = 'speed-btn' + (s.id === (SPEEDS.find(x => x.mult === speedMult)?.id) ? ' is-active' : '');
+                btn.textContent = s.label;
+                btn.addEventListener('click', () => { speedMult = s.mult; renderSpeedRow(); });
+                row.appendChild(btn);
+            });
+        }
+        renderSpeedRow();
 
         function resizeCanvas() {
             const rect = canvas.parentElement.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(dpr, dpr);
             render();
         }
@@ -531,22 +753,18 @@
             if (source === 'massNum') massSlider.value = massNum.value;
             if (source === 'pushSlider') pushNum.value = pushSlider.value;
             if (source === 'pushNum') pushSlider.value = pushNum.value;
-            if (source === 'frictionSlider') frictionNum.value = frictionSlider.value;
-            if (source === 'frictionNum') frictionSlider.value = frictionNum.value;
             if (source === 'timeSlider') timeNum.value = timeSlider.value;
             if (source === 'timeNum') timeSlider.value = timeNum.value;
 
             mass = parseFloat(massNum.value) || 1;
             push = parseFloat(pushNum.value) || 0;
-            friction = parseFloat(frictionNum.value) || 0;
-            time = parseFloat(timeNum.value) || 0;
+            time = parseFloat(timeNum.value) || 0.5;
 
             calculateAndRender();
         }
 
         [massSlider, massNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
         [pushSlider, pushNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
-        [frictionSlider, frictionNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
         [timeSlider, timeNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
 
         chkFriction.addEventListener('change', () => {
@@ -559,36 +777,54 @@
             reaksiPanel.classList.toggle('is-active', chkReaksi.checked);
             render();
         });
+        chkDiagram.addEventListener('change', render);
 
         btnReset.addEventListener('click', () => {
+            stopAnimation();
             massSlider.value = 5; massNum.value = 5;
             pushSlider.value = 40; pushNum.value = 40;
-            frictionSlider.value = 15; frictionNum.value = 15;
             timeSlider.value = 3; timeNum.value = 3;
-            chkFriction.checked = false;
-            frictionOn = false;
+            chkFriction.checked = false; frictionOn = false;
             frictionGroup.classList.add('is-disabled');
-            chkReaksi.checked = false;
-            reaksiPanel.classList.remove('is-active');
+            surface = 'kayu'; renderSurfaceRow();
+            chkReaksi.checked = false; reaksiPanel.classList.remove('is-active');
+            chkDiagram.checked = false;
+            v0 = 0;
+            speedMult = 1; renderSpeedRow();
+            hukum1Mode = false;
+            document.getElementById('hukum1Readout').style.display = 'none';
+            canvasInstruction.textContent = '💡 Atur gaya dorong & gesekan, lalu tekan Jalankan';
             syncInputs();
         });
 
+        // ============ FISIKA INTI (dipertahankan dari versi lama) ============
+        function currentFriction() {
+            if (!frictionOn) return 0;
+            const s = SURFACES.find((x) => x.id === surface);
+            return s.mu * mass * G;
+        }
         function computeNetForce() {
-            const f = frictionOn ? friction : 0;
+            const f = currentFriction();
             return Math.max(0, push - f);
+        }
+        function computeKinematics() {
+            const netForce = computeNetForce();
+            const accel = netForce / mass;
+            const vel = v0 + accel * time;
+            const dist = v0 * time + 0.5 * accel * time * time;
+            return { netForce, accel, vel, dist, friction: currentFriction() };
         }
 
         function updateResults() {
-            const netForce = computeNetForce();
-            const accel = netForce / mass;
-            const vel = accel * time;
-            const dist = 0.5 * accel * time * time;
+            const { netForce, accel, vel, dist, friction } = computeKinematics();
             const isHukum1 = netForce === 0;
 
             accelValueEl.textContent = accel.toFixed(2) + ' m/s²';
             netForceValueEl.textContent = netForce.toFixed(1) + ' N';
+            frictionValueEl.textContent = friction.toFixed(1) + ' N';
             velValueEl.textContent = vel.toFixed(2) + ' m/s';
             distValueEl.textContent = dist.toFixed(2) + ' m';
+            frictionReadout.textContent = friction.toFixed(1) + ' N';
 
             if (isHukum1) {
                 statusBadgeEl.textContent = 'Hukum I';
@@ -598,22 +834,37 @@
                 statusBadgeEl.className = 'interaction-badge badge-hukum2';
             }
 
-            const fStr = frictionOn ? `${push} − ${friction}` : `${push}`;
+            const fStr = frictionOn ? `${push} − ${friction.toFixed(1)}` : `${push}`;
             let formula = `<span class="math-var">ΣF</span> = ${fStr} = <span class="math-num">${netForce.toFixed(1)} N</span>`;
             formula += `<br><span class="math-var">a</span> = ΣF / m = ${netForce.toFixed(1)} / ${mass} = <span class="math-num">${accel.toFixed(2)} m/s²</span>`;
-            if (isHukum1) {
-                formula += `<br><em>ΣF = 0 → sesuai Hukum I, benda tetap diam atau bergerak lurus beraturan (GLB).</em>`;
+            if (frictionOn) {
+                const s = SURFACES.find((x) => x.id === surface);
+                formula += `<br><span class="math-var">f</span> = μ × m × g = ${s.mu} × ${mass} × 9,8 = <span class="math-num">${friction.toFixed(1)} N</span> <span style="color:#64748b;">(permukaan ${s.label.toLowerCase()})</span>`;
+            }
+            if (isHukum1 && v0 === 0) {
+                formula += `<br><em>ΣF = 0 dan benda diam → sesuai Hukum I, benda tetap diam (kelembaman).</em>`;
+            } else if (isHukum1 && v0 > 0) {
+                formula += `<br><em>ΣF = 0 tapi benda sudah bergerak (v₀ = ${v0} m/s) → sesuai Hukum I, benda TETAP bergerak dengan kecepatan konstan, bukan berhenti.</em>`;
             } else {
-                formula += `<br><span class="math-var">v</span> = a × t = ${accel.toFixed(2)} × ${time} = <span class="math-num">${vel.toFixed(2)} m/s</span>`;
-                formula += `<br><span class="math-var">s</span> = ½ × a × t² = <span class="math-num">${dist.toFixed(2)} m</span>`;
+                formula += `<br><span class="math-var">v</span> = v₀ + a×t = ${v0} + ${accel.toFixed(2)}×${time} = <span class="math-num">${vel.toFixed(2)} m/s</span>`;
+                formula += `<br><span class="math-var">s</span> = v₀t + ½at² = <span class="math-num">${dist.toFixed(2)} m</span>`;
             }
             formulaBoxEl.innerHTML = formula;
 
-            return { netForce, accel };
+            return { netForce, accel, vel, dist };
+        }
+
+        // ============ RENDER SCENE (canvas) ============
+        function surfaceGroundStyle() {
+            const s = SURFACES.find((x) => x.id === surface);
+            if (!frictionOn) return { color: 'rgba(148,163,184,0.4)', label: 'Tanpa gesekan' };
+            if (s.id === 'es') return { color: '#7dd3fc', label: '🧊 Es' };
+            if (s.id === 'kayu') return { color: '#b45309', label: '🪵 Kayu' };
+            return { color: '#78716c', label: '🧱 Kasar' };
         }
 
         function drawArrow(fromX, fromY, len, color, label, lineWidth) {
-            if (len < 3) return;
+            if (Math.abs(len) < 3) return;
             const toX = fromX + len;
             const headLen = 8;
             ctx.save();
@@ -636,6 +887,28 @@
             ctx.fillText(label, fromX + len / 2, fromY - 12);
             ctx.restore();
         }
+        function drawVArrow(fromX, fromY, len, color, label) {
+            if (Math.abs(len) < 3) return;
+            const toY = fromY + len;
+            const headLen = 7;
+            ctx.save();
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(fromX, toY); ctx.stroke();
+            const dir = len > 0 ? 1 : -1;
+            ctx.beginPath();
+            ctx.moveTo(fromX, toY);
+            ctx.lineTo(fromX - headLen / 2, toY - dir * headLen);
+            ctx.lineTo(fromX + headLen / 2, toY - dir * headLen);
+            ctx.closePath(); ctx.fill();
+            ctx.font = 'bold 11px system-ui';
+            ctx.textAlign = 'left';
+            ctx.fillText(label, fromX + 8, fromY + len / 2);
+            ctx.restore();
+        }
+
+        // posisi horizontal balok dalam satuan "meter simulasi" (0 = tengah)
+        let blockOffsetM = 0;
+        const PX_PER_M = 14; // skala visual, arbitrer -- cuma buat pergerakan terlihat wajar di layar kecil
 
         function render() {
             const width = canvas.parentElement.clientWidth;
@@ -644,23 +917,40 @@
 
             const groundY = height * 0.68;
             const blockSize = Math.max(36, Math.min(64, width / 8));
-            const blockX = width / 2 - blockSize / 2;
+            const centerX = width / 2 - blockSize / 2;
+            const blockX = centerX + blockOffsetM * PX_PER_M;
             const blockY = groundY - blockSize;
 
-            // Ground line
+            const gs = surfaceGroundStyle();
             ctx.save();
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = gs.color;
+            ctx.lineWidth = frictionOn ? 4 : 2;
             ctx.beginPath();
-            ctx.moveTo(20, groundY);
-            ctx.lineTo(width - 20, groundY);
+            ctx.moveTo(10, groundY);
+            ctx.lineTo(width - 10, groundY);
             ctx.stroke();
+            ctx.fillStyle = 'rgba(148,163,184,0.6)';
+            ctx.font = '10px system-ui';
+            ctx.textAlign = 'left';
+            ctx.fillText(gs.label, 12, groundY + 16);
+            // tanda koordinat sederhana
+            ctx.strokeStyle = 'rgba(148,163,184,0.2)';
+            ctx.lineWidth = 1;
+            for (let gx = 20; gx < width; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, groundY); ctx.lineTo(gx, groundY + 5); ctx.stroke(); }
             ctx.restore();
 
-            // Block
+            // Bayangan balok
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.35)';
+            ctx.beginPath();
+            ctx.ellipse(blockX + blockSize / 2, groundY + 4, blockSize * 0.55, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Balok
             ctx.save();
             const grad = ctx.createLinearGradient(blockX, blockY, blockX, blockY + blockSize);
-            grad.addColorStop(0, '#475569');
+            grad.addColorStop(0, '#64748b');
             grad.addColorStop(1, '#1e293b');
             ctx.fillStyle = grad;
             ctx.strokeStyle = '#94a3b8';
@@ -669,46 +959,335 @@
             ctx.roundRect(blockX, blockY, blockSize, blockSize, 8);
             ctx.fill();
             ctx.stroke();
+            // highlight tepi atas biar terkesan bervolume
+            ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+            ctx.beginPath(); ctx.moveTo(blockX + 4, blockY + 3); ctx.lineTo(blockX + blockSize - 4, blockY + 3); ctx.stroke();
             ctx.fillStyle = '#e2e8f0';
-            ctx.font = `bold ${Math.round(blockSize * 0.28)}px system-ui`;
+            ctx.font = `bold ${Math.round(blockSize * 0.26)}px system-ui`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(`${mass} kg`, blockX + blockSize / 2, blockY + blockSize / 2);
             ctx.restore();
 
-            // Force arrows scaled logarithmically for legibility
-            const maxArrowLen = width * 0.28;
+            const maxArrowLen = width * 0.24;
             const scale = (f) => Math.min(maxArrowLen, f * 2.2);
             const arrowY = blockY + blockSize / 2;
 
-            // Gaya dorong (kanan, biru/merah)
-            drawArrow(blockX + blockSize + 6, arrowY - 10, scale(push), '#ef4444', 'F dorong', 3.5);
-
-            // Gaya gesek (kiri, ungu), kalau aktif
-            if (frictionOn && friction > 0) {
-                drawArrow(blockX - 6, arrowY + 10, -scale(friction), '#a78bfa', 'f gesek', 3.5);
-            }
-
-            // Reaksi (Hukum III) -- panah kecil dari balok mendorong balik "tangan" di kanan
-            if (chkReaksi.checked) {
-                ctx.save();
-                ctx.fillStyle = '#cbd5e1';
-                ctx.font = '11px system-ui';
-                ctx.textAlign = 'center';
-                ctx.fillText('✋ tangan', blockX + blockSize + scale(push) + 24, arrowY - 26);
-                ctx.restore();
-                drawArrow(blockX + blockSize + scale(push) + 6, arrowY + 22, Math.min(40, scale(push) * 0.4), '#38bdf8', 'reaksi', 2.5);
+            if (!diagramMode()) {
+                drawArrow(blockX + blockSize + 6, arrowY - 10, scale(push), '#ef4444', `F = ${push} N`, 3.5);
+                const f = currentFriction();
+                if (frictionOn && f > 0) {
+                    drawArrow(blockX - 6, arrowY + 10, -scale(f), '#a78bfa', `f = ${f.toFixed(1)} N`, 3.5);
+                }
+                if (chkReaksi.checked) {
+                    ctx.save();
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.font = '11px system-ui';
+                    ctx.textAlign = 'center';
+                    // "tangan" sebagai kotak kecil di sisi kiri balok
+                    const handW = 14, handH = blockSize * 0.6;
+                    const handX = blockX - handW - 8;
+                    ctx.fillStyle = '#475569';
+                    ctx.fillRect(handX, blockY + (blockSize - handH) / 2, handW, handH);
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.fillText('✋', handX + handW / 2, blockY - 6);
+                    ctx.restore();
+                    drawArrow(handX + 16, arrowY - 24, scale(push) * 0.5, '#ef4444', `Aksi ${push} N`, 2.5);
+                    drawArrow(handX + 16 + scale(push) * 0.5, arrowY + 24, -scale(push) * 0.5, '#38bdf8', `Reaksi ${push} N`, 2.5);
+                }
+            } else {
+                // Diagram gaya bebas: N (atas), mg (bawah), F (kanan), f (kiri)
+                const N = mass * G, mg = mass * G;
+                const cx = blockX + blockSize / 2;
+                drawVArrow(cx, blockY - 4, -Math.min(60, N * 1.1), '#4ade80', `N = ${N.toFixed(1)} N`);
+                drawVArrow(cx, blockY + blockSize + 4, Math.min(60, mg * 1.1), '#f97316', `mg = ${mg.toFixed(1)} N`);
+                drawArrow(blockX + blockSize + 6, arrowY, scale(push), '#ef4444', `F = ${push} N`, 3.5);
+                const f = currentFriction();
+                if (frictionOn && f > 0) drawArrow(blockX - 6, arrowY, -scale(f), '#a78bfa', `f = ${f.toFixed(1)} N`, 3.5);
             }
         }
+        function diagramMode() { return chkDiagram.checked; }
 
         function calculateAndRender() {
             updateResults();
             render();
         }
 
+        // ============ ANIMASI GERAK REAL-TIME ============
+        let animRunning = false;
+        let animStart = 0;
+        let animElapsed = 0;
+        let hukum1Mode = false;
+        let motionSamples = [];
+        let rafId = null;
+
+        function stopAnimation() {
+            animRunning = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            blockOffsetM = 0;
+            render();
+        }
+
+        function startAnimation() {
+            if (animRunning) return;
+            const { accel } = computeKinematics();
+            animRunning = true;
+            animElapsed = 0;
+            blockOffsetM = 0;
+            motionSamples = [];
+            let last = performance.now();
+            canvasInstruction.textContent = hukum1Mode ? '▶ ΣF = 0 -- amati kecepatan tetap konstan' : '▶ Simulasi berjalan...';
+
+            function step(now) {
+                if (!animRunning) return;
+                const dtReal = Math.min(0.05, (now - last) / 1000);
+                last = now;
+                const dtSim = dtReal * speedMult;
+                animElapsed += dtSim;
+                const durasi = hukum1Mode ? 6 : time;
+                const t = Math.min(animElapsed, durasi);
+
+                const posM = v0 * t + 0.5 * accel * t * t;
+                const velNow = v0 + accel * t;
+                blockOffsetM = posM;
+                motionSamples.push({ t, pos: posM, vel: velNow, accel });
+                if (motionSamples.length > 400) motionSamples.shift();
+
+                render();
+                drawMotionGraph();
+
+                if (animElapsed < durasi) {
+                    rafId = requestAnimationFrame(step);
+                } else {
+                    animRunning = false;
+                    canvasInstruction.textContent = '✅ Simulasi selesai -- ubah parameter lalu jalankan lagi';
+                }
+            }
+            rafId = requestAnimationFrame(step);
+        }
+
+        btnRun.addEventListener('click', () => { hukum1Mode = false; startAnimation(); });
+
+        // ============ EKSPERIMEN HUKUM I ============
+        document.getElementById('btnHukum1').addEventListener('click', () => {
+            chkFriction.checked = false; frictionOn = false; frictionGroup.classList.add('is-disabled');
+            push = 0; pushSlider.value = 0; pushNum.value = 0;
+            v0 = 6;
+            hukum1Mode = true;
+            const readout = document.getElementById('hukum1Readout');
+            readout.style.display = 'block';
+            readout.innerHTML = `<span class="math-var">ΣF</span> = <span class="math-num">0 N</span> &nbsp;|&nbsp; <span class="math-var">v</span> = <span class="math-num">konstan ${v0} m/s</span> -- benda tidak dipercepat maupun diperlambat karena tidak ada gaya total yang bekerja.`;
+            calculateAndRender();
+            startAnimation();
+        });
+
+        // ============ APA YANG TERJADI JIKA... ============
+        const WHATIF = [
+            { label: '⚖️ Massa dilipatgandakan', run: () => { mass *= 2; massSlider.value = Math.min(20, mass); massNum.value = massSlider.value; mass = parseFloat(massNum.value); } },
+            { label: '💪 Gaya dilipatgandakan', run: () => { push = Math.min(100, push * 2); pushSlider.value = push; pushNum.value = push; } },
+            { label: '🧊 Gesekan dihilangkan', run: () => { chkFriction.checked = false; frictionOn = false; frictionGroup.classList.add('is-disabled'); } },
+            { label: '⚡ ΣF dibuat nol', run: () => { chkFriction.checked = true; frictionOn = true; frictionGroup.classList.remove('is-disabled'); surface = 'kasar'; renderSurfaceRow(); const f = currentFriction(); push = Math.round(f); pushSlider.value = push; pushNum.value = push; } },
+        ];
+        function renderWhatif() {
+            const grid = document.getElementById('whatifGrid');
+            grid.innerHTML = '';
+            WHATIF.forEach((w) => {
+                const btn = document.createElement('button');
+                btn.className = 'whatif-btn';
+                btn.innerHTML = `${w.label}<div class="whatif-result" id="wi-${WHATIF.indexOf(w)}"></div>`;
+                btn.addEventListener('click', () => {
+                    w.run();
+                    calculateAndRender();
+                    const { netForce, accel } = computeKinematics();
+                    document.getElementById(`wi-${WHATIF.indexOf(w)}`).textContent = `→ ΣF = ${netForce.toFixed(1)} N, a = ${accel.toFixed(2)} m/s²`;
+                    hukum1Mode = false;
+                    startAnimation();
+                });
+                grid.appendChild(btn);
+            });
+        }
+        renderWhatif();
+
+        // ============ COBA PIKIRKAN ============
+        function renderQuizOptions(container, options, handler) {
+            container.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+                btn.addEventListener('click', () => handler(i, btn, container));
+                container.appendChild(btn);
+            });
+        }
+        let thinkAnswered = false;
+        renderQuizOptions(document.getElementById('thinkOptions'), ['Meningkat dua kali lipat', 'Berkurang menjadi setengah', 'Tetap sama', 'Menjadi nol'], (i, btn, c) => {
+            if (thinkAnswered) return;
+            thinkAnswered = true;
+            const correct = i === 1;
+            c.querySelectorAll('.quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+            const fb = document.getElementById('thinkFeedback');
+            fb.classList.add('is-visible');
+            fb.classList.toggle('is-wrong', !correct);
+            fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena a = ΣF/m, kalau ΣF tetap tapi m dikali 2, maka a menjadi ΣF/(2m) -- setengah dari percepatan semula. Percepatan berbanding TERBALIK dengan massa.';
+        });
+
+        // ============ TANTANGAN ============
+        document.querySelectorAll('[data-challenge]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.challenge;
+                const { netForce, accel } = computeKinematics();
+                const fb = document.getElementById(`chFeedback${id}`);
+                fb.classList.add('is-visible');
+                let pass = false, msg = '';
+                if (id === '1') {
+                    pass = Math.abs(accel - 5) <= 0.2;
+                    msg = pass ? `Percepatan saat ini ${accel.toFixed(2)} m/s², sudah sangat dekat dengan target 5 m/s².` : `Percepatan saat ini ${accel.toFixed(2)} m/s². Ingat a = ΣF/m -- coba sesuaikan gaya dan massa.`;
+                } else if (id === '2') {
+                    pass = netForce === 0 && push > 0;
+                    msg = pass ? `ΣF = 0 tercapai dengan F = ${push} N -- gaya dorong pas sama besar dengan gaya gesek, jadi benda tetap diam.` : `ΣF saat ini ${netForce.toFixed(1)} N. Aktifkan gesekan dan atur gaya dorong supaya persis sama dengan gaya geseknya.`;
+                } else if (id === '3') {
+                    pass = netForce > 0 && accel < 0.5;
+                    msg = pass ? `Percepatan ${accel.toFixed(2)} m/s² -- benda tetap bergerak tapi sangat lambat dipercepat.` : `Percepatan saat ini ${accel.toFixed(2)} m/s². Coba perbesar massa atau perkecil selisih gaya dorong-gesek (tapi jangan sampai ΣF = 0).`;
+                } else if (id === '4') {
+                    const accels = experimentData.map((d) => d.a);
+                    pass = accels.some((a, i) => accels.some((b, j) => i !== j && Math.abs(a - b) < 0.05));
+                    msg = pass ? 'Ditemukan dua baris data dengan percepatan hampir sama -- itu artinya kombinasi m dan F yang beda bisa menghasilkan a yang sama, sesuai a = ΣF/m.' : 'Belum ditemukan dua data dengan percepatan sama di log. Coba atur ulang massa & gaya (mis. m=5,F=20 vs m=10,F=40), tekan ⏺ Ambil Data tiap kali.';
+                }
+                fb.classList.toggle('is-wrong', !pass);
+                fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+            });
+        });
+
+        // ============ DATA LOGGER ============
+        let experimentData = [];
+        function renderDataTable() {
+            const tbody = document.getElementById('dataTableBody');
+            const empty = document.getElementById('dataEmptyNote');
+            if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; drawExperimentGraphs(); return; }
+            empty.style.display = 'none';
+            tbody.innerHTML = experimentData.map((d, i) => `
+                <tr><td>${i + 1}</td><td>${d.m}</td><td>${d.F}</td><td>${d.f.toFixed(1)}</td><td>${d.netF.toFixed(1)}</td><td>${d.a.toFixed(2)}</td></tr>
+            `).join('');
+            drawExperimentGraphs();
+        }
+        document.getElementById('btnLog').addEventListener('click', () => {
+            const { netForce, accel, friction } = computeKinematics();
+            experimentData.push({ m: mass, F: push, f: friction, netF: netForce, a: accel });
+            renderDataTable();
+        });
+        document.getElementById('btnClearLast').addEventListener('click', () => { experimentData.pop(); renderDataTable(); });
+        document.getElementById('btnClearAll').addEventListener('click', () => { experimentData = []; renderDataTable(); });
+        document.getElementById('btnExportCsv').addEventListener('click', () => {
+            if (experimentData.length === 0) return;
+            let csv = 'No,m (kg),F (N),f (N),SigmaF (N),a (m/s2)\n';
+            experimentData.forEach((d, i) => { csv += `${i + 1},${d.m},${d.F},${d.f.toFixed(2)},${d.netF.toFixed(2)},${d.a.toFixed(3)}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'data-eksperimen-hukum-newton.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // ============ GRAFIK EKSPERIMEN (F vs a, m vs a) ============
+        function drawScatter(canvasEl, points, xLabel, color) {
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvasEl.parentElement.clientWidth - 16, h = 120;
+            canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+            canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+            const c = canvasEl.getContext('2d');
+            c.setTransform(1, 0, 0, 1, 0, 0);
+            c.scale(dpr, dpr);
+            c.clearRect(0, 0, w, h);
+            if (points.length === 0) { c.fillStyle = '#64748b'; c.font = '11px system-ui'; c.textAlign = 'center'; c.fillText('Belum ada data', w / 2, h / 2); return; }
+            const maxX = Math.max(...points.map((p) => p.x), 1) * 1.15;
+            const maxY = Math.max(...points.map((p) => p.y), 1) * 1.15;
+            const px = (x) => (x / maxX) * (w - 20) + 12;
+            const py = (y) => h - 14 - (y / maxY) * (h - 24);
+            c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(12, h - 14); c.lineTo(w - 8, h - 14); c.moveTo(12, 6); c.lineTo(12, h - 14); c.stroke();
+            points.forEach((p) => {
+                c.fillStyle = color;
+                c.beginPath(); c.arc(px(p.x), py(p.y), 4, 0, Math.PI * 2); c.fill();
+            });
+            c.fillStyle = '#94a3b8'; c.font = '9px system-ui'; c.textAlign = 'left';
+            c.fillText(xLabel, w - 60, h - 4);
+        }
+        function drawExperimentGraphs() {
+            drawScatter(document.getElementById('graphFa'), experimentData.map((d) => ({ x: d.netF, y: d.a })), 'ΣF (N)', '#facc15');
+            drawScatter(document.getElementById('graphMa'), experimentData.map((d) => ({ x: d.m, y: d.a })), 'm (kg)', '#a78bfa');
+        }
+
+        // ============ GRAFIK GERAK REAL-TIME ============
+        let motionView = 'pos';
+        const MOTION_VIEWS = [
+            { id: 'pos', label: 'Posisi (s)', unit: 'm', key: 'pos', color: '#38bdf8' },
+            { id: 'vel', label: 'Kecepatan (v)', unit: 'm/s', key: 'vel', color: '#facc15' },
+            { id: 'accel', label: 'Percepatan (a)', unit: 'm/s²', key: 'accel', color: '#f87171' },
+        ];
+        function renderMotionTabs() {
+            const tabs = document.getElementById('motionTabs');
+            tabs.innerHTML = '';
+            MOTION_VIEWS.forEach((v) => {
+                const btn = document.createElement('button');
+                btn.className = 'motion-tab' + (v.id === motionView ? ' is-active' : '');
+                btn.textContent = v.label;
+                btn.addEventListener('click', () => { motionView = v.id; renderMotionTabs(); drawMotionGraph(); });
+                tabs.appendChild(btn);
+            });
+        }
+        renderMotionTabs();
+        function drawMotionGraph() {
+            const canvasEl = document.getElementById('graphMotion');
+            const view = MOTION_VIEWS.find((v) => v.id === motionView);
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvasEl.parentElement.clientWidth - 16, h = 150;
+            canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+            canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+            const c = canvasEl.getContext('2d');
+            c.setTransform(1, 0, 0, 1, 0, 0);
+            c.scale(dpr, dpr);
+            c.clearRect(0, 0, w, h);
+            if (motionSamples.length < 2) { c.fillStyle = '#64748b'; c.font = '11px system-ui'; c.textAlign = 'center'; c.fillText('Tekan "▶ Jalankan" untuk melihat grafik gerak', w / 2, h / 2); return; }
+            const values = motionSamples.map((s) => s[view.key]);
+            const maxT = Math.max(...motionSamples.map((s) => s.t), 0.1);
+            const maxV = Math.max(...values.map(Math.abs), 0.1) * 1.2;
+            const minV = view.key === 'pos' || view.key === 'vel' ? Math.min(0, ...values) * 1.2 : 0;
+            const px = (t) => (t / maxT) * (w - 16) + 8;
+            const py = (v) => h - 12 - ((v - minV) / (maxV - minV)) * (h - 22);
+            c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1;
+            for (let i = 0; i <= 3; i++) { const y = 6 + ((h - 22) / 3) * i; c.beginPath(); c.moveTo(8, y); c.lineTo(w - 8, y); c.stroke(); }
+            c.beginPath(); c.strokeStyle = view.color; c.lineWidth = 2.2;
+            motionSamples.forEach((s, i) => { const x = px(s.t), y = py(s[view.key]); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); });
+            c.stroke();
+            c.fillStyle = '#94a3b8'; c.font = '10px system-ui'; c.textAlign = 'left';
+            c.fillText(`${view.label} (${view.unit})`, 10, 12);
+        }
+
+        // ============ BANDINGKAN ============
+        document.getElementById('btnCompare').addEventListener('click', () => {
+            const mA = parseFloat(document.getElementById('cmpAm').value) || 1;
+            const fA = parseFloat(document.getElementById('cmpAf').value) || 0;
+            const mB = parseFloat(document.getElementById('cmpBm').value) || 1;
+            const fB = parseFloat(document.getElementById('cmpBf').value) || 0;
+            const aA = fA / mA, aB = fB / mB;
+            document.getElementById('cmpAResult').textContent = `a = ${aA.toFixed(2)} m/s²`;
+            document.getElementById('cmpBResult').textContent = `a = ${aB.toFixed(2)} m/s²`;
+            const fb = document.getElementById('cmpFeedback');
+            fb.classList.add('is-visible');
+            let msg;
+            if (Math.abs(aA - aB) < 0.01) msg = `⚖️ Percepatan A dan B SAMA (${aA.toFixed(2)} m/s²) walau massa/gayanya beda -- rasio F/m keduanya kebetulan sama.`;
+            else if (aA > aB) msg = `📊 Eksperimen A dipercepat LEBIH CEPAT (${aA.toFixed(2)} m/s²) dibanding B (${aB.toFixed(2)} m/s²).`;
+            else msg = `📊 Eksperimen B dipercepat LEBIH CEPAT (${aB.toFixed(2)} m/s²) dibanding A (${aA.toFixed(2)} m/s²).`;
+            fb.innerHTML = msg;
+        });
+
         window.onload = () => {
             resizeCanvas();
             syncInputs();
+            drawExperimentGraphs();
+            drawMotionGraph();
         };
     </script>
 </body>

@@ -3,28 +3,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Lab Maya: Lab Energi Terbarukan"
-  description="Eksplorasi energi terbarukan — jelajahi scene virtual panel surya, turbin angin, PLTA, panas bumi, dan biomassa yang bisa diklik dan diamati langkah demi langkah, amati daya listrik yang dihasilkan berubah real-time, lalu bandingkan kelimanya."
+  title="Lab Maya: Virtual Collision Lab"
+  description="Laboratorium tumbukan virtual -- atur dua kereta eksperimen (massa, kecepatan, arah), pilih jenis tumbukan (lenting/sebagian/tidak lenting), dan buktikan sendiri Hukum Kekekalan Momentum lewat animasi, data, dan grafik F vs t."
   disableCursor
 >
   <section class="container page-header">
     <a href="/materi" class="back-link">&larr; Semua Materi</a>
-    <p class="eyebrow">🧪 Lab Maya · Energi · Kelas X</p>
-    <h1>Lab Energi Terbarukan</h1>
+    <p class="eyebrow">🧪 Lab Maya · Mekanika · Kelas X</p>
+    <h1>Virtual Collision Lab</h1>
     <p class="page-lede">
-      Coba jadi "operator" lima pembangkit energi terbarukan sekaligus — geser intensitas cahaya di
-      panel surya, kecepatan angin di turbin, debit & ketinggian air di PLTA mini, suhu reservoir
-      panas bumi, sampai massa biomassa yang diproses. Klik tiap komponen buat lihat detailnya, ikuti
-      mode "Lihat Proses" langkah demi langkah, lalu bandingkan kelimanya di tab Bandingkan.
+      Atur dua kereta eksperimen -- massa, kecepatan, dan arahnya -- pilih jenis tumbukan, lalu
+      tekan Mulai Eksperimen dan saksikan sendiri bagaimana momentum berpindah saat keduanya
+      bertumbukan. Lengkap dengan analisis impuls, grafik gaya-waktu, dan Safety Lab yang
+      menghubungkan konsep ini dengan airbag kendaraan.
     </p>
   </section>
 
   <section class="container lab-wrap">
-    <div class="rel-frame-wrap card">
+    <div class="mi-frame-wrap card">
       <iframe
-        data-rel-frame
-        src="/lab-embeds/renewable-energy-lab.html"
-        title="Lab Energi Terbarukan"
+        data-mi-frame
+        src="/lab-embeds/momentum-impuls.html"
+        title="Virtual Collision Lab"
         loading="lazy"
       ></iframe>
     </div>
@@ -63,15 +63,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     padding-block: 1rem 4rem;
   }
 
-  .rel-frame-wrap {
+  .mi-frame-wrap {
     padding: 0;
     overflow: hidden;
   }
 
-  .rel-frame-wrap iframe {
+  .mi-frame-wrap iframe {
     display: block;
     width: 100%;
-    height: 2100px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
+    height: 2900px; /* nilai awal, langsung disesuaikan JS begitu iframe termuat */
     border: 0;
   }
 
@@ -87,7 +87,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   // Iframe ini satu domain (file kita sendiri di /lab-embeds), jadi boleh baca
   // tinggi kontennya langsung tanpa postMessage — auto-resize supaya nggak ada
   // scrollbar ganda atau ruang kosong di bawah simulasi.
-  const iframe = document.querySelector<HTMLIFrameElement>('[data-rel-frame]');
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-mi-frame]');
 
   function resizeIframe() {
     if (!iframe?.contentDocument) return;

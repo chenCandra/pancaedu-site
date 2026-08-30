@@ -17,6 +17,8 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --text-highlight: #facc15;
+            --ok: #4ade80;
+            --warn: #f87171;
             --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
@@ -42,11 +44,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .header-title { display: flex; align-items: center; gap: 12px; }
-        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+        .header-title h1 { font-size: 1.15rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+        .header-title p { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }
 
         .header-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -59,7 +64,13 @@
         }
 
         .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex: 1; }
-        @media (min-width: 900px) { .main-container { grid-template-columns: 360px 1fr; } }
+        .control-card { order: 2; }
+        .canvas-card { order: 1; }
+        @media (min-width: 900px) {
+            .main-container { grid-template-columns: 360px 1fr; }
+            .control-card { order: 1; }
+            .canvas-card { order: 2; }
+        }
 
         .card {
             background-color: var(--card-bg);
@@ -76,18 +87,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 10px;
         }
 
-        .card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
 
         .control-group {
             display: flex;
@@ -103,178 +109,148 @@
         .control-label { font-size: 0.875rem; font-weight: 500; color: var(--text-main); }
 
         .num-input-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--bg-dark);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 2px 8px;
+            display: flex; align-items: center; gap: 4px; background: var(--bg-dark);
+            border: 1px solid var(--card-border); border-radius: 8px; padding: 2px 8px;
         }
-
         .num-input-wrapper input[type="number"] {
-            background: transparent;
-            border: none;
-            color: var(--accent-cyan);
-            font-weight: 700;
-            font-size: 0.95rem;
-            width: 50px;
-            text-align: right;
-            outline: none;
+            background: transparent; border: none; color: var(--accent-cyan); font-weight: 700;
+            font-size: 0.95rem; width: 50px; text-align: right; outline: none;
         }
 
         .unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
         .slider-container { display: flex; align-items: center; gap: 10px; }
 
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: #334155;
-            outline: none;
-            cursor: pointer;
-        }
-
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px; background: #334155; outline: none; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--accent-cyan);
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-            border: 2px solid #ffffff;
-            transition: transform 0.1s;
+            -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%;
+            background: var(--accent-cyan); cursor: pointer; box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border: 2px solid #ffffff; transition: transform 0.1s;
         }
-
         input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
-
         .force-theme input[type="range"]::-webkit-slider-thumb { background: var(--force-color); box-shadow: 0 0 10px var(--force-glow); }
         .dist-theme input[type="range"]::-webkit-slider-thumb { background: var(--dist-color); box-shadow: 0 0 10px rgba(167, 139, 250, 0.4); }
 
-        .btn-reset {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-            transition: all 0.2s;
+        .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+        .toggle-row label { font-size: 0.8rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        .btn-reset, .btn-primary, .btn-secondary {
+            border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
         }
-
-        .btn-reset:active { transform: scale(0.97); opacity: 0.9; }
-
-        .canvas-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
+        .btn-reset { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); color: #04141d; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--card-border); }
+        .btn-reset:active, .btn-primary:active, .btn-secondary:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-row > * { flex: 1; min-width: 120px; }
 
         .canvas-wrapper {
-            position: relative;
-            width: 100%;
-            height: 280px;
+            position: relative; width: 100%; height: 300px;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            overflow: hidden;
+            border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden;
         }
-
-        @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
-
+        @media (max-width: 420px) { .canvas-wrapper { height: 240px; } }
         canvas { display: block; width: 100%; height: 100%; }
 
         .canvas-instruction {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            pointer-events: none;
-            white-space: nowrap;
-            text-align: center;
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; color: var(--text-muted);
+            pointer-events: none; white-space: nowrap; text-align: center;
         }
 
-        .results-panel {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .result-highlight {
-            background: rgba(250, 204, 21, 0.1);
-            border-left: 4px solid var(--net-color);
-            padding: 10px 14px;
-            border-radius: 0 8px 8px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        .results-panel { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .result-highlight { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--net-color); padding: 10px 14px; border-radius: 0 8px 8px 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
         .force-val { font-size: 1.4rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', Courier, monospace; }
-
         .sub-results { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .sub-result {
-            flex: 1;
-            min-width: 110px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 8px 10px;
-            border-left: 3px solid var(--card-border);
-        }
-
-        .sub-result-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
-        .sub-result-value { font-size: 0.9rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
+        .sub-result { flex: 1; min-width: 100px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 8px 10px; border-left: 3px solid var(--card-border); }
+        .sub-result-label { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; }
+        .sub-result-value { font-size: 0.88rem; font-weight: 700; color: var(--text-main); font-family: 'Courier New', Courier, monospace; }
 
         .interaction-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
         .badge-positif { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.4); }
         .badge-nol { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #94a3b8; }
         .badge-negatif { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
 
-        .formula-box {
-            background: #090d16;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px dashed #334155;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.82rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-            overflow-x: auto;
-        }
-
+        .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; line-height: 1.6; color: #e2e8f0; overflow-x: auto; }
         .math-var { color: #38bdf8; font-weight: bold; }
         .math-num { color: #f59e0b; }
 
-        .theory-card {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 0.825rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
+        .theory-card { background: rgba(30, 41, 59, 0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.825rem; color: var(--text-muted); line-height: 1.5; }
         .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+        /* ============ UPGRADE: catatan arah gerak vs arah gaya ============ */
+        .motion-note { font-size: 0.78rem; line-height: 1.5; padding: 10px 12px; border-radius: 8px; border-left: 3px solid var(--accent-cyan); background: rgba(56,189,248,0.06); color: var(--text-muted); }
+        .motion-note.is-zero { border-left-color: var(--text-muted); background: rgba(148,163,184,0.08); }
+        .motion-note.is-warn { border-left-color: var(--warn); background: rgba(248,113,113,0.08); }
+        .motion-note strong { color: var(--text-main); }
+
+        /* ============ UPGRADE: instrumen ukur ============ */
+        .instrument-grid { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 560px) { .instrument-grid { grid-template-columns: repeat(4, 1fr); } }
+        .instrument { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; text-align: center; }
+        .instrument .icon { font-size: 1.2rem; }
+        .instrument .lbl { font-size: 0.66rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
+        .instrument .val { font-size: 1rem; font-weight: 800; font-family: 'Courier New', monospace; color: var(--text-highlight); margin-top: 2px; }
+
+        /* ============ UPGRADE: quiz/challenge ============ */
+        .quiz-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px; }
+        .quiz-question { font-size: 0.88rem; font-weight: 600; line-height: 1.45; }
+        .quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .quiz-options { grid-template-columns: 1fr 1fr; } }
+        .quiz-option { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; padding: 9px 12px; font-size: 0.82rem; text-align: left; cursor: pointer; display: flex; gap: 8px; transition: border-color 0.15s ease, background 0.15s ease; }
+        .quiz-option:hover:not(:disabled) { border-color: var(--accent-cyan); background: rgba(56,189,248,0.07); }
+        .quiz-option .letter { font-weight: 800; color: var(--accent-cyan); flex-shrink: 0; }
+        .quiz-option:disabled { cursor: default; opacity: 0.6; }
+        .quiz-option.is-chosen { border-color: var(--accent-cyan); background: rgba(56,189,248,0.1); }
+        .quiz-option.is-correct { border-color: var(--ok); background: rgba(74,222,128,0.12); }
+        .quiz-option.is-wrong { border-color: var(--warn); background: rgba(248,113,113,0.1); }
+
+        .feedback { font-size: 0.83rem; line-height: 1.5; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--ok); background: rgba(74,222,128,0.08); display: none; }
+        .feedback.is-visible { display: block; }
+        .feedback.is-wrong { border-left-color: var(--warn); background: rgba(248,113,113,0.08); }
+
+        .challenge-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+        @media (min-width: 720px) { .challenge-grid { grid-template-columns: 1fr 1fr; } }
+        .challenge-item { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .challenge-item h4 { font-size: 0.83rem; color: var(--text-highlight); }
+        .challenge-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+        .whatif-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+        .whatif-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); color: var(--text-main); font-size: 0.78rem; font-weight: 700; padding: 10px; border-radius: 10px; cursor: pointer; text-align: left; }
+        .whatif-btn:hover { border-color: var(--accent-cyan); }
+        .whatif-result { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; min-height: 1.2em; }
+
+        /* ============ UPGRADE: data logger ============ */
+        .table-wrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 10px; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 500px; }
+        table.data-table th, table.data-table td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--card-border); font-family: 'Courier New', monospace; }
+        table.data-table th:first-child, table.data-table td:first-child { text-align: left; font-family: inherit; }
+        table.data-table th { color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; background: rgba(255,255,255,0.02); }
+        table.data-table tbody tr:hover { background: rgba(56,189,248,0.05); }
+        .data-empty { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 16px; }
+
+        /* ============ UPGRADE: grafik ============ */
+        .graph-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        @media (min-width: 720px) { .graph-grid { grid-template-columns: 1fr 1fr 1fr; } }
+        .graph-wrap { background: rgba(15,23,42,0.6); border: 1px solid var(--card-border); border-radius: 10px; padding: 8px; }
+        .graph-caption { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; text-align: center; }
+        .graph-wrap canvas { width: 100%; height: 130px; display: block; }
+
+        /* ============ UPGRADE: compare / daya / angkat / miring ============ */
+        .compare-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .compare-grid { grid-template-columns: 1fr 1fr; } }
+        .compare-col { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .compare-tag { font-size: 0.7rem; font-weight: 800; padding: 2px 10px; border-radius: 999px; align-self: flex-start; }
+        .compare-tag.a { color: var(--force-color); border: 1px solid var(--force-color); }
+        .compare-tag.b { color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .compare-input-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; gap: 6px; }
+        .compare-input-row input[type="number"] { width: 64px; background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 6px; padding: 4px 6px; text-align: right; }
+        .compare-result { margin-top: 6px; font-size: 0.85rem; font-weight: 700; font-family: 'Courier New', monospace; }
+
+        .worker-track { position: relative; height: 40px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-top: 6px; overflow: hidden; }
+        .worker-icon { position: absolute; top: 50%; transform: translate(0,-50%); font-size: 1.3rem; left: 4px; transition: left 0.05s linear; }
+        .worker-finish { position: absolute; right: 6px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -283,13 +259,16 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
             </svg>
-            <h1>Laboratorium Maya: Usaha dan Daya</h1>
+            <div>
+                <h1>Laboratorium Maya: Usaha dan Daya</h1>
+                <p>Eksperimen mekanika interaktif berbasis data</p>
+            </div>
         </div>
         <span class="header-badge">SMA Kelas X</span>
     </header>
 
     <div class="main-container">
-        <div class="card">
+        <div class="card control-card">
             <div class="card-header">
                 <span class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -300,103 +279,278 @@
             <div class="control-group force-theme">
                 <div class="control-label-row">
                     <label class="control-label" for="forceSlider">Besar Gaya (F)</label>
-                    <div class="num-input-wrapper">
-                        <input type="number" id="forceNum" min="0" max="100" step="5" value="50">
-                        <span class="unit">N</span>
-                    </div>
+                    <div class="num-input-wrapper"><input type="number" id="forceNum" min="0" max="100" step="5" value="50"><span class="unit">N</span></div>
                 </div>
-                <div class="slider-container">
-                    <input type="range" id="forceSlider" min="0" max="100" step="5" value="50">
-                </div>
+                <div class="slider-container"><input type="range" id="forceSlider" min="0" max="100" step="5" value="50"></div>
             </div>
 
             <div class="control-group">
                 <div class="control-label-row">
                     <label class="control-label" for="angleSlider">Sudut Gaya (θ)</label>
-                    <div class="num-input-wrapper">
-                        <input type="number" id="angleNum" min="0" max="180" step="5" value="0">
-                        <span class="unit">°</span>
-                    </div>
+                    <div class="num-input-wrapper"><input type="number" id="angleNum" min="0" max="180" step="5" value="0"><span class="unit">°</span></div>
                 </div>
-                <div class="slider-container">
-                    <input type="range" id="angleSlider" min="0" max="180" step="5" value="0">
-                </div>
+                <div class="slider-container"><input type="range" id="angleSlider" min="0" max="180" step="5" value="0"></div>
             </div>
 
             <div class="control-group dist-theme">
                 <div class="control-label-row">
                     <label class="control-label" for="distSlider">Jarak Perpindahan (s)</label>
-                    <div class="num-input-wrapper">
-                        <input type="number" id="distNum" min="0" max="20" step="1" value="10">
-                        <span class="unit">m</span>
-                    </div>
+                    <div class="num-input-wrapper"><input type="number" id="distNum" min="0" max="20" step="1" value="10"><span class="unit">m</span></div>
                 </div>
-                <div class="slider-container">
-                    <input type="range" id="distSlider" min="0" max="20" step="1" value="10">
-                </div>
+                <div class="slider-container"><input type="range" id="distSlider" min="0" max="20" step="1" value="10"></div>
             </div>
 
             <div class="control-group">
                 <div class="control-label-row">
                     <label class="control-label" for="timeSlider">Waktu Tempuh (t)</label>
-                    <div class="num-input-wrapper">
-                        <input type="number" id="timeNum" min="0.5" max="20" step="0.5" value="5">
-                        <span class="unit">s</span>
-                    </div>
+                    <div class="num-input-wrapper"><input type="number" id="timeNum" min="0.5" max="20" step="0.5" value="5"><span class="unit">s</span></div>
                 </div>
-                <div class="slider-container">
-                    <input type="range" id="timeSlider" min="0.5" max="20" step="0.5" value="5">
-                </div>
+                <div class="slider-container"><input type="range" id="timeSlider" min="0.5" max="20" step="0.5" value="5"></div>
             </div>
 
-            <button class="btn-reset" id="btnReset">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-                Reset Eksperimen
-            </button>
+            <div class="toggle-row">
+                <label for="chkComponent"><input type="checkbox" id="chkComponent" style="accent-color: var(--net-color);">☑ Tampilkan komponen gaya (Fx, Fy)</label>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label-row"><span class="control-label">⏱️ Kecepatan Simulasi</span></div>
+                <div class="speed-row btn-row" id="speedRow"></div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-primary" id="btnRun">▶ Jalankan</button>
+                <button class="btn-reset" id="btnReset">🔄 Reset</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn-secondary" id="btnSave">💾 Simpan Eksperimen</button>
+                <button class="btn-secondary" id="btnLoad">📂 Pulihkan Eksperimen</button>
+            </div>
         </div>
 
         <div class="card canvas-card">
             <div class="card-header">
                 <span class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                    Visualisasi Interaktif
+                    Laboratorium Virtual
                 </span>
                 <span id="statusBadge" class="interaction-badge badge-positif">Usaha Positif</span>
             </div>
 
             <div class="canvas-wrapper">
                 <canvas id="simCanvas"></canvas>
-                <div class="canvas-instruction">💡 Ubah sudut gaya (θ) sampai 90° -- lihat apa yang terjadi pada usahanya!</div>
+                <div class="canvas-instruction" id="canvasInstruction">💡 Peti berdiri di atas ban berjalan (kecepatan tetap) -- gaya F adalah gaya TAMBAHAN yang bekerja padanya. Ubah sudut θ, lalu tekan Jalankan</div>
+            </div>
+
+            <div class="motion-note" id="motionNote"></div>
+
+            <div class="instrument-grid">
+                <div class="instrument"><div class="icon">⏱️</div><div class="lbl">STOPWATCH</div><div class="val" id="instTime">0,00 s</div></div>
+                <div class="instrument"><div class="icon">💪</div><div class="lbl">FORCE METER</div><div class="val" id="instForce">0 N</div></div>
+                <div class="instrument"><div class="icon">📏</div><div class="lbl">DISTANCE METER</div><div class="val" id="instDist">0,00 m</div></div>
+                <div class="instrument"><div class="icon">⚡</div><div class="lbl">POWER METER</div><div class="val" id="instPower">0 W</div></div>
             </div>
 
             <div class="results-panel">
                 <div class="result-highlight">
-                    <div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">Usaha (W)</div>
-                        <div class="force-val" id="workValue">0 J</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Daya (P)</div>
-                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="powerValue">0 watt</div>
-                    </div>
+                    <div><div style="font-size: 0.8rem; color: var(--text-muted);">Usaha (W)</div><div class="force-val" id="workValue">0 J</div></div>
+                    <div style="text-align: right;"><div style="font-size: 0.75rem; color: var(--text-muted);">Daya (P)</div><div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="powerValue">0 watt</div></div>
                 </div>
-
                 <div class="sub-results">
-                    <div class="sub-result">
-                        <div class="sub-result-label">Komponen gaya searah gerak</div>
-                        <div class="sub-result-value" id="componentValue">0 N</div>
-                    </div>
+                    <div class="sub-result"><div class="sub-result-label">Fx (searah gerak)</div><div class="sub-result-value" id="componentValue">0 N</div></div>
+                    <div class="sub-result"><div class="sub-result-label">Fy (tegak lurus)</div><div class="sub-result-value" id="componentYValue">0 N</div></div>
+                    <div class="sub-result"><div class="sub-result-label">cos θ</div><div class="sub-result-value" id="cosValue">1,00</div></div>
                 </div>
-
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Rincian Perhitungan:</div>
                 <div class="formula-box" id="formulaBox"></div>
             </div>
         </div>
     </div>
 
+    <!-- ============ MODE EKSPERIMEN 3: theta vs W (grafik utama) ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🧪 Eksperimen 3 -- Pengaruh Sudut terhadap Usaha</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">F dan s dikunci ke nilai saat ini. Coba geser sudut dan amati bagaimana grafik θ vs W berubah mengikuti <span class="math-var">W = F·s·cos θ</span>.</p>
+        <div class="graph-wrap"><p class="graph-caption">θ vs W (kurva kosinus -- F &amp; s dikunci di nilai saat ini)</p><canvas id="graphThetaCurve"></canvas></div>
+    </div>
+
+    <!-- ============ MODE DAYA: sama W beda t ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">⏱️ Mode Daya -- Usaha Sama, Waktu Beda</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Usaha yang sama bisa dilakukan dengan daya berbeda, tergantung berapa lama waktunya.</p>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Skenario A</span>
+                <div class="compare-input-row"><span>t (s)</span><input type="number" id="pwrAt" value="10" min="0.5" max="60"></div>
+                <div class="compare-result" id="pwrAResult" style="color:var(--force-color);">P = -- W</div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Skenario B</span>
+                <div class="compare-input-row"><span>t (s)</span><input type="number" id="pwrBt" value="5" min="0.5" max="60"></div>
+                <div class="compare-result" id="pwrBResult" style="color:var(--accent-cyan);">P = -- W</div>
+            </div>
+        </div>
+        <div class="btn-row"><button class="btn-secondary" id="btnPowerCompare">Bandingkan (pakai W saat ini)</button></div>
+        <div class="feedback" id="pwrFeedback"></div>
+    </div>
+
+    <!-- ============ SIAPA LEBIH KUAT ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🏃 Siapa Lebih Kuat? -- Usaha vs Daya</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Dua pekerja memindahkan peti yang sama sejauh 10 m. Pekerja A butuh 20 detik, Pekerja B cuma 10 detik. Usahanya SAMA, tapi siapa dayanya lebih besar?</p>
+        <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);"><span>👷 Pekerja A (20 s)</span><span id="workerATime">0,0 s</span></div>
+            <div class="worker-track"><span class="worker-icon" id="workerAIcon">🧑‍🔧</span><span class="worker-finish"></span></div>
+        </div>
+        <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);"><span>👷 Pekerja B (10 s)</span><span id="workerBTime">0,0 s</span></div>
+            <div class="worker-track"><span class="worker-icon" id="workerBIcon">🧑‍🔧</span><span class="worker-finish"></span></div>
+        </div>
+        <div class="btn-row"><button class="btn-primary" id="btnWorkerRace">▶ Mulai Perlombaan</button></div>
+        <div class="feedback" id="workerFeedback"></div>
+    </div>
+
+    <!-- ============ ANGKAT BEBAN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🏋️ Mode Angkat Beban (W = mgh)</span></div>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Parameter</span>
+                <div class="compare-input-row"><span>Massa (kg)</span><input type="number" id="liftMass" value="5" min="1" max="50"></div>
+                <div class="compare-input-row"><span>Tinggi (m)</span><input type="number" id="liftHeight" value="2" min="0.5" max="10" step="0.5"></div>
+                <div class="compare-input-row"><span>Waktu (s)</span><input type="number" id="liftTime" value="4" min="0.5" max="20" step="0.5"></div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Hasil</span>
+                <div class="compare-result" id="liftWResult">W = -- J</div>
+                <div class="compare-result" id="liftPResult" style="color:var(--accent-cyan);">P = -- W</div>
+                <div style="font-size:0.72rem;color:var(--text-muted);">W = m × g × h (g = 9,8 m/s²)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ BIDANG MIRING ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🛝 Bidang Miring -- Angkat Langsung vs Mendorong</span></div>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Bandingkan mengangkat beban langsung vs mendorongnya lewat bidang miring ke ketinggian yang SAMA.</p>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Parameter</span>
+                <div class="compare-input-row"><span>Massa (kg)</span><input type="number" id="incMass" value="10" min="1" max="50"></div>
+                <div class="compare-input-row"><span>Tinggi (m)</span><input type="number" id="incHeight" value="2" min="0.5" max="10" step="0.5"></div>
+                <div class="compare-input-row"><span>Panjang Bidang (m)</span><input type="number" id="incLength" value="4" min="0.5" max="20" step="0.5"></div>
+                <div class="toggle-row"><label for="chkIncFriction"><input type="checkbox" id="chkIncFriction">Aktifkan gesekan (f = 5% × mg)</label></div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Hasil</span>
+                <div class="compare-result" id="incDirectResult" style="color:var(--force-color);">Langsung: W = -- J, F = -- N</div>
+                <div class="compare-result" id="incRampResult" style="color:var(--accent-cyan);">Bidang Miring: W = -- J, F = -- N</div>
+                <div class="feedback is-visible" id="incNote" style="margin-top:6px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ COBA PIKIRKAN ============ -->
+    <div class="card">
+        <span class="quiz-label">🤔 Coba Pikirkan</span>
+        <p class="quiz-question">Dua siswa melakukan usaha yang SAMA. Siswa A menyelesaikannya dalam 10 detik, siswa B dalam 5 detik. Siapa yang memiliki daya lebih besar?</p>
+        <div class="quiz-options" id="thinkOptions"></div>
+        <div class="feedback" id="thinkFeedback"></div>
+    </div>
+
+    <!-- ============ TANTANGAN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🎯 Tantangan</span></div>
+        <div class="challenge-grid">
+            <div class="challenge-item">
+                <h4>Tantangan 1</h4>
+                <p>Hasilkan usaha tepat <strong>500 J</strong> (toleransi ±10 J) dengan mengatur F, s, dan θ.</p>
+                <button class="btn-secondary" data-challenge="1">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback1"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 2</h4>
+                <p>Hasilkan usaha <strong>500 J</strong> dengan daya <strong>100 W</strong> -- atur waktu yang sesuai.</p>
+                <button class="btn-secondary" data-challenge="2">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback2"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 3</h4>
+                <p>Buat usaha jadi <strong>0 J</strong> meskipun gaya (F) tetap ada dan lebih dari 0.</p>
+                <button class="btn-secondary" data-challenge="3">Cek Sekarang</button>
+                <div class="feedback" id="chFeedback3"></div>
+            </div>
+            <div class="challenge-item">
+                <h4>Tantangan 4</h4>
+                <p>Ambil data (📌) untuk dua kombinasi F/s/θ berbeda yang menghasilkan <strong>usaha sama</strong>.</p>
+                <button class="btn-secondary" data-challenge="4">Cek Data Log</button>
+                <div class="feedback" id="chFeedback4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ APA YANG TERJADI JIKA ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">🔮 Apa yang Terjadi Jika...?</span></div>
+        <div class="whatif-grid" id="whatifGrid"></div>
+    </div>
+
+    <!-- ============ DATA LOGGER ============ -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">📌 Data Logger</span>
+            <div class="btn-row" style="margin:0;">
+                <button class="btn-secondary" id="btnLog">📌 Ambil Data</button>
+                <button class="btn-secondary" id="btnClearLast">Hapus Terakhir</button>
+                <button class="btn-secondary" id="btnClearAll">Hapus Semua</button>
+                <button class="btn-secondary" id="btnExportCsv">⬇️ Download CSV</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead><tr><th>No</th><th>F (N)</th><th>s (m)</th><th>θ (°)</th><th>W (J)</th><th>P (W)</th></tr></thead>
+                <tbody id="dataTableBody"></tbody>
+            </table>
+            <p class="data-empty" id="dataEmptyNote">Belum ada data. Atur parameter lalu tekan "📌 Ambil Data".</p>
+        </div>
+    </div>
+
+    <!-- ============ GRAFIK EKSPERIMEN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">📊 Grafik Eksperimen (dari Data Log)</span></div>
+        <div class="graph-grid">
+            <div class="graph-wrap"><p class="graph-caption">F vs W</p><canvas id="graphFW"></canvas></div>
+            <div class="graph-wrap"><p class="graph-caption">s vs W</p><canvas id="graphSW"></canvas></div>
+            <div class="graph-wrap"><p class="graph-caption">θ vs W</p><canvas id="graphThetaW"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ============ BANDINGKAN 2 EKSPERIMEN ============ -->
+    <div class="card">
+        <div class="card-header"><span class="card-title">⚖️ Bandingkan Dua Eksperimen</span></div>
+        <div class="compare-grid">
+            <div class="compare-col">
+                <span class="compare-tag a">Eksperimen A</span>
+                <div class="compare-input-row"><span>F (N)</span><input type="number" id="cmpAf" value="50" min="0" max="100"></div>
+                <div class="compare-input-row"><span>s (m)</span><input type="number" id="cmpAs" value="5" min="0" max="20"></div>
+                <div class="compare-input-row"><span>θ (°)</span><input type="number" id="cmpAth" value="0" min="0" max="180"></div>
+                <div class="compare-result" id="cmpAResult" style="color:var(--force-color);">W = -- J</div>
+            </div>
+            <div class="compare-col">
+                <span class="compare-tag b">Eksperimen B</span>
+                <div class="compare-input-row"><span>F (N)</span><input type="number" id="cmpBf" value="100" min="0" max="100"></div>
+                <div class="compare-input-row"><span>s (m)</span><input type="number" id="cmpBs" value="2.5" min="0" max="20" step="0.5"></div>
+                <div class="compare-input-row"><span>θ (°)</span><input type="number" id="cmpBth" value="0" min="0" max="180"></div>
+                <div class="compare-result" id="cmpBResult" style="color:var(--accent-cyan);">W = -- J</div>
+            </div>
+        </div>
+        <div class="btn-row"><button class="btn-secondary" id="btnCompare">Bandingkan</button></div>
+        <div class="feedback" id="cmpFeedback"></div>
+    </div>
+
     <div class="theory-card">
         <div class="theory-title">📌 Ringkasan Usaha dan Daya</div>
-        <span class="math-var">W</span> = F × s × cos θ -- usaha cuma dihitung dari komponen gaya yang SEARAH perpindahan. Kalau θ = 90°, usahanya nol meski ada gaya dan ada perpindahan.
+        🛠️ <strong>Skenario:</strong> peti berada di atas <strong>ban berjalan berkecepatan tetap</strong> -- itulah yang menyebabkan peti berpindah sejauh s dalam waktu t. Gaya F yang bisa kamu atur sudutnya adalah gaya TAMBAHAN yang bekerja pada peti selagi ban berjalan bergerak (seperti menghitung usaha angin pada perahu yang sedang didayung) -- bukan penyebab gerak peti itu sendiri. Karena itu, F boleh tegak lurus atau bahkan berlawanan arah gerak tanpa menghentikan peti -- usahanya saja yang jadi nol atau negatif.<br><br>
+        <span class="math-var">W</span> = F × s × cos θ -- usaha oleh gaya F cuma dihitung dari komponen gaya yang SEARAH perpindahan. Kalau θ = 90°, usahanya nol meski ada gaya dan ada perpindahan.
         <span class="math-var">P</span> = W / t -- daya mengukur seberapa CEPAT usaha itu dilakukan, bukan seberapa besar usahanya.
     </div>
 
@@ -412,21 +566,47 @@
         const distNum = document.getElementById('distNum');
         const timeSlider = document.getElementById('timeSlider');
         const timeNum = document.getElementById('timeNum');
+        const chkComponent = document.getElementById('chkComponent');
         const btnReset = document.getElementById('btnReset');
+        const btnRun = document.getElementById('btnRun');
+        const canvasInstruction = document.getElementById('canvasInstruction');
 
         const workValueEl = document.getElementById('workValue');
         const powerValueEl = document.getElementById('powerValue');
         const componentValueEl = document.getElementById('componentValue');
+        const componentYValueEl = document.getElementById('componentYValue');
+        const cosValueEl = document.getElementById('cosValue');
         const formulaBoxEl = document.getElementById('formulaBox');
         const statusBadgeEl = document.getElementById('statusBadge');
 
         let force = 50, angle = 0, dist = 10, time = 5;
+        let speedMult = 1;
+        const SPEEDS = [
+            { id: 'slow', label: '🐢 0,5×', mult: 0.5 },
+            { id: 'normal', label: '1×', mult: 1 },
+            { id: 'fast', label: '2×', mult: 2 },
+            { id: 'faster', label: '4×', mult: 4 },
+        ];
+        function renderSpeedRow() {
+            const row = document.getElementById('speedRow');
+            row.innerHTML = '';
+            SPEEDS.forEach((s) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-secondary' + (s.mult === speedMult ? '' : '');
+                btn.style.opacity = s.mult === speedMult ? '1' : '0.55';
+                btn.textContent = s.label;
+                btn.addEventListener('click', () => { speedMult = s.mult; renderSpeedRow(); });
+                row.appendChild(btn);
+            });
+        }
+        renderSpeedRow();
 
         function resizeCanvas() {
             const rect = canvas.parentElement.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(dpr, dpr);
             render();
         }
@@ -448,47 +628,76 @@
             time = parseFloat(timeNum.value) || 0.5;
 
             calculateAndRender();
+            drawThetaCurve();
         }
 
         [forceSlider, forceNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
         [angleSlider, angleNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
         [distSlider, distNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
         [timeSlider, timeNum].forEach(el => el.addEventListener('input', () => syncInputs(el.id)));
+        chkComponent.addEventListener('change', render);
 
         btnReset.addEventListener('click', () => {
+            stopAnimation();
             forceSlider.value = 50; forceNum.value = 50;
             angleSlider.value = 0; angleNum.value = 0;
             distSlider.value = 10; distNum.value = 10;
             timeSlider.value = 5; timeNum.value = 5;
+            chkComponent.checked = false;
+            blockProgress = 0;
+            canvasInstruction.textContent = '💡 Peti berdiri di atas ban berjalan (kecepatan tetap) -- gaya F adalah gaya TAMBAHAN yang bekerja padanya. Ubah sudut θ, lalu tekan Jalankan';
             syncInputs();
         });
 
+        // ============ FISIKA INTI (dipertahankan dari versi lama) ============
         function updateResults() {
             const rad = (angle * Math.PI) / 180;
             const component = force * Math.cos(rad);
+            const componentY = force * Math.sin(rad);
             const work = component * dist;
             const power = time > 0 ? work / time : 0;
 
             workValueEl.textContent = work.toFixed(1) + ' J';
             powerValueEl.textContent = power.toFixed(1) + ' watt';
             componentValueEl.textContent = component.toFixed(1) + ' N';
+            componentYValueEl.textContent = componentY.toFixed(1) + ' N';
+            cosValueEl.textContent = Math.cos(rad).toFixed(2);
+            document.getElementById('instForce').textContent = force + ' N';
+            document.getElementById('instDist').textContent = dist.toFixed(2) + ' m';
+            document.getElementById('instPower').textContent = power.toFixed(1) + ' W';
 
-            if (Math.abs(work) < 0.5) {
-                statusBadgeEl.textContent = 'Usaha Nol';
-                statusBadgeEl.className = 'interaction-badge badge-nol';
-            } else if (work > 0) {
-                statusBadgeEl.textContent = 'Usaha Positif';
-                statusBadgeEl.className = 'interaction-badge badge-positif';
-            } else {
-                statusBadgeEl.textContent = 'Usaha Negatif';
-                statusBadgeEl.className = 'interaction-badge badge-negatif';
-            }
+            if (Math.abs(work) < 0.5) { statusBadgeEl.textContent = 'Usaha Nol'; statusBadgeEl.className = 'interaction-badge badge-nol'; }
+            else if (work > 0) { statusBadgeEl.textContent = 'Usaha Positif'; statusBadgeEl.className = 'interaction-badge badge-positif'; }
+            else { statusBadgeEl.textContent = 'Usaha Negatif'; statusBadgeEl.className = 'interaction-badge badge-negatif'; }
 
             let formula = `<span class="math-var">W</span> = F × s × cos θ = ${force} × ${dist} × cos(${angle}°) = ${force} × ${dist} × ${Math.cos(rad).toFixed(2)} = <span class="math-num">${work.toFixed(1)} J</span>`;
             formula += `<br><span class="math-var">P</span> = W / t = ${work.toFixed(1)} / ${time} = <span class="math-num">${power.toFixed(1)} watt</span>`;
+            if (Math.abs(work) < 0.5) formula += `<br><em>θ = ${angle}° membuat gaya tegak lurus (atau nyaris tegak lurus) perpindahan -- komponen gaya searah gerak ≈ 0, jadi usaha ≈ 0 walau F dan s tidak nol.</em>`;
+            else if (work < 0) formula += `<br><em>θ &gt; 90° membuat komponen gaya justru BERLAWANAN arah perpindahan -- usaha jadi negatif (gaya "menahan" gerak, bukan membantunya).</em>`;
             formulaBoxEl.innerHTML = formula;
 
-            return { work, power, component, rad };
+            updateMotionNote(component, angle);
+            return { work, power, component, componentY, rad };
+        }
+
+        // Peti di scene ini SELALU digambar berpindah ke kanan sejauh s --
+        // itu KONDISI EKSPERIMEN yang sudah ditentukan (seolah ada agen/gaya
+        // lain yang membuat perpindahan itu terjadi), BUKAN akibat gaya F
+        // yang sedang diatur. Catatan ini menjelaskan hubungan sebenarnya
+        // antara arah gaya F dan arah gerak, supaya tidak menimbulkan kesan
+        // keliru "peti bergerak ke kanan karena didorong F" di semua sudut.
+        function updateMotionNote(component, angleDeg) {
+            const note = document.getElementById('motionNote');
+            note.classList.remove('is-zero', 'is-warn');
+            if (Math.abs(component) < 0.5) {
+                note.classList.add('is-zero');
+                note.innerHTML = `⚠️ Pada θ = ${angleDeg}°, gaya F <strong>tegak lurus</strong> arah gerak (Fx ≈ 0 N) -- gaya ini TIDAK mendorong maupun menahan peti. Peti tetap berpindah sejauh <strong>s</strong> karena dibawa <strong>ban berjalan</strong> yang bergerak dengan kecepatan tetap, bukan karena gaya F. Kita di sini menghitung usaha yang dilakukan KHUSUS oleh gaya F ini -- dan hasilnya nol.`;
+            } else if (component < 0) {
+                note.classList.add('is-warn');
+                note.innerHTML = `⚠️ Pada θ = ${angleDeg}°, komponen gaya searah gerak (Fx = ${component.toFixed(1)} N) <strong>NEGATIF</strong> -- gaya F ini sebenarnya melawan arah gerak, bukan mendorong ke kanan. Peti tetap berpindah sejauh <strong>s</strong> karena dibawa <strong>ban berjalan</strong> yang bergerak dengan kecepatan tetap (bukan hasil dari F); usaha oleh gaya F ini sendiri jadi NEGATIF -- artinya gaya F "menahan" sedikit gerak peti di atas ban.`;
+            } else {
+                note.innerHTML = `✅ Pada θ = ${angleDeg}°, komponen gaya searah gerak (Fx = ${component.toFixed(1)} N) POSITIF -- gaya F ini ikut membantu mendorong peti searah gerak ban berjalan.`;
+            }
         }
 
         function drawArrow(fromX, fromY, toX, toY, color, lineWidth, label) {
@@ -498,27 +707,19 @@
             const angleRad = Math.atan2(dy, dx);
             const headLen = 8;
             ctx.save();
-            ctx.strokeStyle = color;
-            ctx.fillStyle = color;
-            ctx.lineWidth = lineWidth;
-            ctx.beginPath();
-            ctx.moveTo(fromX, fromY);
-            ctx.lineTo(toX, toY);
-            ctx.stroke();
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lineWidth;
+            ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toY); ctx.stroke();
             ctx.beginPath();
             ctx.moveTo(toX, toY);
             ctx.lineTo(toX - headLen * Math.cos(angleRad - Math.PI / 6), toY - headLen * Math.sin(angleRad - Math.PI / 6));
             ctx.lineTo(toX - headLen * Math.cos(angleRad + Math.PI / 6), toY - headLen * Math.sin(angleRad + Math.PI / 6));
-            ctx.closePath();
-            ctx.fill();
-            if (label) {
-                ctx.font = 'bold 12px system-ui';
-                ctx.textAlign = 'center';
-                ctx.fillText(label, (fromX + toX) / 2, Math.min(fromY, toY) - 10);
-            }
+            ctx.closePath(); ctx.fill();
+            if (label) { ctx.font = 'bold 12px system-ui'; ctx.textAlign = 'center'; ctx.fillText(label, (fromX + toX) / 2, Math.min(fromY, toY) - 10); }
             ctx.restore();
         }
 
+        let blockProgress = 0; // 0..1 sepanjang lintasan perpindahan
+        let beltPhase = 0; // posisi chevron ban berjalan (px), berjalan terus selama animasi aktif
         function render() {
             const width = canvas.parentElement.clientWidth;
             const height = canvas.parentElement.clientHeight;
@@ -526,82 +727,422 @@
 
             const groundY = height * 0.7;
             const blockSize = Math.max(32, Math.min(56, width / 9));
-            const blockX = width * 0.28;
+            const pathStartX = width * 0.28;
+            const pathEndX = width * 0.82;
+            const blockX = pathStartX + (pathEndX - pathStartX - blockSize) * blockProgress;
             const blockY = groundY - blockSize;
             const blockCx = blockX + blockSize / 2;
             const blockCy = blockY + blockSize / 2;
 
-            // Lintasan perpindahan (garis putus-putus)
+            // Lintasan perpindahan
             ctx.save();
             ctx.strokeStyle = 'rgba(167, 139, 250, 0.5)';
-            ctx.setLineDash([5, 5]);
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(blockX + blockSize, groundY + 14);
-            ctx.lineTo(width * 0.85, groundY + 14);
-            ctx.stroke();
+            ctx.setLineDash([5, 5]); ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(pathStartX + blockSize / 2, groundY + 14); ctx.lineTo(pathEndX, groundY + 14); ctx.stroke();
             ctx.setLineDash([]);
-            ctx.fillStyle = '#a78bfa';
-            ctx.font = '11px system-ui';
-            ctx.textAlign = 'center';
-            ctx.fillText(`s = ${dist} m`, (blockX + blockSize + width * 0.85) / 2, groundY + 30);
+            ctx.fillStyle = '#a78bfa'; ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+            ctx.fillText(`s = ${dist} m`, (pathStartX + blockSize / 2 + pathEndX) / 2, groundY + 30);
             ctx.restore();
 
-            // Ground
+            // Ban berjalan (bukan lantai diam) -- inilah yang SEBENARNYA
+            // menggerakkan peti sejauh s dalam waktu t, terlepas dari gaya F
+            // yang sedang diatur. Jadi kalaupun F tegak lurus atau berlawanan
+            // arah gerak, peti tetap logis bergerak: bukan didorong F,
+            // melainkan dibawa ban berjalan. Chevron bergerak mensimulasikan
+            // arah jalannya ban.
             ctx.save();
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(20, groundY);
-            ctx.lineTo(width - 20, groundY);
-            ctx.stroke();
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(16, groundY, width - 32, 10);
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(16, groundY, width - 32, 10);
+            const chevronSpacing = 26;
+            const chevronOffset = (beltPhase % chevronSpacing);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)'; ctx.lineWidth = 2;
+            for (let cx = 16 - chevronSpacing + chevronOffset; cx < width - 16; cx += chevronSpacing) {
+                ctx.beginPath(); ctx.moveTo(cx, groundY + 2); ctx.lineTo(cx + 8, groundY + 5); ctx.lineTo(cx, groundY + 8); ctx.stroke();
+            }
+            ctx.fillStyle = '#38bdf8'; ctx.font = '10px system-ui'; ctx.textAlign = 'left';
+            ctx.fillText('⚙️ Ban berjalan (kecepatan tetap)', 18, groundY + 24);
             ctx.restore();
 
-            // Block
+            // Bayangan
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.35)';
+            ctx.beginPath(); ctx.ellipse(blockCx, groundY + 4, blockSize * 0.55, 5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
+            // Peti
             ctx.save();
             const grad = ctx.createLinearGradient(blockX, blockY, blockX, blockY + blockSize);
-            grad.addColorStop(0, '#475569');
-            grad.addColorStop(1, '#1e293b');
-            ctx.fillStyle = grad;
-            ctx.strokeStyle = '#94a3b8';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.roundRect(blockX, blockY, blockSize, blockSize, 8);
-            ctx.fill();
-            ctx.stroke();
+            grad.addColorStop(0, '#a16207'); grad.addColorStop(1, '#422006');
+            ctx.fillStyle = grad; ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.roundRect(blockX, blockY, blockSize, blockSize, 6); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath(); ctx.moveTo(blockX + 4, blockY + 3); ctx.lineTo(blockX + blockSize - 4, blockY + 3); ctx.stroke();
+            ctx.fillStyle = '#fef3c7'; ctx.font = `bold ${Math.round(blockSize * 0.22)}px system-ui`;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('PETI', blockCx, blockCy - blockSize * 0.12);
+            ctx.font = `${Math.round(blockSize * 0.18)}px system-ui`;
+            ctx.fillText('10 kg', blockCx, blockCy + blockSize * 0.16);
             ctx.restore();
 
-            const { rad } = updateResults();
+            const { rad, componentY } = updateResults();
 
-            // Gaya F pada sudut theta (0 derajat = horizontal ke kanan, sudut diukur ke atas)
-            const arrowLen = Math.min(width * 0.22, force * 1.6);
+            // Tali gaya TAMBAHAN F (bukan penyebab gerak -- ban berjalan yang menggerakkan peti)
+            const arrowLen = Math.min(width * 0.22, Math.max(6, force * 1.6));
             const fx = blockCx + arrowLen * Math.cos(-rad);
             const fy = blockCy + arrowLen * Math.sin(-rad);
-            drawArrow(blockCx, blockCy, fx, fy, '#ef4444', 3.5, `F = ${force} N`);
-
-            // Komponen horizontal (searah gerak) -- putus-putus kuning
-            const compLen = arrowLen * Math.cos(rad);
-            if (Math.abs(compLen) > 3) {
+            if (force > 0) {
                 ctx.save();
-                ctx.strokeStyle = 'rgba(250, 204, 21, 0.7)';
-                ctx.setLineDash([3, 3]);
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(blockCx, blockCy);
-                ctx.lineTo(blockCx + compLen, blockCy);
-                ctx.stroke();
-                ctx.setLineDash([]);
+                ctx.strokeStyle = 'rgba(180,150,110,0.9)'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(blockCx, blockCy); ctx.lineTo(fx, fy); ctx.stroke();
                 ctx.restore();
             }
+            // Busur sudut theta (antara arah gaya & arah perpindahan/horizontal)
+            if (angle > 2) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(250, 204, 21, 0.8)'; ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(blockCx, blockCy, 26, -rad, 0, rad < 0);
+                ctx.stroke();
+                ctx.fillStyle = '#facc15'; ctx.font = '10px system-ui'; ctx.textAlign = 'left';
+                ctx.fillText(`θ = ${angle}°`, blockCx + 30, blockCy - 6);
+                ctx.restore();
+            }
+
+            drawArrow(blockCx, blockCy, fx, fy, '#ef4444', 3.5, `F = ${force} N`);
+
+            // Komponen Fx selalu ditampilkan tipis; Fx & Fy jelas kalau toggle aktif
+            const compLen = arrowLen * Math.cos(rad);
+            ctx.save();
+            ctx.strokeStyle = chkComponent.checked ? 'rgba(250, 204, 21, 0.9)' : 'rgba(250, 204, 21, 0.4)';
+            ctx.setLineDash([3, 3]); ctx.lineWidth = chkComponent.checked ? 2.5 : 2;
+            ctx.beginPath(); ctx.moveTo(blockCx, blockCy); ctx.lineTo(blockCx + compLen, blockCy); ctx.stroke();
+            ctx.setLineDash([]);
+            if (chkComponent.checked) {
+                ctx.fillStyle = '#facc15'; ctx.font = '10px system-ui'; ctx.textAlign = 'center';
+                ctx.fillText(`Fx=${(force * Math.cos(rad)).toFixed(0)}N`, blockCx + compLen / 2, blockCy + 14);
+                if (Math.abs(componentY) > 1) {
+                    ctx.strokeStyle = 'rgba(56,189,248,0.7)'; ctx.setLineDash([3, 3]);
+                    ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, blockCy); ctx.stroke(); ctx.setLineDash([]);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.save(); ctx.translate(fx + 12, (fy + blockCy) / 2); ctx.fillText(`Fy=${componentY.toFixed(0)}N`, 0, 0); ctx.restore();
+                }
+            }
+            ctx.restore();
         }
 
-        function calculateAndRender() {
-            render();
+        function calculateAndRender() { render(); }
+
+        // ============ ANIMASI GERAK ============
+        let animRunning = false, rafId = null;
+        function stopAnimation() { animRunning = false; if (rafId) cancelAnimationFrame(rafId); blockProgress = 0; render(); }
+        function startAnimation() {
+            if (animRunning) return;
+            animRunning = true;
+            blockProgress = 0;
+            let elapsed = 0, last = performance.now();
+            canvasInstruction.textContent = '▶ Simulasi berjalan...';
+            function step(now) {
+                if (!animRunning) return;
+                const dtReal = Math.min(0.05, (now - last) / 1000);
+                last = now;
+                elapsed += dtReal * speedMult;
+                beltPhase += dtReal * speedMult * 40; // ban berjalan terus, terlepas dari F
+                const t = Math.min(elapsed, time);
+                blockProgress = time > 0 ? t / time : 1;
+                document.getElementById('instTime').textContent = t.toFixed(2) + ' s';
+                document.getElementById('instDist').textContent = (dist * blockProgress).toFixed(2) + ' m';
+                render();
+                if (elapsed < time) rafId = requestAnimationFrame(step);
+                else { animRunning = false; canvasInstruction.textContent = '✅ Simulasi selesai'; document.getElementById('instDist').textContent = dist.toFixed(2) + ' m'; }
+            }
+            rafId = requestAnimationFrame(step);
         }
+        btnRun.addEventListener('click', startAnimation);
+
+        // ============ GRAFIK θ vs W (kurva kosinus, F & s dikunci) ============
+        function drawThetaCurve() {
+            const canvasEl = document.getElementById('graphThetaCurve');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvasEl.parentElement.clientWidth - 16, h = 140;
+            canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+            canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+            const c = canvasEl.getContext('2d');
+            c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+            const maxW = force * dist || 1;
+            const px = (deg) => (deg / 180) * (w - 20) + 12;
+            const py = (val) => h / 2 - (val / maxW) * (h / 2 - 12);
+            c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(10, h / 2); c.lineTo(w - 8, h / 2); c.stroke();
+            c.beginPath(); c.strokeStyle = '#facc15'; c.lineWidth = 2.2;
+            for (let deg = 0; deg <= 180; deg += 2) {
+                const val = force * dist * Math.cos((deg * Math.PI) / 180);
+                const x = px(deg), y = py(val);
+                if (deg === 0) c.moveTo(x, y); else c.lineTo(x, y);
+            }
+            c.stroke();
+            // titik posisi sudut saat ini
+            const curVal = force * dist * Math.cos((angle * Math.PI) / 180);
+            c.fillStyle = '#38bdf8';
+            c.beginPath(); c.arc(px(angle), py(curVal), 4, 0, Math.PI * 2); c.fill();
+            c.fillStyle = '#94a3b8'; c.font = '9px system-ui'; c.textAlign = 'left';
+            c.fillText('0°', 8, h - 4); c.fillText('180°', w - 24, h - 4); c.fillText('90°', w / 2 - 8, h - 4);
+        }
+
+        // ============ MODE DAYA ============
+        document.getElementById('btnPowerCompare').addEventListener('click', () => {
+            const { work } = updateResults();
+            const tA = parseFloat(document.getElementById('pwrAt').value) || 1;
+            const tB = parseFloat(document.getElementById('pwrBt').value) || 1;
+            const pA = work / tA, pB = work / tB;
+            document.getElementById('pwrAResult').textContent = `P = ${pA.toFixed(1)} W`;
+            document.getElementById('pwrBResult').textContent = `P = ${pB.toFixed(1)} W`;
+            const fb = document.getElementById('pwrFeedback');
+            fb.classList.add('is-visible');
+            fb.innerHTML = `Usaha di kedua skenario SAMA (${work.toFixed(1)} J), tapi daya BEDA -- ${pA > pB ? 'Skenario A' : 'Skenario B'} punya daya lebih besar karena waktunya lebih singkat.`;
+        });
+
+        // ============ SIAPA LEBIH KUAT ============
+        document.getElementById('btnWorkerRace').addEventListener('click', () => {
+            const durA = 20, durB = 10, distPeti = 10, forcePeti = 50;
+            const workEach = forcePeti * distPeti;
+            const iconA = document.getElementById('workerAIcon'), iconB = document.getElementById('workerBIcon');
+            const trackW = iconA.parentElement.clientWidth - 30;
+            let start = performance.now();
+            function step(now) {
+                const t = (now - start) / 1000;
+                const tA = Math.min(t, durA), tB = Math.min(t, durB);
+                iconA.style.left = (trackW * (tA / durA)) + 'px';
+                iconB.style.left = (trackW * (tB / durB)) + 'px';
+                document.getElementById('workerATime').textContent = tA.toFixed(1) + ' s';
+                document.getElementById('workerBTime').textContent = tB.toFixed(1) + ' s';
+                if (t < durA) requestAnimationFrame(step);
+                else {
+                    const pA = workEach / durA, pB = workEach / durB;
+                    const fb = document.getElementById('workerFeedback');
+                    fb.classList.add('is-visible');
+                    fb.innerHTML = `✅ Usaha A = Usaha B = ${workEach} J (sama persis). Tapi Daya A = ${pA.toFixed(1)} W, Daya B = ${pB.toFixed(1)} W -- <strong>Pekerja B dayanya lebih besar</strong> karena menyelesaikan usaha yang sama dalam waktu lebih singkat.`;
+                }
+            }
+            requestAnimationFrame(step);
+        });
+
+        // ============ ANGKAT BEBAN ============
+        function updateLift() {
+            const m = parseFloat(document.getElementById('liftMass').value) || 1;
+            const h = parseFloat(document.getElementById('liftHeight').value) || 0;
+            const t = parseFloat(document.getElementById('liftTime').value) || 1;
+            const w = m * 9.8 * h;
+            document.getElementById('liftWResult').textContent = `W = ${w.toFixed(1)} J`;
+            document.getElementById('liftPResult').textContent = `P = ${(w / t).toFixed(1)} W`;
+        }
+        ['liftMass', 'liftHeight', 'liftTime'].forEach((id) => document.getElementById(id).addEventListener('input', updateLift));
+
+        // ============ BIDANG MIRING ============
+        function updateIncline() {
+            const m = parseFloat(document.getElementById('incMass').value) || 1;
+            const h = parseFloat(document.getElementById('incHeight').value) || 0.1;
+            const L = parseFloat(document.getElementById('incLength').value) || 0.1;
+            const frictionOn = document.getElementById('chkIncFriction').checked;
+            const g = 9.8;
+            const wDirect = m * g * h;
+            const fDirect = m * g;
+            const sinTheta = Math.min(1, h / L);
+            const fRamp = m * g * sinTheta;
+            const frictionForce = frictionOn ? 0.05 * m * g : 0;
+            const wRamp = fRamp * L + frictionForce * L;
+            document.getElementById('incDirectResult').textContent = `Langsung: W = ${wDirect.toFixed(1)} J, F = ${fDirect.toFixed(1)} N`;
+            document.getElementById('incRampResult').textContent = `Bidang Miring: W = ${wRamp.toFixed(1)} J, F = ${fRamp.toFixed(1)} N${frictionOn ? ' (+gesekan)' : ''}`;
+            const note = document.getElementById('incNote');
+            if (!frictionOn) {
+                note.innerHTML = `💡 Tanpa gesekan, usahanya SAMA (${wDirect.toFixed(1)} J ≈ ${wRamp.toFixed(1)} J) -- bidang miring cuma mengurangi GAYA yang dibutuhkan (${fRamp.toFixed(1)} N vs ${fDirect.toFixed(1)} N), bukan mengurangi usaha totalnya.`;
+                note.classList.remove('is-wrong');
+            } else {
+                note.innerHTML = `⚠️ Dengan gesekan, usaha lewat bidang miring jadi LEBIH BESAR (${wRamp.toFixed(1)} J) daripada mengangkat langsung (${wDirect.toFixed(1)} J) -- ada usaha tambahan buat melawan gesekan sepanjang bidang.`;
+                note.classList.add('is-wrong');
+            }
+        }
+        ['incMass', 'incHeight', 'incLength'].forEach((id) => document.getElementById(id).addEventListener('input', updateIncline));
+        document.getElementById('chkIncFriction').addEventListener('change', updateIncline);
+
+        // ============ COBA PIKIRKAN ============
+        function renderQuizOptions(container, options, handler) {
+            container.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+                btn.addEventListener('click', () => handler(i, btn, container));
+                container.appendChild(btn);
+            });
+        }
+        let thinkAnswered = false;
+        renderQuizOptions(document.getElementById('thinkOptions'), ['Siswa A', 'Siswa B', 'Sama besar', 'Tidak dapat ditentukan'], (i, btn, c) => {
+            if (thinkAnswered) return;
+            thinkAnswered = true;
+            const correct = i === 1;
+            c.querySelectorAll('.quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+            const fb = document.getElementById('thinkFeedback');
+            fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+            fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'P = W/t -- usahanya sama, tapi siswa B melakukannya dalam waktu lebih singkat, jadi P siswa B lebih besar. Daya bukan soal "usaha besar", tapi soal "usaha cepat".';
+        });
+
+        // ============ TANTANGAN ============
+        document.querySelectorAll('[data-challenge]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.challenge;
+                const { work, power } = updateResults();
+                const fb = document.getElementById(`chFeedback${id}`);
+                fb.classList.add('is-visible');
+                let pass = false, msg = '';
+                if (id === '1') {
+                    pass = Math.abs(work - 500) <= 10;
+                    msg = pass ? `Usaha saat ini ${work.toFixed(1)} J, sangat dekat dengan target 500 J.` : `Usaha saat ini ${work.toFixed(1)} J. Ingat W = F·s·cos θ -- coba sesuaikan F, s, atau θ.`;
+                } else if (id === '2') {
+                    pass = Math.abs(work - 500) <= 15 && Math.abs(power - 100) <= 5;
+                    msg = pass ? `W = ${work.toFixed(1)} J, P = ${power.toFixed(1)} W -- keduanya sudah pas.` : `Saat ini W = ${work.toFixed(1)} J, P = ${power.toFixed(1)} W. Set F,s,θ agar W≈500J, lalu atur waktu (t) supaya P = W/t ≈ 100 W (harusnya t≈5s).`;
+                } else if (id === '3') {
+                    pass = Math.abs(work) < 0.5 && force > 0;
+                    msg = pass ? `Usaha ≈ 0 J dengan F = ${force} N &gt; 0 -- tepat! θ = 90° membuat gaya tegak lurus perpindahan.` : `Usaha saat ini ${work.toFixed(1)} J. Coba set sudut θ ke 90° (gaya tegak lurus perpindahan) sambil F tetap &gt; 0.`;
+                } else if (id === '4') {
+                    const works = experimentData.map((d) => d.W);
+                    pass = works.some((a, i) => works.some((b, j) => i !== j && Math.abs(a - b) < 2));
+                    msg = pass ? 'Ditemukan dua baris data dengan usaha hampir sama -- kombinasi F/s/θ berbeda bisa hasilkan W yang sama.' : 'Belum ditemukan dua data dengan usaha sama di log. Coba kombinasi lain (mis. F=50,s=10,θ=0° vs F=100,s=5,θ=0°), tekan 📌 Ambil Data tiap kali.';
+                }
+                fb.classList.toggle('is-wrong', !pass);
+                fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+            });
+        });
+
+        // ============ APA YANG TERJADI JIKA... ============
+        const WHATIF = [
+            { label: '💪 Gaya dilipatgandakan', run: () => { force = Math.min(100, force * 2); forceSlider.value = force; forceNum.value = force; } },
+            { label: '📏 Perpindahan dilipatgandakan', run: () => { dist = Math.min(20, dist * 2); distSlider.value = dist; distNum.value = dist; } },
+            { label: '📐 Sudut jadi 90°', run: () => { angle = 90; angleSlider.value = 90; angleNum.value = 90; } },
+            { label: '⏱️ Waktu diperkecil setengah', run: () => { time = Math.max(0.5, time / 2); timeSlider.value = time; timeNum.value = time; } },
+        ];
+        function renderWhatif() {
+            const grid = document.getElementById('whatifGrid');
+            grid.innerHTML = '';
+            WHATIF.forEach((w, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'whatif-btn';
+                btn.innerHTML = `${w.label}<div class="whatif-result" id="wi-${idx}"></div>`;
+                btn.addEventListener('click', () => {
+                    w.run();
+                    calculateAndRender();
+                    drawThetaCurve();
+                    const { work, power } = updateResults();
+                    document.getElementById(`wi-${idx}`).textContent = `→ W = ${work.toFixed(1)} J, P = ${power.toFixed(1)} W`;
+                    startAnimation();
+                });
+                grid.appendChild(btn);
+            });
+        }
+        renderWhatif();
+
+        // ============ DATA LOGGER ============
+        let experimentData = [];
+        function renderDataTable() {
+            const tbody = document.getElementById('dataTableBody');
+            const empty = document.getElementById('dataEmptyNote');
+            if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; drawExperimentGraphs(); return; }
+            empty.style.display = 'none';
+            tbody.innerHTML = experimentData.map((d, i) => `<tr><td>${i + 1}</td><td>${d.F}</td><td>${d.s}</td><td>${d.th}</td><td>${d.W.toFixed(1)}</td><td>${d.P.toFixed(1)}</td></tr>`).join('');
+            drawExperimentGraphs();
+        }
+        document.getElementById('btnLog').addEventListener('click', () => {
+            const { work, power } = updateResults();
+            experimentData.push({ F: force, s: dist, th: angle, W: work, P: power });
+            renderDataTable();
+        });
+        document.getElementById('btnClearLast').addEventListener('click', () => { experimentData.pop(); renderDataTable(); });
+        document.getElementById('btnClearAll').addEventListener('click', () => { experimentData = []; renderDataTable(); });
+        document.getElementById('btnExportCsv').addEventListener('click', () => {
+            if (experimentData.length === 0) return;
+            let csv = 'No,F (N),s (m),theta (deg),W (J),P (W)\n';
+            experimentData.forEach((d, i) => { csv += `${i + 1},${d.F},${d.s},${d.th},${d.W.toFixed(2)},${d.P.toFixed(2)}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'data-eksperimen-usaha-daya.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        function drawScatter(canvasEl, points, xLabel, color) {
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvasEl.parentElement.clientWidth - 16, h = 110;
+            canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+            canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+            const c = canvasEl.getContext('2d');
+            c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+            if (points.length === 0) { c.fillStyle = '#64748b'; c.font = '11px system-ui'; c.textAlign = 'center'; c.fillText('Belum ada data', w / 2, h / 2); return; }
+            const xs = points.map((p) => p.x), ys = points.map((p) => p.y);
+            const minY = Math.min(0, ...ys), maxY = Math.max(...ys, 1) * 1.15;
+            const maxX = Math.max(...xs, 1) * 1.15;
+            const px = (x) => (x / maxX) * (w - 20) + 12;
+            const py = (y) => h - 14 - ((y - minY) / (maxY - minY)) * (h - 24);
+            c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(12, py(0)); c.lineTo(w - 8, py(0)); c.moveTo(12, 6); c.lineTo(12, h - 14); c.stroke();
+            points.forEach((p) => { c.fillStyle = color; c.beginPath(); c.arc(px(p.x), py(p.y), 4, 0, Math.PI * 2); c.fill(); });
+            c.fillStyle = '#94a3b8'; c.font = '9px system-ui'; c.textAlign = 'left'; c.fillText(xLabel, w - 55, h - 4);
+        }
+        function drawExperimentGraphs() {
+            drawScatter(document.getElementById('graphFW'), experimentData.map((d) => ({ x: d.F, y: d.W })), 'F (N)', '#ef4444');
+            drawScatter(document.getElementById('graphSW'), experimentData.map((d) => ({ x: d.s, y: d.W })), 's (m)', '#a78bfa');
+            drawScatter(document.getElementById('graphThetaW'), experimentData.map((d) => ({ x: d.th, y: d.W })), 'θ (°)', '#facc15');
+        }
+
+        // ============ BANDINGKAN ============
+        document.getElementById('btnCompare').addEventListener('click', () => {
+            const fA = parseFloat(document.getElementById('cmpAf').value) || 0;
+            const sA = parseFloat(document.getElementById('cmpAs').value) || 0;
+            const thA = parseFloat(document.getElementById('cmpAth').value) || 0;
+            const fB = parseFloat(document.getElementById('cmpBf').value) || 0;
+            const sB = parseFloat(document.getElementById('cmpBs').value) || 0;
+            const thB = parseFloat(document.getElementById('cmpBth').value) || 0;
+            const wA = fA * sA * Math.cos((thA * Math.PI) / 180);
+            const wB = fB * sB * Math.cos((thB * Math.PI) / 180);
+            document.getElementById('cmpAResult').textContent = `W = ${wA.toFixed(1)} J`;
+            document.getElementById('cmpBResult').textContent = `W = ${wB.toFixed(1)} J`;
+            const fb = document.getElementById('cmpFeedback');
+            fb.classList.add('is-visible');
+            if (Math.abs(wA - wB) < 1) fb.innerHTML = `⚖️ Usaha A dan B SAMA (${wA.toFixed(1)} J) walau F dan s-nya beda -- hasil kali F×s×cosθ keduanya kebetulan sama.`;
+            else if (wA > wB) fb.innerHTML = `📊 Eksperimen A menghasilkan usaha LEBIH BESAR (${wA.toFixed(1)} J) dibanding B (${wB.toFixed(1)} J).`;
+            else fb.innerHTML = `📊 Eksperimen B menghasilkan usaha LEBIH BESAR (${wB.toFixed(1)} J) dibanding A (${wA.toFixed(1)} J).`;
+        });
+
+        // ============ LOCALSTORAGE ============
+        document.getElementById('btnSave').addEventListener('click', () => {
+            try {
+                localStorage.setItem('pancaedu-usaha-daya', JSON.stringify({ force, angle, dist, time, experimentData }));
+                alert('Eksperimen tersimpan di browser ini.');
+            } catch (e) { alert('Gagal menyimpan (mungkin penyimpanan browser penuh/diblokir).'); }
+        });
+        document.getElementById('btnLoad').addEventListener('click', () => {
+            try {
+                const raw = localStorage.getItem('pancaedu-usaha-daya');
+                if (!raw) { alert('Belum ada eksperimen tersimpan.'); return; }
+                const data = JSON.parse(raw);
+                forceSlider.value = data.force; forceNum.value = data.force;
+                angleSlider.value = data.angle; angleNum.value = data.angle;
+                distSlider.value = data.dist; distNum.value = data.dist;
+                timeSlider.value = data.time; timeNum.value = data.time;
+                experimentData = data.experimentData || [];
+                syncInputs();
+                renderDataTable();
+                alert('Eksperimen dipulihkan.');
+            } catch (e) { alert('Gagal memulihkan data.'); }
+        });
 
         window.onload = () => {
             resizeCanvas();
             syncInputs();
+            updateLift();
+            updateIncline();
+            drawExperimentGraphs();
+            drawThetaCurve();
         };
     </script>
 </body>
