@@ -10,7 +10,7 @@ simulasi:
   url: "https://pancaedu.web.id/lab-embeds/usaha-dan-daya.html"
   judul: "Usaha dan Daya: Gaya, Sudut, dan Perpindahan"
   sumber: "Lab Maya PancaEdu"
-  tinggi: 1000
+  tinggi: 2800
 kuis:
   - soal: "Dalam Fisika, usaha (kerja) dikatakan terjadi kalau..."
     pilihan: ["Seseorang mendorong tembok sekuat tenaga tapi tembok itu tidak bergeser sedikit pun", "Sebuah gaya bekerja pada benda DAN benda itu berpindah searah (atau ada komponen searah) gaya tersebut", "Seseorang duduk sambil memegang buku berat tanpa bergerak", "Cukup ada gaya yang bekerja, tidak peduli benda berpindah atau tidak"]

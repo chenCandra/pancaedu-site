@@ -10,7 +10,7 @@ simulasi:
   url: "https://pancaedu.web.id/lab-embeds/hukum-newton.html"
   judul: "Hukum Newton: Gaya dan Percepatan"
   sumber: "Lab Maya PancaEdu"
-  tinggi: 1050
+  tinggi: 2600
 kuis:
   - soal: "Hukum Newton mana yang menjelaskan kalau benda diam akan tetap diam kalau tidak ada gaya total yang bekerja?"
     pilihan: ["Hukum I Newton", "Hukum II Newton", "Hukum III Newton", "Hukum Gravitasi"]
@@ -141,3 +141,7 @@ Dua anak, yang satu jauh lebih berat dari yang lain, saling mendorong sambil ber
 
 1. Menurut Hukum III, apakah gaya yang dialami kedua anak itu sama besar?
 2. Kalau gayanya sama besar, kenapa anak yang lebih ringan biasanya terdorong lebih jauh/cepat dibanding anak yang lebih berat? (Petunjuk: hubungkan dengan Hukum II)
+
+<div class="mtr-note">
+💥 Skenario dua anak di atas papan skateboard itu sebenarnya contoh klasik <strong>kekekalan momentum</strong> -- konsep yang lahir langsung dari Hukum Newton. Coba buktikan sendiri lewat simulasi <strong><a href="/lab-maya/momentum-impuls">Virtual Collision Lab</a></strong>: tabrakkan dua kereta eksperimen, lihat momentum berpindah, dan analisis impulsnya.
+</div>

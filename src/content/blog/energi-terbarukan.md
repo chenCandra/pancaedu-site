@@ -8,9 +8,9 @@ pubDate: 2026-08-29
 tags: ["Energi", "Sumber Energi", "Energi Terbarukan", "Fisika Kelas X", "Fase E"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/renewable-energy-lab.html"
-  judul: "Renewable Energy Lab"
+  judul: "Lab Energi Terbarukan"
   sumber: "Lab Maya PancaEdu"
-  tinggi: 1700
+  tinggi: 2100
 kuis:
   - soal: "Panel surya (fotovoltaik) mengubah energi cahaya matahari langsung menjadi..."
     pilihan: ["Energi panas saja", "Energi listrik", "Energi kimia", "Energi bunyi"]

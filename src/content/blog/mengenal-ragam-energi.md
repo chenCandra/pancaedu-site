@@ -181,6 +181,10 @@ Energi yang tersimpan pada benda elastis (pegas, karet gelang) saat **diregangka
 🔗 Energi kinetik dan energi potensial (gravitasi maupun elastis) bersama-sama disebut <strong>energi mekanik</strong> -- akan sering muncul lagi waktu kita belajar materi Usaha & Energi.
 </div>
 
+<div class="mtr-note">
+🧵 Konstanta pegas (k) di atas berasal dari <strong>Hukum Hooke</strong> (F = k·Δx) -- coba sendiri lewat simulasi <strong><a href="/lab-maya/hukum-hooke">Laboratorium Maya: Hukum Hooke</a></strong>: gantungkan beban pada pegas, ukur pertambahan panjangnya, dan temukan konstanta pegasnya lewat grafik.
+</div>
+
 ## ⚡ Bentuk-bentuk Energi Lainnya
 
 <div class="mtr-cards">
