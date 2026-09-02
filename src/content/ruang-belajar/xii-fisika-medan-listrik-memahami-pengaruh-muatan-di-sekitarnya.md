@@ -13,6 +13,6 @@ materiSlug: medan-listrik
 youtubeId: https://youtu.be/MiXNbYNajPI?si=AEJYlMq_PxMSO5Zu
 latihanUrl: '-'
 tugasUrl: https://wayground.com/join?gc=35129157&source=liveDashboard
-refleksiUrl: '-'
+refleksiUrl: ''
 draft: false
 ---
