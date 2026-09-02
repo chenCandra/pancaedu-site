@@ -101,7 +101,8 @@ collections:
             name: refleksiUrlGlobal
             widget: string
             required: false
-            hint: "Satu Form yang berlaku untuk SEMUA sesi Ruang Belajar (kelas berapa pun, mapel apa pun), kecuali sesi itu punya 'Link Refleksi' sendiri yang beda (itu tetap menang)."
+            pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
+            hint: "Satu Form yang berlaku untuk SEMUA sesi Ruang Belajar (kelas berapa pun, mapel apa pun), kecuali sesi itu punya 'Link Refleksi' sendiri yang beda (itu tetap menang). Kalau belum ada, KOSONGKAN saja -- jangan diisi tanda '-'."
 
   - name: "ruang-belajar"
     label: "Ruang Belajar"
@@ -160,17 +161,20 @@ collections:
         name: latihanUrl
         widget: string
         required: false
-        hint: "Link platform apa saja -- Google Form, Wayground (Quizizz), Kahoot, LiveWorksheets, dll. Tempel link 'assign'/'join'-nya siswa di sini."
+        pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
+        hint: "Link platform apa saja -- Google Form, Wayground (Quizizz), Kahoot, LiveWorksheets, dll. Tempel link 'assign'/'join'-nya siswa di sini. Belum ada linknya? KOSONGKAN saja field ini -- jangan diisi tanda '-', itu bikin situs gagal update."
       - label: "Link Tugas (opsional)"
         name: tugasUrl
         widget: string
         required: false
-        hint: "Tempat siswa mengumpulkan tugas -- Google Form, Google Drive, atau platform lain, bebas."
+        pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
+        hint: "Tempat siswa mengumpulkan tugas -- Google Form, Google Drive, atau platform lain, bebas. Belum ada linknya? KOSONGKAN saja field ini -- jangan diisi tanda '-', itu bikin situs gagal update."
       - label: "Link Refleksi Khusus Sesi Ini (opsional)"
         name: refleksiUrl
         widget: string
         required: false
-        hint: "Kosongkan saja kalau sesi ini pakai Link Refleksi Global yang sudah diatur (lihat koleksi 'Pengaturan Ruang Belajar'). Isi di sini CUMA kalau sesi ini butuh Form refleksi yang beda dari biasanya."
+        pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
+        hint: "Kosongkan saja kalau sesi ini pakai Link Refleksi Global yang sudah diatur (lihat koleksi 'Pengaturan Ruang Belajar'). Isi di sini CUMA kalau sesi ini butuh Form refleksi yang beda dari biasanya. Jangan diisi tanda '-' kalau memang kosong."
       - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
 
   - name: "artikel"
@@ -258,6 +262,7 @@ collections:
           - label: "URL Simulasi"
             name: url
             widget: string
+            pattern: ['^https?://\S+$', 'Harus link http(s) yang valid (jangan diisi tanda "-" atau semacamnya)']
             hint: "Link embed dari PhET/GeoGebra/dsb, atau URL app JS hasil generate AI yang sudah kamu hosting sendiri."
           - { label: "Judul Simulasi", name: judul, widget: string }
           - label: "Sumber"
