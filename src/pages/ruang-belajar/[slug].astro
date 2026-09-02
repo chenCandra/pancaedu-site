@@ -190,21 +190,33 @@ const langkah = [
   // membukanya di Chrome sungguhan. Tidak ada equivalent yang reliable di
   // iOS (Apple tidak sediakan mekanisme serupa), jadi cuma diterapkan di
   // Android; browser/OS lain dibiarkan pakai href asli apa adanya.
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if (isAndroid) {
-    document.querySelectorAll<HTMLAnchorElement>('[data-force-chrome-android]').forEach((a) => {
+  //
+  // SENGAJA tidak menimpa atribut href di DOM (walau lebih sederhana) --
+  // kalau href diubah jadi `intent://...`, tekan-lama pada link buat
+  // "Salin link"/"Bagikan" bakal ikut menyalin URL intent yang aneh itu,
+  // bukan URL Google Form yang asli. Jadi href dibiarkan tetap bersih
+  // apa adanya, dan pengalihan ke intent:// cuma dilakukan saat event
+  // klik beneran terjadi (dihitung ulang setiap klik dari href asli).
+  // Kalau link ini dipaste manual di Chrome (bukan diklik dari sini),
+  // dia tetap URL https biasa -- otomatis buka tab baru di Chrome,
+  // tanpa lompat ke app lain.
+  document.querySelectorAll<HTMLAnchorElement>('[data-force-chrome-android]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      if (!/Android/i.test(navigator.userAgent)) return;
+      let url: URL;
       try {
-        const url = new URL(a.href);
-        if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
-        const scheme = url.protocol.slice(0, -1); // "https:" -> "https"
-        const rest = url.href.slice(url.protocol.length + 2); // buang "https://"
-        const fallback = encodeURIComponent(url.href);
-        a.href = `intent://${rest}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
+        url = new URL(a.href);
       } catch {
-        // href bukan URL absolut yang valid -- biarkan apa adanya.
+        return; // href bukan URL absolut yang valid -- biarkan navigasi normal.
       }
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      e.preventDefault();
+      const scheme = url.protocol.slice(0, -1); // "https:" -> "https"
+      const rest = url.href.slice(url.protocol.length + 2); // buang "https://"
+      const fallback = encodeURIComponent(url.href);
+      window.location.href = `intent://${rest}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
     });
-  }
+  });
 </script>
 
 <style>
