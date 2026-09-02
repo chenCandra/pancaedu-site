@@ -9,7 +9,7 @@ tujuanPembelajaran:
   - Peserta didik mampu menjelaskan konsep medan listrik sebagai daerah di sekitar muatan yang masih mengalami pengaruh gaya listrik.
   - Peserta didik mampu menentukan arah medan listrik yang ditimbulkan oleh muatan positif dan muatan negatif.
 materiSlug: medan-listrik
-youtubeId: MiXNbYNajPI
+youtubeId: https://www.youtube.com/watch?v=MiXNbYNajPI
 latihanUrl: '-'
 tugasUrl: https://wayground.com/join?gc=35129157&source=liveDashboard
 refleksiUrl: ''
