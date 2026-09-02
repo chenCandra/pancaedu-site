@@ -11,7 +11,7 @@ tujuanPembelajaran:
   - Peserta didik mampu menghitung kuat medan listrik yang ditimbulkan oleh sebuah muatan titik menggunakan Hukum Coulomb.
 materiSlug: medan-listrik
 youtubeId: https://youtu.be/MiXNbYNajPI?si=AEJYlMq_PxMSO5Zu
-latihanUrl: ''
+latihanUrl: '-'
 tugasUrl: https://wayground.com/join?gc=35129157&source=liveDashboard
 refleksiUrl: ''
 draft: false
