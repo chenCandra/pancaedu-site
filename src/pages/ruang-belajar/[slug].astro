@@ -87,6 +87,10 @@ const langkah = [
     cta: latihanUrl ? 'Kerjakan Latihan' : 'Kerjakan Kuis',
     href: latihanUrl || (materi?.data.kuis?.length ? `/materi/${materi.id}#kuis` : undefined),
     externalTarget: Boolean(latihanUrl),
+    // Link Google Form/Wayground dkk sering gagal login kalau dibuka dari
+    // in-app browser (WhatsApp/Instagram/dll) di Android -- lihat script
+    // #force-chrome-android di bawah.
+    forceChromeAndroid: Boolean(latihanUrl),
     keterangan: latihanUrl
       ? 'Latihan lewat link yang sudah disiapkan guru.'
       : materi?.data.kuis?.length
@@ -101,6 +105,7 @@ const langkah = [
     cta: 'Kerjakan / Kumpulkan Tugas',
     href: tugasUrl,
     externalTarget: true,
+    forceChromeAndroid: true,
     keterangan: tugasUrl ? 'Kerjakan/kumpulkan lewat link yang sudah disiapkan guru.' : 'Belum ada tugas untuk pembelajaran ini.',
     catatan: tugasUrl ? '⚠️ Presensi kehadiran hari ini didasarkan pada tugas ini terkirim atau tidak. Kalau tidak mengirim tugas, dianggap tidak hadir.' : undefined,
   },
@@ -112,6 +117,7 @@ const langkah = [
     cta: 'Isi Refleksi',
     href: refleksiUrlTampil,
     externalTarget: true,
+    forceChromeAndroid: true,
     keterangan: refleksiUrlTampil ? 'Refleksi singkat lewat Google Form.' : 'Belum ada refleksi untuk pembelajaran ini.',
   },
 ];
@@ -155,7 +161,13 @@ const langkah = [
             <p>{l.keterangan}</p>
             {l.catatan && <p class="pd-step-catatan">{l.catatan}</p>}
             {l.tersedia ? (
-              <a href={l.href} class="btn btn-primary" target={l.externalTarget ? '_blank' : undefined} rel={l.externalTarget ? 'noopener noreferrer' : undefined}>
+              <a
+                href={l.href}
+                class="btn btn-primary"
+                target={l.externalTarget ? '_blank' : undefined}
+                rel={l.externalTarget ? 'noopener noreferrer' : undefined}
+                data-force-chrome-android={l.forceChromeAndroid ? '' : undefined}
+              >
                 {l.cta} {l.externalTarget ? '↗' : '→'}
               </a>
             ) : (
@@ -167,6 +179,33 @@ const langkah = [
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  // Link Latihan/Tugas/Refleksi biasanya Google Form -- Google MEMBLOKIR
+  // login di dalam in-app browser (WhatsApp/Instagram/TikTok/dll yang
+  // dipakai siswa buat buka link ini), munculnya error "This browser or
+  // app may not be secure". Di Android, ini bisa dihindari dengan memaksa
+  // link dibuka lewat Chrome (bukan WebView bawaan app-nya) pakai skema
+  // `intent://` -- Android akan mengeluarkan link dari in-app browser dan
+  // membukanya di Chrome sungguhan. Tidak ada equivalent yang reliable di
+  // iOS (Apple tidak sediakan mekanisme serupa), jadi cuma diterapkan di
+  // Android; browser/OS lain dibiarkan pakai href asli apa adanya.
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if (isAndroid) {
+    document.querySelectorAll<HTMLAnchorElement>('[data-force-chrome-android]').forEach((a) => {
+      try {
+        const url = new URL(a.href);
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+        const scheme = url.protocol.slice(0, -1); // "https:" -> "https"
+        const rest = url.href.slice(url.protocol.length + 2); // buang "https://"
+        const fallback = encodeURIComponent(url.href);
+        a.href = `intent://${rest}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
+      } catch {
+        // href bukan URL absolut yang valid -- biarkan apa adanya.
+      }
+    });
+  }
+</script>
 
 <style>
   .pd-detail {
