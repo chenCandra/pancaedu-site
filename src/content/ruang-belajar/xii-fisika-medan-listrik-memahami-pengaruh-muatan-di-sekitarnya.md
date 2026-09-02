@@ -10,7 +10,7 @@ tujuanPembelajaran:
   - Peserta didik mampu menentukan arah medan listrik yang ditimbulkan oleh muatan positif dan muatan negatif.
 materiSlug: medan-listrik
 youtubeId: https://www.youtube.com/watch?v=MiXNbYNajPI
-latihanUrl: '-'
+latihanUrl: ''
 tugasUrl: https://wayground.com/join?gc=35129157&source=liveDashboard
 refleksiUrl: ''
 draft: false

@@ -10,7 +10,7 @@ tujuanPembelajaran:
   - Peserta didik mampu memilih alat ukur yang tepat berdasarkan besaran yang akan diukur dan tingkat ketelitian yang dibutuhkan.
 materiSlug: alat-ukur
 youtubeId: https://youtu.be/1s6UsJI6eGM?si=qhGMj1QfN0Al_3Pm
-latihanUrl: '-'
+latihanUrl: ''
 tugasUrl: https://wayground.com/join?gc=51804997&source=liveDashboard
 refleksiUrl: ''
 draft: false

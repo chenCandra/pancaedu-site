@@ -10,7 +10,11 @@ import { glob } from 'astro/loaders';
 // `simulasi` & field-field URL Ruang Belajar) -- makanya digeneralisasi
 // jadi helper di sini, dipakai di semua field url opsional biar nggak
 // kejadian lagi di field baru nanti.
-const optionalUrl = () => z.preprocess((v) => (v === '' ? undefined : v), z.string().url().optional());
+// Juga toleransi placeholder '-' (kebiasaan isi tanda strip buat "belum
+// ada") -- pernah bikin deploy gagal total karena build error, padahal
+// maksudnya field itu kosong. Diperlakukan sama seperti string kosong.
+const optionalUrl = () =>
+  z.preprocess((v) => (typeof v === 'string' && (v.trim() === '' || v.trim() === '-') ? undefined : v), z.string().url().optional());
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
