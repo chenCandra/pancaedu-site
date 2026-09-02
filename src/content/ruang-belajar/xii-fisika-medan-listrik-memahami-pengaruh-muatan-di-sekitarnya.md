@@ -8,6 +8,7 @@ durasi: 60
 tujuanPembelajaran:
   - Peserta didik mampu menjelaskan konsep medan listrik sebagai daerah di sekitar muatan yang masih mengalami pengaruh gaya listrik.
   - Peserta didik mampu menentukan arah medan listrik yang ditimbulkan oleh muatan positif dan muatan negatif.
+  - Peserta didik mampu menghitung kuat medan listrik yang ditimbulkan oleh sebuah muatan titik menggunakan Hukum Coulomb.
 materiSlug: medan-listrik
 youtubeId: https://www.youtube.com/watch?v=MiXNbYNajPI
 latihanUrl: ''
