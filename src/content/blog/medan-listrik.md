@@ -206,3 +206,7 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- arah medannya, ru
 * ⚡ Medan listrik tetap "ada" di ruang sekitar muatan, meski belum ada muatan lain yang merasakannya.
 
 Sekarang coba geser sendiri titik ujinya di simulasi berikut -- lihat langsung bagaimana medan listrik berubah arah dan kekuatannya di tiap posisi, dan coba selesaikan Tantangan HOTS di atas: cari titik di mana medan totalnya persis nol.
+
+<div class="mtr-note">
+🧲 Medan listrik yang kalian pelajari di sini punya "saudara" -- medan magnet. Ketika medan magnet di sekitar sebuah kumparan BERUBAH, muncul GGL induksi (Hukum Faraday). Coba buktikan sendiri lewat simulasi <strong><a href="/lab-maya/induksi-elektromagnetik">Faraday Electromagnetic Induction Lab</a></strong> -- tarik magnet mendekati/menjauhi kumparan dan amati galvanometer meresponsnya.
+</div>

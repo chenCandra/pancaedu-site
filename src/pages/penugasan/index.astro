@@ -1,0 +1,148 @@
+---
+// Statis (tanpa prerender=false) -- cuma daftar metadata (judul, kelas,
+// mapel, jumlah soal), bukan kunci jawaban, jadi aman di-bake ke HTML.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PenugasanCard from '../../components/PenugasanCard.astro';
+
+const semua = await getCollection('penugasan', ({ data }) => !data.draft);
+const kelasList = ['X', 'XI', 'XII'].filter((k) => semua.some((p) => p.data.kelas === k));
+
+const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
+  .sort((a, b) => a.localeCompare(b, 'id'))
+  .map((mapel) => ({ mapel, entries: semua.filter((p) => p.data.mapel === mapel) }));
+---
+
+<BaseLayout
+  title="Penugasan"
+  description="Kerjakan tugas interaktif PancaEdu langsung di web -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, sampai drag & drop. Lihat hasilnya langsung di akhir."
+>
+  <section class="container pn-hero">
+    <p class="eyebrow">📝 Penugasan</p>
+    <h1>Kerjakan Tugas Langsung di Sini</h1>
+    <p class="pn-hero-lede">Isi nama & kelasmu, jawab semua soal, lalu lihat hasilnya begitu selesai.</p>
+  </section>
+
+  {mapelGroups.length > 0 ? (
+    <section class="container pn-daftar">
+      <div class="pn-filter-row" role="group" aria-label="Filter kelas" data-pn-filters>
+        <button type="button" class="filter-btn badge" data-filter-kelas="" aria-pressed="true">Semua</button>
+        {kelasList.map((k) => (
+          <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">Kelas {k}</button>
+        ))}
+      </div>
+
+      {mapelGroups.map((group) => (
+        <div class="pn-mapel-group" data-pn-mapel-group>
+          <h3 class="pn-mapel-title">{group.mapel}</h3>
+          <div class="pn-grid">
+            {group.entries.map((entry) => <PenugasanCard entry={entry} />)}
+          </div>
+        </div>
+      ))}
+
+      <p class="pn-empty" data-pn-grid-empty hidden>Belum ada penugasan untuk kelas ini.</p>
+    </section>
+  ) : (
+    <section class="container pn-daftar">
+      <p class="pn-empty">Belum ada penugasan yang tersedia.</p>
+    </section>
+  )}
+</BaseLayout>
+
+<script>
+  const filters = document.querySelector<HTMLElement>('[data-pn-filters]');
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-pn-mapel-group]'));
+  const gridEmpty = document.querySelector<HTMLElement>('[data-pn-grid-empty]');
+
+  if (filters && groups.length > 0) {
+    let activeKelas = '';
+
+    const applyFilter = () => {
+      let anyVisible = false;
+      for (const group of groups) {
+        let groupHasVisible = false;
+        for (const card of group.querySelectorAll<HTMLElement>('[data-pn-list-card]')) {
+          const visible = !activeKelas || card.dataset.kelas === activeKelas;
+          card.hidden = !visible;
+          if (visible) groupHasVisible = true;
+        }
+        group.hidden = !groupHasVisible;
+        if (groupHasVisible) anyVisible = true;
+      }
+      if (gridEmpty) gridEmpty.hidden = anyVisible;
+    };
+
+    filters.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter-kelas]');
+      if (!btn) return;
+      activeKelas = btn.dataset.filterKelas ?? '';
+      for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      }
+      applyFilter();
+    });
+
+    applyFilter();
+  }
+</script>
+
+<style>
+  .pn-hero {
+    padding-block: 3rem 1.5rem;
+    max-width: var(--measure);
+  }
+
+  .pn-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pn-daftar {
+    padding-block: 1rem 3rem;
+  }
+
+  .pn-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    border-color: currentColor;
+  }
+
+  .pn-mapel-group {
+    margin-bottom: 2.5rem;
+  }
+
+  .pn-mapel-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .pn-mapel-title {
+    font-size: 1.0625rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .pn-empty {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+</style>

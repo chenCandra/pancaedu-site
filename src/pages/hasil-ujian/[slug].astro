@@ -18,7 +18,20 @@ const { Content } = await render(item);
 // terbaca dari "View Source" — tapi tetap bisa dibongkar orang yang cukup
 // niat buka DevTools. Ini gerbang untuk mencegah orang iseng, bukan proteksi
 // sungguhan (sudah didiskusikan & disetujui pemilik untuk kasus ini).
-const dataEncoded = Buffer.from(JSON.stringify({ mapel, siswa })).toString('base64');
+//
+// Sengaja pakai btoa (Web API), BUKAN Buffer -- semenjak adapter Cloudflare
+// dipasang (buat fitur Penugasan), halaman ini di-prerender di dalam
+// runtime Workers (workerd) yang TIDAK punya global `Buffer` Node kecuali
+// flag `nodejs_compat` dinyalakan. btoa tersedia di runtime mana pun
+// (Node, Workers, browser) tanpa perlu compat flag tambahan.
+function keBase64Utf8(teks: string): string {
+  const bytes = new TextEncoder().encode(teks);
+  let biner = '';
+  bytes.forEach((b) => (biner += String.fromCharCode(b)));
+  return btoa(biner);
+}
+
+const dataEncoded = keBase64Utf8(JSON.stringify({ mapel, siswa }));
 ---
 
 <BaseLayout

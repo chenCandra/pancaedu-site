@@ -1,0 +1,30 @@
+---
+// Menjodohkan diimplementasikan lewat <select> per baris kiri (bukan
+// drag-and-drop) -- lebih andal lintas perangkat (mouse/sentuh/keyboard)
+// buat memasangkan ke sisi kanan yang urutannya sudah diacak di
+// src/lib/penugasan/tampilan.ts. `id` pada opsi <select> memakai id
+// pasangan asli (opaque, bukan teks) -- lihat komentar cocokkan() di
+// src/lib/penugasan/grading.ts soal kenapa itu aman dikirim ke browser.
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'menjodohkan' }>;
+}
+
+const { soal } = Astro.props;
+---
+
+<div class="pn-order-list" data-pn-menjodohkan>
+  {soal.kiri.map((kiri) => (
+    <div class="pn-match-row">
+      <span class="pn-match-kiri">{kiri.teks}</span>
+      <span aria-hidden="true">→</span>
+      <select class="pn-select" data-pn-pasangan data-kiri-id={kiri.id}>
+        <option value="">-- pilih pasangan --</option>
+        {soal.kanan.map((kanan) => (
+          <option value={kanan.id}>{kanan.teks}</option>
+        ))}
+      </select>
+    </div>
+  ))}
+</div>

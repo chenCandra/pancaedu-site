@@ -1,10 +1,18 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://pancaedu.web.id',
+  // Situs ini TETAP 100% statis secara default (output: 'static', bawaan
+  // Astro) -- adapter di bawah ini HANYA menyalakan kemampuan render
+  // on-demand untuk halaman/route yang secara eksplisit
+  // `export const prerender = false` (dipakai fitur Penugasan: halaman
+  // pengerjaan soal & API grading, supaya kunci jawaban tidak pernah
+  // ter-bake ke HTML statis). Semua halaman lain tidak berubah sama sekali.
+  adapter: cloudflare(),
   // Dev server (`astro dev`) tidak otomatis resolve folder → index.html
   // seperti web server statis biasa, jadi /admin polos 404 walau
   // public/admin/index.html ada & jalan. Redirect eksplisit ini nutup

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Virtual Motion Lab</title>
+<style>
+  :root {
+    --bg-1: #e7fbf5; --bg-2: #eaf6ff; --panel: #ffffff; --panel-2: #f2fbf8;
+    --border: #d8ede6; --ink: #0d1f1a; --ink-muted: #4d6b60; --ink-faint: #7f9c91;
+    --cyan: #06b6d4; --lime: #65a30d; --orange: #f97316; --yellow: #eab308; --violet: #7c3aed;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #0a0f0d; --scene-bg-2: #12201a;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(6,90,80,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+
+  .vml-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .vml-header-title { display: flex; align-items: center; gap: 12px; }
+  .vml-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--cyan), var(--lime)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .vml-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .vml-badge { font-size: 0.72rem; font-weight: 800; color: var(--cyan); background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .vml-intro { background: var(--panel); border-left: 4px solid var(--lime); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+
+  .vml-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .vml-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .vml-card-title { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .vml-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .vml-main-grid { grid-template-columns: 340px 1fr; } }
+
+  .vml-mode-row { display: flex; gap: 8px; }
+  .vml-mode-btn { flex: 1; background: var(--panel-2); border: 2px solid var(--border); color: var(--ink-muted); font-weight: 800; font-size: 0.85rem; padding: 10px; border-radius: var(--radius-sm); }
+  .vml-mode-btn.is-active.glb { color: #fff; background: var(--lime); border-color: transparent; }
+  .vml-mode-btn.is-active.glbb { color: #fff; background: var(--orange); border-color: transparent; }
+
+  .vml-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .vml-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .vml-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--cyan); }
+
+  .vml-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .vml-chip { background: #fff; border: 1.5px solid var(--border); color: var(--ink-muted); font-size: 0.74rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+  .vml-chip.is-active { color: #fff; background: linear-gradient(90deg, var(--cyan), var(--lime)); border-color: transparent; }
+
+  .vml-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+  .vml-toggle-row label { font-size: 0.8rem; color: var(--ink-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+
+  .vml-cartb-panel { background: rgba(124,58,237,0.05); border: 1.5px solid rgba(124,58,237,0.25); border-radius: var(--radius-md); padding: 12px; margin-top: 4px; }
+  .vml-cartb-panel h4 { font-size: 0.8rem; color: var(--violet); margin-bottom: 8px; }
+
+  .vml-scene-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 0%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #0f1d17; box-shadow: inset 0 0 40px rgba(0,0,0,0.4); }
+  .vml-scene-wrap canvas { display: block; width: 100%; height: 300px; }
+  @media (max-width: 480px) { .vml-scene-wrap canvas { height: 250px; } }
+  .vml-scene-hint { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.14); backdrop-filter: blur(4px); color: #f0fdf4; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; text-align: center; max-width: 92%; }
+  .vml-countdown { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(234,179,8,0.8); background: rgba(0,0,0,0.35); }
+  .vml-countdown.is-visible { display: flex; }
+
+  .vml-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .vml-btn-primary { background: linear-gradient(90deg, var(--cyan), var(--lime)); border: none; color: #fff; font-weight: 800; font-size: 0.88rem; padding: 12px 26px; border-radius: 999px; box-shadow: 0 6px 18px rgba(6,182,212,0.3); }
+  .vml-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .vml-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .vml-btn-secondary:hover { color: var(--ink); border-color: var(--cyan); }
+
+  .vml-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .vml-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .vml-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .vml-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .vml-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .vml-formula-box { background: #0a1512; color: #ecfdf5; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .vml-formula-box .v { color: var(--yellow); font-weight: 700; }
+
+  .vml-graph-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .vml-graph-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .vml-graph-wrap { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; }
+  .vml-graph-caption { font-size: 0.7rem; color: var(--ink-faint); text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .vml-graph-wrap canvas { width: 100%; height: 150px; display: block; }
+
+  .vml-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); display: flex; align-items: center; gap: 6px; }
+  .vml-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .vml-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .vml-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .vml-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .vml-quiz-option:hover:not(:disabled) { border-color: var(--cyan); background: rgba(6,182,212,0.06); }
+  .vml-quiz-option .letter { font-weight: 900; color: var(--cyan); flex-shrink: 0; }
+  .vml-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .vml-quiz-option.is-chosen { border-color: var(--cyan); background: rgba(6,182,212,0.1); }
+  .vml-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .vml-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .vml-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .vml-feedback.is-visible { display: block; }
+  .vml-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .vml-challenge-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .vml-challenge-grid { grid-template-columns: 1fr 1fr; } }
+  .vml-challenge-item { background: var(--panel-2); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .vml-challenge-item h4 { font-size: 0.85rem; color: var(--orange); }
+  .vml-challenge-item p { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .vml-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+  table.vml-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; min-width: 480px; }
+  table.vml-table th, table.vml-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--border); font-family: 'Courier New', monospace; }
+  table.vml-table th:first-child, table.vml-table td:first-child { text-align: left; font-family: inherit; }
+  table.vml-table th { color: var(--ink-faint); font-size: 0.66rem; text-transform: uppercase; background: var(--panel-2); }
+  table.vml-table tbody tr:hover { background: rgba(6,182,212,0.05); }
+  .vml-empty-note { font-size: 0.82rem; color: var(--ink-faint); text-align: center; padding: 18px; }
+
+  .vml-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .vml-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="vml-header">
+    <div class="vml-header-title">
+      <span style="font-size:1.8rem;">🚗</span>
+      <div><h1>Virtual Motion Lab</h1><p>Praktikum GLB &amp; GLBB -- Bright Physics Motion Lab</p></div>
+    </div>
+    <span class="vml-badge">🧪 Lab Maya PancaEdu · Kelas X</span>
+  </div>
+
+  <p class="vml-intro">Selamat datang di laboratorium gerak virtual! Atur kereta di lintasan, tentukan mode GLB atau GLBB, lalu tekan <strong>MULAI EKSPERIMEN</strong>. Sensor posisi &amp; kecepatan akan membaca datanya secara otomatis, grafik terbentuk real-time -- dan kamu akan menemukan sendiri ciri khas tiap jenis gerak, bukan cuma menghafal rumusnya.</p>
+
+  <div class="vml-card">
+    <div class="vml-card-header"><span class="vml-card-title">🧪 Eksperimen 1 &amp; 2 -- Membuktikan GLB dan GLBB</span></div>
+
+    <div class="vml-main-grid">
+      <div>
+        <div class="vml-mode-row">
+          <button class="vml-mode-btn glb is-active" id="btnModeGlb">🟢 GLB</button>
+          <button class="vml-mode-btn glbb" id="btnModeGlbb">🟠 GLBB</button>
+        </div>
+
+        <div class="vml-param-row" style="margin-top:12px;">
+          <div class="vml-param-label-row"><span>📍 Posisi Awal (x₀)</span><span class="vml-param-value" id="x0Val">0 m</span></div>
+          <input type="range" id="x0Slider" min="0" max="6" step="0.5" value="0">
+        </div>
+        <div class="vml-param-row">
+          <div class="vml-param-label-row"><span id="vLabel">🏃 Kecepatan (v)</span><span class="vml-param-value" id="vVal">+2,0 m/s</span></div>
+          <input type="range" id="vSlider" min="-6" max="6" step="0.5" value="2">
+        </div>
+        <div class="vml-param-row" id="aRow" style="display:none;">
+          <div class="vml-param-label-row"><span>⚡ Percepatan (a)</span><span class="vml-param-value" id="aVal">+1,0 m/s²</span></div>
+          <input type="range" id="aSlider" min="-4" max="4" step="0.5" value="1">
+        </div>
+
+        <div class="vml-param-row">
+          <div class="vml-param-label-row"><span>🌍 Konteks</span></div>
+          <div class="vml-chip-row" id="contextChips"></div>
+        </div>
+
+        <div class="vml-toggle-row"><label for="chkTrace"><input type="checkbox" id="chkTrace" checked>☑ Tampilkan Jejak Gerak</label></div>
+        <div class="vml-toggle-row"><label for="chkVector"><input type="checkbox" id="chkVector" checked>☑ Tampilkan Vektor</label></div>
+        <div class="vml-toggle-row"><label for="chkRealLab"><input type="checkbox" id="chkRealLab">🔬 Real Lab Mode (sensor sedikit noise)</label></div>
+        <div class="vml-toggle-row"><label for="chkCompare"><input type="checkbox" id="chkCompare">🆚 Aktifkan Cart B (Bandingkan / Kejar)</label></div>
+
+        <div class="vml-cartb-panel" id="cartBPanel" style="display:none;">
+          <h4>🚙 Cart B (violet)</h4>
+          <div class="vml-param-row">
+            <div class="vml-param-label-row"><span>Posisi Awal (x₀B)</span><span class="vml-param-value" id="x0BVal">-2 m</span></div>
+            <input type="range" id="x0BSlider" min="-6" max="6" step="0.5" value="-2">
+          </div>
+          <div class="vml-param-row">
+            <div class="vml-param-label-row"><span>Kecepatan/v₀ (vB)</span><span class="vml-param-value" id="vBVal">+3,0 m/s</span></div>
+            <input type="range" id="vBSlider" min="-6" max="6" step="0.5" value="3">
+          </div>
+          <div class="vml-param-row">
+            <div class="vml-param-label-row"><span>Percepatan (aB)</span><span class="vml-param-value" id="aBVal">0,0 m/s²</span></div>
+            <input type="range" id="aBSlider" min="-4" max="4" step="0.5" value="0">
+          </div>
+        </div>
+
+        <div class="vml-param-row">
+          <div class="vml-param-label-row"><span>📡 Interval Sampling</span></div>
+          <div class="vml-chip-row" id="intervalChips"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="vml-scene-wrap">
+          <canvas id="simCanvas"></canvas>
+          <div class="vml-scene-hint" id="sceneHint">⚡ Atur parameter, lalu tekan MULAI EKSPERIMEN</div>
+          <div class="vml-countdown" id="countdownEl">3</div>
+        </div>
+        <div class="vml-controls-row" style="margin-top:12px;">
+          <button class="vml-btn-primary" id="btnRun">▶ MULAI EKSPERIMEN</button>
+          <button class="vml-btn-secondary" id="btnPause">⏸ Pause</button>
+          <button class="vml-btn-secondary" id="btnReset">↻ Reset</button>
+        </div>
+
+        <div class="vml-data-panel" style="margin-top:14px;">
+          <div class="vml-data-chip"><div class="k">⏱️ Stopwatch</div><div class="v" id="chipTime">00:00,00</div></div>
+          <div class="vml-data-chip"><div class="k">📍 Posisi (x)</div><div class="v" id="chipPos" style="color:var(--cyan);">0,00 m</div></div>
+          <div class="vml-data-chip"><div class="k">🏃 Kecepatan (v)</div><div class="v" id="chipVel" style="color:var(--lime);">0,00 m/s</div></div>
+          <div class="vml-data-chip"><div class="k">⚡ Percepatan (a)</div><div class="v" id="chipAcc" style="color:var(--orange);">0,00 m/s²</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Rumus Interaktif (substitusi otomatis):</div>
+    <div class="vml-formula-box" id="formulaBox"></div>
+    <div class="vml-feedback" id="catchNote"></div>
+  </div>
+
+  <!-- ============ ANALISIS HASIL ============ -->
+  <div class="vml-card">
+    <div class="vml-card-header"><span class="vml-card-title">🔎 Analisis Hasil</span></div>
+    <div class="vml-data-panel">
+      <div class="vml-data-chip"><div class="k">Jenis Gerak</div><div class="v" id="analysisType">GLB</div></div>
+      <div class="vml-data-chip"><div class="k">Kecepatan Awal</div><div class="v" id="analysisV0">2,00 m/s</div></div>
+      <div class="vml-data-chip"><div class="k">Percepatan</div><div class="v" id="analysisA">0,00 m/s²</div></div>
+      <div class="vml-data-chip"><div class="k">Posisi Akhir</div><div class="v" id="analysisXf">0,00 m</div></div>
+    </div>
+    <div class="vml-feedback is-visible" id="analysisNote"></div>
+  </div>
+
+  <!-- ============ GRAFIK ============ -->
+  <div class="vml-card">
+    <div class="vml-card-header"><span class="vml-card-title">📈 Grafik Gerak (tersinkron dengan animasi)</span></div>
+    <div class="vml-graph-grid">
+      <div class="vml-graph-wrap"><p class="vml-graph-caption">Posisi vs Waktu (x-t)</p><canvas id="graphXt"></canvas></div>
+      <div class="vml-graph-wrap"><p class="vml-graph-caption">Kecepatan vs Waktu (v-t)</p><canvas id="graphVt"></canvas></div>
+      <div class="vml-graph-wrap"><p class="vml-graph-caption">Percepatan vs Waktu (a-t)</p><canvas id="graphAt"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ============ EKSPERIMEN 5: TIME TRIAL ============ -->
+  <div class="vml-card">
+    <div class="vml-card-header"><span class="vml-card-title">⏱️ Eksperimen 5 -- Time Trial</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Tempuh jarak <strong id="ttTargetDist">5,0 m</strong> dalam waktu target <strong id="ttTargetTime">3,0 s</strong>. Atur parameter di atas, jalankan eksperimen, lalu cek hasilnya di sini.</p>
+    <button class="vml-btn-secondary" id="btnTimeTrial">Cek Hasil Time Trial</button>
+    <div class="vml-feedback" id="timeTrialFeedback"></div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="vml-card">
+    <span class="vml-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="vml-quiz-question">Pada GLB, mengapa jarak yang ditempuh setiap detik selalu sama?</p>
+    <div class="vml-quiz-options" id="thinkOptions1"></div>
+    <div class="vml-feedback" id="thinkFeedback1"></div>
+    <p class="vml-quiz-question" style="margin-top:8px;">Apakah benda yang bergerak dengan kecepatan besar selalu memiliki percepatan besar?</p>
+    <div class="vml-quiz-options" id="thinkOptions2"></div>
+    <div class="vml-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="vml-card">
+    <div class="vml-card-header"><span class="vml-card-title">🎯 Challenge Mode</span></div>
+    <div class="vml-challenge-grid">
+      <div class="vml-challenge-item"><h4>Challenge 1</h4><p>Buat kereta mencapai <strong>x = 5 m</strong> pada <strong>t = 2,5 s</strong>.</p><button class="vml-btn-secondary" data-challenge="1">Cek Sekarang</button><div class="vml-feedback" id="chFb1"></div></div>
+      <div class="vml-challenge-item"><h4>Challenge 2</h4><p>Buat kecepatan kereta <strong>v = 4 m/s</strong> tepat pada <strong>t = 3 s</strong> (mode GLBB).</p><button class="vml-btn-secondary" data-challenge="2">Cek Sekarang</button><div class="vml-feedback" id="chFb2"></div></div>
+      <div class="vml-challenge-item"><h4>Challenge 3</h4><p>Buat kereta berhenti tepat di <strong>x = 5 m</strong> (v akhir = 0, mode GLBB dengan a berlawanan arah v₀).</p><button class="vml-btn-secondary" data-challenge="3">Cek Sekarang</button><div class="vml-feedback" id="chFb3"></div></div>
+      <div class="vml-challenge-item"><h4>Challenge 4 -- 🎯 Catch the Cart</h4><p>Aktifkan Cart B, kejar Cart A sampai posisinya menyusul.</p><button class="vml-btn-secondary" data-challenge="4">Cek Sekarang</button><div class="vml-feedback" id="chFb4"></div></div>
+      <div class="vml-challenge-item"><h4>Challenge 5 -- Tebak Jenis Gerak</h4><p>Lihat grafik misteri di bawah, tentukan jenis geraknya.</p><div class="vml-quiz-options" id="mysteryOptions" style="margin-top:6px;"></div><div class="vml-feedback" id="chFb5"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ DATA LOGGER ============ -->
+  <div class="vml-card">
+    <div class="vml-card-header">
+      <span class="vml-card-title">📌 Data Logger (terisi otomatis saat eksperimen berjalan)</span>
+      <div class="vml-controls-row" style="margin:0;">
+        <button class="vml-btn-secondary" id="btnSnapshot">📌 Ambil Snapshot</button>
+        <button class="vml-btn-secondary" id="btnClearAll">Hapus Semua</button>
+        <button class="vml-btn-secondary" id="btnExportCsv">⬇️ Download CSV</button>
+      </div>
+    </div>
+    <div class="vml-table-wrap">
+      <table class="vml-table">
+        <thead><tr><th>No</th><th>t (s)</th><th>x (m)</th><th>v (m/s)</th><th>a (m/s²)</th></tr></thead>
+        <tbody id="dataTableBody"></tbody>
+      </table>
+      <p class="vml-empty-note" id="dataEmptyNote">Belum ada data. Jalankan eksperimen untuk mulai merekam.</p>
+    </div>
+    <div class="vml-controls-row">
+      <button class="vml-btn-secondary" id="btnSave">💾 Simpan Eksperimen</button>
+      <button class="vml-btn-secondary" id="btnLoad">📂 Pulihkan Eksperimen</button>
+    </div>
+  </div>
+
+  <div class="vml-legend" id="vmlLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // ============ STATE ============
+    let mode = 'glb'; // 'glb' | 'glbb'
+    let x0 = 0, v = 2, a = 1;
+    let compareOn = false;
+    let x0B = -2, vB = 3, aB = 0;
+    let traceOn = true, vectorOn = true, realLabMode = false;
+    let samplingInterval = 1; // detik
+    let context = 'kereta';
+    let experimentData = [];
+    let lastRunSummary = null; // { finalT, finalX, finalV, stopped }
+    let mysteryAnswer = null; // 'glb' | 'glbb', dibuat sekali per render
+
+    const CONTEXTS = {
+      kereta: { icon: '🚋', label: 'Kereta Lab', unit: 'kereta' },
+      kendaraan: { icon: '🚗', label: 'Kendaraan', unit: 'mobil' },
+      pelari: { icon: '🏃', label: 'Pelari', unit: 'pelari' },
+      lift: { icon: '🛗', label: 'Lift', unit: 'lift' },
+    };
+    const INTERVALS = [0.5, 1];
+
+    function renderContextChips() {
+      const row = $('contextChips'); row.innerHTML = '';
+      Object.entries(CONTEXTS).forEach(([key, c]) => {
+        const chip = document.createElement('button');
+        chip.className = 'vml-chip' + (key === context ? ' is-active' : '');
+        chip.textContent = `${c.icon} ${c.label}`;
+        chip.addEventListener('click', () => { context = key; renderContextChips(); renderScenePreview(); });
+        row.appendChild(chip);
+      });
+    }
+    function renderIntervalChips() {
+      const row = $('intervalChips'); row.innerHTML = '';
+      INTERVALS.forEach((iv) => {
+        const chip = document.createElement('button');
+        chip.className = 'vml-chip' + (iv === samplingInterval ? ' is-active' : '');
+        chip.textContent = iv + ' s';
+        chip.addEventListener('click', () => { samplingInterval = iv; renderIntervalChips(); });
+        row.appendChild(chip);
+      });
+    }
+    renderContextChips(); renderIntervalChips();
+
+    function renderLegend() {
+      const el = $('vmlLegend');
+      [{ icon: '🟢', label: 'GLB' }, { icon: '🟠', label: 'GLBB' }, { icon: '📡', label: 'Sensor' }, { icon: '📈', label: 'Grafik Tersinkron' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'vml-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    // ============ MODE TOGGLE ============
+    $('btnModeGlb').addEventListener('click', () => {
+      mode = 'glb';
+      $('btnModeGlb').classList.add('is-active'); $('btnModeGlbb').classList.remove('is-active');
+      $('aRow').style.display = 'none'; $('vLabel').textContent = '🏃 Kecepatan (v)';
+      updateFormulaPreview();
+    });
+    $('btnModeGlbb').addEventListener('click', () => {
+      mode = 'glbb';
+      $('btnModeGlbb').classList.add('is-active'); $('btnModeGlb').classList.remove('is-active');
+      $('aRow').style.display = ''; $('vLabel').textContent = '🏃 Kecepatan Awal (v₀)';
+      updateFormulaPreview();
+    });
+
+    $('x0Slider').addEventListener('input', (e) => { x0 = parseFloat(e.target.value); $('x0Val').textContent = x0.toFixed(1) + ' m'; updateFormulaPreview(); });
+    $('vSlider').addEventListener('input', (e) => { v = parseFloat(e.target.value); $('vVal').textContent = (v >= 0 ? '+' : '') + v.toFixed(1) + ' m/s'; updateFormulaPreview(); });
+    $('aSlider').addEventListener('input', (e) => { a = parseFloat(e.target.value); $('aVal').textContent = (a >= 0 ? '+' : '') + a.toFixed(1) + ' m/s²'; updateFormulaPreview(); });
+    $('x0BSlider').addEventListener('input', (e) => { x0B = parseFloat(e.target.value); $('x0BVal').textContent = x0B.toFixed(1) + ' m'; });
+    $('vBSlider').addEventListener('input', (e) => { vB = parseFloat(e.target.value); $('vBVal').textContent = (vB >= 0 ? '+' : '') + vB.toFixed(1) + ' m/s'; });
+    $('aBSlider').addEventListener('input', (e) => { aB = parseFloat(e.target.value); $('aBVal').textContent = (aB >= 0 ? '+' : '') + aB.toFixed(1) + ' m/s²'; });
+    $('chkTrace').addEventListener('change', (e) => { traceOn = e.target.checked; });
+    $('chkVector').addEventListener('change', (e) => { vectorOn = e.target.checked; renderScenePreview(); });
+    $('chkRealLab').addEventListener('change', (e) => { realLabMode = e.target.checked; });
+    $('chkCompare').addEventListener('change', (e) => { compareOn = e.target.checked; $('cartBPanel').style.display = compareOn ? '' : 'none'; renderScenePreview(); });
+
+    // ============ FISIKA INTI ============
+    // GLB:  x(t) = x0 + v*t
+    // GLBB: v(t) = v0 + a*t ;  x(t) = x0 + v0*t + 1/2*a*t^2
+    // Kalau a berlawanan tanda dengan v0, kereta berhenti pas v=0 (tstop) dan
+    // TIDAK dibiarkan bergerak mundur begitu saja -- posisi dikunci di situ.
+    function stopTime(v0, acc) {
+      if (acc === 0) return Infinity;
+      const t = -v0 / acc;
+      return t > 0 ? t : Infinity;
+    }
+    function stateAt(t, x0v, v0v, av, isGlb) {
+      if (isGlb) return { x: x0v + v0v * t, v: v0v, a: 0 };
+      const tStop = stopTime(v0v, av);
+      const tEff = Math.min(t, tStop);
+      const x = x0v + v0v * tEff + 0.5 * av * tEff * tEff;
+      const vNow = t >= tStop ? 0 : v0v + av * t;
+      return { x, v: vNow, a: t >= tStop ? 0 : av };
+    }
+    function cartAState(t) { return stateAt(t, x0, v, a, mode === 'glb'); }
+    function cartBState(t) { return stateAt(t, x0B, vB, aB, aB === 0); }
+
+    function runDurationEstimate() {
+      if (mode === 'glb') return 5;
+      const tStop = stopTime(v, a);
+      return isFinite(tStop) ? Math.min(tStop, 8) : 5;
+    }
+
+    function updateFormulaPreview() {
+      let formula;
+      if (mode === 'glb') {
+        formula = `<span class="v">GLB:</span> x = x₀ + v·t = ${x0} + (${v})·t`;
+        formula += `<br>Contoh pada t = 3 s: x = ${x0} + (${v})(3) = <span class="v">${(x0 + v * 3).toFixed(2)} m</span>`;
+      } else {
+        const tStop = stopTime(v, a);
+        formula = `<span class="v">GLBB:</span> v = v₀ + a·t = ${v} + (${a})·t`;
+        formula += `<br>x = x₀ + v₀t + ½at² = ${x0} + (${v})t + ½(${a})t²`;
+        formula += `<br>Contoh pada t = 3 s: v = ${v} + (${a})(3) = <span class="v">${(v + a * 3).toFixed(2)} m/s</span>, x = <span class="v">${(x0 + v * 3 + 0.5 * a * 9).toFixed(2)} m</span>`;
+        if (isFinite(tStop)) formula += `<br><em>⚠️ Dengan a dan v₀ berlawanan tanda, kereta akan BERHENTI pada t ≈ ${tStop.toFixed(2)} s (tidak bergerak mundur).</em>`;
+      }
+      $('formulaBox').innerHTML = formula;
+      drawAllGraphs(null);
+    }
+
+    // ============ SCENE (canvas) ============
+    const TRACK_MIN = -6, TRACK_MAX = 10; // rentang meter yang ditampilkan
+    function resizeCanvas() {
+      const canvas = $('simCanvas');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      renderScenePreview();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function meterToPx(m, w) { return ((m - TRACK_MIN) / (TRACK_MAX - TRACK_MIN)) * (w - 40) + 20; }
+
+    function drawTrack(ctx, w, h) {
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(6,182,212,0.05)'); grad.addColorStop(1, 'rgba(101,163,13,0.08)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+      const trackY = h * 0.68;
+      ctx.strokeStyle = 'rgba(226,232,240,0.5)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(10, trackY); ctx.lineTo(w - 10, trackY); ctx.stroke();
+      ctx.setLineDash([6, 8]); ctx.strokeStyle = 'rgba(6,182,212,0.35)';
+      ctx.beginPath(); ctx.moveTo(10, trackY + 16); ctx.lineTo(w - 10, trackY + 16); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#a7f3d0'; ctx.font = '9px system-ui'; ctx.textAlign = 'center';
+      for (let m = Math.ceil(TRACK_MIN); m <= TRACK_MAX; m++) {
+        const x = meterToPx(m, w);
+        ctx.strokeStyle = m === 0 ? 'rgba(234,179,8,0.8)' : 'rgba(226,232,240,0.25)';
+        ctx.lineWidth = m === 0 ? 2 : 1;
+        ctx.beginPath(); ctx.moveTo(x, trackY - 8); ctx.lineTo(x, trackY + 8); ctx.stroke();
+        if (m % 2 === 0) ctx.fillText(m + 'm', x, trackY + 26);
+      }
+      return trackY;
+    }
+
+    function drawCart(ctx, xm, y, w, color, label, velocity) {
+      const px = meterToPx(xm, w);
+      const bw = 46, bh = 26;
+      ctx.save(); ctx.translate(px, y);
+      const grad = ctx.createLinearGradient(-bw / 2, -bh / 2, -bw / 2, bh / 2);
+      grad.addColorStop(0, color); grad.addColorStop(1, shadeColor(color, -35));
+      ctx.fillStyle = grad; ctx.strokeStyle = shadeColor(color, -50); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.beginPath(); ctx.roundRect(-bw / 5, -bh / 2 - 9, bw / 2.5, 10, 3); ctx.fill();
+      ctx.fillStyle = '#083344';
+      [-bw / 3, bw / 3].forEach((wx) => { ctx.beginPath(); ctx.arc(wx, bh / 2, 6, 0, Math.PI * 2); ctx.fill(); });
+      ctx.fillStyle = '#0d1f1a'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText(label, 0, -bh / 2 - 14);
+      if (vectorOn && Math.abs(velocity) > 0.15) {
+        const len = Math.max(10, Math.min(50, Math.abs(velocity) * 8));
+        const dir = Math.sign(velocity);
+        ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(0, -bh / 2 - 22); ctx.lineTo(dir * len, -bh / 2 - 22); ctx.stroke();
+        const hx = dir * len, hy = -bh / 2 - 22;
+        ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx - dir * 6, hy - 4); ctx.lineTo(hx - dir * 6, hy + 4); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+    function shadeColor(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      let r = (num >> 16) + percent, g = ((num >> 8) & 0xff) + percent, b = (num & 0xff) + percent;
+      r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b));
+      return `rgb(${r},${g},${b})`;
+    }
+
+    let traceMarksA = [], traceMarksB = [];
+    function renderScenePreview(tCurrent) {
+      const canvas = $('simCanvas'), ctx = canvas.getContext('2d');
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const trackY = drawTrack(ctx, w, h);
+      const t = tCurrent ?? 0;
+      const sA = cartAState(t);
+      // trace marks
+      if (traceOn) {
+        ctx.fillStyle = 'rgba(6,182,212,0.55)';
+        traceMarksA.forEach((m) => { const x = meterToPx(m.x, w); ctx.beginPath(); ctx.arc(x, trackY - 20, 3, 0, Math.PI * 2); ctx.fill(); });
+        if (compareOn) { ctx.fillStyle = 'rgba(124,58,237,0.5)'; traceMarksB.forEach((m) => { const x = meterToPx(m.x, w); ctx.beginPath(); ctx.arc(x, trackY - 20 + 34, 3, 0, Math.PI * 2); ctx.fill(); }); }
+      }
+      drawCart(ctx, sA.x, trackY - 20, w, '#06b6d4', CONTEXTS[context].icon + ' A', sA.v);
+      if (compareOn) { const sB = cartBState(t); drawCart(ctx, sB.x, trackY - 20 + 34, w, '#7c3aed', '🚙 B', sB.v); }
+    }
+
+    // ============ COUNTDOWN + ANIMASI ============
+    let animId = null, isPaused = false, elapsedT = 0, runStart = 0, nextSampleT = 0;
+    function startExperiment() {
+      $('btnRun').disabled = true;
+      const countdownEl = $('countdownEl');
+      countdownEl.classList.add('is-visible');
+      let n = 3;
+      countdownEl.textContent = n;
+      $('sceneHint').textContent = '🔴 READY...';
+      const countdownTimer = setInterval(() => {
+        n--;
+        if (n > 0) { countdownEl.textContent = n; }
+        else if (n === 0) { countdownEl.textContent = 'GO!'; }
+        else {
+          clearInterval(countdownTimer);
+          countdownEl.classList.remove('is-visible');
+          beginRun();
+        }
+      }, 500);
+    }
+    function beginRun() {
+      elapsedT = 0; nextSampleT = 0; isPaused = false;
+      traceMarksA = []; traceMarksB = [];
+      experimentData = [];
+      renderDataTable();
+      runStart = performance.now();
+      $('sceneHint').textContent = '🚗 Eksperimen berjalan...';
+      $('btnRun').disabled = true;
+      const duration = runDurationEstimate();
+      function step(now) {
+        if (isPaused) { animId = requestAnimationFrame(step); runStart = now - elapsedT * 1000; return; }
+        elapsedT = (now - runStart) / 1000;
+        const sA = cartAState(elapsedT);
+        const sB = compareOn ? cartBState(elapsedT) : null;
+
+        const noise = () => realLabMode ? (Math.random() - 0.5) * 0.04 : 0;
+        $('chipTime').textContent = fmtStopwatch(elapsedT);
+        $('chipPos').textContent = (sA.x + noise()).toFixed(2) + ' m';
+        $('chipVel').textContent = (sA.v + noise()).toFixed(2) + ' m/s';
+        $('chipAcc').textContent = sA.a.toFixed(2) + ' m/s²';
+
+        if (elapsedT >= nextSampleT) {
+          experimentData.push({ t: elapsedT, x: sA.x, v: sA.v, a: sA.a });
+          renderDataTable();
+          nextSampleT += samplingInterval;
+        }
+        // Tambah titik jejak tiap ~0,5s (dicek lewat selisih waktu, bukan
+        // dihitung tiap frame, supaya tidak dobel/rapat).
+        if (traceOn && (!traceMarksA.length || elapsedT - traceMarksA[traceMarksA.length - 1].t >= 0.5)) {
+          traceMarksA.push({ t: elapsedT, x: sA.x });
+          if (sB) traceMarksB.push({ t: elapsedT, x: sB.x });
+        }
+
+        renderScenePreview(elapsedT);
+        drawAllGraphs(elapsedT);
+
+        if (sB && sB.x >= sA.x - 0.05 && sB.x <= sA.x + 0.6 && sB.x >= x0B) {
+          const note = $('catchNote');
+          note.classList.add('is-visible');
+          note.innerHTML = `🎉 <strong>TARGET REACHED!</strong> Cart B menyusul Cart A pada t = ${elapsedT.toFixed(2)} s (x ≈ ${sA.x.toFixed(2)} m).`;
+          lastRunSummary = { finalT: elapsedT, finalX: sA.x, finalV: sA.v, caught: true };
+          animId = null; $('btnRun').disabled = false; $('sceneHint').textContent = '✅ Cart B berhasil menyusul!';
+          finalizeAnalysis(elapsedT, sA);
+          return;
+        }
+
+        if (elapsedT < duration) { animId = requestAnimationFrame(step); }
+        else {
+          animId = null; $('btnRun').disabled = false;
+          $('sceneHint').textContent = '✅ Eksperimen selesai.';
+          lastRunSummary = { finalT: elapsedT, finalX: sA.x, finalV: sA.v, caught: false };
+          finalizeAnalysis(elapsedT, sA);
+        }
+      }
+      animId = requestAnimationFrame(step);
+    }
+    function fmtStopwatch(t) {
+      const mm = String(Math.floor(t / 60)).padStart(2, '0');
+      const ss = (t % 60).toFixed(2).padStart(5, '0');
+      return `${mm}:${ss}`;
+    }
+    $('btnRun').addEventListener('click', startExperiment);
+    $('btnPause').addEventListener('click', () => { isPaused = !isPaused; $('btnPause').textContent = isPaused ? '▶ Lanjut' : '⏸ Pause'; });
+    $('btnReset').addEventListener('click', () => {
+      if (animId) cancelAnimationFrame(animId);
+      animId = null; isPaused = false; elapsedT = 0; traceMarksA = []; traceMarksB = [];
+      $('btnRun').disabled = false; $('btnPause').textContent = '⏸ Pause';
+      $('sceneHint').textContent = '⚡ Atur parameter, lalu tekan MULAI EKSPERIMEN';
+      $('chipTime').textContent = '00:00,00'; $('chipPos').textContent = '0,00 m'; $('chipVel').textContent = '0,00 m/s'; $('chipAcc').textContent = '0,00 m/s²';
+      $('catchNote').classList.remove('is-visible');
+      renderScenePreview(0); drawAllGraphs(null);
+    });
+
+    // ============ ANALISIS HASIL ============
+    function finalizeAnalysis(t, sA) {
+      $('analysisType').textContent = mode === 'glb' ? 'GLB' : 'GLBB';
+      $('analysisV0').textContent = v.toFixed(2) + ' m/s';
+      $('analysisA').textContent = (mode === 'glb' ? 0 : a).toFixed(2) + ' m/s²';
+      $('analysisXf').textContent = sA.x.toFixed(2) + ' m';
+      const note = $('analysisNote');
+      if (mode === 'glb') note.innerHTML = `Kereta bergerak dengan kecepatan KONSTAN ${v.toFixed(2)} m/s. Grafik x-t berupa garis LURUS, grafik v-t berupa garis DATAR, dan a-t selalu nol -- inilah ciri khas GLB.`;
+      else note.innerHTML = `Kereta mengalami percepatan konstan ${a.toFixed(2)} m/s², sehingga kecepatannya berubah dari ${v.toFixed(2)} m/s jadi ${sA.v.toFixed(2)} m/s dalam ${t.toFixed(2)} s. Grafik x-t berupa PARABOLA, grafik v-t berupa garis MIRING dengan kemiringan = a -- inilah ciri khas GLBB.`;
+    }
+
+    // ============ GRAFIK (analitik, sinkron dengan waktu berjalan) ============
+    function drawAllGraphs(tHighlight) {
+      const duration = runDurationEstimate();
+      const nPts = 60;
+      const ptsX = [], ptsV = [], ptsA = [];
+      for (let i = 0; i <= nPts; i++) { const t = (i / nPts) * duration; const s = cartAState(t); ptsX.push({ x: t, y: s.x }); ptsV.push({ x: t, y: s.v }); ptsA.push({ x: t, y: s.a }); }
+      drawLineGraph($('graphXt'), ptsX, '#06b6d4', tHighlight, cartAState);
+      drawLineGraph($('graphVt'), ptsV, '#65a30d', tHighlight, cartAState, 'v');
+      drawLineGraph($('graphAt'), ptsA, '#f97316', tHighlight, cartAState, 'a');
+    }
+    function drawLineGraph(canvasEl, points, color, tHighlight, stateFn, field) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvasEl.parentElement.clientWidth - 16, h = 130;
+      canvasEl.width = w * dpr; canvasEl.height = h * dpr;
+      canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+      const c = canvasEl.getContext('2d');
+      c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+      const ys = points.map((p) => p.y);
+      const maxY = Math.max(...ys, 0.1), minY = Math.min(...ys, -0.1, 0);
+      const maxX = points[points.length - 1].x || 1;
+      const px = (x) => 20 + (x / maxX) * (w - 30);
+      const py = (y) => h - 18 - ((y - minY) / (maxY - minY || 1)) * (h - 28);
+      c.strokeStyle = 'rgba(0,0,0,0.08)'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(18, py(0)); c.lineTo(w - 6, py(0)); c.moveTo(18, 6); c.lineTo(18, h - 18); c.stroke();
+      c.beginPath(); c.strokeStyle = color; c.lineWidth = 2.4;
+      points.forEach((p, i) => { const x = px(p.x), y = py(p.y); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); });
+      c.stroke();
+      if (tHighlight != null && field) {
+        const s = stateFn(tHighlight);
+        const val = field === 'v' ? s.v : s.a;
+        c.fillStyle = '#0d1f1a';
+        c.beginPath(); c.arc(px(tHighlight), py(val), 5, 0, Math.PI * 2); c.fill();
+      } else if (tHighlight != null) {
+        const s = stateFn(tHighlight);
+        c.fillStyle = '#0d1f1a';
+        c.beginPath(); c.arc(px(tHighlight), py(s.x), 5, 0, Math.PI * 2); c.fill();
+      }
+      c.fillStyle = '#7f9c91'; c.font = '9px system-ui'; c.textAlign = 'left'; c.fillText('t (s)', w - 30, h - 4);
+    }
+
+    // ============ DATA LOGGER ============
+    function renderDataTable() {
+      const tbody = $('dataTableBody'); const empty = $('dataEmptyNote');
+      if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      tbody.innerHTML = experimentData.map((d, i) => `<tr><td>${i + 1}</td><td>${d.t.toFixed(2)}</td><td>${d.x.toFixed(2)}</td><td>${d.v.toFixed(2)}</td><td>${d.a.toFixed(2)}</td></tr>`).join('');
+    }
+    $('btnSnapshot').addEventListener('click', () => {
+      const s = cartAState(elapsedT);
+      experimentData.push({ t: elapsedT, x: s.x, v: s.v, a: s.a });
+      renderDataTable();
+    });
+    $('btnClearAll').addEventListener('click', () => {
+      if (experimentData.length > 0 && !confirm('Hapus semua data eksperimen yang sudah direkam?')) return;
+      experimentData = []; renderDataTable();
+    });
+    $('btnExportCsv').addEventListener('click', () => {
+      if (experimentData.length === 0) return;
+      let csv = 't (s),x (m),v (m/s),a (m/s2)\n';
+      experimentData.forEach((d) => { csv += `${d.t.toFixed(3)},${d.x.toFixed(3)},${d.v.toFixed(3)},${d.a.toFixed(3)}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a'); link.href = url; link.download = 'data-eksperimen-gerak-lurus.csv';
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    });
+
+    // ============ TIME TRIAL ============
+    const TT_TARGET_DIST = 5, TT_TARGET_TIME = 3;
+    $('btnTimeTrial').addEventListener('click', () => {
+      const fb = $('timeTrialFeedback'); fb.classList.add('is-visible');
+      if (!lastRunSummary) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Jalankan eksperimen dulu (tekan MULAI EKSPERIMEN).'; return; }
+      // cari waktu saat x mencapai target (dari data yang direkam / komputasi ulang)
+      let tAtTarget = null;
+      for (let i = 0; i <= 200; i++) { const t = (i / 200) * runDurationEstimate(); if (cartAState(t).x >= TT_TARGET_DIST) { tAtTarget = t; break; } }
+      if (tAtTarget === null) { fb.classList.add('is-wrong'); fb.innerHTML = `💡 Kereta belum mencapai ${TT_TARGET_DIST} m dalam eksperimen ini. Naikkan kecepatan/percepatan.`; return; }
+      const selisih = tAtTarget - TT_TARGET_TIME;
+      const pass = Math.abs(selisih) <= 0.3;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = `Waktu aktual mencapai ${TT_TARGET_DIST} m = <strong>${tAtTarget.toFixed(2)} s</strong>. Selisih dari target (${TT_TARGET_TIME} s) = <strong>${selisih >= 0 ? '+' : ''}${selisih.toFixed(2)} s</strong>. ${pass ? '✅ Sangat dekat target!' : '💡 Coba sesuaikan lagi kecepatan/percepatan.'}`;
+    });
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'vml-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Done = false, t2Done = false;
+    renderQuizOptions($('thinkOptions1'), ['Karena percepatannya nol, sehingga kecepatan (dan jarak per detik) selalu sama', 'Karena kecepatannya nol', 'Karena gaya yang bekerja sangat besar', 'Jaraknya sebenarnya tidak selalu sama'], (i, btn, c) => {
+      if (t1Done) return; t1Done = true;
+      const correct = i === 0;
+      c.querySelectorAll('.vml-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 0) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Pada GLB, a = 0 sehingga v selalu konstan -- karena v tetap, jarak yang ditempuh tiap detik (x = v×t) juga pasti sama.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Ya, selalu', 'Tidak -- kecepatan besar bisa terjadi walau percepatannya nol (GLB)', 'Ya, tapi hanya pada GLBB', 'Tidak dapat ditentukan'], (i, btn, c) => {
+      if (t2Done) return; t2Done = true;
+      const correct = i === 1;
+      c.querySelectorAll('.vml-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Kecepatan dan percepatan itu besaran yang berbeda. Kereta GLB bisa punya kecepatan 100 m/s TAPI percepatannya tetap nol -- kecepatan besar tidak otomatis berarti percepatan besar.';
+    });
+
+    // ============ CHALLENGE 5: TEBAK JENIS GERAK (grafik misteri) ============
+    function renderMysteryChallenge() {
+      mysteryAnswer = Math.random() < 0.5 ? 'glb' : 'glbb';
+      renderQuizOptions($('mysteryOptions'), ['GLB', 'GLBB'], (i, btn, c) => {
+        const guess = i === 0 ? 'glb' : 'glbb';
+        const correct = guess === mysteryAnswer;
+        c.querySelectorAll('.vml-quiz-option').forEach((b) => (b.disabled = true));
+        btn.classList.add(correct ? 'is-correct' : 'is-wrong');
+        const fb = $('chFb5'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+        fb.innerHTML = correct ? `✅ Tepat, grafik misteri itu memang ${mysteryAnswer.toUpperCase()}!` : `💡 Grafik misteri itu sebenarnya ${mysteryAnswer.toUpperCase()}. Coba lihat lagi kurva x-t di atas -- lurus berarti GLB, melengkung (parabola) berarti GLBB.`;
+      });
+    }
+    renderMysteryChallenge();
+
+    // ============ TANTANGAN 1-4 ============
+    document.querySelectorAll('[data-challenge]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.challenge;
+        const fb = $(`chFb${id}`); fb.classList.add('is-visible');
+        let pass = false, msg = '';
+        if (id === '1') { const s = cartAState(2.5); pass = Math.abs(s.x - 5) <= 0.3; msg = pass ? `Posisi pada t=2,5s adalah ${s.x.toFixed(2)} m -- pas!` : `Posisi pada t=2,5s saat ini ${s.x.toFixed(2)} m. Sesuaikan v (GLB) atau v₀/a (GLBB).`; }
+        else if (id === '2') { const s = cartAState(3); pass = mode === 'glbb' && Math.abs(s.v - 4) <= 0.3; msg = pass ? `v pada t=3s adalah ${s.v.toFixed(2)} m/s -- pas!` : `Pastikan mode GLBB aktif. v pada t=3s saat ini ${s.v.toFixed(2)} m/s.`; }
+        else if (id === '3') { const tStop = stopTime(v, a); const s = isFinite(tStop) ? cartAState(tStop) : null; pass = mode === 'glbb' && s && Math.abs(s.x - 5) <= 0.3; msg = pass ? `Kereta berhenti di x=${s.x.toFixed(2)} m -- pas di 5 m!` : `Kereta ${s ? `berhenti di x=${s.x.toFixed(2)} m` : 'belum berhenti (a dan v₀ harus berlawanan tanda)'}. Sesuaikan v₀ dan a.`; }
+        else if (id === '4') { pass = lastRunSummary && lastRunSummary.caught; msg = pass ? `Cart B berhasil menyusul pada t=${lastRunSummary.finalT.toFixed(2)}s!` : 'Aktifkan Cart B, atur parameternya supaya menyusul Cart A, lalu jalankan eksperimen.'; }
+        fb.classList.toggle('is-wrong', !pass);
+        fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+      });
+    });
+
+    // ============ LOCALSTORAGE ============
+    $('btnSave').addEventListener('click', () => {
+      try { localStorage.setItem('pancaedu-gerak-lurus', JSON.stringify({ mode, x0, v, a, compareOn, x0B, vB, aB, experimentData })); alert('Eksperimen tersimpan di browser ini.'); }
+      catch (e) { alert('Gagal menyimpan.'); }
+    });
+    $('btnLoad').addEventListener('click', () => {
+      try {
+        const raw = localStorage.getItem('pancaedu-gerak-lurus');
+        if (!raw) { alert('Belum ada eksperimen tersimpan.'); return; }
+        const d = JSON.parse(raw);
+        mode = d.mode || 'glb'; x0 = d.x0 ?? 0; v = d.v ?? 2; a = d.a ?? 1;
+        compareOn = d.compareOn || false; x0B = d.x0B ?? -2; vB = d.vB ?? 3; aB = d.aB ?? 0;
+        experimentData = d.experimentData || [];
+        $('x0Slider').value = x0; $('x0Val').textContent = x0.toFixed(1) + ' m';
+        $('vSlider').value = v; $('vVal').textContent = (v >= 0 ? '+' : '') + v.toFixed(1) + ' m/s';
+        $('aSlider').value = a; $('aVal').textContent = (a >= 0 ? '+' : '') + a.toFixed(1) + ' m/s²';
+        $('chkCompare').checked = compareOn; $('cartBPanel').style.display = compareOn ? '' : 'none';
+        $('x0BSlider').value = x0B; $('x0BVal').textContent = x0B.toFixed(1) + ' m';
+        $('vBSlider').value = vB; $('vBVal').textContent = (vB >= 0 ? '+' : '') + vB.toFixed(1) + ' m/s';
+        $('aBSlider').value = aB; $('aBVal').textContent = (aB >= 0 ? '+' : '') + aB.toFixed(1) + ' m/s²';
+        if (mode === 'glbb') $('btnModeGlbb').click(); else $('btnModeGlb').click();
+        renderDataTable(); renderScenePreview(0); updateFormulaPreview();
+        alert('Eksperimen dipulihkan.');
+      } catch (e) { alert('Gagal memulihkan data.'); }
+    });
+
+    window.onload = () => {
+      resizeCanvas();
+      updateFormulaPreview();
+      renderScenePreview(0);
+    };
+  </script>
+</body>
+</html>

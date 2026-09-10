@@ -1,0 +1,13 @@
+---
+// Sama pola dengan PilihanGanda.astro, cuma 2 opsi tetap (Benar/Salah).
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'benar-salah' }>;
+}
+---
+
+<div class="pn-options" role="group" aria-label="Pilihan Benar/Salah">
+  <button type="button" class="pn-option" data-pn-opsi data-opsi-id="benar">✅ Benar</button>
+  <button type="button" class="pn-option" data-pn-opsi data-opsi-id="salah">❌ Salah</button>
+</div>

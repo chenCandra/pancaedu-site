@@ -1,0 +1,25 @@
+---
+// Menyusun urutan lewat tombol naik/turun (▲▼) -- dipilih dibanding drag
+// asli supaya tetap dipakai nyaman lewat keyboard/screen reader, dan tidak
+// perlu deteksi posisi drop yang rumit buat sekadar tukar posisi
+// tetangga. Urutan tampilan awal SUDAH diacak di
+// src/lib/penugasan/tampilan.ts -- urutan akhir dibaca dari urutan DOM
+// saat submit (lihat ambil-jawaban.ts), bukan disimpan terpisah di sini.
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'menyusun-urutan' }>;
+}
+
+const { soal } = Astro.props;
+---
+
+<ol class="pn-order-list" data-pn-urutan>
+  {soal.item.map((item) => (
+    <li class="pn-order-item" data-pn-urutan-item data-item-id={item.id}>
+      <button type="button" class="pn-order-btn" data-pn-urutan-naik aria-label="Pindah ke atas">▲</button>
+      <button type="button" class="pn-order-btn" data-pn-urutan-turun aria-label="Pindah ke bawah">▼</button>
+      <span>{item.teks}</span>
+    </li>
+  ))}
+</ol>

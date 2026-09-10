@@ -36,8 +36,10 @@ const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !dat
 // Conservation Lab, Lab Energi Terbarukan, Energy Consumption Lab,
 // Non-Renewable Energy Lab, Energy Efficiency Lab, Energy Crisis Lab,
 // Energy Planning Lab, Simulasi Massa Jenis (PhET, wrapper sendiri),
-// Hukum Hooke, Virtual Collision Lab (Momentum & Impuls).
-const LAB_MAYA_SIMULASI_COUNT = 17;
+// Hukum Hooke, Virtual Collision Lab (Momentum & Impuls), Virtual
+// Motion Lab (GLB & GLBB), Virtual Circuit Lab (Hukum Ohm), Faraday
+// Electromagnetic Induction Lab.
+const LAB_MAYA_SIMULASI_COUNT = 20;
 
 const counters = [
   { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },

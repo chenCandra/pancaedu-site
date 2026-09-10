@@ -489,6 +489,228 @@ a {
   color: var(--indigo);
 }
 
+/* ================= Penugasan (kuis interaktif mandiri) =================
+   Utility class bersama dipakai lintas src/components/penugasan/*.astro
+   DAN src/pages/penugasan/[slug].astro. Ditaruh di sini (bukan scoped
+   <style> per komponen) karena Astro men-scope <style> per FILE SUMBER --
+   kalau ditulis di file induk saja, tidak akan kena ke markup yang
+   dirender komponen anak. Nama class sengaja beda dari `.kuis-*` (dipakai
+   Kuis.astro) walau nadanya serupa, supaya dua fitur ini tidak saling
+   tercampur kalau suatu saat disatukan di satu halaman. */
+
+.pn-soal {
+  padding-block: 1.5rem;
+}
+
+.pn-soal + .pn-soal {
+  border-top: 1px solid var(--border);
+}
+
+.pn-soal.pn-benar {
+  border-left: 3px solid var(--teal);
+  padding-left: 1rem;
+}
+
+.pn-soal.pn-salah {
+  border-left: 3px solid var(--rose);
+  padding-left: 1rem;
+}
+
+.pn-question {
+  font-weight: 600;
+  margin: 0 0 0.9rem;
+}
+
+.pn-skor-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+  margin-left: 0.5rem;
+}
+
+.pn-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pn-option {
+  text-align: left;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-solid);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.pn-option:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
+.pn-option:disabled {
+  cursor: default;
+}
+
+.pn-option.is-selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.pn-option.pn-correct {
+  border-color: var(--teal);
+  background: var(--teal-soft);
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.pn-option.pn-incorrect {
+  border-color: var(--rose);
+  background: var(--rose-soft);
+  color: var(--rose);
+}
+
+.pn-input,
+.pn-select {
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--surface-solid);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+}
+
+.pn-match-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.4rem 0;
+}
+
+.pn-match-row .pn-match-kiri {
+  min-width: 10rem;
+  font-weight: 600;
+}
+
+.pn-order-list,
+.pn-tray,
+.pn-zone-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pn-order-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-solid);
+}
+
+.pn-order-item span {
+  flex: 1;
+}
+
+.pn-order-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  width: 1.9rem;
+  height: 1.9rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.pn-order-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.pn-dragdrop-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  min-height: 3rem;
+}
+
+.pn-chip {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-solid);
+  color: var(--ink);
+  font-size: 0.875rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.pn-chip.is-picked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Salinan visual yang ikut kursor saat drag (chip aslinya diam & disembunyikan
+   di tempat -- lihat komentar `ghost` di src/scripts/penugasan/ambil-jawaban.ts
+   soal kenapa dipisah begini). Ditaruh langsung di <body>, jadi TIDAK ikut
+   ke-blur/transparan oleh backdrop-filter kartu manapun. */
+.pn-chip-ghost {
+  cursor: grabbing;
+  box-shadow: var(--shadow-md);
+}
+
+.pn-zones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+}
+
+.pn-zone {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem;
+  min-height: 3.5rem;
+}
+
+.pn-zone-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin: 0 0 0.4rem;
+}
+
+.pn-zone.is-over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.pn-feedback {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

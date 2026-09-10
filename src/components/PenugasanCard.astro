@@ -1,0 +1,84 @@
+---
+// Kartu satu Penugasan di halaman daftar (/penugasan) -- mirip
+// RuangBelajarCard.astro, tapi menautkan ke /penugasan/{id} dan
+// menunjukkan jumlah soal alih-alih durasi (Penugasan belum punya field
+// durasi eksplisit).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'penugasan'>;
+}
+
+const { entry } = Astro.props;
+const { kelas, mapel, judul, deskripsi } = entry.data;
+---
+
+<a href={`/penugasan/${entry.id}`} class="pn-card" data-pn-list-card data-kelas={kelas}>
+  <div class="pn-card-tag">
+    <span class="badge">{mapel.toUpperCase()} — KELAS {kelas}</span>
+  </div>
+  <h3 class="pn-card-title">{judul}</h3>
+  {deskripsi && <p class="pn-card-desc">{deskripsi}</p>}
+  <div class="pn-card-footer">
+    <span class="pn-card-jumlah">📝 {entry.data.soal.length} soal</span>
+    <span class="pn-card-cta">Kerjakan &rarr;</span>
+  </div>
+</a>
+
+<style>
+  .pn-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pn-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .pn-card-title {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .pn-card-desc {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .pn-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pn-card-jumlah {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .pn-card-cta {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

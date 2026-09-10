@@ -2,6 +2,11 @@
 dist/
 # generated types
 .astro/
+# hasil `wrangler types` -- regenerate lokal tiap butuh (`npx wrangler types`),
+# sengaja dikecualikan dari tsconfig.json juga (lihat komentar di sana)
+worker-configuration.d.ts
+# state D1 lokal (astro dev / wrangler dev), per-mesin, jangan ikut commit
+.wrangler/
 
 # dependencies
 node_modules/

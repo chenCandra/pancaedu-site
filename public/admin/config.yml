@@ -177,6 +177,193 @@ collections:
         hint: "Kosongkan saja kalau sesi ini pakai Link Refleksi Global yang sudah diatur (lihat koleksi 'Pengaturan Ruang Belajar'). Isi di sini CUMA kalau sesi ini butuh Form refleksi yang beda dari biasanya. Jangan diisi tanda '-' kalau memang kosong."
       - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
 
+  - name: "penugasan-pengaturan"
+    label: "Pengaturan Penugasan"
+    # Singleton (pola sama seperti "Pengaturan Ruang Belajar"). Daftar
+    # kelas di sini yang muncul sebagai dropdown "Kelas" saat siswa mulai
+    # mengerjakan Penugasan -- edit di sini tiap semester/tahun ajaran
+    # ganti, TIDAK perlu minta ubah kode.
+    files:
+      - name: "pengaturan"
+        label: "Daftar Kelas & Roster Siswa"
+        file: "src/content/penugasan-pengaturan/index.md"
+        fields:
+          - name: "daftarKelas"
+            label: "Daftar Kelas"
+            widget: list
+            summary: "{{fields.kelas}} ({{fields.siswa}} siswa)"
+            hint: "Satu blok per kelas. Opsi 'Umum / Lainnya' untuk pengunjung non-SMAN 4 ditambahkan OTOMATIS oleh situs -- tidak perlu dibuat di sini."
+            fields:
+              - { label: "Nama Kelas", name: kelas, widget: string, hint: "mis. 'X E1', 'XII F2'" }
+              - label: "Daftar Nama Siswa"
+                name: siswa
+                widget: list
+                hint: "Satu nama per baris, urut sesuai selera (mis. alfabetis). Ini yang muncul sebagai dropdown nama setelah siswa memilih kelas ini."
+          - label: "PIN Guru (hash, opsional)"
+            name: pinGuruHash
+            widget: string
+            required: false
+            hint: 'Gerbang halaman /penugasan/rekap (rekap nilai semua kelas & semua tugas) -- SATU PIN ini beda dari PIN Leaderboard tiap Penugasan. Buat hash-nya di /penugasan/pin-generator, JANGAN tempel PIN mentahnya di sini.'
+
+  - name: "penugasan"
+    label: "Penugasan"
+    label_singular: "Tugas"
+    folder: "src/content/penugasan"
+    create: true
+    slug: "{{fields.kelas}}-{{fields.mapel}}-{{fields.judul}}"
+    identifier_field: judul
+    summary: "{{fields.kelas}} {{fields.mapel}} — {{fields.judul}}"
+    fields:
+      - { label: "Judul", name: judul, widget: string }
+      - label: "Kelas"
+        name: kelas
+        widget: select
+        options: ["X", "XI", "XII"]
+      - label: "Mata Pelajaran"
+        name: mapel
+        widget: string
+        hint: "mis. Fisika, Matematika, Bahasa Indonesia"
+      - label: "Deskripsi Singkat (opsional)"
+        name: deskripsi
+        widget: text
+        required: false
+      - label: "Materi yang Dirujuk (opsional)"
+        name: materiSlug
+        widget: relation
+        collection: "materi"
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        required: false
+        hint: "Cuma buat tautan 'materi terkait' di halaman tugas, BUKAN sumber soal -- soal tetap ditulis manual di bawah."
+      - label: "PIN Leaderboard (hash)"
+        name: pinHash
+        widget: string
+        hint: 'Buat hash-nya di halaman /penugasan/pin-generator (tanpa terminal), lalu tempel di sini. JANGAN tempel kode PIN mentahnya -- siswa/wali murid tidak boleh bisa baca kode aslinya dari sini.'
+      - label: "PIN Berlaku Hingga"
+        name: pinBerlakuHingga
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        hint: "Wajib diisi -- kebijakan: maksimal 6 bulan dari kapan PIN ini dibuat/diperbarui. Halaman /penugasan/pin-generator otomatis mengisi tanggal 6 bulan ke depan begitu hash dibuat, tinggal disalin ke sini. Setelah lewat tanggal ini, PIN yang benar sekalipun akan ditolak."
+      - name: "soal"
+        label: "Daftar Soal"
+        widget: list
+        summary: "{{fields.soal}}"
+        # Sveltia CMS "variable type" list -- tiap butir soal punya bentuk
+        # field BEDA tergantung tipenya, `typeKey` menentukan nama field
+        # penanda tipe yang ditulis ke tiap butir (harus cocok `tipe` di
+        # src/content.config.ts -- discriminated union Zod-nya).
+        typeKey: tipe
+        types:
+          - name: "pilihan-ganda"
+            label: "Pilihan Ganda Interaktif"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string, hint: "mis. 'soal-1'" }
+              - { label: "Pertanyaan", name: soal, widget: text }
+              - label: "Pilihan Jawaban"
+                name: pilihan
+                widget: list
+                summary: "{{fields.teks}}"
+                fields:
+                  - { label: "ID Opsi (unik dalam soal ini)", name: id, widget: string, hint: "mis. 'a', 'b', 'c'" }
+                  - { label: "Teks Pilihan", name: teks, widget: string }
+              - label: "ID Opsi yang Benar"
+                name: jawabanBenarId
+                widget: string
+                hint: "Harus cocok persis salah satu ID Opsi di atas."
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+          - name: "benar-salah"
+            label: "Benar / Salah"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string }
+              - { label: "Pernyataan", name: soal, widget: text }
+              - label: "Jawaban Benar"
+                name: jawabanBenar
+                widget: select
+                options: [{ label: "Benar", value: true }, { label: "Salah", value: false }]
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+          - name: "isian-singkat"
+            label: "Isian Singkat"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string }
+              - { label: "Pertanyaan", name: soal, widget: text }
+              - label: "Jawaban Berupa Angka?"
+                name: angka
+                widget: boolean
+                default: false
+                hint: "Kalau YA, jawaban dibandingkan sebagai angka + toleransi (cocok buat hitungan Fisika). Kalau TIDAK, dibandingkan sebagai teks (huruf besar/kecil & spasi di ujung diabaikan)."
+              - label: "Toleransi (cuma dipakai kalau angka)"
+                name: toleransi
+                widget: number
+                default: 0
+                hint: "mis. 0.5 -- jawaban dianggap benar kalau selisihnya dari jawaban benar tidak lebih dari nilai ini."
+              - label: "Varian Jawaban Benar"
+                name: jawabanBenar
+                widget: list
+                hint: "Boleh lebih dari satu (mis. '5', '5.0', '5,0' buat angka yang sama ditulis beda format)."
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+          - name: "menjodohkan"
+            label: "Menjodohkan"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string }
+              - { label: "Instruksi", name: soal, widget: text }
+              - label: "Pasangan"
+                name: pasangan
+                widget: list
+                summary: "{{fields.kiri}} — {{fields.kanan}}"
+                hint: "Minimal 2 pasang. Sisi kanan akan diacak urutannya otomatis saat ditampilkan ke siswa."
+                fields:
+                  - { label: "ID Pasangan (unik dalam soal ini)", name: id, widget: string }
+                  - { label: "Sisi Kiri", name: kiri, widget: string }
+                  - { label: "Sisi Kanan (pasangannya)", name: kanan, widget: string }
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+          - name: "menyusun-urutan"
+            label: "Menyusun Urutan"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string }
+              - { label: "Instruksi", name: soal, widget: text }
+              - label: "Item (isi SUDAH dalam urutan yang benar)"
+                name: item
+                widget: list
+                summary: "{{fields.teks}}"
+                hint: "Urutan penulisan di sini ADALAH kunci jawabannya -- tampilan ke siswa otomatis diacak."
+                fields:
+                  - { label: "ID Item (unik dalam soal ini)", name: id, widget: string }
+                  - { label: "Teks", name: teks, widget: string }
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+          - name: "drag-drop"
+            label: "Drag & Drop (Kategorisasi)"
+            fields:
+              - { label: "ID Soal (unik dalam tugas ini)", name: id, widget: string }
+              - { label: "Instruksi", name: soal, widget: text }
+              - label: "Kategori (kotak tujuan)"
+                name: kategori
+                widget: list
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: "ID Kategori (unik dalam soal ini)", name: id, widget: string }
+                  - { label: "Label Kategori", name: label, widget: string }
+              - label: "Item yang Digeser"
+                name: item
+                widget: list
+                summary: "{{fields.teks}}"
+                fields:
+                  - { label: "ID Item (unik dalam soal ini)", name: id, widget: string }
+                  - { label: "Teks", name: teks, widget: string }
+                  - label: "ID Kategori yang Benar"
+                    name: kategoriBenarId
+                    widget: string
+                    hint: "Harus cocok persis salah satu ID Kategori di atas."
+              - { label: "Penjelasan (opsional)", name: penjelasan, widget: text, required: false }
+              - { label: "Skor", name: skor, widget: number, value_type: int, default: 1 }
+      - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
+
   - name: "artikel"
     label: "Artikel"
     label_singular: "Artikel"

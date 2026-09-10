@@ -1,5 +1,17 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  // worker-configuration.d.ts (hasil `wrangler types`) SENGAJA dikecualikan:
+  // file itu men-declare banyak tipe global Workers runtime (termasuk
+  // `Element`/`Node` versi API HTMLRewriter Cloudflare) yang BENTROK sama
+  // `Element`/`Node` versi DOM lib biasa dipakai kode client-side
+  // (src/scripts/**, <script> di .astro) -- kalau file ini ikut disertakan
+  // project-wide, banyak method DOM standar (append, remove, dst) jadi
+  // salah tipe di SELURUH file, bukan cuma di server. Tipe Cloudflare yang
+  // benar-benar dibutuhkan (D1Database, dst) diimpor eksplisit dari paket
+  // @cloudflare/workers-types (non-global) di file server yang butuh,
+  // dan `env` dari 'cloudflare:workers' ditipekan lewat src/env.d.ts
+  // (scoped ke satu module specifier, bukan global merge) -- lihat kedua
+  // file itu buat detailnya.
+  "exclude": ["dist", "worker-configuration.d.ts"]
 }

@@ -1,0 +1,430 @@
+---
+// WAJIB on-demand (bukan prerender): kunci jawaban ada di
+// `entry.data.soal` dan TIDAK BOLEH ter-bake ke HTML statis. Di bawah,
+// `keSoalTampilan()` membuang semua field kunci jawaban SEBELUM data itu
+// disentuh komponen mana pun -- itulah mekanisme utama yang mencegah
+// kebocoran (lihat komentar panjang di src/content.config.ts & di
+// src/lib/penugasan/tampilan.ts).
+export const prerender = false;
+
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { KELAS_UMUM } from '../../lib/penugasan/kelas';
+import { keSoalTampilan } from '../../lib/penugasan/tampilan';
+import PilihanGanda from '../../components/penugasan/PilihanGanda.astro';
+import BenarSalah from '../../components/penugasan/BenarSalah.astro';
+import IsianSingkat from '../../components/penugasan/IsianSingkat.astro';
+import Menjodohkan from '../../components/penugasan/Menjodohkan.astro';
+import MenyusunUrutan from '../../components/penugasan/MenyusunUrutan.astro';
+import DragDrop from '../../components/penugasan/DragDrop.astro';
+
+const { slug } = Astro.params;
+const entry = slug ? await getEntry('penugasan', slug) : undefined;
+
+if (!entry || entry.data.draft) {
+  return new Response(null, { status: 404 });
+}
+
+const { judul, kelas, mapel, deskripsi } = entry.data;
+const soalTampilan = entry.data.soal.map(keSoalTampilan); // TIDAK ada kunci jawaban di sini
+const skorMaksTotal = soalTampilan.reduce((total, s) => total + s.skor, 0);
+
+const pengaturan = await getEntry('penugasanPengaturan', 'index');
+const daftarKelas = pengaturan?.data.daftarKelas ?? [];
+---
+
+<BaseLayout title={judul} description={deskripsi ?? judul} disableCursor>
+  <section class="container pn-header" data-pn-app data-slug={entry.id}>
+    <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
+    <p class="eyebrow">📝 Penugasan · {mapel} · Kelas {kelas}</p>
+    <h1>{judul}</h1>
+    {deskripsi && <p class="pn-lede">{deskripsi}</p>}
+    <p class="pn-meta">📝 {soalTampilan.length} soal · {skorMaksTotal} poin</p>
+
+    <section class="pn-identitas card" data-pn-identitas>
+      <h2>Sebelum mulai...</h2>
+      <p class="pn-identitas-lede">Isi nama & kelasmu dulu -- ini bukan akun/login, cuma supaya hasilmu tercatat.</p>
+      <form class="pn-identitas-form" data-pn-identitas-form>
+        <label>
+          Kelas
+          <select name="kelas" class="pn-select" data-pn-kelas-select required>
+            <option value="" disabled selected>Pilih kelas</option>
+            {daftarKelas.map((k) => <option value={k.kelas}>{k.kelas}</option>)}
+            <option value={KELAS_UMUM}>{KELAS_UMUM}</option>
+          </select>
+        </label>
+        <label data-pn-nama-select-wrap hidden>
+          Nama
+          <select class="pn-select" data-pn-nama-select disabled>
+            <option value="" disabled selected>Pilih nama</option>
+          </select>
+        </label>
+        <label data-pn-nama-manual-wrap hidden>
+          Nama
+          <input type="text" class="pn-input" data-pn-nama-manual autocomplete="off" maxlength="80" placeholder="Ketik namamu" />
+        </label>
+        <button type="submit" class="btn btn-primary">Mulai Kerjakan</button>
+      </form>
+    </section>
+
+    <script type="application/json" id="pn-roster-data" set:html={JSON.stringify(daftarKelas)} />
+
+    <section class="pn-pengerjaan" data-pn-pengerjaan hidden>
+      <p class="pn-percobaan" data-pn-percobaan></p>
+      <div class="card pn-soal-card">
+        <ol class="pn-daftar-soal">
+          {soalTampilan.map((soal, i) => (
+            <li class="pn-soal" data-soal data-soal-id={soal.id} data-tipe={soal.tipe}>
+              <p class="pn-question">
+                {i + 1}. {soal.soal}
+                <span class="pn-skor-badge">({soal.skor} poin)</span>
+              </p>
+              {soal.tipe === 'pilihan-ganda' && <PilihanGanda soal={soal} />}
+              {soal.tipe === 'benar-salah' && <BenarSalah soal={soal} />}
+              {soal.tipe === 'isian-singkat' && <IsianSingkat soal={soal} />}
+              {soal.tipe === 'menjodohkan' && <Menjodohkan soal={soal} />}
+              {soal.tipe === 'menyusun-urutan' && <MenyusunUrutan soal={soal} />}
+              {soal.tipe === 'drag-drop' && <DragDrop soal={soal} />}
+              <p class="pn-feedback" data-pn-feedback hidden></p>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <button type="button" class="btn btn-primary pn-submit-btn" data-pn-submit>Selesai &amp; Lihat Hasil</button>
+    </section>
+
+    <section class="pn-hasil card" data-pn-hasil hidden>
+      <h2>🎉 Selesai!</h2>
+      <p class="pn-hasil-skor" data-pn-hasil-skor></p>
+      <div class="pn-hasil-actions">
+        <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost">🏆 Lihat Leaderboard</a>
+        <a href="/penugasan" class="btn btn-ghost">Penugasan Lain</a>
+      </div>
+    </section>
+  </section>
+</BaseLayout>
+
+<script>
+  import { inisialisasiSoal, bacaSemuaJawaban, tampilkanHasil } from '../../scripts/penugasan/ambil-jawaban';
+  import { ambilIdentitas, simpanIdentitas } from '../../scripts/penugasan-identity';
+  import { KELAS_UMUM } from '../../lib/penugasan/kelas';
+
+  const NAMA_MANUAL = '__manual__';
+
+  const app = document.querySelector<HTMLElement>('[data-pn-app]');
+  if (app) {
+    const slug = app.dataset.slug ?? '';
+    const identitasSection = app.querySelector<HTMLElement>('[data-pn-identitas]');
+    const identitasForm = app.querySelector<HTMLFormElement>('[data-pn-identitas-form]');
+    const pengerjaanSection = app.querySelector<HTMLElement>('[data-pn-pengerjaan]');
+    const hasilSection = app.querySelector<HTMLElement>('[data-pn-hasil]');
+    const hasilSkorEl = app.querySelector<HTMLElement>('[data-pn-hasil-skor]');
+    const submitBtn = app.querySelector<HTMLButtonElement>('[data-pn-submit]');
+    const percobaanEl = app.querySelector<HTMLElement>('[data-pn-percobaan]');
+
+    const kelasSelect = identitasForm?.querySelector<HTMLSelectElement>('[data-pn-kelas-select]');
+    const namaSelectWrap = identitasForm?.querySelector<HTMLElement>('[data-pn-nama-select-wrap]');
+    const namaSelect = identitasForm?.querySelector<HTMLSelectElement>('[data-pn-nama-select]');
+    const namaManualWrap = identitasForm?.querySelector<HTMLElement>('[data-pn-nama-manual-wrap]');
+    const namaManual = identitasForm?.querySelector<HTMLInputElement>('[data-pn-nama-manual]');
+
+    // Roster nama per kelas, di-embed server-side (bukan diambil ulang
+    // lewat fetch) -- lihat elemen #pn-roster-data & komentar
+    // `penugasanPengaturan` di src/content.config.ts.
+    type EntriRoster = { kelas: string; siswa: string[] };
+    let roster: EntriRoster[] = [];
+    try {
+      const raw = document.getElementById('pn-roster-data')?.textContent;
+      if (raw) roster = JSON.parse(raw) as EntriRoster[];
+    } catch {
+      roster = [];
+    }
+
+    // Set ulang isi & visibilitas field Nama tiap kali Kelas berganti.
+    // Kalau kelasnya "Umum / Lainnya" ATAU rosternya masih kosong (belum
+    // diisi guru), langsung tampilkan isian manual -- dropdown kosong yang
+    // cuma berisi "nama saya tidak ada di daftar" tidak ada gunanya.
+    function perbaruiFieldNama(kelasTerpilih: string) {
+      if (!namaSelectWrap || !namaSelect || !namaManualWrap || !namaManual) return;
+
+      const entri = roster.find((r) => r.kelas === kelasTerpilih);
+      const pakaiDropdown = kelasTerpilih !== '' && kelasTerpilih !== KELAS_UMUM && !!entri?.siswa.length;
+
+      if (pakaiDropdown) {
+        namaSelect.innerHTML = '';
+        const optKosong = new Option('Pilih nama', '', true, true);
+        optKosong.disabled = true;
+        namaSelect.appendChild(optKosong);
+        for (const nama of entri!.siswa) namaSelect.appendChild(new Option(nama, nama));
+        namaSelect.appendChild(new Option('✏️ Nama saya tidak ada di daftar', NAMA_MANUAL));
+        namaSelect.disabled = false;
+        namaSelect.required = true;
+        namaSelectWrap.hidden = false;
+        namaManualWrap.hidden = true;
+        namaManual.required = false;
+        namaManual.value = '';
+      } else {
+        namaSelectWrap.hidden = true;
+        namaSelect.required = false;
+        namaManualWrap.hidden = kelasTerpilih === '';
+        namaManual.required = kelasTerpilih !== '';
+      }
+    }
+
+    function ambilNamaTerpilih(): string {
+      if (namaManualWrap && !namaManualWrap.hidden && namaManual) return namaManual.value.trim();
+      if (namaSelectWrap && !namaSelectWrap.hidden && namaSelect && namaSelect.value !== NAMA_MANUAL) {
+        return namaSelect.value;
+      }
+      return '';
+    }
+
+    kelasSelect?.addEventListener('change', () => perbaruiFieldNama(kelasSelect.value));
+
+    namaSelect?.addEventListener('change', () => {
+      if (!namaManualWrap || !namaManual) return;
+      const pilihManual = namaSelect.value === NAMA_MANUAL;
+      namaManualWrap.hidden = !pilihManual;
+      namaManual.required = pilihManual;
+      if (!pilihManual) namaManual.value = '';
+    });
+
+    let attemptId: number | null = null;
+
+    const identitasTersimpan = ambilIdentitas();
+    if (identitasTersimpan && kelasSelect) {
+      // Kalau kelas tersimpan sudah tidak ada di daftar (mis. dihapus dari
+      // Pengaturan Penugasan setelah ganti semester), <select> otomatis
+      // balik ke placeholder kosong -- bukan error, siswa cuma perlu pilih
+      // ulang kelasnya.
+      kelasSelect.value = identitasTersimpan.kelas;
+      perbaruiFieldNama(kelasSelect.value);
+
+      if (namaSelectWrap && !namaSelectWrap.hidden && namaSelect) {
+        namaSelect.value = identitasTersimpan.nama;
+        // Nama tersimpan tidak ada di opsi (mis. typo beda, atau roster
+        // berubah) -- <select> balik ke placeholder kosong; alihkan ke
+        // isian manual supaya nama yang tersimpan tidak hilang begitu saja.
+        if (namaSelect.value !== identitasTersimpan.nama) {
+          namaSelect.value = NAMA_MANUAL;
+          if (namaManualWrap && namaManual) {
+            namaManualWrap.hidden = false;
+            namaManual.required = true;
+            namaManual.value = identitasTersimpan.nama;
+          }
+        }
+      } else if (namaManual) {
+        namaManual.value = identitasTersimpan.nama;
+      }
+    }
+
+    identitasForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nama = ambilNamaTerpilih();
+      const kelas = kelasSelect?.value.trim() ?? '';
+      if (!nama || !kelas) return;
+      simpanIdentitas({ nama, kelas });
+
+      const tombolMulai = identitasForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (tombolMulai) {
+        tombolMulai.disabled = true;
+        tombolMulai.textContent = 'Memulai...';
+      }
+
+      try {
+        const res = await fetch('/api/penugasan/mulai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, nama, kelas }),
+        });
+        if (!res.ok) throw new Error('gagal mulai');
+        const data = (await res.json()) as { attemptId: number; attemptKe: number };
+        attemptId = data.attemptId;
+
+        if (percobaanEl) {
+          percobaanEl.textContent =
+            data.attemptKe === 1
+              ? 'Ini percobaan pertamamu untuk tugas ini.'
+              : `Ini percobaan ke-${data.attemptKe} kamu untuk tugas ini.`;
+        }
+
+        if (identitasSection) identitasSection.hidden = true;
+        if (pengerjaanSection) {
+          pengerjaanSection.hidden = false;
+          inisialisasiSoal(pengerjaanSection);
+        }
+      } catch {
+        if (tombolMulai) {
+          tombolMulai.disabled = false;
+          tombolMulai.textContent = 'Mulai Kerjakan';
+        }
+        alert('Gagal memulai penugasan. Coba lagi.');
+      }
+    });
+
+    submitBtn?.addEventListener('click', async () => {
+      if (attemptId === null || !pengerjaanSection) return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Menilai...';
+
+      const jawaban = bacaSemuaJawaban(pengerjaanSection);
+      try {
+        const res = await fetch('/api/penugasan/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attemptId, slug, jawaban }),
+        });
+        if (!res.ok) throw new Error('gagal submit');
+        const data = (await res.json()) as {
+          skor: number;
+          skorMaks: number;
+          perSoal: { soalId: string; benar: boolean; skor: number; skorMaks: number; penjelasan?: string }[];
+        };
+
+        tampilkanHasil(pengerjaanSection, data.perSoal.map((h) => ({ ...h, skor: h.skor ?? 0, skorMaks: h.skorMaks ?? 0 })));
+        submitBtn.hidden = true;
+        if (hasilSkorEl) hasilSkorEl.textContent = `Skor kamu: ${data.skor} dari ${data.skorMaks}`;
+        if (hasilSection) {
+          hasilSection.hidden = false;
+          hasilSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Selesai & Lihat Hasil';
+        alert('Gagal mengirim jawaban. Coba lagi.');
+      }
+    });
+  }
+</script>
+
+<style>
+  .pn-header {
+    padding-block: 3rem 4rem;
+    max-width: 42rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .pn-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pn-meta {
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0;
+  }
+
+  .pn-identitas {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .pn-identitas-lede {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 1.25rem;
+  }
+
+  .pn-identitas-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  /* Bug spesifisitas [hidden]+display yang sudah pernah kejadian di
+     CookieConsent.astro & hasil-ujian/[slug].astro -- guard yang sama
+     diterapkan di sini untuk tiap section yang juga set `display`. */
+  .pn-identitas[hidden] {
+    display: none;
+  }
+
+  .pn-identitas-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex: 1 1 12rem;
+  }
+
+  /* Field Nama (select ATAU input manual) muncul/hilang tergantung kelas
+     dipilih -- guard [hidden]+display yang sama lagi (lihat catatan di
+     atas soal CookieConsent.astro/hasil-ujian). */
+  .pn-identitas-form label[hidden] {
+    display: none;
+  }
+
+  .pn-pengerjaan[hidden],
+  .pn-hasil[hidden] {
+    display: none;
+  }
+
+  .pn-pengerjaan {
+    margin-top: 2rem;
+  }
+
+  .pn-percobaan {
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+
+  .pn-percobaan:empty {
+    display: none;
+  }
+
+  .pn-soal-card {
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pn-daftar-soal {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pn-submit-btn {
+    width: 100%;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .pn-hasil {
+    margin-top: 2rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .pn-hasil-skor {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .pn-hasil-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+</style>

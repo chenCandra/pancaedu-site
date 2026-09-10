@@ -211,6 +211,10 @@ Selain kuat arus, kita sering ingin mengetahui beda potensial atau tegangan dala
 
 Berbeda dengan amperemeter, voltmeter dipasang secara **PARALEL** terhadap komponen yang ingin diukur beda potensialnya. Jadi, jangan tertukar:
 
+<div class="mtr-note">
+🔧 Coba praktikkan sendiri lewat simulasi <strong><a href="/lab-maya/hukum-ohm">Virtual Circuit Lab</a></strong> -- tarik amperemeter dan voltmeter ke titik yang salah dulu, lihat pesan errornya, baru pasang di titik yang benar. Sekalian temukan sendiri Hukum Ohm (V=IR) dan rangkaian seri/paralel.
+</div>
+
 <div class="mtr-table-wrap">
 <div class="mtr-table-scroll">
 <table class="mtr-table">

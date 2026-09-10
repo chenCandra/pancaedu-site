@@ -1,0 +1,319 @@
+---
+// TETAP prerender (statis) -- cuma `pinGuruHash` (bukan data siswa) yang
+// ter-bake ke HTML, pola sama seperti leaderboard per-Penugasan. Baris
+// rekap sungguhan diambil LIVE dari /api/penugasan/rekap/[slug] setelah
+// PIN cocok, server mencocokkan ulang hash itu sendiri.
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draft);
+const pengaturan = await getEntry('penugasanPengaturan', 'index');
+const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
+---
+
+<BaseLayout
+  title="Rekap Nilai"
+  description="Rekap nilai Penugasan dikelompokkan per kelas -- khusus guru, digerbangi PIN."
+  noindex
+>
+  <section class="container page-header">
+    <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
+    <p class="eyebrow">📊 Rekap Nilai · Khusus Guru</p>
+    <h1>Rekap Nilai per Kelas</h1>
+    <p class="page-lede">Pilih penugasan, lihat rata-rata & skor tertinggi tiap kelas yang mengerjakannya.</p>
+  </section>
+
+  <section class="container gate-section" data-pin-hash={pinGuruHash}>
+    {pinGuruHash ? (
+      <>
+        <form class="pin-form card" data-pin-form>
+          <label for="pin">PIN Guru</label>
+          <div class="pin-row">
+            <input
+              type="text"
+              id="pin"
+              name="pin"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="Masukkan PIN Guru"
+              required
+            />
+            <button type="submit" class="btn btn-primary">Buka Rekap</button>
+          </div>
+          <p class="pin-error" data-pin-error hidden>Kode PIN salah. Coba lagi.</p>
+        </form>
+
+        <div class="rekap-wrap" data-rekap-wrap hidden>
+          <label class="rekap-pilih-label">
+            Pilih Penugasan
+            <select class="pn-select" data-rekap-pilih>
+              {semuaPenugasan.map((p) => (
+                <option value={p.id}>{p.data.kelas} · {p.data.mapel} — {p.data.judul}</option>
+              ))}
+            </select>
+          </label>
+
+          <p class="leaderboard-loading" data-rekap-loading hidden>Memuat...</p>
+          <div class="table-scroll">
+            <table class="leaderboard-table" data-rekap-table></table>
+          </div>
+          <p class="leaderboard-empty" data-rekap-empty hidden>Belum ada yang mengerjakan tugas ini.</p>
+        </div>
+      </>
+    ) : (
+      <p class="belum-ada-pin card">
+        PIN Guru belum diatur. Buat dulu lewat <a href="/penugasan/pin-generator">/penugasan/pin-generator</a>,
+        lalu isi field "PIN Guru (hash)" di <a href="/admin">/admin</a> &rarr; Pengaturan Penugasan.
+      </p>
+    )}
+  </section>
+</BaseLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  type BarisRekap = { kelas: string; jumlahSiswa: number; rataRata: number; skorTertinggi: number; skorMaks: number };
+
+  function baris(...isi: (string | number)[]): HTMLTableRowElement {
+    const tr = document.createElement('tr');
+    for (const nilai of isi) {
+      const cell = document.createElement('td');
+      cell.textContent = String(nilai);
+      tr.appendChild(cell);
+    }
+    return tr;
+  }
+
+  function renderTable(table: HTMLTableElement, rows: BarisRekap[]) {
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    headRow.innerHTML = '<th>Kelas</th><th>Jumlah Siswa</th><th>Rata-rata</th><th>Skor Tertinggi</th>';
+    thead.appendChild(headRow);
+
+    const tbody = document.createElement('tbody');
+    rows.forEach((r) => {
+      tbody.appendChild(baris(r.kelas, r.jumlahSiswa, r.rataRata, `${r.skorTertinggi} / ${r.skorMaks}`));
+    });
+
+    table.replaceChildren(thead, tbody);
+  }
+
+  const section = document.querySelector<HTMLElement>('[data-pin-hash]');
+  const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
+  const wrap = document.querySelector<HTMLElement>('[data-rekap-wrap]');
+  const pilihSelect = document.querySelector<HTMLSelectElement>('[data-rekap-pilih]');
+  const loadingEl = document.querySelector<HTMLElement>('[data-rekap-loading]');
+  const emptyEl = document.querySelector<HTMLElement>('[data-rekap-empty]');
+  const table = document.querySelector<HTMLTableElement>('[data-rekap-table]');
+
+  if (section && form && errorEl && wrap && pilihSelect && table) {
+    const expectedHash = section.dataset.pinHash!;
+    const sessionKey = `penugasan-rekap:${expectedHash}`;
+    let pinTersimpan = '';
+
+    const muatRekap = async () => {
+      const slug = pilihSelect.value;
+      if (!slug || !pinTersimpan) return;
+
+      loadingEl?.removeAttribute('hidden');
+      table.replaceChildren();
+      emptyEl?.setAttribute('hidden', '');
+
+      try {
+        const res = await fetch(`/api/penugasan/rekap/${slug}?pin=${encodeURIComponent(pinTersimpan)}`);
+        if (!res.ok) {
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          sessionStorage.removeItem(sessionKey);
+          wrap.hidden = true;
+          form.hidden = false;
+          if (errorEl) {
+            errorEl.textContent = body?.error || 'Gagal membuka rekap. Coba lagi.';
+            errorEl.hidden = false;
+          }
+          return;
+        }
+        const data = (await res.json()) as { rows: BarisRekap[] };
+        if (data.rows.length === 0) {
+          emptyEl?.removeAttribute('hidden');
+        } else {
+          renderTable(table, data.rows);
+        }
+      } catch {
+        if (emptyEl) {
+          emptyEl.textContent = 'Gagal memuat rekap. Coba muat ulang halaman.';
+          emptyEl.removeAttribute('hidden');
+        }
+      } finally {
+        loadingEl?.setAttribute('hidden', '');
+      }
+    };
+
+    const buka = (hash: string) => {
+      pinTersimpan = hash;
+      form.hidden = true;
+      wrap.hidden = false;
+      muatRekap();
+    };
+
+    pilihSelect.addEventListener('change', muatRekap);
+
+    // Sengaja pakai sessionStorage (bukan localStorage) -- pola sama
+    // seperti leaderboard & hasil-ujian, tidak "login permanen" di
+    // perangkat bersama/sekolah.
+    if (sessionStorage.getItem(sessionKey) === '1') {
+      buka(expectedHash);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('#pin')!;
+      const hash = await sha256Hex(input.value.trim());
+
+      if (hash === expectedHash) {
+        errorEl.hidden = true;
+        sessionStorage.setItem(sessionKey, '1');
+        buka(hash);
+      } else {
+        errorEl.textContent = 'Kode PIN salah. Coba lagi.';
+        errorEl.hidden = false;
+        input.select();
+      }
+    });
+  }
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .gate-section {
+    padding-block: 1rem 4rem;
+    max-width: 40rem;
+  }
+
+  .belum-ada-pin {
+    padding: 1.5rem;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .pin-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pin-form[hidden] {
+    display: none;
+  }
+
+  .pin-form label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pin-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pin-row input {
+    flex: 1 1 12rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .pin-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .rekap-wrap[hidden] {
+    display: none;
+  }
+
+  .rekap-pilih-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  .leaderboard-loading,
+  .leaderboard-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    padding-block: 1rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    box-shadow: var(--shadow);
+  }
+
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .leaderboard-table thead th {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--ink-soft);
+    background-color: var(--accent-soft);
+  }
+
+  .leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+</style>

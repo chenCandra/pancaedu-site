@@ -1,0 +1,35 @@
+---
+// Drag & drop sungguhan (Pointer Events + setPointerCapture, pola yang
+// sama dipakai widget lab virtual mis. src/components/lab/JangkaSorong.astro)
+// -- geser potongan (`.pn-chip`) dari tray ke salah satu kategori. Ada
+// juga fallback klik-klik (klik chip buat "pegang", lalu klik kategori
+// buat menaruh) supaya tetap bisa dipakai tanpa drag (keyboard/aksesibilitas).
+// Logika drag & klik dipasang di src/scripts/penugasan/ambil-jawaban.ts,
+// bukan di sini -- file ini cuma markup awal (semua item mulai di tray).
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'drag-drop' }>;
+}
+
+const { soal } = Astro.props;
+---
+
+<div data-pn-dragdrop>
+  <p class="pn-zone-label">Belum ditempatkan:</p>
+  <div class="pn-dragdrop-tray" data-pn-tray>
+    {soal.item.map((item) => (
+      <button type="button" class="pn-chip" data-pn-chip data-item-id={item.id}>
+        {item.teks}
+      </button>
+    ))}
+  </div>
+  <div class="pn-zones">
+    {soal.kategori.map((kat) => (
+      <div class="pn-zone" data-pn-zone data-kategori-id={kat.id}>
+        <p class="pn-zone-label">{kat.label}</p>
+        <div class="pn-zone-items" data-pn-zone-items></div>
+      </div>
+    ))}
+  </div>
+</div>

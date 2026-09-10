@@ -131,6 +131,10 @@ Salah. <strong class="mtr-right">Aksi dan reaksi bekerja pada benda yang BERBEDA
 Kurang tepat. <strong class="mtr-right">Benda yang sudah bergerak akan tetap bergerak lurus beraturan</strong> kalau ΣF = 0 -- bukan otomatis berhenti begitu saja.
 </div>
 
+<div class="mtr-note">
+🚗 "Bergerak lurus beraturan" itu istilah resmi <strong>GLB</strong>, dan begitu ada gaya total yang bekerja, geraknya berubah jadi <strong>GLBB</strong>. Coba buktikan sendiri bedanya lewat simulasi <strong><a href="/lab-maya/gerak-lurus">Virtual Motion Lab</a></strong> -- jalankan kereta di lintasan, baca sensor, dan lihat langsung ciri khas tiap jenis gerak lewat grafik.
+</div>
+
 ## 🎯 Intinya
 
 Perhatikan bahwa ketiga hukum ini sebenarnya menceritakan satu hal yang sama dari tiga sudut berbeda: Hukum I adalah kasus KHUSUS Hukum II (saat ΣF = 0, otomatis a = 0, sehingga benda tidak berubah geraknya). Hukum III melengkapi keduanya dengan menjelaskan bahwa gaya **tidak pernah berdiri sendiri** -- setiap gaya yang bekerja pada suatu benda pasti punya pasangannya di benda lain. Kalau kalian paham hubungan tiga hukum ini sebagai satu kesatuan (bukan tiga aturan terpisah untuk dihafal), soal-soal gerak jadi jauh lebih mudah dianalisis.

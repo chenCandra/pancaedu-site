@@ -1,0 +1,23 @@
+---
+// Bagian interaktif tipe "pilihan-ganda" saja -- wrapper `.pn-soal`,
+// teks pertanyaan, dan placeholder feedback ada di halaman induk
+// (src/pages/penugasan/[slug].astro), supaya tidak diulang di tiap
+// komponen tipe. Interaksi klik (single-select, boleh ganti pilihan
+// sebelum submit) dipasang oleh script bersama
+// src/scripts/penugasan/ambil-jawaban.ts, bukan di sini.
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'pilihan-ganda' }>;
+}
+
+const { soal } = Astro.props;
+---
+
+<div class="pn-options" role="group" aria-label="Pilihan jawaban">
+  {soal.pilihan.map((opsi) => (
+    <button type="button" class="pn-option" data-pn-opsi data-opsi-id={opsi.id}>
+      {opsi.teks}
+    </button>
+  ))}
+</div>

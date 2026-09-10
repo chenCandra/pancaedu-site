@@ -1,0 +1,22 @@
+---
+// Input teks/angka bebas. `angka: true` -> keyboard numerik di HP & atribut
+// inputmode/step yang sesuai, tapi PENILAIAN toleransi tetap dihitung di
+// server (src/lib/penugasan/grading.ts), bukan di sini.
+import type { SoalTampilan } from '../../lib/penugasan/types';
+
+interface Props {
+  soal: Extract<SoalTampilan, { tipe: 'isian-singkat' }>;
+}
+
+const { soal } = Astro.props;
+---
+
+<input
+  type={soal.angka ? 'number' : 'text'}
+  inputmode={soal.angka ? 'decimal' : undefined}
+  step={soal.angka ? 'any' : undefined}
+  class="pn-input"
+  data-pn-isian
+  placeholder={soal.angka ? 'Jawaban berupa angka' : 'Ketik jawabanmu di sini'}
+  autocomplete="off"
+/>

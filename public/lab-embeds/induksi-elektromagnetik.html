@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Faraday Electromagnetic Induction Lab</title>
+<style>
+  :root {
+    --bg-1: #f5f3ff; --bg-2: #eef2ff; --panel: #ffffff; --panel-2: #f7f5ff;
+    --border: #e3ddfa; --ink: #1c1533; --ink-muted: #5f5480; --ink-faint: #9088ad;
+    --indigo: #4f46e5; --violet: #7c3aed; --cyan: #06b6d4; --magenta: #db2777; --amber: #f59e0b;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #0b0a20; --scene-bg-2: #17123c;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(79,70,229,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--indigo); outline-offset: 2px; }
+
+  .fl-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .fl-header-title { display: flex; align-items: center; gap: 12px; }
+  .fl-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--indigo), var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .fl-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .fl-badge { font-size: 0.72rem; font-weight: 800; color: var(--indigo); background: rgba(79,70,229,0.1); border: 1px solid rgba(79,70,229,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .fl-intro { background: var(--panel); border-left: 4px solid var(--magenta); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+
+  .fl-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .fl-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .fl-card-title { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .fl-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .fl-main-grid { grid-template-columns: 300px 1fr; } }
+
+  .fl-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .fl-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .fl-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--indigo); }
+
+  .fl-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .fl-chip { background: #fff; border: 1.5px solid var(--border); color: var(--ink-muted); font-size: 0.74rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+  .fl-chip.is-active { color: #fff; background: linear-gradient(90deg, var(--indigo), var(--violet)); border-color: transparent; }
+
+  .fl-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+  .fl-toggle-row label { font-size: 0.8rem; color: var(--ink-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+
+  .fl-scene-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 0%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #0b0920; box-shadow: inset 0 0 40px rgba(0,0,0,0.45); }
+  .fl-scene-wrap canvas { display: block; width: 100%; height: 340px; touch-action: none; }
+  @media (max-width: 480px) { .fl-scene-wrap canvas { height: 280px; } }
+  .fl-scene-hint { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.14); backdrop-filter: blur(4px); color: #ede9fe; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; text-align: center; max-width: 92%; }
+
+  .fl-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .fl-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .fl-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .fl-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .fl-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .fl-formula-box { background: #0e0a26; color: #ede9fe; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .fl-formula-box .v { color: var(--amber); font-weight: 700; }
+
+  .fl-lenz-panel { background: rgba(219,39,119,0.06); border: 1.5px solid rgba(219,39,119,0.25); border-radius: var(--radius-md); padding: 12px 14px; font-size: 0.82rem; color: var(--ink-muted); }
+  .fl-lenz-panel strong { color: var(--magenta); }
+
+  .fl-graph-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .fl-graph-grid { grid-template-columns: 1fr 1fr; } }
+  .fl-graph-wrap { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; }
+  .fl-graph-caption { font-size: 0.7rem; color: var(--ink-faint); text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .fl-graph-wrap canvas { width: 100%; height: 150px; display: block; }
+
+  .fl-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .fl-btn-primary { background: linear-gradient(90deg, var(--indigo), var(--magenta)); border: none; color: #fff; font-weight: 800; font-size: 0.88rem; padding: 12px 26px; border-radius: 999px; box-shadow: 0 6px 18px rgba(79,70,229,0.3); }
+  .fl-btn-primary.is-recording { background: linear-gradient(90deg, var(--warn), var(--magenta)); }
+  .fl-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .fl-btn-secondary:hover { color: var(--ink); border-color: var(--indigo); }
+
+  .fl-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+  table.fl-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; min-width: 480px; }
+  table.fl-table th, table.fl-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--border); font-family: 'Courier New', monospace; }
+  table.fl-table th:first-child, table.fl-table td:first-child { text-align: left; font-family: inherit; }
+  table.fl-table th { color: var(--ink-faint); font-size: 0.66rem; text-transform: uppercase; background: var(--panel-2); }
+  .fl-empty-note { font-size: 0.82rem; color: var(--ink-faint); text-align: center; padding: 18px; }
+
+  .fl-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); display: flex; align-items: center; gap: 6px; }
+  .fl-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .fl-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .fl-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .fl-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .fl-quiz-option:hover:not(:disabled) { border-color: var(--indigo); background: rgba(79,70,229,0.06); }
+  .fl-quiz-option .letter { font-weight: 900; color: var(--indigo); flex-shrink: 0; }
+  .fl-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .fl-quiz-option.is-chosen { border-color: var(--indigo); background: rgba(79,70,229,0.1); }
+  .fl-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .fl-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .fl-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .fl-feedback.is-visible { display: block; }
+  .fl-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .fl-challenge-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .fl-challenge-grid { grid-template-columns: 1fr 1fr; } }
+  .fl-challenge-item { background: var(--panel-2); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .fl-challenge-item h4 { font-size: 0.85rem; color: var(--magenta); }
+  .fl-challenge-item p { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .fl-compare-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .fl-compare-grid { grid-template-columns: 1fr 1fr; } }
+  .fl-compare-col { background: var(--panel-2); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .fl-compare-tag { font-size: 0.7rem; font-weight: 900; padding: 3px 11px; border-radius: 999px; align-self: flex-start; }
+  .fl-compare-tag.a { color: var(--indigo); border: 1.5px solid var(--indigo); }
+  .fl-compare-tag.b { color: var(--magenta); border: 1.5px solid var(--magenta); }
+  .fl-compare-result { margin-top: 4px; font-size: 0.9rem; font-weight: 800; font-family: 'Courier New', monospace; }
+
+  .fl-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .fl-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="fl-header">
+    <div class="fl-header-title">
+      <span style="font-size:1.8rem;">⚡</span>
+      <div><h1>Faraday Electromagnetic Induction Lab</h1><p>Praktikum Induksi Elektromagnetik -- Modern Electromagnetic Lab</p></div>
+    </div>
+    <span class="fl-badge">🧪 Lab Maya PancaEdu · Fisika Kelas XII</span>
+  </div>
+
+  <p class="fl-intro"><strong>Tarik magnet</strong> di lintasan dengan jari/mouse -- mendekat, menjauh, cepat, atau lambat, terserah kamu. Amati jarum galvanometer merespons GERAKAN itu secara langsung, dan temukan sendiri hubungan antara perubahan fluks magnetik dan GGL induksi -- bukan cuma angka yang berubah sendiri.</p>
+
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">🧪 Eksperimen -- Gerakkan Magnet, Amati Galvanometer</span></div>
+    <div class="fl-main-grid">
+      <div>
+        <div class="fl-param-row">
+          <div class="fl-param-label-row"><span>🌀 Jumlah Lilitan (N)</span><span class="fl-param-value" id="nVal">50</span></div>
+          <div class="fl-chip-row" id="nChips"></div>
+        </div>
+        <div class="fl-toggle-row"><label for="chkField"><input type="checkbox" id="chkField" checked>☑ Tampilkan Medan Magnet</label></div>
+        <div class="fl-toggle-row"><label for="chkRealLab"><input type="checkbox" id="chkRealLab">🔬 Real Lab Mode (noise kecil)</label></div>
+        <div class="fl-param-row" style="margin-top:10px;">
+          <div class="fl-param-label-row"><span>🐢 Respons Jarum &amp; Arus</span></div>
+          <div class="fl-chip-row" id="speedChips"></div>
+        </div>
+        <div class="fl-lenz-panel" id="lenzPanel">
+          <strong>🧭 Hukum Lenz:</strong> arus induksi muncul dengan arah yang MENENTANG perubahan fluks magnetik. Gerakkan magnet untuk melihatnya bekerja.
+        </div>
+      </div>
+      <div>
+        <div class="fl-scene-wrap">
+          <canvas id="simCanvas"></canvas>
+          <div class="fl-scene-hint" id="sceneHint">🧲 Tarik magnet mendekati/menjauhi kumparan</div>
+        </div>
+        <div class="fl-data-panel" style="margin-top:12px;">
+          <div class="fl-data-chip"><div class="k">📏 Jarak (x)</div><div class="v" id="chipX" style="color:var(--indigo);">10,0 cm</div></div>
+          <div class="fl-data-chip"><div class="k">🏃 Kecepatan (v)</div><div class="v" id="chipV" style="color:var(--cyan);">0,0 cm/s</div></div>
+          <div class="fl-data-chip"><div class="k">🧲 Fluks (Φ)</div><div class="v" id="chipPhi">0,0000 Wb</div></div>
+          <div class="fl-data-chip"><div class="k">⚡ GGL (ε)</div><div class="v" id="chipEmf" style="color:var(--magenta);">0,00 V</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fl-data-panel">
+      <div class="fl-data-chip"><div class="k">ΔΦ/Δt</div><div class="v" id="chipDphidt">0,0000 Wb/s</div></div>
+      <div class="fl-data-chip"><div class="k">↔ Arah Arus Induksi</div><div class="v" id="chipDirection">--</div></div>
+      <div class="fl-data-chip"><div class="k">📌 Status Magnet</div><div class="v" id="chipStatus">Diam</div></div>
+      <div class="fl-data-chip"><div class="k">⚙️ N (lilitan)</div><div class="v" id="chipN">50</div></div>
+    </div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Hukum Faraday -- Rincian Perhitungan:</div>
+    <div class="fl-formula-box" id="formulaBox"></div>
+  </div>
+
+  <!-- ============ GRAFIK ============ -->
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">📈 Grafik Real-Time (8 detik terakhir)</span></div>
+    <div class="fl-graph-grid">
+      <div class="fl-graph-wrap"><p class="fl-graph-caption">GGL vs Waktu (ε-t)</p><canvas id="graphEt"></canvas></div>
+      <div class="fl-graph-wrap"><p class="fl-graph-caption">Fluks vs Waktu (Φ-t)</p><canvas id="graphPhit"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ============ EKSPERIMEN 4: BANDINGKAN SLOW VS FAST ============ -->
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">🧪 Eksperimen 4 -- Bandingkan Kecepatan Gerak</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Gerakkan magnet PELAN, tekan "Rekam Slow". Lalu gerakkan CEPAT, tekan "Rekam Fast". Bandingkan εnya.</p>
+    <div class="fl-compare-grid">
+      <div class="fl-compare-col">
+        <span class="fl-compare-tag a">🐢 SLOW</span>
+        <div class="fl-compare-result" id="slowResult">ε = -- V</div>
+        <button class="fl-btn-secondary" id="btnRecordSlow">📌 Rekam Slow (pakai |ε| saat ini)</button>
+      </div>
+      <div class="fl-compare-col">
+        <span class="fl-compare-tag b">⚡ FAST</span>
+        <div class="fl-compare-result" id="fastResult">ε = -- V</div>
+        <button class="fl-btn-secondary" id="btnRecordFast">📌 Rekam Fast (pakai |ε| saat ini)</button>
+      </div>
+    </div>
+    <div class="fl-feedback" id="compareSpeedFeedback"></div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="fl-card">
+    <span class="fl-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="fl-quiz-question">Mengapa galvanometer tidak menunjukkan arus ketika magnet diam (meski dekat kumparan)?</p>
+    <div class="fl-quiz-options" id="thinkOptions1"></div>
+    <div class="fl-feedback" id="thinkFeedback1"></div>
+    <p class="fl-quiz-question" style="margin-top:8px;">Apakah magnet yang lebih kuat selalu menghasilkan GGL lebih besar?</p>
+    <div class="fl-quiz-options" id="thinkOptions2"></div>
+    <div class="fl-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">🎯 Faraday Challenge</span></div>
+    <div class="fl-challenge-grid">
+      <div class="fl-challenge-item"><h4>Challenge 1</h4><p>Hasilkan GGL sebesar mungkin dengan N TETAP -- coba ubah kecepatan gerak magnet.</p><button class="fl-btn-secondary" data-challenge="1">Cek Sekarang (target |ε|≥1V)</button><div class="fl-feedback" id="chFb1"></div></div>
+      <div class="fl-challenge-item"><h4>Challenge 2</h4><p>Hasilkan GGL minimal <strong>0,5 V</strong>.</p><button class="fl-btn-secondary" data-challenge="2">Cek Sekarang</button><div class="fl-feedback" id="chFb2"></div></div>
+      <div class="fl-challenge-item"><h4>Challenge 3</h4><p>Balikkan arah GGL (gerakkan magnet ke dua arah berbeda).</p><button class="fl-btn-secondary" data-challenge="3">Cek Sekarang</button><div class="fl-feedback" id="chFb3"></div></div>
+      <div class="fl-challenge-item">
+        <h4>Challenge 4</h4><p>Sambil menggerakkan magnet, tebak dari arah jarum: magnet sedang MENDEKAT atau MENJAUH?</p>
+        <div class="fl-controls-row"><button class="fl-btn-secondary" data-guess="mendekat">⬅️ Mendekat</button><button class="fl-btn-secondary" data-guess="menjauh">➡️ Menjauh</button></div>
+        <div class="fl-feedback" id="chFb4"></div>
+      </div>
+      <div class="fl-challenge-item"><h4>Challenge 5</h4><p>Capai GGL ≥ 0,3 V dengan jumlah lilitan sekecil mungkin (coba mulai dari N=10).</p><button class="fl-btn-secondary" data-challenge="5">Cek Sekarang</button><div class="fl-feedback" id="chFb5"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ DATA LOGGER ============ -->
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">⏺ Record Experiment</span></div>
+    <div class="fl-controls-row">
+      <button class="fl-btn-primary" id="btnRecordToggle">⏺ START RECORDING</button>
+      <button class="fl-btn-secondary" id="btnClearAll">Hapus Semua</button>
+      <button class="fl-btn-secondary" id="btnExportCsv">⬇️ Download CSV</button>
+    </div>
+    <div class="fl-table-wrap">
+      <table class="fl-table"><thead><tr><th>t (s)</th><th>x (cm)</th><th>v (cm/s)</th><th>Φ (Wb)</th><th>ε (V)</th></tr></thead><tbody id="dataTableBody"></tbody></table>
+      <p class="fl-empty-note" id="dataEmptyNote">Belum ada data. Tekan START RECORDING lalu gerakkan magnet.</p>
+    </div>
+  </div>
+
+  <div class="fl-legend" id="flLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // ============ STATE & MODEL ============
+    let N = 50;
+    const N_CHIPS = [10, 20, 50, 100, 200];
+    const X_MIN = 1, X_MAX = 20; // cm, rentang rel
+    let magnetX = 10; // cm, jarak dari kumparan
+    let magnetV = 0; // cm/s, kecepatan sesaat (dari drag)
+    let fieldOn = true, realLabMode = false;
+    let responseSpeed = 1; // faktor easing jarum/arus (0.25-2x)
+    const RESPONSE_SPEEDS = [0.25, 0.5, 1, 2];
+
+    // Model fluks: peluruhan eksponensial monoton -- turunannya TIDAK PERNAH
+    // nol di rentang manapun, jadi tanda GGL selalu konsisten (mendekat =
+    // satu tanda, menjauh = tanda sebaliknya, tanpa titik nol-palsu).
+    const PHI_MAX = 0.0022; // Wb, konstanta model simulasi (bukan pengukuran nyata)
+    const X_CHAR = 6; // cm, jarak karakteristik peluruhan
+    function fluxAt(x) { return PHI_MAX * Math.exp(-x / X_CHAR); }
+    function dFluxDx(x) { return -(PHI_MAX / X_CHAR) * Math.exp(-x / X_CHAR); }
+    function computeEmf(x, v) {
+      const dPhiDt = dFluxDx(x) * v; // v dalam cm/s, x dalam cm -- konsisten dalam satuan model ini
+      const emf = -N * dPhiDt;
+      return { emf, dPhiDt };
+    }
+
+    function renderNChips() {
+      const row = $('nChips'); row.innerHTML = '';
+      N_CHIPS.forEach((n) => {
+        const chip = document.createElement('button');
+        chip.className = 'fl-chip' + (n === N ? ' is-active' : '');
+        chip.textContent = 'N=' + n;
+        chip.addEventListener('click', () => { N = n; $('nVal').textContent = n; renderNChips(); updateReadout(); });
+        row.appendChild(chip);
+      });
+    }
+    function renderSpeedChips() {
+      const row = $('speedChips'); row.innerHTML = '';
+      RESPONSE_SPEEDS.forEach((s) => {
+        const chip = document.createElement('button');
+        chip.className = 'fl-chip' + (s === responseSpeed ? ' is-active' : '');
+        chip.textContent = (s < 1 ? '🐢 ' : '') + s + '×';
+        chip.addEventListener('click', () => { responseSpeed = s; renderSpeedChips(); });
+        row.appendChild(chip);
+      });
+    }
+    renderNChips(); renderSpeedChips();
+    $('chkField').addEventListener('change', (e) => { fieldOn = e.target.checked; });
+    $('chkRealLab').addEventListener('change', (e) => { realLabMode = e.target.checked; });
+
+    function renderLegend() {
+      const el = $('flLegend');
+      [{ icon: '🧲', label: 'Magnet (N merah, S biru)' }, { icon: '🌀', label: 'Kumparan' }, { icon: '📟', label: 'Galvanometer' }, { icon: '🧭', label: 'Hukum Lenz' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'fl-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    // ============ DRAG MAGNET (pointer-based, kecepatan dari gerakan asli) ============
+    const canvas = $('simCanvas');
+    let dragging = false, lastPointerX = 0, lastPointerT = 0;
+    let railStartPx = 0, railEndPx = 0; // dihitung ulang tiap resize
+    let vSmoothed = 0;
+
+    function pxToCm(px) {
+      const frac = (px - railStartPx) / (railEndPx - railStartPx);
+      return X_MAX - frac * (X_MAX - X_MIN); // px kecil (dekat kumparan) -> x kecil
+    }
+    canvas.addEventListener('pointerdown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const magnetPx = xToPx(magnetX);
+      if (Math.abs(px - magnetPx) > 60) return; // cuma bisa drag kalau klik dekat magnet
+      dragging = true; lastPointerX = px; lastPointerT = performance.now();
+      canvas.setPointerCapture(e.pointerId);
+      $('sceneHint').textContent = '🧲 Menarik magnet...';
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const now = performance.now();
+      const dt = Math.max(0.001, (now - lastPointerT) / 1000);
+      const newX = Math.min(X_MAX, Math.max(X_MIN, pxToCm(px)));
+      const instV = (newX - magnetX) / dt;
+      vSmoothed = vSmoothed * 0.5 + instV * 0.5; // sedikit smoothing biar tidak terlalu bergetar
+      magnetX = newX; magnetV = vSmoothed;
+      lastPointerX = px; lastPointerT = now;
+      updateReadout();
+    });
+    function stopDrag() {
+      if (!dragging) return;
+      dragging = false; magnetV = 0; vSmoothed = 0;
+      $('sceneHint').textContent = '🧲 Tarik magnet mendekati/menjauhi kumparan';
+      updateReadout();
+    }
+    canvas.addEventListener('pointerup', stopDrag);
+    canvas.addEventListener('pointercancel', stopDrag);
+    canvas.addEventListener('pointerleave', () => { if (dragging) stopDrag(); });
+
+    function xToPx(xcm) {
+      const frac = (X_MAX - xcm) / (X_MAX - X_MIN);
+      return railStartPx + frac * (railEndPx - railStartPx);
+    }
+
+    // ============ READOUT & FORMULA ============
+    let needleAngle = 0; // derajat, dianimasikan dgn easing
+    let recordingBuffer = []; // {t,x,v,phi,emf} rolling 8 detik untuk grafik
+    let sessionStartT = performance.now();
+    let peakAbsEmf = 0;
+    let sawPositive = false, sawNegative = false;
+
+    function updateReadout() {
+      const phi = fluxAt(magnetX);
+      const { emf, dPhiDt } = computeEmf(magnetX, magnetV);
+      const noise = () => realLabMode ? (Math.random() - 0.5) * 0.02 : 0;
+
+      $('chipX').textContent = magnetX.toFixed(1) + ' cm';
+      $('chipV').textContent = magnetV.toFixed(1) + ' cm/s';
+      $('chipPhi').textContent = phi.toFixed(4) + ' Wb';
+      $('chipEmf').textContent = (emf + noise()).toFixed(3) + ' V';
+      $('chipDphidt').textContent = dPhiDt.toFixed(4) + ' Wb/s';
+      $('chipN').textContent = N;
+      $('chipStatus').textContent = Math.abs(magnetV) < 0.3 ? 'Diam' : (magnetV < 0 ? 'Mendekat ke kumparan' : 'Menjauh dari kumparan');
+
+      const dirEl = $('chipDirection');
+      if (Math.abs(emf) < 0.005) { dirEl.textContent = '-- (tidak ada arus)'; dirEl.style.color = 'var(--ink-faint)'; }
+      else if (emf < 0) { dirEl.textContent = '← (searah jarum jam)'; dirEl.style.color = 'var(--indigo)'; }
+      else { dirEl.textContent = '→ (berlawanan jarum jam)'; dirEl.style.color = 'var(--magenta)'; }
+
+      let formula = `Φ(x) = Φmax·e^(−x/xc) = ${PHI_MAX} × e^(−${magnetX.toFixed(1)}/${X_CHAR}) = <span class="v">${phi.toFixed(4)} Wb</span> <span style="color:#a5a3c4;">(model simulasi)</span>`;
+      formula += `<br>ΔΦ/Δt (dari gerak magnet, v=${magnetV.toFixed(1)} cm/s) = <span class="v">${dPhiDt.toFixed(4)} Wb/s</span>`;
+      formula += `<br><span class="v">ε</span> = −N × ΔΦ/Δt = −${N} × ${dPhiDt.toFixed(4)} = <span class="v">${emf.toFixed(3)} V</span>`;
+      if (Math.abs(magnetV) < 0.3) formula += `<br><em>Magnet diam (v≈0) → ΔΦ/Δt = 0 → ε ≈ 0, meskipun magnet dekat kumparan dan Φ tidak nol.</em>`;
+      $('formulaBox').innerHTML = formula;
+
+      // Lenz panel dinamis
+      const lenz = $('lenzPanel');
+      if (Math.abs(emf) < 0.005) lenz.innerHTML = `<strong>🧭 Hukum Lenz:</strong> arus induksi muncul dengan arah yang MENENTANG perubahan fluks magnetik. Gerakkan magnet untuk melihatnya bekerja.`;
+      else if (magnetV < 0) lenz.innerHTML = `<strong>🧭 Hukum Lenz:</strong> magnet MENDEKAT → fluks bertambah → arus induksi menghasilkan medan yang MENENTANG pertambahan itu (melawan kedatangan magnet).`;
+      else lenz.innerHTML = `<strong>🧭 Hukum Lenz:</strong> magnet MENJAUH → fluks berkurang → arus induksi menghasilkan medan yang MENENTANG pengurangan itu (menarik magnet kembali), arah arus jadi berlawanan dari sebelumnya.`;
+
+      // target needle angle, easing diterapkan di render loop
+      const maxEmfForFullScale = 2; // V, skala penuh galvanometer
+      needleAngle = Math.max(-60, Math.min(60, (emf / maxEmfForFullScale) * 60));
+
+      if (Math.abs(emf) > peakAbsEmf) peakAbsEmf = Math.abs(emf);
+      if (emf > 0.02) sawPositive = true; if (emf < -0.02) sawNegative = true;
+
+      const t = (performance.now() - sessionStartT) / 1000;
+      recordingBuffer.push({ t, x: magnetX, v: magnetV, phi, emf });
+      recordingBuffer = recordingBuffer.filter((d) => t - d.t <= 8);
+      if (isRecording && t - lastLogT >= 0.2) { experimentData.push({ t, x: magnetX, v: magnetV, phi, emf }); renderDataTable(); lastLogT = t; }
+
+      return { phi, emf };
+    }
+
+    // ============ RENDER SCENE ============
+    let needleAngleDisplay = 0;
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, rect.width * dpr); canvas.height = Math.max(1, rect.height * dpr);
+      const ctx = canvas.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      railStartPx = rect.width * 0.28; railEndPx = rect.width * 0.94;
+      resizeAllGraphs();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawLabBg(ctx, w, h) {
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(124,58,237,0.06)'); grad.addColorStop(1, 'rgba(6,182,212,0.05)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+    }
+
+    let particlePhase = 0, fieldPhase = 0;
+    function drawScene(emf) {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, w, h);
+      drawLabBg(ctx, w, h);
+
+      const railY = h * 0.42;
+      const coilX = railStartPx - 26;
+
+      // Rel
+      ctx.strokeStyle = 'rgba(226,232,240,0.35)'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(railStartPx - 10, railY + 34); ctx.lineTo(railEndPx + 10, railY + 34); ctx.stroke();
+
+      // Kumparan (beberapa loop elips + inti)
+      ctx.save(); ctx.translate(coilX, railY);
+      ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2.2;
+      for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.ellipse(i * 5, 0, 12, 34, 0, 0, Math.PI * 2); ctx.stroke(); }
+      ctx.fillStyle = '#201a45'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('🌀 KUMPARAN', 0, -50);
+      ctx.fillText(`N=${N}`, 0, 50);
+      ctx.restore();
+
+      // Medan magnet field lines (dari magnet, toggle)
+      const magnetPx = xToPx(magnetX);
+      if (fieldOn) {
+        fieldPhase += 0.01;
+        ctx.save();
+        const nLines = 5;
+        for (let i = 0; i < nLines; i++) {
+          const spread = 18 + i * 10;
+          const alpha = Math.max(0.05, 0.35 - i * 0.06) * (1 - Math.min(1, magnetX / X_MAX) * 0.3 + 0.3);
+          ctx.strokeStyle = `rgba(124,58,237,${alpha})`; ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(magnetPx - 12, railY - spread * 0.2);
+          ctx.quadraticCurveTo(magnetPx - 60 - i * 14, railY, magnetPx - 12, railY + spread * 0.2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Magnet batang (N merah kanan/atas, S biru kiri/bawah tergantung orientasi tetap menghadap kumparan)
+      ctx.save(); ctx.translate(magnetPx, railY);
+      ctx.fillStyle = '#ef4444'; ctx.fillRect(-24, -16, 24, 32);
+      ctx.fillStyle = '#3b82f6'; ctx.fillRect(0, -16, 24, 32);
+      ctx.strokeStyle = '#1e1b4b'; ctx.lineWidth = 2; ctx.strokeRect(-24, -16, 48, 32);
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 13px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('N', -12, 0); ctx.fillText('S', 12, 0);
+      if (dragging) { ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2; ctx.strokeRect(-28, -20, 56, 40); }
+      ctx.restore();
+
+      // Kabel dari kumparan ke galvanometer + partikel arus
+      const galvX = w * 0.5, galvY = h * 0.82;
+      const wirePts = [[coilX, railY + 34], [coilX, galvY], [galvX - 40, galvY], [galvX - 40, galvY - 30]];
+      ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); wirePts.forEach((p, i) => { if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); }); ctx.stroke();
+      const wirePts2 = [[galvX + 40, galvY - 30], [galvX + 40, galvY], [coilX + 12, galvY + 20], [coilX + 12, railY + 34]];
+      ctx.beginPath(); wirePts2.forEach((p, i) => { if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); }); ctx.stroke();
+
+      if (Math.abs(emf) > 0.01) {
+        particlePhase += 0.02 * responseSpeed * Math.min(3, Math.max(0.3, Math.abs(emf) * 2));
+        const allPts = emf < 0 ? wirePts.concat(wirePts2.slice().reverse()) : wirePts2.concat(wirePts.slice().reverse());
+        const totalLen = allPts.reduce((s, p, i) => { if (i === 0) return 0; const prev = allPts[i - 1]; return s + Math.hypot(p[0] - prev[0], p[1] - prev[1]); }, 0);
+        for (let k = 0; k < 4; k++) {
+          const dist = ((particlePhase + k / 4) % 1) * totalLen;
+          let acc = 0;
+          for (let i = 1; i < allPts.length; i++) {
+            const p = allPts[i - 1], n = allPts[i];
+            const segLen = Math.hypot(n[0] - p[0], n[1] - p[1]);
+            if (dist <= acc + segLen) {
+              const t = segLen > 0 ? (dist - acc) / segLen : 0;
+              const x = p[0] + (n[0] - p[0]) * t, y = p[1] + (n[1] - p[1]) * t;
+              ctx.fillStyle = '#f472b6'; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+              break;
+            }
+            acc += segLen;
+          }
+        }
+      }
+
+      // Galvanometer analog
+      ctx.save(); ctx.translate(galvX, galvY - 30);
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = '#4f46e5'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(0, 0, 34, Math.PI, 0); ctx.lineTo(34, 8); ctx.lineTo(-34, 8); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 1;
+      for (let a = -60; a <= 60; a += 15) { const rad = (a - 90) * Math.PI / 180; ctx.beginPath(); ctx.moveTo(Math.cos(rad) * 24, Math.sin(rad) * 24); ctx.lineTo(Math.cos(rad) * 30, Math.sin(rad) * 30); ctx.stroke(); }
+      ctx.fillStyle = '#1c1533'; ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('−', -26, 2); ctx.fillText('0', 0, -30); ctx.fillText('+', 26, 2);
+      const easeFactor = 0.08 * responseSpeed;
+      needleAngleDisplay += (needleAngle - needleAngleDisplay) * easeFactor;
+      const nrad = (needleAngleDisplay - 90) * Math.PI / 180;
+      ctx.strokeStyle = '#db2777'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(Math.cos(nrad) * 26, Math.sin(nrad) * 26); ctx.stroke();
+      ctx.fillStyle = '#4f46e5'; ctx.beginPath(); ctx.arc(0, 4, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#201a45'; ctx.font = 'bold 9px system-ui'; ctx.fillText('GALVANOMETER', 0, 22);
+      ctx.restore();
+    }
+
+    // ============ MAIN LOOP ============
+    function mainLoop() {
+      const { emf } = updateReadout();
+      drawScene(emf);
+      drawLiveGraphs();
+      requestAnimationFrame(mainLoop);
+    }
+
+    // ============ GRAFIK LIVE (rolling buffer) ============
+    function resizeAllGraphs() { drawLiveGraphs(); }
+    function drawLiveGraphs() {
+      drawSeries($('graphEt'), recordingBuffer.map((d) => ({ x: d.t, y: d.emf })), '#db2777', 'ε (V)');
+      drawSeries($('graphPhit'), recordingBuffer.map((d) => ({ x: d.t, y: d.phi })), '#7c3aed', 'Φ (Wb)');
+    }
+    function drawSeries(canvasEl, points, color, label) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvasEl.parentElement.clientWidth - 16, h = 130;
+      canvasEl.width = w * dpr; canvasEl.height = h * dpr; canvasEl.style.width = w + 'px'; canvasEl.style.height = h + 'px';
+      const c = canvasEl.getContext('2d'); c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+      if (points.length < 2) { c.fillStyle = '#9088ad'; c.font = '11px system-ui'; c.textAlign = 'center'; c.fillText('Gerakkan magnet untuk melihat grafik', w / 2, h / 2); return; }
+      const minT = points[0].x, maxT = Math.max(points[points.length - 1].x, minT + 1);
+      const ys = points.map((p) => p.y);
+      const maxY = Math.max(...ys, 0.001), minY = Math.min(...ys, -0.001, 0);
+      const px = (t) => 20 + ((t - minT) / (maxT - minT)) * (w - 30);
+      const py = (y) => h - 18 - ((y - minY) / (maxY - minY || 1)) * (h - 28);
+      c.strokeStyle = 'rgba(0,0,0,0.08)'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(18, py(0)); c.lineTo(w - 6, py(0)); c.moveTo(18, 8); c.lineTo(18, h - 18); c.stroke();
+      c.beginPath(); c.strokeStyle = color; c.lineWidth = 2.2;
+      points.forEach((p, i) => { const x = px(p.x), y = py(p.y); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); });
+      c.stroke();
+      c.fillStyle = '#9088ad'; c.font = '9px system-ui'; c.textAlign = 'left'; c.fillText(label, w - 44, 14);
+    }
+
+    // ============ EKSPERIMEN 4: BANDINGKAN SLOW VS FAST ============
+    $('btnRecordSlow').addEventListener('click', () => {
+      const { emf } = updateReadout(); $('slowResult').textContent = `ε = ${emf.toFixed(3)} V`;
+      updateSpeedCompare();
+    });
+    $('btnRecordFast').addEventListener('click', () => {
+      const { emf } = updateReadout(); $('fastResult').textContent = `ε = ${emf.toFixed(3)} V`;
+      updateSpeedCompare();
+    });
+    function updateSpeedCompare() {
+      const slowText = $('slowResult').textContent, fastText = $('fastResult').textContent;
+      if (slowText.includes('--') || fastText.includes('--')) return;
+      const slowVal = Math.abs(parseFloat(slowText.replace('ε = ', '')));
+      const fastVal = Math.abs(parseFloat(fastText.replace('ε = ', '')));
+      const fb = $('compareSpeedFeedback'); fb.classList.add('is-visible');
+      fb.innerHTML = fastVal > slowVal
+        ? `✅ Sesuai dugaan: |ε| Fast (${fastVal.toFixed(3)} V) LEBIH BESAR dari Slow (${slowVal.toFixed(3)} V) -- gerakan lebih cepat = ΔΦ/Δt lebih besar = GGL lebih besar.`
+        : `💡 Saat ini |ε| Slow (${slowVal.toFixed(3)} V) ≥ Fast (${fastVal.toFixed(3)} V) -- coba ulangi, pastikan gerakan "Fast" benar-benar lebih cepat dari "Slow".`;
+    }
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'fl-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Done = false, t2Done = false;
+    renderQuizOptions($('thinkOptions1'), ['Karena ΔΦ/Δt = 0 saat magnet diam, walau Φ sendiri tidak nol', 'Karena fluksnya nol', 'Karena magnetnya terlalu jauh', 'Karena galvanometernya rusak'], (i, btn, c) => {
+      if (t1Done) return; t1Done = true;
+      const correct = i === 0;
+      c.querySelectorAll('.fl-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 0) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'ε = −N·ΔΦ/Δt -- GGL muncul dari PERUBAHAN fluks, bukan dari besar fluksnya. Magnet diam dekat kumparan tetap punya Φ besar, tapi ΔΦ/Δt = 0 karena tidak ada perubahan.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Ya, selalu', 'Tidak -- magnet kuat yang diam (v=0) tetap menghasilkan ε≈0, kecepatan geraknya yang menentukan', 'Ya, tapi cuma untuk magnet besar', 'Tidak dapat ditentukan'], (i, btn, c) => {
+      if (t2Done) return; t2Done = true;
+      const correct = i === 1;
+      c.querySelectorAll('.fl-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Kekuatan magnet memang memengaruhi besar Φ, tapi GGL bergantung pada LAJU PERUBAHAN fluks (ΔΦ/Δt) -- magnet sekuat apapun kalau diam (v=0), ΔΦ/Δt=0, dan ε≈0.';
+    });
+
+    // ============ CHALLENGE ============
+    document.querySelectorAll('[data-challenge]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.challenge;
+        const { emf } = updateReadout();
+        const fb = $(`chFb${id}`); fb.classList.add('is-visible');
+        let pass = false, msg = '';
+        if (id === '1') { pass = peakAbsEmf >= 1; msg = pass ? `Rekor |ε| tertinggi sesi ini: ${peakAbsEmf.toFixed(3)} V -- lolos target 1V!` : `Rekor |ε| tertinggi sesi ini baru ${peakAbsEmf.toFixed(3)} V. Coba tarik magnet lebih cepat (N tetap).`; }
+        else if (id === '2') { pass = peakAbsEmf >= 0.5; msg = pass ? `Rekor |ε| tertinggi: ${peakAbsEmf.toFixed(3)} V -- sudah lewat 0,5V!` : `Rekor |ε| tertinggi baru ${peakAbsEmf.toFixed(3)} V, target 0,5V. Coba lebih cepat atau naikkan N.`; }
+        else if (id === '3') { pass = sawPositive && sawNegative; msg = pass ? 'Sudah tercatat GGL positif DAN negatif -- arah GGL berhasil dibalik!' : 'Coba gerakkan magnet MENDEKAT lalu MENJAUH (dua arah berbeda) supaya tanda ε berubah.'; }
+        else if (id === '5') { pass = N <= 20 && peakAbsEmf >= 0.3; msg = pass ? `Dengan N=${N} (kecil), rekor |ε|=${peakAbsEmf.toFixed(3)} V sudah lewat 0,3V!` : `N saat ini ${N}, rekor |ε|=${peakAbsEmf.toFixed(3)} V. Coba N=10 atau N=20, lalu gerakkan magnet cukup cepat untuk capai 0,3V.`; }
+        fb.classList.toggle('is-wrong', !pass);
+        fb.innerHTML = (pass ? '✅ ' : '💡 ') + msg;
+      });
+    });
+    document.querySelectorAll('[data-guess]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const guess = btn.dataset.guess;
+        const actual = magnetV < -0.3 ? 'mendekat' : magnetV > 0.3 ? 'menjauh' : null;
+        const fb = $('chFb4'); fb.classList.add('is-visible');
+        if (actual === null) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Magnet sedang tidak bergerak -- coba tebak SAMBIL menariknya.'; return; }
+        const correct = guess === actual;
+        fb.classList.toggle('is-wrong', !correct);
+        fb.innerHTML = correct ? `✅ Tepat! Magnet memang sedang ${actual}.` : `💡 Sebenarnya magnet sedang ${actual} (lihat lagi arah jarum &amp; arus).`;
+      });
+    });
+
+    // ============ DATA LOGGER ============
+    let isRecording = false, lastLogT = 0;
+    let experimentData = [];
+    $('btnRecordToggle').addEventListener('click', () => {
+      isRecording = !isRecording;
+      $('btnRecordToggle').textContent = isRecording ? '⏹ STOP RECORDING' : '⏺ START RECORDING';
+      $('btnRecordToggle').classList.toggle('is-recording', isRecording);
+      if (isRecording) lastLogT = (performance.now() - sessionStartT) / 1000;
+    });
+    $('btnClearAll').addEventListener('click', () => { experimentData = []; renderDataTable(); });
+    $('btnExportCsv').addEventListener('click', () => {
+      if (experimentData.length === 0) return;
+      let csv = 't (s),x (cm),v (cm/s),phi (Wb),emf (V)\n';
+      experimentData.forEach((d) => { csv += `${d.t.toFixed(2)},${d.x.toFixed(2)},${d.v.toFixed(2)},${d.phi.toFixed(5)},${d.emf.toFixed(4)}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'data-eksperimen-induksi-faraday.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+    function renderDataTable() {
+      const tbody = $('dataTableBody'); const empty = $('dataEmptyNote');
+      if (experimentData.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      const recent = experimentData.slice(-40); // batasi baris ditampilkan biar tabel tidak meledak
+      tbody.innerHTML = recent.map((d) => `<tr><td>${d.t.toFixed(2)}</td><td>${d.x.toFixed(1)}</td><td>${d.v.toFixed(1)}</td><td>${d.phi.toFixed(4)}</td><td>${d.emf.toFixed(3)}</td></tr>`).join('');
+    }
+
+    // ============ INIT ============
+    resizeCanvas();
+    updateReadout();
+    requestAnimationFrame(mainLoop);
+  </script>
+</body>
+</html>

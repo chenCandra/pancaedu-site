@@ -1,0 +1,212 @@
+---
+// Utilitas kecil: buat hash PIN tanpa perlu buka terminal/Node. Statis
+// murni (prerender default) -- PIN yang diketik TIDAK PERNAH dikirim ke
+// mana pun, semua dihitung di browser (crypto.subtle, sama seperti
+// pengecekan PIN di leaderboard/hasil-ujian).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Generator Hash PIN"
+  description="Buat hash PIN untuk Penugasan/Rekap Nilai PancaEdu tanpa perlu terminal -- semua dihitung di browser, PIN tidak pernah dikirim ke server."
+  noindex
+>
+  <section class="container page-header">
+    <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
+    <p class="eyebrow">🔑 Utilitas Admin</p>
+    <h1>Generator Hash PIN</h1>
+    <p class="page-lede">
+      Ketik PIN yang mau dipakai, hash-nya langsung dibuat di sini (browser Anda sendiri) -- tidak pernah
+      dikirim ke mana pun. Salin hasilnya ke field <strong>"PIN Leaderboard (hash)"</strong> atau
+      <strong>"PIN Guru (hash)"</strong> di <a href="/admin">/admin</a>. Kebijakan: PIN berlaku
+      <strong>maksimal 6 bulan</strong> sejak dibuat -- kolom tanggal di bawah otomatis membatasi ini.
+    </p>
+  </section>
+
+  <section class="container gen-section">
+    <form class="gen-form card" data-gen-form>
+      <label>
+        Kode PIN
+        <input
+          type="text"
+          class="gen-input"
+          data-gen-pin
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="mis. KAPASITOR-XII-2027"
+          required
+        />
+      </label>
+      <label>
+        Berlaku hingga (maksimal 6 bulan dari hari ini)
+        <input type="date" class="gen-input" data-gen-tanggal required />
+      </label>
+      <button type="submit" class="btn btn-primary">Buat Hash</button>
+    </form>
+
+    <div class="gen-hasil card" data-gen-hasil hidden>
+      <p class="gen-hasil-label">Tempel ke field "PIN Leaderboard (hash)" / "PIN Guru (hash)":</p>
+      <div class="gen-hasil-row">
+        <code class="gen-hash" data-gen-hash></code>
+        <button type="button" class="btn btn-ghost" data-gen-salin>Salin</button>
+      </div>
+      <p class="gen-hasil-label">Tanggal "Berlaku Hingga" (tempel juga ke field tanggalnya):</p>
+      <code class="gen-tanggal-hasil" data-gen-tanggal-hasil></code>
+      <p class="gen-salin-status" data-gen-salin-status hidden>✅ Tersalin ke clipboard.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  function tanggalIso(d: Date): string {
+    return d.toISOString().slice(0, 10);
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-gen-form]');
+  const pinInput = document.querySelector<HTMLInputElement>('[data-gen-pin]');
+  const tanggalInput = document.querySelector<HTMLInputElement>('[data-gen-tanggal]');
+  const hasilEl = document.querySelector<HTMLElement>('[data-gen-hasil]');
+  const hashEl = document.querySelector<HTMLElement>('[data-gen-hash]');
+  const tanggalHasilEl = document.querySelector<HTMLElement>('[data-gen-tanggal-hasil]');
+  const salinBtn = document.querySelector<HTMLButtonElement>('[data-gen-salin]');
+  const salinStatus = document.querySelector<HTMLElement>('[data-gen-salin-status]');
+
+  if (form && pinInput && tanggalInput && hasilEl && hashEl && tanggalHasilEl) {
+    const hariIni = new Date();
+    const maksTanggal = new Date(hariIni);
+    maksTanggal.setMonth(maksTanggal.getMonth() + 6);
+
+    // Batasi lewat atribut HTML `max` -- browser menolak tanggal lebih
+    // dari 6 bulan ke depan lewat date picker-nya sendiri. Default diisi
+    // pas 6 bulan (paling lama yang diizinkan), tinggal dipendekkan kalau
+    // guru mau PIN berlaku lebih singkat.
+    tanggalInput.min = tanggalIso(hariIni);
+    tanggalInput.max = tanggalIso(maksTanggal);
+    tanggalInput.value = tanggalIso(maksTanggal);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const hash = await sha256Hex(pinInput.value.trim());
+      hashEl.textContent = hash;
+      tanggalHasilEl.textContent = tanggalInput.value;
+      hasilEl.hidden = false;
+      salinStatus?.setAttribute('hidden', '');
+    });
+
+    salinBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(hashEl.textContent ?? '');
+        if (salinStatus) salinStatus.hidden = false;
+      } catch {
+        // Clipboard API tidak tersedia/ditolak -- guru tinggal select-copy manual, tidak fatal.
+      }
+    });
+  }
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1.5rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-lede {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .gen-section {
+    padding-block: 1rem 4rem;
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .gen-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .gen-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .gen-input {
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: var(--font-body);
+  }
+
+  .gen-hasil {
+    padding: 1.5rem;
+  }
+
+  .gen-hasil[hidden] {
+    display: none;
+  }
+
+  .gen-hasil-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin: 0 0 0.5rem;
+  }
+
+  .gen-hasil-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .gen-hash,
+  .gen-tanggal-hasil {
+    flex: 1 1 auto;
+    word-break: break-all;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.9rem;
+    font-size: 0.875rem;
+    display: inline-block;
+  }
+
+  .gen-salin-status {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--teal);
+  }
+</style>

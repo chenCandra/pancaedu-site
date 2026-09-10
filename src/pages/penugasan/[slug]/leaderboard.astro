@@ -1,0 +1,357 @@
+---
+// TETAP prerender (statis) -- cuma `pinHash` (bukan data siswa) yang
+// ter-bake ke HTML, sama seperti hasil-ujian/[slug].astro. Baris
+// leaderboard sungguhan diambil LIVE dari
+// /api/penugasan/leaderboard/[slug] setelah PIN cocok, dan server
+// mencocokkan ulang hash itu sendiri (lihat komentar di API route) --
+// jadi "curl API-nya langsung" tidak bisa melewati gerbang PIN.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const semua = await getCollection('penugasan', ({ data }) => !data.draft);
+  return semua.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { judul, kelas, mapel, pinHash } = entry.data;
+---
+
+<BaseLayout title={`Leaderboard — ${judul}`} description={`Leaderboard penugasan ${judul}, kelas ${kelas}.`} noindex>
+  <section class="container page-header">
+    <a href={`/penugasan/${entry.id}`} class="back-link">&larr; Kembali ke Penugasan</a>
+    <p class="eyebrow">🏆 Leaderboard · {mapel} · Kelas {kelas}</p>
+    <h1>{judul}</h1>
+  </section>
+
+  <section class="container gate-section" data-pin-hash={pinHash} data-slug={entry.id}>
+    <form class="pin-form card" data-pin-form>
+      <label for="pin">Kode PIN</label>
+      <div class="pin-row">
+        <input
+          type="text"
+          id="pin"
+          name="pin"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Minta kode ini ke guru"
+          required
+        />
+        <button type="submit" class="btn btn-primary">Buka Leaderboard</button>
+      </div>
+      <p class="pin-error" data-pin-error hidden>Kode PIN salah. Coba lagi.</p>
+    </form>
+
+    <div class="leaderboard-wrap" data-leaderboard-wrap hidden>
+      <div class="sort-row" role="group" aria-label="Urutkan leaderboard" data-sort-row>
+        <button type="button" class="filter-btn badge" data-sort="tepat" aria-pressed="true">🎯 Paling Tepat</button>
+        <button type="button" class="filter-btn badge" data-sort="cepat" aria-pressed="false">⚡ Paling Cepat</button>
+      </div>
+      <p class="leaderboard-loading" data-leaderboard-loading hidden>Memuat...</p>
+      <div class="table-scroll">
+        <table class="leaderboard-table" data-leaderboard-table></table>
+      </div>
+      <p class="leaderboard-empty" data-leaderboard-empty hidden>Belum ada yang mengerjakan penugasan ini.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  type BarisLeaderboard = {
+    nama: string;
+    kelas: string;
+    skorTerbaik: number;
+    skorMaks: number;
+    durasiDetik: number;
+    percobaanKe: number;
+  };
+  type ModeSort = 'tepat' | 'cepat';
+
+  function formatDurasi(detik: number): string {
+    const total = Math.max(0, Math.round(detik));
+    const menit = Math.floor(total / 60);
+    const sisaDetik = total % 60;
+    return `${menit}m ${String(sisaDetik).padStart(2, '0')}d`;
+  }
+
+  // "Paling Tepat" = urut skor dulu (tie-break waktu tercepat), "Paling
+  // Cepat" = urut waktu dulu (tie-break skor tertinggi) -- dua sudut
+  // pandang atas data yang SAMA, jadi cukup sort ulang di klien tanpa
+  // fetch API kedua kalinya (baris sudah lengkap dari satu kali panggil).
+  function urutkan(rows: BarisLeaderboard[], mode: ModeSort): BarisLeaderboard[] {
+    const salinan = [...rows];
+    if (mode === 'cepat') {
+      salinan.sort((a, b) => a.durasiDetik - b.durasiDetik || b.skorTerbaik - a.skorTerbaik);
+    } else {
+      salinan.sort((a, b) => b.skorTerbaik - a.skorTerbaik || a.durasiDetik - b.durasiDetik);
+    }
+    return salinan;
+  }
+
+  function baris(...isi: (string | number)[]): HTMLTableRowElement {
+    const tr = document.createElement('tr');
+    for (const nilai of isi) {
+      const cell = document.createElement('td');
+      cell.textContent = String(nilai);
+      tr.appendChild(cell);
+    }
+    return tr;
+  }
+
+  function renderTable(table: HTMLTableElement, rows: BarisLeaderboard[]) {
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    headRow.innerHTML = '<th>#</th><th>Nama</th><th>Kelas</th><th>Skor</th><th>Waktu Pengerjaan</th><th>Percobaan Ke-</th>';
+    thead.appendChild(headRow);
+
+    // Nama & kelas ditulis siswa sendiri lewat form (bukan konten yang
+    // ditulis lewat CMS) -- pakai textContent per sel (lewat baris()),
+    // BUKAN innerHTML dengan interpolasi string, supaya tidak ada celah
+    // XSS kalau ada yang isi nama/kelas dengan markup aneh-aneh.
+    const tbody = document.createElement('tbody');
+    rows.forEach((r, i) => {
+      tbody.appendChild(
+        baris(i + 1, r.nama, r.kelas, `${r.skorTerbaik} / ${r.skorMaks}`, formatDurasi(r.durasiDetik), r.percobaanKe)
+      );
+    });
+
+    table.replaceChildren(thead, tbody);
+  }
+
+  const section = document.querySelector<HTMLElement>('[data-pin-hash]');
+  const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
+  const wrap = document.querySelector<HTMLElement>('[data-leaderboard-wrap]');
+  const loadingEl = document.querySelector<HTMLElement>('[data-leaderboard-loading]');
+  const emptyEl = document.querySelector<HTMLElement>('[data-leaderboard-empty]');
+  const table = document.querySelector<HTMLTableElement>('[data-leaderboard-table]');
+  const sortRow = document.querySelector<HTMLElement>('[data-sort-row]');
+
+  if (section && form && errorEl && wrap && table) {
+    const expectedHash = section.dataset.pinHash!;
+    const slug = section.dataset.slug!;
+    const sessionKey = `penugasan-leaderboard:${expectedHash}`;
+
+    let semuaBaris: BarisLeaderboard[] = [];
+    let modeAktif: ModeSort = 'tepat';
+
+    const renderUlang = () => {
+      if (semuaBaris.length === 0) return;
+      renderTable(table, urutkan(semuaBaris, modeAktif));
+    };
+
+    sortRow?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-sort]');
+      if (!btn) return;
+      modeAktif = btn.dataset.sort === 'cepat' ? 'cepat' : 'tepat';
+      for (const b of sortRow.querySelectorAll<HTMLButtonElement>('[data-sort]')) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      }
+      renderUlang();
+    });
+
+    const muatData = async (hash: string) => {
+      form.hidden = true;
+      wrap.hidden = false;
+      loadingEl?.removeAttribute('hidden');
+      table.replaceChildren();
+      emptyEl?.setAttribute('hidden', '');
+
+      try {
+        const res = await fetch(`/api/penugasan/leaderboard/${slug}?pin=${encodeURIComponent(hash)}`);
+        if (!res.ok) {
+          // 403 di sini berarti server MENOLAK meski hash-nya cocok --
+          // paling sering karena PIN sudah kedaluwarsa (lihat pengecekan
+          // `pinBerlakuHingga` di API). Tampilkan pesan aslinya dari
+          // server, JANGAN pesan generik, dan balikkan ke form PIN (bukan
+          // ke tampilan "leaderboard kosong") -- ini bukan soal isi
+          // leaderboard-nya, tapi soal aksesnya.
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          sessionStorage.removeItem(sessionKey);
+          wrap.hidden = true;
+          form.hidden = false;
+          if (errorEl) {
+            errorEl.textContent = body?.error || 'Gagal membuka leaderboard. Coba lagi.';
+            errorEl.hidden = false;
+          }
+          return;
+        }
+        const data = (await res.json()) as { rows: BarisLeaderboard[] };
+        semuaBaris = data.rows;
+        if (semuaBaris.length === 0) {
+          emptyEl?.removeAttribute('hidden');
+        } else {
+          renderUlang();
+        }
+      } catch {
+        if (emptyEl) {
+          emptyEl.textContent = 'Gagal memuat leaderboard. Coba muat ulang halaman.';
+          emptyEl.removeAttribute('hidden');
+        }
+      } finally {
+        loadingEl?.setAttribute('hidden', '');
+      }
+    };
+
+    // Sengaja pakai sessionStorage (bukan localStorage), sama seperti
+    // hasil-ujian -- tidak "login permanen" di perangkat bersama/sekolah.
+    if (sessionStorage.getItem(sessionKey) === '1') {
+      muatData(expectedHash);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('#pin')!;
+      const hash = await sha256Hex(input.value.trim());
+
+      if (hash === expectedHash) {
+        errorEl.hidden = true;
+        sessionStorage.setItem(sessionKey, '1');
+        await muatData(hash);
+      } else {
+        // Reset ke pesan default -- kalau sebelumnya errorEl sempat diisi
+        // pesan lain (mis. "PIN sudah kedaluwarsa" dari muatData), jangan
+        // sampai pesan lama itu nyangkut buat kasus PIN salah biasa.
+        errorEl.textContent = 'Kode PIN salah. Coba lagi.';
+        errorEl.hidden = false;
+        input.select();
+      }
+    });
+  }
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1rem;
+    max-width: 40rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .gate-section {
+    padding-block: 1rem 4rem;
+    max-width: 40rem;
+  }
+
+  .pin-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Guard [hidden]+display, sama seperti hasil-ujian/[slug].astro &
+     CookieConsent.astro -- lihat memori proyek soal bug berulang ini. */
+  .pin-form[hidden] {
+    display: none;
+  }
+
+  .pin-form label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pin-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pin-row input {
+    flex: 1 1 12rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .pin-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .leaderboard-wrap {
+    margin-top: 1.5rem;
+  }
+
+  .sort-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    border-color: currentColor;
+  }
+
+  .leaderboard-loading,
+  .leaderboard-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    padding-block: 1rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    box-shadow: var(--shadow);
+  }
+
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .leaderboard-table thead th {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--ink-soft);
+    background-color: var(--accent-soft);
+  }
+
+  .leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+</style>

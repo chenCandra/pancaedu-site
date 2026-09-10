@@ -245,4 +245,169 @@ const ruangBelajarPengaturan = defineCollection({
   }),
 });
 
-export const collections = { blog, kelas, hasilUjian, homepage, ruangBelajar, modeDaring, ruangBelajarPengaturan };
+// Penugasan -- kuis/tugas interaktif yang jalan di web sendiri (pengganti
+// Wayground/Google Form). BEDA PENTING dari `blog.kuis[]` (komponen
+// Kuis.astro): kunci jawaban field-field di bawah ini (`jawabanBenarId`,
+// `jawabanBenar`, `kategoriBenarId`, dan urutan array `item[]` itu sendiri
+// untuk tipe menyusun-urutan) HANYA BOLEH dibaca server-side (API route
+// penilaian) -- halaman pengerjaan soal (src/pages/penugasan/[slug].astro)
+// WAJIB `export const prerender = false` dan wajib membuang field-field
+// ini sebelum data dikirim ke komponen/browser. Kalau ini bocor ke HTML
+// statis, itu persis kesalahan yang sengaja dihindari fitur ini (beda dari
+// Kuis.astro yang aman-aman saja bocor karena cuma latihan self-check
+// tanpa leaderboard/taruhan apa pun).
+//
+// Setiap opsi/potongan (pilihan, pasangan, item, kategori) punya `id`
+// stabil sendiri (bukan index tampilan) -- supaya urutan tampilan ke
+// siswa boleh diacak tanpa mengubah cara menilai di server.
+//
+// Soal disimpan bersarang di dalam entri penugasan itu sendiri (bukan
+// collection tersendiri) -- pola sama seperti `blog.kuis[]` dan
+// `ruangBelajar.tujuanPembelajaran[]`. Prinsip "jangan duplikasi materi"
+// tidak dilanggar: itu soal ttg REFERENSI (materi/video/lab) yang dipakai
+// ulang lintas sesi, sedangkan soal tugas ditulis khusus untuk satu
+// penugasan, tidak dipakai ulang -- tetap dijaga di level metadata lewat
+// `materiSlug?` di bawah.
+//
+// Fase 1 baru mencakup 6 tipe di bawah. Tipe baru (fase mendatang: hotspot
+// gambar, labelling diagram, grafik, simulasi, game, audio/video
+// interaktif, branching scenario) tinggal ditambah sebagai object Zod baru
+// + entri baru di array `z.discriminatedUnion` -- tidak mengubah 6 tipe
+// yang sudah ada.
+const soalPilihanGanda = z.object({
+  tipe: z.literal('pilihan-ganda'),
+  id: z.string(),
+  soal: z.string(),
+  pilihan: z.array(z.object({ id: z.string(), teks: z.string() })).min(2),
+  jawabanBenarId: z.string(),
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalBenarSalah = z.object({
+  tipe: z.literal('benar-salah'),
+  id: z.string(),
+  soal: z.string(),
+  jawabanBenar: z.boolean(),
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalIsianSingkat = z.object({
+  tipe: z.literal('isian-singkat'),
+  id: z.string(),
+  soal: z.string(),
+  angka: z.boolean().default(false), // true = dibandingkan sebagai angka + toleransi, false = teks
+  toleransi: z.number().default(0), // dipakai kalau angka: true
+  jawabanBenar: z.array(z.string()).min(1), // varian jawaban yang diterima
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalMenjodohkan = z.object({
+  tipe: z.literal('menjodohkan'),
+  id: z.string(),
+  soal: z.string(),
+  pasangan: z.array(z.object({ id: z.string(), kiri: z.string(), kanan: z.string() })).min(2),
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalMenyusunUrutan = z.object({
+  tipe: z.literal('menyusun-urutan'),
+  id: z.string(),
+  soal: z.string(),
+  // Diisi guru SUDAH dalam urutan yang benar -- urutan array ITU SENDIRI
+  // adalah kunci jawabannya (bukan field index terpisah).
+  item: z.array(z.object({ id: z.string(), teks: z.string() })).min(2),
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalDragDrop = z.object({
+  tipe: z.literal('drag-drop'),
+  id: z.string(),
+  soal: z.string(),
+  kategori: z.array(z.object({ id: z.string(), label: z.string() })).min(2),
+  item: z.array(z.object({ id: z.string(), teks: z.string(), kategoriBenarId: z.string() })).min(2),
+  penjelasan: z.string().optional(),
+  skor: z.number().int().positive().default(1),
+});
+
+const soalSchema = z.discriminatedUnion('tipe', [
+  soalPilihanGanda,
+  soalBenarSalah,
+  soalIsianSingkat,
+  soalMenjodohkan,
+  soalMenyusunUrutan,
+  soalDragDrop,
+]);
+
+const penugasan = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/penugasan' }),
+  schema: z.object({
+    judul: z.string(),
+    kelas: z.enum(['X', 'XI', 'XII']),
+    mapel: z.string(),
+    deskripsi: z.string().optional(),
+    // id entri collection "blog" (category:materi) yang relevan -- opsional,
+    // cuma buat tautan "materi terkait", bukan sumber soal.
+    materiSlug: z.string().optional(),
+    // SHA-256 dari PIN leaderboard -- generate lewat halaman
+    // /penugasan/pin-generator (hash dibuat di browser, tanpa terminal).
+    // JANGAN taruh PIN mentahnya di sini, cuma hash-nya.
+    pinHash: z.string(),
+    // Tanggal PIN berhenti berlaku -- WAJIB diisi, kebijakan: maksimal 6
+    // bulan dari kapan PIN itu dibuat/diperbarui (dijaga lewat hint di CMS
+    // & halaman pin-generator, bukan dipaksa lewat kode -- situs ini cuma
+    // dikelola 1 guru, jadi cukup diingatkan, tidak perlu dikunci keras).
+    // Dicek server-side di src/pages/api/penugasan/leaderboard/[slug].ts --
+    // PIN yang benar SEKALIPUN ditolak kalau sudah lewat tanggal ini.
+    pinBerlakuHingga: z.coerce.date(),
+    soal: z.array(soalSchema).min(1),
+    draft: z.boolean().default(false),
+  }),
+});
+
+// Singleton (pola sama seperti `ruangBelajarPengaturan`). Daftar rombel +
+// roster nama siswa tiap rombel, dipakai buat form identitas Penugasan
+// (src/pages/penugasan/[slug].astro): siswa pilih KELAS dulu (dropdown),
+// baru NAMA muncul sebagai dropdown ke-2 khusus kelas itu -- SENGAJA
+// dropdown (bukan isian bebas) supaya nama & kelas konsisten & gampang
+// disortir/dikelompokkan di leaderboard (tidak ada "Budi" vs "budi" vs
+// "Budi S" untuk siswa yang sama). Opsi "Umum / Lainnya" (buat pengunjung
+// non-SMAN 4, ditambahkan otomatis di halaman -- TIDAK perlu ditulis di
+// sini) dan opsi "nama saya tidak ada di daftar" di tiap kelas TETAP kasih
+// jalan keluar isian manual, buat siswa baru/pindahan yang rosternya belum
+// diperbarui.
+const penugasanPengaturan = defineCollection({
+  loader: glob({ pattern: 'index.md', base: './src/content/penugasan-pengaturan' }),
+  schema: z.object({
+    daftarKelas: z
+      .array(
+        z.object({
+          kelas: z.string(),
+          siswa: z.array(z.string()).default([]),
+        })
+      )
+      .default([]),
+    // SHA-256 dari "PIN Guru" -- SATU PIN gerbang halaman rekap nilai
+    // (/penugasan/rekap, lintas semua Penugasan & kelas), beda dari
+    // `pinHash` per-Penugasan yang cuma buka leaderboard tugas itu saja.
+    // Sama seperti pinHash lain, generate lewat /penugasan/pin-generator,
+    // JANGAN taruh PIN mentahnya di sini.
+    pinGuruHash: z.string().optional(),
+  }),
+});
+
+export const collections = {
+  blog,
+  kelas,
+  hasilUjian,
+  homepage,
+  ruangBelajar,
+  modeDaring,
+  ruangBelajarPengaturan,
+  penugasan,
+  penugasanPengaturan,
+};
