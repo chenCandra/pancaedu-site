@@ -12,7 +12,7 @@ tujuanPembelajaran:
 materiSlug: medan-listrik
 youtubeId: https://www.youtube.com/watch?v=MiXNbYNajPI
 latihanUrl: ''
-tugasUrl: https://wayground.com/join?gc=35129157&source=liveDashboard
+tugasUrl: https://wayground.com/join?gc=14930166&source=liveDashboard
 refleksiUrl: ''
 draft: false
 ---
