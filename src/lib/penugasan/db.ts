@@ -6,13 +6,19 @@ import type { HasilSoal } from './types';
 // `Astro.locals.runtime.env` -- pola itu sudah dihapus di Astro v6+ /
 // @astrojs/cloudflare versi yang dipakai repo ini).
 
-export async function mulaiAttempt(db: D1Database, params: { slug: string; nama: string; kelas: string }) {
+export async function mulaiAttempt(
+  db: D1Database,
+  params: { slug: string; nama: string; kelas: string; sesiId?: number | null }
+) {
   // Dihitung SEBELUM insert baris baru -- "percobaan ke-N" ditentukan dari
   // jumlah attempt (nama+kelas persis sama, cocok konvensi pengelompokan
   // yang sama dipakai leaderboard) yang SUDAH ada sebelum attempt ini,
   // ditambah 1. Dihitung dari SEMUA baris (termasuk yang belum selesai),
   // bukan cuma yang selesai -- kalau siswa mulai lalu tinggal pergi, itu
   // tetap "sudah pernah mencoba", bukan seolah tidak pernah terjadi.
+  // SENGAJA lintas-sesi (bukan dihitung ulang per sesi) -- "percobaan ke-3"
+  // tetap percobaan ke-3 siswa itu buat Penugasan ini, terlepas dia pindah
+  // sesi/remedial atau tidak.
   const hitung = await db
     .prepare('SELECT COUNT(*) AS jumlah FROM attempts WHERE penugasan_slug = ?1 AND nama = ?2 AND kelas = ?3')
     .bind(params.slug, params.nama, params.kelas)
@@ -20,8 +26,8 @@ export async function mulaiAttempt(db: D1Database, params: { slug: string; nama:
   const attemptKe = (hitung?.jumlah ?? 0) + 1;
 
   const result = await db
-    .prepare('INSERT INTO attempts (penugasan_slug, nama, kelas) VALUES (?1, ?2, ?3) RETURNING id')
-    .bind(params.slug, params.nama, params.kelas)
+    .prepare('INSERT INTO attempts (penugasan_slug, nama, kelas, sesi_id) VALUES (?1, ?2, ?3, ?4) RETURNING id')
+    .bind(params.slug, params.nama, params.kelas, params.sesiId ?? null)
     .first<{ id: number }>();
   if (!result) throw new Error('Gagal membuat attempt baru');
   return { attemptId: result.id, attemptKe };

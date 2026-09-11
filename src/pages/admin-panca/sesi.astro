@@ -1,0 +1,289 @@
+---
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { daftarSesi } from '../../lib/penugasan/sesi';
+import { env } from 'cloudflare:workers';
+import { getCollection } from 'astro:content';
+
+export const prerender = false;
+
+const admin = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!admin) return Astro.redirect('/admin-panca/login');
+
+const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draft);
+const slug = Astro.url.searchParams.get('slug') ?? '';
+const entry = slug ? semuaPenugasan.find((p) => p.id === slug) : undefined;
+const daftarSesiPenugasan = entry ? await daftarSesi(env.DB, slug) : [];
+
+function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; kelas: string } {
+  if (s.revoked_at) return { label: 'Dicabut', kelas: 'status-dicabut' };
+  return { label: 'Aktif', kelas: 'status-aktif' };
+}
+---
+
+<AdminPancaLayout title="Kelola Sesi Penugasan" username={admin.username}>
+  <h1 class="panca-h1">Kelola Sesi Penugasan</h1>
+  <p class="panca-lede">
+    Sesi = periode pengerjaan bertanda kode sendiri untuk SATU Penugasan yang sama -- dipakai kalau kamu mau
+    mengadakan remedial dengan soal yang sama, tapi hasilnya perlu terpisah dari pengerjaan awal.
+    <strong>Opsional</strong> -- Penugasan yang belum pernah dibuatkan sesi tetap bisa dikerjakan murid seperti
+    biasa (nama+kelas saja, tanpa kode tambahan).
+  </p>
+
+  <section class="panca-card">
+    <form method="get" class="pilih-form">
+      <label>
+        Pilih Penugasan
+        <select name="slug" required>
+          <option value="">-- Pilih Penugasan --</option>
+          {semuaPenugasan.map((p) => (
+            <option value={p.id} selected={p.id === slug}>
+              {p.data.kelas} · {p.data.mapel} — {p.data.judul}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button type="submit" class="panca-btn panca-btn-primary">Buka</button>
+    </form>
+  </section>
+
+  {slug && !entry && <p class="panca-card pin-empty">Penugasan tidak ditemukan. Coba pilih lagi dari form di atas.</p>}
+
+  {entry && (
+    <>
+      <section class="panca-card">
+        <h2 class="section-title">Buat Sesi Baru untuk "{entry.data.judul}"</h2>
+        <form data-sesi-form class="sesi-form">
+          <label>
+            Label (buat pengingat kamu sendiri)
+            <input type="text" name="label" placeholder="mis. Remedial - 20 Oktober 2026" required />
+          </label>
+          <label>
+            Kode Sesi (dibagikan ke murid)
+            <input
+              type="text"
+              name="kode"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="mis. REMEDIAL-DIMENSI-1"
+              required
+            />
+          </label>
+          <p class="sesi-error" data-sesi-form-error hidden></p>
+          <button type="submit" class="panca-btn panca-btn-primary" data-sesi-submit>Buat Sesi</button>
+        </form>
+        <p class="sesi-hint">
+          ⚠️ Begitu sesi PERTAMA dibuat untuk Penugasan ini, murid WAJIB isi kode sesi sebelum mulai mengerjakan
+          (kode sesi manapun yang masih aktif). Kalau semua sesi dicabut, murid kembali bisa mulai tanpa kode.
+        </p>
+      </section>
+
+      <section class="panca-card sesi-list-card">
+        <h2 class="section-title">Sesi yang Pernah Dibuat</h2>
+        {daftarSesiPenugasan.length === 0 ? (
+          <p class="pin-empty">Belum ada sesi -- murid mengerjakan Penugasan ini seperti biasa, tanpa kode.</p>
+        ) : (
+          <div class="table-scroll">
+            <table class="sesi-table">
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>Status</th>
+                  <th>Dibuat</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {daftarSesiPenugasan.map((s) => {
+                  const status = statusSesi(s);
+                  return (
+                    <tr>
+                      <td>{s.label}</td>
+                      <td><span class={`sesi-status ${status.kelas}`}>{status.label}</span></td>
+                      <td>{s.created_at}</td>
+                      <td>
+                        {!s.revoked_at && (
+                          <form method="post" action={`/api/admin-panca/sesi/${s.id}?slug=${encodeURIComponent(slug)}`} data-confirm="Yakin cabut sesi ini? Kode sesinya tidak akan bisa dipakai lagi.">
+                            <button type="submit" class="panca-btn panca-btn-ghost">Cabut</button>
+                          </form>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </>
+  )}
+</AdminPancaLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-sesi-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-sesi-form-error]');
+  const submitBtn = document.querySelector<HTMLButtonElement>('[data-sesi-submit]');
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug') ?? '';
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!errorEl || !submitBtn) return;
+    errorEl.hidden = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Menyimpan...';
+
+    const data = new FormData(form);
+    const pinHash = await sha256Hex(String(data.get('kode') ?? '').trim());
+
+    try {
+      const res = await fetch('/api/admin-panca/sesi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, label: data.get('label'), pinHash }),
+      });
+      if (res.ok) {
+        window.location.reload();
+        return;
+      }
+      const body = (await res.json().catch(() => null)) as { error?: string } | null;
+      errorEl.textContent = body?.error || 'Gagal membuat sesi.';
+      errorEl.hidden = false;
+    } catch {
+      errorEl.textContent = 'Gagal terhubung ke server. Coba lagi.';
+      errorEl.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Buat Sesi';
+    }
+  });
+
+  document.querySelectorAll<HTMLFormElement>('form[data-confirm]').forEach((f) => {
+    f.addEventListener('submit', (e) => {
+      if (!confirm(f.dataset.confirm ?? 'Yakin?')) e.preventDefault();
+    });
+  });
+</script>
+
+<style>
+  .pilih-form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .pilih-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex: 1 1 20rem;
+  }
+
+  .pilih-form select {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    margin: 0 0 1rem;
+  }
+
+  .sesi-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 28rem;
+  }
+
+  .sesi-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .sesi-form input {
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: var(--font-body);
+  }
+
+  .sesi-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .sesi-hint {
+    color: var(--ink-soft);
+    font-size: 0.8125rem;
+    margin: 1rem 0 0;
+  }
+
+  .sesi-list-card {
+    margin-top: 1.5rem;
+  }
+
+  .pin-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .sesi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .sesi-table th,
+  .sesi-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .sesi-status {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .status-aktif {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .status-dicabut {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+</style>

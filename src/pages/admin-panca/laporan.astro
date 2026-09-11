@@ -9,13 +9,14 @@
 import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
 import { ambilSesi } from '../../lib/adminPanca/auth';
 import { ambilLaporanSiswa } from '../../lib/adminPanca/db';
+import { daftarSesi } from '../../lib/penugasan/sesi';
 import { env } from 'cloudflare:workers';
 import { getCollection, getEntry } from 'astro:content';
 
 export const prerender = false;
 
-const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
-if (!sesi) return Astro.redirect('/admin-panca/login');
+const sesiAdmin = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesiAdmin) return Astro.redirect('/admin-panca/login');
 
 const qs = Astro.url.searchParams;
 const slug = qs.get('slug') ?? '';
@@ -27,6 +28,7 @@ const namaGuru = qs.get('guru') ?? '';
 const topik = qs.get('topik') ?? '';
 const tujuan = qs.get('tujuan') ?? '';
 const catatan = qs.get('catatan') ?? '';
+const sesiParam = qs.get('sesi') ?? '';
 
 const [semuaPenugasan, semuaRuangBelajar, pengaturan] = await Promise.all([
   getCollection('penugasan', ({ data }) => !data.draft),
@@ -35,6 +37,24 @@ const [semuaPenugasan, semuaRuangBelajar, pengaturan] = await Promise.all([
 ]);
 
 const daftarKelas = pengaturan?.data.daftarKelas ?? [];
+
+// Dropdown filter Sesi -- cuma relevan kalau Penugasan yang dipilih PERNAH
+// dibuatkan sesi (lihat /admin-panca/sesi & migrations/0003_sesi_penugasan.sql).
+// Kosong (default) = semua data digabung seperti biasa (perilaku lama, tidak
+// berubah buat Penugasan yang tidak pakai fitur sesi sama sekali). Diambil
+// untuk SEMUA Penugasan sekaligus (bukan cuma yang dipilih) supaya dropdown
+// bisa diisi ulang lewat JS begitu guru ganti pilihan Penugasan, tanpa
+// reload -- pola sama seperti `prefillPerSlug` di bawah.
+const sesiPerSlugEntries = await Promise.all(
+  semuaPenugasan.map(async (p) => [p.id, await daftarSesi(env.DB, p.id)] as const)
+);
+const sesiPerSlug: Record<string, Awaited<ReturnType<typeof daftarSesi>>> = Object.fromEntries(sesiPerSlugEntries);
+const daftarSesiPenugasan = sesiPerSlug[slug] ?? [];
+const sesiFilterValue: number | 'tanpa-sesi' | undefined =
+  sesiParam === 'tanpa-sesi' ? 'tanpa-sesi' : sesiParam && /^\d+$/.test(sesiParam) ? Number(sesiParam) : undefined;
+const sesiTerpilih = typeof sesiFilterValue === 'number' ? daftarSesiPenugasan.find((s) => s.id === sesiFilterValue) : undefined;
+const sesiLabelTampil =
+  sesiFilterValue === 'tanpa-sesi' ? 'Tanpa Sesi (sebelum ada sesi)' : sesiTerpilih ? sesiTerpilih.label : '';
 
 // Data buat auto-isi form di client (JS) saat guru pilih Penugasan --
 // dicari Ruang Belajar dengan `materiSlug` yang sama, ambil yang tanggalnya
@@ -91,7 +111,7 @@ if (slug && kelasDipilih) {
   if (entry) {
     const rosterEntry = daftarKelas.find((d) => d.kelas === kelasDipilih);
     const rosterSiswa = rosterEntry?.siswa ?? [];
-    const dataAttempt = await ambilLaporanSiswa(env.DB, slug, kelasDipilih);
+    const dataAttempt = await ambilLaporanSiswa(env.DB, slug, kelasDipilih, sesiFilterValue);
     const attemptByNama = new Map(dataAttempt.map((b) => [b.nama, b]));
 
     // Gabung roster (bisa "belum mulai") + siapa pun yang tercatat attempt
@@ -192,7 +212,7 @@ Kelas/Rombel: ${kelasDipilih}
 Mata Pelajaran: ${laporan.entry.data.mapel}
 Topik/Materi: ${topik || laporan.entry.data.judul}
 Tanggal Pelaksanaan: ${tanggalFormat}
-Nama Penugasan/Latihan yang Dinilai: ${laporan.entry.data.judul}
+Nama Penugasan/Latihan yang Dinilai: ${laporan.entry.data.judul}${sesiLabelTampil ? `\nSesi: ${sesiLabelTampil}` : ''}
 Tujuan Pembelajaran:
 ${tujuanList.length ? tujuanList.map((t) => `- ${t}`).join('\n') : '- (tidak diisi)'}
 
@@ -229,7 +249,7 @@ Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap, dan JANGAN menambah
 const promptAI = buatPromptAI();
 ---
 
-<AdminPancaLayout title="Laporan Belajar Daring" username={sesi.username}>
+<AdminPancaLayout title="Laporan Belajar Daring" username={sesiAdmin.username}>
   <div class="no-print">
     <h1 class="panca-h1">Laporan Belajar Daring</h1>
     <p class="panca-lede">
@@ -261,6 +281,19 @@ const promptAI = buatPromptAI();
             </select>
           </label>
         </div>
+
+        <label data-sesi-wrap hidden={daftarSesiPenugasan.length === 0}>
+          Sesi <span class="opsional">(opsional -- Penugasan ini punya sesi, filter kalau perlu pisahkan hasil remedial)</span>
+          <select name="sesi" data-sesi-select>
+            <option value="" selected={sesiParam === ''}>Semua Sesi (digabung)</option>
+            <option value="tanpa-sesi" selected={sesiParam === 'tanpa-sesi'}>Tanpa Sesi (sebelum ada sesi)</option>
+            {daftarSesiPenugasan.map((s) => (
+              <option value={s.id} selected={String(s.id) === sesiParam}>
+                {s.label} {s.revoked_at ? '(dicabut)' : ''}
+              </option>
+            ))}
+          </select>
+        </label>
 
         <div class="grid-2">
           <label>
@@ -318,6 +351,7 @@ const promptAI = buatPromptAI();
         {tanggal && <p><strong>Tanggal:</strong> {new Date(`${tanggal}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>}
         <p><strong>Topik / Materi:</strong> {topik || laporan.entry.data.judul}</p>
         <p><strong>Penugasan yang Dinilai:</strong> {laporan.entry.data.judul}</p>
+        {sesiLabelTampil && <p><strong>Sesi:</strong> {sesiLabelTampil}</p>}
         {tujuan.trim() && (
           <>
             <p><strong>Tujuan Pembelajaran:</strong></p>
@@ -469,6 +503,27 @@ const promptAI = buatPromptAI();
     });
   }
 
+  // Dropdown Sesi -- tampil/hilang & isi ulang ototmatis begitu guru ganti
+  // pilihan Penugasan, supaya tidak nyangkut nunjukkin sesi Penugasan lain.
+  type SesiOpsi = { id: number; label: string; revoked_at: string | null };
+  const sesiDataEl = document.querySelector<HTMLScriptElement>('#sesi-data');
+  const sesiWrap = document.querySelector<HTMLElement>('[data-sesi-wrap]');
+  const sesiSelect = document.querySelector<HTMLSelectElement>('[data-sesi-select]');
+
+  if (sesiDataEl && slugSelect && sesiWrap && sesiSelect) {
+    const sesiMap = JSON.parse(sesiDataEl.textContent || '{}') as Record<string, SesiOpsi[]>;
+    slugSelect.addEventListener('change', () => {
+      const daftar = sesiMap[slugSelect.value] ?? [];
+      sesiWrap.hidden = daftar.length === 0;
+      sesiSelect.innerHTML = '';
+      sesiSelect.appendChild(new Option('Semua Sesi (digabung)', ''));
+      sesiSelect.appendChild(new Option('Tanpa Sesi (sebelum ada sesi)', 'tanpa-sesi'));
+      for (const s of daftar) {
+        sesiSelect.appendChild(new Option(`${s.label}${s.revoked_at ? ' (dicabut)' : ''}`, String(s.id)));
+      }
+    });
+  }
+
   // Ingat Nama Sekolah & Nama Guru lewat localStorage -- jarang berubah
   // antar laporan, guru awam IT tidak perlu ketik ulang tiap kali.
   const sekolahInput = document.querySelector<HTMLInputElement>('[data-sekolah-input]');
@@ -505,6 +560,7 @@ const promptAI = buatPromptAI();
 </script>
 
 <script type="application/json" id="prefill-data" set:html={JSON.stringify(prefillPerSlug)} />
+<script type="application/json" id="sesi-data" set:html={JSON.stringify(sesiPerSlug)} />
 
 <style>
   .laporan-form {
@@ -525,6 +581,14 @@ const promptAI = buatPromptAI();
     gap: 0.35rem;
     font-size: 0.875rem;
     font-weight: 600;
+  }
+
+  /* Guard [hidden]+display -- pola sama seperti bug berulang di
+     CookieConsent.astro & beberapa halaman Penugasan lain (lihat memori
+     proyek). Field Sesi disembunyikan/ditampilkan lewat JS saat Penugasan
+     berganti, jadi butuh guard ini supaya [hidden] benar-benar berlaku. */
+  .laporan-form label[hidden] {
+    display: none;
   }
 
   .opsional {

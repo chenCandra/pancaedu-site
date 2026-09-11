@@ -8,8 +8,10 @@
 export const prerender = false;
 
 import { getEntry } from 'astro:content';
+import { env } from 'cloudflare:workers';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { KELAS_UMUM } from '../../lib/penugasan/kelas';
+import { adaSesiAktif } from '../../lib/penugasan/sesi';
 import { keSoalTampilan } from '../../lib/penugasan/tampilan';
 import PilihanGanda from '../../components/penugasan/PilihanGanda.astro';
 import BenarSalah from '../../components/penugasan/BenarSalah.astro';
@@ -31,6 +33,12 @@ const skorMaksTotal = soalTampilan.reduce((total, s) => total + s.skor, 0);
 
 const pengaturan = await getEntry('penugasanPengaturan', 'index');
 const daftarKelas = pengaturan?.data.daftarKelas ?? [];
+
+// Kode Sesi HANYA muncul kalau guru pernah bikin Sesi Penugasan untuk
+// slug ini lewat Admin Panca (lihat migrations/0003_sesi_penugasan.sql) --
+// mayoritas Penugasan TIDAK punya sesi sama sekali, jadi field ini
+// tersembunyi buat mereka & murid mulai seperti biasa tanpa kode tambahan.
+const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
 ---
 
 <BaseLayout title={judul} description={deskripsi ?? judul} disableCursor>
@@ -63,6 +71,23 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
           Nama
           <input type="text" class="pn-input" data-pn-nama-manual autocomplete="off" maxlength="80" placeholder="Ketik namamu" />
         </label>
+        {butuhSesiPin && (
+          <label>
+            Kode Sesi
+            <input
+              type="text"
+              class="pn-input"
+              data-pn-sesi-pin
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              maxlength="60"
+              placeholder="Minta kode ini ke guru"
+              required
+            />
+          </label>
+        )}
+        <p class="pn-sesi-error" data-pn-sesi-error hidden></p>
         <button type="submit" class="btn btn-primary">Mulai Kerjakan</button>
       </form>
     </section>
@@ -128,6 +153,14 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
     const namaSelect = identitasForm?.querySelector<HTMLSelectElement>('[data-pn-nama-select]');
     const namaManualWrap = identitasForm?.querySelector<HTMLElement>('[data-pn-nama-manual-wrap]');
     const namaManual = identitasForm?.querySelector<HTMLInputElement>('[data-pn-nama-manual]');
+    const sesiPinInput = identitasForm?.querySelector<HTMLInputElement>('[data-pn-sesi-pin]');
+    const sesiErrorEl = identitasForm?.querySelector<HTMLElement>('[data-pn-sesi-error]');
+
+    async function sha256Hex(text: string): Promise<string> {
+      const bytes = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
 
     // Roster nama per kelas, di-embed server-side (bukan diambil ulang
     // lewat fetch) -- lihat elemen #pn-roster-data & komentar
@@ -226,6 +259,8 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
       if (!nama || !kelas) return;
       simpanIdentitas({ nama, kelas });
 
+      sesiErrorEl?.setAttribute('hidden', '');
+
       const tombolMulai = identitasForm.querySelector<HTMLButtonElement>('button[type="submit"]');
       if (tombolMulai) {
         tombolMulai.disabled = true;
@@ -233,12 +268,24 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
       }
 
       try {
+        const sesiPin = sesiPinInput?.value.trim() ? await sha256Hex(sesiPinInput.value.trim()) : undefined;
         const res = await fetch('/api/penugasan/mulai', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, nama, kelas }),
+          body: JSON.stringify({ slug, nama, kelas, sesiPin }),
         });
-        if (!res.ok) throw new Error('gagal mulai');
+        if (!res.ok) {
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          if (sesiErrorEl) {
+            sesiErrorEl.textContent = body?.error || 'Gagal memulai penugasan. Coba lagi.';
+            sesiErrorEl.hidden = false;
+          }
+          if (tombolMulai) {
+            tombolMulai.disabled = false;
+            tombolMulai.textContent = 'Mulai Kerjakan';
+          }
+          return;
+        }
         const data = (await res.json()) as { attemptId: number; attemptKe: number };
         attemptId = data.attemptId;
 
@@ -366,6 +413,17 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
      dipilih -- guard [hidden]+display yang sama lagi (lihat catatan di
      atas soal CookieConsent.astro/hasil-ujian). */
   .pn-identitas-form label[hidden] {
+    display: none;
+  }
+
+  .pn-sesi-error {
+    flex: 1 1 100%;
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .pn-sesi-error[hidden] {
     display: none;
   }
 

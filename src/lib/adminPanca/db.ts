@@ -114,13 +114,26 @@ export type BarisLaporanSiswa = {
  * sini -- pemanggil yang gabungkan dengan roster kelas (`daftarKelas`) buat
  * dapat baris "belum mulai sama sekali".
  */
-export async function ambilLaporanSiswa(db: D1Database, slug: string, kelas: string): Promise<BarisLaporanSiswa[]> {
+export async function ambilLaporanSiswa(
+  db: D1Database,
+  slug: string,
+  kelas: string,
+  // undefined = semua sesi (termasuk yang tanpa sesi sama sekali, pola
+  // lama) -- number = satu sesi tertentu -- 'tanpa-sesi' = HANYA attempt
+  // yang direkam SEBELUM Penugasan ini punya sesi apa pun (sesi_id NULL).
+  // Lihat halaman /admin-panca/laporan & migrations/0003_sesi_penugasan.sql.
+  sesiFilter?: number | 'tanpa-sesi'
+): Promise<BarisLaporanSiswa[]> {
+  const klausaSesi =
+    typeof sesiFilter === 'number' ? 'AND sesi_id = ?3' : sesiFilter === 'tanpa-sesi' ? 'AND sesi_id IS NULL' : '';
+  const bindings: (string | number)[] = typeof sesiFilter === 'number' ? [slug, kelas, sesiFilter] : [slug, kelas];
+
   const { results } = await db
     .prepare(
       `WITH semua_attempt AS (
          SELECT *, (julianday(selesai_at) - julianday(mulai_at)) * 86400 AS durasi_detik
          FROM attempts
-         WHERE penugasan_slug = ?1 AND kelas = ?2
+         WHERE penugasan_slug = ?1 AND kelas = ?2 ${klausaSesi}
        ),
        peringkat_selesai AS (
          SELECT *, ROW_NUMBER() OVER (
@@ -147,7 +160,7 @@ export async function ambilLaporanSiswa(db: D1Database, slug: string, kelas: str
        LEFT JOIN terbaik_selesai t ON t.nama = r.nama
        ORDER BY r.nama ASC`
     )
-    .bind(slug, kelas)
+    .bind(...bindings)
     .all<BarisLaporanSiswa>();
   return results ?? [];
 }
