@@ -52,6 +52,7 @@ const daftarKelas = [...new Set(rows.map((r) => r.kelas))].sort();
             <th>Jumlah Siswa</th>
             <th>Rata-rata</th>
             <th>Skor Tertinggi</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -63,6 +64,9 @@ const daftarKelas = [...new Set(rows.map((r) => r.kelas))].sort();
               <td>{r.jumlahSiswa}</td>
               <td>{r.rataRata}</td>
               <td>{r.skorTertinggi} / {r.skorMaks}</td>
+              <td class="col-detail">
+                <a href={`/admin-panca/laporan?slug=${r.penugasanSlug}&kelas=${encodeURIComponent(r.kelas)}`}>Lihat detail &rarr;</a>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -139,5 +143,16 @@ const daftarKelas = [...new Set(rows.map((r) => r.kelas))].sort();
 
   .rekap-table tbody tr:last-child td {
     border-bottom: none;
+  }
+
+  .col-detail a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .col-detail a:hover {
+    text-decoration: underline;
   }
 </style>
