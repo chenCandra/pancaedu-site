@@ -42,6 +42,19 @@ const formattedDate = tanggal.toLocaleDateString('id-ID', {
   year: 'numeric',
 });
 
+// Pembelajaran Berikutnya -- urutan SAMA PERSIS dengan yang dipakai
+// /ruang-belajar (index: dikelompokkan per Kelas+Mapel, urut tanggal
+// ASCENDING). Dihitung ulang di sini (bukan disimpan sebagai field manual
+// di content) supaya OTOMATIS ikut benar kalau ada sesi baru disisipkan di
+// tengah -- guru tidak perlu update field "sesi berikutnya" di tiap entri
+// satu-satu tiap kali nambah sesi baru.
+const semuaSesi = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+const urutanSekelas = semuaSesi
+  .filter((s) => s.data.kelas === kelas && s.data.mapel === mapel)
+  .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf() || a.id.localeCompare(b.id));
+const indexSekarang = urutanSekelas.findIndex((s) => s.id === entry.id);
+const sesiBerikutnya = indexSekarang >= 0 ? urutanSekelas[indexSekarang + 1] : undefined;
+
 // Learning Path -- 6 langkah tetap, status ("tersedia"/"belum tersedia")
 // murni dihitung dari ada-tidaknya data ini, BUKAN progress akun siswa.
 const langkah = [
@@ -176,6 +189,24 @@ const langkah = [
           </div>
         </div>
       ))}
+    </div>
+
+    <div class="pd-next">
+      {sesiBerikutnya ? (
+        <a href={`/ruang-belajar/${sesiBerikutnya.id}`} class="pd-next-card">
+          <span class="pd-next-label">➡️ Pembelajaran Berikutnya</span>
+          <span class="pd-next-judul">{sesiBerikutnya.data.judul}</span>
+          <span class="pd-next-cta">Lanjut &rarr;</span>
+        </a>
+      ) : (
+        <div class="pd-next-selesai">
+          <span class="pd-next-label">🎉 Sesi Terakhir</span>
+          <p>
+            Ini pembelajaran terakhir yang tersedia untuk {mapel} Kelas {kelas} saat ini. Sesi berikutnya akan
+            ditambahkan menyusul -- lihat <a href="/ruang-belajar">semua Ruang Belajar</a> sementara menunggu.
+          </p>
+        </div>
+      )}
     </div>
   </article>
 </BaseLayout>
@@ -350,5 +381,71 @@ const langkah = [
     color: var(--ink-faint);
     font-size: 0.875rem;
     font-style: italic;
+  }
+
+  .pd-next {
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .pd-next-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .pd-next-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    transition: border-color 0.2s ease;
+  }
+
+  .pd-next-card:hover {
+    border-color: var(--border-strong);
+  }
+
+  .pd-next-card .pd-next-label {
+    flex-basis: 100%;
+    margin-bottom: 0;
+  }
+
+  .pd-next-judul {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.0625rem;
+  }
+
+  .pd-next-cta {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+
+  .pd-next-selesai {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .pd-next-selesai p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
   }
 </style>
