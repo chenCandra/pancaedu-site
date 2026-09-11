@@ -12,7 +12,7 @@ tujuanPembelajaran:
 materiSlug: medan-listrik
 youtubeId: https://www.youtube.com/watch?v=MiXNbYNajPI
 latihanUrl: ''
-tugasUrl: https://wayground.com/join?gc=14930166&source=liveDashboard
+tugasUrl: https://pancaedu.web.id/penugasan/xii-fisika-medan-listrik
 refleksiUrl: ''
 draft: false
 ---

@@ -12,7 +12,7 @@ tujuanPembelajaran:
 materiSlug: hukum-coulomb
 youtubeId: JZNFwsugY0k
 latihanUrl: ''
-tugasUrl: https://forms.gle/KezsTste5isPxPt87
+tugasUrl: https://pancaedu.web.id/penugasan/xii-fisika-hukum-coulomb
 refleksiUrl: https://docs.google.com/forms/d/e/1FAIpQLSdkgdqgcWbjqhfY7ui-bkFrHlj0nNUPGb9CsrlYR4PmzUlqPA/viewform?usp=sharing&ouid=116224258446320558437
 draft: false
 ---

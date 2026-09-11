@@ -12,7 +12,7 @@ tujuanPembelajaran:
 materiSlug: dimensi
 youtubeId: yqA4dz6qYxI
 latihanUrl: ''
-tugasUrl: https://forms.gle/zxGQbGh9ToqqdVgn6
+tugasUrl: https://pancaedu.web.id/penugasan/x-fisika-dimensi
 refleksiUrl: ''
 draft: false
 ---
