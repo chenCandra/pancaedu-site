@@ -17,6 +17,8 @@ const links = [
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
 
+    <a href="/admin-panca/login" class="footer-admin-icon" aria-label="Admin" title="Admin">⚙️</a>
+
     <p class="footer-copy">&copy; {year} PancaEdu. Ditulis &amp; dikelola mandiri.</p>
   </div>
 </footer>
@@ -69,5 +71,19 @@ const links = [
     width: 100%;
     order: 3;
     margin: 0;
+  }
+
+  /* Kecil & samar sengaja -- bukan CTA, cuma jalan pintas buat guru sendiri
+     supaya tidak perlu ingat/ketik /admin-panca/login manual. */
+  .footer-admin-icon {
+    font-size: 0.9rem;
+    text-decoration: none;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+  }
+
+  .footer-admin-icon:hover {
+    opacity: 0.9;
   }
 </style>
