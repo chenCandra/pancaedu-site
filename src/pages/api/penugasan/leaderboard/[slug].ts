@@ -17,6 +17,7 @@ export const prerender = false;
 export const GET: APIRoute = async ({ params, url, cookies }) => {
   const slug = params.slug;
   const pin = url.searchParams.get('pin') ?? '';
+  const sesiParam = url.searchParams.get('sesi') ?? '';
 
   if (!slug) return json({ error: 'slug wajib diisi' }, 400);
 
@@ -40,7 +41,13 @@ export const GET: APIRoute = async ({ params, url, cookies }) => {
     }
   }
 
-  const rows = await ambilLeaderboard(env.DB, slug);
+  // Filter Sesi Penugasan (BEDA dari PIN leaderboard di atas -- itu gerbang
+  // akses, ini cuma filter TAMPILAN data begitu sudah lolos gerbang). Lihat
+  // komentar `ambilLeaderboard` di src/lib/penugasan/db.ts.
+  const sesiFilter: number | 'tanpa-sesi' | undefined =
+    sesiParam === 'tanpa-sesi' ? 'tanpa-sesi' : sesiParam && /^\d+$/.test(sesiParam) ? Number(sesiParam) : undefined;
+
+  const rows = await ambilLeaderboard(env.DB, slug, sesiFilter);
   return json({ rows });
 };
 

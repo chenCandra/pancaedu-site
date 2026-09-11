@@ -74,7 +74,23 @@ export type BarisLeaderboard = {
   percobaanKe: number;
 };
 
-export async function ambilLeaderboard(db: D1Database, slug: string): Promise<BarisLeaderboard[]> {
+export async function ambilLeaderboard(
+  db: D1Database,
+  slug: string,
+  // undefined = semua attempt digabung (perilaku lama, dan tetap default
+  // buat Penugasan yang tidak pakai Sesi sama sekali) -- number = satu sesi
+  // tertentu -- 'tanpa-sesi' = HANYA attempt SEBELUM Penugasan ini punya
+  // sesi apa pun. Lihat komentar `ambilLaporanSiswa` di
+  // src/lib/adminPanca/db.ts untuk alasan yang sama persis -- begitu
+  // Penugasan dipakai buat remedial, leaderboard yang menggabung semua
+  // periode jadi membingungkan (skor lama & baru, kelas lain yang pernah
+  // iseng coba, tercampur semua).
+  sesiFilter?: number | 'tanpa-sesi'
+): Promise<BarisLeaderboard[]> {
+  const klausaSesi =
+    typeof sesiFilter === 'number' ? 'AND sesi_id = ?2' : sesiFilter === 'tanpa-sesi' ? 'AND sesi_id IS NULL' : '';
+  const bindings: (string | number)[] = typeof sesiFilter === 'number' ? [slug, sesiFilter] : [slug];
+
   // "Attempt terbaik" seorang siswa = SATU baris attempt yang sama (bukan
   // MAX(skor) dan MIN(waktu) dari attempt yang beda-beda -- itu bisa
   // mencampur skor dari percobaan A dengan waktu dari percobaan B, yang
@@ -84,9 +100,10 @@ export async function ambilLeaderboard(db: D1Database, slug: string): Promise<Ba
   // selisih selesai_at - mulai_at (detik), dipakai buat opsi sortir
   // "Paling Cepat" di UI (selain "Paling Tepat"/skor yang sudah ada).
   // `percobaan_ke` dihitung TERPISAH dari SEMUA attempt siswa itu (bukan
-  // cuma yang selesai) diurutkan dari yang paling awal -- konsisten dengan
-  // cara `mulaiAttempt()` menghitung "Percobaan ke-N" yang dilihat siswa
-  // sendiri saat mengerjakan.
+  // cuma yang selesai, dan LINTAS SESI -- bukan cuma sesi yang difilter)
+  // diurutkan dari yang paling awal -- konsisten dengan cara
+  // `mulaiAttempt()` menghitung "Percobaan ke-N" yang dilihat siswa sendiri
+  // saat mengerjakan.
   const { results } = await db
     .prepare(
       `WITH semua_attempt AS (
@@ -100,7 +117,7 @@ export async function ambilLeaderboard(db: D1Database, slug: string): Promise<Ba
        selesai AS (
          SELECT *, (julianday(selesai_at) - julianday(mulai_at)) * 86400 AS durasi_detik
          FROM semua_attempt
-         WHERE selesai_at IS NOT NULL
+         WHERE selesai_at IS NOT NULL ${klausaSesi}
        ),
        peringkat AS (
          SELECT *, ROW_NUMBER() OVER (
@@ -117,7 +134,7 @@ export async function ambilLeaderboard(db: D1Database, slug: string): Promise<Ba
        ORDER BY skorTerbaik DESC, durasiDetik ASC
        LIMIT 100`
     )
-    .bind(slug)
+    .bind(...bindings)
     .all<BarisLeaderboard>();
   return results;
 }

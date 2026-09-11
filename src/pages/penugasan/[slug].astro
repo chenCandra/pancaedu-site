@@ -122,7 +122,7 @@ const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
       <h2>🎉 Selesai!</h2>
       <p class="pn-hasil-skor" data-pn-hasil-skor></p>
       <div class="pn-hasil-actions">
-        <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost">🏆 Lihat Papan Peringkat</a>
+        <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost" data-pn-leaderboard-link>🏆 Lihat Papan Peringkat</a>
         <a href="/penugasan" class="btn btn-ghost">Penugasan Lain</a>
       </div>
       <p class="pn-hasil-catatan">ℹ️ Untuk melihat Papan Peringkat, silakan minta kode PIN ke gurumu.</p>
@@ -300,8 +300,16 @@ const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
           }
           return;
         }
-        const data = (await res.json()) as { attemptId: number; attemptKe: number };
+        const data = (await res.json()) as { attemptId: number; attemptKe: number; sesiId: number | null };
         attemptId = data.attemptId;
+
+        // Arahkan link Papan Peringkat ke SESI yang sama dengan yang baru
+        // dikerjakan siswa ini -- supaya dia lihat peringkat sesinya saja
+        // (mis. remedial), tidak tercampur data sesi/periode lain.
+        const leaderboardLink = app.querySelector<HTMLAnchorElement>('[data-pn-leaderboard-link]');
+        if (leaderboardLink && data.sesiId !== null) {
+          leaderboardLink.href = `/penugasan/${slug}/leaderboard?sesi=${data.sesiId}`;
+        }
 
         if (percobaanEl) {
           percobaanEl.textContent =

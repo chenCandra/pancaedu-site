@@ -56,7 +56,11 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const { attemptId, attemptKe } = await mulaiAttempt(env.DB, { slug, nama, kelas, sesiId });
-  return json({ attemptId, attemptKe });
+  // sesiId ikut dibalikkan supaya client bisa arahkan link "Lihat Papan
+  // Peringkat" langsung ke sesi yang sama (lihat src/pages/penugasan/[slug].astro)
+  // -- siswa yang ikut sesi remedial tidak perlu lihat leaderboard gabungan
+  // semua periode, cukup sesi yang baru dia kerjakan.
+  return json({ attemptId, attemptKe, sesiId });
 };
 
 function json(data: unknown, status = 200) {

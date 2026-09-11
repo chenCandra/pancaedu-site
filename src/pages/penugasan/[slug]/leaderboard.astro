@@ -12,6 +12,7 @@ export const prerender = false;
 import { getEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { ambilSesi } from '../../../lib/adminPanca/auth';
+import { daftarSesi } from '../../../lib/penugasan/sesi';
 import { env } from 'cloudflare:workers';
 
 const { slug } = Astro.params;
@@ -22,8 +23,17 @@ if (!entry || entry.data.draft) {
 }
 
 const { judul, kelas, mapel, pinHash } = entry.data;
-const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
-const sudahLogin = sesi !== null;
+const sesiAdmin = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+const sudahLogin = sesiAdmin !== null;
+
+// Dropdown filter Sesi -- cuma muncul kalau Penugasan ini PERNAH dibuatkan
+// sesi lewat Admin Panca (lihat /admin-panca/sesi & migrations/0003).
+// Query `?sesi=` (dikirim otomatis dari link "Lihat Papan Peringkat" begitu
+// siswa selesai mengerjakan sesi tertentu, lihat src/pages/penugasan/[slug].astro)
+// jadi pilihan awal -- tanpa itu, default TETAP "Semua Sesi" supaya link
+// lama/dibagikan manual tanpa parameter tidak tiba-tiba kosong.
+const daftarSesiPenugasan = entry.id ? await daftarSesi(env.DB, entry.id) : [];
+const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
 ---
 
 <BaseLayout title={`Papan Peringkat — ${judul}`} description={`Papan peringkat penugasan ${judul}, kelas ${kelas}.`} noindex>
@@ -35,7 +45,7 @@ const sudahLogin = sesi !== null;
 
   <section class="container gate-section" data-pin-hash={pinHash} data-slug={entry.id} data-sudah-login={sudahLogin ? '1' : ''}>
     {sudahLogin && (
-      <p class="login-hint">✅ Masuk sebagai <strong>{sesi!.username}</strong> lewat Admin Panca -- tidak perlu PIN.</p>
+      <p class="login-hint">✅ Masuk sebagai <strong>{sesiAdmin!.username}</strong> lewat Admin Panca -- tidak perlu PIN.</p>
     )}
 
     <form class="pin-form card" data-pin-form hidden={sudahLogin}>
@@ -57,6 +67,20 @@ const sudahLogin = sesi !== null;
     </form>
 
     <div class="leaderboard-wrap" data-leaderboard-wrap hidden>
+      {daftarSesiPenugasan.length > 0 && (
+        <label class="sesi-filter-label">
+          Sesi
+          <select data-sesi-filter>
+            <option value="" selected={sesiParam === ''}>Semua Sesi (digabung)</option>
+            <option value="tanpa-sesi" selected={sesiParam === 'tanpa-sesi'}>Tanpa Sesi (sebelum ada sesi)</option>
+            {daftarSesiPenugasan.map((s) => (
+              <option value={s.id} selected={String(s.id) === sesiParam}>
+                {s.label} {s.revoked_at ? '(dicabut)' : ''}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <div class="sort-row" role="group" aria-label="Urutkan papan peringkat" data-sort-row>
         <button type="button" class="filter-btn badge" data-sort="tepat" aria-pressed="true">🎯 Paling Tepat</button>
         <button type="button" class="filter-btn badge" data-sort="cepat" aria-pressed="false">⚡ Paling Cepat</button>
@@ -148,6 +172,7 @@ const sudahLogin = sesi !== null;
   const emptyEl = document.querySelector<HTMLElement>('[data-leaderboard-empty]');
   const table = document.querySelector<HTMLTableElement>('[data-leaderboard-table]');
   const sortRow = document.querySelector<HTMLElement>('[data-sort-row]');
+  const sesiFilterSelect = document.querySelector<HTMLSelectElement>('[data-sesi-filter]');
 
   if (section && form && errorEl && wrap && table) {
     const expectedHash = section.dataset.pinHash!;
@@ -173,7 +198,10 @@ const sudahLogin = sesi !== null;
       renderUlang();
     });
 
+    let pinTersimpan = '';
+
     const muatData = async (hash: string) => {
+      pinTersimpan = hash;
       form.hidden = true;
       wrap.hidden = false;
       loadingEl?.removeAttribute('hidden');
@@ -181,8 +209,11 @@ const sudahLogin = sesi !== null;
       emptyEl?.setAttribute('hidden', '');
 
       try {
-        const query = hash ? `?pin=${encodeURIComponent(hash)}` : '';
-        const res = await fetch(`/api/penugasan/leaderboard/${slug}${query}`);
+        const params = new URLSearchParams();
+        if (hash) params.set('pin', hash);
+        if (sesiFilterSelect?.value) params.set('sesi', sesiFilterSelect.value);
+        const qs = params.toString();
+        const res = await fetch(`/api/penugasan/leaderboard/${slug}${qs ? `?${qs}` : ''}`);
         if (!res.ok) {
           // 403 di sini berarti server MENOLAK meski hash-nya cocok --
           // paling sering karena PIN sudah kedaluwarsa (lihat pengecekan
@@ -216,6 +247,17 @@ const sudahLogin = sesi !== null;
         loadingEl?.setAttribute('hidden', '');
       }
     };
+
+    // Ganti Sesi -> muat ulang data dengan filter baru (pakai PIN/sesi yang
+    // sama, cuma parameter `sesi` yang berubah) -- juga update URL (tanpa
+    // reload) supaya link ini bisa disalin/dibagikan tetap ke sesi yang sama.
+    sesiFilterSelect?.addEventListener('change', () => {
+      const url = new URL(window.location.href);
+      if (sesiFilterSelect.value) url.searchParams.set('sesi', sesiFilterSelect.value);
+      else url.searchParams.delete('sesi');
+      window.history.replaceState(null, '', url);
+      if (wrap.hidden === false) muatData(pinTersimpan);
+    });
 
     // Sengaja pakai sessionStorage (bukan localStorage), sama seperti
     // hasil-ujian -- tidak "login permanen" di perangkat bersama/sekolah.
@@ -319,6 +361,26 @@ const sudahLogin = sesi !== null;
 
   .leaderboard-wrap {
     margin-top: 1.5rem;
+  }
+
+  .sesi-filter-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    max-width: 22rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .sesi-filter-label select {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
   }
 
   .sort-row {
