@@ -1,0 +1,126 @@
+---
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+// Sudah login? Langsung lempar ke dashboard, tidak perlu lihat form login lagi.
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (sesi) return Astro.redirect('/admin-panca');
+---
+
+<AdminPancaLayout title="Masuk">
+  <div class="login-wrap">
+    <div class="panca-card login-card">
+      <p class="eyebrow">🛠️ Admin Panca</p>
+      <h1 class="panca-h1">Masuk</h1>
+      <p class="panca-lede">Panel kelola PIN &amp; rekap nilai PancaEdu -- khusus admin.</p>
+
+      <form data-login-form>
+        <label>
+          Username
+          <input type="text" name="username" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" autocomplete="current-password" required />
+        </label>
+        <p class="login-error" data-login-error hidden></p>
+        <button type="submit" class="panca-btn panca-btn-primary" data-login-submit>Masuk</button>
+      </form>
+    </div>
+  </div>
+</AdminPancaLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-login-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-login-error]');
+  const submitBtn = document.querySelector<HTMLButtonElement>('[data-login-submit]');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!errorEl || !submitBtn) return;
+    errorEl.hidden = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Memeriksa...';
+
+    const data = new FormData(form);
+    try {
+      const res = await fetch('/api/admin-panca/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: data.get('username'), password: data.get('password') }),
+      });
+      if (res.ok) {
+        window.location.href = '/admin-panca';
+        return;
+      }
+      const body = (await res.json().catch(() => null)) as { error?: string } | null;
+      errorEl.textContent = body?.error || 'Gagal masuk. Coba lagi.';
+      errorEl.hidden = false;
+    } catch {
+      errorEl.textContent = 'Gagal terhubung ke server. Coba lagi.';
+      errorEl.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Masuk';
+    }
+  });
+</script>
+
+<style>
+  .login-wrap {
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 24rem;
+  }
+
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 0.35rem;
+  }
+
+  [data-login-form] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  [data-login-form] label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  [data-login-form] input {
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: var(--font-body);
+  }
+
+  .login-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  [data-login-submit] {
+    width: 100%;
+  }
+</style>

@@ -18,7 +18,7 @@
     // {slug} sebagai "404" alih-alih meneruskannya ke Worker. Worker
     // sendiri otomatis meneruskan ke ASSETS binding untuk rute yang
     // memang statis (mis. leaderboard), jadi tidak ada yang hilang.
-    "run_worker_first": ["/penugasan/*", "/api/*"]
+    "run_worker_first": ["/penugasan/*", "/api/*", "/admin-panca/*"]
   },
   // Database Cloudflare D1 buat fitur Penugasan (skor & jawaban siswa) --
   // database_id diisi setelah `wrangler d1 create pancaedu-penugasan`

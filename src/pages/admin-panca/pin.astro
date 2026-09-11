@@ -1,0 +1,242 @@
+---
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { daftarPin } from '../../lib/adminPanca/db';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesi) return Astro.redirect('/admin-panca/login');
+
+const pins = await daftarPin(env.DB, 'rekap');
+
+function statusPin(p: (typeof pins)[number]): { label: string; kelas: string } {
+  if (p.revoked_at) return { label: 'Dicabut', kelas: 'status-dicabut' };
+  if (new Date(p.expires_at).getTime() < Date.now()) return { label: 'Kedaluwarsa', kelas: 'status-kedaluwarsa' };
+  return { label: 'Aktif', kelas: 'status-aktif' };
+}
+---
+
+<AdminPancaLayout title="Kelola PIN" username={sesi.username}>
+  <h1 class="panca-h1">Kelola PIN Rekap Nilai</h1>
+  <p class="panca-lede">
+    PIN ini dipakai untuk buka <a href="/penugasan/rekap">/penugasan/rekap</a> (halaman rekap nilai khusus guru).
+    Bisa ada lebih dari satu PIN aktif sekaligus -- misalnya sambil buat PIN baru sebelum yang lama kedaluwarsa.
+  </p>
+
+  <section class="panca-card">
+    <h2 class="section-title">Buat PIN Baru</h2>
+    <form data-pin-form class="pin-create-form">
+      <label>
+        Label (buat pengingat kamu sendiri)
+        <input type="text" name="label" placeholder="mis. Semester Ganjil 2027" required />
+      </label>
+      <label>
+        Kode PIN
+        <input type="text" name="pin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="mis. REKAP-XII-2027" required />
+      </label>
+      <label>
+        Berlaku hingga (maksimal ~6 bulan)
+        <input type="date" name="expiresAt" required />
+      </label>
+      <p class="pin-error" data-pin-form-error hidden></p>
+      <button type="submit" class="panca-btn panca-btn-primary" data-pin-submit>Buat PIN</button>
+    </form>
+  </section>
+
+  <section class="panca-card pin-list-card">
+    <h2 class="section-title">PIN yang Pernah Dibuat</h2>
+    {pins.length === 0 ? (
+      <p class="pin-empty">Belum ada PIN. Buat yang pertama lewat form di atas.</p>
+    ) : (
+      <div class="table-scroll">
+        <table class="pin-table">
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Status</th>
+              <th>Dibuat</th>
+              <th>Berlaku Hingga</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {pins.map((p) => {
+              const status = statusPin(p);
+              return (
+                <tr>
+                  <td>{p.label}</td>
+                  <td><span class={`pin-status ${status.kelas}`}>{status.label}</span></td>
+                  <td>{p.created_at}</td>
+                  <td>{p.expires_at.slice(0, 10)}</td>
+                  <td>
+                    {!p.revoked_at && (
+                      <form method="post" action={`/api/admin-panca/pins/${p.id}`} data-confirm="Yakin cabut PIN ini? PIN tidak akan bisa dipakai lagi.">
+                        <button type="submit" class="panca-btn panca-btn-ghost">Cabut</button>
+                      </form>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+</AdminPancaLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function tanggalIso(d: Date): string {
+    return d.toISOString().slice(0, 10);
+  }
+
+  // Batasi date picker maks ~6 bulan ke depan -- sama seperti pin-generator lama,
+  // server (/api/admin-panca/pins) TETAP menegakkan batas ini ulang, ini cuma UX.
+  const tanggalInput = document.querySelector<HTMLInputElement>('[name="expiresAt"]');
+  if (tanggalInput) {
+    const hariIni = new Date();
+    const maksTanggal = new Date(hariIni);
+    maksTanggal.setDate(maksTanggal.getDate() + 186);
+    tanggalInput.min = tanggalIso(hariIni);
+    tanggalInput.max = tanggalIso(maksTanggal);
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-pin-form-error]');
+  const submitBtn = document.querySelector<HTMLButtonElement>('[data-pin-submit]');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!errorEl || !submitBtn) return;
+    errorEl.hidden = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Menyimpan...';
+
+    const data = new FormData(form);
+    const pinHash = await sha256Hex(String(data.get('pin') ?? '').trim());
+
+    try {
+      const res = await fetch('/api/admin-panca/pins', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ label: data.get('label'), pinHash, expiresAt: data.get('expiresAt') }),
+      });
+      if (res.ok) {
+        window.location.reload();
+        return;
+      }
+      const body = (await res.json().catch(() => null)) as { error?: string } | null;
+      errorEl.textContent = body?.error || 'Gagal membuat PIN.';
+      errorEl.hidden = false;
+    } catch {
+      errorEl.textContent = 'Gagal terhubung ke server. Coba lagi.';
+      errorEl.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Buat PIN';
+    }
+  });
+
+  // Konfirmasi sebelum cabut PIN (form polos, tetap jalan tanpa JS -- ini cuma lapisan tambahan).
+  document.querySelectorAll<HTMLFormElement>('form[data-confirm]').forEach((f) => {
+    f.addEventListener('submit', (e) => {
+      if (!confirm(f.dataset.confirm ?? 'Yakin?')) e.preventDefault();
+    });
+  });
+</script>
+
+<style>
+  .section-title {
+    font-size: 1.1rem;
+    margin: 0 0 1rem;
+  }
+
+  .pin-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 28rem;
+  }
+
+  .pin-create-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pin-create-form input {
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: var(--font-body);
+  }
+
+  .pin-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .pin-list-card {
+    margin-top: 1.5rem;
+  }
+
+  .pin-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .pin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .pin-table th,
+  .pin-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .pin-status {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .status-aktif {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .status-kedaluwarsa {
+    background: var(--accent-soft);
+    color: var(--ink-soft);
+  }
+
+  .status-dicabut {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+</style>

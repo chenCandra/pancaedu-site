@@ -1,0 +1,68 @@
+---
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesi) return Astro.redirect('/admin-panca/login');
+---
+
+<AdminPancaLayout title="Dashboard" username={sesi.username}>
+  <h1 class="panca-h1">Halo, {sesi.username} 👋</h1>
+  <p class="panca-lede">Pilih menu di bawah, atau lewat navigasi di atas.</p>
+
+  <div class="menu-grid">
+    <a class="panca-card menu-card" href="/admin-panca/pin">
+      <span class="menu-icon">🔑</span>
+      <span class="menu-title">Kelola PIN</span>
+      <span class="menu-desc">Buat, lihat, atau cabut PIN Rekap Nilai -- tanpa perlu commit git.</span>
+    </a>
+    <a class="panca-card menu-card" href="/admin-panca/rekap">
+      <span class="menu-icon">📊</span>
+      <span class="menu-title">Rekap Lintas Penugasan</span>
+      <span class="menu-desc">Lihat rata-rata &amp; skor tertinggi semua penugasan sekaligus, per kelas.</span>
+    </a>
+    <a class="panca-card menu-card" href="/admin-panca/laporan">
+      <span class="menu-icon">📄</span>
+      <span class="menu-title">Laporan Belajar Daring</span>
+      <span class="menu-desc">Laporan siap cetak per kelas: jumlah siswa, ketuntasan, distribusi skor, detail per siswa.</span>
+    </a>
+  </div>
+</AdminPancaLayout>
+
+<style>
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+  }
+
+  .menu-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  .menu-card:hover {
+    border-color: var(--accent);
+  }
+
+  .menu-icon {
+    font-size: 1.75rem;
+  }
+
+  .menu-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .menu-desc {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+  }
+</style>
