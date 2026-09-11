@@ -3,16 +3,20 @@ import { getEntry } from 'astro:content';
 import { env } from 'cloudflare:workers';
 import { ambilRekapKelas } from '../../../../lib/penugasan/db';
 import { pinValid } from '../../../../lib/adminPanca/db';
+import { ambilSesi } from '../../../../lib/adminPanca/auth';
 
-// WAJIB on-demand: digerbangi PIN Guru, dicocokkan ulang di server (sama
-// alasannya dengan API leaderboard) -- `slug` di sini adalah id Penugasan
-// yang mau direkap. PIN-nya dikelola dinamis lewat Admin Panca (tabel
+// WAJIB on-demand: digerbangi PIN Guru ATAU sesi Admin Panca yang valid,
+// dicocokkan ulang di server (sama alasannya dengan API leaderboard) --
+// `slug` di sini adalah id Penugasan yang mau direkap. Sesi Admin Panca
+// diperiksa DULUAN (guru yang sudah login tidak perlu PIN lagi -- itu
+// otentikasi yang lebih kuat) -- PIN cuma fallback untuk yang mengakses
+// tanpa akun Admin Panca (mis. dibagikan ke guru lain via /penugasan/rekap
+// langsung). PIN-nya sendiri dikelola dinamis lewat Admin Panca (tabel
 // `pins`, scope 'rekap') -- BUKAN lagi field statis `pinGuruHash` di
-// Sveltia/git (pola lama, sekarang sudah tidak dipakai untuk gating ini;
-// lihat riwayat sebelum fitur Admin Panca kalau butuh baca cara lama).
+// Sveltia/git (pola lama, sekarang sudah tidak dipakai untuk gating ini).
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, url }) => {
+export const GET: APIRoute = async ({ params, url, cookies }) => {
   const slug = params.slug;
   const pin = (url.searchParams.get('pin') ?? '').toLowerCase();
 
@@ -21,7 +25,10 @@ export const GET: APIRoute = async ({ params, url }) => {
   const entry = await getEntry('penugasan', slug);
   if (!entry) return json({ error: 'Penugasan tidak ditemukan' }, 404);
 
-  if (!pin || !/^[0-9a-f]{64}$/.test(pin) || !(await pinValid(env.DB, 'rekap', pin))) {
+  const sesi = await ambilSesi(cookies, env.ADMIN_SESSION_SECRET);
+  const pinCocok = pin && /^[0-9a-f]{64}$/.test(pin) && (await pinValid(env.DB, 'rekap', pin));
+
+  if (!sesi && !pinCocok) {
     return json({ error: 'PIN salah, sudah kedaluwarsa, atau sudah dicabut.' }, 403);
   }
 

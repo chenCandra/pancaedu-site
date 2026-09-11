@@ -1,14 +1,23 @@
 ---
-// TETAP prerender (statis) -- halaman ini tidak lagi baca `pinGuruHash` dari
-// content collection sama sekali (field itu sudah tidak dipakai untuk
-// gating ini). PIN sekarang dikelola dinamis lewat Admin Panca (tabel D1
-// `pins`), jadi TIDAK ada lagi "hash yang di-bake ke HTML" buat dicocokkan
-// di client -- form PIN selalu ditampilkan, validitasnya 100% ditentukan
-// server saat submit (lihat /api/penugasan/rekap/[slug]).
+// WAJIB on-demand (bukan lagi prerender) -- perlu cek sesi Admin Panca di
+// server lewat cookie. Guru yang SUDAH login ke Admin Panca langsung lihat
+// rekap tanpa PIN lagi (sesi itu sendiri sudah otentikasi yang lebih kuat
+// daripada PIN); form PIN cuma muncul kalau belum ada sesi valid (mis.
+// dibuka di perangkat/browser lain tanpa login, tapi punya PIN yang
+// dibagikan). Validitasnya (baik sesi maupun PIN) TETAP dicek ulang di
+// server saat fetch data (lihat /api/penugasan/rekap/[slug]) -- flag
+// `sudahLogin` di sini cuma menentukan tampilan awal, bukan satu-satunya
+// penjaga akses.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
 
 const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draft);
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+const sudahLogin = sesi !== null;
 ---
 
 <BaseLayout
@@ -23,8 +32,12 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
     <p class="page-lede">Pilih penugasan, lihat rata-rata & skor tertinggi tiap kelas yang mengerjakannya.</p>
   </section>
 
-  <section class="container gate-section">
-    <form class="pin-form card" data-pin-form>
+  <section class="container gate-section" data-sudah-login={sudahLogin ? '1' : ''}>
+    {sudahLogin && (
+      <p class="login-hint">✅ Masuk sebagai <strong>{sesi!.username}</strong> lewat Admin Panca -- tidak perlu PIN.</p>
+    )}
+
+    <form class="pin-form card" data-pin-form hidden={sudahLogin}>
       <label for="pin">PIN Guru</label>
       <div class="pin-row">
         <input
@@ -41,7 +54,8 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
       </div>
       <p class="pin-error" data-pin-error hidden></p>
       <p class="pin-hint">
-        Belum punya PIN? Buat lewat <a href="/admin-panca/pin">Admin Panca &rarr; Kelola PIN</a>.
+        Belum punya PIN? Buat lewat <a href="/admin-panca/pin">Admin Panca &rarr; Kelola PIN</a>, atau
+        <a href="/admin-panca/login">masuk ke Admin Panca</a> kalau sudah punya akun.
       </p>
     </form>
 
@@ -99,6 +113,7 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
     table.replaceChildren(thead, tbody);
   }
 
+  const section = document.querySelector<HTMLElement>('[data-sudah-login]');
   const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
   const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
   const wrap = document.querySelector<HTMLElement>('[data-rekap-wrap]');
@@ -107,30 +122,37 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
   const emptyEl = document.querySelector<HTMLElement>('[data-rekap-empty]');
   const table = document.querySelector<HTMLTableElement>('[data-rekap-table]');
 
-  if (form && errorEl && wrap && pilihSelect && table) {
-    // Sengaja pakai sessionStorage (bukan localStorage) -- pola sama seperti
-    // leaderboard & hasil-ujian, tidak "login permanen" di perangkat
-    // bersama/sekolah. TIDAK ada lagi "expectedHash" statis untuk
+  if (section && form && errorEl && wrap && pilihSelect && table) {
+    // Guru yang sudah login ke Admin Panca TIDAK butuh PIN sama sekali --
+    // sesi cookie-nya otomatis ikut tiap fetch (same-origin), server yang
+    // memeriksa ulang (lihat /api/penugasan/rekap/[slug]). Sengaja pakai
+    // sessionStorage (bukan localStorage) untuk jalur PIN -- pola sama
+    // seperti leaderboard & hasil-ujian, tidak "login permanen" di
+    // perangkat bersama/sekolah. TIDAK ada lagi "expectedHash" statis untuk
     // dibandingkan di client -- PIN bisa lebih dari satu & berganti kapan
     // saja (dikelola di Admin Panca), jadi validitas SELALU dicek ulang ke
     // server tiap kali (termasuk saat restore dari sessionStorage).
+    const sudahLogin = section.dataset.sudahLogin === '1';
     const SESSION_KEY = 'penugasan-rekap-pin';
     let pinTersimpan = sessionStorage.getItem(SESSION_KEY) ?? '';
 
     const muatRekap = async () => {
       const slug = pilihSelect.value;
-      if (!slug || !pinTersimpan) return;
+      if (!slug || !(sudahLogin || pinTersimpan)) return;
 
       loadingEl?.removeAttribute('hidden');
       table.replaceChildren();
       emptyEl?.setAttribute('hidden', '');
 
       try {
-        const res = await fetch(`/api/penugasan/rekap/${slug}?pin=${encodeURIComponent(pinTersimpan)}`);
+        const query = pinTersimpan ? `?pin=${encodeURIComponent(pinTersimpan)}` : '';
+        const res = await fetch(`/api/penugasan/rekap/${slug}${query}`);
         if (!res.ok) {
           const body = (await res.json().catch(() => null)) as { error?: string } | null;
           sessionStorage.removeItem(SESSION_KEY);
           pinTersimpan = '';
+          // Kalau sesi sempat expired di tengah jalan, tetap kasih jalan keluar
+          // lewat form PIN -- jangan biarkan halaman jadi buntu.
           wrap.hidden = true;
           form.hidden = false;
           if (errorEl) {
@@ -164,7 +186,12 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
 
     pilihSelect.addEventListener('change', muatRekap);
 
-    if (pinTersimpan) buka(pinTersimpan);
+    if (sudahLogin) {
+      wrap.hidden = false;
+      muatRekap();
+    } else if (pinTersimpan) {
+      buka(pinTersimpan);
+    }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -248,6 +275,12 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
     color: var(--ink-soft);
     font-size: 0.8125rem;
     margin: 0.25rem 0 0;
+  }
+
+  .login-hint {
+    color: var(--teal);
+    font-size: 0.9375rem;
+    margin: 0 0 1.25rem;
   }
 
   .rekap-wrap[hidden] {
