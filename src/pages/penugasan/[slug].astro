@@ -72,7 +72,7 @@ const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
           <input type="text" class="pn-input" data-pn-nama-manual autocomplete="off" maxlength="80" placeholder="Ketik namamu" />
         </label>
         {butuhSesiPin && (
-          <label>
+          <label data-pn-sesi-wrap>
             Kode Sesi
             <input
               type="text"
@@ -153,6 +153,7 @@ const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
     const namaSelect = identitasForm?.querySelector<HTMLSelectElement>('[data-pn-nama-select]');
     const namaManualWrap = identitasForm?.querySelector<HTMLElement>('[data-pn-nama-manual-wrap]');
     const namaManual = identitasForm?.querySelector<HTMLInputElement>('[data-pn-nama-manual]');
+    const sesiWrap = identitasForm?.querySelector<HTMLElement>('[data-pn-sesi-wrap]');
     const sesiPinInput = identitasForm?.querySelector<HTMLInputElement>('[data-pn-sesi-pin]');
     const sesiErrorEl = identitasForm?.querySelector<HTMLElement>('[data-pn-sesi-error]');
 
@@ -202,6 +203,19 @@ const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
         namaSelect.required = false;
         namaManualWrap.hidden = kelasTerpilih === '';
         namaManual.required = kelasTerpilih !== '';
+      }
+
+      // Kode Sesi TIDAK berlaku buat "Umum / Lainnya" -- itu jalur sengaja
+      // dibuka buat siapa saja yang mau coba-coba (bukan siswa yang
+      // dilacak guru buat penilaian/remedial), jadi tidak boleh ikut
+      // kena-gerbang kode sesi yang sebenarnya ditujukan buat kelas
+      // tertentu. Elemen ini cuma ADA di DOM kalau server sudah tahu
+      // Penugasan ini butuh kode sesi (lihat `butuhSesiPin` di frontmatter).
+      if (sesiWrap && sesiPinInput) {
+        const pakaiSesi = kelasTerpilih !== '' && kelasTerpilih !== KELAS_UMUM;
+        sesiWrap.hidden = !pakaiSesi;
+        sesiPinInput.required = pakaiSesi;
+        if (!pakaiSesi) sesiPinInput.value = '';
       }
     }
 

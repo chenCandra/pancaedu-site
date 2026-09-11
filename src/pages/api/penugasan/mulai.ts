@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import { env } from 'cloudflare:workers';
 import { mulaiAttempt } from '../../../lib/penugasan/db';
 import { adaSesiAktif, sesiPinValid } from '../../../lib/penugasan/sesi';
+import { KELAS_UMUM } from '../../../lib/penugasan/kelas';
 
 // Route ini WAJIB on-demand (bukan prerender) -- mencatat waktu mulai di
 // server (bukan dari jam siswa di browser) dan butuh akses D1.
@@ -36,8 +37,14 @@ export const POST: APIRoute = async ({ request }) => {
   // Kode sesi HANYA wajib kalau guru PERNAH bikin sesi untuk Penugasan ini
   // (lihat migrations/0003_sesi_penugasan.sql) -- Penugasan yang belum
   // pernah dibuatkan sesi (mayoritas) TETAP jalan seperti biasa, tanpa kode.
+  // "Umum / Lainnya" SELALU DIKECUALIKAN dari kode sesi, apa pun status
+  // sesinya -- jalur itu sengaja dibuka buat siapa saja yang mau coba-coba
+  // (bukan siswa yang dilacak guru buat penilaian/remedial), jadi tidak
+  // boleh ikut ter-gerbang kode sesi yang sebenarnya ditujukan buat kelas
+  // tertentu (kalau tidak, guru yang mengaktifkan sesi remedial untuk SATU
+  // kelas malah tanpa sadar mengunci semua pengunjung umum lain juga).
   let sesiId: number | null = null;
-  if (await adaSesiAktif(env.DB, slug)) {
+  if (kelas !== KELAS_UMUM && (await adaSesiAktif(env.DB, slug))) {
     if (!sesiPin || !/^[0-9a-f]{64}$/.test(sesiPin)) {
       return json({ error: 'Kode sesi wajib diisi untuk Penugasan ini. Tanya guru kode sesinya.' }, 403);
     }
