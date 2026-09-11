@@ -73,17 +73,18 @@ const links = [
     margin: 0;
   }
 
-  /* Kecil & samar sengaja -- bukan CTA, cuma jalan pintas buat guru sendiri
-     supaya tidak perlu ingat/ketik /admin-panca/login manual. */
+  /* Kecil sengaja -- bukan CTA, cuma jalan pintas buat guru sendiri supaya
+     tidak perlu ingat/ketik /admin-panca/login manual. Opacity dinaikkan
+     (2026-09-11) supaya lebih gampang ditemukan sendiri -- awalnya 0,35. */
   .footer-admin-icon {
     font-size: 0.9rem;
     text-decoration: none;
-    opacity: 0.35;
+    opacity: 0.7;
     transition: opacity 0.2s ease;
     line-height: 1;
   }
 
   .footer-admin-icon:hover {
-    opacity: 0.9;
+    opacity: 1;
   }
 </style>
