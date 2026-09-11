@@ -18,7 +18,14 @@
     // {slug} sebagai "404" alih-alih meneruskannya ke Worker. Worker
     // sendiri otomatis meneruskan ke ASSETS binding untuk rute yang
     // memang statis (mis. leaderboard), jadi tidak ada yang hilang.
-    "run_worker_first": ["/penugasan/*", "/api/*", "/admin-panca/*"]
+    //
+    // "/admin-panca" (TANPA trailing slash/wildcard) WAJIB ditulis terpisah
+    // dari "/admin-panca/*" -- pattern "/admin-panca/*" TERNYATA tidak
+    // mencakup path bare-nya sendiri (dibuktikan production 2026-09-11:
+    // /admin-panca/login 200 tapi /admin-panca polos 404). Kalau nanti
+    // nambah sub-route baru di admin-panca yang levelnya sama (bukan
+    // sub-halaman), cek pola ini lagi.
+    "run_worker_first": ["/penugasan/*", "/api/*", "/admin-panca", "/admin-panca/*"]
   },
   // Database Cloudflare D1 buat fitur Penugasan (skor & jawaban siswa) --
   // database_id diisi setelah `wrangler d1 create pancaedu-penugasan`

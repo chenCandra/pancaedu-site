@@ -2,7 +2,14 @@
 // Terpisah total dari alur PIN (SHA-256 polos) dan dari login GitHub Sveltia
 // -- ini akun sendiri (username/password) khusus panel /admin-panca.
 
-const PBKDF2_ITERATIONS = 210_000;
+// 100.000 adalah BATAS MAKSIMAL Cloudflare Workers production untuk PBKDF2
+// (crypto.subtle.deriveBits) -- di atas itu langsung lempar NotSupportedError.
+// JANGAN naikkan angka ini tanpa cek ulang batas itu masih sama. Miniflare
+// (wrangler dev / astro dev lokal) TIDAK menegakkan batas ini -- kesalahan
+// ini sempat lolos semua tes lokal dan baru ketahuan di production
+// (2026-09-11), jadi jangan percaya "sudah dites lokal, pasti aman" untuk
+// urusan crypto.subtle di proyek ini.
+const PBKDF2_ITERATIONS = 100_000;
 const SESSION_TTL_DETIK = 7 * 24 * 60 * 60; // 7 hari
 
 function toHex(bytes: ArrayBuffer | Uint8Array): string {
