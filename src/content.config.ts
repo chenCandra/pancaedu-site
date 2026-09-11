@@ -391,11 +391,12 @@ const penugasanPengaturan = defineCollection({
         })
       )
       .default([]),
-    // SHA-256 dari "PIN Guru" -- SATU PIN gerbang halaman rekap nilai
-    // (/penugasan/rekap, lintas semua Penugasan & kelas), beda dari
-    // `pinHash` per-Penugasan yang cuma buka leaderboard tugas itu saja.
-    // Sama seperti pinHash lain, generate lewat /penugasan/pin-generator,
-    // JANGAN taruh PIN mentahnya di sini.
+    // DEPRECATED sejak fitur Admin Panca (2026-09-11) -- SUDAH TIDAK DIBACA
+    // di mana pun. Gerbang PIN halaman /penugasan/rekap sekarang dinamis
+    // lewat tabel D1 `pins` (scope 'rekap'), dikelola dari /admin-panca/pin
+    // -- bukan lagi field statis di sini. Field ini dibiarkan (bukan
+    // dihapus) supaya konten lama yang masih punya nilainya tidak bikin
+    // Sveltia/Zod error; aman dihapus kapan saja kalau mau beres-beres.
     pinGuruHash: z.string().optional(),
   }),
 });

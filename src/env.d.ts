@@ -12,5 +12,9 @@ declare module 'cloudflare:workers' {
 
   export const env: {
     DB: D1Database;
+    // Secret buat sign/verify cookie session Admin Panca (HMAC-SHA256).
+    // Lokal: `.dev.vars` (gitignored). Produksi: `wrangler secret put
+    // ADMIN_SESSION_SECRET` -- JANGAN PERNAH ditaruh di file yang ke-commit.
+    ADMIN_SESSION_SECRET: string;
   };
 }

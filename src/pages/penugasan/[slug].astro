@@ -97,9 +97,10 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
       <h2>🎉 Selesai!</h2>
       <p class="pn-hasil-skor" data-pn-hasil-skor></p>
       <div class="pn-hasil-actions">
-        <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost">🏆 Lihat Leaderboard</a>
+        <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost">🏆 Lihat Papan Peringkat</a>
         <a href="/penugasan" class="btn btn-ghost">Penugasan Lain</a>
       </div>
+      <p class="pn-hasil-catatan">ℹ️ Untuk melihat Papan Peringkat, silakan minta kode PIN ke gurumu.</p>
     </section>
   </section>
 </BaseLayout>
@@ -426,5 +427,11 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
     gap: 0.75rem;
     flex-wrap: wrap;
     margin-top: 1rem;
+  }
+
+  .pn-hasil-catatan {
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
   }
 </style>

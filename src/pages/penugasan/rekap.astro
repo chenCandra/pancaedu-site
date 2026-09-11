@@ -1,14 +1,14 @@
 ---
-// TETAP prerender (statis) -- cuma `pinGuruHash` (bukan data siswa) yang
-// ter-bake ke HTML, pola sama seperti leaderboard per-Penugasan. Baris
-// rekap sungguhan diambil LIVE dari /api/penugasan/rekap/[slug] setelah
-// PIN cocok, server mencocokkan ulang hash itu sendiri.
-import { getCollection, getEntry } from 'astro:content';
+// TETAP prerender (statis) -- halaman ini tidak lagi baca `pinGuruHash` dari
+// content collection sama sekali (field itu sudah tidak dipakai untuk
+// gating ini). PIN sekarang dikelola dinamis lewat Admin Panca (tabel D1
+// `pins`), jadi TIDAK ada lagi "hash yang di-bake ke HTML" buat dicocokkan
+// di client -- form PIN selalu ditampilkan, validitasnya 100% ditentukan
+// server saat submit (lihat /api/penugasan/rekap/[slug]).
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draft);
-const pengaturan = await getEntry('penugasanPengaturan', 'index');
-const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
 ---
 
 <BaseLayout
@@ -23,50 +23,44 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
     <p class="page-lede">Pilih penugasan, lihat rata-rata & skor tertinggi tiap kelas yang mengerjakannya.</p>
   </section>
 
-  <section class="container gate-section" data-pin-hash={pinGuruHash}>
-    {pinGuruHash ? (
-      <>
-        <form class="pin-form card" data-pin-form>
-          <label for="pin">PIN Guru</label>
-          <div class="pin-row">
-            <input
-              type="text"
-              id="pin"
-              name="pin"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="Masukkan PIN Guru"
-              required
-            />
-            <button type="submit" class="btn btn-primary">Buka Rekap</button>
-          </div>
-          <p class="pin-error" data-pin-error hidden>Kode PIN salah. Coba lagi.</p>
-        </form>
-
-        <div class="rekap-wrap" data-rekap-wrap hidden>
-          <label class="rekap-pilih-label">
-            Pilih Penugasan
-            <select class="pn-select" data-rekap-pilih>
-              {semuaPenugasan.map((p) => (
-                <option value={p.id}>{p.data.kelas} · {p.data.mapel} — {p.data.judul}</option>
-              ))}
-            </select>
-          </label>
-
-          <p class="leaderboard-loading" data-rekap-loading hidden>Memuat...</p>
-          <div class="table-scroll">
-            <table class="leaderboard-table" data-rekap-table></table>
-          </div>
-          <p class="leaderboard-empty" data-rekap-empty hidden>Belum ada yang mengerjakan tugas ini.</p>
-        </div>
-      </>
-    ) : (
-      <p class="belum-ada-pin card">
-        PIN Guru belum diatur. Buat dulu lewat <a href="/penugasan/pin-generator">/penugasan/pin-generator</a>,
-        lalu isi field "PIN Guru (hash)" di <a href="/admin">/admin</a> &rarr; Pengaturan Penugasan.
+  <section class="container gate-section">
+    <form class="pin-form card" data-pin-form>
+      <label for="pin">PIN Guru</label>
+      <div class="pin-row">
+        <input
+          type="text"
+          id="pin"
+          name="pin"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Masukkan PIN Guru"
+          required
+        />
+        <button type="submit" class="btn btn-primary">Buka Rekap</button>
+      </div>
+      <p class="pin-error" data-pin-error hidden></p>
+      <p class="pin-hint">
+        Belum punya PIN? Buat lewat <a href="/admin-panca/pin">Admin Panca &rarr; Kelola PIN</a>.
       </p>
-    )}
+    </form>
+
+    <div class="rekap-wrap" data-rekap-wrap hidden>
+      <label class="rekap-pilih-label">
+        Pilih Penugasan
+        <select class="pn-select" data-rekap-pilih>
+          {semuaPenugasan.map((p) => (
+            <option value={p.id}>{p.data.kelas} · {p.data.mapel} — {p.data.judul}</option>
+          ))}
+        </select>
+      </label>
+
+      <p class="leaderboard-loading" data-rekap-loading hidden>Memuat...</p>
+      <div class="table-scroll">
+        <table class="leaderboard-table" data-rekap-table></table>
+      </div>
+      <p class="leaderboard-empty" data-rekap-empty hidden>Belum ada yang mengerjakan tugas ini.</p>
+    </div>
   </section>
 </BaseLayout>
 
@@ -105,7 +99,6 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
     table.replaceChildren(thead, tbody);
   }
 
-  const section = document.querySelector<HTMLElement>('[data-pin-hash]');
   const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
   const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
   const wrap = document.querySelector<HTMLElement>('[data-rekap-wrap]');
@@ -114,10 +107,15 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
   const emptyEl = document.querySelector<HTMLElement>('[data-rekap-empty]');
   const table = document.querySelector<HTMLTableElement>('[data-rekap-table]');
 
-  if (section && form && errorEl && wrap && pilihSelect && table) {
-    const expectedHash = section.dataset.pinHash!;
-    const sessionKey = `penugasan-rekap:${expectedHash}`;
-    let pinTersimpan = '';
+  if (form && errorEl && wrap && pilihSelect && table) {
+    // Sengaja pakai sessionStorage (bukan localStorage) -- pola sama seperti
+    // leaderboard & hasil-ujian, tidak "login permanen" di perangkat
+    // bersama/sekolah. TIDAK ada lagi "expectedHash" statis untuk
+    // dibandingkan di client -- PIN bisa lebih dari satu & berganti kapan
+    // saja (dikelola di Admin Panca), jadi validitas SELALU dicek ulang ke
+    // server tiap kali (termasuk saat restore dari sessionStorage).
+    const SESSION_KEY = 'penugasan-rekap-pin';
+    let pinTersimpan = sessionStorage.getItem(SESSION_KEY) ?? '';
 
     const muatRekap = async () => {
       const slug = pilihSelect.value;
@@ -131,7 +129,8 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
         const res = await fetch(`/api/penugasan/rekap/${slug}?pin=${encodeURIComponent(pinTersimpan)}`);
         if (!res.ok) {
           const body = (await res.json().catch(() => null)) as { error?: string } | null;
-          sessionStorage.removeItem(sessionKey);
+          sessionStorage.removeItem(SESSION_KEY);
+          pinTersimpan = '';
           wrap.hidden = true;
           form.hidden = false;
           if (errorEl) {
@@ -165,27 +164,16 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
 
     pilihSelect.addEventListener('change', muatRekap);
 
-    // Sengaja pakai sessionStorage (bukan localStorage) -- pola sama
-    // seperti leaderboard & hasil-ujian, tidak "login permanen" di
-    // perangkat bersama/sekolah.
-    if (sessionStorage.getItem(sessionKey) === '1') {
-      buka(expectedHash);
-    }
+    if (pinTersimpan) buka(pinTersimpan);
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = form.querySelector<HTMLInputElement>('#pin')!;
       const hash = await sha256Hex(input.value.trim());
 
-      if (hash === expectedHash) {
-        errorEl.hidden = true;
-        sessionStorage.setItem(sessionKey, '1');
-        buka(hash);
-      } else {
-        errorEl.textContent = 'Kode PIN salah. Coba lagi.';
-        errorEl.hidden = false;
-        input.select();
-      }
+      errorEl.hidden = true;
+      sessionStorage.setItem(SESSION_KEY, hash);
+      buka(hash);
     });
   }
 </script>
@@ -216,12 +204,6 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
   .gate-section {
     padding-block: 1rem 4rem;
     max-width: 40rem;
-  }
-
-  .belum-ada-pin {
-    padding: 1.5rem;
-    color: var(--ink-soft);
-    font-size: 0.9375rem;
   }
 
   .pin-form {
@@ -259,6 +241,12 @@ const pinGuruHash = pengaturan?.data.pinGuruHash ?? '';
   .pin-error {
     color: #b3423f;
     font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .pin-hint {
+    color: var(--ink-soft);
+    font-size: 0.8125rem;
     margin: 0.25rem 0 0;
   }
 

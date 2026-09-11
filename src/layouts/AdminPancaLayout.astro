@@ -1,0 +1,164 @@
+---
+// Layout khusus Admin Panca -- SENGAJA minimal (bukan BaseLayout), tanpa
+// Header/Footer/CookieConsent situs publik: ini alat kerja internal, bukan
+// halaman yang perlu terasa "situs PancaEdu", dan supaya guru awam IT tidak
+// terdistraksi nav situs utama saat lagi ngurus PIN/rekap.
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  username?: string;
+}
+
+const { title, username } = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title} · Admin Panca</title>
+  </head>
+  <body class="panca-body">
+    {username && (
+      <header class="panca-topbar">
+        <div class="panca-topbar-inner">
+          <a href="/admin-panca" class="panca-brand">🛠️ Admin Panca</a>
+          <nav class="panca-nav">
+            <a href="/admin-panca/pin">Kelola PIN</a>
+            <a href="/admin-panca/rekap">Rekap Lintas Penugasan</a>
+            <a href="/admin-panca/laporan">Laporan Belajar Daring</a>
+          </nav>
+          <div class="panca-user">
+            <span>{username}</span>
+            <form method="post" action="/api/admin-panca/logout" data-panca-logout>
+              <button type="submit" class="panca-btn panca-btn-ghost">Keluar</button>
+            </form>
+          </div>
+        </div>
+      </header>
+    )}
+    <main class="panca-main">
+      <slot />
+    </main>
+    {username && (
+      <script>
+        // Logout lewat fetch (biar tidak pindah halaman ke response JSON polos),
+        // lalu redirect manual ke halaman login.
+        document.querySelector<HTMLFormElement>('[data-panca-logout]')?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await fetch('/api/admin-panca/logout', { method: 'POST' });
+          window.location.href = '/admin-panca/login';
+        });
+      </script>
+    )}
+  </body>
+</html>
+
+<style is:global>
+  .panca-body {
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+
+  .panca-topbar {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-solid);
+  }
+
+  .panca-topbar-inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .panca-brand {
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .panca-nav {
+    display: flex;
+    gap: 1.25rem;
+    flex: 1 1 auto;
+  }
+
+  .panca-nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .panca-nav a:hover {
+    color: var(--accent);
+  }
+
+  .panca-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  .panca-main {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  .panca-btn {
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .panca-btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+  }
+
+  .panca-btn-ghost:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .panca-btn-primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .panca-card {
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  .panca-h1 {
+    font-size: 1.5rem;
+    margin: 0 0 0.35rem;
+  }
+
+  .panca-lede {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1.5rem;
+  }
+</style>

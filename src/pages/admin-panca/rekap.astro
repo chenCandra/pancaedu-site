@@ -1,0 +1,143 @@
+---
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { ambilRekapSemuaPenugasan } from '../../lib/adminPanca/db';
+import { env } from 'cloudflare:workers';
+import { getCollection } from 'astro:content';
+
+export const prerender = false;
+
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesi) return Astro.redirect('/admin-panca/login');
+
+const [baris, semuaPenugasan] = await Promise.all([ambilRekapSemuaPenugasan(env.DB), getCollection('penugasan')]);
+const judulPerSlug = new Map(semuaPenugasan.map((p) => [p.id, { judul: p.data.judul, mapel: p.data.mapel }]));
+
+const rows = baris.map((b) => ({
+  ...b,
+  judul: judulPerSlug.get(b.penugasanSlug)?.judul ?? b.penugasanSlug,
+  mapel: judulPerSlug.get(b.penugasanSlug)?.mapel ?? '-',
+}));
+
+const daftarKelas = [...new Set(rows.map((r) => r.kelas))].sort();
+---
+
+<AdminPancaLayout title="Rekap Lintas Penugasan" username={sesi.username}>
+  <h1 class="panca-h1">Rekap Lintas Penugasan</h1>
+  <p class="panca-lede">
+    Semua Penugasan sekaligus, dikelompokkan per kelas -- tidak perlu pilih satu-satu seperti di
+    <a href="/penugasan/rekap">/penugasan/rekap</a>. Skor terbaik per siswa (bukan percobaan terakhir).
+  </p>
+
+  <div class="filter-row">
+    <label>
+      Filter Kelas
+      <select data-filter-kelas>
+        <option value="">Semua Kelas</option>
+        {daftarKelas.map((k) => <option value={k}>{k}</option>)}
+      </select>
+    </label>
+  </div>
+
+  {rows.length === 0 ? (
+    <p class="panca-card pin-empty">Belum ada siswa yang menyelesaikan Penugasan apa pun.</p>
+  ) : (
+    <div class="panca-card table-scroll">
+      <table class="rekap-table">
+        <thead>
+          <tr>
+            <th>Kelas</th>
+            <th>Penugasan</th>
+            <th>Mapel</th>
+            <th>Jumlah Siswa</th>
+            <th>Rata-rata</th>
+            <th>Skor Tertinggi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr data-kelas={r.kelas}>
+              <td>{r.kelas}</td>
+              <td>{r.judul}</td>
+              <td>{r.mapel}</td>
+              <td>{r.jumlahSiswa}</td>
+              <td>{r.rataRata}</td>
+              <td>{r.skorTertinggi} / {r.skorMaks}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</AdminPancaLayout>
+
+<script>
+  const select = document.querySelector<HTMLSelectElement>('[data-filter-kelas]');
+  const rows = document.querySelectorAll<HTMLTableRowElement>('.rekap-table tbody tr');
+
+  select?.addEventListener('change', () => {
+    const kelas = select.value;
+    rows.forEach((row) => {
+      row.hidden = kelas !== '' && row.dataset.kelas !== kelas;
+    });
+  });
+</script>
+
+<style>
+  .filter-row {
+    margin-bottom: 1rem;
+  }
+
+  .filter-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    max-width: 16rem;
+  }
+
+  .filter-row select {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+  }
+
+  .pin-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    padding: 0;
+  }
+
+  .rekap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .rekap-table th,
+  .rekap-table td {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .rekap-table thead th {
+    font-weight: 600;
+    color: var(--ink-soft);
+    background-color: var(--accent-soft);
+  }
+
+  .rekap-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+</style>

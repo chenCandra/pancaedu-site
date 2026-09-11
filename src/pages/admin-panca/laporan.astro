@@ -1,0 +1,755 @@
+---
+// Laporan Belajar Daring -- dibuat ON-DEMAND dari data yang sudah ada
+// (attempts/jawaban D1 + roster `daftarKelas` + content Penugasan/Ruang
+// Belajar), TIDAK disimpan sebagai record terpisah. Alasan: laporan begini
+// sifatnya insidental (sekolah minta sewaktu-waktu), dan data sumbernya
+// (skor siswa) sudah otoritatif di D1 -- menyimpan salinan laporan cuma
+// nambah risiko datanya beda/basi. Kalau nanti butuh "riwayat laporan yang
+// pernah dibuat", itu penambahan terpisah, bukan bagian dari desain ini.
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { ambilLaporanSiswa } from '../../lib/adminPanca/db';
+import { env } from 'cloudflare:workers';
+import { getCollection, getEntry } from 'astro:content';
+
+export const prerender = false;
+
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesi) return Astro.redirect('/admin-panca/login');
+
+const qs = Astro.url.searchParams;
+const slug = qs.get('slug') ?? '';
+const kelasDipilih = qs.get('kelas') ?? '';
+const kkm = Number(qs.get('kkm') ?? '70') || 70;
+const tanggal = qs.get('tanggal') ?? '';
+const namaSekolah = qs.get('sekolah') ?? '';
+const namaGuru = qs.get('guru') ?? '';
+const topik = qs.get('topik') ?? '';
+const tujuan = qs.get('tujuan') ?? '';
+const catatan = qs.get('catatan') ?? '';
+
+const [semuaPenugasan, semuaRuangBelajar, pengaturan] = await Promise.all([
+  getCollection('penugasan', ({ data }) => !data.draft),
+  getCollection('ruangBelajar', ({ data }) => !data.draft),
+  getEntry('penugasanPengaturan', 'index'),
+]);
+
+const daftarKelas = pengaturan?.data.daftarKelas ?? [];
+
+// Data buat auto-isi form di client (JS) saat guru pilih Penugasan --
+// dicari Ruang Belajar dengan `materiSlug` yang sama, ambil yang tanggalnya
+// PALING BARU kalau ada beberapa sesi merujuk materi yang sama. Ini cuma
+// SARAN awal, semua field tetap bisa diedit manual sebelum "Buat Laporan".
+const prefillPerSlug: Record<
+  string,
+  { topik: string; tujuan: string[]; tanggal: string; kelasBroad: string; materiSlug: string | undefined }
+> = {};
+for (const p of semuaPenugasan) {
+  const kandidat = p.data.materiSlug
+    ? semuaRuangBelajar
+        .filter((r) => r.data.materiSlug === p.data.materiSlug)
+        .sort((a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime())[0]
+    : undefined;
+  prefillPerSlug[p.id] = {
+    topik: kandidat?.data.judul ?? p.data.judul,
+    tujuan: kandidat?.data.tujuanPembelajaran ?? [],
+    tanggal: kandidat ? kandidat.data.tanggal.toISOString().slice(0, 10) : '',
+    kelasBroad: p.data.kelas,
+    materiSlug: p.data.materiSlug,
+  };
+}
+
+// --- Hitung laporan (cuma kalau slug+kelas sudah dipilih) ---
+type BarisLaporan = {
+  nama: string;
+  status: 'belum-mulai' | 'belum-selesai' | 'selesai';
+  jumlahPercobaan: number;
+  skor: number | null;
+  skorMaks: number | null;
+  persentase: number | null;
+  tuntas: boolean;
+  durasiDetik: number | null;
+};
+
+let laporan: {
+  entry: (typeof semuaPenugasan)[number];
+  baris: BarisLaporan[];
+  totalRoster: number;
+  jumlahMengikuti: number;
+  jumlahSelesai: number;
+  jumlahTuntas: number;
+  rataRata: number;
+  skorTertinggiPersen: number;
+  skorTerendahPersen: number;
+  ketuntasanDariMengerjakan: number;
+  ketuntasanDariTotal: number;
+  distribusi: { label: string; jumlah: number }[];
+} | null = null;
+
+if (slug && kelasDipilih) {
+  const entry = semuaPenugasan.find((p) => p.id === slug);
+  if (entry) {
+    const rosterEntry = daftarKelas.find((d) => d.kelas === kelasDipilih);
+    const rosterSiswa = rosterEntry?.siswa ?? [];
+    const dataAttempt = await ambilLaporanSiswa(env.DB, slug, kelasDipilih);
+    const attemptByNama = new Map(dataAttempt.map((b) => [b.nama, b]));
+
+    // Gabung roster (bisa "belum mulai") + siapa pun yang tercatat attempt
+    // walau namanya tidak ada di roster (siswa baru/pindahan yang pilih
+    // "nama saya tidak ada di daftar" -- TETAP harus muncul di laporan,
+    // bukan didiamkan hilang).
+    const semuaNama = new Set([...rosterSiswa, ...dataAttempt.map((b) => b.nama)]);
+
+    const baris: BarisLaporan[] = [...semuaNama].sort((a, b) => a.localeCompare(b, 'id')).map((nama) => {
+      const a = attemptByNama.get(nama);
+      if (!a) {
+        return { nama, status: 'belum-mulai', jumlahPercobaan: 0, skor: null, skorMaks: null, persentase: null, tuntas: false, durasiDetik: null };
+      }
+      const persentase = a.pernahSelesai && a.skorMaks ? Math.round((a.skorTerbaik! / a.skorMaks) * 100) : null;
+      return {
+        nama,
+        status: a.pernahSelesai ? 'selesai' : 'belum-selesai',
+        jumlahPercobaan: a.jumlahPercobaan,
+        skor: a.skorTerbaik,
+        skorMaks: a.skorMaks,
+        persentase,
+        tuntas: persentase !== null && persentase >= kkm,
+        durasiDetik: a.durasiDetik,
+      };
+    });
+
+    const totalRoster = rosterSiswa.length;
+    const jumlahMengikuti = baris.filter((b) => b.status !== 'belum-mulai').length;
+    const selesaiRows = baris.filter((b) => b.status === 'selesai');
+    const jumlahSelesai = selesaiRows.length;
+    const jumlahTuntas = selesaiRows.filter((b) => b.tuntas).length;
+    const persenList = selesaiRows.map((b) => b.persentase!);
+    const rataRata = persenList.length ? Math.round((persenList.reduce((a, b) => a + b, 0) / persenList.length) * 10) / 10 : 0;
+    const skorTertinggiPersen = persenList.length ? Math.max(...persenList) : 0;
+    const skorTerendahPersen = persenList.length ? Math.min(...persenList) : 0;
+
+    const bucketDef = [
+      { label: '0-20', min: 0, maks: 20 },
+      { label: '21-40', min: 21, maks: 40 },
+      { label: '41-60', min: 41, maks: 60 },
+      { label: '61-80', min: 61, maks: 80 },
+      { label: '81-100', min: 81, maks: 100 },
+    ];
+    const distribusi = bucketDef.map((b) => ({
+      label: b.label,
+      jumlah: persenList.filter((p) => p >= b.min && p <= b.maks).length,
+    }));
+
+    laporan = {
+      entry,
+      baris,
+      totalRoster,
+      jumlahMengikuti,
+      jumlahSelesai,
+      jumlahTuntas,
+      rataRata,
+      skorTertinggiPersen,
+      skorTerendahPersen,
+      ketuntasanDariMengerjakan: jumlahSelesai ? Math.round((jumlahTuntas / jumlahSelesai) * 1000) / 10 : 0,
+      ketuntasanDariTotal: totalRoster ? Math.round((jumlahTuntas / totalRoster) * 1000) / 10 : 0,
+      distribusi,
+    };
+  }
+}
+
+const STATUS_LABEL: Record<BarisLaporan['status'], string> = {
+  'belum-mulai': 'Belum Mulai',
+  'belum-selesai': 'Sedang Mengerjakan',
+  selesai: 'Selesai',
+};
+
+// Prompt buat AI eksternal (ChatGPT/Claude/dst) -- teks polos, guru SENDIRI
+// yang tempel manual ke chat AI pilihannya (tidak ada panggilan API AI apa
+// pun dari sini, jadi tidak ada data yang otomatis terkirim ke pihak
+// ketiga). Isinya SEMUA angka yang sudah dihitung sistem + instruksi biar
+// AI menyusun narasi laporan, BUKAN diminta mengarang angka baru.
+function buatPromptAI(): string {
+  if (!laporan) return '';
+  const tanggalFormat = tanggal
+    ? new Date(`${tanggal}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : '(tanggal tidak diisi)';
+  const tujuanList = tujuan.split('\n').map((t) => t.trim()).filter(Boolean);
+  const distribusiText = laporan.distribusi.map((d) => `- ${d.label}%: ${d.jumlah} siswa`).join('\n');
+  const siswaText = laporan.baris
+    .map((b) => {
+      const skorText = b.skor !== null ? `${b.skor}/${b.skorMaks} (${b.persentase}%)` : '-';
+      const tuntasText = b.status === 'selesai' ? (b.tuntas ? 'Tuntas' : 'Belum Tuntas') : '-';
+      return `${b.nama} | ${STATUS_LABEL[b.status]} | ${skorText} | ${tuntasText}`;
+    })
+    .join('\n');
+
+  return `Tolong buatkan LAPORAN HASIL BELAJAR DARING yang lengkap, formal, dan siap diserahkan ke sekolah, dalam Bahasa Indonesia baku. Gunakan HANYA data di bawah ini sebagai dasar -- JANGAN mengarang angka yang tidak tercantum di sini.
+
+=== DATA PELAKSANAAN ===
+Sekolah: ${namaSekolah || '(isi manual)'}
+Guru Pengampu: ${namaGuru || '(isi manual)'}
+Kelas/Rombel: ${kelasDipilih}
+Mata Pelajaran: ${laporan.entry.data.mapel}
+Topik/Materi: ${topik || laporan.entry.data.judul}
+Tanggal Pelaksanaan: ${tanggalFormat}
+Nama Penugasan/Latihan yang Dinilai: ${laporan.entry.data.judul}
+Tujuan Pembelajaran:
+${tujuanList.length ? tujuanList.map((t) => `- ${t}`).join('\n') : '- (tidak diisi)'}
+
+=== DATA CAPAIAN (sudah dihitung otomatis oleh sistem) ===
+Jumlah siswa terdaftar di kelas ini: ${laporan.totalRoster}
+Jumlah siswa yang mengikuti pembelajaran (mengerjakan latihan, termasuk yang belum selesai): ${laporan.jumlahMengikuti}
+Jumlah siswa yang menyelesaikan latihan sampai selesai: ${laporan.jumlahSelesai}
+Rata-rata skor (dari yang menyelesaikan): ${laporan.rataRata}%
+Skor tertinggi: ${laporan.skorTertinggiPersen}%
+Skor terendah: ${laporan.skorTerendahPersen}%
+KKM (batas tuntas) yang dipakai: ${kkm}%
+Tingkat ketuntasan (dihitung dari siswa yang mengerjakan): ${laporan.ketuntasanDariMengerjakan}%
+Tingkat ketuntasan (dihitung dari total siswa terdaftar): ${laporan.ketuntasanDariTotal}%
+
+Distribusi skor (persentase, di antara yang menyelesaikan):
+${distribusiText}
+
+=== DETAIL PER SISWA (Nama | Status | Skor | Ketuntasan) ===
+${siswaText}
+
+=== CATATAN GURU ===
+${catatan.trim() || '(tidak ada catatan tambahan dari guru)'}
+
+=== INSTRUKSI PENYUSUNAN LAPORAN ===
+Susun laporan dengan struktur berikut:
+1. Identitas Pelaksanaan (sekolah, guru, kelas, mapel, topik, tanggal)
+2. Ringkasan Pelaksanaan Pembelajaran (1 paragraf, ceritakan apa yang dilakukan)
+3. Analisis Capaian & Ketuntasan Belajar (JELASKAN makna angka-angka di atas -- apa artinya bagi kelas ini, bukan cuma mengulang angkanya)
+4. Kendala/Catatan (kalau ada isi dari Catatan Guru di atas, kembangkan; kalau tidak ada, boleh dilewati)
+5. Tindak Lanjut / Rekomendasi (langkah konkret untuk siswa yang belum tuntas)
+Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap, dan JANGAN menambahkan data/angka yang tidak diberikan di atas.`;
+}
+
+const promptAI = buatPromptAI();
+---
+
+<AdminPancaLayout title="Laporan Belajar Daring" username={sesi.username}>
+  <div class="no-print">
+    <h1 class="panca-h1">Laporan Belajar Daring</h1>
+    <p class="panca-lede">
+      Pilih Penugasan &amp; kelas yang mau dilaporkan -- laporan dihitung langsung dari data pengerjaan siswa,
+      tidak perlu rekap manual.
+    </p>
+
+    <section class="panca-card">
+      <form method="get" data-laporan-form class="laporan-form">
+        <div class="grid-2">
+          <label>
+            Penugasan
+            <select name="slug" required data-slug-select>
+              <option value="">-- Pilih Penugasan --</option>
+              {semuaPenugasan.map((p) => (
+                <option value={p.id} selected={p.id === slug}>
+                  {p.data.kelas} · {p.data.mapel} — {p.data.judul}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Kelas / Rombel
+            <select name="kelas" required>
+              <option value="">-- Pilih Kelas --</option>
+              {daftarKelas.map((k) => (
+                <option value={k.kelas} selected={k.kelas === kelasDipilih}>{k.kelas} ({k.siswa.length} siswa)</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            Tanggal Pelaksanaan
+            <input type="date" name="tanggal" value={tanggal} data-tanggal-input />
+          </label>
+          <label>
+            KKM / Batas Tuntas (%)
+            <input type="number" name="kkm" min="0" max="100" value={kkm} />
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            Nama Sekolah <span class="opsional">(opsional, diingat browser)</span>
+            <input type="text" name="sekolah" value={namaSekolah} placeholder="mis. SMA Negeri 4 ..." data-sekolah-input />
+          </label>
+          <label>
+            Nama Guru <span class="opsional">(opsional, diingat browser)</span>
+            <input type="text" name="guru" value={namaGuru} placeholder="mis. Candra Pabakti" data-guru-input />
+          </label>
+        </div>
+
+        <label>
+          Topik / Materi
+          <input type="text" name="topik" value={topik} placeholder="mis. Angka Penting" data-topik-input />
+        </label>
+
+        <label>
+          Tujuan Pembelajaran <span class="opsional">(satu poin per baris)</span>
+          <textarea name="tujuan" rows="3" data-tujuan-input>{tujuan}</textarea>
+        </label>
+
+        <label>
+          Catatan / Kesimpulan Guru <span class="opsional">(opsional, muncul di bagian akhir laporan)</span>
+          <textarea name="catatan" rows="3">{catatan}</textarea>
+        </label>
+
+        <button type="submit" class="panca-btn panca-btn-primary">Buat Laporan</button>
+      </form>
+    </section>
+  </div>
+
+  {laporan && (
+    <section class="laporan-hasil">
+      <div class="laporan-actions no-print">
+        <button type="button" class="panca-btn panca-btn-primary" data-print-btn>🖨️ Cetak / Simpan PDF</button>
+      </div>
+
+      <div class="panca-card laporan-kop">
+        <h2 class="laporan-judul">Laporan Hasil Belajar Daring</h2>
+        {namaSekolah && <p><strong>Sekolah:</strong> {namaSekolah}</p>}
+        {namaGuru && <p><strong>Guru:</strong> {namaGuru}</p>}
+        <p><strong>Kelas:</strong> {kelasDipilih} &nbsp;·&nbsp; <strong>Mapel:</strong> {laporan.entry.data.mapel}</p>
+        {tanggal && <p><strong>Tanggal:</strong> {new Date(`${tanggal}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>}
+        <p><strong>Topik / Materi:</strong> {topik || laporan.entry.data.judul}</p>
+        <p><strong>Penugasan yang Dinilai:</strong> {laporan.entry.data.judul}</p>
+        {tujuan.trim() && (
+          <>
+            <p><strong>Tujuan Pembelajaran:</strong></p>
+            <ul class="tujuan-list">
+              {tujuan.split('\n').map((t) => t.trim()).filter(Boolean).map((t) => <li>{t}</li>)}
+            </ul>
+          </>
+        )}
+      </div>
+
+      <div class="panca-card">
+        <h3 class="section-title">Ringkasan</h3>
+        <div class="ringkasan-grid">
+          <div class="stat-box">
+            <span class="stat-angka">{laporan.totalRoster}</span>
+            <span class="stat-label">Siswa Terdaftar</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-angka">{laporan.jumlahMengikuti}</span>
+            <span class="stat-label">Mengikuti Pembelajaran</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-angka">{laporan.jumlahSelesai}</span>
+            <span class="stat-label">Menyelesaikan Tugas</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-angka">{laporan.rataRata}%</span>
+            <span class="stat-label">Rata-rata Skor</span>
+          </div>
+          <div class="stat-box stat-box-tuntas">
+            <span class="stat-angka">{laporan.ketuntasanDariMengerjakan}%</span>
+            <span class="stat-label">Ketuntasan (dari yang mengerjakan)</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-angka">{laporan.ketuntasanDariTotal}%</span>
+            <span class="stat-label">Ketuntasan (dari total terdaftar)</span>
+          </div>
+        </div>
+        <p class="catatan-kkm">
+          KKM yang dipakai: <strong>{kkm}%</strong>. "Tuntas" = siswa menyelesaikan tugas dengan skor &ge; KKM.
+          Skor tertinggi {laporan.skorTertinggiPersen}%, skor terendah {laporan.skorTerendahPersen}% (di antara yang menyelesaikan).
+        </p>
+      </div>
+
+      <div class="panca-card">
+        <h3 class="section-title">Distribusi Skor</h3>
+        <div class="histogram">
+          {laporan.distribusi.map((d) => {
+            const maksJumlah = Math.max(1, ...laporan!.distribusi.map((x) => x.jumlah));
+            const tinggi = Math.round((d.jumlah / maksJumlah) * 100);
+            return (
+              <div class="hist-bar-wrap">
+                <div class="hist-bar" style={`height:${Math.max(tinggi, d.jumlah > 0 ? 6 : 0)}%`}>
+                  {d.jumlah > 0 && <span class="hist-jumlah">{d.jumlah}</span>}
+                </div>
+                <span class="hist-label">{d.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div class="panca-card">
+        <h3 class="section-title">Detail per Siswa</h3>
+        <div class="table-scroll">
+          <table class="laporan-table">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Status</th>
+                <th>Percobaan</th>
+                <th>Skor</th>
+                <th>Persentase</th>
+                <th>Ketuntasan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {laporan.baris.map((b) => (
+                <tr>
+                  <td>{b.nama}</td>
+                  <td>{STATUS_LABEL[b.status]}</td>
+                  <td>{b.jumlahPercobaan || '-'}</td>
+                  <td>{b.skor !== null ? `${b.skor} / ${b.skorMaks}` : '-'}</td>
+                  <td>{b.persentase !== null ? `${b.persentase}%` : '-'}</td>
+                  <td>
+                    {b.status === 'selesai' ? (
+                      <span class={`badge-tuntas ${b.tuntas ? 'badge-ya' : 'badge-tidak'}`}>{b.tuntas ? 'Tuntas' : 'Belum Tuntas'}</span>
+                    ) : '-'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {catatan.trim() && (
+        <div class="panca-card">
+          <h3 class="section-title">Catatan / Kesimpulan Guru</h3>
+          <p class="catatan-guru">{catatan}</p>
+        </div>
+      )}
+
+      <div class="panca-card no-print">
+        <h3 class="section-title">🤖 Prompt untuk AI (ChatGPT / Claude / dll)</h3>
+        <p class="prompt-desc">
+          Salin teks di bawah, tempel ke chat AI pilihanmu -- AI akan menyusun laporan naratif lengkap (identitas,
+          ringkasan, analisis, rekomendasi) dari data di atas. Data yang dikirim cuma yang ada di kotak ini, TIDAK ada
+          yang otomatis terkirim ke AI mana pun dari halaman ini -- kamu yang tempel manual.
+        </p>
+        <textarea class="prompt-box" readonly rows="10" data-prompt-text>{promptAI}</textarea>
+        <div class="prompt-actions">
+          <button type="button" class="panca-btn panca-btn-primary" data-copy-prompt>📋 Salin Prompt</button>
+          <span class="prompt-copied" data-prompt-copied hidden>✅ Tersalin!</span>
+          <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" class="panca-btn panca-btn-ghost">Buka ChatGPT ↗</a>
+          <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" class="panca-btn panca-btn-ghost">Buka Claude ↗</a>
+        </div>
+      </div>
+
+      <p class="laporan-footer no-print">
+        Dibuat otomatis dari Admin Panca &middot; {new Date().toLocaleString('id-ID')}
+      </p>
+    </section>
+  )}
+
+  {slug && kelasDipilih && !laporan && (
+    <p class="panca-card pin-empty">Penugasan tidak ditemukan. Coba pilih lagi dari form di atas.</p>
+  )}
+</AdminPancaLayout>
+
+<script>
+  type Prefill = { topik: string; tujuan: string[]; tanggal: string; kelasBroad: string; materiSlug?: string };
+  const dataEl = document.querySelector<HTMLScriptElement>('#prefill-data');
+
+  const slugSelect = document.querySelector<HTMLSelectElement>('[data-slug-select]');
+  const tanggalInput = document.querySelector<HTMLInputElement>('[data-tanggal-input]');
+  const topikInput = document.querySelector<HTMLInputElement>('[data-topik-input]');
+  const tujuanInput = document.querySelector<HTMLTextAreaElement>('[data-tujuan-input]');
+
+  if (dataEl && slugSelect) {
+    const prefillMap = JSON.parse(dataEl.textContent || '{}') as Record<string, Prefill>;
+    slugSelect.addEventListener('change', () => {
+      const p = prefillMap[slugSelect.value];
+      if (!p) return;
+      // Cuma isi field yang MASIH KOSONG -- jangan timpa yang sudah diketik guru.
+      if (topikInput && !topikInput.value) topikInput.value = p.topik;
+      if (tujuanInput && !tujuanInput.value && p.tujuan.length) tujuanInput.value = p.tujuan.join('\n');
+      if (tanggalInput && !tanggalInput.value && p.tanggal) tanggalInput.value = p.tanggal;
+    });
+  }
+
+  // Ingat Nama Sekolah & Nama Guru lewat localStorage -- jarang berubah
+  // antar laporan, guru awam IT tidak perlu ketik ulang tiap kali.
+  const sekolahInput = document.querySelector<HTMLInputElement>('[data-sekolah-input]');
+  const guruInput = document.querySelector<HTMLInputElement>('[data-guru-input]');
+  try {
+    if (sekolahInput && !sekolahInput.value) sekolahInput.value = localStorage.getItem('panca-nama-sekolah') ?? '';
+    if (guruInput && !guruInput.value) guruInput.value = localStorage.getItem('panca-nama-guru') ?? '';
+    document.querySelector('[data-laporan-form]')?.addEventListener('submit', () => {
+      if (sekolahInput?.value) localStorage.setItem('panca-nama-sekolah', sekolahInput.value);
+      if (guruInput?.value) localStorage.setItem('panca-nama-guru', guruInput.value);
+    });
+  } catch {
+    // localStorage tidak tersedia (mode privat/dibatasi) -- bukan fatal, cukup guru ketik manual tiap kali.
+  }
+
+  document.querySelector('[data-print-btn]')?.addEventListener('click', () => window.print());
+
+  const copyBtn = document.querySelector<HTMLButtonElement>('[data-copy-prompt]');
+  const promptTextEl = document.querySelector<HTMLTextAreaElement>('[data-prompt-text]');
+  const copiedEl = document.querySelector<HTMLElement>('[data-prompt-copied]');
+  copyBtn?.addEventListener('click', async () => {
+    if (!promptTextEl) return;
+    try {
+      await navigator.clipboard.writeText(promptTextEl.value);
+    } catch {
+      // Clipboard API ditolak/tidak tersedia -- fallback select-all biar guru tinggal Ctrl+C manual.
+      promptTextEl.select();
+    }
+    if (copiedEl) {
+      copiedEl.hidden = false;
+      setTimeout(() => copiedEl.setAttribute('hidden', ''), 2000);
+    }
+  });
+</script>
+
+<script type="application/json" id="prefill-data" set:html={JSON.stringify(prefillPerSlug)} />
+
+<style>
+  .laporan-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+  }
+
+  .laporan-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .opsional {
+    font-weight: 400;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .laporan-form input,
+  .laporan-form select,
+  .laporan-form textarea {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+    resize: vertical;
+  }
+
+  .laporan-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  .prompt-desc {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    margin: 0 0 1rem;
+  }
+
+  .prompt-box {
+    width: 100%;
+    padding: 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.8125rem;
+    font-family: ui-monospace, monospace;
+    line-height: 1.5;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .prompt-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.85rem;
+  }
+
+  .prompt-copied {
+    color: var(--teal);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .laporan-hasil {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .laporan-kop p {
+    margin: 0.25rem 0;
+  }
+
+  .laporan-judul {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+  }
+
+  .tujuan-list {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    margin: 0 0 1rem;
+  }
+
+  .ringkasan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.85rem;
+  }
+
+  .stat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.9rem;
+    border-radius: 0.75rem;
+    background: var(--accent-soft);
+  }
+
+  .stat-box-tuntas {
+    background: var(--teal-soft);
+  }
+
+  .stat-angka {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .catatan-kkm {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .histogram {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    height: 10rem;
+    padding-top: 1rem;
+  }
+
+  .hist-bar-wrap {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 0.4rem;
+  }
+
+  .hist-bar {
+    width: 100%;
+    background: var(--accent);
+    border-radius: 0.4rem 0.4rem 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 0;
+    transition: height 0.2s ease;
+  }
+
+  .hist-jumlah {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  .hist-label {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .laporan-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .laporan-table th,
+  .laporan-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge-tuntas {
+    display: inline-block;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .badge-ya {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .badge-tidak {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+
+  .catatan-guru {
+    white-space: pre-line;
+  }
+
+  .laporan-footer {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  .pin-empty {
+    color: var(--ink-soft);
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    .panca-card {
+      border: none;
+      padding: 0;
+      break-inside: avoid;
+    }
+
+    .laporan-hasil {
+      gap: 1.5rem;
+    }
+  }
+</style>

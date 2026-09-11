@@ -21,6 +21,9 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+# secrets lokal untuk `wrangler dev` / `astro dev` (mis. ADMIN_SESSION_SECRET) --
+# JANGAN PERNAH commit, ini padanan lokal dari `wrangler secret put` di produksi
+.dev.vars
 
 # macOS-specific files
 .DS_Store

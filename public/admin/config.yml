@@ -199,11 +199,12 @@ collections:
                 name: siswa
                 widget: list
                 hint: "Satu nama per baris, urut sesuai selera (mis. alfabetis). Ini yang muncul sebagai dropdown nama setelah siswa memilih kelas ini."
-          - label: "PIN Guru (hash, opsional)"
-            name: pinGuruHash
-            widget: string
-            required: false
-            hint: 'Gerbang halaman /penugasan/rekap (rekap nilai semua kelas & semua tugas) -- SATU PIN ini beda dari PIN Leaderboard tiap Penugasan. Buat hash-nya di /penugasan/pin-generator, JANGAN tempel PIN mentahnya di sini.'
+          # Field "PIN Guru (hash)" yang dulu ada di sini SUDAH DIHAPUS dari
+          # form (2026-09-11) -- gerbang /penugasan/rekap sekarang dikelola
+          # dinamis lewat /admin-panca/pin (tabel D1 `pins`), bukan lagi
+          # lewat commit git di sini. `pinGuruHash` masih ada di skema
+          # (content.config.ts) sebagai field deprecated, cuma tidak lagi
+          # ditampilkan sebagai form di CMS ini.
 
   - name: "penugasan"
     label: "Penugasan"

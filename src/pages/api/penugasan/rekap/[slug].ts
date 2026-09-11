@@ -2,30 +2,27 @@ import type { APIRoute } from 'astro';
 import { getEntry } from 'astro:content';
 import { env } from 'cloudflare:workers';
 import { ambilRekapKelas } from '../../../../lib/penugasan/db';
+import { pinValid } from '../../../../lib/adminPanca/db';
 
 // WAJIB on-demand: digerbangi PIN Guru, dicocokkan ulang di server (sama
 // alasannya dengan API leaderboard) -- `slug` di sini adalah id Penugasan
-// yang mau direkap, PIN-nya sendiri global (dari penugasanPengaturan),
-// BUKAN pinHash milik Penugasan itu.
+// yang mau direkap. PIN-nya dikelola dinamis lewat Admin Panca (tabel
+// `pins`, scope 'rekap') -- BUKAN lagi field statis `pinGuruHash` di
+// Sveltia/git (pola lama, sekarang sudah tidak dipakai untuk gating ini;
+// lihat riwayat sebelum fitur Admin Panca kalau butuh baca cara lama).
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, url }) => {
   const slug = params.slug;
-  const pin = url.searchParams.get('pin') ?? '';
+  const pin = (url.searchParams.get('pin') ?? '').toLowerCase();
 
   if (!slug) return json({ error: 'slug wajib diisi' }, 400);
 
   const entry = await getEntry('penugasan', slug);
   if (!entry) return json({ error: 'Penugasan tidak ditemukan' }, 404);
 
-  const pengaturan = await getEntry('penugasanPengaturan', 'index');
-  const pinGuruHash = pengaturan?.data.pinGuruHash;
-
-  if (!pinGuruHash) {
-    return json({ error: 'PIN Guru belum diatur. Buat dulu lewat /penugasan/pin-generator, lalu isi di /admin.' }, 403);
-  }
-  if (!pin || pin !== pinGuruHash) {
-    return json({ error: 'PIN salah' }, 403);
+  if (!pin || !/^[0-9a-f]{64}$/.test(pin) || !(await pinValid(env.DB, 'rekap', pin))) {
+    return json({ error: 'PIN salah, sudah kedaluwarsa, atau sudah dicabut.' }, 403);
   }
 
   const rows = await ambilRekapKelas(env.DB, slug);
