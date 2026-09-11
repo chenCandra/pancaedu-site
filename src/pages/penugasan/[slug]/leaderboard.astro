@@ -1,20 +1,29 @@
 ---
-// TETAP prerender (statis) -- cuma `pinHash` (bukan data siswa) yang
-// ter-bake ke HTML, sama seperti hasil-ujian/[slug].astro. Baris
-// leaderboard sungguhan diambil LIVE dari
-// /api/penugasan/leaderboard/[slug] setelah PIN cocok, dan server
-// mencocokkan ulang hash itu sendiri (lihat komentar di API route) --
-// jadi "curl API-nya langsung" tidak bisa melewati gerbang PIN.
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+// WAJIB on-demand (bukan lagi prerender) -- perlu cek sesi Admin Panca di
+// server lewat cookie, sama pola seperti /penugasan/rekap. Guru yang sudah
+// login ke Admin Panca langsung lihat papan peringkat tanpa PIN -- gampang
+// lupa PIN leaderboard mana untuk Penugasan yang mana kalau harus diingat
+// satu-satu. PIN tetap ada & berfungsi normal untuk MURID (dibagikan guru),
+// dicocokkan ulang di server saat fetch data (lihat
+// /api/penugasan/leaderboard/[slug]) -- flag `sudahLogin` di sini cuma
+// menentukan tampilan awal, bukan satu-satunya penjaga akses.
+export const prerender = false;
 
-export async function getStaticPaths() {
-  const semua = await getCollection('penugasan', ({ data }) => !data.draft);
-  return semua.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { ambilSesi } from '../../../lib/adminPanca/auth';
+import { env } from 'cloudflare:workers';
+
+const { slug } = Astro.params;
+const entry = slug ? await getEntry('penugasan', slug) : undefined;
+
+if (!entry || entry.data.draft) {
+  return new Response(null, { status: 404 });
 }
 
-const { entry } = Astro.props;
 const { judul, kelas, mapel, pinHash } = entry.data;
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+const sudahLogin = sesi !== null;
 ---
 
 <BaseLayout title={`Papan Peringkat — ${judul}`} description={`Papan peringkat penugasan ${judul}, kelas ${kelas}.`} noindex>
@@ -24,8 +33,12 @@ const { judul, kelas, mapel, pinHash } = entry.data;
     <h1>{judul}</h1>
   </section>
 
-  <section class="container gate-section" data-pin-hash={pinHash} data-slug={entry.id}>
-    <form class="pin-form card" data-pin-form>
+  <section class="container gate-section" data-pin-hash={pinHash} data-slug={entry.id} data-sudah-login={sudahLogin ? '1' : ''}>
+    {sudahLogin && (
+      <p class="login-hint">✅ Masuk sebagai <strong>{sesi!.username}</strong> lewat Admin Panca -- tidak perlu PIN.</p>
+    )}
+
+    <form class="pin-form card" data-pin-form hidden={sudahLogin}>
       <label for="pin">Kode PIN</label>
       <div class="pin-row">
         <input
@@ -139,6 +152,7 @@ const { judul, kelas, mapel, pinHash } = entry.data;
   if (section && form && errorEl && wrap && table) {
     const expectedHash = section.dataset.pinHash!;
     const slug = section.dataset.slug!;
+    const sudahLogin = section.dataset.sudahLogin === '1';
     const sessionKey = `penugasan-leaderboard:${expectedHash}`;
 
     let semuaBaris: BarisLeaderboard[] = [];
@@ -167,7 +181,8 @@ const { judul, kelas, mapel, pinHash } = entry.data;
       emptyEl?.setAttribute('hidden', '');
 
       try {
-        const res = await fetch(`/api/penugasan/leaderboard/${slug}?pin=${encodeURIComponent(hash)}`);
+        const query = hash ? `?pin=${encodeURIComponent(hash)}` : '';
+        const res = await fetch(`/api/penugasan/leaderboard/${slug}${query}`);
         if (!res.ok) {
           // 403 di sini berarti server MENOLAK meski hash-nya cocok --
           // paling sering karena PIN sudah kedaluwarsa (lihat pengecekan
@@ -204,7 +219,11 @@ const { judul, kelas, mapel, pinHash } = entry.data;
 
     // Sengaja pakai sessionStorage (bukan localStorage), sama seperti
     // hasil-ujian -- tidak "login permanen" di perangkat bersama/sekolah.
-    if (sessionStorage.getItem(sessionKey) === '1') {
+    // Guru yang sudah login Admin Panca lewati semua ini, langsung muat
+    // data (server yang menegakkan lewat sesi cookie, bukan hash di sini).
+    if (sudahLogin) {
+      muatData('');
+    } else if (sessionStorage.getItem(sessionKey) === '1') {
       muatData(expectedHash);
     }
 
@@ -290,6 +309,12 @@ const { judul, kelas, mapel, pinHash } = entry.data;
     color: #b3423f;
     font-size: 0.875rem;
     margin: 0.25rem 0 0;
+  }
+
+  .login-hint {
+    color: var(--teal);
+    font-size: 0.9375rem;
+    margin: 0 0 1.25rem;
   }
 
   .leaderboard-wrap {
