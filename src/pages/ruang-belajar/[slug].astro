@@ -53,6 +53,7 @@ const urutanSekelas = semuaSesi
   .filter((s) => s.data.kelas === kelas && s.data.mapel === mapel)
   .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf() || a.id.localeCompare(b.id));
 const indexSekarang = urutanSekelas.findIndex((s) => s.id === entry.id);
+const sesiSebelumnya = indexSekarang > 0 ? urutanSekelas[indexSekarang - 1] : undefined;
 const sesiBerikutnya = indexSekarang >= 0 ? urutanSekelas[indexSekarang + 1] : undefined;
 
 // Learning Path -- 6 langkah tetap, status ("tersedia"/"belum tersedia")
@@ -191,22 +192,39 @@ const langkah = [
       ))}
     </div>
 
-    <div class="pd-next">
-      {sesiBerikutnya ? (
-        <a href={`/ruang-belajar/${sesiBerikutnya.id}`} class="pd-next-card">
-          <span class="pd-next-label">➡️ Pembelajaran Berikutnya</span>
-          <span class="pd-next-judul">{sesiBerikutnya.data.judul}</span>
-          <span class="pd-next-cta">Lanjut &rarr;</span>
-        </a>
-      ) : (
-        <div class="pd-next-selesai">
-          <span class="pd-next-label">🎉 Sesi Terakhir</span>
-          <p>
-            Ini pembelajaran terakhir yang tersedia untuk {mapel} Kelas {kelas} saat ini. Sesi berikutnya akan
-            ditambahkan menyusul -- lihat <a href="/ruang-belajar">semua Ruang Belajar</a> sementara menunggu.
-          </p>
-        </div>
-      )}
+    <div class="pd-nav-grid">
+      <div class="pd-nav-slot">
+        {sesiSebelumnya ? (
+          <a href={`/ruang-belajar/${sesiSebelumnya.id}`} class="pd-next-card">
+            <span class="pd-next-label">⬅️ Pembelajaran Sebelumnya</span>
+            <span class="pd-next-judul">{sesiSebelumnya.data.judul}</span>
+            <span class="pd-next-cta">&larr; Lihat lagi</span>
+          </a>
+        ) : (
+          <div class="pd-next-selesai">
+            <span class="pd-next-label">🏁 Sesi Pertama</span>
+            <p>Ini pembelajaran paling awal yang tersedia untuk {mapel} Kelas {kelas} saat ini.</p>
+          </div>
+        )}
+      </div>
+
+      <div class="pd-nav-slot">
+        {sesiBerikutnya ? (
+          <a href={`/ruang-belajar/${sesiBerikutnya.id}`} class="pd-next-card">
+            <span class="pd-next-label">➡️ Pembelajaran Berikutnya</span>
+            <span class="pd-next-judul">{sesiBerikutnya.data.judul}</span>
+            <span class="pd-next-cta">Lanjut &rarr;</span>
+          </a>
+        ) : (
+          <div class="pd-next-selesai">
+            <span class="pd-next-label">🎉 Sesi Terakhir</span>
+            <p>
+              Ini pembelajaran terakhir yang tersedia untuk {mapel} Kelas {kelas} saat ini. Sesi berikutnya akan
+              ditambahkan menyusul -- lihat <a href="/ruang-belajar">semua Ruang Belajar</a> sementara menunggu.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   </article>
 </BaseLayout>
@@ -383,10 +401,28 @@ const langkah = [
     font-style: italic;
   }
 
-  .pd-next {
+  .pd-nav-grid {
     margin-top: 1rem;
     padding-top: 2rem;
     border-top: 1px solid var(--glass-border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .pd-nav-slot {
+    display: flex;
+  }
+
+  .pd-nav-slot > * {
+    width: 100%;
+  }
+
+  @media (max-width: 36rem) {
+    .pd-nav-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .pd-next-label {
