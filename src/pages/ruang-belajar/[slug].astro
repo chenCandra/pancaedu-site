@@ -148,11 +148,17 @@ const langkah = [
     <h1>{judul}</h1>
 
     <div class="pd-meta-row">
-      <span class="pd-meta">{formattedDate}</span>
+      {indexSekarang >= 0 && (
+        <span class="pd-meta pd-meta-langkah">📍 Langkah {indexSekarang + 1} dari {urutanSekelas.length}</span>
+      )}
       {durasi && <span class="pd-meta">⏱ {durasi} menit</span>}
     </div>
 
     {deskripsiTampil && <p class="pd-lede">{deskripsiTampil}</p>}
+
+    <p class="pd-tanggal-kecil">
+      Sesi ini pertama kali diajarkan {formattedDate} -- tapi bisa dipelajari siapa saja, kapan saja, tidak terikat tanggal.
+    </p>
 
     {tujuanPembelajaran.length > 0 && (
       <div class="pd-tujuan">
@@ -293,9 +299,20 @@ const langkah = [
     color: var(--ink-soft);
   }
 
+  .pd-meta-langkah {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
   .pd-lede {
     font-size: 1.0625rem;
     color: var(--ink-soft);
+  }
+
+  .pd-tanggal-kecil {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin: 0.35rem 0 0;
   }
 
   .pd-tujuan {
