@@ -19,6 +19,10 @@ const sesiAdmin = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
 if (!sesiAdmin) return Astro.redirect('/admin-panca/login');
 
 const qs = Astro.url.searchParams;
+// Dipakai form hapus (per-siswa & massal) supaya sesudah hapus, guru
+// diarahkan BALIK ke laporan yang sama persis (Penugasan/Kelas/Sesi/KKM/dst
+// tetap terisi), bukan balik ke form kosong.
+const urlKembali = `${Astro.url.pathname}${Astro.url.search}`;
 const slug = qs.get('slug') ?? '';
 const kelasDipilih = qs.get('kelas') ?? '';
 const kkm = Number(qs.get('kkm') ?? '70') || 70;
@@ -415,7 +419,22 @@ const promptAI = buatPromptAI();
       </div>
 
       <div class="panca-card">
-        <h3 class="section-title">Detail per Siswa</h3>
+        <div class="detail-header no-print">
+          <h3 class="section-title">Detail per Siswa</h3>
+          {laporan.jumlahMengikuti > 0 && (
+            <form
+              method="post"
+              action="/api/admin-panca/attempts/hapus-kelas"
+              data-confirm={`Yakin hapus SEMUA data pengerjaan (${laporan.jumlahMengikuti} siswa) untuk ${kelasDipilih} pada Penugasan ini${sesiLabelTampil ? ` (sesi: ${sesiLabelTampil})` : ''}? Tidak bisa dibatalkan.`}
+            >
+              <input type="hidden" name="slug" value={slug} />
+              <input type="hidden" name="kelas" value={kelasDipilih} />
+              <input type="hidden" name="sesi" value={sesiParam} />
+              <input type="hidden" name="kembaliKe" value={urlKembali} />
+              <button type="submit" class="panca-btn panca-btn-hapus">🗑️ Hapus Semua Data Kelas Ini</button>
+            </form>
+          )}
+        </div>
         <div class="table-scroll">
           <table class="laporan-table">
             <thead>
@@ -426,6 +445,7 @@ const promptAI = buatPromptAI();
                 <th>Skor</th>
                 <th>Persentase</th>
                 <th>Ketuntasan</th>
+                <th class="no-print"></th>
               </tr>
             </thead>
             <tbody>
@@ -440,6 +460,21 @@ const promptAI = buatPromptAI();
                     {b.status === 'selesai' ? (
                       <span class={`badge-tuntas ${b.tuntas ? 'badge-ya' : 'badge-tidak'}`}>{b.tuntas ? 'Tuntas' : 'Belum Tuntas'}</span>
                     ) : '-'}
+                  </td>
+                  <td class="no-print">
+                    {b.status !== 'belum-mulai' && (
+                      <form
+                        method="post"
+                        action="/api/admin-panca/attempts/hapus-siswa"
+                        data-confirm={`Yakin hapus semua pengerjaan "${b.nama}" untuk Penugasan ini? Tidak bisa dibatalkan.`}
+                      >
+                        <input type="hidden" name="slug" value={slug} />
+                        <input type="hidden" name="kelas" value={kelasDipilih} />
+                        <input type="hidden" name="nama" value={b.nama} />
+                        <input type="hidden" name="kembaliKe" value={urlKembali} />
+                        <button type="submit" class="panca-btn-hapus-kecil" title="Hapus data siswa ini">🗑️</button>
+                      </form>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -556,6 +591,14 @@ const promptAI = buatPromptAI();
       copiedEl.hidden = false;
       setTimeout(() => copiedEl.setAttribute('hidden', ''), 2000);
     }
+  });
+
+  // Konfirmasi sebelum hapus data (per-siswa & massal) -- aksi ireversibel,
+  // pola sama seperti "Cabut" di /admin-panca/pin & /admin-panca/sesi.
+  document.querySelectorAll<HTMLFormElement>('form[data-confirm]').forEach((f) => {
+    f.addEventListener('submit', (e) => {
+      if (!confirm(f.dataset.confirm ?? 'Yakin?')) e.preventDefault();
+    });
   });
 </script>
 
@@ -674,6 +717,53 @@ const promptAI = buatPromptAI();
   .section-title {
     font-size: 1.05rem;
     margin: 0 0 1rem;
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .detail-header .section-title {
+    margin: 0;
+  }
+
+  .panca-btn-hapus {
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--rose);
+    background: var(--rose-soft);
+    color: var(--rose);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .panca-btn-hapus:hover {
+    background: var(--rose);
+    color: white;
+  }
+
+  .panca-btn-hapus-kecil {
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, background 0.15s ease;
+  }
+
+  .panca-btn-hapus-kecil:hover {
+    opacity: 1;
+    background: var(--rose-soft);
   }
 
   .ringkasan-grid {

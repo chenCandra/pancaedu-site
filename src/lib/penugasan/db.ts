@@ -33,6 +33,71 @@ export async function mulaiAttempt(
   return { attemptId: result.id, attemptKe };
 }
 
+/**
+ * Hapus SEMUA attempt (+ jawaban terkait) satu siswa untuk satu Penugasan --
+ * dipakai Admin Panca buat bersihkan data iseng/spam (mis. nama becandaan,
+ * atau typo yang bikin data "siswa" ganda). `jawaban` dihapus manual lewat
+ * subquery LEBIH DULU (bukan mengandalkan ON DELETE CASCADE begitu saja)
+ * supaya tetap benar apa pun status PRAGMA foreign_keys di runtime D1.
+ * Return jumlah attempt yang terhapus (0 kalau memang tidak ada -- BUKAN
+ * error, mis. karena sudah kepencet hapus duluan di tab lain).
+ */
+export async function hapusAttemptSiswa(
+  db: D1Database,
+  params: { slug: string; kelas: string; nama: string }
+): Promise<number> {
+  const idRows = await db
+    .prepare('SELECT id FROM attempts WHERE penugasan_slug = ?1 AND kelas = ?2 AND nama = ?3')
+    .bind(params.slug, params.kelas, params.nama)
+    .all<{ id: number }>();
+  const ids = (idRows.results ?? []).map((r) => r.id);
+  if (ids.length === 0) return 0;
+
+  const placeholder = ids.map((_, i) => `?${i + 1}`).join(',');
+  await db.batch([
+    db.prepare(`DELETE FROM jawaban WHERE attempt_id IN (${placeholder})`).bind(...ids),
+    db.prepare(`DELETE FROM attempts WHERE id IN (${placeholder})`).bind(...ids),
+  ]);
+  return ids.length;
+}
+
+/**
+ * Hapus SEMUA attempt (+ jawaban) untuk satu (Penugasan, Kelas) sekaligus
+ * -- versi massal `hapusAttemptSiswa`, buat bersihkan spam banyak orang
+ * sekaligus (mis. kelas "Umum / Lainnya" kebanjiran iseng). `sesiFilter`
+ * opsional -- kalau diisi, cuma hapus attempt di sesi itu (atau yang
+ * TANPA sesi sama sekali kalau 'tanpa-sesi'), bukan seluruh kelas lintas
+ * sesi -- supaya bersih-bersih tidak sengaja kena data sesi lain yang
+ * masih valid. Return jumlah attempt yang terhapus.
+ */
+export async function hapusAttemptKelas(
+  db: D1Database,
+  params: { slug: string; kelas: string; sesiFilter?: number | 'tanpa-sesi' }
+): Promise<number> {
+  const klausaSesi =
+    typeof params.sesiFilter === 'number'
+      ? 'AND sesi_id = ?3'
+      : params.sesiFilter === 'tanpa-sesi'
+        ? 'AND sesi_id IS NULL'
+        : '';
+  const bindings: (string | number)[] =
+    typeof params.sesiFilter === 'number' ? [params.slug, params.kelas, params.sesiFilter] : [params.slug, params.kelas];
+
+  const idRows = await db
+    .prepare(`SELECT id FROM attempts WHERE penugasan_slug = ?1 AND kelas = ?2 ${klausaSesi}`)
+    .bind(...bindings)
+    .all<{ id: number }>();
+  const ids = (idRows.results ?? []).map((r) => r.id);
+  if (ids.length === 0) return 0;
+
+  const placeholder = ids.map((_, i) => `?${i + 1}`).join(',');
+  await db.batch([
+    db.prepare(`DELETE FROM jawaban WHERE attempt_id IN (${placeholder})`).bind(...ids),
+    db.prepare(`DELETE FROM attempts WHERE id IN (${placeholder})`).bind(...ids),
+  ]);
+  return ids.length;
+}
+
 export async function simpanHasil(
   db: D1Database,
   params: { attemptId: number; hasil: HasilSoal[]; jawabanMentah: Record<string, unknown> }
