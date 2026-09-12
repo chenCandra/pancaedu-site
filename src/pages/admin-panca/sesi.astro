@@ -89,6 +89,7 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
               <thead>
                 <tr>
                   <th>Label</th>
+                  <th>Kode PIN</th>
                   <th>Status</th>
                   <th>Dibuat</th>
                   <th></th>
@@ -100,6 +101,15 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
                   return (
                     <tr>
                       <td>{s.label}</td>
+                      <td>
+                        {s.pin ? (
+                          <code class="sesi-pin-kode">{s.pin}</code>
+                        ) : (
+                          <span class="sesi-pin-lama" title="Dibuat sebelum fitur ini ada -- kodenya tidak tersimpan, cabut & buat baru kalau masih perlu">
+                            (kode lama, tidak tersimpan)
+                          </span>
+                        )}
+                      </td>
                       <td><span class={`sesi-status ${status.kelas}`}>{status.label}</span></td>
                       <td>{s.created_at}</td>
                       <td>
@@ -122,12 +132,6 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
 </AdminPancaLayout>
 
 <script>
-  async function sha256Hex(text: string): Promise<string> {
-    const bytes = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
-    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
-  }
-
   const form = document.querySelector<HTMLFormElement>('[data-sesi-form]');
   const errorEl = document.querySelector<HTMLElement>('[data-sesi-form-error]');
   const submitBtn = document.querySelector<HTMLButtonElement>('[data-sesi-submit]');
@@ -142,13 +146,13 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
     submitBtn.textContent = 'Menyimpan...';
 
     const data = new FormData(form);
-    const pinHash = await sha256Hex(String(data.get('kode') ?? '').trim());
+    const pin = String(data.get('kode') ?? '').trim();
 
     try {
       const res = await fetch('/api/admin-panca/sesi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug, label: data.get('label'), pinHash }),
+        body: JSON.stringify({ slug, label: data.get('label'), pin }),
       });
       if (res.ok) {
         window.location.reload();
@@ -267,6 +271,21 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
     text-align: left;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+  }
+
+  .sesi-pin-kode {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .sesi-pin-lama {
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+    font-style: italic;
   }
 
   .sesi-status {

@@ -21,18 +21,18 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const admin = await ambilSesi(cookies, env.ADMIN_SESSION_SECRET);
   if (!admin) return json({ error: 'Belum login.' }, 401);
 
-  const body = (await request.json().catch(() => null)) as { slug?: string; label?: string; pinHash?: string } | null;
+  const body = (await request.json().catch(() => null)) as { slug?: string; label?: string; pin?: string } | null;
   const slug = body?.slug?.trim() ?? '';
   const label = body?.label?.trim() ?? '';
-  const pinHash = body?.pinHash?.trim().toLowerCase() ?? '';
+  const pin = body?.pin?.trim() ?? '';
 
-  if (!slug || !label || !pinHash) return json({ error: 'Penugasan, label, dan kode sesi wajib diisi.' }, 400);
-  if (!/^[0-9a-f]{64}$/.test(pinHash)) return json({ error: 'Format kode sesi tidak valid.' }, 400);
+  if (!slug || !label || !pin) return json({ error: 'Penugasan, label, dan kode sesi wajib diisi.' }, 400);
+  if (pin.length > 60) return json({ error: 'Kode sesi terlalu panjang (maksimal 60 karakter).' }, 400);
 
   const entry = await getEntry('penugasan', slug);
   if (!entry) return json({ error: 'Penugasan tidak ditemukan.' }, 404);
 
-  await buatSesi(env.DB, { slug, label, pinHash, createdBy: admin.uid });
+  await buatSesi(env.DB, { slug, label, pin, createdBy: admin.uid });
   return json({ ok: true });
 };
 

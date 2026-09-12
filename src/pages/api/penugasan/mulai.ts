@@ -20,7 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
   const slug = typeof body.slug === 'string' ? body.slug : '';
   const nama = typeof body.nama === 'string' ? body.nama.trim() : '';
   const kelas = typeof body.kelas === 'string' ? body.kelas.trim() : '';
-  const sesiPin = typeof body.sesiPin === 'string' ? body.sesiPin.toLowerCase() : '';
+  const sesiPin = typeof body.sesiPin === 'string' ? body.sesiPin.trim() : '';
 
   if (!slug || !nama || !kelas) {
     return json({ error: 'slug, nama, dan kelas wajib diisi' }, 400);
@@ -45,7 +45,7 @@ export const POST: APIRoute = async ({ request }) => {
   // kelas malah tanpa sadar mengunci semua pengunjung umum lain juga).
   let sesiId: number | null = null;
   if (kelas !== KELAS_UMUM && (await adaSesiAktif(env.DB, slug))) {
-    if (!sesiPin || !/^[0-9a-f]{64}$/.test(sesiPin)) {
+    if (!sesiPin) {
       return json({ error: 'Kode sesi wajib diisi untuk Penugasan ini. Tanya guru kode sesinya.' }, 403);
     }
     const sesi = await sesiPinValid(env.DB, slug, sesiPin);

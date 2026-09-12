@@ -1,0 +1,12 @@
+-- Kode Sesi (beda dari PIN Rekap Guru & PIN Leaderboard) diputuskan TIDAK
+-- perlu di-hash -- ini kode kelas yang memang dibagikan terbuka ke banyak
+-- murid, bukan kredensial rahasia, dan guru (sebagai satu-satunya admin)
+-- butuh bisa melihatnya lagi kapan saja kalau lupa, tanpa harus cabut &
+-- buat sesi baru cuma karena lupa kode.
+--
+-- Kolom `pin_hash` lama DIBIARKAN ADA (skemanya NOT NULL, tidak diubah)
+-- tapi TIDAK DIPAKAI lagi untuk validasi mulai dari sini -- baris LAMA
+-- (dibuat sebelum migration ini) otomatis tidak bisa dipakai murid lagi
+-- karena kolom `pin` barunya kosong (NULL); guru perlu cabut sesi lama itu
+-- & buat yang baru kalau masih perlu dipakai.
+ALTER TABLE sesi_penugasan ADD COLUMN pin TEXT;

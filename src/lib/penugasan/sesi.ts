@@ -5,12 +5,19 @@ import type { D1Database } from '@cloudflare/workers-types';
 // Dipakai DUA sisi: murid (cek/wajib isi kode sesi saat mulai, lihat
 // src/pages/api/penugasan/mulai.ts) dan guru (kelola sesi + filter Laporan
 // lewat Admin Panca, lihat src/pages/admin-panca/sesi.astro).
+//
+// Kode Sesi disimpan APA ADANYA (bukan di-hash) -- lihat
+// migrations/0004_sesi_pin_plaintext.sql: ini kode kelas yang memang
+// dibagikan terbuka ke banyak murid (bukan kredensial rahasia semacam
+// password), dan guru butuh bisa melihatnya lagi kapan saja kalau lupa,
+// tanpa perlu cabut & buat sesi baru. Kolom `pin_hash` lama TETAP ADA di
+// tabel (skemanya NOT NULL) tapi TIDAK DIPAKAI lagi di sini.
 
 export type SesiPenugasan = {
   id: number;
   penugasan_slug: string;
   label: string;
-  pin_hash: string;
+  pin: string | null; // NULL cuma untuk baris lama (dibuat sebelum migration 0004), lihat komentarnya
   created_by: number | null;
   created_at: string;
   revoked_at: string | null;
@@ -30,11 +37,19 @@ export async function adaSesiAktif(db: D1Database, slug: string): Promise<boolea
   return row !== null;
 }
 
-/** Cocokkan kode sesi (hash) yang diketik murid ke salah satu sesi aktif Penugasan ini. */
-export async function sesiPinValid(db: D1Database, slug: string, pinHash: string): Promise<{ id: number } | null> {
+/**
+ * Cocokkan kode sesi yang diketik murid ke salah satu sesi aktif Penugasan
+ * ini -- dibandingkan APA ADANYA (bukan hash), tanpa peduli besar/kecil
+ * huruf & spasi di ujung (guru/murid awam IT, jangan terlalu ketat).
+ */
+export async function sesiPinValid(db: D1Database, slug: string, pin: string): Promise<{ id: number } | null> {
   return db
-    .prepare('SELECT id FROM sesi_penugasan WHERE penugasan_slug = ?1 AND pin_hash = ?2 AND revoked_at IS NULL LIMIT 1')
-    .bind(slug, pinHash)
+    .prepare(
+      `SELECT id FROM sesi_penugasan
+       WHERE penugasan_slug = ?1 AND revoked_at IS NULL AND pin IS NOT NULL AND LOWER(TRIM(pin)) = LOWER(TRIM(?2))
+       LIMIT 1`
+    )
+    .bind(slug, pin)
     .first<{ id: number }>();
 }
 
@@ -49,11 +64,15 @@ export async function daftarSesi(db: D1Database, slug: string): Promise<SesiPenu
 
 export async function buatSesi(
   db: D1Database,
-  params: { slug: string; label: string; pinHash: string; createdBy: number }
+  params: { slug: string; label: string; pin: string; createdBy: number }
 ): Promise<void> {
+  // `pin_hash` masih diisi (walau tidak dipakai lagi buat validasi) sekadar
+  // memenuhi constraint NOT NULL kolom lama tanpa perlu migration tambahan
+  // buat ubah skemanya -- lihat migrations/0004_sesi_pin_plaintext.sql.
+  const pinHashVestigial = await sha256Hex(params.pin);
   await db
-    .prepare('INSERT INTO sesi_penugasan (penugasan_slug, label, pin_hash, created_by) VALUES (?1, ?2, ?3, ?4)')
-    .bind(params.slug, params.label, params.pinHash, params.createdBy)
+    .prepare('INSERT INTO sesi_penugasan (penugasan_slug, label, pin_hash, pin, created_by) VALUES (?1, ?2, ?3, ?4, ?5)')
+    .bind(params.slug, params.label, pinHashVestigial, params.pin, params.createdBy)
     .run();
 }
 
@@ -62,4 +81,10 @@ export async function cabutSesi(db: D1Database, id: number): Promise<void> {
     .prepare("UPDATE sesi_penugasan SET revoked_at = datetime('now') WHERE id = ?1 AND revoked_at IS NULL")
     .bind(id)
     .run();
+}
+
+async function sha256Hex(text: string): Promise<string> {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
