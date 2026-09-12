@@ -219,6 +219,6 @@ Sebuah desa terpencil di pegunungan belum terjangkau jaringan listrik nasional k
 Coba diskusikan jawabanmu dengan teman sekelas -- ini merangkum hampir semua yang sudah kita pelajari sepanjang materi Energi.
 
 <div class="mtr-cta">
-<p>Setelah tuntas membahas Energi, sekarang kita masuk ke bab baru: menggabungkan gerak lurus dengan vektor untuk memahami gerak dua dimensi.</p>
-<a href="/materi/vektor" class="btn btn-primary">🧭 Lanjut ke Vektor →</a>
+<p>Setelah tuntas membahas Energi, sekarang kita masuk ke bab baru: Gerak Dua Dimensi -- dimulai dari dasar-dasar gerak lurus.</p>
+<a href="/materi/gerak-lurus-beraturan" class="btn btn-primary">🚗 Lanjut ke Gerak Lurus Beraturan (GLB) →</a>
 </div>

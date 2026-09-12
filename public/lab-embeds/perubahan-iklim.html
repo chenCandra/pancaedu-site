@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Climate Change Simulator</title>
+<style>
+  :root {
+    --bg-1: #ecfdf5; --bg-2: #eff6ff; --panel: #ffffff; --panel-2: #f2faf6;
+    --border: #d9ede1; --ink: #0f2419; --ink-muted: #4f6a5a; --ink-faint: #82988a;
+    --teal: #0d9488; --blue: #2563eb; --amber: #f59e0b; --red: #dc2626; --green: #16a34a;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #071410; --scene-bg-2: #0f241b;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(6,80,60,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+  .clm-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .clm-header-title { display: flex; align-items: center; gap: 12px; }
+  .clm-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--teal), var(--green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .clm-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .clm-badge { font-size: 0.72rem; font-weight: 800; color: var(--teal); background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .clm-intro { background: var(--panel); border-left: 4px solid var(--teal); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+  .clm-disclaimer { background: rgba(245,158,11,0.08); border-left: 4px solid var(--amber); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 0.78rem; color: var(--ink-muted); line-height: 1.5; }
+
+  .clm-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .clm-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .clm-card-title { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .clm-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .clm-main-grid { grid-template-columns: 320px 1fr; } }
+
+  .clm-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .clm-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .clm-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--teal); }
+
+  .clm-scene-wrap { border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 0%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #061410; box-shadow: inset 0 0 40px rgba(0,0,0,0.4); padding: 10px; }
+  .clm-graph-caption { font-size: 0.72rem; color: #d1fae5; text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .clm-scene-wrap canvas { width: 100%; height: 220px; display: block; }
+
+  .clm-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .clm-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .clm-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .clm-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .clm-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .clm-risk-banner { border-radius: var(--radius-md); padding: 1rem 1.25rem; text-align: center; font-weight: 800; font-size: 1rem; }
+  .clm-risk-rendah { background: rgba(22,163,74,0.12); color: #14532d; }
+  .clm-risk-sedang { background: rgba(245,158,11,0.14); color: #78350f; }
+  .clm-risk-tinggi { background: rgba(234,88,12,0.14); color: #7c2d12; }
+  .clm-risk-sangat-tinggi { background: rgba(220,38,38,0.14); color: #7f1d1d; }
+
+  .clm-formula-box { background: #071b14; color: #d1fae5; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .clm-formula-box .v { color: #fde68a; font-weight: 700; }
+
+  .clm-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal); display: flex; align-items: center; gap: 6px; }
+  .clm-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .clm-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .clm-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .clm-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .clm-quiz-option:hover:not(:disabled) { border-color: var(--teal); background: rgba(13,148,136,0.06); }
+  .clm-quiz-option .letter { font-weight: 900; color: var(--teal); flex-shrink: 0; }
+  .clm-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .clm-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .clm-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .clm-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .clm-feedback.is-visible { display: block; }
+  .clm-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .clm-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .clm-btn-secondary:hover { color: var(--ink); border-color: var(--teal); }
+
+  .clm-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .clm-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="clm-header">
+    <div class="clm-header-title">
+      <span style="font-size:1.8rem;">🌍</span>
+      <div><h1>Climate Change Simulator</h1><p>Atur Upaya Mitigasi, Lihat Proyeksi Kenaikan Suhu Global</p></div>
+    </div>
+    <span class="clm-badge">🧪 Lab Maya PancaEdu · Kelas X</span>
+  </div>
+
+  <p class="clm-intro">Atur tiga upaya mitigasi perubahan iklim di bawah, lalu lihat bagaimana proyeksi kenaikan suhu global rata-rata sampai tahun 2100 berubah. Bandingkan dengan target Perjanjian Paris: menahan kenaikan suhu di bawah 1,5-2°C.</p>
+  <p class="clm-disclaimer">⚠️ Ini model SANGAT disederhanakan untuk belajar -- bukan model iklim ilmiah sungguhan. Proyeksi suhu asli dihitung ilmuwan iklim dengan model jauh lebih kompleks (banyak variabel: lautan, awan, umpan balik es, dst).</p>
+
+  <div class="clm-card">
+    <div class="clm-card-header"><span class="clm-card-title">🧪 Atur Upaya Mitigasi Global</span></div>
+
+    <div class="clm-main-grid">
+      <div>
+        <div class="clm-param-row">
+          <div class="clm-param-label-row"><span>🏭 Pengurangan Emisi Karbon</span><span class="clm-param-value" id="emisiVal">0%</span></div>
+          <input type="range" id="emisiSlider" min="0" max="100" step="5" value="0">
+        </div>
+        <div class="clm-param-row">
+          <div class="clm-param-label-row"><span>☀️ Adopsi Energi Terbarukan</span><span class="clm-param-value" id="energiVal">0%</span></div>
+          <input type="range" id="energiSlider" min="0" max="100" step="5" value="0">
+        </div>
+        <div class="clm-param-row">
+          <div class="clm-param-label-row"><span>🌳 Upaya Reboisasi</span><span class="clm-param-value" id="reboisasiVal">0%</span></div>
+          <input type="range" id="reboisasiSlider" min="0" max="100" step="5" value="0">
+        </div>
+
+        <div class="clm-risk-banner clm-risk-sangat-tinggi" id="riskBanner">⚠️ Risiko Sangat Tinggi</div>
+      </div>
+
+      <div>
+        <div class="clm-scene-wrap">
+          <p class="clm-graph-caption">Proyeksi Kenaikan Suhu Global (°C), 2025-2100</p>
+          <canvas id="graphSuhu"></canvas>
+        </div>
+
+        <div class="clm-data-panel" style="margin-top:14px;">
+          <div class="clm-data-chip"><div class="k">🌡️ Proyeksi 2100 (skenario ini)</div><div class="v" id="chipRise" style="color:var(--teal);">4.0°C</div></div>
+          <div class="clm-data-chip"><div class="k">📉 Business as Usual</div><div class="v" id="chipBau" style="color:var(--red);">4.0°C</div></div>
+          <div class="clm-data-chip"><div class="k">🎯 Target Paris Agreement</div><div class="v" style="color:var(--green);">1,5°C</div></div>
+          <div class="clm-data-chip"><div class="k">📊 Rata-rata Upaya</div><div class="v" id="chipAvg" style="color:var(--blue);">0%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Rumus Interaktif (model sederhana, substitusi otomatis):</div>
+    <div class="clm-formula-box" id="formulaBox"></div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="clm-card">
+    <span class="clm-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="clm-quiz-question">Kenapa mengurangi emisi karbon SAJA (tanpa reboisasi atau energi terbarukan) tidak cukup untuk mencapai target 1,5°C dalam simulasi ini?</p>
+    <div class="clm-quiz-options" id="thinkOptions1"></div>
+    <div class="clm-feedback" id="thinkFeedback1"></div>
+    <p class="clm-quiz-question" style="margin-top:8px;">Apa peran hutan/reboisasi dalam mengurangi dampak perubahan iklim?</p>
+    <div class="clm-quiz-options" id="thinkOptions2"></div>
+    <div class="clm-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="clm-card">
+    <div class="clm-card-header"><span class="clm-card-title">🎯 Challenge Mode</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Atur ketiga slider supaya proyeksi kenaikan suhu 2100 di bawah <strong>1,5°C</strong> -- target Perjanjian Paris.</p>
+    <button class="clm-btn-secondary" id="btnChallenge">Cek Sekarang</button>
+    <div class="clm-feedback" id="challengeFeedback"></div>
+  </div>
+
+  <div class="clm-legend" id="clmLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    let emisi = 0, energi = 0, reboisasi = 0;
+    const BASELINE_RISE = 4.0; // °C pada 0% upaya (business as usual)
+    const MIN_RISE = 1.1; // °C pada 100% upaya penuh di ketiga slider
+
+    function renderLegend() {
+      const el = $('clmLegend');
+      [{ icon: '🔴', label: 'Business as Usual' }, { icon: '🟢', label: 'Skenario Kamu' }, { icon: '🎯', label: 'Target Paris (1,5°C)' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'clm-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    $('emisiSlider').addEventListener('input', (e) => { emisi = parseFloat(e.target.value); $('emisiVal').textContent = emisi.toFixed(0) + '%'; render(); });
+    $('energiSlider').addEventListener('input', (e) => { energi = parseFloat(e.target.value); $('energiVal').textContent = energi.toFixed(0) + '%'; render(); });
+    $('reboisasiSlider').addEventListener('input', (e) => { reboisasi = parseFloat(e.target.value); $('reboisasiVal').textContent = reboisasi.toFixed(0) + '%'; render(); });
+
+    function computeRise() {
+      const avgAction = (emisi + energi + reboisasi) / 3;
+      const rise = BASELINE_RISE - (BASELINE_RISE - MIN_RISE) * (avgAction / 100);
+      return { avgAction, rise };
+    }
+
+    function riskLevel(rise) {
+      if (rise > 3.0) return { label: 'Sangat Tinggi', cls: 'clm-risk-sangat-tinggi', icon: '🔴' };
+      if (rise > 2.0) return { label: 'Tinggi', cls: 'clm-risk-tinggi', icon: '🟠' };
+      if (rise > 1.5) return { label: 'Sedang', cls: 'clm-risk-sedang', icon: '🟡' };
+      return { label: 'Rendah -- Target Paris tercapai!', cls: 'clm-risk-rendah', icon: '🟢' };
+    }
+
+    function updateUI() {
+      const { avgAction, rise } = computeRise();
+      $('chipRise').textContent = rise.toFixed(2) + '°C';
+      $('chipBau').textContent = BASELINE_RISE.toFixed(1) + '°C';
+      $('chipAvg').textContent = avgAction.toFixed(0) + '%';
+
+      const risk = riskLevel(rise);
+      const banner = $('riskBanner');
+      banner.className = 'clm-risk-banner ' + risk.cls;
+      banner.textContent = `${risk.icon} Risiko ${risk.label}`;
+
+      let formula = `Rata-rata upaya = (Emisi + Energi + Reboisasi) / 3 = (${emisi} + ${energi} + ${reboisasi}) / 3 = <span class="v">${avgAction.toFixed(1)}%</span>`;
+      formula += `<br>Proyeksi Suhu = 4,0 − (4,0 − 1,1) × (upaya/100) = 4,0 − 2,9 × ${(avgAction / 100).toFixed(2)} = <span class="v">${rise.toFixed(2)}°C</span>`;
+      $('formulaBox').innerHTML = formula;
+    }
+
+    function drawGraph() {
+      const canvas = $('graphSuhu');
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.parentElement.clientWidth - 20, h = 220;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      const c = canvas.getContext('2d');
+      c.setTransform(1, 0, 0, 1, 0, 0); c.scale(dpr, dpr); c.clearRect(0, 0, w, h);
+
+      const { rise } = computeRise();
+      const years = 75; // 2025 - 2100
+      const maxRise = 4.2;
+      const px = (yearIdx) => 30 + (yearIdx / years) * (w - 45);
+      const py = (val) => h - 26 - (val / maxRise) * (h - 40);
+
+      // sumbu
+      c.strokeStyle = 'rgba(209,250,229,0.25)'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(28, 8); c.lineTo(28, h - 26); c.lineTo(w - 8, h - 26); c.stroke();
+      c.fillStyle = 'rgba(209,250,229,0.6)'; c.font = '9px system-ui'; c.textAlign = 'left';
+      c.fillText('2025', 22, h - 12); c.fillText('2100', w - 32, h - 12);
+
+      // garis target 1.5C
+      c.strokeStyle = 'rgba(34,197,94,0.6)'; c.setLineDash([4, 4]); c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(28, py(1.5)); c.lineTo(w - 8, py(1.5)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = 'rgba(34,197,94,0.8)'; c.fillText('1,5°C (Paris)', 32, py(1.5) - 4);
+
+      // kurva business as usual (merah)
+      c.strokeStyle = '#dc2626'; c.lineWidth = 2; c.beginPath();
+      for (let i = 0; i <= years; i++) { const val = (i / years) * BASELINE_RISE; const x = px(i), y = py(val); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
+      c.stroke();
+
+      // kurva skenario kamu (hijau)
+      c.strokeStyle = '#0d9488'; c.lineWidth = 3; c.beginPath();
+      for (let i = 0; i <= years; i++) { const val = (i / years) * rise; const x = px(i), y = py(val); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
+      c.stroke();
+    }
+
+    function render() { updateUI(); drawGraph(); }
+    window.addEventListener('resize', () => drawGraph());
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'clm-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Done = false, t2Done = false;
+    renderQuizOptions($('thinkOptions1'), ['Karena emisi karbon bukan satu-satunya penyebab perubahan iklim', 'Karena slider emisi tidak berfungsi', 'Karena target 1,5°C tidak masuk akal', 'Karena reboisasi lebih penting dari emisi'], (i, btn, c) => {
+      if (t1Done) return; t1Done = true;
+      const correct = i === 0;
+      c.querySelectorAll('.clm-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 0) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Perubahan iklim butuh solusi dari berbagai arah sekaligus -- mengurangi emisi, transisi energi terbarukan, DAN reboisasi -- bukan cuma satu upaya saja.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Tidak ada peran sama sekali', 'Hutan menyerap CO2 dari udara lewat fotosintesis, membantu mengurangi gas rumah kaca', 'Hutan justru menambah emisi karbon', 'Hutan cuma berpengaruh pada cuaca lokal, tidak pada iklim global'], (i, btn, c) => {
+      if (t2Done) return; t2Done = true;
+      const correct = i === 1;
+      c.querySelectorAll('.clm-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Pohon menyerap CO2 lewat fotosintesis dan menyimpannya -- deforestasi (penebangan hutan) mengurangi kemampuan ini, sementara reboisasi (penanaman kembali) memulihkannya.';
+    });
+
+    // ============ CHALLENGE ============
+    $('btnChallenge').addEventListener('click', () => {
+      const { rise } = computeRise();
+      const fb = $('challengeFeedback'); fb.classList.add('is-visible');
+      const pass = rise <= 1.5;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass ? `✅ Berhasil! Proyeksi suhu saat ini = ${rise.toFixed(2)}°C, sudah di bawah target 1,5°C.` : `💡 Proyeksi suhu saat ini = ${rise.toFixed(2)}°C, masih di atas target 1,5°C. Coba naikkan lagi ketiga slidernya.`;
+    });
+
+    window.onload = () => { render(); };
+  </script>
+</body>
+</html>
