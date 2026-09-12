@@ -113,11 +113,23 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
   };
   type ModeSort = 'tepat' | 'cepat';
 
+  // Format M:SS (mis. "7:05") -- lebih umum & jelas daripada "7m 05d" yang
+  // gampang salah dibaca seolah "7 menit 5 HARI" (huruf "d" dikira "day").
   function formatDurasi(detik: number): string {
     const total = Math.max(0, Math.round(detik));
     const menit = Math.floor(total / 60);
     const sisaDetik = total % 60;
-    return `${menit}m ${String(sisaDetik).padStart(2, '0')}d`;
+    return `${menit}:${String(sisaDetik).padStart(2, '0')}`;
+  }
+
+  // Warna badge skor berdasarkan persentase -- kalau skorMaks 0 (soal
+  // belum ada skornya sama sekali, edge case), dianggap netral.
+  function kelasSkor(skorTerbaik: number, skorMaks: number): string {
+    if (skorMaks <= 0) return 'skor-netral';
+    const persen = (skorTerbaik / skorMaks) * 100;
+    if (persen >= 80) return 'skor-tinggi';
+    if (persen >= 50) return 'skor-sedang';
+    return 'skor-rendah';
   }
 
   // "Paling Tepat" = urut skor dulu (tie-break waktu tercepat), "Paling
@@ -134,15 +146,14 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
     return salinan;
   }
 
-  function baris(...isi: (string | number)[]): HTMLTableRowElement {
-    const tr = document.createElement('tr');
-    for (const nilai of isi) {
-      const cell = document.createElement('td');
-      cell.textContent = String(nilai);
-      tr.appendChild(cell);
-    }
-    return tr;
+  function selText(tag: string, teks: string | number, kelas?: string): HTMLElement {
+    const el = document.createElement(tag);
+    el.textContent = String(teks);
+    if (kelas) el.className = kelas;
+    return el;
   }
+
+  const MEDALI = ['🥇', '🥈', '🥉'];
 
   function renderTable(table: HTMLTableElement, rows: BarisLeaderboard[]) {
     const thead = document.createElement('thead');
@@ -151,14 +162,32 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
     thead.appendChild(headRow);
 
     // Nama & kelas ditulis siswa sendiri lewat form (bukan konten yang
-    // ditulis lewat CMS) -- pakai textContent per sel (lewat baris()),
-    // BUKAN innerHTML dengan interpolasi string, supaya tidak ada celah
-    // XSS kalau ada yang isi nama/kelas dengan markup aneh-aneh.
+    // ditulis lewat CMS) -- pakai textContent (lewat selText()), BUKAN
+    // innerHTML dengan interpolasi string, supaya tidak ada celah XSS
+    // kalau ada yang isi nama/kelas dengan markup aneh-aneh.
     const tbody = document.createElement('tbody');
     rows.forEach((r, i) => {
-      tbody.appendChild(
-        baris(i + 1, r.nama, r.kelas, `${r.skorTerbaik} / ${r.skorMaks}`, formatDurasi(r.durasiDetik), r.percobaanKe)
-      );
+      const tr = document.createElement('tr');
+
+      const tdRank = document.createElement('td');
+      tdRank.className = 'lb-rank';
+      tdRank.textContent = i < 3 ? MEDALI[i] : String(i + 1);
+      tr.appendChild(tdRank);
+
+      tr.appendChild(selText('td', r.nama));
+      tr.appendChild(selText('td', r.kelas));
+
+      const tdSkor = document.createElement('td');
+      const badge = document.createElement('span');
+      badge.className = `skor-badge ${kelasSkor(r.skorTerbaik, r.skorMaks)}`;
+      badge.textContent = `${r.skorTerbaik} / ${r.skorMaks}`;
+      tdSkor.appendChild(badge);
+      tr.appendChild(tdSkor);
+
+      tr.appendChild(selText('td', formatDurasi(r.durasiDetik), 'lb-waktu'));
+      tr.appendChild(selText('td', r.percobaanKe));
+
+      tbody.appendChild(tr);
     });
 
     table.replaceChildren(thead, tbody);
@@ -440,5 +469,44 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
 
   .leaderboard-table tbody tr:last-child td {
     border-bottom: none;
+  }
+
+  .lb-rank {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    text-align: center;
+  }
+
+  .lb-waktu {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-soft);
+  }
+
+  .skor-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .skor-tinggi {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .skor-sedang {
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+
+  .skor-rendah {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+
+  .skor-netral {
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 </style>
