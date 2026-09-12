@@ -2,6 +2,7 @@
 tanggal: 2026-08-27
 kelas: XII
 mapel: Fisika
+bab: "Rangkaian Listrik"
 judul: Hukum Coulomb
 deskripsi: Belajar gaya tarik dan tolak antar muatan listrik -- rumus, arah gaya, dan cara menghitungnya, lengkap simulasi interaktif yang bisa dicoba langsung.
 durasi: 90

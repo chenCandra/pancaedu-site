@@ -2,6 +2,7 @@
 tanggal: 2026-09-02
 kelas: XII
 mapel: Fisika
+bab: "Rangkaian Listrik"
 judul: Medan Listrik, Memahami Pengaruh Muatan di Sekitarnya
 deskripsi: Mengapa sebuah muatan listrik dapat memengaruhi muatan lain meskipun tidak bersentuhan? Konsep medan listrik membantu kita memahami pengaruh tersebut. Pada pembelajaran ini, kita akan mempelajari konsep medan listrik, arah dan kuat medan, garis-garis medan, serta menghitung medan listrik yang ditimbulkan oleh satu atau beberapa muatan listrik.
 durasi: 60

@@ -2,6 +2,7 @@
 tanggal: 2026-09-10
 kelas: XII
 mapel: Fisika
+bab: "Rangkaian Listrik"
 judul: Kapasitor Keping Sejajar
 deskripsi: Kenapa lampu kilat kamera bisa menyala sangat terang meski baterainya kecil? Pada pembelajaran ini, kita akan mempelajari kapasitor sebagai penyimpan muatan dan energi listrik, struktur keping sejajar, rumus kapasitansi, serta faktor yang memengaruhinya.
 durasi: 90
