@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Projectile Motion Lab</title>
+<style>
+  :root {
+    --bg-1: #fff7ed; --bg-2: #eff6ff; --panel: #ffffff; --panel-2: #fdf6ee;
+    --border: #f0e3d0; --ink: #2b1f10; --ink-muted: #6b5b40; --ink-faint: #9c8b6f;
+    --blue: #2563eb; --orange: #f97316; --green: #16a34a; --red: #dc2626;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #0a1220; --scene-bg-2: #142238;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(120,60,10,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+  .prj-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .prj-header-title { display: flex; align-items: center; gap: 12px; }
+  .prj-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--orange), var(--red)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .prj-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .prj-badge { font-size: 0.72rem; font-weight: 800; color: var(--orange); background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .prj-intro { background: var(--panel); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+
+  .prj-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .prj-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .prj-card-title { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .prj-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .prj-main-grid { grid-template-columns: 320px 1fr; } }
+
+  .prj-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .prj-param-label-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); }
+  .prj-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--orange); }
+
+  .prj-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+  .prj-toggle-row label { font-size: 0.8rem; color: var(--ink-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+
+  .prj-scene-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 0%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #0b1424; box-shadow: inset 0 0 40px rgba(0,0,0,0.4); }
+  .prj-scene-wrap canvas { display: block; width: 100%; height: 320px; }
+  @media (max-width: 480px) { .prj-scene-wrap canvas { height: 260px; } }
+  .prj-scene-hint { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.14); backdrop-filter: blur(4px); color: #fff7ed; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; text-align: center; max-width: 92%; }
+
+  .prj-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .prj-btn-primary { background: linear-gradient(90deg, var(--orange), var(--red)); border: none; color: #fff; font-weight: 800; font-size: 0.88rem; padding: 12px 26px; border-radius: 999px; box-shadow: 0 6px 18px rgba(249,115,22,0.3); }
+  .prj-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .prj-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .prj-btn-secondary:hover { color: var(--ink); border-color: var(--orange); }
+
+  .prj-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .prj-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .prj-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .prj-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .prj-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .prj-formula-box { background: #0d1220; color: #fef3e2; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .prj-formula-box .v { color: #fbbf24; font-weight: 700; }
+
+  .prj-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange); display: flex; align-items: center; gap: 6px; }
+  .prj-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .prj-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .prj-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .prj-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .prj-quiz-option:hover:not(:disabled) { border-color: var(--orange); background: rgba(249,115,22,0.06); }
+  .prj-quiz-option .letter { font-weight: 900; color: var(--orange); flex-shrink: 0; }
+  .prj-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .prj-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .prj-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .prj-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .prj-feedback.is-visible { display: block; }
+  .prj-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .prj-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .prj-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="prj-header">
+    <div class="prj-header-title">
+      <span style="font-size:1.8rem;">🎯</span>
+      <div><h1>Projectile Motion Lab</h1><p>Gerak Parabola -- Gabungan GLB &amp; GLBB dalam Dua Dimensi</p></div>
+    </div>
+    <span class="prj-badge">🧪 Lab Maya PancaEdu · Kelas X</span>
+  </div>
+
+  <p class="prj-intro">Atur kecepatan awal dan sudut elevasi peluru, lalu tembakkan. Perhatikan bagaimana gerak horizontal (GLB, kecepatan konstan) dan gerak vertikal (GLBB, dipengaruhi gravitasi) berjalan BERSAMAAN tapi SALING BEBAS -- menghasilkan lintasan berbentuk parabola.</p>
+
+  <div class="prj-card">
+    <div class="prj-card-header"><span class="prj-card-title">🧪 Atur Peluncuran</span></div>
+
+    <div class="prj-main-grid">
+      <div>
+        <div class="prj-param-row">
+          <div class="prj-param-label-row"><span>🚀 Kecepatan Awal (v₀)</span><span class="prj-param-value" id="v0Val">20 m/s</span></div>
+          <input type="range" id="v0Slider" min="5" max="30" step="1" value="20">
+        </div>
+        <div class="prj-param-row">
+          <div class="prj-param-label-row"><span>📐 Sudut Elevasi (θ)</span><span class="prj-param-value" id="angVal">45°</span></div>
+          <input type="range" id="angSlider" min="10" max="80" step="1" value="45">
+        </div>
+        <div class="prj-toggle-row"><label for="chkTrace"><input type="checkbox" id="chkTrace" checked>☑ Tampilkan Jejak Lintasan</label></div>
+        <div class="prj-toggle-row"><label for="chkVector"><input type="checkbox" id="chkVector" checked>☑ Tampilkan Vektor vx &amp; vy</label></div>
+        <div class="prj-toggle-row"><label for="chkCompare"><input type="checkbox" id="chkCompare">🆚 Bandingkan dengan Peluncuran Kedua (θ komplemen)</label></div>
+      </div>
+
+      <div>
+        <div class="prj-scene-wrap">
+          <canvas id="simCanvas"></canvas>
+          <div class="prj-scene-hint" id="sceneHint">⚡ Atur parameter, lalu tekan TEMBAKKAN</div>
+        </div>
+        <div class="prj-controls-row" style="margin-top:12px;">
+          <button class="prj-btn-primary" id="btnRun">▶ TEMBAKKAN</button>
+          <button class="prj-btn-secondary" id="btnReset">↻ Reset</button>
+        </div>
+
+        <div class="prj-data-panel" style="margin-top:14px;">
+          <div class="prj-data-chip"><div class="k">⏱️ Waktu</div><div class="v" id="chipTime">0,00 s</div></div>
+          <div class="prj-data-chip"><div class="k">📍 Posisi (x,y)</div><div class="v" id="chipPos" style="color:var(--blue);">0,0 / 0,0 m</div></div>
+          <div class="prj-data-chip"><div class="k">🏃 vx / vy</div><div class="v" id="chipVel" style="color:var(--green);">0,0 / 0,0</div></div>
+          <div class="prj-data-chip"><div class="k">⬆️ Tinggi Maks</div><div class="v" id="chipHmax" style="color:var(--orange);">0,0 m</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Rumus Interaktif (substitusi otomatis):</div>
+    <div class="prj-formula-box" id="formulaBox"></div>
+  </div>
+
+  <!-- ============ ANALISIS HASIL ============ -->
+  <div class="prj-card">
+    <div class="prj-card-header"><span class="prj-card-title">🔎 Analisis Hasil</span></div>
+    <div class="prj-data-panel">
+      <div class="prj-data-chip"><div class="k">v₀x (konstan)</div><div class="v" id="analysisVx">0,00 m/s</div></div>
+      <div class="prj-data-chip"><div class="k">v₀y (awal)</div><div class="v" id="analysisVy">0,00 m/s</div></div>
+      <div class="prj-data-chip"><div class="k">Waktu di Udara</div><div class="v" id="analysisTtotal">0,00 s</div></div>
+      <div class="prj-data-chip"><div class="k">Jangkauan (R)</div><div class="v" id="analysisRange">0,00 m</div></div>
+    </div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="prj-card">
+    <span class="prj-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="prj-quiz-question">Sebuah peluru ditembakkan dengan sudut 30° dan peluru lain dengan sudut 60°, keduanya dengan kecepatan awal (v₀) yang sama. Bagaimana jangkauan (R) keduanya?</p>
+    <div class="prj-quiz-options" id="thinkOptions1"></div>
+    <div class="prj-feedback" id="thinkFeedback1"></div>
+    <p class="prj-quiz-question" style="margin-top:8px;">Pada gerak parabola (tanpa gesekan udara), apa yang terjadi pada kecepatan horizontal (vx) sepanjang lintasan?</p>
+    <div class="prj-quiz-options" id="thinkOptions2"></div>
+    <div class="prj-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="prj-card">
+    <div class="prj-card-header"><span class="prj-card-title">🎯 Challenge Mode</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Atur v₀ dan sudut elevasi supaya jangkauan (R) sedekat mungkin dengan <strong>40 meter</strong>. Tembakkan dulu, baru cek hasilnya.</p>
+    <button class="prj-btn-secondary" id="btnChallenge">Cek Sekarang</button>
+    <div class="prj-feedback" id="challengeFeedback"></div>
+  </div>
+
+  <div class="prj-legend" id="prjLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const D2R = Math.PI / 180;
+    const G = 10; // m/s^2
+
+    let v0 = 20, ang = 45;
+    let traceOn = true, vectorOn = true, compareOn = false;
+    let lastRangeAchieved = null;
+
+    function renderLegend() {
+      const el = $('prjLegend');
+      [{ icon: '🔴', label: 'Peluru' }, { icon: '🟢', label: 'Lintasan (Parabola)' }, { icon: '🔵', label: 'vx (horizontal)' }, { icon: '🟠', label: 'vy (vertikal)' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'prj-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    $('v0Slider').addEventListener('input', (e) => { v0 = parseFloat(e.target.value); $('v0Val').textContent = v0.toFixed(0) + ' m/s'; updateFormulaAndPreview(); });
+    $('angSlider').addEventListener('input', (e) => { ang = parseFloat(e.target.value); $('angVal').textContent = ang.toFixed(0) + '°'; updateFormulaAndPreview(); });
+    $('chkTrace').addEventListener('change', (e) => { traceOn = e.target.checked; });
+    $('chkVector').addEventListener('change', (e) => { vectorOn = e.target.checked; renderScene(lastT); });
+    $('chkCompare').addEventListener('change', (e) => { compareOn = e.target.checked; renderScene(lastT); });
+
+    // ============ FISIKA INTI ============
+    function paramsOf(v0v, angv) {
+      const vx0 = v0v * Math.cos(angv * D2R);
+      const vy0 = v0v * Math.sin(angv * D2R);
+      const tNaik = vy0 / G;
+      const tTotal = 2 * tNaik;
+      const hMax = (vy0 * vy0) / (2 * G);
+      const range = vx0 * tTotal;
+      return { vx0, vy0, tNaik, tTotal, hMax, range };
+    }
+    function stateAt(t, v0v, angv) {
+      const { vx0, vy0 } = paramsOf(v0v, angv);
+      const tEff = Math.max(0, t);
+      const x = vx0 * tEff;
+      const y = Math.max(0, vy0 * tEff - 0.5 * G * tEff * tEff);
+      const vy = vy0 - G * tEff;
+      return { x, y, vx: vx0, vy };
+    }
+
+    function updateFormulaAndPreview() {
+      const p = paramsOf(v0, ang);
+      let formula = `v₀x = v₀cos θ = ${v0}·cos(${ang}°) = <span class="v">${p.vx0.toFixed(2)} m/s</span> (konstan)`;
+      formula += `<br>v₀y = v₀sin θ = ${v0}·sin(${ang}°) = <span class="v">${p.vy0.toFixed(2)} m/s</span>`;
+      formula += `<br>t naik = v₀y/g = ${p.vy0.toFixed(2)}/${G} = <span class="v">${p.tNaik.toFixed(2)} s</span>, t total = 2×t naik = <span class="v">${p.tTotal.toFixed(2)} s</span>`;
+      formula += `<br>h maks = v₀y²/(2g) = <span class="v">${p.hMax.toFixed(2)} m</span>`;
+      formula += `<br>Jangkauan R = v₀x × t total = <span class="v">${p.range.toFixed(2)} m</span>`;
+      $('formulaBox').innerHTML = formula;
+      $('chipHmax').textContent = p.hMax.toFixed(1) + ' m';
+      renderScene(null);
+    }
+
+    // ============ CANVAS ============
+    function resizeCanvas() {
+      const canvas = $('simCanvas');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      updateFormulaAndPreview();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function sceneScale(w, h) {
+      const p = paramsOf(v0, ang);
+      const maxX = Math.max(10, p.range * 1.15);
+      const maxY = Math.max(5, p.hMax * 1.6);
+      const groundY = h * 0.85;
+      const scaleX = (w - 40) / maxX;
+      const scaleY = (groundY - 20) / maxY;
+      const scale = Math.min(scaleX, scaleY);
+      return { scale, groundY, maxX, maxY };
+    }
+    function drawGround(ctx, w, h, groundY) {
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(37,99,235,0.06)'); grad.addColorStop(1, 'rgba(249,115,22,0.08)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(226,232,240,0.5)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(10, groundY); ctx.lineTo(w - 10, groundY); ctx.stroke();
+    }
+    function drawTrail(ctx, points, scale, groundY, color) {
+      if (points.length < 2) return;
+      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      points.forEach((pt, i) => { const px = 20 + pt.x * scale, py = groundY - pt.y * scale; if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); });
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    function drawProjectile(ctx, x, y, vx, vy, scale, groundY, color) {
+      const px = 20 + x * scale, py = groundY - y * scale;
+      ctx.fillStyle = color; ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI * 2); ctx.fill();
+      if (vectorOn) {
+        const vScale = 3.5;
+        ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + vx * vScale, py); ctx.stroke();
+        ctx.strokeStyle = '#f97316';
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py - vy * vScale); ctx.stroke();
+      }
+    }
+
+    let trailA = [], trailB = [];
+    let lastT = null;
+    function renderScene(tCurrent) {
+      const canvas = $('simCanvas'), ctx = canvas.getContext('2d');
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const { scale, groundY } = sceneScale(w, h);
+      drawGround(ctx, w, h, groundY);
+      const t = tCurrent ?? 0;
+      const sA = stateAt(t, v0, ang);
+      if (traceOn) drawTrail(ctx, trailA, scale, groundY, 'rgba(220,38,38,0.5)');
+      drawProjectile(ctx, sA.x, sA.y, sA.vx, sA.vy, scale, groundY, '#dc2626');
+      if (compareOn) {
+        const angComp = 90 - ang;
+        const sB = stateAt(t, v0, angComp);
+        if (traceOn) drawTrail(ctx, trailB, scale, groundY, 'rgba(124,58,237,0.5)');
+        drawProjectile(ctx, sB.x, sB.y, sB.vx, sB.vy, scale, groundY, '#7c3aed');
+      }
+    }
+
+    // ============ RUN ============
+    let animId = null, runStart = 0;
+    function runDuration() { return paramsOf(v0, ang).tTotal; }
+    $('btnRun').addEventListener('click', () => {
+      $('btnRun').disabled = true;
+      trailA = []; trailB = [];
+      $('sceneHint').textContent = '🚀 Peluru meluncur...';
+      runStart = performance.now();
+      const duration = runDuration();
+      const angComp = 90 - ang;
+      function step(now) {
+        const t = (now - runStart) / 1000;
+        lastT = t;
+        const sA = stateAt(t, v0, ang);
+        $('chipTime').textContent = t.toFixed(2) + ' s';
+        $('chipPos').textContent = sA.x.toFixed(1) + ' / ' + sA.y.toFixed(1) + ' m';
+        $('chipVel').textContent = sA.vx.toFixed(1) + ' / ' + sA.vy.toFixed(1) + ' m/s';
+        if (!trailA.length || t - trailA[trailA.length - 1].t >= 0.05) trailA.push({ t, x: sA.x, y: sA.y });
+        if (compareOn) {
+          const sB = stateAt(t, v0, angComp);
+          if (!trailB.length || t - trailB[trailB.length - 1].t >= 0.05) trailB.push({ t, x: sB.x, y: sB.y });
+        }
+        renderScene(t);
+        if (t < duration) { animId = requestAnimationFrame(step); }
+        else {
+          animId = null; $('btnRun').disabled = false;
+          $('sceneHint').textContent = '✅ Peluru mendarat.';
+          const p = paramsOf(v0, ang);
+          lastRangeAchieved = p.range;
+          $('analysisVx').textContent = p.vx0.toFixed(2) + ' m/s';
+          $('analysisVy').textContent = p.vy0.toFixed(2) + ' m/s';
+          $('analysisTtotal').textContent = p.tTotal.toFixed(2) + ' s';
+          $('analysisRange').textContent = p.range.toFixed(2) + ' m';
+        }
+      }
+      animId = requestAnimationFrame(step);
+    });
+    $('btnReset').addEventListener('click', () => {
+      if (animId) cancelAnimationFrame(animId);
+      animId = null; lastT = null; trailA = []; trailB = [];
+      $('btnRun').disabled = false;
+      $('sceneHint').textContent = '⚡ Atur parameter, lalu tekan TEMBAKKAN';
+      $('chipTime').textContent = '0,00 s'; $('chipPos').textContent = '0,0 / 0,0 m'; $('chipVel').textContent = '0,0 / 0,0';
+      renderScene(0);
+    });
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'prj-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Done = false, t2Done = false;
+    renderQuizOptions($('thinkOptions1'), ['Jangkauan 30° lebih jauh', 'Jangkauan 60° lebih jauh', 'Jangkauan keduanya SAMA', 'Tidak dapat ditentukan'], (i, btn, c) => {
+      if (t1Done) return; t1Done = true;
+      const correct = i === 2;
+      c.querySelectorAll('.prj-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 2) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena R = v₀²sin(2θ)/g, dan sin(2×30°) = sin(60°) = sin(2×60°) = sin(120°) -- sudut θ dan (90°-θ) selalu memberi jangkauan yang SAMA. Coba nyalakan "Bandingkan" di atas untuk lihat sendiri.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Terus bertambah karena gravitasi', 'Terus berkurang lalu menjadi negatif', 'Tetap konstan sepanjang lintasan', 'Berubah jadi nol di titik tertinggi'], (i, btn, c) => {
+      if (t2Done) return; t2Done = true;
+      const correct = i === 2;
+      c.querySelectorAll('.prj-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 2) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Gravitasi hanya bekerja pada sumbu vertikal (y). Tidak ada gaya horizontal (mengabaikan gesekan udara), jadi vx tetap KONSTAN sepanjang lintasan -- inilah sebabnya gerak horizontalnya disebut GLB.';
+    });
+
+    // ============ CHALLENGE ============
+    $('btnChallenge').addEventListener('click', () => {
+      const fb = $('challengeFeedback'); fb.classList.add('is-visible');
+      if (lastRangeAchieved === null) { fb.classList.add('is-wrong'); fb.innerHTML = '💡 Tembakkan peluru dulu (tekan TEMBAKKAN), baru cek hasilnya.'; return; }
+      const pass = Math.abs(lastRangeAchieved - 40) <= 1.5;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass ? `✅ Berhasil! Jangkauan mendarat = ${lastRangeAchieved.toFixed(2)} m, sangat dekat target 40 m.` : `💡 Jangkauan terakhir = ${lastRangeAchieved.toFixed(2)} m. Coba sesuaikan lagi v₀ dan sudut elevasi.`;
+    });
+
+    window.onload = () => { resizeCanvas(); };
+  </script>
+</body>
+</html>

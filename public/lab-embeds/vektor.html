@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vector Playground</title>
+<style>
+  :root {
+    --bg-1: #fdf2f8; --bg-2: #eef2ff; --panel: #ffffff; --panel-2: #f7f5fb;
+    --border: #e6e0f0; --ink: #241b2e; --ink-muted: #5f5470; --ink-faint: #948aa3;
+    --blue: #2563eb; --orange: #f97316; --green: #16a34a; --violet: #7c3aed;
+    --ok: #16a34a; --warn: #dc2626;
+    --scene-bg-1: #100a1a; --scene-bg-2: #1b1330;
+    --radius-lg: 20px; --radius-md: 14px; --radius-sm: 9px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    --shadow-card: 0 4px 20px rgba(76,29,149,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%); color: var(--ink); font-family: var(--font); min-height: 100vh; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  button, select, input { font-family: inherit; cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+  .vek-header { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-card); }
+  .vek-header-title { display: flex; align-items: center; gap: 12px; }
+  .vek-header h1 { font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .vek-header p { font-size: 0.72rem; color: var(--ink-faint); font-weight: 600; }
+  .vek-badge { font-size: 0.72rem; font-weight: 800; color: var(--violet); background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); padding: 5px 12px; border-radius: 999px; }
+
+  .vek-intro { background: var(--panel); border-left: 4px solid var(--violet); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; font-size: 0.85rem; color: var(--ink-muted); line-height: 1.55; box-shadow: var(--shadow-card); }
+
+  .vek-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
+  .vek-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--panel-2); padding-bottom: 10px; }
+  .vek-card-title { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+  .vek-main-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 980px) { .vek-main-grid { grid-template-columns: 320px 1fr; } }
+
+  .vek-mode-row { display: flex; gap: 8px; }
+  .vek-mode-btn { flex: 1; background: var(--panel-2); border: 2px solid var(--border); color: var(--ink-muted); font-weight: 800; font-size: 0.82rem; padding: 10px; border-radius: var(--radius-sm); }
+  .vek-mode-btn.is-active { color: #fff; background: var(--violet); border-color: transparent; }
+
+  .vek-vec-block { border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 4px; }
+  .vek-vec-block h4 { font-size: 0.82rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .vek-param-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+  .vek-param-label-row { display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; color: var(--ink-muted); }
+  .vek-param-value { font-family: 'Courier New', monospace; font-weight: 800; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--violet); }
+
+  .vek-scene-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; background: radial-gradient(circle at 50% 30%, var(--scene-bg-2), var(--scene-bg-1)); border: 2px solid #150c26; box-shadow: inset 0 0 40px rgba(0,0,0,0.4); }
+  .vek-scene-wrap canvas { display: block; width: 100%; height: 340px; }
+  @media (max-width: 480px) { .vek-scene-wrap canvas { height: 280px; } }
+
+  .vek-data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .vek-data-panel { grid-template-columns: repeat(4, 1fr); } }
+  .vek-data-chip { background: var(--panel-2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .vek-data-chip .k { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .vek-data-chip .v { font-size: 1.0rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  .vek-formula-box { background: #140a24; color: #ede9fe; padding: 12px 14px; border-radius: var(--radius-sm); font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.65; overflow-x: auto; }
+  .vek-formula-box .v { color: #fbbf24; font-weight: 700; }
+
+  .vek-quiz-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); display: flex; align-items: center; gap: 6px; }
+  .vek-quiz-question { font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .vek-quiz-options { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .vek-quiz-options { grid-template-columns: 1fr 1fr; } }
+  .vek-quiz-option { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink); border-radius: var(--radius-sm); padding: 10px 13px; font-size: 0.83rem; text-align: left; display: flex; gap: 8px; }
+  .vek-quiz-option:hover:not(:disabled) { border-color: var(--violet); background: rgba(124,58,237,0.06); }
+  .vek-quiz-option .letter { font-weight: 900; color: var(--violet); flex-shrink: 0; }
+  .vek-quiz-option:disabled { cursor: default; opacity: 0.6; }
+  .vek-quiz-option.is-correct { border-color: var(--ok); background: rgba(22,163,74,0.12); }
+  .vek-quiz-option.is-wrong { border-color: var(--warn); background: rgba(220,38,38,0.1); }
+
+  .vek-feedback { font-size: 0.85rem; line-height: 1.55; padding: 11px 15px; border-radius: var(--radius-sm); border-left: 4px solid var(--ok); background: rgba(22,163,74,0.08); display: none; }
+  .vek-feedback.is-visible { display: block; }
+  .vek-feedback.is-wrong { border-left-color: var(--warn); background: rgba(220,38,38,0.06); }
+
+  .vek-controls-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .vek-btn-secondary { background: var(--panel-2); border: 1.5px solid var(--border); color: var(--ink-muted); font-weight: 700; font-size: 0.85rem; padding: 11px 18px; border-radius: 999px; }
+  .vek-btn-secondary:hover { color: var(--ink); border-color: var(--violet); }
+
+  .vek-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .vek-legend-chip { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--ink-muted); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="vek-header">
+    <div class="vek-header-title">
+      <span style="font-size:1.8rem;">🧭</span>
+      <div><h1>Vector Playground</h1><p>Menjumlahkan Vektor -- Metode Grafis &amp; Analitis</p></div>
+    </div>
+    <span class="vek-badge">🧪 Lab Maya PancaEdu · Kelas X</span>
+  </div>
+
+  <p class="vek-intro">Atur besar dan arah dua vektor (A dan B), lalu lihat sendiri bagaimana keduanya dijumlahkan -- baik secara grafis (metode segitiga, ujung ke ujung) maupun secara analitis (lewat komponen sumbu x dan y). Bandingkan hasilnya: keduanya akan selalu memberi resultan yang sama.</p>
+
+  <div class="vek-card">
+    <div class="vek-card-header"><span class="vek-card-title">🧪 Atur Vektor A dan B</span></div>
+
+    <div class="vek-main-grid">
+      <div>
+        <div class="vek-mode-row">
+          <button class="vek-mode-btn is-active" id="btnModeGrafis">📐 Metode Grafis</button>
+          <button class="vek-mode-btn" id="btnModeAnalitis">🧮 Metode Analitis</button>
+        </div>
+
+        <div class="vek-vec-block" style="margin-top:12px;">
+          <h4 style="color:var(--blue);">🔵 Vektor A</h4>
+          <div class="vek-param-row">
+            <div class="vek-param-label-row"><span>Besar (|A|)</span><span class="vek-param-value" id="aMagVal">6 satuan</span></div>
+            <input type="range" id="aMagSlider" min="0" max="10" step="0.5" value="6">
+          </div>
+          <div class="vek-param-row">
+            <div class="vek-param-label-row"><span>Arah (θA)</span><span class="vek-param-value" id="aAngVal">0°</span></div>
+            <input type="range" id="aAngSlider" min="0" max="360" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="vek-vec-block">
+          <h4 style="color:var(--orange);">🟠 Vektor B</h4>
+          <div class="vek-param-row">
+            <div class="vek-param-label-row"><span>Besar (|B|)</span><span class="vek-param-value" id="bMagVal">5 satuan</span></div>
+            <input type="range" id="bMagSlider" min="0" max="10" step="0.5" value="5">
+          </div>
+          <div class="vek-param-row">
+            <div class="vek-param-label-row"><span>Arah (θB)</span><span class="vek-param-value" id="bAngVal">90°</span></div>
+            <input type="range" id="bAngSlider" min="0" max="360" step="5" value="90">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="vek-scene-wrap">
+          <canvas id="simCanvas"></canvas>
+        </div>
+
+        <div class="vek-data-panel" style="margin-top:14px;">
+          <div class="vek-data-chip"><div class="k">Rx (ΣAx+Bx)</div><div class="v" id="chipRx" style="color:var(--blue);">0,00</div></div>
+          <div class="vek-data-chip"><div class="k">Ry (ΣAy+By)</div><div class="v" id="chipRy" style="color:var(--orange);">0,00</div></div>
+          <div class="vek-data-chip"><div class="k">|R| Resultan</div><div class="v" id="chipR" style="color:var(--green);">0,00</div></div>
+          <div class="vek-data-chip"><div class="k">Arah θR</div><div class="v" id="chipTheta" style="color:var(--violet);">0°</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.82rem;font-weight:700;color:var(--ink-muted);">Rumus Interaktif (substitusi otomatis):</div>
+    <div class="vek-formula-box" id="formulaBox"></div>
+  </div>
+
+  <!-- ============ COBA PIKIRKAN ============ -->
+  <div class="vek-card">
+    <span class="vek-quiz-label">🤔 Coba Pikirkan</span>
+    <p class="vek-quiz-question">Vektor A besarnya 3 satuan ke arah 0°, vektor B besarnya 4 satuan ke arah 90° (tegak lurus A). Berapa besar resultannya?</p>
+    <div class="vek-quiz-options" id="thinkOptions1"></div>
+    <div class="vek-feedback" id="thinkFeedback1"></div>
+    <p class="vek-quiz-question" style="margin-top:8px;">Kalau dua vektor yang besarnya sama justru berlawanan arah (misal A ke 0° dan B ke 180°, besar sama), berapa besar resultannya?</p>
+    <div class="vek-quiz-options" id="thinkOptions2"></div>
+    <div class="vek-feedback" id="thinkFeedback2"></div>
+  </div>
+
+  <!-- ============ CHALLENGE ============ -->
+  <div class="vek-card">
+    <div class="vek-card-header"><span class="vek-card-title">🎯 Challenge Mode</span></div>
+    <p style="font-size:0.85rem;color:var(--ink-muted);">Atur besar &amp; arah vektor A dan B supaya besar resultannya (|R|) mendekati <strong>10 satuan</strong>.</p>
+    <button class="vek-btn-secondary" id="btnChallenge">Cek Sekarang</button>
+    <div class="vek-feedback" id="challengeFeedback"></div>
+  </div>
+
+  <div class="vek-legend" id="vekLegend"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const D2R = Math.PI / 180;
+
+    let mode = 'grafis'; // 'grafis' | 'analitis'
+    let aMag = 6, aAng = 0, bMag = 5, bAng = 90;
+
+    function renderLegend() {
+      const el = $('vekLegend');
+      [{ icon: '🔵', label: 'Vektor A' }, { icon: '🟠', label: 'Vektor B' }, { icon: '🟢', label: 'Resultan R' }, { icon: '📐', label: 'Komponen x-y' }].forEach((f) => {
+        const chip = document.createElement('span'); chip.className = 'vek-legend-chip'; chip.innerHTML = `<span>${f.icon}</span><span>${f.label}</span>`; el.appendChild(chip);
+      });
+    }
+    renderLegend();
+
+    $('btnModeGrafis').addEventListener('click', () => { mode = 'grafis'; $('btnModeGrafis').classList.add('is-active'); $('btnModeAnalitis').classList.remove('is-active'); render(); });
+    $('btnModeAnalitis').addEventListener('click', () => { mode = 'analitis'; $('btnModeAnalitis').classList.add('is-active'); $('btnModeGrafis').classList.remove('is-active'); render(); });
+
+    $('aMagSlider').addEventListener('input', (e) => { aMag = parseFloat(e.target.value); $('aMagVal').textContent = aMag.toFixed(1) + ' satuan'; render(); });
+    $('aAngSlider').addEventListener('input', (e) => { aAng = parseFloat(e.target.value); $('aAngVal').textContent = aAng.toFixed(0) + '°'; render(); });
+    $('bMagSlider').addEventListener('input', (e) => { bMag = parseFloat(e.target.value); $('bMagVal').textContent = bMag.toFixed(1) + ' satuan'; render(); });
+    $('bAngSlider').addEventListener('input', (e) => { bAng = parseFloat(e.target.value); $('bAngVal').textContent = bAng.toFixed(0) + '°'; render(); });
+
+    function comp(mag, ang) { return { x: mag * Math.cos(ang * D2R), y: -mag * Math.sin(ang * D2R) }; } // -sin: canvas y ke bawah
+
+    function currentVectors() {
+      const a = comp(aMag, aAng);
+      const b = comp(bMag, bAng);
+      const rx = a.x + b.x, ry = a.y + b.y;
+      const rMag = Math.sqrt(rx * rx + ry * ry);
+      let rAngRad = Math.atan2(-ry, rx); // balik y buat sudut matematis biasa
+      let rAngDeg = rAngRad / D2R; if (rAngDeg < 0) rAngDeg += 360;
+      return { a, b, rx, ry, rMag, rAngDeg };
+    }
+
+    function updateChipsAndFormula() {
+      const { a, b, rx, ry, rMag, rAngDeg } = currentVectors();
+      const ax = a.x, ay = -a.y, bx = b.x, by = -b.y; // tampilkan dalam sudut matematis biasa (y positif ke atas)
+      const ryDisp = -ry;
+      $('chipRx').textContent = rx.toFixed(2);
+      $('chipRy').textContent = ryDisp.toFixed(2);
+      $('chipR').textContent = rMag.toFixed(2);
+      $('chipTheta').textContent = rAngDeg.toFixed(1) + '°';
+
+      let formula = `Ax = |A|cos θA = ${aMag}·cos(${aAng}°) = <span class="v">${ax.toFixed(2)}</span>`;
+      formula += `<br>Ay = |A|sin θA = ${aMag}·sin(${aAng}°) = <span class="v">${ay.toFixed(2)}</span>`;
+      formula += `<br>Bx = |B|cos θB = ${bMag}·cos(${bAng}°) = <span class="v">${bx.toFixed(2)}</span>`;
+      formula += `<br>By = |B|sin θB = ${bMag}·sin(${bAng}°) = <span class="v">${by.toFixed(2)}</span>`;
+      formula += `<br>Rx = Ax+Bx = <span class="v">${rx.toFixed(2)}</span> &nbsp; Ry = Ay+By = <span class="v">${ryDisp.toFixed(2)}</span>`;
+      formula += `<br>|R| = √(Rx²+Ry²) = <span class="v">${rMag.toFixed(2)}</span> satuan, θR = arctan(Ry/Rx) = <span class="v">${rAngDeg.toFixed(1)}°</span>`;
+      $('formulaBox').innerHTML = formula;
+    }
+
+    // ============ CANVAS ============
+    const SCALE_UNITS = 12; // rentang tampilan (-12..12) per sumbu
+    function resizeCanvas() {
+      const canvas = $('simCanvas');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function toPx(x, y, w, h) {
+      const scale = Math.min(w, h) / (2 * SCALE_UNITS);
+      return { px: w / 2 + x * scale, py: h / 2 + y * scale };
+    }
+
+    function drawAxes(ctx, w, h) {
+      ctx.strokeStyle = 'rgba(226,232,240,0.25)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
+      ctx.fillStyle = 'rgba(226,232,240,0.4)'; ctx.font = '9px system-ui';
+      ctx.fillText('x', w - 14, h / 2 - 6); ctx.fillText('y', w / 2 + 6, 12);
+    }
+
+    function drawArrow(ctx, x0, y0, x1, y1, color, width) {
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      const ang = Math.atan2(y1 - y0, x1 - x0);
+      const headLen = 10;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x1 - headLen * Math.cos(ang - Math.PI / 6), y1 - headLen * Math.sin(ang - Math.PI / 6));
+      ctx.lineTo(x1 - headLen * Math.cos(ang + Math.PI / 6), y1 - headLen * Math.sin(ang + Math.PI / 6));
+      ctx.closePath(); ctx.fill();
+    }
+
+    function render() {
+      updateChipsAndFormula();
+      const canvas = $('simCanvas'), ctx = canvas.getContext('2d');
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h);
+      const { a, b, rx, ry } = currentVectors();
+      const origin = toPx(0, 0, w, h);
+
+      if (mode === 'grafis') {
+        // A dari origin
+        const aTip = toPx(a.x, a.y, w, h);
+        drawArrow(ctx, origin.px, origin.py, aTip.px, aTip.py, '#2563eb', 3.5);
+        // B disambung dari ujung A (head-to-tail)
+        const bTip = toPx(a.x + b.x, a.y + b.y, w, h);
+        drawArrow(ctx, aTip.px, aTip.py, bTip.px, bTip.py, '#f97316', 3.5);
+        // Resultan dari origin ke ujung B
+        drawArrow(ctx, origin.px, origin.py, bTip.px, bTip.py, '#16a34a', 4);
+        ctx.fillStyle = '#e5e7eb'; ctx.font = 'bold 11px system-ui';
+        ctx.fillText('A', (origin.px + aTip.px) / 2 + 8, (origin.py + aTip.py) / 2 - 6);
+        ctx.fillText('B', (aTip.px + bTip.px) / 2 + 8, (aTip.py + bTip.py) / 2 - 6);
+        ctx.fillText('R', (origin.px + bTip.px) / 2 - 20, (origin.py + bTip.py) / 2 - 10);
+      } else {
+        // Analitis: A dan B dari origin, plus garis komponen putus-putus
+        const aTip = toPx(a.x, a.y, w, h);
+        const bTip = toPx(b.x, b.y, w, h);
+        const rTip = toPx(rx, ry, w, h);
+        drawArrow(ctx, origin.px, origin.py, aTip.px, aTip.py, '#2563eb', 3);
+        drawArrow(ctx, origin.px, origin.py, bTip.px, bTip.py, '#f97316', 3);
+        drawArrow(ctx, origin.px, origin.py, rTip.px, rTip.py, '#16a34a', 4);
+        ctx.setLineDash([5, 5]); ctx.strokeStyle = 'rgba(226,232,240,0.5)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(rTip.px, rTip.py); ctx.lineTo(rTip.px, origin.py); ctx.moveTo(rTip.px, rTip.py); ctx.lineTo(origin.px, rTip.py); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#e5e7eb'; ctx.font = 'bold 11px system-ui';
+        ctx.fillText('A', aTip.px + 6, aTip.py - 6);
+        ctx.fillText('B', bTip.px + 6, bTip.py - 6);
+        ctx.fillText('R', rTip.px + 6, rTip.py - 12);
+        ctx.font = '9px system-ui'; ctx.fillStyle = 'rgba(226,232,240,0.7)';
+        ctx.fillText('Rx', rTip.px - 10, origin.py - 4);
+        ctx.fillText('Ry', origin.px + 4, (rTip.py + origin.py) / 2);
+      }
+    }
+
+    // ============ COBA PIKIRKAN ============
+    function renderQuizOptions(container, options, handler) {
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'vek-quiz-option';
+        btn.innerHTML = `<span class="letter">${letters[i]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => handler(i, btn, container));
+        container.appendChild(btn);
+      });
+    }
+    let t1Done = false, t2Done = false;
+    renderQuizOptions($('thinkOptions1'), ['7 satuan', '5 satuan', '1 satuan', '12 satuan'], (i, btn, c) => {
+      if (t1Done) return; t1Done = true;
+      const correct = i === 1;
+      c.querySelectorAll('.vek-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback1'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena A dan B tegak lurus, |R| = √(3²+4²) = √25 = 5 satuan (segitiga 3-4-5) -- BUKAN 3+4=7. Vektor tidak dijumlahkan seperti bilangan biasa kalau arahnya tidak sama.';
+    });
+    renderQuizOptions($('thinkOptions2'), ['Dua kali besar salah satu vektor', 'Nol', 'Sama dengan salah satu vektor', 'Tidak dapat ditentukan'], (i, btn, c) => {
+      if (t2Done) return; t2Done = true;
+      const correct = i === 1;
+      c.querySelectorAll('.vek-quiz-option').forEach((b, j) => { b.disabled = true; if (j === 1) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+      const fb = $('thinkFeedback2'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Kalau besarnya sama tapi arahnya berlawanan (180°), komponen keduanya saling meniadakan -- resultannya NOL, meski kedua vektor asalnya tidak nol.';
+    });
+
+    // ============ CHALLENGE ============
+    $('btnChallenge').addEventListener('click', () => {
+      const { rMag } = currentVectors();
+      const fb = $('challengeFeedback'); fb.classList.add('is-visible');
+      const pass = Math.abs(rMag - 10) <= 0.3;
+      fb.classList.toggle('is-wrong', !pass);
+      fb.innerHTML = pass ? `✅ Berhasil! |R| saat ini = ${rMag.toFixed(2)} satuan, sangat dekat target 10.` : `💡 |R| saat ini = ${rMag.toFixed(2)} satuan. Coba sesuaikan lagi besar/arah A dan B.`;
+    });
+
+    window.onload = () => { resizeCanvas(); };
+  </script>
+</body>
+</html>
