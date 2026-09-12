@@ -13,38 +13,55 @@ const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
 
 const kelasList = ['X', 'XI', 'XII'].filter((k) => semua.some((p) => p.data.kelas === k));
 
-// Silabus -- dikelompokkan per Mata Pelajaran, urut tanggal ASCENDING di
-// dalam tiap kelompok (progres belajar dari sesi pertama ke terakhir,
-// beda dari "Hari Ini" yang butuh tanggal PERSIS hari ini). Ini yang bikin
-// Ruang Belajar tetap berguna dijelajahi kapan saja, bukan cuma pas ada
-// jadwal hari itu.
-// Di dalam tiap kelompok Mapel, sesi yang sudah diberi `bab` (lihat
+// Silabus -- dikelompokkan per Mata Pelajaran, LALU per Kelas, urut
+// tanggal ASCENDING di dalam tiap kelompok Kelas (progres belajar dari
+// sesi pertama ke terakhir, beda dari "Hari Ini" yang butuh tanggal PERSIS
+// hari ini). Ini yang bikin Ruang Belajar tetap berguna dijelajahi kapan
+// saja, bukan cuma pas ada jadwal hari itu.
+// PENTING: kelompok Bab dihitung TERPISAH per Kelas (bukan per Mapel
+// saja) -- kalau digabung lintas kelas, urutan tanggal antar kurikulum
+// yang dibangun bersamaan bisa saling menyelip (mis. sesi Kelas XII yang
+// tanggalnya kebetulan lebih awal dari sesi "Energi Alternatif" Kelas X
+// bikin bab Kelas XII itu kehitung "Bab 3" di tengah silabus Kelas X).
+// Ini pernah kejadian betulan: "Rangkaian Listrik" (bab Kelas XII) sempat
+// muncul sebagai "Bab 3" gara-gara tanggalnya (2026-08-27) pas bareng
+// sama sesi Kelas X. Fix: setiap Kelas punya urutan Bab sendiri, sama
+// seperti perhitungan babInfo di [slug].astro yang sudah benar dari awal
+// (filter kelas DAN mapel, lihat komentar di sana).
+// Di dalam tiap kelompok Kelas, sesi yang sudah diberi `bab` (lihat
 // content.config.ts) dikelompokkan lagi jadi Bab 1/Bab 2/dst -- supaya
 // urutan panjang (puluhan sesi) tampil sebagai beberapa bab kecil, bukan
 // satu grid rata tanpa struktur. Nomor Bab dihitung dari urutan MUNCUL
 // PERTAMA KALI (yang otomatis sama dengan urutan tanggal, karena entries
 // sudah disortir ascending sebelum loop ini) -- bukan field manual, jadi
 // tidak perlu diurutkan ulang manual tiap nambah sesi baru. Sesi tanpa
-// `bab` (mis. Kelas XI/XII yang belum dikelompokkan) masuk ke `tanpaBab`,
-// ditampilkan tetap seperti sebelumnya (grid rata, tanpa judul bab).
+// `bab` (mis. mapel/kelas lain yang belum dikelompokkan) masuk ke
+// `tanpaBab`, ditampilkan tetap seperti sebelumnya (grid rata, tanpa
+// judul bab).
 const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
   .sort((a, b) => a.localeCompare(b, 'id'))
   .map((mapel) => {
-    const entries = semua
-      .filter((p) => p.data.mapel === mapel)
-      .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
+    const kelasGroups = kelasList
+      .filter((k) => semua.some((p) => p.data.mapel === mapel && p.data.kelas === k))
+      .map((kelas) => {
+        const entries = semua
+          .filter((p) => p.data.mapel === mapel && p.data.kelas === kelas)
+          .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
 
-    const babGroups: { nama: string; entries: typeof entries }[] = [];
-    const tanpaBab: typeof entries = [];
-    for (const entry of entries) {
-      const nama = entry.data.bab;
-      if (!nama) { tanpaBab.push(entry); continue; }
-      let grup = babGroups.find((g) => g.nama === nama);
-      if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
-      grup.entries.push(entry);
-    }
+        const babGroups: { nama: string; entries: typeof entries }[] = [];
+        const tanpaBab: typeof entries = [];
+        for (const entry of entries) {
+          const nama = entry.data.bab;
+          if (!nama) { tanpaBab.push(entry); continue; }
+          let grup = babGroups.find((g) => g.nama === nama);
+          if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
+          grup.entries.push(entry);
+        }
 
-    return { mapel, entries, babGroups, tanpaBab };
+        return { kelas, entries, babGroups, tanpaBab };
+      });
+
+    return { mapel, kelasGroups };
   });
 ---
 
@@ -97,23 +114,31 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
         <div class="pd-mapel-group" data-pd-mapel-group>
           <h3 class="pd-mapel-title">{group.mapel}</h3>
 
-          {group.babGroups.map((babGroup, i) => (
-            <div class="pd-bab-group" data-pd-bab-group>
-              <h4 class="pd-bab-title">
-                <span class="pd-bab-nomor">Bab {i + 1}</span>
-                <span class="pd-bab-nama">{babGroup.nama}</span>
-              </h4>
-              <div class="pd-grid">
-                {babGroup.entries.map((entry) => <RuangBelajarCard entry={entry} />)}
-              </div>
+          {group.kelasGroups.map((kelasGroup) => (
+            <div class="pd-kelas-group" data-pd-kelas-group data-kelas={kelasGroup.kelas}>
+              {group.kelasGroups.length > 1 && (
+                <p class="pd-kelas-title">Kelas {kelasGroup.kelas}</p>
+              )}
+
+              {kelasGroup.babGroups.map((babGroup, i) => (
+                <div class="pd-bab-group" data-pd-bab-group>
+                  <h4 class="pd-bab-title">
+                    <span class="pd-bab-nomor">Bab {i + 1}</span>
+                    <span class="pd-bab-nama">{babGroup.nama}</span>
+                  </h4>
+                  <div class="pd-grid">
+                    {babGroup.entries.map((entry) => <RuangBelajarCard entry={entry} />)}
+                  </div>
+                </div>
+              ))}
+
+              {kelasGroup.tanpaBab.length > 0 && (
+                <div class="pd-grid" data-pd-bab-group>
+                  {kelasGroup.tanpaBab.map((entry) => <RuangBelajarCard entry={entry} />)}
+                </div>
+              )}
             </div>
           ))}
-
-          {group.tanpaBab.length > 0 && (
-            <div class="pd-grid" data-pd-bab-group>
-              {group.tanpaBab.map((entry) => <RuangBelajarCard entry={entry} />)}
-            </div>
-          )}
         </div>
       ))}
 
@@ -167,7 +192,12 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
 
   // Filter Kelas (Semua/X/XI/XII) di "Semua Pelajaran" -- tiap kelompok
   // Mapel disembunyikan seluruhnya kalau tidak ada sesi yang cocok filter
-  // (supaya tidak ada judul mapel nongkrong kosong tanpa isi).
+  // (supaya tidak ada judul mapel nongkrong kosong tanpa isi). Sejak
+  // babGroups dihitung per-Kelas (lihat komentar di atas const
+  // mapelGroups), tiap [data-pd-kelas-group] sudah homogen isinya satu
+  // kelas saja -- jadi filter cukup sembunyikan/tampilkan seluruh blok
+  // Kelas itu langsung, tidak perlu lagi cek satu-satu tiap kartu/bab di
+  // dalamnya.
   const filters = document.querySelector<HTMLElement>('[data-pd-filters]');
   const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-pd-mapel-group]'));
   const gridEmpty = document.querySelector<HTMLElement>('[data-pd-grid-empty]');
@@ -179,21 +209,11 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
       let anyVisible = false;
       for (const group of groups) {
         let groupHasVisible = false;
-        // Tiap kelompok Mapel bisa punya beberapa kelompok Bab bersarang di
-        // dalamnya (lihat [data-pd-bab-group] di index.astro) -- bab yang
-        // kartu-kartunya semua tersaring habis juga harus disembunyikan
-        // seluruhnya, bukan cuma dikosongkan (supaya tidak ada judul Bab
-        // nongkrong kosong tanpa isi saat filter Kelas aktif).
-        const babGroupsInMapel = group.querySelectorAll<HTMLElement>('[data-pd-bab-group]');
-        for (const babGroup of babGroupsInMapel) {
-          let babHasVisible = false;
-          for (const card of babGroup.querySelectorAll<HTMLElement>('[data-pd-card]')) {
-            const visible = !activeKelas || card.dataset.kelas === activeKelas;
-            card.hidden = !visible;
-            if (visible) babHasVisible = true;
-          }
-          babGroup.hidden = !babHasVisible;
-          if (babHasVisible) groupHasVisible = true;
+        const kelasGroupsInMapel = group.querySelectorAll<HTMLElement>('[data-pd-kelas-group]');
+        for (const kelasGroup of kelasGroupsInMapel) {
+          const visible = !activeKelas || kelasGroup.dataset.kelas === activeKelas;
+          kelasGroup.hidden = !visible;
+          if (visible) groupHasVisible = true;
         }
         group.hidden = !groupHasVisible;
         if (groupHasVisible) anyVisible = true;
@@ -325,6 +345,24 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border);
+  }
+
+  .pd-kelas-group {
+    margin-bottom: 2.5rem;
+  }
+
+  .pd-kelas-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .pd-kelas-title {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1.1rem;
   }
 
   .pd-bab-group {
