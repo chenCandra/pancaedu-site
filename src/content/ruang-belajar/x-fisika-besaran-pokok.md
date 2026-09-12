@@ -2,6 +2,7 @@
 tanggal: 2026-08-23
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: Besaran Pokok
 deskripsi: Mengenal 7 besaran pokok dalam Sistem Internasional (SI) satu per satu, lengkap definisi, satuan, contoh, dan miskonsepsi yang sering ketuker macam massa vs berat.
 durasi: 90

@@ -190,6 +190,16 @@ const ruangBelajar = defineCollection({
     tanggal: z.coerce.date(),
     kelas: z.enum(['X', 'XI', 'XII']),
     mapel: z.string(),
+    // Nama Bab/unit besar (mis. "Hakikat Fisika", "Energi Alternatif") --
+    // OPSIONAL, dipakai buat mengelompokkan sesi jadi Bab 1/Bab 2/dst di
+    // halaman daftar & badge "Langkah X dari Y" di halaman detail, supaya
+    // urutan panjang (puluhan sesi) tidak terasa seperti satu daftar rata
+    // tanpa struktur. Nomor Bab dan posisi di dalamnya DIHITUNG OTOMATIS
+    // dari urutan tanggal (bukan field manual) -- guru cukup mengetik nama
+    // Bab yang sama persis di setiap sesi yang termasuk bab itu. Kosongkan
+    // kalau sesi ini belum dikelompokkan (fallback ke badge lama, langkah
+    // dihitung dari SELURUH sesi Kelas+Mapel, bukan per-Bab).
+    bab: z.string().optional(),
     judul: z.string(),
     // Opsional -- kalau kosong, halaman detail pakai description dari
     // materi yang dirujuk (materiSlug) sebagai fallback.

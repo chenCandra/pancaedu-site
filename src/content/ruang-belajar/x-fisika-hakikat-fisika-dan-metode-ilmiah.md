@@ -2,6 +2,7 @@
 tanggal: 2026-08-13
 kelas: X
 mapel: Fisika
+bab: "Hakikat Fisika"
 judul: Hakikat Fisika & Metode Ilmiah
 deskripsi: Sebelum lompat ke rumus dan angka, kenalan dulu sama tiga "wajah" Fisika (proses, sikap, produk) dan 6 langkah metode ilmiah yang jadi fondasi semua materi Fisika ke depannya.
 durasi: 90

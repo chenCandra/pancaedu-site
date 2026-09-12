@@ -2,6 +2,7 @@
 tanggal: 2026-10-21
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Permasalahan dan Upaya Pemenuhan Kebutuhan Energi"
 deskripsi: Membahas empat masalah energi yang dihadapi dunia -- keterbatasan sumber, kenaikan permintaan, pemerataan akses, dan dampak lingkungan -- lengkap upaya nyata yang sedang dilakukan buat mengatasinya. Sesi penutup Bab Energi dan Perubahannya.
 durasi: 90

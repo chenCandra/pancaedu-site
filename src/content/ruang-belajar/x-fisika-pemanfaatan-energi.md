@@ -2,6 +2,7 @@
 tanggal: 2026-10-19
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Pemanfaatan Energi"
 deskripsi: Melihat bagaimana energi benar-benar dipakai sehari-hari di sektor rumah tangga, transportasi, industri, dan pertanian, lengkap sumber energi utama tiap sektor.
 durasi: 90

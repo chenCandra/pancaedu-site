@@ -2,6 +2,7 @@
 tanggal: 2026-10-05
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Konsep Energi"
 deskripsi: Belajar apa itu energi secara umum -- kemampuan melakukan usaha, satuannya (joule), sifatnya sebagai besaran skalar, dan Hukum Kekekalan Energi. Sesi pembuka Bab Energi dan Perubahannya.
 durasi: 90

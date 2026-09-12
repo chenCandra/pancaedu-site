@@ -2,6 +2,7 @@
 tanggal: 2026-08-21
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: Besaran dan Satuan
 deskripsi: Fondasi paling dasar sebelum belajar besaran pokok & turunan -- apa itu besaran dan satuan, kenapa dunia butuh satuan baku (Sistem Internasional), sampai klasifikasi besaran skalar dan vektor.
 durasi: 90

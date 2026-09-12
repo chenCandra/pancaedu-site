@@ -2,6 +2,7 @@
 tanggal: 2026-08-25
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: "Besaran Turunan: Ketika Besaran Pokok 'Dikombinasikan'"
 deskripsi: Kenalan sama besaran turunan -- luas, volume, kecepatan, gaya, tekanan, sampai daya -- dan gimana semuanya dibentuk dari kombinasi besaran pokok, lengkap contoh perhitungan.
 durasi: 90

@@ -2,6 +2,7 @@
 tanggal: 2026-09-10
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: Angka Penting dan Notasi Ilmiah
 deskripsi: Hasil pengukuran itu perlu jujur soal seberapa teliti alat yang dipakai. Pada pembelajaran ini, kita akan belajar 8 aturan menentukan angka penting, notasi ilmiah, awalan satuan, dan aturan operasi hitung yang paling sering bikin salah.
 durasi: 135

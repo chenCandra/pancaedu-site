@@ -2,6 +2,7 @@
 tanggal: 2026-08-18
 kelas: X
 mapel: Fisika
+bab: "Hakikat Fisika"
 judul: Keselamatan Kerja di Laboratorium
 deskripsi: Bekal wajib sebelum praktikum -- kenalan sama Alat Pelindung Diri (APD), simbol bahaya bahan kimia, tata tertib lab, dan cara menangani kecelakaan ringan.
 durasi: 60

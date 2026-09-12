@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const {
-  kelas, mapel, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug,
+  kelas, mapel, bab, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug,
   youtubeId, latihanUrl, tugasUrl, refleksiUrl,
 } = entry.data;
 
@@ -55,6 +55,30 @@ const urutanSekelas = semuaSesi
 const indexSekarang = urutanSekelas.findIndex((s) => s.id === entry.id);
 const sesiSebelumnya = indexSekarang > 0 ? urutanSekelas[indexSekarang - 1] : undefined;
 const sesiBerikutnya = indexSekarang >= 0 ? urutanSekelas[indexSekarang + 1] : undefined;
+
+// Badge "Langkah X dari Y" -- kalau sesi ini sudah dikelompokkan ke sebuah
+// Bab, badge dipersempit jadi "Bab N · Nama — Langkah X dari Y" HANYA
+// dalam bab itu (supaya urutan panjang lintas-bab, mis. 21 sesi, tidak
+// terasa seperti satu daftar rata tanpa struktur). Nomor Bab & posisi di
+// dalamnya dihitung dari urutan tanggal yang sama seperti urutanSekelas di
+// atas -- BUKAN field manual -- jadi otomatis benar kalau ada sesi baru
+// disisipkan. Sesi yang belum diberi `bab` (mis. Kelas XI/XII yang belum
+// dikelompokkan) fallback ke badge lama, dihitung dari SELURUH sesi
+// Kelas+Mapel seperti sebelumnya.
+let babInfo: { nomor: number; nama: string; posisi: number; total: number } | undefined;
+if (bab) {
+  const urutanBab: string[] = [];
+  for (const s of urutanSekelas) {
+    if (s.data.bab && !urutanBab.includes(s.data.bab)) urutanBab.push(s.data.bab);
+  }
+  const entriesDiBab = urutanSekelas.filter((s) => s.data.bab === bab);
+  babInfo = {
+    nomor: urutanBab.indexOf(bab) + 1,
+    nama: bab,
+    posisi: entriesDiBab.findIndex((s) => s.id === entry.id) + 1,
+    total: entriesDiBab.length,
+  };
+}
 
 // Learning Path -- 6 langkah tetap, status ("tersedia"/"belum tersedia")
 // murni dihitung dari ada-tidaknya data ini, BUKAN progress akun siswa.
@@ -148,8 +172,12 @@ const langkah = [
     <h1>{judul}</h1>
 
     <div class="pd-meta-row">
-      {indexSekarang >= 0 && (
-        <span class="pd-meta pd-meta-langkah">📍 Langkah {indexSekarang + 1} dari {urutanSekelas.length}</span>
+      {babInfo ? (
+        <span class="pd-meta pd-meta-langkah">📘 Bab {babInfo.nomor} · {babInfo.nama} — Langkah {babInfo.posisi} dari {babInfo.total}</span>
+      ) : (
+        indexSekarang >= 0 && (
+          <span class="pd-meta pd-meta-langkah">📍 Langkah {indexSekarang + 1} dari {urutanSekelas.length}</span>
+        )
       )}
       {durasi && <span class="pd-meta">⏱ {durasi} menit</span>}
     </div>

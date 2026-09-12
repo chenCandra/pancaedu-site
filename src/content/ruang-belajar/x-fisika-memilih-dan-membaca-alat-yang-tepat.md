@@ -2,6 +2,7 @@
 tanggal: 2026-09-02
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: Memilih dan Membaca Alat yang Tepat
 deskripsi: Kita tidak bisa hanya mengandalkan perkiraan. Dalam Fisika, kita membutuhkan pengukuran agar hasilnya dapat dinyatakan dengan angka dan satuan yang jelas
 durasi: 90

@@ -2,6 +2,7 @@
 tanggal: 2026-10-13
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Sumber Energi"
 deskripsi: Membedakan sumber energi dari bentuk energi, serta memahami perbedaan sumber energi terbarukan dan tak terbarukan berdasarkan kecepatan pembentukan vs kecepatan pemakaiannya.
 durasi: 90

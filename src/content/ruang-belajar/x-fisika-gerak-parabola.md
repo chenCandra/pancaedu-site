@@ -2,6 +2,7 @@
 tanggal: 2026-11-04
 kelas: X
 mapel: Fisika
+bab: "Gerak Dua Dimensi"
 judul: "Gerak Parabola"
 deskripsi: Belajar gerak dua dimensi yang merupakan gabungan GLB (horizontal) dan GLBB (vertikal) -- rumus posisi, kecepatan, tinggi maksimum, waktu di udara, dan jangkauan. Sesi penutup Bab Gerak Dua Dimensi.
 durasi: 90

@@ -2,6 +2,7 @@
 tanggal: 2026-10-15
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Energi Tak Terbarukan"
 deskripsi: Mengenal tiga jenis energi fosil (minyak bumi, batu bara, gas alam) serta energi nuklir, asal pembentukannya, dan kekurangannya seperti emisi dan pemanasan global.
 durasi: 90

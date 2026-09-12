@@ -2,6 +2,7 @@
 tanggal: 2026-10-17
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Energi Terbarukan"
 deskripsi: Mengenal enam jenis energi terbarukan (surya, angin, air, panas bumi, biomassa, ombak/pasang surut), kelebihan dan tantangannya masing-masing, serta keunggulan geografis Indonesia.
 durasi: 90

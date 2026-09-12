@@ -2,6 +2,7 @@
 tanggal: 2026-09-11
 kelas: X
 mapel: Fisika
+bab: "Besaran dan Satuan"
 judul: "Pengukuran Tunggal & Pengukuran Berulang"
 deskripsi: Belajar cara melaporkan hasil pengukuran yang benar -- dari pengukuran tunggal (x ± setengah skala terkecil) sampai pengukuran berulang, menghitung rata-rata, ketidakpastian, dan cara melaporkan hasil akhirnya. Sesi penutup Bab Pengukuran.
 durasi: 90

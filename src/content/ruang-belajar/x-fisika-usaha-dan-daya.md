@@ -2,6 +2,7 @@
 tanggal: 2026-10-11
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Usaha dan Daya"
 deskripsi: Belajar hubungan gaya, perpindahan, dan usaha (W = F.s.cos theta), teorema usaha-energi, serta daya sebagai kecepatan melakukan usaha (P = W/t).
 durasi: 90

@@ -2,6 +2,7 @@
 tanggal: 2026-10-09
 kelas: X
 mapel: Fisika
+bab: "Energi Alternatif"
 judul: "Perubahan Energi"
 deskripsi: Belajar bagaimana energi berubah dari satu bentuk ke bentuk lain lewat rantai perubahan energi (PLTA, kendaraan, panel surya, senter, gitar), serta konsep efisiensi energi dan alasan tidak ada mesin yang 100% efisien.
 durasi: 90

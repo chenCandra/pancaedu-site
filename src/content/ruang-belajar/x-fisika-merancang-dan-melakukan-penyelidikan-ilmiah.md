@@ -2,6 +2,7 @@
 tanggal: 2026-08-20
 kelas: X
 mapel: Fisika
+bab: "Hakikat Fisika"
 judul: Merancang dan Melakukan Penyelidikan Ilmiah
 deskripsi: Belajar merancang percobaan sungguhan -- menentukan variabel bebas, terikat, dan kontrol, menyusun prosedur kerja, sampai menulis laporan hasil penyelidikan lewat contoh percobaan bandul sederhana.
 durasi: 90

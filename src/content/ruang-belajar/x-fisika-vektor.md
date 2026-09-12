@@ -2,6 +2,7 @@
 tanggal: 2026-11-02
 kelas: X
 mapel: Fisika
+bab: "Gerak Dua Dimensi"
 judul: "Vektor"
 deskripsi: Belajar pengertian vektor, cara menggambar dan menuliskannya, komponen vektor pada sumbu x-y, serta dua cara menjumlahkan vektor -- metode grafis dan metode analitis. Sesi pembuka Bab Gerak Dua Dimensi.
 durasi: 90
