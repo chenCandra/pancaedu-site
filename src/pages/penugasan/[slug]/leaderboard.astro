@@ -449,20 +449,37 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
   .leaderboard-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9375rem;
+    font-size: 1rem;
   }
 
+  /* Rata tengah buat semua kolom KECUALI Nama (kolom ke-2 -- lebih enak
+     dibaca rata kiri, apalagi nama panjang) -- guru minta tabelnya jangan
+     berantakan/rapat kayak daftar biasa. */
   .leaderboard-table th,
   .leaderboard-table td {
-    padding: 0.65rem 1rem;
-    text-align: left;
+    padding: 1rem 1.35rem;
+    text-align: center;
     border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
     white-space: nowrap;
   }
 
+  .leaderboard-table th:last-child,
+  .leaderboard-table td:last-child {
+    border-right: none;
+  }
+
+  .leaderboard-table th:nth-child(2),
+  .leaderboard-table td:nth-child(2) {
+    text-align: left;
+  }
+
   .leaderboard-table thead th {
-    font-family: var(--font-body);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--ink-soft);
     background-color: var(--accent-soft);
   }
@@ -471,10 +488,23 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
     border-bottom: none;
   }
 
+  .leaderboard-table tbody tr:nth-child(even) {
+    background-color: var(--accent-soft);
+  }
+
+  .leaderboard-table tbody tr:hover {
+    background-color: var(--gold-soft);
+  }
+
+  .leaderboard-table td:nth-child(2) {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
   .lb-rank {
+    font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.0625rem;
-    text-align: center;
+    font-size: 1.375rem;
   }
 
   .lb-waktu {
@@ -484,9 +514,11 @@ const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
 
   .skor-badge {
     display: inline-block;
-    padding: 0.2rem 0.65rem;
+    padding: 0.35rem 0.9rem;
     border-radius: 999px;
+    font-family: var(--font-display);
     font-weight: 700;
+    font-size: 1rem;
     font-variant-numeric: tabular-nums;
   }
 
