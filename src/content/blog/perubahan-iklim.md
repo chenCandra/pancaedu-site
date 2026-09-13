@@ -1,41 +1,28 @@
 ---
 title: "Perubahan Iklim"
-description: "Penyebab perubahan iklim (efek rumah kaca yang diperparah aktivitas manusia), dampaknya bagi bumi, dan upaya mitigasi maupun adaptasi yang sedang dilakukan -- termasuk Perjanjian Paris."
+description: "Dampak pemanasan global dalam skala bumi -- kenaikan suhu global, mencairnya es kutub, naiknya permukaan laut, cuaca ekstrem, dan ancaman keanekaragaman hayati."
 category: materi
 mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Perubahan Iklim", "Pemanasan Global", "Fisika Kelas X", "Fase E"]
-simulasi:
-  url: "https://pancaedu.web.id/lab-embeds/perubahan-iklim.html"
-  judul: "Climate Change Simulator"
-  sumber: "Lab Maya PancaEdu"
-  tinggi: 1650
 kuis:
-  - soal: "Efek rumah kaca adalah proses alami di mana..."
-    pilihan: ["Bumi menjadi terlalu dingin karena tidak ada sinar matahari", "Gas rumah kaca di atmosfer menahan sebagian panas matahari, menjaga bumi tetap hangat", "Rumah kaca di kebun menghasilkan gas beracun", "Matahari memancarkan lebih banyak panas dari biasanya"]
-    jawaban: 1
-    penjelasan: "Efek rumah kaca alami itu penting -- tanpanya, bumi akan jauh lebih dingin dan tidak layak huni. Masalahnya muncul saat efek ini DIPERKUAT BERLEBIHAN oleh aktivitas manusia."
-  - soal: "Penyebab utama peningkatan gas rumah kaca akibat aktivitas manusia adalah..."
-    pilihan: ["Pembakaran bahan bakar fosil dan deforestasi", "Terlalu banyak pohon ditanam", "Matahari yang semakin panas", "Gunung berapi yang tidak pernah meletus"]
-    jawaban: 0
-    penjelasan: "Pembakaran bahan bakar fosil (lihat materi Energi Tak Terbarukan) dan deforestasi (penebangan hutan) adalah dua penyebab utama meningkatnya gas rumah kaca akibat manusia."
-  - soal: "Manakah yang TERMASUK dampak perubahan iklim?"
+  - soal: "Manakah yang TERMASUK dampak perubahan iklim skala bumi?"
     pilihan: ["Kenaikan permukaan laut akibat mencairnya es kutub", "Cuaca menjadi selalu stabil dan mudah diprediksi", "Semua spesies makhluk hidup diuntungkan", "Suhu bumi menjadi lebih dingin secara merata"]
     jawaban: 0
     penjelasan: "Mencairnya es di kutub dan gletser menyebabkan kenaikan permukaan laut -- salah satu dampak paling nyata dari perubahan iklim."
-  - soal: "Upaya menanam kembali hutan yang gundul untuk menyerap lebih banyak CO2 disebut..."
-    pilihan: ["Deforestasi", "Reboisasi", "Adaptasi", "Fosilisasi"]
-    jawaban: 1
-    penjelasan: "Reboisasi adalah penanaman kembali hutan, membantu menyerap CO2 dari atmosfer lewat fotosintesis."
-  - soal: "Kesepakatan internasional yang menargetkan kenaikan suhu global di bawah 1,5-2°C disebut..."
-    pilihan: ["Perjanjian Paris (Paris Agreement)", "Konferensi Pengukuran Dunia", "Deklarasi Energi Fosil", "Traktat Kutub Utara"]
+  - soal: "Kenaikan permukaan air laut terutama disebabkan oleh..."
+    pilihan: ["Mencairnya es kutub/gletser dan memuainya air laut karena lebih hangat", "Bertambahnya jumlah air hujan setiap tahun", "Penggunaan air tanah oleh manusia", "Aktivitas pelayaran kapal laut"]
     jawaban: 0
-    penjelasan: "Perjanjian Paris (2015) adalah kesepakatan internasional yang menargetkan menahan kenaikan suhu global di bawah 2°C, idealnya di bawah 1,5°C, dibanding masa pra-industri."
-  - soal: "Mengurangi PENYEBAB perubahan iklim (mis. transisi ke energi terbarukan) disebut upaya..."
-    pilihan: ["Mitigasi", "Adaptasi", "Deforestasi", "Fosilisasi"]
+    penjelasan: "Es yang mencair menambah volume air laut, ditambah air laut yang memuai karena suhu lebih hangat -- keduanya sama-sama menaikkan permukaan laut."
+  - soal: "Kenapa perubahan iklim mengancam keanekaragaman hayati?"
+    pilihan: ["Banyak spesies kesulitan beradaptasi dengan perubahan suhu dan habitat yang cepat", "Semua hewan justru berkembang biak lebih cepat", "Perubahan iklim hanya mempengaruhi tumbuhan, bukan hewan", "Keanekaragaman hayati tidak terkait dengan suhu"]
     jawaban: 0
-    penjelasan: "Mitigasi = mengurangi penyebab perubahan iklim. Adaptasi = menyesuaikan diri dengan dampak yang sudah/akan terjadi -- keduanya sama-sama dibutuhkan."
+    penjelasan: "Perubahan suhu dan habitat yang cepat membuat banyak spesies kesulitan beradaptasi, meningkatkan risiko kepunahan."
+  - soal: "Manakah pernyataan yang paling tepat tentang cuaca ekstrem akibat perubahan iklim?"
+    pilihan: ["Banjir, kekeringan, dan badai besar terjadi lebih sering dan lebih intens", "Cuaca ekstrem tidak ada hubungannya dengan perubahan iklim", "Cuaca ekstrem hanya terjadi di satu benua saja", "Perubahan iklim membuat cuaca selalu lebih tenang"]
+    jawaban: 0
+    penjelasan: "Perubahan iklim membuat kejadian cuaca ekstrem (banjir, kekeringan, gelombang panas, badai) terjadi lebih sering dan lebih intens dari sebelumnya."
 draft: false
 ---
 
@@ -74,25 +61,7 @@ draft: false
 .mtr-table tbody tr:last-child td { border-bottom: none; }
 .mtr-table td em { color: var(--accent); font-style: normal; font-weight: 600; }
 
-.mtr-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-  gap: 1rem;
-}
-
-.mtr-card {
-  background: var(--surface);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  padding: 1.25rem;
-}
-
-.mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
-.mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
-.mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+.mtr-steps { margin-block: 2rem; }
 
 .mtr-step {
   display: grid;
@@ -146,26 +115,13 @@ draft: false
 .mtr-note strong.mtr-right { color: var(--teal); }
 </style>
 
-Ingat materi [Energi Tak Terbarukan](/materi/energi-tak-terbarukan) dan [Permasalahan dan Upaya Pemenuhan Kebutuhan Energi](/materi/permasalahan-dan-upaya-pemenuhan-kebutuhan-energi)? Salah satu dampak yang sempat disinggung di sana adalah pemanasan global. Sekarang kita bahas tuntas isu yang jauh lebih besar dari itu: **Perubahan Iklim** -- penyebabnya, dampaknya bagi bumi, dan upaya nyata yang sedang dilakukan dunia.
+Di materi [Dampak Pemanasan Global dalam Kehidupan Sehari-hari](/materi/dampak-pemanasan-global-kehidupan-sehari-hari), kita sudah lihat dampaknya dalam skala keseharian di sekitar kita. Sekarang kita perbesar sudut pandang ke skala yang JAUH LEBIH BESAR: **Perubahan Iklim** -- bagaimana pemanasan global mengubah kondisi bumi secara keseluruhan.
 
-## 🌡️ Efek Rumah Kaca -- Alami, Tapi Diperparah Manusia
+## 🌍 Dari Pemanasan Global ke Perubahan Iklim
 
-Bumi tetap hangat karena **efek rumah kaca**: gas-gas tertentu di atmosfer (karbon dioksida/CO2, metana, dan lainnya) menahan sebagian panas matahari yang dipantulkan bumi, mirip cara kaca rumah kaca menahan panas di dalamnya. Efek ini **alami dan penting** -- tanpanya, suhu bumi akan jauh lebih dingin dan sulit dihuni.
+**Perubahan iklim** adalah istilah yang lebih luas dari pemanasan global -- ia mencakup SEMUA perubahan pola iklim jangka panjang di bumi (bukan cuma suhu), termasuk perubahan pola angin, curah hujan, dan kondisi laut, sebagai AKIBAT dari suhu bumi yang terus naik.
 
-Masalahnya: sejak revolusi industri, manusia memperbanyak gas rumah kaca secara drastis lewat pembakaran bahan bakar fosil dan deforestasi -- efek rumah kaca jadi jauh lebih kuat dari seharusnya, dan suhu bumi naik lebih cepat dari yang alami.
-
-## 🔥 Penyebab Utama Perubahan Iklim
-
-<div class="mtr-cards">
-<div class="mtr-cards-grid">
-<div class="mtr-card"><span class="mtr-card-icon">⛽</span><h4>Pembakaran Bahan Bakar Fosil</h4><p>Minyak bumi, batu bara, dan gas alam (lihat materi Energi Tak Terbarukan) melepaskan CO2 dalam jumlah besar saat dibakar.</p></div>
-<div class="mtr-card"><span class="mtr-card-icon">🪓</span><h4>Deforestasi</h4><p>Penebangan hutan mengurangi jumlah pohon yang menyerap CO2 lewat fotosintesis -- makin sedikit hutan, makin banyak CO2 tertinggal di udara.</p></div>
-<div class="mtr-card"><span class="mtr-card-icon">🐄</span><h4>Peternakan Skala Besar</h4><p>Menghasilkan gas metana dalam jumlah besar, salah satu gas rumah kaca yang efeknya jauh lebih kuat dari CO2 per satuan massa.</p></div>
-<div class="mtr-card"><span class="mtr-card-icon">🏭</span><h4>Aktivitas Industri</h4><p>Proses produksi (semen, kimia, dst) melepaskan berbagai gas rumah kaca sebagai hasil sampingan.</p></div>
-</div>
-</div>
-
-## ⚠️ Dampak Perubahan Iklim
+## ⚠️ Lima Dampak Perubahan Iklim dalam Skala Bumi
 
 <div class="mtr-steps">
   <div class="mtr-step">
@@ -189,7 +145,7 @@ Masalahnya: sejak revolusi industri, manusia memperbanyak gas rumah kaca secara 
   <div class="mtr-step">
     <span class="mtr-step-num">4</span>
     <div class="mtr-step-body">
-      <p><strong>Cuaca Ekstrem Lebih Sering.</strong> Banjir, kekeringan, gelombang panas, dan badai besar terjadi lebih sering dan lebih intens dari sebelumnya.</p>
+      <p><strong>Cuaca Ekstrem Lebih Sering.</strong> Banjir, kekeringan, gelombang panas, dan badai besar terjadi lebih sering dan lebih intens dari sebelumnya, di berbagai belahan bumi.</p>
     </div>
   </div>
   <div class="mtr-step">
@@ -200,34 +156,11 @@ Masalahnya: sejak revolusi industri, manusia memperbanyak gas rumah kaca secara 
   </div>
 </div>
 
-## ✅ Mitigasi vs Adaptasi
+## 🧊 Kenapa Pulau Kecil dan Daerah Pesisir Paling Terancam?
 
-Ada dua jenis upaya menghadapi perubahan iklim, dan keduanya sama-sama dibutuhkan:
-
-<div class="mtr-table-wrap">
-<div class="mtr-table-scroll">
-<table class="mtr-table">
-<thead>
-<tr><th>Jenis Upaya</th><th>Artinya</th><th>Contoh</th></tr>
-</thead>
-<tbody>
-<tr><td>Mitigasi</td><td>Mengurangi PENYEBAB perubahan iklim</td><td>Transisi ke energi terbarukan, efisiensi energi, reboisasi, mengurangi limbah</td></tr>
-<tr><td>Adaptasi</td><td>Menyesuaikan diri dengan DAMPAK yang sudah/akan terjadi</td><td>Infrastruktur tahan banjir, teknologi pertanian tahan kekeringan, tanggul pesisir</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-
-Salah satu kesepakatan mitigasi terbesar di dunia adalah **Perjanjian Paris (Paris Agreement, 2015)** -- disepakati hampir semua negara di dunia, menargetkan menahan kenaikan suhu global di bawah 2°C dibanding masa pra-industri, idealnya di bawah 1,5°C.
-
-Coba jadi "pembuat kebijakan iklim" sendiri di simulasi bawah ini -- atur upaya pengurangan emisi, energi terbarukan, dan reboisasi, lalu lihat proyeksi kenaikan suhunya. Bisakah kamu mencapai target 1,5°C?
+Kenaikan permukaan laut tidak terasa sama di semua tempat. Negara kepulauan dan kota-kota pesisir (termasuk banyak wilayah di Indonesia) menghadapi risiko lebih besar karena sebagian daratannya hanya sedikit di atas permukaan laut -- kenaikan beberapa sentimeter saja bisa berarti banjir rob yang lebih sering dan lebih parah.
 
 ## ⚠️ Kesalahan Umum
-
-<div class="mtr-note">
-<strong class="mtr-wrong">❌ "Efek rumah kaca itu selalu buruk, seharusnya dihilangkan sama sekali."</strong><br>
-Tidak tepat. <strong class="mtr-right">Efek rumah kaca alami itu PENTING</strong> -- yang jadi masalah adalah efeknya yang DIPERKUAT BERLEBIHAN oleh aktivitas manusia, bukan efek rumah kacanya sendiri.
-</div>
 
 <div class="mtr-note">
 <strong class="mtr-wrong">❌ "Perubahan iklim cuma soal cuaca jadi lebih panas."</strong><br>
@@ -238,12 +171,12 @@ Terlalu sempit. <strong class="mtr-right">Perubahan iklim mencakup berbagai damp
 
 Sebuah kota pesisir menghadapi ancaman kenaikan permukaan laut akibat perubahan iklim.
 
-1. Sebutkan satu contoh upaya mitigasi dan satu contoh upaya adaptasi yang bisa dilakukan kota itu.
-2. Menurutmu, kenapa kota itu tetap perlu melakukan KEDUANYA (bukan cuma salah satu)?
+1. Dari lima dampak yang dibahas di atas, mana yang paling langsung mengancam kota pesisir itu?
+2. Menurutmu, kenapa dampak perubahan iklim dirasakan TIDAK SAMA RATA oleh setiap daerah di bumi?
 
-Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
+Coba diskusikan jawabanmu dengan teman sekelas.
 
 <div class="mtr-cta">
-<p>Setelah tuntas membahas Perubahan Iklim, sekarang kita masuk ke bab baru: Gerak Dua Dimensi -- dimulai dari dasar-dasar gerak lurus.</p>
-<a href="/materi/gerak-lurus-beraturan" class="btn btn-primary">🚗 Lanjut ke Gerak Lurus Beraturan (GLB) →</a>
+<p>Dampaknya sudah jelas skalanya sangat besar. Untungnya, dunia tidak diam saja -- selanjutnya kita bahas upaya nyata yang sudah dilakukan di tingkat global dan negara untuk menghadapinya.</p>
+<a href="/materi/upaya-global-dan-nasional-pemanasan-global" class="btn btn-primary">🤝 Lanjut ke Upaya Global dan Nasional →</a>
 </div>

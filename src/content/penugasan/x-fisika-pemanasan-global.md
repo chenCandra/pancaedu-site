@@ -2,7 +2,7 @@
 judul: "Pemanasan Global"
 kelas: X
 mapel: Fisika
-deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pengertian pemanasan global, jenis-jenis gas rumah kaca, faktor penyebabnya, dan upaya pencegahan yang sudah dilakukan manusia."
+deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pengertian pemanasan global dan mekanisme efek rumah kaca."
 materiSlug: pemanasan-global
 pinHash: 6a3f375c056b7383cbf62e779030c7606d72bd74c7863097a25cbb0e8d6492fc
 pinBerlakuHingga: 2027-03-11
@@ -20,133 +20,132 @@ soal:
     skor: 1
   - tipe: pilihan-ganda
     id: soal-2
-    soal: "Gas rumah kaca yang PALING BANYAK dihasilkan manusia dari pembakaran bahan bakar fosil adalah..."
+    soal: "Tanpa efek rumah kaca sama sekali, suhu rata-rata bumi akan..."
     pilihan:
-      - { id: a, teks: "Ozon (O3)" }
-      - { id: b, teks: "Karbon dioksida (CO2)" }
-      - { id: c, teks: "Uap air (H2O)" }
-      - { id: d, teks: "Gas fluorinasi" }
-    jawabanBenarId: b
-    penjelasan: "Karbon dioksida (CO2) dari pembakaran bahan bakar fosil adalah gas rumah kaca yang paling banyak dihasilkan aktivitas manusia."
+      - { id: a, teks: "Sekitar -18°C, terlalu dingin untuk dihuni" }
+      - { id: b, teks: "Tetap sama seperti sekarang" }
+      - { id: c, teks: "Jauh lebih panas dari sekarang" }
+      - { id: d, teks: "Berubah acak tanpa pola" }
+    jawabanBenarId: a
+    penjelasan: "Efek rumah kaca alami menjaga bumi tetap hangat -- tanpanya suhu rata-rata bumi diperkirakan sekitar -18°C."
     skor: 1
   - tipe: pilihan-ganda
     id: soal-3
-    soal: "Perjanjian internasional PERTAMA (sebelum Perjanjian Paris) yang mengikat negara maju mengurangi emisi gas rumah kaca adalah..."
+    soal: "Sejak kapan pemanasan global mulai dianggap sebagai masalah serius?"
     pilihan:
-      - { id: a, teks: "Protokol Kyoto (1997)" }
-      - { id: b, teks: "Konferensi Rio (1992)" }
-      - { id: c, teks: "Traktat Antartika" }
-      - { id: d, teks: "Deklarasi Stockholm" }
+      - { id: a, teks: "Sejak revolusi industri, saat pembakaran bahan bakar fosil meningkat drastis" }
+      - { id: b, teks: "Sejak zaman purba, sudah ada dari dulu" }
+      - { id: c, teks: "Baru mulai 5 tahun terakhir" }
+      - { id: d, teks: "Sejak manusia pertama menemukan api" }
     jawabanBenarId: a
-    penjelasan: "Protokol Kyoto (1997) adalah pendahulu Perjanjian Paris -- perjanjian internasional pertama yang mengikat negara maju secara hukum untuk mengurangi emisi gas rumah kaca."
+    penjelasan: "Sejak revolusi industri, manusia mulai membakar bahan bakar fosil dalam skala besar, memperkuat efek rumah kaca jauh melebihi kondisi alaminya."
     skor: 1
   - tipe: pilihan-ganda
     id: soal-4
-    soal: "Manakah upaya pencegahan pemanasan global di tingkat NEGARA/INDUSTRI, bukan individu?"
+    soal: "Apa yang sebenarnya jadi masalah dari efek rumah kaca?"
     pilihan:
-      - { id: a, teks: "Mematikan lampu yang tidak dipakai" }
-      - { id: b, teks: "Transisi pembangkit listrik ke energi terbarukan (PLTS/PLTB)" }
-      - { id: c, teks: "Membawa tas belanja sendiri" }
-      - { id: d, teks: "Mengurangi konsumsi daging" }
-    jawabanBenarId: b
-    penjelasan: "Transisi pembangkit listrik skala besar ke energi terbarukan adalah upaya di tingkat negara/industri -- tiga pilihan lain adalah aksi individu."
+      - { id: a, teks: "Efeknya diperkuat berlebihan oleh gas rumah kaca tambahan dari aktivitas manusia" }
+      - { id: b, teks: "Efek rumah kaca itu sendiri, yang seharusnya tidak pernah ada" }
+      - { id: c, teks: "Matahari yang tiba-tiba memancarkan lebih banyak panas" }
+      - { id: d, teks: "Bumi yang jaraknya semakin dekat dengan matahari" }
+    jawabanBenarId: a
+    penjelasan: "Efek rumah kaca alami itu penting -- masalahnya adalah manusia memperkuatnya secara berlebihan."
     skor: 1
   - tipe: benar-salah
     id: soal-5
-    soal: "Efek rumah kaca seharusnya dihilangkan sama sekali karena selalu menyebabkan pemanasan global."
+    soal: "Efek rumah kaca seharusnya dihilangkan sama sekali karena selalu buruk bagi bumi."
     jawabanBenar: false
-    penjelasan: "Salah -- efek rumah kaca alami itu penting, tanpanya bumi akan sekitar -18°C. Masalahnya adalah efek ini DIPERKUAT BERLEBIHAN oleh gas rumah kaca hasil aktivitas manusia."
+    penjelasan: "Salah -- efek rumah kaca alami itu penting untuk menjaga bumi tetap hangat. Yang jadi masalah adalah penguatannya yang berlebihan."
     skor: 1
   - tipe: benar-salah
     id: soal-6
-    soal: "Metana (CH4) banyak dihasilkan dari peternakan dan sampah organik, dan daya serap panasnya lebih kuat dari CO2 per satuan massa."
+    soal: "Efek rumah kaca alami membuat bumi tetap hangat dan penting bagi kehidupan."
     jawabanBenar: true
-    penjelasan: "Benar -- metana berasal dari sistem pencernaan hewan ternak dan pembusukan sampah organik, dengan daya perangkap panas yang jauh lebih kuat dari CO2."
+    penjelasan: "Benar -- tanpa efek rumah kaca alami, bumi akan sekitar -18°C dan sulit dihuni."
     skor: 1
   - tipe: benar-salah
     id: soal-7
-    soal: "Sampai saat ini belum ada upaya nyata apa pun yang dilakukan manusia untuk mencegah pemanasan global."
+    soal: "Pemanasan global sama artinya dengan cuaca panas yang terjadi di satu daerah pada satu hari tertentu."
     jawabanBenar: false
-    penjelasan: "Salah -- sudah ada upaya nyata bertahun-tahun, dari Protokol Kyoto (1997) dan Perjanjian Paris (2015) di tingkat internasional, sampai transisi energi terbarukan di banyak negara."
+    penjelasan: "Salah -- pemanasan global adalah tren suhu jangka panjang (puluhan tahun) yang diukur secara global, bukan cuaca sesaat di satu tempat."
     skor: 1
   - tipe: isian-singkat
     id: soal-8
-    soal: "Kesepakatan internasional tahun 2015 yang menargetkan kenaikan suhu global di bawah 1,5-2°C disebut apa?"
-    angka: false
-    toleransi: 0
-    jawabanBenar: ["Perjanjian Paris"]
-    penjelasan: "Perjanjian Paris (2015) adalah kesepakatan internasional yang melibatkan hampir semua negara di dunia untuk menahan kenaikan suhu global."
+    soal: "Berapa perkiraan suhu rata-rata bumi (dalam °C) jika tidak ada efek rumah kaca sama sekali?"
+    angka: true
+    toleransi: 1
+    jawabanBenar: ["-18"]
+    penjelasan: "Tanpa efek rumah kaca, suhu rata-rata bumi diperkirakan sekitar -18°C."
     skor: 1
   - tipe: isian-singkat
     id: soal-9
-    soal: "Protokol Kyoto, perjanjian pendahulu Perjanjian Paris, disepakati pada tahun berapa?"
-    angka: true
+    soal: "Sejak peristiwa besar apa manusia mulai memperkuat efek rumah kaca secara berlebihan? (2 kata)"
+    angka: false
     toleransi: 0
-    jawabanBenar: ["1997"]
-    penjelasan: "Protokol Kyoto disepakati tahun 1997, menjadi perjanjian internasional pertama yang mengikat negara maju mengurangi emisi."
+    jawabanBenar: ["Revolusi Industri"]
+    penjelasan: "Sejak Revolusi Industri, pembakaran bahan bakar fosil meningkat drastis, memperkuat efek rumah kaca melebihi kondisi alaminya."
     skor: 1
   - tipe: isian-singkat
     id: soal-10
-    soal: "Gas rumah kaca yang paling banyak dihasilkan dari peternakan dan sampah organik disebut apa? (satu kata)"
+    soal: "Istilah untuk gas-gas di atmosfer yang menahan panas matahari disebut apa? (3 kata)"
     angka: false
     toleransi: 0
-    jawabanBenar: ["Metana"]
-    penjelasan: "Metana (CH4) adalah gas rumah kaca yang banyak dihasilkan dari sistem pencernaan hewan ternak dan pembusukan sampah organik."
+    jawabanBenar: ["Gas Rumah Kaca"]
+    penjelasan: "Gas rumah kaca adalah gas-gas di atmosfer (CO2, metana, dll) yang menahan sebagian panas matahari yang dipantulkan bumi."
     skor: 1
   - tipe: menjodohkan
     id: soal-11
-    soal: "Jodohkan gas rumah kaca dengan sumber utamanya."
+    soal: "Jodohkan istilah dengan penjelasannya."
     pasangan:
-      - { id: p1, kiri: "Karbon Dioksida (CO2)", kanan: "Pembakaran bahan bakar fosil dan deforestasi" }
-      - { id: p2, kiri: "Metana (CH4)", kanan: "Peternakan dan pengolahan sampah organik" }
-      - { id: p3, kiri: "Nitrogen Oksida (N2O)", kanan: "Pupuk kimia pertanian" }
-      - { id: p4, kiri: "Gas Fluorinasi", kanan: "Pendingin ruangan (AC/kulkas)" }
-    penjelasan: "Setiap gas rumah kaca punya sumber utama yang berbeda-beda dari aktivitas manusia."
+      - { id: p1, kiri: "Efek Rumah Kaca Alami", kanan: "Menjaga suhu bumi tetap hangat dan layak huni" }
+      - { id: p2, kiri: "Efek Rumah Kaca Diperkuat", kanan: "Menyebabkan pemanasan global" }
+      - { id: p3, kiri: "Pemanasan Global", kanan: "Kenaikan suhu bumi dalam jangka panjang" }
+    penjelasan: "Ketiga istilah ini saling terkait tapi punya makna berbeda -- penting dibedakan sejak awal."
     skor: 1
   - tipe: menjodohkan
     id: soal-12
-    soal: "Jodohkan tingkatan upaya pencegahan pemanasan global dengan contohnya."
+    soal: "Jodohkan istilah dengan durasi/cakupannya."
     pasangan:
-      - { id: p1, kiri: "Internasional", kanan: "Perjanjian Paris" }
-      - { id: p2, kiri: "Negara & Industri", kanan: "Transisi ke PLTS/PLTB" }
-      - { id: p3, kiri: "Individu", kanan: "Menghemat listrik di rumah" }
-    penjelasan: "Upaya pencegahan pemanasan global berjalan di berbagai tingkatan, dari perjanjian antarnegara sampai kebiasaan sehari-hari."
+      - { id: p1, kiri: "Cuaca", kanan: "Kondisi jangka pendek di satu tempat" }
+      - { id: p2, kiri: "Iklim", kanan: "Pola jangka panjang di suatu wilayah" }
+      - { id: p3, kiri: "Pemanasan Global", kanan: "Tren suhu jangka panjang seluruh bumi" }
+    penjelasan: "Cuaca berubah harian, iklim adalah pola bertahun-tahun di suatu wilayah, dan pemanasan global adalah tren global yang mencakup seluruh bumi."
     skor: 1
   - tipe: menyusun-urutan
     id: soal-13
-    soal: "Susun urutan peristiwa berikut terkait pemanasan global, dari yang paling awal."
+    soal: "Susun mekanisme efek rumah kaca berikut dari tahap paling awal."
     item:
-      - { id: i1, teks: "Revolusi industri memicu pembakaran bahan bakar fosil secara besar-besaran" }
-      - { id: i2, teks: "Konsentrasi gas rumah kaca di atmosfer meningkat drastis" }
-      - { id: i3, teks: "Protokol Kyoto disepakati (1997)" }
-      - { id: i4, teks: "Perjanjian Paris disepakati (2015)" }
-    penjelasan: "Urutan ini menunjukkan bagaimana pemanasan global bermula dari revolusi industri, sampai akhirnya direspons lewat perjanjian-perjanjian internasional."
+      - { id: i1, teks: "Matahari memancarkan panas ke bumi" }
+      - { id: i2, teks: "Sebagian panas dipantulkan kembali ke arah luar angkasa" }
+      - { id: i3, teks: "Gas rumah kaca di atmosfer menahan sebagian panas pantulan itu" }
+      - { id: i4, teks: "Panas yang tertahan menjaga suhu bumi tetap hangat" }
+    penjelasan: "Ini adalah mekanisme dasar efek rumah kaca -- alami dan penting, sebelum diperparah oleh gas rumah kaca tambahan dari aktivitas manusia."
     skor: 1
   - tipe: drag-drop
     id: soal-14
-    soal: "Kelompokkan gas berikut sebagai Gas Rumah Kaca atau Bukan Gas Rumah Kaca."
+    soal: "Kelompokkan pernyataan berikut sebagai Efek Rumah Kaca Alami atau Penguatan Berlebihan (masalah)."
     kategori:
-      - { id: grk, label: "Gas Rumah Kaca" }
-      - { id: bukan, label: "Bukan Gas Rumah Kaca" }
+      - { id: alami, label: "Alami (Baik)" }
+      - { id: berlebihan, label: "Penguatan Berlebihan (Masalah)" }
     item:
-      - { id: t1, teks: "Karbon Dioksida (CO2)", kategoriBenarId: grk }
-      - { id: t2, teks: "Metana (CH4)", kategoriBenarId: grk }
-      - { id: t3, teks: "Nitrogen (N2)", kategoriBenarId: bukan }
-      - { id: t4, teks: "Oksigen (O2)", kategoriBenarId: bukan }
-    penjelasan: "CO2 dan metana adalah gas rumah kaca. Nitrogen dan oksigen adalah gas terbanyak di atmosfer bumi, tapi bukan gas rumah kaca -- keduanya tidak menahan panas matahari seperti CO2/metana."
+      - { id: t1, teks: "Menjaga suhu bumi tetap sekitar 15°C, layak huni", kategoriBenarId: alami }
+      - { id: t2, teks: "Sudah ada sebelum manusia ada di bumi", kategoriBenarId: alami }
+      - { id: t3, teks: "Gas rumah kaca tambahan dari pembakaran bahan bakar fosil sejak revolusi industri", kategoriBenarId: berlebihan }
+      - { id: t4, teks: "Menyebabkan suhu bumi naik lebih cepat dari kondisi normal", kategoriBenarId: berlebihan }
+    penjelasan: "Efek rumah kaca alami itu baik dan penting. Masalahnya muncul saat manusia menambah gas rumah kaca secara berlebihan sejak revolusi industri."
     skor: 1
   - tipe: drag-drop
     id: soal-15
-    soal: "Kelompokkan upaya pencegahan pemanasan global berikut sebagai tingkat Negara/Industri atau tingkat Individu."
+    soal: "Kelompokkan pernyataan berikut sebagai Cuaca atau Iklim/Pemanasan Global."
     kategori:
-      - { id: negara, label: "Negara/Industri" }
-      - { id: individu, label: "Individu" }
+      - { id: cuaca, label: "Cuaca" }
+      - { id: iklim, label: "Iklim/Pemanasan Global" }
     item:
-      - { id: t1, teks: "Transisi pembangkit listrik ke energi terbarukan", kategoriBenarId: negara }
-      - { id: t2, teks: "Aturan standar emisi kendaraan", kategoriBenarId: negara }
-      - { id: t3, teks: "Mengurangi konsumsi daging", kategoriBenarId: individu }
-      - { id: t4, teks: "Memilah sampah dari rumah", kategoriBenarId: individu }
-    penjelasan: "Upaya negara/industri berskala besar dan butuh kebijakan (transisi energi, regulasi emisi), sementara upaya individu adalah kebiasaan sehari-hari yang bisa langsung dijalankan siapa saja."
+      - { id: t1, teks: "Hari ini hujan deras di kota X", kategoriBenarId: cuaca }
+      - { id: t2, teks: "Besok diperkirakan cerah dan panas", kategoriBenarId: cuaca }
+      - { id: t3, teks: "Suhu rata-rata bumi naik dalam 100 tahun terakhir", kategoriBenarId: iklim }
+      - { id: t4, teks: "Tren kenaikan suhu global yang diukur selama puluhan tahun", kategoriBenarId: iklim }
+    penjelasan: "Cuaca adalah kondisi jangka pendek (harian), sementara iklim dan pemanasan global adalah pola/tren jangka panjang."
     skor: 1
 draft: false
 ---

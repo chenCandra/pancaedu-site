@@ -1,5 +1,5 @@
 ---
-tanggal: 2026-10-29
+tanggal: 2026-11-08
 kelas: X
 mapel: Fisika
 bab: "Gerak Dua Dimensi"
