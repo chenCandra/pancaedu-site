@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gerbang Logika</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .gate-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .gate-btn { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); border-radius: 12px; padding: 10px 4px; font-size: 0.85rem; font-weight: 800; cursor: pointer; text-align: center; }
+  .gate-btn.active { color: var(--bg-dark); background: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+  .scene { display: flex; align-items: center; justify-content: center; gap: 20px; background: #090d16; border-radius: 12px; padding: 20px; flex-wrap: wrap; }
+  .switch-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .switch-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; }
+  .toggle-btn { width: 60px; height: 60px; border-radius: 14px; border: 2px solid var(--card-border); background: #1e293b; font-size: 1.4rem; font-weight: 900; cursor: pointer; color: var(--text-muted); }
+  .toggle-btn.high { background: rgba(56,189,248,0.18); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+  .gate-box { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .gate-shape { width: 84px; height: 60px; border-radius: 14px; border: 2px solid var(--card-border); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; background: #1e293b; color: var(--text-muted); }
+
+  .output-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .led { width: 60px; height: 60px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; transition: all 0.2s; }
+  .led.high { background: #facc15; box-shadow: 0 0 26px #facc15; color: #422006; }
+
+  .truth-table-wrap { overflow-x: auto; }
+  table.truth { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.truth th, table.truth td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--card-border); font-family: 'Courier New', monospace; }
+  table.truth thead th { color: var(--text-muted); font-family: var(--font-family); font-weight: 700; }
+  table.truth tr.active-row td { background: rgba(56,189,248,0.15); color: var(--accent-cyan); font-weight: 900; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔢</span><h1>Laboratorium Maya: Gerbang Logika</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="gate-row" id="gateRow1"></div>
+    <div class="gate-row" id="gateRow2"></div>
+  </div>
+
+  <div class="card">
+    <div class="scene">
+      <div class="switch-col">
+        <span class="switch-label">Input A</span>
+        <button class="toggle-btn" id="btnA">0</button>
+      </div>
+      <div class="switch-col" id="colB">
+        <span class="switch-label">Input B</span>
+        <button class="toggle-btn" id="btnB">0</button>
+      </div>
+      <div class="gate-box">
+        <span class="switch-label">Gerbang</span>
+        <div class="gate-shape" id="gateShape">AND</div>
+      </div>
+      <div class="output-col">
+        <span class="switch-label">Output</span>
+        <div class="led" id="ledOutput">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="truth-table-wrap">
+      <table class="truth" id="truthTable"></table>
+    </div>
+  </div>
+
+  <div class="theory-card" id="theoryCard"></div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Gerbang XOR akan menghasilkan output 1 kalau...</span>
+    <div class="quiz-opts" id="glQuizOpts"></div>
+    <div class="quiz-fb" id="glQuizFb"></div>
+  </div>
+
+  <script>
+    const gates = {
+      AND: { inputs: 2, fn: (a, b) => a && b, theory: 'Gerbang AND menghasilkan output 1 HANYA JIKA SEMUA input bernilai 1. Kalau ada satu saja input yang 0, outputnya pasti 0.' },
+      OR: { inputs: 2, fn: (a, b) => a || b, theory: 'Gerbang OR menghasilkan output 1 kalau ADA MINIMAL SATU input yang bernilai 1. Outputnya cuma 0 kalau SEMUA input 0.' },
+      NOT: { inputs: 1, fn: (a) => a ? 0 : 1, theory: 'Gerbang NOT (inverter) cuma punya SATU input, dan fungsinya membalik nilainya: 0 jadi 1, 1 jadi 0.' },
+      NAND: { inputs: 2, fn: (a, b) => (a && b) ? 0 : 1, theory: 'NAND = NOT + AND, kebalikan dari AND. Outputnya 0 HANYA JIKA semua input 1, selain itu outputnya 1.' },
+      NOR: { inputs: 2, fn: (a, b) => (a || b) ? 0 : 1, theory: 'NOR = NOT + OR, kebalikan dari OR. Outputnya 1 HANYA JIKA semua input 0, selain itu outputnya 0.' },
+      XOR: { inputs: 2, fn: (a, b) => (a !== b) ? 1 : 0, theory: 'XOR (Exclusive OR) menghasilkan output 1 kalau kedua inputnya BERBEDA (satu 0, satu 1). Kalau kedua input SAMA (sama-sama 0 atau sama-sama 1), outputnya 0.' },
+    };
+    let activeGate = 'AND';
+    let inputA = 0, inputB = 0;
+
+    const gateNames = Object.keys(gates);
+    const gateRow1 = document.getElementById('gateRow1');
+    const gateRow2 = document.getElementById('gateRow2');
+    gateNames.forEach((name, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'gate-btn' + (name === activeGate ? ' active' : '');
+      btn.textContent = name;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gate-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeGate = name;
+        update();
+      });
+      (i < 3 ? gateRow1 : gateRow2).appendChild(btn);
+    });
+
+    const btnA = document.getElementById('btnA');
+    const btnB = document.getElementById('btnB');
+    const colB = document.getElementById('colB');
+    const gateShape = document.getElementById('gateShape');
+    const ledOutput = document.getElementById('ledOutput');
+    const truthTable = document.getElementById('truthTable');
+    const theoryCard = document.getElementById('theoryCard');
+
+    btnA.addEventListener('click', () => { inputA = inputA ? 0 : 1; update(); });
+    btnB.addEventListener('click', () => { inputB = inputB ? 0 : 1; update(); });
+
+    function update() {
+      const gate = gates[activeGate];
+      colB.style.display = gate.inputs === 1 ? 'none' : 'flex';
+      btnA.textContent = inputA; btnA.classList.toggle('high', !!inputA);
+      btnB.textContent = inputB; btnB.classList.toggle('high', !!inputB);
+      gateShape.textContent = activeGate;
+
+      const output = gate.inputs === 1 ? gate.fn(inputA) : gate.fn(inputA, inputB);
+      ledOutput.textContent = output;
+      ledOutput.classList.toggle('high', !!output);
+
+      // Tabel kebenaran
+      truthTable.innerHTML = '';
+      const thead = document.createElement('thead');
+      thead.innerHTML = gate.inputs === 1 ? '<tr><th>A</th><th>Output</th></tr>' : '<tr><th>A</th><th>B</th><th>Output</th></tr>';
+      truthTable.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      const combos = gate.inputs === 1 ? [[0], [1]] : [[0, 0], [0, 1], [1, 0], [1, 1]];
+      combos.forEach((combo) => {
+        const out = gate.inputs === 1 ? gate.fn(combo[0]) : gate.fn(combo[0], combo[1]);
+        const isActive = gate.inputs === 1 ? combo[0] === inputA : (combo[0] === inputA && combo[1] === inputB);
+        const tr = document.createElement('tr');
+        if (isActive) tr.className = 'active-row';
+        tr.innerHTML = gate.inputs === 1 ? `<td>${combo[0]}</td><td>${out}</td>` : `<td>${combo[0]}</td><td>${combo[1]}</td><td>${out}</td>`;
+        tbody.appendChild(tr);
+      });
+      truthTable.appendChild(tbody);
+
+      theoryCard.innerHTML = `<div class="theory-title">📌 Gerbang ${activeGate}</div>${gate.theory}`;
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('glQuizOpts'), [
+      'Kedua inputnya BERBEDA (satu 0, satu 1)', 'Kedua inputnya SAMA (sama-sama 0 atau sama-sama 1)', 'Semua input bernilai 1', 'Semua input bernilai 0'
+    ], 0, (correct) => {
+      const fb = document.getElementById('glQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'XOR ("exclusive or") cuma bernilai 1 kalau kedua inputnya BERBEDA. Coba pilih tab XOR di simulasi atas, lalu coba semua kombinasi A dan B untuk membuktikannya sendiri lewat tabel kebenarannya.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>
