@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Efek Fotolistrik</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .material-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .material-btn { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); border-radius: 12px; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; cursor: pointer; text-align: center; }
+  .material-btn small { display: block; font-weight: 600; opacity: 0.75; font-size: 0.68rem; margin-top: 2px; }
+  .material-btn.active { color: var(--bg-dark); background: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+  .scene { position: relative; height: 190px; background: #090d16; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .plate { position: absolute; right: 34%; top: 14px; bottom: 14px; width: 16px; border-radius: 4px; background: linear-gradient(180deg, #64748b, #334155); box-shadow: inset -3px 0 6px rgba(0,0,0,0.4); }
+  .beam { position: absolute; left: 8%; top: 50%; width: 40%; height: 4px; transform: translateY(-50%); border-radius: 3px; }
+  .photon { position: absolute; top: 50%; width: 8px; height: 8px; border-radius: 50%; transform: translateY(-50%); animation: flyPhoton 1.1s linear infinite; }
+  @keyframes flyPhoton { from { left: 8%; opacity: 1; } to { left: 65%; opacity: 0.2; } }
+  .electron { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8; opacity: 0; }
+  .electron.released { animation: flyElectron 1.3s ease-out infinite; }
+  @keyframes flyElectron { 0% { transform: translate(0,0); opacity: 1; } 100% { transform: translate(70px, var(--dy, -20px)); opacity: 0; } }
+  .scene-label { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-size: 0.72rem; color: var(--text-muted); }
+  .status-banner { text-align: center; font-size: 0.95rem; font-weight: 800; padding: 10px; border-radius: 10px; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.05rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">💡</span><h1>Laboratorium Maya: Efek Fotolistrik</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="material-row" id="materialRow"></div>
+  </div>
+
+  <div class="card">
+    <div class="scene" id="scene">
+      <div class="beam" id="beam"></div>
+      <div class="plate"></div>
+      <div id="photonLayer"></div>
+      <div id="electronLayer"></div>
+      <div class="scene-label">Cahaya menembak lempeng logam dari kiri</div>
+    </div>
+    <div class="status-banner" id="statusBanner"></div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <div class="slider-label"><span>Panjang Gelombang (λ)</span><b id="lambdaLabel">500 nm</b></div>
+      <input type="range" id="lambdaSlider" min="100" max="800" step="5" value="500">
+      <p style="font-size:0.72rem;color:var(--text-muted);">💡 Geser ke kiri = panjang gelombang kecil (energi foton besar); ke kanan = panjang gelombang besar (energi foton kecil)</p>
+    </div>
+    <div class="slider-group">
+      <div class="slider-label"><span>Intensitas Cahaya</span><b id="intensityLabel">Sedang</b></div>
+      <input type="range" id="intensitySlider" min="1" max="5" step="1" value="3">
+      <p style="font-size:0.72rem;color:var(--text-muted);">💡 Menaikkan intensitas cuma menambah JUMLAH foton/elektron per detik, TIDAK menambah energi tiap foton</p>
+    </div>
+
+    <div class="data-panel">
+      <div class="data-chip"><div class="k">Energi Foton (E)</div><div class="v" id="chipEnergy">2,48 eV</div></div>
+      <div class="data-chip"><div class="k">Fungsi Kerja (W₀)</div><div class="v" id="chipWork">2,30 eV</div></div>
+      <div class="data-chip"><div class="k">λ Ambang</div><div class="v" id="chipThreshold">539 nm</div></div>
+      <div class="data-chip"><div class="k">Energi Kinetik Maks</div><div class="v" id="chipKE">0,18 eV</div></div>
+    </div>
+    <div class="formula-box" id="formulaBox"></div>
+  </div>
+
+  <div class="theory-card" id="theoryCard">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Setiap foton cahaya membawa energi <span class="math-num">E = hc/λ</span> (h = konstanta Planck, c = kecepatan cahaya). Elektron baru bisa terlepas dari logam kalau energi SATU foton (bukan akumulasi banyak foton) lebih besar dari fungsi kerja logam (W₀) -- makanya cahaya dengan panjang gelombang di atas λ ambang TIDAK PERNAH bisa melepaskan elektron, walau intensitasnya dibesarkan sebesar apa pun.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kalau lempeng logam disinari cahaya dengan frekuensi di BAWAH frekuensi ambang, lalu intensitas cahayanya dibesarkan terus-menerus, apa yang terjadi?</span>
+    <div class="quiz-opts" id="peQuizOpts"></div>
+    <div class="quiz-fb" id="peQuizFb"></div>
+  </div>
+
+  <script>
+    const H_EV = 4.136e-15; // konstanta Planck dalam eV.s
+    const C = 3e8;
+    const HC_EVNM = 1240; // pendekatan hc dalam eV.nm, umum dipakai di soal SMA
+
+    const materials = [
+      { key: 'cesium', name: 'Cesium', w0: 1.9 },
+      { key: 'natrium', name: 'Natrium', w0: 2.3 },
+      { key: 'seng', name: 'Seng', w0: 4.3 },
+      { key: 'platina', name: 'Platina', w0: 6.35 },
+    ];
+    let activeMaterial = materials[1];
+
+    const materialRow = document.getElementById('materialRow');
+    materials.forEach((m, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'material-btn' + (i === 1 ? ' active' : '');
+      btn.innerHTML = `${m.name}<small>W₀=${m.w0} eV</small>`;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.material-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeMaterial = m;
+        update();
+      });
+      materialRow.appendChild(btn);
+    });
+
+    const lambdaSlider = document.getElementById('lambdaSlider');
+    const intensitySlider = document.getElementById('intensitySlider');
+    const lambdaLabel = document.getElementById('lambdaLabel');
+    const intensityLabel = document.getElementById('intensityLabel');
+    const chipEnergy = document.getElementById('chipEnergy');
+    const chipWork = document.getElementById('chipWork');
+    const chipThreshold = document.getElementById('chipThreshold');
+    const chipKE = document.getElementById('chipKE');
+    const formulaBox = document.getElementById('formulaBox');
+    const statusBanner = document.getElementById('statusBanner');
+    const beam = document.getElementById('beam');
+    const photonLayer = document.getElementById('photonLayer');
+    const electronLayer = document.getElementById('electronLayer');
+
+    function wavelengthColor(nm) {
+      if (nm < 380) return '#a78bfa'; // UV -- digambarkan ungu, meski sebenarnya tak kasat mata
+      if (nm < 450) return '#7c3aed';
+      if (nm < 490) return '#3b82f6';
+      if (nm < 510) return '#22d3ee';
+      if (nm < 565) return '#22c55e';
+      if (nm < 590) return '#eab308';
+      if (nm < 625) return '#f97316';
+      if (nm <= 700) return '#ef4444';
+      return '#f43f5e'; // inframerah -- digambarkan merah tua
+    }
+
+    function fmt(n, d = 2) { return n.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+
+    function renderPhotons(intensity, color) {
+      photonLayer.innerHTML = '';
+      const count = intensity; // 1-5 foton berjalan bersamaan, merepresentasikan intensitas
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'photon';
+        p.style.background = color;
+        p.style.boxShadow = `0 0 6px ${color}`;
+        p.style.animationDelay = (i * 0.18) + 's';
+        p.style.top = (35 + i * 8) + '%';
+        photonLayer.appendChild(p);
+      }
+    }
+
+    function renderElectrons(released, intensity) {
+      electronLayer.innerHTML = '';
+      if (!released) return;
+      const count = intensity;
+      for (let i = 0; i < count; i++) {
+        const e = document.createElement('div');
+        e.className = 'electron released';
+        e.style.left = '67%';
+        e.style.top = (30 + i * 10) + '%';
+        e.style.setProperty('--dy', (Math.random() * 40 - 20) + 'px');
+        e.style.animationDelay = (i * 0.15) + 's';
+        electronLayer.appendChild(e);
+      }
+    }
+
+    function update() {
+      const lambda = parseFloat(lambdaSlider.value);
+      const intensity = parseFloat(intensitySlider.value);
+      const intensityNames = { 1: 'Sangat Lemah', 2: 'Lemah', 3: 'Sedang', 4: 'Kuat', 5: 'Sangat Kuat' };
+
+      lambdaLabel.textContent = lambda + ' nm';
+      intensityLabel.textContent = intensityNames[intensity];
+
+      const energy = HC_EVNM / lambda; // eV
+      const w0 = activeMaterial.w0;
+      const thresholdLambda = HC_EVNM / w0; // nm
+      const released = energy > w0;
+      const ke = released ? energy - w0 : 0;
+
+      chipEnergy.textContent = fmt(energy) + ' eV';
+      chipWork.textContent = fmt(w0) + ' eV';
+      chipThreshold.textContent = fmt(thresholdLambda, 0) + ' nm';
+      chipKE.textContent = released ? fmt(ke) + ' eV' : '-- (tak terlepas)';
+
+      formulaBox.innerHTML = `E = hc/λ = 1240/${lambda} = <span class="math-num">${fmt(energy)} eV</span>\nW₀ (${activeMaterial.name}) = <span class="math-num">${fmt(w0)} eV</span>\n` +
+        (released
+          ? `Eₖ maks = E − W₀ = ${fmt(energy)} − ${fmt(w0)} = <span class="math-num">${fmt(ke)} eV</span>`
+          : `E < W₀ → TIDAK ADA elektron yang terlepas, berapa pun intensitasnya`);
+
+      statusBanner.textContent = released ? '✅ Elektron TERLEPAS dari permukaan logam' : '🚫 TIDAK ADA elektron yang terlepas';
+      statusBanner.style.background = released ? '#22c55e22' : '#ef444422';
+      statusBanner.style.color = released ? '#22c55e' : '#ef4444';
+
+      const color = wavelengthColor(lambda);
+      beam.style.background = `linear-gradient(90deg, transparent, ${color})`;
+      renderPhotons(intensity, color);
+      renderElectrons(released, intensity);
+    }
+    lambdaSlider.addEventListener('input', update);
+    intensitySlider.addEventListener('input', update);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('peQuizOpts'), [
+      'Tetap tidak ada elektron yang terlepas, berapa pun besar intensitasnya', 'Elektron akan terlepas kalau intensitasnya cukup besar', 'Elektron terlepas dengan energi kinetik yang makin besar', 'Logamnya akan meleleh'
+    ], 0, (correct) => {
+      const fb = document.getElementById('peQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Yang menentukan bisa/tidaknya elektron terlepas adalah ENERGI SATU FOTON (bergantung frekuensi/panjang gelombang), bukan jumlah totalnya (intensitas). Kalau energi satu foton saja sudah kurang dari fungsi kerja logam, sejuta foton sekalipun tidak akan bisa melepaskan satu elektron pun -- coba buktikan sendiri di simulasi atas dengan menaikkan slider Intensitas saat λ di atas nilai ambang.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>

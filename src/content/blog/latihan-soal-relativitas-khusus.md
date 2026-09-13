@@ -147,6 +147,6 @@ Energi kinetik roket itu sekitar **5,48×10²¹ Joule** -- angka yang luar biasa
 </div>
 
 <div class="mtr-cta">
-<p>Sudah menguasai seluruh Bab Teori Dasar Fisika Modern bagian relativitas khusus ini? Lanjutkan eksplorasimu ke materi Fisika Kelas XII lainnya.</p>
-<a href="/materi" class="btn btn-primary">📚 Lihat Semua Materi →</a>
+<p>Sudah menguasai relativitas khusus? Sekarang kita bahas topik lain di Bab Teori Dasar Fisika Modern yang sama anehnya: ternyata cahaya sendiri punya kepribadian ganda, kadang seperti gelombang, kadang seperti partikel.</p>
+<a href="/materi/efek-fotolistrik-dan-dualisme-gelombang-partikel" class="btn btn-primary">💡 Lanjut ke Efek Fotolistrik dan Dualisme Gelombang-Partikel →</a>
 </div>
