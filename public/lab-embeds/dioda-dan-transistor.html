@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Dioda dan Transistor</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .tab-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .tab-btn { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); border-radius: 12px; padding: 10px 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-align: center; }
+  .tab-btn.active { color: var(--bg-dark); background: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+  .scene { position: relative; height: 160px; background: #090d16; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 18px; }
+  .component { width: 70px; height: 70px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 2px solid var(--card-border); transition: all 0.25s; }
+  .component.on { border-color: #22c55e; box-shadow: 0 0 24px rgba(34,197,94,0.5); background: rgba(34,197,94,0.12); }
+  .component.off { opacity: 0.45; }
+  .arrow-flow { font-size: 1.4rem; color: var(--text-muted); }
+  .arrow-flow.on { color: #22c55e; }
+  .led { width: 34px; height: 34px; border-radius: 50%; background: #334155; transition: all 0.25s; }
+  .led.on { background: #facc15; box-shadow: 0 0 20px #facc15; }
+
+  .status-banner { text-align: center; font-size: 0.95rem; font-weight: 800; padding: 10px; border-radius: 10px; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.05rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔌</span><h1>Laboratorium Maya: Dioda dan Transistor</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="dioda">➡️ Dioda</button>
+      <button class="tab-btn" data-tab="transistor">🔀 Transistor (Saklar)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="scene" id="scene">
+      <div class="component" id="compIcon">➡️|</div>
+      <div class="arrow-flow" id="flowArrow">⚡→</div>
+      <div class="led" id="ledIndicator"></div>
+    </div>
+    <div class="status-banner" id="statusBanner"></div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <div class="slider-label"><span id="sliderName">Tegangan Bias (V)</span><b id="sliderLabel">0,0 V</b></div>
+      <input type="range" id="voltSlider" min="-2" max="2" step="0.05" value="0">
+    </div>
+
+    <div class="data-panel">
+      <div class="data-chip"><div class="k" id="chipLabel1Name">Tegangan Ambang</div><div class="v" id="chipThreshold">0,7 V</div></div>
+      <div class="data-chip"><div class="k" id="chipLabel2Name">Status</div><div class="v" id="chipStatus">OFF</div></div>
+    </div>
+  </div>
+
+  <div class="theory-card" id="theoryCard"></div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Sebuah dioda silikon (tegangan ambang ≈0,7 V) dipasang dalam kondisi FORWARD BIAS dengan tegangan sumber hanya 0,3 V. Apa yang terjadi?</span>
+    <div class="quiz-opts" id="dtQuizOpts"></div>
+    <div class="quiz-fb" id="dtQuizFb"></div>
+  </div>
+
+  <script>
+    const THRESHOLD = 0.7; // volt, tegangan ambang dioda silikon (juga dipakai basis-emitor transistor)
+    const tabs = {
+      dioda: {
+        sliderName: 'Tegangan Bias (V)', icon: '➡️|',
+        theory: 'Dioda hanya mengalirkan arus satu arah. Saat FORWARD BIAS (tegangan positif, kutub P ke +) dan melebihi tegangan ambang (≈0,7 V untuk silikon), dioda "terbuka" dan arus mengalir. Saat REVERSE BIAS (tegangan negatif) atau tegangan forward belum cukup, dioda tetap "tertutup", TIDAK ada arus mengalir sama sekali. Sifat satu-arah inilah yang membuat dioda cocok jadi PENYEARAH (rectifier), mengubah arus AC jadi DC.',
+      },
+      transistor: {
+        sliderName: 'Tegangan Basis-Emitor (V)', icon: '🔀',
+        theory: 'Transistor bisa berfungsi sebagai SAKLAR ELEKTRONIK. Sambungan basis-emitornya berperilaku seperti dioda -- perlu tegangan ambang (≈0,7 V) untuk "menyalakan" transistor. Begitu ON, arus BESAR bisa mengalir dari kolektor ke emitor, dikendalikan oleh arus KECIL di basis -- prinsip inilah yang dipakai transistor sebagai penguat (amplifier) maupun saklar digital di semua chip komputer modern.',
+      },
+    };
+    let activeTab = 'dioda';
+
+    const voltSlider = document.getElementById('voltSlider');
+    const sliderLabel = document.getElementById('sliderLabel');
+    const sliderName = document.getElementById('sliderName');
+    const chipThreshold = document.getElementById('chipThreshold');
+    const chipStatus = document.getElementById('chipStatus');
+    const theoryCard = document.getElementById('theoryCard');
+    const statusBanner = document.getElementById('statusBanner');
+    const compIcon = document.getElementById('compIcon');
+    const flowArrow = document.getElementById('flowArrow');
+    const ledIndicator = document.getElementById('ledIndicator');
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTab = btn.dataset.tab;
+        const t = tabs[activeTab];
+        sliderName.textContent = t.sliderName;
+        compIcon.textContent = t.icon;
+        if (activeTab === 'transistor') voltSlider.min = 0; else voltSlider.min = -2;
+        update();
+      });
+    });
+
+    function update() {
+      const t = tabs[activeTab];
+      const v = parseFloat(voltSlider.value);
+      sliderLabel.textContent = v.toFixed(2) + ' V';
+      chipThreshold.textContent = THRESHOLD.toFixed(1) + ' V';
+
+      const on = v >= THRESHOLD;
+      chipStatus.textContent = on ? 'ON (menghantar)' : 'OFF (tak menghantar)';
+
+      compIcon.classList.toggle('on', on);
+      compIcon.classList.toggle('off', !on);
+      flowArrow.classList.toggle('on', on);
+      ledIndicator.classList.toggle('on', on);
+
+      if (activeTab === 'dioda') {
+        if (v < 0) {
+          statusBanner.textContent = '🚫 REVERSE BIAS -- dioda tertutup, tidak ada arus';
+        } else if (v < THRESHOLD) {
+          statusBanner.textContent = '⏳ FORWARD BIAS tapi BELUM cukup -- masih tertutup';
+        } else {
+          statusBanner.textContent = '✅ FORWARD BIAS melebihi ambang -- dioda terbuka, arus mengalir';
+        }
+      } else {
+        statusBanner.textContent = on ? '✅ Transistor ON -- arus kolektor-emitor mengalir' : '🚫 Transistor OFF -- tidak ada arus kolektor-emitor';
+      }
+      statusBanner.style.background = on ? '#22c55e22' : '#ef444422';
+      statusBanner.style.color = on ? '#22c55e' : '#ef4444';
+
+      theoryCard.innerHTML = `<div class="theory-title">📌 Ringkasan Konsep</div>${t.theory}`;
+    }
+    voltSlider.addEventListener('input', update);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('dtQuizOpts'), [
+      'Dioda tetap TIDAK menghantar, karena tegangannya belum melewati tegangan ambang', 'Dioda langsung menghantar penuh', 'Dioda malah rusak', 'Dioda berubah jadi reverse bias'
+    ], 0, (correct) => {
+      const fb = document.getElementById('dtQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Forward bias saja tidak cukup -- tegangannya juga harus MELEBIHI tegangan ambang (≈0,7 V untuk silikon). Di 0,3 V, dioda masih tertutup. Coba geser slider di tab Dioda ke sekitar 0,3 V lalu ke atas 0,7 V, dan lihat sendiri kapan statusnya berubah jadi ON.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>
