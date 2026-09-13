@@ -219,6 +219,6 @@ Tidak tepat. <strong class="mtr-right">Intensitas setinggi apa pun TIDAK BISA me
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
 <div class="mtr-cta">
-<p>Sudah paham dualisme gelombang-partikel cahaya? Materi Fisika Modern lainnya bisa kamu jelajahi lewat halaman Materi.</p>
-<a href="/materi" class="btn btn-primary">📚 Lihat Semua Materi →</a>
+<p>Sudah paham dualisme gelombang-partikel cahaya? Sekarang kita masuk ke jantung materi itu sendiri: inti atom, dan kenapa sebagian inti tidak stabil sehingga meluruh secara radioaktif.</p>
+<a href="/materi/inti-atom-dan-radioaktivitas" class="btn btn-primary">☢️ Lanjut ke Inti Atom dan Radioaktivitas →</a>
 </div>

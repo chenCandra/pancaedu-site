@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Peluruhan Radioaktif</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .isotope-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (min-width: 480px) { .isotope-row { grid-template-columns: repeat(4, 1fr); } }
+  .isotope-btn { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); border-radius: 12px; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; cursor: pointer; text-align: center; }
+  .isotope-btn small { display: block; font-weight: 600; opacity: 0.75; font-size: 0.66rem; margin-top: 2px; }
+  .isotope-btn.active { color: var(--bg-dark); background: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+  .atom-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; background: #090d16; border-radius: 12px; padding: 14px; }
+  .atom-dot { aspect-ratio: 1; border-radius: 50%; background: #22c55e; transition: background 0.3s, opacity 0.3s; }
+  .atom-dot.decayed { background: #334155; opacity: 0.35; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.05rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">☢️</span><h1>Laboratorium Maya: Peluruhan Radioaktif</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="isotope-row" id="isotopeRow"></div>
+  </div>
+
+  <div class="card">
+    <div class="atom-grid" id="atomGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <div class="slider-label"><span>Waktu Berlalu</span><b id="timeLabel">0 × T½</b></div>
+      <input type="range" id="timeSlider" min="0" max="5" step="0.1" value="0">
+      <p style="font-size:0.72rem;color:var(--text-muted);">💡 Digeser dalam satuan "berapa kali waktu paruh (T½)" berlalu -- berlaku untuk isotop apa pun, biar mudah dibandingkan.</p>
+    </div>
+
+    <div class="data-panel">
+      <div class="data-chip"><div class="k">Waktu Sebenarnya</div><div class="v" id="chipRealTime">0 hari</div></div>
+      <div class="data-chip"><div class="k">Sisa Inti (N/N₀)</div><div class="v" id="chipFraction">100%</div></div>
+    </div>
+    <div class="formula-box" id="formulaBox"></div>
+  </div>
+
+  <div class="theory-card" id="theoryCard">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Peluruhan radioaktif bersifat EKSPONENSIAL, bukan linear -- setiap kali berlalu SATU waktu paruh (T½), jumlah inti yang TERSISA selalu berkurang jadi SETENGAHNYA, berapa pun jumlah awalnya. Rumusnya: <span class="math-num">N = N₀ × (1/2)^(t/T½)</span>. Inilah kenapa peluruhan radioaktif tidak akan pernah benar-benar mencapai nol -- jumlahnya terus berkurang setengah demi setengah, mendekati nol tapi (secara matematis) tak pernah persis nol.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Sebuah sampel radioaktif tersisa 25% dari jumlah awalnya. Sudah berapa kali waktu paruh yang berlalu?</span>
+    <div class="quiz-opts" id="decayQuizOpts"></div>
+    <div class="quiz-fb" id="decayQuizFb"></div>
+  </div>
+
+  <script>
+    const isotopes = [
+      { key: 'i131', name: 'Iodin-131', half: 8, unit: 'hari', icon: '🏥' },
+      { key: 'tc99m', name: 'Teknesium-99m', half: 6, unit: 'jam', icon: '🩻' },
+      { key: 'ra226', name: 'Radium-226', half: 1600, unit: 'tahun', icon: '☢️' },
+      { key: 'c14', name: 'Karbon-14', half: 5730, unit: 'tahun', icon: '🦴' },
+    ];
+    let activeIsotope = isotopes[0];
+
+    const isotopeRow = document.getElementById('isotopeRow');
+    isotopes.forEach((iso, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'isotope-btn' + (i === 0 ? ' active' : '');
+      btn.innerHTML = `${iso.icon} ${iso.name}<small>T½=${iso.half} ${iso.unit}</small>`;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.isotope-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeIsotope = iso;
+        update();
+      });
+      isotopeRow.appendChild(btn);
+    });
+
+    const atomGrid = document.getElementById('atomGrid');
+    const dots = [];
+    for (let i = 0; i < 100; i++) {
+      const d = document.createElement('div');
+      d.className = 'atom-dot';
+      atomGrid.appendChild(d);
+      dots.push(d);
+    }
+
+    const timeSlider = document.getElementById('timeSlider');
+    const timeLabel = document.getElementById('timeLabel');
+    const chipRealTime = document.getElementById('chipRealTime');
+    const chipFraction = document.getElementById('chipFraction');
+    const formulaBox = document.getElementById('formulaBox');
+
+    function fmt(n, d = 2) { return n.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+
+    function update() {
+      const n = parseFloat(timeSlider.value); // dalam satuan T half
+      timeLabel.textContent = fmt(n, 1) + ' × T½';
+
+      const fraction = Math.pow(0.5, n);
+      const realTime = n * activeIsotope.half;
+
+      chipRealTime.textContent = fmt(realTime, realTime < 10 ? 2 : 0) + ' ' + activeIsotope.unit;
+      chipFraction.textContent = fmt(fraction * 100, 1) + '%';
+
+      const remainingCount = Math.round(fraction * 100);
+      dots.forEach((d, i) => { d.classList.toggle('decayed', i >= remainingCount); });
+
+      formulaBox.innerHTML = `N/N₀ = (1/2)^(t/T½) = (1/2)^${fmt(n, 1)} = <span class="math-num">${fmt(fraction * 100, 1)}%</span>\nWaktu sebenarnya (${activeIsotope.name}, T½=${activeIsotope.half} ${activeIsotope.unit}) = ${fmt(n, 1)} × ${activeIsotope.half} = <span class="math-num">${fmt(realTime, realTime < 10 ? 2 : 0)} ${activeIsotope.unit}</span>`;
+    }
+    timeSlider.addEventListener('input', update);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('decayQuizOpts'), [
+      '2 kali waktu paruh', '4 kali waktu paruh', '1 kali waktu paruh', '25 kali waktu paruh'
+    ], 0, (correct) => {
+      const fb = document.getElementById('decayQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Setelah 1×T½ tersisa 50%, setelah 2×T½ tersisa 50% dari 50% = 25%. Coba geser slider Waktu Berlalu ke 2,0 di simulasi atas dan lihat sendiri chip "Sisa Inti"-nya.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>
