@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Bilangan Biner</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .bit-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+  .bit-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bit-place { font-size: 0.62rem; color: var(--text-muted); font-family: 'Courier New', monospace; }
+  .bit-btn { width: 100%; aspect-ratio: 1; border-radius: 10px; border: 2px solid var(--card-border); background: #1e293b; color: var(--text-muted); font-weight: 900; font-size: 1.1rem; cursor: pointer; }
+  .bit-btn.on { background: rgba(56,189,248,0.2); border-color: var(--accent-cyan); color: var(--accent-cyan); box-shadow: 0 0 14px rgba(56,189,248,0.35); }
+
+  .result-panel { text-align: center; padding: 14px; border-radius: 12px; background: #090d16; }
+  .result-panel .label { font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+  .result-panel .value { font-size: 2rem; font-weight: 900; font-family: 'Courier New', monospace; color: var(--text-highlight); margin-top: 4px; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.76rem; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔢</span><h1>Laboratorium Maya: Bilangan Biner</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;">💡 Tekan tiap kotak untuk menyalakan (1) atau mematikan (0) bit-nya, dari MSB (kiri) ke LSB (kanan)</p>
+    <div class="bit-row" id="bitRow"></div>
+    <div class="result-panel">
+      <div class="label">Nilai Desimal</div>
+      <div class="value" id="decimalValue">0</div>
+    </div>
+    <div class="formula-box" id="formulaBox"></div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <div class="slider-label"><span>Atau geser langsung nilai desimalnya</span><b id="decimalSliderLabel">0</b></div>
+      <input type="range" id="decimalSlider" min="0" max="255" step="1" value="0">
+    </div>
+  </div>
+
+  <div class="theory-card" id="theoryCard">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Bilangan biner (basis-2) cuma memakai dua digit: 0 dan 1 -- persis jumlah keadaan yang bisa direpresentasikan sinyal digital (LOW/HIGH). Setiap posisi digit (bit) mewakili pangkat 2, mirip nilai tempat pada bilangan desimal (basis-10) yang mewakili pangkat 10. Untuk mengonversi biner ke desimal, kalikan tiap bit dengan nilai tempatnya (kalau bit itu 1), lalu jumlahkan semuanya.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Berapa nilai desimal dari bilangan biner 1010?</span>
+    <div class="quiz-opts" id="binQuizOpts"></div>
+    <div class="quiz-fb" id="binQuizFb"></div>
+  </div>
+
+  <script>
+    const places = [128, 64, 32, 16, 8, 4, 2, 1];
+    let bits = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    const bitRow = document.getElementById('bitRow');
+    const decimalValue = document.getElementById('decimalValue');
+    const formulaBox = document.getElementById('formulaBox');
+    const decimalSlider = document.getElementById('decimalSlider');
+    const decimalSliderLabel = document.getElementById('decimalSliderLabel');
+
+    places.forEach((place, i) => {
+      const col = document.createElement('div'); col.className = 'bit-col';
+      const label = document.createElement('span'); label.className = 'bit-place'; label.textContent = place;
+      const btn = document.createElement('button'); btn.className = 'bit-btn'; btn.textContent = '0';
+      btn.addEventListener('click', () => {
+        bits[i] = bits[i] ? 0 : 1;
+        updateFromBits();
+      });
+      col.appendChild(label); col.appendChild(btn);
+      bitRow.appendChild(col);
+    });
+
+    function renderBits() {
+      document.querySelectorAll('.bit-btn').forEach((btn, i) => {
+        btn.textContent = bits[i];
+        btn.classList.toggle('on', !!bits[i]);
+      });
+    }
+
+    function updateFormula(decimal) {
+      const terms = places.map((p, i) => bits[i] ? `<span class="math-num">${p}</span>` : null).filter(Boolean);
+      const binaryStr = bits.join('');
+      formulaBox.innerHTML = `Biner: ${binaryStr}\nDesimal = ${terms.length ? terms.join(' + ') : '0'} = <span class="math-num">${decimal}</span>`;
+    }
+
+    function updateFromBits() {
+      renderBits();
+      const decimal = bits.reduce((sum, b, i) => sum + b * places[i], 0);
+      decimalValue.textContent = decimal;
+      decimalSlider.value = decimal;
+      decimalSliderLabel.textContent = decimal;
+      updateFormula(decimal);
+    }
+
+    function updateFromDecimal(decimal) {
+      let remaining = decimal;
+      bits = places.map((p) => {
+        if (remaining >= p) { remaining -= p; return 1; }
+        return 0;
+      });
+      renderBits();
+      decimalValue.textContent = decimal;
+      decimalSliderLabel.textContent = decimal;
+      updateFormula(decimal);
+    }
+
+    decimalSlider.addEventListener('input', () => updateFromDecimal(parseInt(decimalSlider.value, 10)));
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('binQuizOpts'), [
+      '10', '4', '5', '12'
+    ], 0, (correct) => {
+      const fb = document.getElementById('binQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + '1010 = (1×8) + (0×4) + (1×2) + (0×1) = 8 + 0 + 2 + 0 = 10. Coba nyalakan bit ke-4 dari kanan (nilai 8) dan bit ke-2 dari kanan (nilai 2) di simulasi atas untuk membuktikannya sendiri.';
+    });
+
+    window.onload = () => updateFromBits();
+  </script>
+</body>
+</html>

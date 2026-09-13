@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Sinyal Analog dan Digital"
+  description="Atur laju sampling dan kedalaman bit, lalu lihat sendiri bagaimana sinyal analog kontinu diubah jadi sinyal digital bertangga -- dan kenapa resolusinya penting."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Teori Dasar Digital · Kelas XII</p>
+    <h1>Laboratorium Maya: Sinyal Analog dan Digital</h1>
+    <p class="page-lede">
+      Atur laju sampling dan kedalaman bit, lalu lihat sendiri bagaimana sinyal analog yang kontinu
+      diubah jadi sinyal digital bertangga -- dan kenapa resolusinya berpengaruh besar terhadap
+      seberapa mirip hasilnya dengan sinyal aslinya.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="gl-frame-wrap card">
+      <iframe
+        data-gl-frame
+        src="/lab-embeds/sinyal-analog-digital.html"
+        title="Laboratorium Maya: Sinyal Analog dan Digital"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa visualnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header { padding-block: 3rem 1.5rem; max-width: 42rem; }
+  .back-link { display: inline-block; font-size: 0.875rem; color: var(--ink-soft); text-decoration: none; margin-bottom: 1rem; }
+  .back-link:hover { color: var(--accent); }
+  .page-lede { color: var(--ink-soft); font-size: 1.0625rem; }
+  .lab-wrap { max-width: 60rem; padding-block: 1rem 4rem; }
+  .gl-frame-wrap { padding: 0; overflow: hidden; }
+  .gl-frame-wrap iframe { display: block; width: 100%; height: 1050px; border: 0; }
+  .lab-note { margin-top: 0.75rem; font-size: 0.8125rem; color: var(--ink-faint); text-align: center; }
+</style>
+
+<script>
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-gl-frame]');
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

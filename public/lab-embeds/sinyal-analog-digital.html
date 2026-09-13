@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Sinyal Analog dan Digital</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .graph-legend { display: flex; gap: 16px; justify-content: center; font-size: 0.75rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .graph-wrap { background: #090d16; border-radius: 12px; padding: 10px; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.05rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">📶</span><h1>Laboratorium Maya: Sinyal Analog dan Digital</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="graph-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#facc15;"></span>Sinyal Analog (asli)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#38bdf8;"></span>Sinyal Digital (hasil sampling+kuantisasi)</div>
+    </div>
+    <div class="graph-wrap">
+      <svg id="waveSvg" viewBox="0 0 320 160" width="100%" height="160"></svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <div class="slider-label"><span>Laju Sampling (sampel per periode)</span><b id="sampleLabel">8</b></div>
+      <input type="range" id="sampleSlider" min="2" max="40" step="1" value="8">
+    </div>
+    <div class="slider-group">
+      <div class="slider-label"><span>Kedalaman Bit (jumlah level kuantisasi)</span><b id="bitLabel">2 bit (4 level)</b></div>
+      <input type="range" id="bitSlider" min="1" max="4" step="1" value="2">
+    </div>
+
+    <div class="data-panel">
+      <div class="data-chip"><div class="k">Sampel per Periode</div><div class="v" id="chipSamples">8</div></div>
+      <div class="data-chip"><div class="k">Level Kuantisasi</div><div class="v" id="chipLevels">4</div></div>
+    </div>
+  </div>
+
+  <div class="theory-card" id="theoryCard">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Sinyal ANALOG berubah secara KONTINU -- nilainya bisa berapa saja dalam rentang tertentu. Sinyal DIGITAL adalah hasil dua proses: <strong>sampling</strong> (mengambil nilai analog pada interval waktu tertentu) dan <strong>kuantisasi</strong> (membulatkan tiap nilai sampel ke level diskrit terdekat). Semakin TINGGI laju sampling dan kedalaman bit, semakin MIRIP sinyal digitalnya dengan aslinya -- tapi butuh lebih banyak data untuk menyimpannya.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kenapa sinyal digital lebih tahan terhadap gangguan (noise) dibanding sinyal analog?</span>
+    <div class="quiz-opts" id="adQuizOpts"></div>
+    <div class="quiz-fb" id="adQuizFb"></div>
+  </div>
+
+  <script>
+    const sampleSlider = document.getElementById('sampleSlider');
+    const bitSlider = document.getElementById('bitSlider');
+    const sampleLabel = document.getElementById('sampleLabel');
+    const bitLabel = document.getElementById('bitLabel');
+    const chipSamples = document.getElementById('chipSamples');
+    const chipLevels = document.getElementById('chipLevels');
+    const waveSvg = document.getElementById('waveSvg');
+
+    function analogValue(theta) {
+      // Gelombang gabungan biar bentuknya tidak sesederhana sinus tunggal
+      return 0.6 * Math.sin(theta) + 0.25 * Math.sin(2.3 * theta + 0.6);
+    }
+
+    function buildAnalogPath(width, height, cycles) {
+      const N = 300;
+      let d = '';
+      for (let i = 0; i <= N; i++) {
+        const x = (i / N) * width;
+        const theta = (i / N) * cycles * 2 * Math.PI;
+        const y = height / 2 - analogValue(theta) * (height * 0.42);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+      }
+      return d;
+    }
+
+    function buildDigitalPath(width, height, cycles, samples, levels) {
+      const totalSamples = samples * cycles;
+      const step = 2 * Math.PI * cycles / totalSamples;
+      let d = '';
+      let prevY = null;
+      for (let i = 0; i <= totalSamples; i++) {
+        const theta = i * step;
+        let val = analogValue(theta);
+        // Kuantisasi: bulatkan ke level terdekat dalam rentang [-1, 1]
+        const levelSize = 2 / (levels - 1);
+        val = Math.round((val + 1) / levelSize) * levelSize - 1;
+        val = Math.max(-1, Math.min(1, val));
+        const x = (i / totalSamples) * width;
+        const y = height / 2 - val * (height * 0.42);
+        if (i === 0) {
+          d += `M${x.toFixed(1)},${y.toFixed(1)} `;
+        } else {
+          // tahan nilai sebelumnya (zero-order hold) baru naik/turun ke nilai baru
+          d += `L${x.toFixed(1)},${prevY.toFixed(1)} L${x.toFixed(1)},${y.toFixed(1)} `;
+        }
+        prevY = y;
+      }
+      return d;
+    }
+
+    function fmt(n) { return n.toLocaleString('id-ID'); }
+
+    function update() {
+      const samples = parseInt(sampleSlider.value, 10);
+      const bits = parseInt(bitSlider.value, 10);
+      const levels = Math.pow(2, bits);
+
+      sampleLabel.textContent = samples;
+      bitLabel.textContent = bits + ' bit (' + levels + ' level)';
+      chipSamples.textContent = samples;
+      chipLevels.textContent = levels;
+
+      const width = 320, height = 160, cycles = 2;
+      const analogPath = buildAnalogPath(width, height, cycles);
+      const digitalPath = buildDigitalPath(width, height, cycles, samples, levels);
+
+      waveSvg.innerHTML = `
+        <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="#334155" stroke-width="1" stroke-dasharray="4,4"/>
+        <path d="${analogPath}" fill="none" stroke="#facc15" stroke-width="2" opacity="0.85"/>
+        <path d="${digitalPath}" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+      `;
+    }
+    sampleSlider.addEventListener('input', update);
+    bitSlider.addEventListener('input', update);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('adQuizOpts'), [
+      'Sinyal digital cuma perlu dibedakan HIGH/LOW, gangguan kecil tidak mengubah interpretasinya', 'Sinyal digital tidak pernah terkena gangguan sama sekali', 'Sinyal digital selalu punya tegangan lebih besar', 'Sinyal digital tidak memakai listrik'
+    ], 0, (correct) => {
+      const fb = document.getElementById('adQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Sinyal digital cuma butuh dibedakan dua level (HIGH/LOW) -- gangguan kecil yang menggeser tegangan sedikit biasanya masih terbaca sebagai level yang sama. Sinyal analog sebaliknya, SETIAP gangguan kecil langsung "menyatu" jadi bagian dari informasinya, dan makin parah tiap kali sinyal itu disalin/diperkuat ulang.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>

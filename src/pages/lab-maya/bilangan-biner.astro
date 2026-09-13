@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Bilangan Biner"
+  description="Nyalakan-matikan 8 bit biner dan lihat nilai desimalnya berubah live, atau geser nilai desimalnya langsung dan lihat pola biner yang terbentuk."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Teori Dasar Digital · Kelas XII</p>
+    <h1>Laboratorium Maya: Bilangan Biner</h1>
+    <p class="page-lede">
+      Nyalakan-matikan 8 bit biner dan lihat nilai desimalnya berubah live, atau geser nilai
+      desimalnya langsung dan lihat pola biner yang terbentuk -- cara paling cepat memahami
+      konversi biner-desimal.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="gl-frame-wrap card">
+      <iframe
+        data-gl-frame
+        src="/lab-embeds/bilangan-biner.html"
+        title="Laboratorium Maya: Bilangan Biner"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa visualnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header { padding-block: 3rem 1.5rem; max-width: 42rem; }
+  .back-link { display: inline-block; font-size: 0.875rem; color: var(--ink-soft); text-decoration: none; margin-bottom: 1rem; }
+  .back-link:hover { color: var(--accent); }
+  .page-lede { color: var(--ink-soft); font-size: 1.0625rem; }
+  .lab-wrap { max-width: 60rem; padding-block: 1rem 4rem; }
+  .gl-frame-wrap { padding: 0; overflow: hidden; }
+  .gl-frame-wrap iframe { display: block; width: 100%; height: 1000px; border: 0; }
+  .lab-note { margin-top: 0.75rem; font-size: 0.8125rem; color: var(--ink-faint); text-align: center; }
+</style>
+
+<script>
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-gl-frame]');
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

@@ -1,5 +1,5 @@
 ---
-tanggal: 2026-10-26
+tanggal: 2026-10-30
 kelas: XII
 mapel: Fisika
 bab: "Teori Dasar Digital"

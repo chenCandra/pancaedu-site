@@ -108,7 +108,7 @@ draft: false
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
 </style>
 
-Selamat datang di bab baru: **Teori Dasar Digital**. Sepanjang tiga bab sebelumnya kita membahas rangkaian listrik, medan magnet, sampai fisika modern yang aneh-aneh. Sekarang saatnya membahas fondasi teknologi yang mungkin paling sering kamu pakai setiap hari tanpa sadar: **elektronika** -- ilmu di balik HP, laptop, charger, sampai lampu LED di kamarmu. Kita mulai dari bahan paling dasarnya: semikonduktor, dan komponen pertama yang dibangun darinya, dioda.
+Di materi [Sinyal Analog dan Digital](/materi/sinyal-analog-dan-digital) dan [Bilangan Biner](/materi/bilangan-biner) kita sudah paham KENAPA dunia digital cuma butuh dua keadaan (0 dan 1), dan bagaimana angka direpresentasikan dalam sistem itu. Sekarang saatnya menjawab pertanyaan berikutnya: bagaimana caranya dua keadaan itu benar-benar DIWUJUDKAN secara fisik lewat komponen elektronik? Jawabannya dimulai dari bahan paling dasar: **semikonduktor**, dan komponen pertama yang dibangun darinya, **dioda**.
 
 ## 🔬 Semikonduktor: Bukan Konduktor, Bukan Isolator
 

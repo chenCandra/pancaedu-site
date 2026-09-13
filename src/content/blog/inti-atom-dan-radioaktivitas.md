@@ -233,6 +233,6 @@ Tidak tepat. <strong class="mtr-right">Setelah 2×T½, yang tersisa adalah 25%, 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
 <div class="mtr-cta">
-<p>Dengan ini kita tuntas membahas seluruh Bab Teori Dasar Fisika Modern -- dari relativitas khusus, dualisme gelombang-partikel, sampai inti atom dan radioaktivitas. Bab terakhir membawa kita ke fondasi teknologi yang kamu pakai setiap hari: elektronika.</p>
-<a href="/materi/semikonduktor-dan-dioda" class="btn btn-primary">🔌 Lanjut ke Semikonduktor dan Dioda →</a>
+<p>Dengan ini kita tuntas membahas seluruh Bab Teori Dasar Fisika Modern -- dari relativitas khusus, dualisme gelombang-partikel, sampai inti atom dan radioaktivitas. Bab terakhir membawa kita ke fondasi teknologi yang kamu pakai setiap hari: dunia digital.</p>
+<a href="/materi/sinyal-analog-dan-digital" class="btn btn-primary">📶 Lanjut ke Sinyal Analog dan Digital →</a>
 </div>
