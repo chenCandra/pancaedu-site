@@ -5,6 +5,7 @@ category: materi
 mapel: "Fisika"
 kelas: XII
 pubDate: 2024-01-14
+updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Kontraksi Panjang", "Fisika Kelas XII"]
 kuis:
   - soal: "Kontraksi panjang terjadi pada arah..."
@@ -26,60 +27,157 @@ kuis:
 draft: false
 ---
 
-![Kontraksi Panjang](/images/migrated/Screenshot-2024-01-14-212815.png)
+<style>
+.mtr-table-wrap, .mtr-cards { margin-block: 2rem; }
 
-Di materi [Dilatasi Waktu](/materi/dilatasi-waktu) kita sudah lihat bagaimana waktu "melambat" bagi benda yang bergerak sangat cepat. Ternyata bukan cuma waktu -- ruang (panjang) juga ikut berubah. Kontraksi panjang adalah fenomena fisika yang menyatakan bahwa panjang suatu benda yang bergerak relatif terhadap pengamat akan terlihat lebih pendek daripada panjang benda yang diam. Fenomena ini merupakan salah satu konsekuensi dari teori relativitas khusus yang dikemukakan oleh Albert Einstein pada tahun 1905. Teori relativitas khusus adalah teori yang menjelaskan hubungan antara ruang, waktu, massa, dan energi dalam kerangka acuan yang bergerak dengan kecepatan konstan.
+.mtr-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--shadow-sm);
+}
 
-## Apa Itu Kontraksi Panjang?
+.mtr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
 
-Kontraksi panjang adalah efek yang terjadi ketika suatu benda bergerak dengan kecepatan mendekati kecepatan cahaya. Kecepatan cahaya dalam ruang hampa adalah sekitar 3 x 10 8 m/s, yang merupakan batas maksimum kecepatan yang dapat dicapai oleh benda apapun. Ketika suatu benda bergerak dengan kecepatan yang sangat tinggi, panjang benda tersebut akan terlihat berkurang oleh pengamat yang diam atau bergerak dengan kecepatan yang berbeda.
+.mtr-table th, .mtr-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
 
-Kontraksi panjang hanya terjadi pada arah gerak benda, sedangkan arah tegak lurus gerak benda tidak mengalami kontraksi. Misalnya, jika suatu roket berbentuk tabung bergerak dengan kecepatan tinggi, maka panjang roket akan terlihat lebih pendek, tetapi diameter roket tidak berubah. Kontraksi panjang juga tidak mempengaruhi massa atau volume benda, hanya panjangnya saja.
+.mtr-table thead th {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ink-soft);
+  background-color: var(--accent-soft);
+}
 
-## Mengapa Kontraksi Panjang Terjadi?
+.mtr-table tbody tr:last-child td { border-bottom: none; }
 
-Kontraksi panjang terjadi karena adanya perbedaan waktu antara pengamat dan benda yang bergerak. Waktu yang dialami oleh pengamat dan benda yang bergerak tidak sama, tetapi relatif tergantung pada kecepatan masing-masing. Ini disebut sebagai [dilatasi waktu](/materi/dilatasi-waktu), yaitu fenomena yang menyatakan bahwa waktu akan berjalan lebih lambat bagi benda yang bergerak dengan kecepatan tinggi daripada benda yang diam.
+.mtr-def {
+  border-left: 3px solid var(--gold);
+  background: var(--gold-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.25rem;
+  font-size: 0.9375rem;
+}
 
-Dilatasi waktu menyebabkan perbedaan panjang benda yang terukur oleh pengamat yang berbeda. Pengamat yang diam akan melihat benda yang bergerak dengan kecepatan tinggi sebagai benda yang lebih pendek, karena waktu yang dibutuhkan oleh benda untuk menempuh jarak tertentu lebih lama dari waktu yang dibutuhkan oleh pengamat untuk mengukur jarak tersebut. Sebaliknya, pengamat yang bergerak dengan kecepatan yang sama dengan benda akan melihat benda tersebut dengan panjang aslinya, karena waktu yang dibutuhkan oleh benda dan pengamat untuk menempuh jarak tertentu sama.
+.mtr-note {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.25rem;
+  font-size: 0.9375rem;
+}
 
-## Bagaimana Menghitung Kontraksi Panjang?
+.mtr-note strong.mtr-wrong { color: var(--rose); }
+.mtr-note strong.mtr-right { color: var(--teal); }
 
-Kontraksi panjang dapat dihitung dengan menggunakan rumus berikut:
+.mtr-formula {
+  text-align: center;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin-block: 1rem;
+}
 
-![rumus kontraksi panjang](/images/migrated/Screenshot-2024-01-14-205457.png)
+.mtr-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 1rem;
+}
 
-![Rumus KOntraksi Panjang](/images/migrated/Screenshot-2024-01-14-205542.png)
+.mtr-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+}
 
-Dari rumus tersebut, dapat dilihat bahwa semakin besar kecepatan benda, semakin kecil panjang benda yang terukur oleh pengamat. Jika kecepatan benda mendekati kecepatan cahaya, maka panjang benda akan mendekati nol.
+.mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+.mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
+.mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+</style>
 
-## Bagaimana kontraksi panjang mempengaruhi kehidupan sehari-hari?
+Di materi [Dilatasi Waktu](/materi/dilatasi-waktu) kita sudah lihat bagaimana waktu "melambat" bagi benda yang bergerak sangat cepat. Ternyata bukan cuma waktu -- ruang (panjang) juga ikut berubah. Fenomena ini disebut **kontraksi panjang**: panjang suatu benda yang bergerak relatif terhadap pengamat akan terukur lebih PENDEK dibanding panjang benda itu saat diam.
 
-Kontraksi panjang hampir tidak terlihat pada kecepatan sehari-hari dan diabaikan untuk semua kegiatan umum. Hanya pada kecepatan sangat tinggi, mendekati kecepatan cahaya, baru efek ini dapat teramati. Oleh karena itu, kontraksi panjang tidak mempengaruhi kehidupan sehari-hari kita secara langsung, tetapi hanya berlaku untuk benda-benda yang bergerak dengan kecepatan luar biasa, seperti pesawat ruang angkasa, partikel subatomik, atau gelombang elektromagnetik.
+## 📏 Apa Itu Kontraksi Panjang?
 
-Meskipun demikian, kontraksi panjang memiliki beberapa implikasi penting dalam bidang fisika, astronomi, dan teknologi. Misalnya, kontraksi panjang mempengaruhi pengukuran jarak, waktu, massa, dan energi dari benda-benda yang bergerak dengan kecepatan tinggi. Kontraksi panjang juga berhubungan dengan fenomena lain, seperti dilatasi waktu, ekuivalensi massa-energi, efek Doppler relativistik, dan presesi Thomas. Kontraksi panjang juga menjadi salah satu dasar untuk mengembangkan teori relativitas umum, yang menjelaskan gravitasi sebagai kelengkungan ruang-waktu.
+<div class="mtr-def">
+💡 <strong>Kontraksi panjang</strong> hanya terjadi pada arah SEARAH gerak benda. Arah tegak lurus gerak sama sekali TIDAK berubah. Kalau sebuah roket berbentuk tabung melesat sangat cepat, panjangnya akan terlihat memendek, tapi DIAMETERNYA tetap sama.
+</div>
 
-## Contoh Soal dan Pembahasan
+Penting juga dicatat: kontraksi panjang tidak mengubah massa atau volume benda secara "nyata" -- ini murni soal panjang yang TERUKUR oleh pengamat yang berbeda kerangka acuannya. Bagi orang yang ikut bergerak bersama roket itu (misalnya sang astronot di dalamnya), roketnya tetap terasa dan terukur dengan panjang aslinya, tidak memendek sama sekali.
 
-Berikut adalah dua contoh soal dan pembahasan tentang kontraksi panjang:
+## 🧩 Kenapa Kontraksi Panjang Terjadi?
 
-**Contoh soal 1**
+Kontraksi panjang adalah "pasangan" dari dilatasi waktu -- keduanya lahir dari akar yang sama: postulat kecepatan cahaya yang konstan bagi semua pengamat. Karena ruang dan waktu saling terkait erat (ingat Transformasi Lorentz yang sempat disinggung di materi Dilatasi Waktu), perubahan pada satu akan selalu diiringi perubahan pada yang lain.
 
-Sebuah roket berbentuk tabung dengan panjang 20 m bergerak dengan kecepatan 0,8 c relatif terhadap Bumi. Berapakah panjang roket yang terukur oleh pengamat di Bumi?
+## 🧮 Rumus Kontraksi Panjang
 
-**Pembahasan**
+<div class="mtr-formula">L = L₀ × √(1 − v²/c²)</div>
 
-Diketahui:
+dengan:
 
--   L0 = 20m
--   v = 0,8 c
--   c = 3 x 10 8 m/s
+* **L** = panjang benda yang terukur oleh pengamat yang bergerak relatif terhadap benda (selalu lebih pendek)
+* **L₀** = panjang benda yang terukur oleh pengamat yang diam relatif terhadap benda (disebut *panjang sejati*/*proper length* -- selalu yang paling panjang)
+* **v** = kecepatan benda relatif terhadap pengamat
+* **c** = kecepatan cahaya di ruang hampa (≈ 3×10⁸ m/s)
 
-Ditanya:L?
+Perhatikan: faktor √(1−v²/c²) selalu bernilai antara 0 dan 1 (untuk v<c), jadi **L selalu LEBIH KECIL dari L₀**. Semakin besar v mendekati c, semakin kecil faktor ini, dan semakin pendek pula panjang yang terukur -- pada v=c (andai bisa tercapai), panjangnya akan menyusut jadi nol.
 
-Jawab:
+## ✏️ Contoh Soal
 
-Substitusikan nilai-nilai yang diketahui ke dalam rumus kontraksi panjang:
+**Soal:** Sebuah roket berbentuk tabung dengan panjang 20 m (saat diam) bergerak dengan kecepatan 0,8c relatif terhadap Bumi. Berapa panjang roket yang terukur oleh pengamat di Bumi?
 
-![COntoh soal kontraksi panjang](/images/migrated/Screenshot-2024-01-14-205716.png)
+**Pembahasan:**
 
-Selain panjang dan waktu, ternyata massa benda yang bergerak sangat cepat juga ikut berubah -- baca lanjutannya di materi [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik).
+Diketahui: L₀ = 20 m, v = 0,8c
+
+<div class="mtr-formula">L = L₀ × √(1 − v²/c²) = 20 × √(1 − (0,8c)²/c²)</div>
+<div class="mtr-formula">L = 20 × √(1 − 0,64) = 20 × √0,36 = 20 × 0,6 = 12 m</div>
+
+Jadi, pengamat di Bumi akan mengukur panjang roket itu hanya **12 m** -- jauh lebih pendek dari panjang aslinya (20 m) saat diam. Tapi bagi astronot yang ada di dalam roket itu sendiri, roketnya tetap terasa 20 m seperti biasa!
+
+## 🔭 Kenapa Kita Tidak Pernah Melihat Ini Sehari-hari?
+
+<div class="mtr-cards">
+<div class="mtr-cards-grid">
+<div class="mtr-card"><span class="mtr-card-icon">🚗</span><h4>Kecepatan Sehari-hari Terlalu Lambat</h4><p>Mobil, pesawat komersial, bahkan roket antariksa biasa punya v/c yang SANGAT kecil -- faktor √(1−v²/c²) nyaris persis 1, jadi kontraksinya tidak terdeteksi sama sekali.</p></div>
+<div class="mtr-card"><span class="mtr-card-icon">⚛️</span><h4>Baru Terlihat di Fisika Partikel</h4><p>Di akselerator partikel, partikel subatomik dipercepat hingga mendekati c -- di sinilah kontraksi panjang (dan efek relativistik lainnya) benar-benar teramati dan terukur.</p></div>
+</div>
+</div>
+
+## ⚠️ Kesalahan Umum
+
+<div class="mtr-note">
+<strong class="mtr-wrong">❌ "Kontraksi panjang itu cuma ilusi optik -- benda 'kelihatan' pendek, padahal sebenarnya tidak berubah."</strong><br>
+Tidak tepat. <strong class="mtr-right">Kontraksi panjang adalah hasil pengukuran yang sah</strong>, bukan sekadar ilusi mata. Bagi pengamat yang diam, panjang benda itu BENAR-BENAR terukur lebih pendek dengan alat ukur apa pun yang dipakainya -- ini konsekuensi nyata dari sifat ruang-waktu, sama nyatanya dengan dilatasi waktu, meski keduanya cuma "terlihat" berbeda tergantung kerangka acuan siapa yang mengukur.
+</div>
+
+## 🤔 Coba Pikirkan
+
+1. Dari materi Dilatasi Waktu, ingat contoh Dede yang bepergian dengan v=0,75c. Kalau Dede membawa penggaris sepanjang 1 m yang searah dengan arah gerak pesawatnya, berapa kira-kira panjang penggaris itu menurut Didi yang diam di Bumi? (Petunjuk: gunakan rumus kontraksi panjang dengan v=0,75c)
+2. Kenapa menurutmu astronot di dalam roket TIDAK akan pernah merasakan roketnya sendiri "memendek", berapa pun cepatnya ia bergerak?
+
+Coba diskusikan jawabanmu dengan teman sekelas.
+
+<div class="mtr-cta">
+<p>Selain panjang dan waktu, ternyata massa benda yang bergerak sangat cepat juga ikut berubah.</p>
+<a href="/materi/massa-relativistik-dan-momentum-relativistik" class="btn btn-primary">⚖️ Lanjut ke Massa Relativistik dan Momentum Relativistik →</a>
+</div>

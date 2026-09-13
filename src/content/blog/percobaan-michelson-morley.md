@@ -5,6 +5,7 @@ category: materi
 mapel: "Fisika"
 kelas: XII
 pubDate: 2024-01-11
+updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Michelson-Morley", "Fisika Kelas XII"]
 kuis:
   - soal: "Apa tujuan awal percobaan Michelson-Morley?"
@@ -26,38 +27,189 @@ kuis:
 draft: false
 ---
 
-## Percobaan Michelson-Morley: Menguji Keberadaan Eter
+<style>
+.mtr-table-wrap, .mtr-cards, .mtr-steps { margin-block: 2rem; }
 
-![percobaan Michelson morley](/images/migrated/Michelson-y-morley.jpg)
+.mtr-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--shadow-sm);
+}
 
-Di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) sempat disinggung soal percobaan yang jadi salah satu pemicu lahirnya teori itu. Percobaan Michelson-Morley adalah salah satu percobaan paling penting dan terkenal dalam sejarah fisika, yang dilakukan pada tahun 1887 oleh Albert Michelson dan Edward Morley di tempat yang sekarang menjadi kampus Case Western Reserve University di Cleveland, Ohio, Amerika Serikat. Percobaan ini bertujuan untuk menguji hipotesis tentang keberadaan eter, yang pada waktu itu dianggap sebagai medium yang membantu perambatan gelombang cahaya.
+.mtr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
 
-## Latar Belakang Percobaan
+.mtr-table th, .mtr-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
 
-Pada abad ke-19, banyak ilmuwan yang percaya bahwa gelombang cahaya membutuhkan suatu medium untuk merambat, sama seperti gelombang suara membutuhkan udara atau air. Medium ini disebut eter, dan dianggap sebagai suatu zat yang mengisi seluruh ruang kosmik, termasuk di antara benda-benda langit. Eter juga dianggap sebagai suatu medium yang absolut dan tidak bergerak, sehingga semua gerakan relatif dapat diukur terhadap eter.
+.mtr-table thead th {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ink-soft);
+  background-color: var(--accent-soft);
+}
 
-Salah satu konsekuensi dari hipotesis eter ini adalah bahwa kecepatan cahaya harus bergantung pada arah dan kecepatan gerak pengamat terhadap eter. Misalnya, jika Bumi bergerak melalui eter dengan kecepatan tertentu, maka pengamat di Bumi akan melihat cahaya yang datang dari arah yang berlawanan dengan gerak Bumi lebih cepat daripada cahaya yang datang dari arah yang sejajar dengan gerak Bumi. Perbedaan kecepatan cahaya ini disebut angin eter (ether wind).
+.mtr-table tbody tr:last-child td { border-bottom: none; }
 
-Michelson dan Morley ingin mengukur angin eter ini dengan menggunakan suatu alat yang disebut interferometer, yang dapat mendeteksi perubahan kecil dalam panjang gelombang cahaya. Interferometer ini terdiri dari dua lengan yang sama panjang yang saling tegak lurus, yang masing-masing dilengkapi dengan cermin di ujungnya. Cahaya dari suatu sumber dibagi menjadi dua sinar yang merambat ke arah yang berbeda, lalu dipantulkan oleh cermin dan digabungkan kembali. Jika kedua sinar cahaya memiliki panjang gelombang yang sama, maka mereka akan saling menguatkan atau melemahkan, tergantung pada fase gelombangnya. Namun, jika ada perbedaan panjang gelombang antara kedua sinar cahaya, maka akan terjadi suatu pola interferensi yang dapat diamati.
+.mtr-step {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 1.5rem;
+}
 
-![percobaan Michelson morley](/images/migrated/02624e8eb5d4a18b1df53c37748109a0.jpg)
+.mtr-step:last-child { padding-bottom: 0; }
 
-Percobaan Michelson morley
+.mtr-step-num {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  box-shadow: var(--glow-accent);
+  position: relative;
+  z-index: 1;
+}
 
-Michelson dan Morley berharap bahwa dengan memutar interferometer mereka, mereka dapat mengukur perbedaan panjang gelombang cahaya yang disebabkan oleh angin eter. Mereka mengira bahwa ketika salah satu lengan interferometer sejajar dengan arah gerak Bumi, maka cahaya yang merambat di lengan tersebut akan lebih lambat daripada cahaya yang merambat di lengan yang tegak lurus dengan arah gerak Bumi. Sebaliknya, ketika lengan interferometer tersebut tegak lurus dengan arah gerak Bumi, maka cahaya yang merambat di lengan tersebut akan lebih cepat daripada cahaya yang merambat di lengan yang sejajar dengan arah gerak Bumi. Perbedaan kecepatan cahaya ini akan menyebabkan perbedaan panjang gelombang cahaya, yang akan terlihat sebagai pergeseran pola interferensi.
+.mtr-step:not(:last-child) .mtr-step-num::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 1.5rem;
+  background: var(--border-strong);
+}
 
-## Hasil dan Implikasi Percobaan
+.mtr-step-body p { margin: 0; color: var(--ink-soft); font-size: 0.9375rem; }
+.mtr-step-body strong { color: var(--ink); }
 
-Michelson dan Morley melakukan percobaan mereka dengan sangat teliti dan akurat, tetapi mereka tidak menemukan adanya pergeseran pola interferensi yang signifikan. Hasil percobaan mereka menunjukkan bahwa tidak ada perbedaan kecepatan cahaya yang terukur antara dua arah yang berbeda, yang berarti bahwa tidak ada angin eter yang terdeteksi. Hasil ini sangat mengejutkan dan menantang bagi para ilmuwan pada waktu itu, karena mereka menggagalkan hipotesis eter yang telah diterima secara luas.
+.mtr-def {
+  border-left: 3px solid var(--gold);
+  background: var(--gold-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.25rem;
+  font-size: 0.9375rem;
+}
 
-Percobaan Michelson-Morley dianggap sebagai petunjuk pertama terkuat untuk menyangkal keberadaan eter sebagai medium gelombang cahaya. Percobaan ini juga telah disebut sebagai “titik tolak untuk aspek teoretis revolusi ilmiah kedua”. Albert Michelson dianugerahi Hadiah Nobel Fisika tahun 1907 terutama untuk melaksanakan percobaan ini.
+.mtr-note {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.25rem;
+  font-size: 0.9375rem;
+}
 
-Percobaan Michelson-Morley membuka jalan bagi perkembangan teori relativitas khusus oleh Albert Einstein pada tahun 1905, yang menjelaskan bahwa kecepatan cahaya adalah konstan dan tidak bergantung pada kerangka acuan pengamat. Teori relativitas khusus juga menyatakan bahwa ruang dan waktu bukanlah entitas yang absolut dan tetap, tetapi dapat berubah-ubah tergantung pada kecepatan relatif antara pengamat dan objek yang diamati. Teori relativitas khusus telah terbukti secara eksperimental oleh banyak percobaan lain, dan menjadi salah satu landasan fisika modern.
+.mtr-note strong.mtr-wrong { color: var(--rose); }
+.mtr-note strong.mtr-right { color: var(--teal); }
 
-Percobaan Michelson-Morley juga menginspirasi banyak percobaan lain yang menguji aspek-aspek lain dari teori relativitas khusus, seperti percobaan Ives-Stilwell dan Kennedy-Thorndike. Percobaan-percobaan ini semakin meningkatkan kepekaan dan akurasi pengukuran kecepatan cahaya, dan semakin memperkuat kenyataan tidak adanya angin eter. Percobaan resonator paling baru menguatkan kenyataan tidak adanya angin eter pada tingkat 10−17.
+.mtr-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 1rem;
+}
 
-## Kesimpulan
+.mtr-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+}
 
-Percobaan Michelson-Morley adalah percobaan yang sangat berpengaruh dalam sejarah fisika, yang membantah hipotesis eter dan mendorong lahirnya teori relativitas khusus. Percobaan ini menunjukkan bahwa kecepatan cahaya adalah konstan dan tidak dipengaruhi oleh gerak relatif antara pengamat dan sumber cahaya. Percobaan ini juga menunjukkan bahwa ruang dan waktu bukanlah konsep yang sederhana dan baku, tetapi dapat berubah-ubah tergantung pada kecepatan relatif. Percobaan ini merupakan salah satu contoh bagaimana percobaan ilmiah dapat mengubah paradigma dan pemahaman kita tentang alam semesta.
+.mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+.mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
+.mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+</style>
 
-Salah satu konsekuensi paling terkenal dari "ruang dan waktu yang relatif" ini adalah **dilatasi waktu** -- baca lebih lanjut di materi [Dilatasi Waktu: Apa, Mengapa, dan Bagaimana?](/materi/dilatasi-waktu).
+Di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) sempat disinggung soal eksperimen yang jadi salah satu pemicu lahirnya teori itu. Kali ini kita bahas tuntas: **Percobaan Michelson-Morley** tahun 1887, salah satu eksperimen paling terkenal dalam sejarah fisika -- bukan karena berhasil membuktikan sesuatu, tapi justru karena "gagal total" membuktikan apa yang seharusnya ia buktikan.
+
+## 🌊 Eter: Medium yang (Katanya) Dibutuhkan Cahaya
+
+Di abad ke-19, fisikawan percaya gelombang butuh medium untuk merambat -- persis seperti gelombang bunyi yang butuh udara. Karena cahaya juga gelombang, mereka menyimpulkan pasti ada medium serupa yang mengisi seluruh alam semesta, termasuk ruang hampa. Medium hipotetis ini dinamai **eter** (*luminiferous aether*).
+
+<div class="mtr-def">
+💡 Kalau eter memang ada dan diam mutlak di alam semesta, maka Bumi yang mengorbit Matahari seharusnya bergerak MENEMBUS eter itu -- menciptakan semacam "angin eter" (*ether wind*), mirip angin yang kamu rasakan saat menjulurkan tangan dari mobil yang melaju.
+</div>
+
+Kalau angin eter itu nyata, cahaya yang merambat SEARAH gerak Bumi seharusnya terukur sedikit berbeda kecepatannya dibanding cahaya yang merambat TEGAK LURUS arah gerak Bumi. Albert Michelson dan Edward Morley di Cleveland, Ohio, merancang eksperimen untuk mengukur perbedaan sekecil apa pun ini.
+
+## 🔬 Cara Kerja Interferometer Michelson
+
+Alat yang mereka pakai disebut **interferometer** -- mampu mendeteksi perbedaan superkecil dalam jarak tempuh cahaya lewat pola interferensi (garis terang-gelap yang muncul saat dua gelombang cahaya bertemu).
+
+<div class="mtr-steps">
+  <div class="mtr-step">
+    <span class="mtr-step-num">1</span>
+    <div class="mtr-step-body">
+      <p><strong>Cahaya dari satu sumber dipancarkan ke sebuah cermin setengah perak</strong> (cermin yang memantulkan sebagian cahaya, meneruskan sebagian lainnya) -- cahaya ini terbagi jadi dua berkas.</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">2</span>
+    <div class="mtr-step-body">
+      <p><strong>Kedua berkas merambat di dua lengan yang saling TEGAK LURUS</strong>, satu lengan searah gerak Bumi (dugaan arah "angin eter"), satu lengan lagi tegak lurus terhadapnya.</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">3</span>
+    <div class="mtr-step-body">
+      <p><strong>Di ujung tiap lengan, cermin memantulkan berkas cahaya itu kembali</strong> ke cermin setengah perak di tengah.</p>
+    </div>
+  </div>
+  <div class="mtr-step">
+    <span class="mtr-step-num">4</span>
+    <div class="mtr-step-body">
+      <p><strong>Kedua berkas digabung kembali dan diamati lewat teleskop.</strong> Kalau ada "angin eter", cahaya di kedua lengan akan menempuh waktu sedikit berbeda -- menghasilkan pola interferensi yang bergeser saat seluruh alat diputar perlahan.</p>
+    </div>
+  </div>
+</div>
+
+## 😲 Hasilnya: Nihil
+
+Michelson dan Morley mengulang percobaan ini dengan sangat teliti, memutar interferometernya ke berbagai arah dan waktu berbeda sepanjang tahun (supaya menangkap variasi arah gerak Bumi mengelilingi Matahari). Hasilnya?
+
+<div class="mtr-note">
+<strong class="mtr-right">TIDAK ADA pergeseran pola interferensi yang berarti.</strong> Kecepatan cahaya terukur SAMA PERSIS di kedua lengan, berapa pun arahnya. Tidak ada jejak "angin eter" sama sekali -- persis kebalikan dari yang diprediksi.
+</div>
+
+Ini adalah salah satu "kegagalan" paling berpengaruh dalam sejarah sains. Michelson bahkan meraih Hadiah Nobel Fisika 1907, justru untuk eksperimen yang "gagal" membuktikan hipotesisnya sendiri! Hasil nihil inilah yang kemudian disebut sebagai salah satu petunjuk terkuat yang menuntun ke kesimpulan radikal: mungkin tidak ada eter sama sekali, dan cahaya memang secara alami merambat dengan kecepatan konstan c bagi SEMUA pengamat, tidak peduli bagaimana mereka bergerak.
+
+## ⚠️ Kesalahan Umum
+
+<div class="mtr-note">
+<strong class="mtr-wrong">❌ "Percobaan Michelson-Morley itu percobaan yang gagal/tidak berguna, karena tidak menemukan apa yang dicari."</strong><br>
+Tidak tepat. <strong class="mtr-right">Hasil "negatif" dalam sains justru bisa sama berharganya dengan hasil "positif"</strong> -- percobaan ini dirancang dan dijalankan dengan sangat presisi, dan hasilnya (tidak ada angin eter) itu SENDIRI adalah data ilmiah yang valid. Justru karena hasil tak terduga inilah, fisikawan terdorong mencari penjelasan baru, yang berujung pada teori relativitas khusus Einstein delapan belas tahun kemudian.
+</div>
+
+## 🤔 Coba Pikirkan
+
+1. Kalau kamu jadi fisikawan di akhir abad ke-19 dan hasil percobaanmu bertentangan total dengan teori yang sudah diyakini semua orang selama puluhan tahun, menurutmu apa yang lebih sulit: merancang percobaannya, atau meyakinkan orang lain menerima hasilnya?
+2. Einstein tidak "membuktikan" ketiadaan eter lewat percobaan baru -- ia malah mengubah ASUMSI dasarnya (ruang & waktu relatif, bukan mutlak) supaya hasil Michelson-Morley jadi masuk akal. Menurutmu, kenapa cara ini bisa dibilang lebih radikal daripada sekadar mencari alasan teknis kenapa percobaannya "gagal"?
+
+Coba diskusikan jawabanmu dengan teman sekelas.
+
+<div class="mtr-cta">
+<p>Salah satu konsekuensi paling terkenal dari "ruang dan waktu yang relatif" ini adalah dilatasi waktu -- waktu yang bisa "melambat" bagi benda yang bergerak sangat cepat.</p>
+<a href="/materi/dilatasi-waktu" class="btn btn-primary">⏱️ Lanjut ke Dilatasi Waktu →</a>
+</div>
