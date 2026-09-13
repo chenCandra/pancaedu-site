@@ -1,10 +1,10 @@
 ---
-judul: "Sistem Elektronika: Semikonduktor, Dioda, dan Transistor"
+judul: "Semikonduktor dan Dioda"
 kelas: XII
 mapel: Fisika
-deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar semikonduktor, dioda, dan transistor."
-materiSlug: sistem-elektronika
-pinHash: d886cc2fdeb3f43c78d1083308e5ab591e2a44825394ca91f922999f46cdf803
+deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar semikonduktor, doping, dan dioda sebagai penyearah."
+materiSlug: semikonduktor-dan-dioda
+pinHash: 83c56c421e5cdd5638e7354138057497d81034b83eaca7df67a00d4901f43e51
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda
@@ -75,14 +75,14 @@ soal:
     skor: 1
   - tipe: pilihan-ganda
     id: soal-7
-    soal: "Transistor tersusun dari berapa lapis semikonduktor, dengan tiga kaki apa saja?"
+    soal: "LED (Light Emitting Diode) adalah jenis dioda khusus yang berfungsi untuk..."
     pilihan:
-      - { id: a, teks: "3 lapis; basis, kolektor, dan emitor" }
-      - { id: b, teks: "2 lapis; anoda dan katoda" }
-      - { id: c, teks: "1 lapis; hanya basis" }
-      - { id: d, teks: "4 lapis; tanpa nama khusus" }
+      - { id: a, teks: "Memancarkan cahaya saat dialiri arus forward bias" }
+      - { id: b, teks: "Menyimpan energi listrik dalam jumlah besar" }
+      - { id: c, teks: "Memperbesar sinyal listrik" }
+      - { id: d, teks: "Mengubah cahaya jadi listrik" }
     jawabanBenarId: a
-    penjelasan: "Transistor (NPN atau PNP) tersusun dari 3 lapis semikonduktor dengan 3 kaki: basis (B), kolektor (C), dan emitor (E)."
+    penjelasan: "LED adalah dioda yang memancarkan cahaya saat dialiri arus forward bias -- dipakai di hampir semua lampu indikator dan layar modern."
     skor: 1
   - tipe: benar-salah
     id: soal-8
@@ -98,9 +98,9 @@ soal:
     skor: 1
   - tipe: benar-salah
     id: soal-10
-    soal: "Transistor bisa berfungsi baik sebagai saklar elektronik maupun sebagai penguat (amplifier) sinyal."
+    soal: "Silikon dan Germanium adalah dua bahan semikonduktor yang umum dipakai dalam elektronika."
     jawabanBenar: true
-    penjelasan: "Benar -- kemampuan arus kecil di basis mengendalikan arus besar di kolektor-emitor membuat transistor bisa dipakai untuk kedua fungsi ini."
+    penjelasan: "Benar -- Silikon (Si) dan Germanium (Ge) adalah dua semikonduktor paling umum, dengan Silikon yang paling banyak dipakai di industri elektronika modern."
     skor: 1
   - tipe: isian-singkat
     id: soal-11
@@ -139,16 +139,16 @@ soal:
     skor: 1
   - tipe: drag-drop
     id: soal-15
-    soal: "Kelompokkan komponen berikut berdasarkan fungsi utamanya."
+    soal: "Kelompokkan ciri-ciri berikut sebagai kondisi Forward Bias atau Reverse Bias pada dioda."
     kategori:
-      - { id: penyearah, label: "Penyearah/Cahaya" }
-      - { id: saklarpenguat, label: "Saklar/Penguat" }
+      - { id: forward, label: "Forward Bias" }
+      - { id: reverse, label: "Reverse Bias" }
     item:
-      - { id: t1, teks: "Dioda", kategoriBenarId: penyearah }
-      - { id: t2, teks: "LED", kategoriBenarId: penyearah }
-      - { id: t3, teks: "Transistor", kategoriBenarId: saklarpenguat }
-      - { id: t4, teks: "IC (kumpulan miliaran transistor)", kategoriBenarId: saklarpenguat }
-    penjelasan: "Dioda dan LED berkaitan dengan menyearahkan arus/memancarkan cahaya, sedangkan transistor dan IC berkaitan dengan fungsi saklar/penguat sinyal."
+      - { id: t1, teks: "Kutub P dihubungkan ke (+), kutub N ke (−)", kategoriBenarId: forward }
+      - { id: t2, teks: "Kutub P dihubungkan ke (−), kutub N ke (+)", kategoriBenarId: reverse }
+      - { id: t3, teks: "Arus mengalir kalau tegangan melebihi ambang", kategoriBenarId: forward }
+      - { id: t4, teks: "Dioda tetap tertutup, tidak ada arus mengalir", kategoriBenarId: reverse }
+    penjelasan: "Forward bias (P ke +, N ke −) memungkinkan arus mengalir jika melebihi tegangan ambang; reverse bias (P ke −, N ke +) membuat dioda tertutup total."
     skor: 1
 draft: false
 ---

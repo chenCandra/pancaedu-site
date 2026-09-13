@@ -1,11 +1,11 @@
 ---
-title: "Sistem Elektronika: Semikonduktor, Dioda, dan Transistor"
-description: "Kenalan dengan komponen dasar elektronika modern -- semikonduktor, dioda sebagai penyearah, dan transistor sebagai saklar/penguat, lengkap simulasi interaktif."
+title: "Semikonduktor dan Dioda"
+description: "Kenalan dengan bahan di balik seluruh elektronika modern -- semikonduktor, proses doping, dan dioda sebagai penyearah arus, lengkap simulasi interaktif."
 category: materi
 mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
-tags: ["Sistem Elektronika", "Semikonduktor", "Dioda", "Transistor", "Fisika Kelas XII"]
+tags: ["Sistem Elektronika", "Semikonduktor", "Dioda", "Fisika Kelas XII"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/dioda-dan-transistor.html"
   judul: "Laboratorium Maya: Dioda dan Transistor"
@@ -24,10 +24,10 @@ kuis:
     pilihan: ["Hanya mengalirkan arus satu arah (saat forward bias melebihi tegangan ambang)", "Mengalirkan arus ke segala arah dengan sama mudahnya", "Memperbesar sinyal listrik", "Menyimpan energi listrik"]
     jawaban: 0
     penjelasan: "Dioda cuma menghantar saat forward bias dan tegangannya melebihi tegangan ambang (≈0,7V untuk silikon) -- sifat satu-arah inilah yang membuatnya cocok jadi penyearah."
-  - soal: "Transistor sebagai saklar elektronik dikendalikan oleh..."
-    pilihan: ["Tegangan/arus kecil di basis, mengendalikan arus besar kolektor-emitor", "Suhu ruangan", "Warna cahaya yang mengenainya", "Panjang kabel yang dipakai"]
+  - soal: "LED (Light Emitting Diode) akan memancarkan cahaya saat..."
+    pilihan: ["Dipasang forward bias dan tegangannya melebihi tegangan ambang", "Dipasang reverse bias", "Suhu ruangan sangat rendah", "Tidak dialiri arus sama sekali"]
     jawaban: 0
-    penjelasan: "Arus kecil di basis (begitu melewati tegangan ambang) bisa mengendalikan arus jauh lebih besar antara kolektor dan emitor -- prinsip dasar semua chip komputer modern."
+    penjelasan: "LED adalah jenis dioda khusus -- sama seperti dioda biasa, ia baru menghantar (dan pada LED, memancarkan cahaya) saat forward bias melebihi tegangan ambang."
 draft: false
 ---
 
@@ -108,7 +108,7 @@ draft: false
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
 </style>
 
-Selamat datang di bab baru: **Teori Dasar Digital**. Sepanjang tiga bab sebelumnya kita membahas rangkaian listrik, medan magnet, sampai fisika modern yang aneh-aneh. Sekarang saatnya membahas fondasi teknologi yang mungkin paling sering kamu pakai setiap hari tanpa sadar: **elektronika** -- ilmu di balik HP, laptop, charger, sampai lampu LED di kamarmu.
+Selamat datang di bab baru: **Teori Dasar Digital**. Sepanjang tiga bab sebelumnya kita membahas rangkaian listrik, medan magnet, sampai fisika modern yang aneh-aneh. Sekarang saatnya membahas fondasi teknologi yang mungkin paling sering kamu pakai setiap hari tanpa sadar: **elektronika** -- ilmu di balik HP, laptop, charger, sampai lampu LED di kamarmu. Kita mulai dari bahan paling dasarnya: semikonduktor, dan komponen pertama yang dibangun darinya, dioda.
 
 ## 🔬 Semikonduktor: Bukan Konduktor, Bukan Isolator
 
@@ -147,27 +147,6 @@ Sifat satu-arah inilah yang membuat dioda sangat berguna sebagai **penyearah (re
 
 Salah satu jenis dioda khusus yang sudah sangat familiar buatmu adalah **LED (Light Emitting Diode)** -- dioda yang memancarkan cahaya saat dialiri arus forward bias, dipakai di hampir semua lampu indikator, layar, dan penerangan hemat energi modern.
 
-## 🔀 Transistor: Saklar dan Penguat
-
-Kalau dioda tersusun dari 2 lapis semikonduktor (P-N), **transistor** tersusun dari **3 lapis** (bisa NPN atau PNP), dengan tiga kaki: **basis (B)**, **kolektor (C)**, dan **emitor (E)**.
-
-<div class="mtr-def">
-💡 Sambungan basis-emitor transistor berperilaku seperti dioda -- perlu tegangan melebihi ambang (≈0,7V) untuk "menyalakannya". Begitu ON, arus KECIL di basis bisa mengendalikan arus jauh lebih BESAR yang mengalir dari kolektor ke emitor.
-</div>
-
-Kemampuan "arus kecil mengendalikan arus besar" inilah yang membuat transistor punya dua fungsi utama:
-
-<div class="mtr-cards">
-<div class="mtr-cards-grid">
-<div class="mtr-card"><span class="mtr-card-icon">🔘</span><h4>Sebagai Saklar</h4><p>Transistor cuma punya 2 keadaan: ON (menghantar penuh) atau OFF (tidak menghantar sama sekali) -- persis seperti saklar digital "1" dan "0". Inilah dasar SEMUA chip komputer modern, yang berisi miliaran transistor mini yang menyala-mati super cepat.</p></div>
-<div class="mtr-card"><span class="mtr-card-icon">📢</span><h4>Sebagai Penguat (Amplifier)</h4><p>Sinyal lemah (mis. dari mikrofon) di basis bisa "diperbesar" jadi sinyal kuat di kolektor-emitor -- prinsip ini dipakai di amplifier audio, radio, dan berbagai alat elektronik lainnya.</p></div>
-</div>
-</div>
-
-## 🔬 Dari Komponen ke IC (Integrated Circuit)
-
-Dulu, dioda dan transistor dibuat sebagai komponen terpisah yang harus dirangkai manual dengan kabel. Sekarang, jutaan bahkan miliaran transistor mini bisa dicetak dalam satu keping silikon kecil yang disebut **IC (Integrated Circuit/sirkuit terpadu)** -- inilah "otak" di balik prosesor HP dan komputer modern. Materi selanjutnya, [Gerbang Logika](/materi/gerbang-logika), akan menunjukkan bagaimana kombinasi transistor-transistor ini disusun jadi "gerbang" yang bisa melakukan operasi logika -- fondasi cara kerja semua komputer digital.
-
 ## ⚠️ Kesalahan Umum
 
 <div class="mtr-note">
@@ -180,9 +159,9 @@ Tidak tepat. <strong class="mtr-right">Semikonduktor tipe-P tetap NETRAL secara 
 1. Kenapa menurutmu dioda LED yang dipasang TERBALIK (reverse bias) di sebuah rangkaian tidak akan menyala, walau sudah diberi sumber tegangan?
 2. Sebuah remote control TV inframerah (ingat lagi materi [Spektrum Elektromagnetik](/materi/spektrum-elektromagnetik)) memakai LED inframerah untuk mengirim sinyal. Menurutmu, kenapa LED (bukan lampu pijar biasa) yang dipilih untuk aplikasi ini?
 
-Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu pemahamanmu lewat simulasi Dioda dan Transistor di atas.
+Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu pemahamanmu lewat tab Dioda di simulasi bawah.
 
 <div class="mtr-cta">
-<p>Sekarang kita paham komponen dasarnya. Selanjutnya kita lihat bagaimana kombinasi transistor-transistor ini disusun jadi "gerbang logika" -- fondasi cara kerja semua komputer digital.</p>
-<a href="/materi/gerbang-logika" class="btn btn-primary">🔢 Lanjut ke Gerbang Logika →</a>
+<p>Sekarang kita paham bahan dasarnya dan komponen pertama yang dibangun darinya. Selanjutnya kita bahas komponen yang jauh lebih canggih: transistor, yang jadi dasar semua chip komputer modern.</p>
+<a href="/materi/transistor-saklar-dan-penguat" class="btn btn-primary">🔀 Lanjut ke Transistor: Saklar dan Penguat →</a>
 </div>

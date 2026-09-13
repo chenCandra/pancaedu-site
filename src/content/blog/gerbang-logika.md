@@ -108,7 +108,7 @@ draft: false
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
 </style>
 
-Di materi [Sistem Elektronika](/materi/sistem-elektronika) kita belajar transistor bisa berfungsi sebagai saklar digital: ON (1) atau OFF (0). Pertanyaannya sekarang: bagaimana caranya jutaan saklar sederhana seperti itu bisa disusun jadi sesuatu serumit prosesor HP-mu yang bisa menjalankan game, memutar musik, dan menghitung? Jawabannya dimulai dari unit paling dasar: **gerbang logika (logic gate)**.
+Di materi [Transistor: Saklar dan Penguat](/materi/transistor-saklar-dan-penguat) kita belajar transistor bisa berfungsi sebagai saklar digital: ON (1) atau OFF (0). Pertanyaannya sekarang: bagaimana caranya jutaan saklar sederhana seperti itu bisa disusun jadi sesuatu serumit prosesor HP-mu yang bisa menjalankan game, memutar musik, dan menghitung? Jawabannya dimulai dari unit paling dasar: **gerbang logika (logic gate)**.
 
 ## 🔢 Sinyal Digital: Cuma Ada Dua Pilihan
 
