@@ -1,5 +1,5 @@
 ---
-tanggal: 2026-10-31
+tanggal: 2026-10-25
 kelas: X
 mapel: Fisika
 bab: "Perubahan Iklim"

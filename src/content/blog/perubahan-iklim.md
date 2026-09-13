@@ -242,3 +242,8 @@ Sebuah kota pesisir menghadapi ancaman kenaikan permukaan laut akibat perubahan 
 2. Menurutmu, kenapa kota itu tetap perlu melakukan KEDUANYA (bukan cuma salah satu)?
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
+
+<div class="mtr-cta">
+<p>Setelah tuntas membahas Perubahan Iklim, sekarang kita masuk ke bab baru: Gerak Dua Dimensi -- dimulai dari dasar-dasar gerak lurus.</p>
+<a href="/materi/gerak-lurus-beraturan" class="btn btn-primary">🚗 Lanjut ke Gerak Lurus Beraturan (GLB) →</a>
+</div>
