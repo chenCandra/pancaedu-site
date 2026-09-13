@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gaya Lorentz</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --pos: #ef4444; --neg: #3b82f6;
+    --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .toggle-row { display: flex; gap: 8px; }
+  .toggle-btn { flex: 1; background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 10px; border-radius: 10px; cursor: pointer; }
+  .toggle-btn.is-active-pos { color: #fff; background: var(--pos); border-color: transparent; }
+  .toggle-btn.is-active-neg { color: #fff; background: var(--neg); border-color: transparent; }
+  .toggle-btn.is-active-b { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .btn-reset { background: linear-gradient(135deg, #64748b 0%, #475569 100%); color: #fff; border: none; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 340px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 280px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 14px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .result-highlight .k { font-size: 0.8rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.2rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌀</span><h1>Laboratorium Maya: Gaya Lorentz</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Kecepatan Partikel (v)</span><span class="control-value" id="vVal">4</span></div>
+        <input type="range" id="vSlider" min="1" max="8" step="0.5" value="4">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Kuat Medan Magnet (B)</span><span class="control-value" id="bVal">4</span></div>
+        <input type="range" id="bSlider" min="1" max="8" step="0.5" value="4">
+      </div>
+      <div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Jenis Muatan</p>
+        <div class="toggle-row">
+          <button class="toggle-btn is-active-pos" id="btnPos">➕ Positif</button>
+          <button class="toggle-btn" id="btnNeg">➖ Negatif</button>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Arah Medan B</p>
+        <div class="toggle-row">
+          <button class="toggle-btn is-active-b" id="btnBOut">⊙ Keluar Layar</button>
+          <button class="toggle-btn" id="btnBIn">⊗ Masuk Layar</button>
+        </div>
+      </div>
+      <button class="btn-reset" id="btnReset">🔄 Tembak Ulang Partikel</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visualisasi</span></div>
+      <div class="canvas-wrapper"><canvas id="lorentzCanvas"></canvas></div>
+      <div class="results-panel">
+        <div class="result-highlight"><div><div class="k">Jari-jari Lintasan (r)</div><div class="v" id="radiusVal">0</div></div></div>
+        <div class="formula-box" id="lorentzFormula"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Partikel bermuatan yang bergerak TEGAK LURUS terhadap medan magnet seragam akan mengalami gaya (<span class="math-var">F = qvB</span>) yang SELALU tegak lurus arah geraknya -- gaya ini tidak pernah mempercepat/memperlambat partikel, hanya membelokkan arahnya, sehingga lintasannya berbentuk LINGKARAN. Jari-jari lintasan <span class="math-var">r = mv/(qB)</span>: makin cepat partikelnya atau makin lemah medannya, makin besar lingkarannya. Arah belokan ditentukan kaidah tangan kanan (untuk muatan positif) -- muatan negatif membelok ke arah BERLAWANAN.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kalau jenis muatan partikel dibalik dari positif jadi negatif (kecepatan &amp; medan B tetap sama), apa yang terjadi pada lintasannya?</span>
+    <div class="quiz-opts" id="lorentzQuizOpts"></div>
+    <div class="quiz-fb" id="lorentzQuizFb"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('lorentzCanvas');
+    const ctx = canvas.getContext('2d');
+    const vSlider = document.getElementById('vSlider'), vVal = document.getElementById('vVal');
+    const bSlider = document.getElementById('bSlider'), bVal = document.getElementById('bVal');
+    const btnPos = document.getElementById('btnPos'), btnNeg = document.getElementById('btnNeg');
+    const btnBOut = document.getElementById('btnBOut'), btnBIn = document.getElementById('btnBIn');
+    const btnReset = document.getElementById('btnReset');
+    const radiusVal = document.getElementById('radiusVal');
+    const lorentzFormula = document.getElementById('lorentzFormula');
+
+    let vMag = 4, bMag = 4, qSign = 1, bSign = 1; // bSign: +1 keluar layar, -1 masuk layar
+    let particle = { x: 0, y: 0, vx: 0, vy: 0 };
+    let trail = [];
+    const m = 1; // massa & |q| dianggap 1 satuan -- yang divariasikan cuma v dan B
+
+    vSlider.addEventListener('input', () => { vMag = parseFloat(vSlider.value); vVal.textContent = vMag; resetParticle(); });
+    bSlider.addEventListener('input', () => { bMag = parseFloat(bSlider.value); bVal.textContent = bMag; resetParticle(); });
+    btnPos.addEventListener('click', () => { qSign = 1; btnPos.classList.add('is-active-pos'); btnNeg.classList.remove('is-active-neg'); resetParticle(); });
+    btnNeg.addEventListener('click', () => { qSign = -1; btnNeg.classList.add('is-active-neg'); btnPos.classList.remove('is-active-pos'); resetParticle(); });
+    btnBOut.addEventListener('click', () => { bSign = 1; btnBOut.classList.add('is-active-b'); btnBIn.classList.remove('is-active-b'); resetParticle(); });
+    btnBIn.addEventListener('click', () => { bSign = -1; btnBIn.classList.add('is-active-b'); btnBOut.classList.remove('is-active-b'); resetParticle(); });
+    btnReset.addEventListener('click', resetParticle);
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      resetParticle();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function resetParticle() {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      particle = { x: w * 0.15, y: h * 0.5, vx: vMag * 12, vy: 0 };
+      trail = [];
+      const r = (m * vMag) / (Math.abs(qSign) * bMag) * 22;
+      radiusVal.textContent = r.toFixed(1) + ' satuan';
+      let formula = `r = mv/(qB) = (1)(${vMag})/((1)(${bMag})) = <span class="math-num">${(vMag / bMag).toFixed(2)}</span> satuan (skala relatif)<br>`;
+      formula += `Muatan: <span class="math-var">${qSign > 0 ? 'positif (+)' : 'negatif (-)'}</span>, Medan B: <span class="math-var">${bSign > 0 ? 'keluar layar (⊙)' : 'masuk layar (⊗)'}</span>`;
+      lorentzFormula.innerHTML = formula;
+    }
+
+    function drawFieldDots(w, h) {
+      const cols = 8, rows = 5;
+      ctx.save();
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = ((i + 0.5) / cols) * w, y = ((j + 0.5) / rows) * h;
+          ctx.strokeStyle = 'rgba(148,163,184,0.35)'; ctx.fillStyle = 'rgba(148,163,184,0.35)'; ctx.lineWidth = 1.5;
+          if (bSign > 0) {
+            ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+          } else {
+            ctx.beginPath(); ctx.moveTo(x - 4, y - 4); ctx.lineTo(x + 4, y + 4); ctx.moveTo(x + 4, y - 4); ctx.lineTo(x - 4, y + 4); ctx.stroke();
+          }
+        }
+      }
+      ctx.restore();
+    }
+
+    function step(dt) {
+      // Gaya Lorentz 2D: F = q(v x B), B = (0,0,bSign*bMag)
+      // v x B = (vy*Bz, -vx*Bz, 0)
+      const Bz = bSign * bMag * 0.06;
+      const Fx = qSign * particle.vy * Bz;
+      const Fy = -qSign * particle.vx * Bz;
+      particle.vx += (Fx / m) * dt;
+      particle.vy += (Fy / m) * dt;
+      particle.x += particle.vx * dt;
+      particle.y += particle.vy * dt;
+      trail.push({ x: particle.x, y: particle.y });
+      if (trail.length > 400) trail.shift();
+    }
+
+    function render() {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      drawFieldDots(w, h);
+
+      // Wrap partikel kalau keluar kanvas (biar animasi terus berjalan)
+      if (particle.x < -20 || particle.x > w + 20 || particle.y < -20 || particle.y > h + 20) resetParticle();
+
+      // Trail
+      ctx.save();
+      ctx.strokeStyle = qSign > 0 ? 'rgba(239,68,68,0.6)' : 'rgba(59,130,246,0.6)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      trail.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+      ctx.stroke();
+      ctx.restore();
+
+      // Partikel
+      ctx.save();
+      ctx.beginPath(); ctx.arc(particle.x, particle.y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = qSign > 0 ? '#ef4444' : '#3b82f6';
+      ctx.shadowColor = qSign > 0 ? 'rgba(239,68,68,0.6)' : 'rgba(59,130,246,0.6)';
+      ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 11px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(qSign > 0 ? '+' : '-', particle.x, particle.y);
+      ctx.restore();
+
+      step(1);
+      requestAnimationFrame(render);
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('lorentzQuizOpts'), [
+      'Lintasannya tetap melingkar dengan jari-jari sama, tapi membelok ke arah BERLAWANAN', 'Partikel berhenti bergerak', 'Lintasannya menjadi garis lurus', 'Jari-jari lingkarannya menjadi dua kali lebih besar'
+    ], 0, (correct) => {
+      const fb = document.getElementById('lorentzQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Membalik tanda muatan membalik arah gaya (F=qvB), jadi partikel membelok ke arah berlawanan -- tapi besar jari-jari lingkarannya tidak berubah karena |q| tidak berubah, cuma tandanya. Coba buktikan sendiri dengan tombol Positif/Negatif di atas.';
+    });
+
+    window.onload = () => { resizeCanvas(); requestAnimationFrame(render); };
+  </script>
+</body>
+</html>

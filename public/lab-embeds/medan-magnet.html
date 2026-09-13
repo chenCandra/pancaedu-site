@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Medan Magnet</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --north: #ef4444; --north-glow: rgba(239,68,68,0.4);
+    --south: #3b82f6; --south-glow: rgba(59,130,246,0.4);
+    --compass: #facc15; --compass-glow: rgba(250,204,21,0.45);
+    --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 11px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; }
+  .tab-panel.is-active { display: block; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 340px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .toggle-row { display: flex; gap: 8px; }
+  .toggle-btn { flex: 1; background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 10px; border-radius: 10px; cursor: pointer; }
+  .toggle-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 340px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; touch-action: none; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 280px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+  .canvas-instruction { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.85); border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; color: var(--text-muted); pointer-events: none; white-space: nowrap; text-align: center; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--compass); padding: 10px 14px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.8rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.3rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--accent-cyan); }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title">
+      <span style="font-size:1.5rem;">🧲</span>
+      <h1>Laboratorium Maya: Medan Magnet</h1>
+    </div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnMagnet">🧲 Magnet Batang</button>
+    <button class="tab-btn" id="tabBtnWire">🔌 Kawat Berarus</button>
+  </div>
+
+  <!-- ============ TAB 1: MAGNET BATANG ============ -->
+  <div class="tab-panel is-active" id="tabMagnet">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Kompas</span></div>
+        <div class="theory-card">
+          <div class="theory-title">💡 Cara Main</div>
+          Geser <strong style="color:var(--compass);">kompas kuning</strong> di kanvas ke mana saja -- jarumnya akan otomatis mengarah sesuai medan magnet di titik itu, sama seperti kompas asli di dekat magnet sungguhan.
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kekuatan Magnet</span><span class="control-value" id="magStrengthVal">5</span></div>
+          <input type="range" id="magStrengthSlider" min="1" max="10" step="1" value="5">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span><span id="magBadge" class="header-badge">Menjelajah</span></div>
+        <div class="canvas-wrapper">
+          <canvas id="magnetCanvas"></canvas>
+          <div class="canvas-instruction">💡 Geser kompas kuning buat menjelajah arah medan di sekitar magnet</div>
+        </div>
+        <div class="results-panel">
+          <div class="result-highlight"><div class="k">Arah Jarum Kompas</div><div class="v" id="compassAngleVal">0°</div></div>
+          <div class="formula-box" id="magnetFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Garis gaya magnet SELALU keluar dari kutub <span style="color:var(--north);">Utara (N)</span> dan masuk ke kutub <span style="color:var(--south);">Selatan (S)</span> di LUAR magnet. Kompas hanyalah magnet kecil yang bebas berputar -- jarumnya (kutub utara kompas) akan selalu sejajar dengan arah medan magnet di titik tersebut. Model di atas menyederhanakan magnet sebagai dua "kutub titik" (mirip cara kita memodelkan muatan listrik) supaya arah medannya bisa dihitung -- pendekatan ini membantu visualisasi meski kutub magnet sesungguhnya tidak bisa dipisah sendiri-sendiri (tidak ada monopol magnet).
+    </div>
+    <div class="card quiz-card">
+      <span class="quiz-q">🤔 Kalau kamu dekatkan kutub Utara sebuah magnet ke kutub Utara magnet lain, apa yang terjadi?</span>
+      <div class="quiz-opts" id="magQuizOpts"></div>
+      <div class="quiz-fb" id="magQuizFb"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: KAWAT BERARUS ============ -->
+  <div class="tab-panel" id="tabWire">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Arus</span></div>
+        <div class="theory-card">
+          <div class="theory-title">💡 Kaidah Tangan Kanan</div>
+          Genggam kawat dengan tangan kanan, ibu jari menunjuk arah arus (I) -- lipatan jari-jari lain menunjukkan arah medan magnet (B) yang melingkar di sekitarnya.
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kuat Arus (I)</span><span class="control-value" id="currentVal">5 A</span></div>
+          <input type="range" id="currentSlider" min="1" max="10" step="1" value="5">
+        </div>
+        <div class="toggle-row">
+          <button class="toggle-btn is-active" id="btnCurrentUp">⬆️ Arus ke Atas</button>
+          <button class="toggle-btn" id="btnCurrentDown">⬇️ Arus ke Bawah</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper">
+          <canvas id="wireCanvas"></canvas>
+          <div class="canvas-instruction">💡 Geser kompas kuning buat menjelajah arah medan di sekitar kawat</div>
+        </div>
+        <div class="results-panel">
+          <div class="result-highlight"><div class="k">Arah Jarum Kompas</div><div class="v" id="wireCompassVal">0°</div></div>
+          <div class="formula-box" id="wireFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Berbeda dari magnet batang, medan magnet di sekitar kawat lurus berarus berbentuk LINGKARAN KONSENTRIS mengelilingi kawat, arahnya ditentukan kaidah tangan kanan. Kalau kawat ini digulung jadi kumparan (solenoida), medan dari tiap lilitan saling memperkuat di dalam kumparan -- inilah prinsip dasar elektromagnet (magnet buatan yang bisa dinyalakan/dimatikan lewat arus listrik).
+    </div>
+    <div class="card quiz-card">
+      <span class="quiz-q">🤔 Kalau arah arus pada kawat dibalik, apa yang terjadi pada arah medan magnetnya?</span>
+      <div class="quiz-opts" id="wireQuizOpts"></div>
+      <div class="quiz-fb" id="wireQuizFb"></div>
+    </div>
+  </div>
+
+  <script>
+    // ============ UTIL ============
+    function drawArrow(ctx, fromX, fromY, dirX, dirY, len, color, lineWidth) {
+      const mag = Math.hypot(dirX, dirY);
+      if (mag < 1e-9 || len < 2) return;
+      const ux = dirX / mag, uy = dirY / mag;
+      const toX = fromX + ux * len, toY = fromY + uy * len;
+      const headLen = Math.max(5, lineWidth * 2.2);
+      const angle = Math.atan2(uy, ux);
+      ctx.save();
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lineWidth;
+      ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = '';
+      let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    // ============ TAB SWITCHING ============
+    const tabBtnMagnet = document.getElementById('tabBtnMagnet');
+    const tabBtnWire = document.getElementById('tabBtnWire');
+    const tabMagnet = document.getElementById('tabMagnet');
+    const tabWire = document.getElementById('tabWire');
+    tabBtnMagnet.addEventListener('click', () => {
+      tabBtnMagnet.classList.add('is-active'); tabBtnWire.classList.remove('is-active');
+      tabMagnet.classList.add('is-active'); tabWire.classList.remove('is-active');
+      resizeMagnetCanvas();
+    });
+    tabBtnWire.addEventListener('click', () => {
+      tabBtnWire.classList.add('is-active'); tabBtnMagnet.classList.remove('is-active');
+      tabWire.classList.add('is-active'); tabMagnet.classList.remove('is-active');
+      resizeWireCanvas();
+    });
+
+    // ============ TAB 1: MAGNET BATANG (model dwikutub, mirip medan listrik) ============
+    const magnetCanvas = document.getElementById('magnetCanvas');
+    const magnetCtx = magnetCanvas.getContext('2d');
+    const magStrengthSlider = document.getElementById('magStrengthSlider');
+    const magStrengthVal = document.getElementById('magStrengthVal');
+    const compassAngleVal = document.getElementById('compassAngleVal');
+    const magnetFormula = document.getElementById('magnetFormula');
+    const magBadge = document.getElementById('magBadge');
+
+    let magStrength = 5;
+    let magPxPerUnit = 10;
+    let poleN = { x: 0, y: 0 }, poleS = { x: 0, y: 0 };
+    let compassFrac = { x: 0.72, y: 0.3 };
+    let isDraggingCompass = false;
+
+    magStrengthSlider.addEventListener('input', () => { magStrength = parseFloat(magStrengthSlider.value); magStrengthVal.textContent = magStrength; renderMagnet(); });
+
+    function fieldAtPointDipole(px, py) {
+      // Model sederhana: kutub N = "sumber positif", kutub S = "sumber negatif",
+      // field sebanding 1/r^2 dari tiap kutub (analog medan listrik 2 muatan).
+      let bx = 0, by = 0;
+      const poles = [{ pos: poleN, sign: 1 }, { pos: poleS, sign: -1 }];
+      for (const p of poles) {
+        const dx = px - p.pos.x, dy = py - p.pos.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 18) continue;
+        const mag = (magStrength * 4000) / (dist * dist);
+        bx += p.sign * mag * (dx / dist);
+        by += p.sign * mag * (dy / dist);
+      }
+      return { bx, by, mag: Math.hypot(bx, by) };
+    }
+
+    function resizeMagnetCanvas() {
+      const rect = magnetCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      magnetCanvas.width = rect.width * dpr; magnetCanvas.height = rect.height * dpr;
+      magnetCtx.setTransform(1, 0, 0, 1, 0, 0); magnetCtx.scale(dpr, dpr);
+      renderMagnet();
+    }
+    window.addEventListener('resize', resizeMagnetCanvas);
+
+    function renderMagnet() {
+      const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      magnetCtx.clearRect(0, 0, w, h);
+      magPxPerUnit = w / 30;
+      const cx = w / 2, cy = h / 2, half = 45 * (magPxPerUnit / 10);
+      poleN = { x: cx - half, y: cy };
+      poleS = { x: cx + half, y: cy };
+
+      // Batang magnet
+      magnetCtx.save();
+      const barH = Math.max(28, w / 14);
+      const grad = magnetCtx.createLinearGradient(poleN.x, 0, poleS.x, 0);
+      grad.addColorStop(0, '#ef4444'); grad.addColorStop(1, '#3b82f6');
+      magnetCtx.fillStyle = grad;
+      magnetCtx.fillRect(poleN.x - 14, cy - barH / 2, (poleS.x - poleN.x) + 28, barH);
+      magnetCtx.fillStyle = '#fff'; magnetCtx.font = `bold ${Math.round(barH * 0.55)}px system-ui`; magnetCtx.textAlign = 'center'; magnetCtx.textBaseline = 'middle';
+      magnetCtx.fillText('N', poleN.x, cy);
+      magnetCtx.fillText('S', poleS.x, cy);
+      magnetCtx.restore();
+
+      // Grid arah medan (kecil-kecil di latar)
+      const cols = 9, rows = 5;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const gx = ((i + 0.5) / cols) * w, gy = ((j + 0.5) / rows) * h;
+          if (Math.hypot(gx - poleN.x, gy - poleN.y) < 30 || Math.hypot(gx - poleS.x, gy - poleS.y) < 30) continue;
+          const f = fieldAtPointDipole(gx, gy);
+          if (f.mag < 1e-6) continue;
+          const len = 12;
+          drawArrow(magnetCtx, gx - (f.bx / f.mag) * len * 0.5, gy - (f.by / f.mag) * len * 0.5, f.bx, f.by, len, 'rgba(148,163,184,0.4)', 1.2);
+        }
+      }
+
+      // Kompas (draggable)
+      const compassPx = { x: compassFrac.x * w, y: compassFrac.y * h };
+      const field = fieldAtPointDipole(compassPx.x, compassPx.y);
+      const angleDeg = (Math.atan2(field.by, field.bx) * 180 / Math.PI + 360) % 360;
+      compassAngleVal.textContent = angleDeg.toFixed(0) + '°';
+
+      magnetCtx.save();
+      magnetCtx.beginPath(); magnetCtx.arc(compassPx.x, compassPx.y, 22, 0, Math.PI * 2);
+      magnetCtx.fillStyle = 'rgba(250,204,21,0.15)'; magnetCtx.fill();
+      magnetCtx.strokeStyle = 'rgba(250,204,21,0.6)'; magnetCtx.lineWidth = 1.5; magnetCtx.stroke();
+      magnetCtx.restore();
+      if (field.mag > 0) drawArrow(magnetCtx, compassPx.x, compassPx.y, field.bx, field.by, 24, '#facc15', 3.5);
+
+      let formula = `Model: kutub N &amp; S dianggap dua "sumber titik" seperti muatan (analog medan listrik).<br>`;
+      formula += `Arah jarum kompas = arah <span class="math-var">B total</span> di titik itu = <span class="math-num">${angleDeg.toFixed(1)}°</span>`;
+      magnetFormula.innerHTML = formula;
+
+      const nearPole = Math.min(Math.hypot(compassPx.x - poleN.x, compassPx.y - poleN.y), Math.hypot(compassPx.x - poleS.x, compassPx.y - poleS.y)) < 60;
+      magBadge.textContent = nearPole ? '🎯 Dekat Kutub -- Medan Kuat!' : 'Menjelajah';
+    }
+
+    function getCanvasCoords(canvas, evt) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    magnetCanvas.addEventListener('mousedown', (e) => {
+      const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(magnetCanvas, e);
+      const compassPx = { x: compassFrac.x * w, y: compassFrac.y * h };
+      if (Math.hypot(pos.x - compassPx.x, pos.y - compassPx.y) < 30) isDraggingCompass = true;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingCompass) return;
+      const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(magnetCanvas, e);
+      compassFrac = { x: Math.max(0.03, Math.min(0.97, pos.x / w)), y: Math.max(0.05, Math.min(0.95, pos.y / h)) };
+      renderMagnet();
+    });
+    window.addEventListener('mouseup', () => { isDraggingCompass = false; });
+    magnetCanvas.addEventListener('touchstart', (e) => {
+      const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(magnetCanvas, e);
+      const compassPx = { x: compassFrac.x * w, y: compassFrac.y * h };
+      if (Math.hypot(pos.x - compassPx.x, pos.y - compassPx.y) < 30) isDraggingCompass = true;
+    }, { passive: false });
+    window.addEventListener('touchmove', (e) => {
+      if (!isDraggingCompass) return; e.preventDefault();
+      const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(magnetCanvas, e);
+      compassFrac = { x: Math.max(0.03, Math.min(0.97, pos.x / w)), y: Math.max(0.05, Math.min(0.95, pos.y / h)) };
+      renderMagnet();
+    }, { passive: false });
+    window.addEventListener('touchend', () => { isDraggingCompass = false; });
+
+    renderQuizOptions(document.getElementById('magQuizOpts'), [
+      'Saling menolak (kutub sejenis tolak-menolak)', 'Saling menarik dengan sangat kuat', 'Tidak terjadi apa-apa', 'Kedua magnet kehilangan sifat magnetnya'
+    ], 0, (correct) => {
+      const fb = document.getElementById('magQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Sama seperti muatan listrik, kutub magnet SEJENIS (N-N atau S-S) saling TOLAK, sedangkan kutub BERLAWANAN (N-S) saling TARIK.';
+    });
+
+    // ============ TAB 2: KAWAT BERARUS ============
+    const wireCanvas = document.getElementById('wireCanvas');
+    const wireCtx = wireCanvas.getContext('2d');
+    const currentSlider = document.getElementById('currentSlider');
+    const currentVal = document.getElementById('currentVal');
+    const btnCurrentUp = document.getElementById('btnCurrentUp');
+    const btnCurrentDown = document.getElementById('btnCurrentDown');
+    const wireCompassVal = document.getElementById('wireCompassVal');
+    const wireFormula = document.getElementById('wireFormula');
+
+    let current = 5;
+    let currentDir = 1; // 1 = ke atas (keluar layar secara konseptual diputar 90 derajat utk visual 2D), -1 = ke bawah
+    let wireCompassFrac = { x: 0.72, y: 0.3 };
+    let isDraggingWireCompass = false;
+
+    currentSlider.addEventListener('input', () => { current = parseFloat(currentSlider.value); currentVal.textContent = current + ' A'; renderWire(); });
+    btnCurrentUp.addEventListener('click', () => { currentDir = 1; btnCurrentUp.classList.add('is-active'); btnCurrentDown.classList.remove('is-active'); renderWire(); });
+    btnCurrentDown.addEventListener('click', () => { currentDir = -1; btnCurrentDown.classList.add('is-active'); btnCurrentUp.classList.remove('is-active'); renderWire(); });
+
+    function resizeWireCanvas() {
+      const rect = wireCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      wireCanvas.width = rect.width * dpr; wireCanvas.height = rect.height * dpr;
+      wireCtx.setTransform(1, 0, 0, 1, 0, 0); wireCtx.scale(dpr, dpr);
+      renderWire();
+    }
+    window.addEventListener('resize', resizeWireCanvas);
+
+    function renderWire() {
+      const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      wireCtx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+
+      // Kawat (garis vertikal tebal di tengah, tampak dari samping)
+      wireCtx.save();
+      wireCtx.strokeStyle = '#94a3b8'; wireCtx.lineWidth = 8; wireCtx.lineCap = 'round';
+      wireCtx.beginPath(); wireCtx.moveTo(cx, 20); wireCtx.lineTo(cx, h - 20); wireCtx.stroke();
+      // Panah arah arus di kawat
+      const arrowY = currentDir === 1 ? h - 40 : 40;
+      const arrowDirY = currentDir === 1 ? -1 : 1;
+      drawArrow(wireCtx, cx, arrowY, 0, arrowDirY, 26, '#facc15', 4);
+      wireCtx.restore();
+
+      // Lingkaran-lingkaran konsentris (medan melingkar)
+      const maxR = Math.min(w, h) / 2 - 10;
+      const rings = 4;
+      for (let i = 1; i <= rings; i++) {
+        const rad = (maxR / rings) * i;
+        wireCtx.beginPath(); wireCtx.arc(cx, cy, rad, 0, Math.PI * 2);
+        wireCtx.strokeStyle = 'rgba(56,189,248,0.25)'; wireCtx.lineWidth = 1.5; wireCtx.stroke();
+        // panah kecil di lingkaran menunjukkan arah edar (kaidah tangan kanan)
+        for (let a = 0; a < 4; a++) {
+          const ang = (a / 4) * Math.PI * 2 + (i * 0.3);
+          const px = cx + rad * Math.cos(ang), py = cy + rad * Math.sin(ang);
+          // arah tangensial: kalau arus ke atas (currentDir=1), medan berlawanan jarum jam (dilihat dari atas) -> pada tampilan 2D ini kita gambar searah jarum jam utk arus ke bawah
+          const tangentAng = ang + (currentDir === 1 ? Math.PI / 2 : -Math.PI / 2);
+          drawArrow(wireCtx, px - Math.cos(tangentAng) * 6, py - Math.sin(tangentAng) * 6, Math.cos(tangentAng), Math.sin(tangentAng), 12, 'rgba(56,189,248,0.7)', 2);
+        }
+      }
+
+      // Kompas draggable
+      const compassPx = { x: wireCompassFrac.x * w, y: wireCompassFrac.y * h };
+      const dx = compassPx.x - cx, dy = compassPx.y - cy;
+      const distFromWire = Math.max(24, Math.hypot(dx, dy));
+      const radialAng = Math.atan2(dy, dx);
+      const tangentAng = radialAng + (currentDir === 1 ? Math.PI / 2 : -Math.PI / 2);
+      const fieldStrength = (current * 3000) / distFromWire;
+      const angleDeg = ((tangentAng * 180 / Math.PI) + 360) % 360;
+      wireCompassVal.textContent = angleDeg.toFixed(0) + '°';
+
+      wireCtx.save();
+      wireCtx.beginPath(); wireCtx.arc(compassPx.x, compassPx.y, 22, 0, Math.PI * 2);
+      wireCtx.fillStyle = 'rgba(250,204,21,0.15)'; wireCtx.fill();
+      wireCtx.strokeStyle = 'rgba(250,204,21,0.6)'; wireCtx.lineWidth = 1.5; wireCtx.stroke();
+      wireCtx.restore();
+      drawArrow(wireCtx, compassPx.x, compassPx.y, Math.cos(tangentAng), Math.sin(tangentAng), 24, '#facc15', 3.5);
+
+      let formula = `Arah arus: <span class="math-var">${currentDir === 1 ? 'ke atas ⬆️' : 'ke bawah ⬇️'}</span><br>`;
+      formula += `Jarak kompas ke kawat: <span class="math-num">${(distFromWire / 10).toFixed(1)}</span> satuan<br>`;
+      formula += `Medan magnet (B) sebanding <span class="math-var">I/r</span> -- makin dekat kawat &amp; makin besar arus, makin kuat B.<br>`;
+      formula += `Arah B saat ini: <span class="math-num">${angleDeg.toFixed(1)}°</span> (tegak lurus terhadap jari-jari lingkaran)`;
+      wireFormula.innerHTML = formula;
+    }
+
+    wireCanvas.addEventListener('mousedown', (e) => {
+      const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(wireCanvas, e);
+      const compassPx = { x: wireCompassFrac.x * w, y: wireCompassFrac.y * h };
+      if (Math.hypot(pos.x - compassPx.x, pos.y - compassPx.y) < 30) isDraggingWireCompass = true;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingWireCompass) return;
+      const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(wireCanvas, e);
+      wireCompassFrac = { x: Math.max(0.03, Math.min(0.97, pos.x / w)), y: Math.max(0.05, Math.min(0.95, pos.y / h)) };
+      renderWire();
+    });
+    window.addEventListener('mouseup', () => { isDraggingWireCompass = false; });
+    wireCanvas.addEventListener('touchstart', (e) => {
+      const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(wireCanvas, e);
+      const compassPx = { x: wireCompassFrac.x * w, y: wireCompassFrac.y * h };
+      if (Math.hypot(pos.x - compassPx.x, pos.y - compassPx.y) < 30) isDraggingWireCompass = true;
+    }, { passive: false });
+    window.addEventListener('touchmove', (e) => {
+      if (!isDraggingWireCompass) return; e.preventDefault();
+      const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      const pos = getCanvasCoords(wireCanvas, e);
+      wireCompassFrac = { x: Math.max(0.03, Math.min(0.97, pos.x / w)), y: Math.max(0.05, Math.min(0.95, pos.y / h)) };
+      renderWire();
+    }, { passive: false });
+    window.addEventListener('touchend', () => { isDraggingWireCompass = false; });
+
+    renderQuizOptions(document.getElementById('wireQuizOpts'), [
+      'Arah medan magnetnya ikut terbalik', 'Medan magnetnya menghilang', 'Kekuatan medan magnetnya menjadi dua kali lipat', 'Tidak ada perubahan sama sekali'
+    ], 0, (correct) => {
+      const fb = document.getElementById('wireQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Sesuai kaidah tangan kanan, membalik arah arus otomatis membalik arah lingkaran medan magnet di sekitarnya -- coba buktikan sendiri dengan tombol arah arus di atas.';
+    });
+
+    window.onload = () => { resizeMagnetCanvas(); resizeWireCanvas(); };
+  </script>
+</body>
+</html>

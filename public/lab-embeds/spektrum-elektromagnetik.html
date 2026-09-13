@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Spektrum Elektromagnetik</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .spectrum-bar { position: relative; height: 34px; border-radius: 10px; overflow: hidden; display: flex; }
+  .spectrum-bar .seg { flex-shrink: 0; }
+  .spectrum-labels { display: flex; font-size: 0.62rem; font-weight: 700; color: var(--text-muted); }
+  .spectrum-labels span { flex-shrink: 0; text-align: center; }
+
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: #fff; }
+
+  .region-panel { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; padding: 18px; border-radius: 14px; transition: background 0.2s; }
+  .region-icon { font-size: 2.6rem; }
+  .region-name { font-size: 1.3rem; font-weight: 800; }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.05rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .app-chip { background: rgba(15,23,42,0.6); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; text-align: center; font-size: 0.78rem; }
+  .app-chip .ico { font-size: 1.3rem; display: block; margin-bottom: 3px; }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌈</span><h1>Laboratorium Maya: Spektrum Elektromagnetik</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="card">
+    <div class="spectrum-bar" id="spectrumBar"></div>
+    <div class="spectrum-labels" id="spectrumLabels"></div>
+    <input type="range" id="waveSlider" min="-13" max="4" step="0.05" value="-6.3">
+    <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;">💡 Geser slider dari kiri (gelombang radio, panjang gelombang besar) ke kanan (sinar gamma, panjang gelombang sangat kecil)</p>
+  </div>
+
+  <div class="card">
+    <div class="region-panel" id="regionPanel">
+      <span class="region-icon" id="regionIcon">👁️</span>
+      <span class="region-name" id="regionName">Cahaya Tampak</span>
+    </div>
+    <div class="data-panel">
+      <div class="data-chip"><div class="k">Panjang Gelombang (λ)</div><div class="v" id="chipLambda">500 nm</div></div>
+      <div class="data-chip"><div class="k">Frekuensi (f)</div><div class="v" id="chipFreq">600 THz</div></div>
+    </div>
+    <div class="formula-box" id="waveFormula"></div>
+    <div>
+      <p style="font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-bottom:8px;">Contoh Pemanfaatan di Kehidupan Sehari-hari:</p>
+      <div class="apps-grid" id="appsGrid"></div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Semua gelombang elektromagnetik (radio, cahaya, sinar-X, dst) merambat dengan KECEPATAN YANG SAMA di ruang hampa: kecepatan cahaya <span class="math-var">c ≈ 3×10⁸ m/s</span>. Yang membedakan satu jenis dari yang lain hanyalah PANJANG GELOMBANG (λ) dan FREKUENSI (f) -- keduanya berbanding TERBALIK lewat rumus <span class="math-var">c = λ × f</span>. Makin pendek panjang gelombangnya, makin tinggi frekuensinya, dan makin besar energinya (dari radio yang paling "lembut" sampai sinar gamma yang paling berenergi tinggi).
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kalau panjang gelombang suatu radiasi elektromagnetik semakin PENDEK, apa yang terjadi pada frekuensi dan energinya?</span>
+    <div class="quiz-opts" id="emQuizOpts"></div>
+    <div class="quiz-fb" id="emQuizFb"></div>
+  </div>
+
+  <script>
+    const C = 3e8;
+    const bands = [
+      { key: 'radio', name: 'Gelombang Radio', icon: '📻', color: '#7c3aed', logMin: 0, logMax: 4, apps: [{ ico: '📻', label: 'Siaran Radio' }, { ico: '📺', label: 'Siaran TV' }, { ico: '🛰️', label: 'Komunikasi Satelit' }] },
+      { key: 'microwave', name: 'Gelombang Mikro', icon: '📡', color: '#2563eb', logMin: -3, logMax: 0, apps: [{ ico: '📶', label: 'WiFi & Bluetooth' }, { ico: '🍲', label: 'Microwave Oven' }, { ico: '📍', label: 'GPS' }, { ico: '🚔', label: 'Radar' }] },
+      { key: 'inframerah', name: 'Sinar Inframerah', icon: '🌡️', color: '#f97316', logMin: -6.15, logMax: -3, apps: [{ ico: '🕹️', label: 'Remote Control' }, { ico: '🌡️', label: 'Kamera Termal' }, { ico: '🔥', label: 'Pemanas Ruangan' }] },
+      { key: 'tampak', name: 'Cahaya Tampak', icon: '👁️', color: '#22c55e', logMin: -6.4, logMax: -6.15, apps: [{ ico: '👁️', label: 'Penglihatan Manusia' }, { ico: '🌱', label: 'Fotosintesis' }, { ico: '💡', label: 'Lampu & Layar' }] },
+      { key: 'uv', name: 'Sinar Ultraviolet', icon: '☀️', color: '#a3e635', logMin: -8, logMax: -6.4, apps: [{ ico: '☀️', label: 'Sinar Matahari (Sunburn)' }, { ico: '🦠', label: 'Sterilisasi UV' }, { ico: '💵', label: 'Deteksi Uang Palsu' }] },
+      { key: 'xray', name: 'Sinar-X', icon: '🦴', color: '#facc15', logMin: -11, logMax: -8, apps: [{ ico: '🦴', label: 'Rontgen Medis' }, { ico: '🛄', label: 'Pemindai Bandara' }] },
+      { key: 'gamma', name: 'Sinar Gamma', icon: '☢️', color: '#ef4444', logMin: -13, logMax: -11, apps: [{ ico: '☢️', label: 'Terapi Kanker' }, { ico: '🧪', label: 'Sterilisasi Alat Medis' }, { ico: '💥', label: 'Peluruhan Radioaktif' }] },
+    ];
+
+    const waveSlider = document.getElementById('waveSlider');
+    const regionPanel = document.getElementById('regionPanel');
+    const regionIcon = document.getElementById('regionIcon');
+    const regionName = document.getElementById('regionName');
+    const chipLambda = document.getElementById('chipLambda');
+    const chipFreq = document.getElementById('chipFreq');
+    const waveFormula = document.getElementById('waveFormula');
+    const appsGrid = document.getElementById('appsGrid');
+
+    function renderSpectrumBar() {
+      const bar = document.getElementById('spectrumBar');
+      const labels = document.getElementById('spectrumLabels');
+      bar.innerHTML = ''; labels.innerHTML = '';
+      const totalRange = 17; // dari logMin -13 sampai logMax 4
+      bands.slice().reverse().forEach((b) => {
+        const widthPct = ((b.logMax - b.logMin) / totalRange) * 100;
+        const seg = document.createElement('div'); seg.className = 'seg';
+        seg.style.width = widthPct + '%'; seg.style.background = b.color;
+        bar.appendChild(seg);
+        const label = document.createElement('span'); label.style.width = widthPct + '%'; label.textContent = b.icon;
+        labels.appendChild(label);
+      });
+    }
+    renderSpectrumBar();
+
+    function findBand(logLambda) {
+      return bands.find((b) => logLambda >= b.logMin && logLambda < b.logMax) || bands[bands.length - 1];
+    }
+
+    function formatLength(meters) {
+      if (meters >= 1) return meters.toFixed(2) + ' m';
+      if (meters >= 1e-3) return (meters * 1e3).toFixed(2) + ' mm';
+      if (meters >= 1e-6) return (meters * 1e6).toFixed(2) + ' µm';
+      if (meters >= 1e-9) return (meters * 1e9).toFixed(2) + ' nm';
+      return (meters * 1e12).toFixed(2) + ' pm';
+    }
+    function formatFreq(hz) {
+      if (hz >= 1e18) return (hz / 1e18).toFixed(2) + ' EHz';
+      if (hz >= 1e15) return (hz / 1e15).toFixed(2) + ' PHz';
+      if (hz >= 1e12) return (hz / 1e12).toFixed(2) + ' THz';
+      if (hz >= 1e9) return (hz / 1e9).toFixed(2) + ' GHz';
+      if (hz >= 1e6) return (hz / 1e6).toFixed(2) + ' MHz';
+      if (hz >= 1e3) return (hz / 1e3).toFixed(2) + ' kHz';
+      return hz.toFixed(2) + ' Hz';
+    }
+
+    function update() {
+      const logLambda = parseFloat(waveSlider.value);
+      const lambda = Math.pow(10, logLambda);
+      const freq = C / lambda;
+      const band = findBand(logLambda);
+
+      regionIcon.textContent = band.icon;
+      regionName.textContent = band.name;
+      regionPanel.style.background = band.color + '22';
+      regionPanel.style.border = '1.5px solid ' + band.color + '66';
+      chipLambda.textContent = formatLength(lambda);
+      chipFreq.textContent = formatFreq(freq);
+
+      let formula = `λ = 10^(${logLambda.toFixed(2)}) m = <span class="math-num">${formatLength(lambda)}</span><br>`;
+      formula += `f = c/λ = (3×10⁸)/(${lambda.toExponential(2)}) = <span class="math-num">${formatFreq(freq)}</span>`;
+      waveFormula.innerHTML = formula;
+
+      appsGrid.innerHTML = '';
+      band.apps.forEach((a) => {
+        const div = document.createElement('div'); div.className = 'app-chip';
+        div.innerHTML = `<span class="ico">${a.ico}</span>${a.label}`;
+        appsGrid.appendChild(div);
+      });
+    }
+    waveSlider.addEventListener('input', update);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('emQuizOpts'), [
+      'Frekuensi dan energinya semakin BESAR', 'Frekuensi dan energinya semakin kecil', 'Frekuensi naik tapi energi tetap sama', 'Keduanya tidak berhubungan dengan panjang gelombang'
+    ], 0, (correct) => {
+      const fb = document.getElementById('emQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Panjang gelombang dan frekuensi berbanding TERBALIK (c=λf, c tetap) -- makin pendek λ, makin besar f. Energi gelombang elektromagnetik juga sebanding dengan frekuensinya, jadi sinar gamma (λ sangat pendek) jauh lebih berenergi dari gelombang radio.';
+    });
+
+    window.onload = update;
+  </script>
+</body>
+</html>
