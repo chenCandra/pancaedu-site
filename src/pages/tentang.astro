@@ -1,34 +1,227 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const roles = [
+  { label: 'Guru Fisika', badge: '' },
+  { label: 'Wali Kelas', badge: 'badge-teal' },
+  { label: 'Operator Dana BOS', badge: 'badge-gold' },
+  { label: 'Pembelajar Seumur Hidup', badge: 'badge-purple' },
+];
+
+const works = [
+  {
+    href: '/ruang-belajar',
+    title: 'Ruang Belajar',
+    desc: 'Rangkaian sesi belajar mandiri, disusun berurutan per bab kurikulum.',
+  },
+  {
+    href: '/materi',
+    title: 'Materi',
+    desc: 'Rangkuman konsep fisika, ditulis ulang dengan bahasa yang mudah dicerna.',
+  },
+  {
+    href: '/lab-maya',
+    title: 'Lab Maya',
+    desc: 'Simulasi interaktif untuk memvisualisasikan konsep yang abstrak di kelas.',
+  },
+  {
+    href: '/penugasan',
+    title: 'Penugasan',
+    desc: 'Sistem tugas interaktif dengan PIN, dari isian singkat sampai drag-and-drop.',
+  },
+  {
+    href: '/artikel',
+    title: 'Artikel',
+    desc: 'Tulisan lepas: refleksi ruang kelas, catatan studi, dan opini seputar pendidikan.',
+  },
+];
+
+const canonicalURL = new URL('/tentang', Astro.site).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Candra Pabakti',
+  url: canonicalURL,
+  email: 'mailto:gravi.tazy@gmail.com',
+  jobTitle: 'Guru Fisika',
+  description:
+    'Guru, wali kelas, dan operator Dana BOS. Penulis dan pengelola tunggal PancaEdu, situs belajar fisika gratis di pancaedu.web.id.',
+  knowsAbout: ['Fisika', 'Pendidikan Fisika', 'Media Pembelajaran Interaktif'],
+  worksFor: { '@type': 'Organization', name: 'PancaEdu', url: 'https://pancaedu.web.id' },
+};
 ---
 
 <BaseLayout
-  title="Tentang"
-  description="Tentang penulis PancaEdu — guru, wali kelas, operator dana BOS, dan pembelajar."
+  title="Tentang Candra Pabakti"
+  description="Candra Pabakti — guru fisika, wali kelas, dan operator Dana BOS. Penulis dan pengelola PancaEdu, situs belajar fisika gratis di pancaedu.web.id."
+  jsonLd={jsonLd}
 >
-  <article class="container prose page">
-    <p class="eyebrow">Tentang</p>
-    <h1>Halo, saya Panca.</h1>
-    <p>
-      Saya seorang guru yang sekaligus menjabat sebagai wali kelas dan operator pengelolaan
-      Dana BOS di sekolah tempat saya mengajar. Di luar itu, saya juga seorang pembelajar yang
-      senang menambah ilmu baru.
-    </p>
-    <p>
-      PancaEdu adalah ruang menulis pribadi saya — tempat saya membagikan artikel seputar
-      pendidikan, refleksi dari ruang kelas, catatan studi, dan materi pelajaran yang saya
-      susun sendiri untuk dipakai gratis oleh siapa saja yang membutuhkan.
-    </p>
-    <p>
-      Kalau Anda seorang guru, murid, atau siapa pun yang menemukan materi di sini bermanfaat,
-      silakan dipakai. Kalau ada masukan atau ingin berdiskusi, saya senang mendengarnya lewat
-      halaman <a href="/kontak">Kontak</a>.
-    </p>
+  <article class="container page">
+    <header class="hero" data-reveal>
+      <div class="hero-avatar" aria-hidden="true">
+        <span>CP</span>
+      </div>
+      <div class="hero-text">
+        <p class="eyebrow">Tentang Penulis</p>
+        <h1>Candra Pabakti</h1>
+        <p class="hero-tagline">
+          Penulis &amp; pengelola tunggal <strong>PancaEdu</strong> — situs belajar fisika gratis
+          di <a href="https://pancaedu.web.id">pancaedu.web.id</a>.
+        </p>
+        <ul class="hero-roles">
+          {roles.map((r) => (
+            <li class={`badge ${r.badge}`.trim()}>{r.label}</li>
+          ))}
+        </ul>
+      </div>
+    </header>
+
+    <div class="prose bio">
+      <p>
+        Saya <strong>Candra Pabakti</strong>, seorang guru yang sekaligus menjabat sebagai wali
+        kelas dan operator pengelolaan Dana BOS di sekolah tempat saya mengajar. Di luar itu,
+        saya juga seorang pembelajar yang senang menambah ilmu baru — termasuk belajar menulis
+        dan membangun situs ini dari nol.
+      </p>
+      <p>
+        <strong>PancaEdu</strong> adalah ruang menulis pribadi saya — tempat saya membagikan
+        artikel seputar pendidikan, refleksi dari ruang kelas, catatan studi, dan materi
+        pelajaran yang saya susun sendiri untuk dipakai gratis oleh siapa saja yang
+        membutuhkan. Semua tulisan, materi, dan sistem interaktif di situs ini — Ruang Belajar,
+        Lab Maya, sampai Penugasan — saya rancang dan kelola sendiri.
+      </p>
+      <p>
+        Kalau Anda seorang guru, murid, atau siapa pun yang menemukan materi di sini bermanfaat,
+        silakan dipakai. Kalau ada masukan, ingin berdiskusi, atau sekadar menyapa, saya senang
+        mendengarnya lewat halaman <a href="/kontak">Kontak</a>.
+      </p>
+    </div>
+
+    <section class="works" data-reveal>
+      <p class="eyebrow">Yang saya bangun di PancaEdu</p>
+      <div class="works-grid">
+        {works.map((w) => (
+          <a class="work-card card" href={w.href}>
+            <h2>{w.title}</h2>
+            <p>{w.desc}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="/kontak">Hubungi Saya</a>
+      <a class="btn btn-ghost" href="/artikel">Baca Tulisan Saya</a>
+    </div>
   </article>
 </BaseLayout>
 
 <style>
   .page {
     padding-block: 3rem 4rem;
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-avatar {
+    flex-shrink: 0;
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 14px 32px -10px rgba(59, 111, 237, 0.55);
+  }
+
+  .hero-avatar span {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--accent-ink);
+    letter-spacing: 0.02em;
+  }
+
+  .hero-text h1 {
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .hero-tagline {
+    color: var(--ink-soft);
+    max-width: var(--measure);
+  }
+
+  .hero-tagline a {
+    font-weight: 600;
+  }
+
+  .hero-roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+  }
+
+  .bio {
+    max-width: var(--measure);
+  }
+
+  .works {
+    margin-top: 3rem;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .work-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .work-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .work-card h2 {
+    margin: 0 0 0.35rem;
+    font-size: 1.0625rem;
+    font-family: var(--font-display);
+    color: var(--accent);
+  }
+
+  .work-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 48rem) {
+    .hero {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
   }
 </style>

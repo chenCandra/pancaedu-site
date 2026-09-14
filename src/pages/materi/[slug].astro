@@ -55,7 +55,11 @@ const jsonLd = {
   about: mapel,
   datePublished: pubDate.toISOString(),
   dateModified: (updatedDate ?? pubDate).toISOString(),
-  author: { '@type': 'Person', name: 'PancaEdu' },
+  author: {
+    '@type': 'Person',
+    name: 'Candra Pabakti',
+    url: new URL('/tentang', Astro.site).toString(),
+  },
 };
 ---
 
