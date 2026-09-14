@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Fluida Statis</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 11px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #0f172a; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .toggle-row { display: flex; gap: 8px; }
+  .toggle-btn { flex: 1; background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 10px; border-radius: 10px; cursor: pointer; }
+  .toggle-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .pill-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 8px; }
+  .pill-btn { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-muted); border-radius: 12px; padding: 9px 4px; font-size: 0.76rem; font-weight: 700; cursor: pointer; text-align: center; }
+  .pill-btn small { display: block; font-weight: 600; opacity: 0.75; font-size: 0.65rem; margin-top: 2px; }
+  .pill-btn.active { color: var(--bg-dark); background: var(--accent-cyan); border-color: var(--accent-cyan); }
+  .pill-btn.active.is-obj { background: var(--text-highlight); }
+
+  .field-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .scene { position: relative; height: 300px; background: #090d16; border-radius: 12px; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
+  .tank { position: relative; width: 150px; height: 260px; border: 3px solid #64748b; border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; background: #0f172a; }
+  .fluid-fill { position: absolute; left: 0; right: 0; bottom: 0; top: 24px; transition: background 0.3s; }
+  .obj-block { position: absolute; left: 50%; width: 64px; transform: translateX(-50%); border-radius: 4px; border: 2px solid rgba(255,255,255,0.35); transition: top 0.4s ease, height 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #0f172a; text-shadow: 0 1px 2px rgba(255,255,255,0.3); }
+  .gauge-line { position: absolute; left: 0; right: 0; height: 0; border-top: 2px dashed var(--text-highlight); }
+  .gauge-tag { position: absolute; right: 4px; transform: translateY(-100%); background: rgba(250,204,21,0.9); color: #0f172a; font-size: 0.62rem; font-weight: 800; padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+  .surface-line { position: absolute; left: 0; right: 0; top: 24px; height: 2px; background: rgba(255,255,255,0.5); }
+  .scene-note { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-size: 0.68rem; color: var(--text-muted); }
+  .status-banner { text-align: center; font-size: 0.92rem; font-weight: 800; padding: 9px; border-radius: 10px; }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.02rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+
+  .scale-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .scale-body { width: 74px; height: 40px; background: linear-gradient(180deg,#475569,#1e293b); border-radius: 8px 8px 4px 4px; border: 2px solid #64748b; display: flex; align-items: center; justify-content: center; font-family: 'Courier New', monospace; font-weight: 800; font-size: 0.72rem; }
+  .scale-string { width: 2px; background: #94a3b8; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🧪</span><h1>Laboratorium Maya: Fluida Statis</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnDensity">⚖️ Massa Jenis &amp; Tekanan</button>
+    <button class="tab-btn" id="tabBtnPascal">🔧 Pascal &amp; Archimedes</button>
+  </div>
+
+  <!-- ===================== TAB 1: MASSA JENIS & TEKANAN ===================== -->
+  <div class="tab-panel is-active" id="tabDensity">
+    <div class="card">
+      <span class="field-label">Pilih Benda</span>
+      <div class="pill-row" id="objRow"></div>
+      <span class="field-label">Pilih Fluida</span>
+      <div class="pill-row" id="fluidRow"></div>
+    </div>
+
+    <div class="card">
+      <div class="scene">
+        <div class="tank" id="tank1">
+          <div class="fluid-fill" id="fluidFill"></div>
+          <div class="surface-line"></div>
+          <div class="obj-block" id="objBlock">ρ</div>
+          <div class="gauge-line" id="gaugeLine"><span class="gauge-tag" id="gaugeTag">P</span></div>
+        </div>
+        <div class="scene-note">Garis putus-putus kuning = kedalaman pengukuran tekanan</div>
+      </div>
+      <div class="status-banner" id="statusBanner1"></div>
+    </div>
+
+    <div class="card">
+      <div class="slider-group">
+        <div class="slider-label"><span>Kedalaman Pengukuran (h)</span><b id="depthLabel">1,0 m</b></div>
+        <input type="range" id="depthSlider" min="0" max="2.4" step="0.1" value="1.0">
+      </div>
+      <div class="data-panel">
+        <div class="data-chip"><div class="k">ρ Benda</div><div class="v" id="chipObjDensity">-</div></div>
+        <div class="data-chip"><div class="k">ρ Fluida</div><div class="v" id="chipFluidDensity">-</div></div>
+        <div class="data-chip"><div class="k">Fraksi Tercelup</div><div class="v" id="chipFraction">-</div></div>
+        <div class="data-chip"><div class="k">Tekanan di h</div><div class="v" id="chipPressure">-</div></div>
+      </div>
+      <div class="formula-box" id="formulaBox1"></div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Terapung/melayang/tenggelam ditentukan HANYA oleh perbandingan massa jenis benda (ρ<sub>benda</sub>) terhadap massa jenis fluida (ρ<sub>fluida</sub>), bukan oleh massa atau ukurannya. Sementara itu, tekanan hidrostatis <span class="math-num">P = ρ·g·h</span> cuma bergantung pada kedalaman (h) dan jenis fluidanya -- SAMA di semua titik pada kedalaman yang sama, tidak peduli bentuk wadahnya.
+    </div>
+
+    <div class="card quiz-card">
+      <span class="quiz-q">🤔 Sebuah benda punya massa jenis 950 kg/m³. Kalau dimasukkan ke air laut (ρ = 1.030 kg/m³), apa yang terjadi?</span>
+      <div class="quiz-opts" id="quizOpts1"></div>
+      <div class="quiz-fb" id="quizFb1"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TAB 2: PASCAL & ARCHIMEDES ===================== -->
+  <div class="tab-panel" id="tabPascal">
+    <div class="toggle-row">
+      <button class="toggle-btn is-active" id="toggleBtnPascal">🔧 Dongkrak Hidrolik</button>
+      <button class="toggle-btn" id="toggleBtnArchimedes">🏋️ Gaya Apung</button>
+    </div>
+
+    <!-- Dongkrak Hidrolik -->
+    <div id="pascalMode">
+      <div class="card">
+        <div class="scene" style="height:220px;">
+          <svg viewBox="0 0 300 200" style="width:100%;height:100%;">
+            <rect x="20" y="150" width="260" height="14" fill="#334155" rx="4"></rect>
+            <rect x="40" y="70" width="40" height="80" fill="#0ea5e9" opacity="0.35" stroke="#38bdf8" stroke-width="2"></rect>
+            <rect id="pistonSmall" x="44" y="90" width="32" height="16" fill="#94a3b8" stroke="#f8fafc" stroke-width="1.5"></rect>
+            <rect x="220" y="30" width="60" height="120" fill="#0ea5e9" opacity="0.35" stroke="#38bdf8" stroke-width="2"></rect>
+            <rect id="pistonBig" x="225" y="70" width="50" height="16" fill="#94a3b8" stroke="#f8fafc" stroke-width="1.5"></rect>
+            <line x1="80" y1="150" x2="220" y2="150" stroke="#38bdf8" stroke-width="3" opacity="0.5"></line>
+            <text x="60" y="60" fill="#f8fafc" font-size="11" text-anchor="middle" font-weight="700">F1 ↓</text>
+            <text x="250" y="22" fill="#facc15" font-size="11" text-anchor="middle" font-weight="700">F2 ↑</text>
+            <text x="60" y="185" fill="#94a3b8" font-size="9" text-anchor="middle">A1 (kecil)</text>
+            <text x="250" y="185" fill="#94a3b8" font-size="9" text-anchor="middle">A2 (besar)</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card">
+        <div class="slider-group">
+          <div class="slider-label"><span>Gaya Input (F1)</span><b id="f1Label">100 N</b></div>
+          <input type="range" id="f1Slider" min="10" max="500" step="10" value="100">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Luas Piston Kecil (A1)</span><b id="a1Label">5 cm²</b></div>
+          <input type="range" id="a1Slider" min="2" max="20" step="1" value="5">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Luas Piston Besar (A2)</span><b id="a2Label">50 cm²</b></div>
+          <input type="range" id="a2Slider" min="20" max="200" step="5" value="50">
+        </div>
+        <div class="data-panel">
+          <div class="data-chip"><div class="k">Tekanan (P)</div><div class="v" id="chipPascalP">-</div></div>
+          <div class="data-chip"><div class="k">Gaya Keluar (F2)</div><div class="v" id="chipF2">-</div></div>
+          <div class="data-chip"><div class="k">Pelipatgandaan Gaya</div><div class="v" id="chipRatio">-</div></div>
+        </div>
+        <div class="formula-box" id="formulaPascal"></div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-title">📌 Hukum Pascal</div>
+        Tekanan yang diberikan pada fluida tertutup diteruskan SAMA RATA ke segala arah. Karena <span class="math-num">P = F1/A1 = F2/A2</span> harus sama di kedua piston, piston yang lebih LUAS akan menghasilkan gaya yang lebih BESAR -- inilah dasar kerja dongkrak hidrolik, rem hidrolik mobil, dan kursi mekanik bengkel.
+      </div>
+      <div class="card quiz-card">
+        <span class="quiz-q">🤔 Kenapa dongkrak hidrolik bisa mengangkat mobil seberat 1 ton hanya dengan tenaga tangan manusia?</span>
+        <div class="quiz-opts" id="quizOptsPascal"></div>
+        <div class="quiz-fb" id="quizFbPascal"></div>
+      </div>
+    </div>
+
+    <!-- Gaya Apung -->
+    <div id="archimedesMode" style="display:none;">
+      <div class="card">
+        <span class="field-label">Pilih Benda</span>
+        <div class="pill-row" id="archObjRow"></div>
+      </div>
+      <div class="card">
+        <div class="scene">
+          <div style="display:flex;align-items:flex-end;gap:6px;height:100%;">
+            <div class="scale-wrap" style="padding-bottom:110px;">
+              <div class="scale-body" id="scaleBody">- N</div>
+              <div class="scale-string" id="scaleString" style="height:40px;"></div>
+            </div>
+          </div>
+          <div class="tank" id="tank2" style="height:180px;width:110px;margin-left:-30px;">
+            <div class="fluid-fill" style="background:rgba(56,189,248,0.35);"></div>
+            <div class="surface-line"></div>
+            <div class="obj-block" id="archBlock" style="top:60px;height:56px;">Fa</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="slider-group">
+          <div class="slider-label"><span>Volume Benda (V)</span><b id="volLabel">500 cm³</b></div>
+          <input type="range" id="volSlider" min="100" max="1500" step="50" value="500">
+        </div>
+        <div class="data-panel">
+          <div class="data-chip"><div class="k">Berat Sejati (W)</div><div class="v" id="chipWeight">-</div></div>
+          <div class="data-chip"><div class="k">Gaya Apung (Fa)</div><div class="v" id="chipBuoyancy">-</div></div>
+          <div class="data-chip"><div class="k">Berat Semu</div><div class="v" id="chipApparent">-</div></div>
+          <div class="data-chip"><div class="k">Status</div><div class="v" id="chipArchStatus">-</div></div>
+        </div>
+        <div class="formula-box" id="formulaArch"></div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-title">📌 Hukum Archimedes</div>
+        Benda yang tercelup dalam fluida mendapat gaya apung ke ATAS sebesar berat fluida yang dipindahkannya: <span class="math-num">Fa = ρ_fluida · g · V</span>. Itulah kenapa timbangan pegas menunjukkan angka yang lebih KECIL saat benda dicelupkan ke air dibanding saat di udara -- selisihnya persis sebesar Fa.
+      </div>
+      <div class="card quiz-card">
+        <span class="quiz-q">🤔 Sepotong besi (ρ = 7.870 kg/m³) ditimbang di udara menunjukkan 78,7 N, lalu dicelupkan penuh ke air. Timbangan akan menunjukkan angka yang...</span>
+        <div class="quiz-opts" id="quizOptsArch"></div>
+        <div class="quiz-fb" id="quizFbArch"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 10;
+    function fmt(n, d = 2) { return n.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    function showFb(el, correct, text) {
+      el.classList.add('is-visible'); el.classList.toggle('is-wrong', !correct);
+      el.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + text;
+    }
+
+    /* ---------------- TAB SWITCH ---------------- */
+    const tabBtnDensity = document.getElementById('tabBtnDensity');
+    const tabBtnPascal = document.getElementById('tabBtnPascal');
+    const tabDensity = document.getElementById('tabDensity');
+    const tabPascal = document.getElementById('tabPascal');
+    tabBtnDensity.addEventListener('click', () => {
+      tabBtnDensity.classList.add('is-active'); tabBtnPascal.classList.remove('is-active');
+      tabDensity.classList.add('is-active'); tabPascal.classList.remove('is-active');
+    });
+    tabBtnPascal.addEventListener('click', () => {
+      tabBtnPascal.classList.add('is-active'); tabBtnDensity.classList.remove('is-active');
+      tabPascal.classList.add('is-active'); tabDensity.classList.remove('is-active');
+    });
+
+    /* ================= TAB 1: MASSA JENIS & TEKANAN ================= */
+    const objects = [
+      { key: 'gabus', name: 'Gabus', density: 240, color: '#facc15' },
+      { key: 'kayu', name: 'Kayu', density: 600, color: '#a16207' },
+      { key: 'es', name: 'Es Batu', density: 920, color: '#e0f2fe' },
+      { key: 'alu', name: 'Aluminium', density: 2700, color: '#cbd5e1' },
+      { key: 'besi', name: 'Besi', density: 7870, color: '#64748b' },
+      { key: 'emas', name: 'Emas', density: 19300, color: '#eab308' },
+    ];
+    const fluids = [
+      { key: 'minyak', name: 'Minyak Goreng', density: 800, color: 'rgba(234,179,8,0.35)' },
+      { key: 'air', name: 'Air', density: 1000, color: 'rgba(56,189,248,0.35)' },
+      { key: 'garam', name: 'Air Garam (Laut)', density: 1030, color: 'rgba(34,211,238,0.4)' },
+      { key: 'raksa', name: 'Air Raksa', density: 13600, color: 'rgba(148,163,184,0.6)' },
+    ];
+    let activeObj = objects[3];
+    let activeFluid = fluids[1];
+
+    const objRow = document.getElementById('objRow');
+    objects.forEach((o, i) => {
+      const btn = document.createElement('button'); btn.className = 'pill-btn is-obj' + (o === activeObj ? ' active' : '');
+      btn.innerHTML = `${o.name}<small>${o.density}</small>`;
+      btn.addEventListener('click', () => { document.querySelectorAll('#objRow .pill-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); activeObj = o; updateDensityTab(); });
+      objRow.appendChild(btn);
+    });
+    const fluidRow = document.getElementById('fluidRow');
+    fluids.forEach((f, i) => {
+      const btn = document.createElement('button'); btn.className = 'pill-btn' + (f === activeFluid ? ' active' : '');
+      btn.innerHTML = `${f.name}<small>${f.density}</small>`;
+      btn.addEventListener('click', () => { document.querySelectorAll('#fluidRow .pill-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); activeFluid = f; updateDensityTab(); });
+      fluidRow.appendChild(btn);
+    });
+
+    const depthSlider = document.getElementById('depthSlider');
+    const depthLabel = document.getElementById('depthLabel');
+    const objBlock = document.getElementById('objBlock');
+    const gaugeLine = document.getElementById('gaugeLine');
+    const gaugeTag = document.getElementById('gaugeTag');
+    const statusBanner1 = document.getElementById('statusBanner1');
+
+    const TANK_H = 260, SURFACE_Y = 24, BOTTOM_MARGIN = 6, OBJ_H = 54;
+    const FLUID_DEPTH_PX = TANK_H - SURFACE_Y - BOTTOM_MARGIN; // area fluida di bawah permukaan
+    const MAX_DEPTH_M = 2.4; // slider max, dipetakan ke FLUID_DEPTH_PX
+
+    function updateDensityTab() {
+      document.getElementById('fluidFill').style.background = activeFluid.color;
+      objBlock.style.background = activeObj.color;
+      objBlock.style.height = OBJ_H + 'px';
+
+      const ratio = activeObj.density / activeFluid.density;
+      let fraction, status;
+      if (Math.abs(ratio - 1) < 0.02) { fraction = 1; status = 'melayang'; }
+      else if (ratio > 1) { fraction = 1; status = 'tenggelam'; }
+      else { fraction = ratio; status = 'terapung'; }
+
+      let topPx;
+      if (status === 'tenggelam') {
+        topPx = TANK_H - BOTTOM_MARGIN - OBJ_H;
+      } else if (status === 'melayang') {
+        topPx = SURFACE_Y + FLUID_DEPTH_PX / 2 - OBJ_H / 2;
+      } else {
+        topPx = SURFACE_Y - (1 - fraction) * OBJ_H;
+      }
+      objBlock.style.top = topPx + 'px';
+
+      const statusText = { terapung: '🟢 TERAPUNG', melayang: '🟡 MELAYANG', tenggelam: '🔴 TENGGELAM' }[status];
+      statusBanner1.textContent = statusText;
+      statusBanner1.style.background = status === 'tenggelam' ? '#ef444422' : status === 'melayang' ? '#facc1522' : '#22c55e22';
+      statusBanner1.style.color = status === 'tenggelam' ? '#ef4444' : status === 'melayang' ? '#facc15' : '#22c55e';
+
+      const h = parseFloat(depthSlider.value);
+      depthLabel.textContent = fmt(h, 1) + ' m';
+      const gaugeY = SURFACE_Y + (h / MAX_DEPTH_M) * FLUID_DEPTH_PX;
+      gaugeLine.style.top = gaugeY + 'px';
+      const pressure = activeFluid.density * G * h;
+      gaugeTag.textContent = fmt(pressure / 1000, 1) + ' kPa';
+
+      document.getElementById('chipObjDensity').textContent = activeObj.density + ' kg/m³';
+      document.getElementById('chipFluidDensity').textContent = activeFluid.density + ' kg/m³';
+      document.getElementById('chipFraction').textContent = status === 'terapung' ? fmt(fraction * 100, 0) + '%' : (status === 'melayang' ? '100% (melayang)' : '100% (di dasar)');
+      document.getElementById('chipPressure').textContent = fmt(pressure) + ' Pa';
+
+      document.getElementById('formulaBox1').innerHTML =
+        `ρ_benda / ρ_fluida = ${activeObj.density}/${activeFluid.density} = <span class="math-num">${fmt(ratio, 2)}</span> → ${statusText}\n` +
+        `P = ρ·g·h = ${activeFluid.density} × ${G} × ${fmt(h, 1)} = <span class="math-num">${fmt(pressure)} Pa</span>`;
+    }
+    depthSlider.addEventListener('input', updateDensityTab);
+
+    renderQuizOptions(document.getElementById('quizOpts1'), [
+      'Tenggelam, karena 950 < 1.030', 'Terapung, karena 950 < 1.030', 'Melayang tepat di tengah', 'Tidak bisa ditentukan tanpa tahu bentuknya'
+    ], 1, (correct) => showFb(document.getElementById('quizFb1'), correct,
+      'Karena massa jenis benda (950) LEBIH KECIL dari massa jenis air laut (1.030), benda akan TERAPUNG -- sebagian tercelup, sebagian muncul di permukaan. Semakin dekat kedua nilai massa jenisnya, semakin banyak bagian yang tercelup.'));
+
+    /* ================= TAB 2: PASCAL & ARCHIMEDES ================= */
+    const toggleBtnPascal = document.getElementById('toggleBtnPascal');
+    const toggleBtnArchimedes = document.getElementById('toggleBtnArchimedes');
+    const pascalMode = document.getElementById('pascalMode');
+    const archimedesMode = document.getElementById('archimedesMode');
+    toggleBtnPascal.addEventListener('click', () => {
+      toggleBtnPascal.classList.add('is-active'); toggleBtnArchimedes.classList.remove('is-active');
+      pascalMode.style.display = ''; archimedesMode.style.display = 'none';
+    });
+    toggleBtnArchimedes.addEventListener('click', () => {
+      toggleBtnArchimedes.classList.add('is-active'); toggleBtnPascal.classList.remove('is-active');
+      archimedesMode.style.display = ''; pascalMode.style.display = 'none';
+    });
+
+    const f1Slider = document.getElementById('f1Slider');
+    const a1Slider = document.getElementById('a1Slider');
+    const a2Slider = document.getElementById('a2Slider');
+    function updatePascal() {
+      const f1 = parseFloat(f1Slider.value);
+      const a1 = parseFloat(a1Slider.value); // cm²
+      const a2 = parseFloat(a2Slider.value); // cm²
+      document.getElementById('f1Label').textContent = f1 + ' N';
+      document.getElementById('a1Label').textContent = a1 + ' cm²';
+      document.getElementById('a2Label').textContent = a2 + ' cm²';
+
+      const a1m2 = a1 / 10000, a2m2 = a2 / 10000;
+      const p = f1 / a1m2; // Pa
+      const f2 = p * a2m2;
+      const ratio = f2 / f1;
+
+      document.getElementById('chipPascalP').textContent = fmt(p / 1000, 1) + ' kPa';
+      document.getElementById('chipF2').textContent = fmt(f2, 0) + ' N';
+      document.getElementById('chipRatio').textContent = fmt(ratio, 1) + '×';
+
+      document.getElementById('formulaPascal').innerHTML =
+        `P = F1/A1 = ${f1}/${fmt(a1m2, 5)} = <span class="math-num">${fmt(p / 1000, 1)} kPa</span>\n` +
+        `F2 = P × A2 = ${fmt(p / 1000, 1)}k × ${fmt(a2m2, 5)} = <span class="math-num">${fmt(f2, 0)} N</span> (${fmt(ratio, 1)}× lebih besar dari F1)`;
+
+      const pistonWidthBig = Math.min(70, 30 + a2 / 4);
+      document.getElementById('pistonBig').setAttribute('width', pistonWidthBig);
+      document.getElementById('pistonBig').setAttribute('x', 250 - pistonWidthBig / 2);
+    }
+    [f1Slider, a1Slider, a2Slider].forEach(s => s.addEventListener('input', updatePascal));
+
+    renderQuizOptions(document.getElementById('quizOptsPascal'), [
+      'Karena air bisa menghilangkan sebagian berat mobil', 'Karena tekanan diteruskan sama besar ke piston yang jauh lebih luas, menghasilkan gaya yang jauh lebih besar', 'Karena ada motor listrik tersembunyi di dalam dongkrak', 'Karena mobil sebenarnya tidak seberat itu'
+    ], 1, (correct) => showFb(document.getElementById('quizFbPascal'), correct,
+      'Tekanan P = F/A yang sama diteruskan ke seluruh fluida. Karena piston besar punya luas (A2) yang jauh lebih besar dari piston kecil (A1), gaya keluarnya (F2 = P×A2) jadi berkali-kali lipat lebih besar dari gaya yang kita berikan (F1) -- ini yang disebut keuntungan mekanis.'));
+
+    const archObjects = [
+      { key: 'kayu', name: 'Kayu', density: 600, color: '#a16207' },
+      { key: 'alu', name: 'Aluminium', density: 2700, color: '#cbd5e1' },
+      { key: 'besi', name: 'Besi', density: 7870, color: '#64748b' },
+      { key: 'emas', name: 'Emas', density: 19300, color: '#eab308' },
+    ];
+    let activeArchObj = archObjects[2];
+    const archObjRow = document.getElementById('archObjRow');
+    archObjects.forEach((o) => {
+      const btn = document.createElement('button'); btn.className = 'pill-btn is-obj' + (o === activeArchObj ? ' active' : '');
+      btn.innerHTML = `${o.name}<small>${o.density}</small>`;
+      btn.addEventListener('click', () => { document.querySelectorAll('#archObjRow .pill-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); activeArchObj = o; updateArchimedes(); });
+      archObjRow.appendChild(btn);
+    });
+
+    const volSlider = document.getElementById('volSlider');
+    const FLUID_DENSITY_WATER = 1000;
+    function updateArchimedes() {
+      const volCm3 = parseFloat(volSlider.value);
+      document.getElementById('volLabel').textContent = volCm3 + ' cm³';
+      const volM3 = volCm3 / 1e6;
+      const weight = activeArchObj.density * volM3 * G;
+      const buoyancy = FLUID_DENSITY_WATER * volM3 * G;
+      const apparent = weight - buoyancy;
+
+      document.getElementById('chipWeight').textContent = fmt(weight) + ' N';
+      document.getElementById('chipBuoyancy').textContent = fmt(buoyancy) + ' N';
+      document.getElementById('chipApparent').textContent = fmt(apparent) + ' N';
+      document.getElementById('chipArchStatus').textContent = apparent >= 0 ? 'Tenggelam bila dilepas' : 'Akan terapung';
+      document.getElementById('scaleBody').textContent = fmt(Math.max(apparent, 0), 1) + ' N';
+      document.getElementById('archBlock').style.background = activeArchObj.color;
+
+      document.getElementById('formulaArch').innerHTML =
+        `W = ρ_benda·g·V = ${activeArchObj.density} × ${G} × ${fmt(volM3, 6)} = <span class="math-num">${fmt(weight)} N</span>\n` +
+        `Fa = ρ_air·g·V = ${FLUID_DENSITY_WATER} × ${G} × ${fmt(volM3, 6)} = <span class="math-num">${fmt(buoyancy)} N</span>\n` +
+        `Berat semu = W − Fa = <span class="math-num">${fmt(apparent)} N</span>`;
+    }
+    volSlider.addEventListener('input', updateArchimedes);
+
+    renderQuizOptions(document.getElementById('quizOptsArch'), [
+      'Tetap 78,7 N, tidak berubah', 'Lebih besar dari 78,7 N', 'Lebih kecil dari 78,7 N, sebesar berat air yang dipindahkan besi itu', 'Menjadi nol'
+    ], 2, (correct) => showFb(document.getElementById('quizFbArch'), correct,
+      'Saat tercelup, besi mendapat gaya apung (Fa) ke atas sebesar berat air yang dipindahkannya. Timbangan hanya membaca berat SEMU = berat sejati − Fa, jadi angkanya PASTI lebih kecil dari 78,7 N (tapi besi tetap tenggelam karena ρ besi jauh lebih besar dari ρ air, Fa-nya tidak cukup menahannya).'));
+
+    updateDensityTab();
+    updatePascal();
+    updateArchimedes();
+  </script>
+</body>
+</html>

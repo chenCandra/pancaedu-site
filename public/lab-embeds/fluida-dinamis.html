@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Fluida Dinamis</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 11px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #0f172a; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .scene { position: relative; height: 200px; background: #090d16; border-radius: 12px; overflow: hidden; }
+  .scene-note { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-size: 0.68rem; color: var(--text-muted); }
+
+  .slider-group { display: flex; flex-direction: column; gap: 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+  .slider-label b { color: var(--text-main); font-family: 'Courier New', monospace; }
+  input[type="range"] { width: 100%; height: 10px; border-radius: 5px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .data-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .data-chip { background: rgba(15,23,42,0.7); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+  .data-chip .k { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .data-chip .v { font-size: 1.02rem; font-weight: 900; font-family: 'Courier New', monospace; margin-top: 2px; color: var(--text-highlight); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+
+  .manometer { position: absolute; bottom: 0; width: 16px; background: linear-gradient(180deg, #38bdf8, #0ea5e9); border: 1px solid #7dd3fc; border-radius: 4px 4px 0 0; transition: height 0.3s ease; }
+  .manometer-label { position: absolute; bottom: 2px; font-size: 0.6rem; font-weight: 800; color: #0f172a; text-align: center; width: 16px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🚿</span><h1>Laboratorium Maya: Fluida Dinamis</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnKontinuitas">🔀 Kontinuitas &amp; Debit</button>
+    <button class="tab-btn" id="tabBtnBernoulli">✈️ Asas Bernoulli</button>
+  </div>
+
+  <!-- ===================== TAB 1: KONTINUITAS ===================== -->
+  <div class="tab-panel is-active" id="tabKontinuitas">
+    <div class="card">
+      <div class="scene" id="sceneKontinuitas">
+        <svg viewBox="0 0 300 160" style="width:100%;height:100%;" id="pipeSvgKontinuitas"></svg>
+        <div class="scene-note">Titik-titik = partikel fluida -- perhatikan kecepatannya berubah di bagian sempit</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="slider-group">
+        <div class="slider-label"><span>Diameter Pipa Lebar (d1)</span><b id="d1Label">8 cm</b></div>
+        <input type="range" id="d1Slider" min="4" max="10" step="0.5" value="8">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label"><span>Diameter Pipa Sempit (d2)</span><b id="d2Label">4 cm</b></div>
+        <input type="range" id="d2Slider" min="2" max="8" step="0.5" value="4">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label"><span>Kecepatan Aliran Masuk (v1)</span><b id="v1Label">1,0 m/s</b></div>
+        <input type="range" id="v1SliderK" min="0.2" max="3" step="0.1" value="1">
+      </div>
+      <div class="data-panel">
+        <div class="data-chip"><div class="k">Luas A1</div><div class="v" id="chipA1">-</div></div>
+        <div class="data-chip"><div class="k">Luas A2</div><div class="v" id="chipA2">-</div></div>
+        <div class="data-chip"><div class="k">Kecepatan v2</div><div class="v" id="chipV2K">-</div></div>
+        <div class="data-chip"><div class="k">Debit (Q)</div><div class="v" id="chipQ">-</div></div>
+      </div>
+      <div class="formula-box" id="formulaKontinuitas"></div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Asas Kontinuitas</div>
+      Untuk fluida ideal (tak termampatkan) yang mengalir di pipa tertutup, DEBIT-nya harus SAMA di setiap bagian pipa: <span class="math-num">Q = A1·v1 = A2·v2</span>. Karena itu, begitu pipa menyempit (A mengecil), kecepatan alirannya HARUS membesar supaya debitnya tetap sama -- seperti air yang menyembur lebih deras saat ujung selang ditekan.
+    </div>
+    <div class="card quiz-card">
+      <span class="quiz-q">🤔 Kalau diameter pipa dikecilkan menjadi SETENGAHNYA, apa yang terjadi pada kecepatan alirannya (debit tetap sama)?</span>
+      <div class="quiz-opts" id="quizOptsK"></div>
+      <div class="quiz-fb" id="quizFbK"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TAB 2: BERNOULLI ===================== -->
+  <div class="tab-panel" id="tabBernoulli">
+    <div class="card">
+      <div class="scene" id="sceneBernoulli">
+        <svg viewBox="0 0 300 160" style="width:100%;height:100%;" id="pipeSvgBernoulli"></svg>
+        <div class="manometer" id="manometer1" style="left:70px;"></div>
+        <div class="manometer" id="manometer2" style="left:220px;"></div>
+        <div class="scene-note">Kolom biru = tekanan relatif (ilustrasi, bukan skala sebenarnya)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="slider-group">
+        <div class="slider-label"><span>Diameter Pipa Lebar (d1)</span><b id="d1LabelB">8 cm</b></div>
+        <input type="range" id="d1SliderB" min="4" max="10" step="0.5" value="8">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label"><span>Diameter Penyempitan (d2)</span><b id="d2LabelB">4 cm</b></div>
+        <input type="range" id="d2SliderB" min="2" max="8" step="0.5" value="4">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label"><span>Kecepatan Aliran Masuk (v1)</span><b id="v1LabelB">1,0 m/s</b></div>
+        <input type="range" id="v1SliderB" min="0.2" max="3" step="0.1" value="1">
+      </div>
+      <div class="data-panel">
+        <div class="data-chip"><div class="k">v1 (lebar)</div><div class="v" id="chipV1B">-</div></div>
+        <div class="data-chip"><div class="k">v2 (sempit)</div><div class="v" id="chipV2B">-</div></div>
+        <div class="data-chip"><div class="k">P1 − P2 (ΔP)</div><div class="v" id="chipDeltaP">-</div></div>
+        <div class="data-chip"><div class="k">Tekanan Lebih Rendah</div><div class="v" id="chipLowerP">-</div></div>
+      </div>
+      <div class="formula-box" id="formulaBernoulli"></div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Asas Bernoulli</div>
+      Untuk aliran mendatar (ketinggian sama), <span class="math-num">P + ½ρv²</span> bernilai TETAP di sepanjang pipa. Jadi di bagian yang lebih SEMPIT (v besar), tekanannya justru harus LEBIH KECIL. Inilah prinsip di balik gaya angkat sayap pesawat, penyemprot parfum, dan karburator -- semua memanfaatkan aliran cepat yang menciptakan zona bertekanan rendah.
+    </div>
+    <div class="card quiz-card">
+      <span class="quiz-q">🤔 Sayap pesawat dirancang agar udara mengalir lebih CEPAT di sisi atas dibanding sisi bawah. Apa akibatnya?</span>
+      <div class="quiz-opts" id="quizOptsB"></div>
+      <div class="quiz-fb" id="quizFbB"></div>
+    </div>
+  </div>
+
+  <script>
+    function fmt(n, d = 2) { return n.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    function showFb(el, correct, text) {
+      el.classList.add('is-visible'); el.classList.toggle('is-wrong', !correct);
+      el.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + text;
+    }
+
+    /* ---------------- TAB SWITCH ---------------- */
+    const tabBtnKontinuitas = document.getElementById('tabBtnKontinuitas');
+    const tabBtnBernoulli = document.getElementById('tabBtnBernoulli');
+    const tabKontinuitas = document.getElementById('tabKontinuitas');
+    const tabBernoulli = document.getElementById('tabBernoulli');
+    tabBtnKontinuitas.addEventListener('click', () => {
+      tabBtnKontinuitas.classList.add('is-active'); tabBtnBernoulli.classList.remove('is-active');
+      tabKontinuitas.classList.add('is-active'); tabBernoulli.classList.remove('is-active');
+    });
+    tabBtnBernoulli.addEventListener('click', () => {
+      tabBtnBernoulli.classList.add('is-active'); tabBtnKontinuitas.classList.remove('is-active');
+      tabBernoulli.classList.add('is-active'); tabKontinuitas.classList.remove('is-active');
+    });
+
+    /* ---------------- PIPE DRAWING (dipakai kedua tab) ---------------- */
+    // Geometri pipa: lebar kiri (x 20-120) -> penyempitan (x 120-180) -> sempit kanan (x 180-280)
+    function buildPipe(svg, d1cm, d2cm) {
+      svg.innerHTML = '';
+      const scale = 6; // px per cm diameter
+      const h1 = d1cm * scale, h2 = d2cm * scale;
+      const midY = 80;
+      const top1 = midY - h1 / 2, bot1 = midY + h1 / 2;
+      const top2 = midY - h2 / 2, bot2 = midY + h2 / 2;
+      const path = `M20,${top1} L120,${top1} L180,${top2} L280,${top2} L280,${bot2} L180,${bot2} L120,${bot1} L20,${bot1} Z`;
+      const ns = 'http://www.w3.org/2000/svg';
+      const shape = document.createElementNS(ns, 'path');
+      shape.setAttribute('d', path);
+      shape.setAttribute('fill', 'rgba(56,189,248,0.18)');
+      shape.setAttribute('stroke', '#38bdf8');
+      shape.setAttribute('stroke-width', '2');
+      svg.appendChild(shape);
+      return { midY, top1, bot1, top2, bot2 };
+    }
+
+    function makeParticles(svg, count) {
+      const ns = 'http://www.w3.org/2000/svg';
+      const dots = [];
+      for (let i = 0; i < count; i++) {
+        const c = document.createElementNS(ns, 'circle');
+        c.setAttribute('r', '3');
+        c.setAttribute('fill', '#facc15');
+        svg.appendChild(c);
+        dots.push({ el: c, x: 20 + i * (260 / count) });
+      }
+      return dots;
+    }
+
+    /* ---------------- TAB 1: KONTINUITAS ---------------- */
+    const svgK = document.getElementById('pipeSvgKontinuitas');
+    let dotsK = [];
+    let gK = null;
+
+    function updateKontinuitas() {
+      const d1 = parseFloat(document.getElementById('d1Slider').value);
+      const d2 = parseFloat(document.getElementById('d2Slider').value);
+      const v1 = parseFloat(document.getElementById('v1SliderK').value);
+      document.getElementById('d1Label').textContent = fmt(d1, 1) + ' cm';
+      document.getElementById('d2Label').textContent = fmt(d2, 1) + ' cm';
+      document.getElementById('v1Label').textContent = fmt(v1, 1) + ' m/s';
+
+      const r1 = d1 / 200, r2 = d2 / 200; // meter
+      const A1 = Math.PI * r1 * r1, A2 = Math.PI * r2 * r2;
+      const v2 = v1 * A1 / A2;
+      const Q = A1 * v1;
+
+      document.getElementById('chipA1').textContent = fmt(A1 * 1e4, 1) + ' cm²';
+      document.getElementById('chipA2').textContent = fmt(A2 * 1e4, 1) + ' cm²';
+      document.getElementById('chipV2K').textContent = fmt(v2, 2) + ' m/s';
+      document.getElementById('chipQ').textContent = fmt(Q * 1000, 2) + ' L/s';
+
+      document.getElementById('formulaKontinuitas').innerHTML =
+        `A1·v1 = A2·v2\n${fmt(A1 * 1e4, 1)} cm² × ${fmt(v1, 1)} m/s = ${fmt(A2 * 1e4, 1)} cm² × v2\n` +
+        `v2 = <span class="math-num">${fmt(v2, 2)} m/s</span> (Q = ${fmt(Q * 1000, 2)} L/s, tetap sama di kedua bagian)`;
+
+      gK = buildPipe(svgK, d1, d2);
+      dotsK = makeParticles(svgK, 8);
+      window.__vProfileK = (x) => (x < 120 ? v1 : x < 180 ? (v1 + (v2 - v1) * ((x - 120) / 60)) : v2);
+    }
+    ['d1Slider', 'd2Slider', 'v1SliderK'].forEach(id => document.getElementById(id).addEventListener('input', updateKontinuitas));
+
+    /* ---------------- TAB 2: BERNOULLI ---------------- */
+    const svgB = document.getElementById('pipeSvgBernoulli');
+    let dotsB = [];
+    const RHO_WATER = 1000;
+
+    function updateBernoulli() {
+      const d1 = parseFloat(document.getElementById('d1SliderB').value);
+      const d2 = parseFloat(document.getElementById('d2SliderB').value);
+      const v1 = parseFloat(document.getElementById('v1SliderB').value);
+      document.getElementById('d1LabelB').textContent = fmt(d1, 1) + ' cm';
+      document.getElementById('d2LabelB').textContent = fmt(d2, 1) + ' cm';
+      document.getElementById('v1LabelB').textContent = fmt(v1, 1) + ' m/s';
+
+      const r1 = d1 / 200, r2 = d2 / 200;
+      const A1 = Math.PI * r1 * r1, A2 = Math.PI * r2 * r2;
+      const v2 = v1 * A1 / A2;
+      const deltaP = 0.5 * RHO_WATER * (v2 * v2 - v1 * v1); // P1 - P2
+
+      document.getElementById('chipV1B').textContent = fmt(v1, 2) + ' m/s';
+      document.getElementById('chipV2B').textContent = fmt(v2, 2) + ' m/s';
+      document.getElementById('chipDeltaP').textContent = fmt(deltaP) + ' Pa';
+      document.getElementById('chipLowerP').textContent = 'Di bagian SEMPIT (P2)';
+
+      document.getElementById('formulaBernoulli').innerHTML =
+        `P1 + ½ρv1² = P2 + ½ρv2²\n` +
+        `P1 − P2 = ½ρ(v2² − v1²) = ½×${RHO_WATER}×(${fmt(v2, 2)}² − ${fmt(v1, 2)}²)\n` +
+        `P1 − P2 = <span class="math-num">${fmt(deltaP)} Pa</span> → tekanan di bagian sempit LEBIH RENDAH`;
+
+      buildPipe(svgB, d1, d2);
+      dotsB = makeParticles(svgB, 8);
+      window.__vProfileB = (x) => (x < 120 ? v1 : x < 180 ? (v1 + (v2 - v1) * ((x - 120) / 60)) : v2);
+
+      const baseH = 60;
+      const scaleFactor = 0.15;
+      const h1 = Math.max(10, Math.min(96, baseH + (0) * scaleFactor));
+      const h2 = Math.max(10, Math.min(96, baseH - deltaP * scaleFactor));
+      document.getElementById('manometer1').style.height = h1 + 'px';
+      document.getElementById('manometer2').style.height = h2 + 'px';
+    }
+    ['d1SliderB', 'd2SliderB', 'v1SliderB'].forEach(id => document.getElementById(id).addEventListener('input', updateBernoulli));
+
+    /* ---------------- ANIMASI PARTIKEL (dipakai kedua tab, hanya tab aktif yang terlihat) ---------------- */
+    let lastT = performance.now();
+    function tick(t) {
+      const dt = Math.min(0.05, (t - lastT) / 1000);
+      lastT = t;
+      const pxPerM = 26; // skala visual kecepatan -> pergeseran piksel
+      if (tabKontinuitas.classList.contains('is-active') && window.__vProfileK) {
+        dotsK.forEach(d => {
+          const v = window.__vProfileK(d.x);
+          d.x += v * pxPerM * dt;
+          if (d.x > 280) d.x = 20;
+          d.el.setAttribute('cx', d.x);
+          d.el.setAttribute('cy', 80);
+        });
+      }
+      if (tabBernoulli.classList.contains('is-active') && window.__vProfileB) {
+        dotsB.forEach(d => {
+          const v = window.__vProfileB(d.x);
+          d.x += v * pxPerM * dt;
+          if (d.x > 280) d.x = 20;
+          d.el.setAttribute('cx', d.x);
+          d.el.setAttribute('cy', 80);
+        });
+      }
+      requestAnimationFrame(tick);
+    }
+
+    renderQuizOptions(document.getElementById('quizOptsK'), [
+      'Kecepatan tetap sama', 'Kecepatan menjadi 2× lipat', 'Kecepatan menjadi 4× lipat', 'Kecepatan menjadi setengahnya'
+    ], 2, (correct) => showFb(document.getElementById('quizFbK'), correct,
+      'Luas penampang A = πr² berbanding dengan KUADRAT diameter. Diameter jadi setengah → luas jadi 1/4 kali → supaya Q=A·v tetap sama, kecepatan harus naik 4× lipat.'));
+
+    renderQuizOptions(document.getElementById('quizOptsB'), [
+      'Tekanan di atas lebih besar, sayap terdorong ke bawah', 'Tekanan di atas lebih kecil, sayap terdorong ke atas (gaya angkat)', 'Tidak ada pengaruh apa pun ke sayap', 'Pesawat akan berputar di udara'
+    ], 1, (correct) => showFb(document.getElementById('quizFbB'), correct,
+      'Sesuai asas Bernoulli, aliran udara yang lebih CEPAT di sisi atas sayap punya tekanan yang lebih RENDAH dibanding sisi bawah yang alirannya lebih lambat. Selisih tekanan inilah yang mendorong sayap (dan pesawatnya) ke ATAS -- disebut gaya angkat (lift).'));
+
+    updateKontinuitas();
+    updateBernoulli();
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>

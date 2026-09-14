@@ -118,11 +118,19 @@ const customLabs = [
     tag: 'Kelas X · Energi',
   },
   {
-    href: '/lab-maya/fluida-dan-massa-jenis',
+    href: '/lab-maya/fluida-statis',
     icon: '🧊',
-    title: 'Simulasi Massa Jenis (Density)',
+    title: 'Fluida Statis',
     description:
-      'Simulasi dari PhET Interactive Simulations -- bandingkan massa, volume, dan massa jenis berbagai benda, dan lihat sendiri mana yang mengapung atau tenggelam.',
+      'Bandingkan massa jenis benda dan fluida, ukur tekanan hidrostatis, coba dongkrak hidrolik (Pascal), dan rasakan gaya apung (Archimedes) -- empat konsep, satu simulasi.',
+    tag: 'Kelas XI · Fluida',
+  },
+  {
+    href: '/lab-maya/fluida-dinamis',
+    icon: '🚿',
+    title: 'Fluida Dinamis',
+    description:
+      'Atur diameter pipa dan kecepatan aliran, buktikan sendiri asas kontinuitas (debit tetap) dan asas Bernoulli (tekanan turun saat aliran menyempit).',
     tag: 'Kelas XI · Fluida',
   },
   {
@@ -293,7 +301,11 @@ const customLabEmbedSlugs = new Set(
 // kesaring lewat pola URL di atas. Tapi ada simulasi EKSTERNAL (mis. PhET)
 // yang urlnya bukan /lab-embeds/*.html, jadi disaring lewat id post materi-
 // nya secara eksplisit di sini kalau sudah punya wrapper /lab-maya/* sendiri.
-const materiSimAlreadyWrapped = new Set(['fluida-dan-massa-jenis']);
+// (kosong untuk sekarang -- 'fluida-dan-massa-jenis' dulu di sini karena
+// sempat pakai sim eksternal PhET yang urlnya bukan pola /lab-embeds/*.html;
+// sejak diganti sim internal fluida-statis.html, penyaringannya otomatis
+// lewat customLabEmbedSlugs di bawah, jadi entri manual ini tidak perlu lagi)
+const materiSimAlreadyWrapped = new Set<string>([]);
 
 // Materi yang punya field `simulasi` (embed PhET/GeoGebra/dsb, atau Lab Maya
 // yang BELUM punya halaman /lab-maya/* sendiri) — otomatis ikut muncul di
