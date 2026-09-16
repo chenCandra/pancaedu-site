@@ -1,30 +1,17 @@
 ---
-// Kartu satu sesi Ruang Belajar -- dipakai di dua tempat: section
-// "Pembelajaran Hari Ini" dan grid Silabus per Mapel (dashboard). Satu
-// komponen, satu sumber kebenaran visual.
+// Kartu satu sesi Ruang Belajar -- dipakai di grid Bab pada halaman
+// per-Kelas (lihat src/pages/ruang-belajar/kelas/[kelas].astro).
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   entry: CollectionEntry<'ruangBelajar'>;
-  // Tanggal-ISO ("2026-08-26") ditaruh sebagai data-attribute buat
-  // dicocokkan JS di sisi klien (lihat index.astro) -- situs ini statis,
-  // "hari ini" cuma bisa dihitung di browser pengunjung, bukan saat build.
-  hidden?: boolean;
 }
 
-const { entry, hidden = false } = Astro.props;
-const { kelas, mapel, judul, deskripsi, durasi, tanggal } = entry.data;
-const tanggalIso = tanggal.toISOString().slice(0, 10);
+const { entry } = Astro.props;
+const { kelas, mapel, judul, deskripsi, durasi } = entry.data;
 ---
 
-<a
-  href={`/ruang-belajar/${entry.id}`}
-  class="pd-card"
-  data-pd-card
-  data-tanggal={tanggalIso}
-  data-kelas={kelas}
-  hidden={hidden}
->
+<a href={`/ruang-belajar/${entry.id}`} class="pd-card">
   <div class="pd-card-tag">
     <span class="badge">{mapel.toUpperCase()} — KELAS {kelas}</span>
   </div>

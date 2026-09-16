@@ -45,7 +45,7 @@ const counters = [
   { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },
   { icon: '✍️', value: String(artikelPosts.length), suffix: '', label: 'Artikel' },
   { icon: '🧪', value: String(LAB_MAYA_SIMULASI_COUNT), suffix: '', label: 'Simulasi Lab Maya' },
-  { icon: '🎥', value: String(ruangBelajarSesi), suffix: '', label: 'Sesi Pembelajaran Daring' },
+  { icon: '🎥', value: String(ruangBelajarSesi), suffix: '', label: 'Sesi Ruang Belajar' },
 ];
 
 const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? allPosts[0];

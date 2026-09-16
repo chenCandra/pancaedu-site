@@ -1,79 +1,39 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import RuangBelajarCard from '../../components/RuangBelajarCard.astro';
+import { kelasToSlug, type Kelas } from '../../lib/ruangBelajar';
 
-// modeDaring SEKARANG cuma buat nampilin catatan darurat (mis. kabut asap)
-// kalau ada -- Ruang Belajar sendiri PERMANEN, tidak digerbangi field ini.
+// modeDaring cuma buat nampilin catatan darurat (mis. kabut asap) --
+// kalau ada. Ruang Belajar sendiri PERMANEN, tidak digerbangi field ini.
 const modeDaring = await getEntry('modeDaring', 'index');
 const aktif = modeDaring?.data.aktif ?? false;
 const keterangan = modeDaring?.data.keterangan;
 
 const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
 
-const kelasList = ['X', 'XI', 'XII'].filter((k) => semua.some((p) => p.data.kelas === k));
-
-// Silabus -- dikelompokkan per Mata Pelajaran, LALU per Kelas, urut
-// tanggal ASCENDING di dalam tiap kelompok Kelas (progres belajar dari
-// sesi pertama ke terakhir, beda dari "Hari Ini" yang butuh tanggal PERSIS
-// hari ini). Ini yang bikin Ruang Belajar tetap berguna dijelajahi kapan
-// saja, bukan cuma pas ada jadwal hari itu.
-// PENTING: kelompok Bab dihitung TERPISAH per Kelas (bukan per Mapel
-// saja) -- kalau digabung lintas kelas, urutan tanggal antar kurikulum
-// yang dibangun bersamaan bisa saling menyelip (mis. sesi Kelas XII yang
-// tanggalnya kebetulan lebih awal dari sesi "Energi Alternatif" Kelas X
-// bikin bab Kelas XII itu kehitung "Bab 3" di tengah silabus Kelas X).
-// Ini pernah kejadian betulan: "Rangkaian Listrik" (bab Kelas XII) sempat
-// muncul sebagai "Bab 3" gara-gara tanggalnya (2026-08-27) pas bareng
-// sama sesi Kelas X. Fix: setiap Kelas punya urutan Bab sendiri, sama
-// seperti perhitungan babInfo di [slug].astro yang sudah benar dari awal
-// (filter kelas DAN mapel, lihat komentar di sana).
-// Di dalam tiap kelompok Kelas, sesi yang sudah diberi `bab` (lihat
-// content.config.ts) dikelompokkan lagi jadi Bab 1/Bab 2/dst -- supaya
-// urutan panjang (puluhan sesi) tampil sebagai beberapa bab kecil, bukan
-// satu grid rata tanpa struktur. Nomor Bab dihitung dari urutan MUNCUL
-// PERTAMA KALI (yang otomatis sama dengan urutan tanggal, karena entries
-// sudah disortir ascending sebelum loop ini) -- bukan field manual, jadi
-// tidak perlu diurutkan ulang manual tiap nambah sesi baru. Sesi tanpa
-// `bab` (mis. mapel/kelas lain yang belum dikelompokkan) masuk ke
-// `tanpaBab`, ditampilkan tetap seperti sebelumnya (grid rata, tanpa
-// judul bab).
-const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
-  .sort((a, b) => a.localeCompare(b, 'id'))
-  .map((mapel) => {
-    const kelasGroups = kelasList
-      .filter((k) => semua.some((p) => p.data.mapel === mapel && p.data.kelas === k))
-      .map((kelas) => {
-        const entries = semua
-          .filter((p) => p.data.mapel === mapel && p.data.kelas === kelas)
-          .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
-
-        const babGroups: { nama: string; entries: typeof entries }[] = [];
-        const tanpaBab: typeof entries = [];
-        for (const entry of entries) {
-          const nama = entry.data.bab;
-          if (!nama) { tanpaBab.push(entry); continue; }
-          let grup = babGroups.find((g) => g.nama === nama);
-          if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
-          grup.entries.push(entry);
-        }
-
-        return { kelas, entries, babGroups, tanpaBab };
-      });
-
-    return { mapel, kelasGroups };
-  });
+// Ruang Belajar ditata sebagai 3 kartu Kelas (X/XI/XII) -- bukan lagi
+// jadwal "hari ini" yang butuh sesi dibuka tepat pas tanggalnya (fitur
+// "belajar daring" lama). Setiap kartu Kelas cuma perlu jumlah Bab &
+// sesi buat ditampilkan di sini -- daftar lengkap urutan Bab ada di
+// halaman /ruang-belajar/kelas/[kelas].
+const KELAS_URUT: Kelas[] = ['X', 'XI', 'XII'];
+const kelasCards = KELAS_URUT.map((kelas) => {
+  const entries = semua.filter((p) => p.data.kelas === kelas);
+  const babCount = new Set(entries.map((p) => p.data.bab).filter(Boolean)).size;
+  const mapelList = [...new Set(entries.map((p) => p.data.mapel))].sort((a, b) => a.localeCompare(b, 'id'));
+  return { kelas, slug: kelasToSlug(kelas), entries, babCount, mapelList };
+}).filter((k) => k.entries.length > 0);
 ---
 
 <BaseLayout
   title="Ruang Belajar"
-  description="Ruang Belajar PancaEdu -- lihat apa yang harus dipelajari, ikuti langkahnya, lalu kerjakan latihan/tugasnya. Tersedia kapan saja."
+  description="Ruang Belajar PancaEdu -- pilih kelasmu, ikuti bab demi bab secara berurutan, lalu kerjakan latihan/tugasnya. Tersedia kapan saja."
 >
   <section class="container pd-hero">
     <div class="pd-hero-main">
       <p class="eyebrow">🎓 Ruang Belajar</p>
       <h1>Belajar Kapan Saja</h1>
-      <p class="pd-hero-lede">Lihat apa yang perlu dipelajari, ikuti langkahnya dari atas ke bawah, lalu kerjakan latihan/tugasnya.</p>
+      <p class="pd-hero-lede">Pilih kelasmu, lalu ikuti bab-babnya secara berurutan dari yang paling awal.</p>
 
       {aktif && keterangan && (
         <div class="pd-alert">
@@ -89,151 +49,31 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
     </a>
   </section>
 
-  <section class="container pd-hari-ini" data-pd-hari-ini hidden>
-    <h2 class="pd-section-title">📌 Pembelajaran Hari Ini</h2>
-    <p class="pd-tanggal" data-pd-tanggal></p>
+  {kelasCards.length > 0 && (
+    <section class="container pd-kelas-section">
+      <h2 class="pd-section-title">Pilih Kelas</h2>
+      <p class="pd-section-lede">Materi tersusun rapi per Bab, urut dari sesi pertama sampai terakhir.</p>
 
-    <div class="pd-hari-ini-grid" data-pd-hari-ini-grid>
-      {semua.map((entry) => <RuangBelajarCard entry={entry} hidden />)}
-    </div>
-  </section>
-
-  {mapelGroups.length > 0 && (
-    <section class="container pd-silabus">
-      <h2 class="pd-section-title">Semua Pelajaran</h2>
-      <p class="pd-silabus-lede">Jelajahi berdasarkan kelas -- urut dari sesi paling awal ke terbaru, seperti silabus.</p>
-
-      <div class="pd-filter-row" role="group" aria-label="Filter kelas" data-pd-filters>
-        <button type="button" class="filter-btn badge" data-filter-kelas="" aria-pressed="true">Semua</button>
-        {kelasList.map((k) => (
-          <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">Kelas {k}</button>
+      <div class="pd-kelas-grid">
+        {kelasCards.map(({ kelas, slug, entries, babCount, mapelList }) => (
+          <a href={`/ruang-belajar/kelas/${slug}`} class="pd-kelas-card">
+            <div class="pd-kelas-card-tag">
+              <span class="badge">{mapelList.join(', ').toUpperCase()}</span>
+            </div>
+            <h3 class="pd-kelas-card-title">Kelas {kelas}</h3>
+            <p class="pd-kelas-card-desc">
+              {babCount > 0 ? `${babCount} bab` : `${entries.length} sesi`} tersusun berurutan, siap dipelajari kapan saja.
+            </p>
+            <div class="pd-kelas-card-footer">
+              <span class="pd-kelas-card-stat">{entries.length} sesi</span>
+              <span class="pd-kelas-card-cta">Lihat Bab &rarr;</span>
+            </div>
+          </a>
         ))}
       </div>
-
-      {mapelGroups.map((group) => (
-        <div class="pd-mapel-group" data-pd-mapel-group>
-          <h3 class="pd-mapel-title">{group.mapel}</h3>
-
-          {group.kelasGroups.map((kelasGroup) => (
-            <div class="pd-kelas-group" data-pd-kelas-group data-kelas={kelasGroup.kelas}>
-              {group.kelasGroups.length > 1 && (
-                <p class="pd-kelas-title">Kelas {kelasGroup.kelas}</p>
-              )}
-
-              {kelasGroup.babGroups.map((babGroup, i) => (
-                <div class="pd-bab-group" data-pd-bab-group>
-                  <h4 class="pd-bab-title">
-                    <span class="pd-bab-nomor">Bab {i + 1}</span>
-                    <span class="pd-bab-nama">{babGroup.nama}</span>
-                  </h4>
-                  <div class="pd-grid">
-                    {babGroup.entries.map((entry) => <RuangBelajarCard entry={entry} />)}
-                  </div>
-                </div>
-              ))}
-
-              {kelasGroup.tanpaBab.length > 0 && (
-                <div class="pd-grid" data-pd-bab-group>
-                  {kelasGroup.tanpaBab.map((entry) => <RuangBelajarCard entry={entry} />)}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
-
-      <p class="pd-empty" data-pd-grid-empty hidden>Tidak ada pembelajaran untuk kelas ini.</p>
     </section>
   )}
 </BaseLayout>
-
-<script>
-  // "Hari ini" cuma bisa dihitung di browser pengunjung -- situs ini
-  // statis, dibangun sekali lalu di-deploy, jadi tanggal server saat build
-  // TIDAK bisa dipakai (bakal "hari ini" yang sama terus sampai rebuild
-  // berikutnya). Dihitung dari waktu LOKAL browser (bukan toISOString(),
-  // yang UTC) supaya cocok sama kalender yang dilihat siswa.
-  function todayIso(): string {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-  }
-
-  const today = todayIso();
-
-  const tanggalEl = document.querySelector<HTMLElement>('[data-pd-tanggal]');
-  if (tanggalEl) {
-    const d = new Date();
-    tanggalEl.textContent = d.toLocaleDateString('id-ID', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  }
-
-  // Section "Hari Ini" DISEMBUNYIKAN SELURUHNYA (bukan cuma tampil pesan
-  // kosong) kalau tidak ada yang cocok -- Ruang Belajar permanen, jadi
-  // hari-hari biasa tanpa jadwal khusus tidak perlu terasa "kosong/rusak",
-  // cukup langsung lanjut ke "Semua Pelajaran" di bawahnya.
-  const hariIniSection = document.querySelector<HTMLElement>('[data-pd-hari-ini]');
-  const hariIniGrid = document.querySelector<HTMLElement>('[data-pd-hari-ini-grid]');
-  if (hariIniSection && hariIniGrid) {
-    let count = 0;
-    for (const card of hariIniGrid.querySelectorAll<HTMLElement>('[data-pd-card]')) {
-      const match = card.dataset.tanggal === today;
-      card.hidden = !match;
-      if (match) count++;
-    }
-    hariIniSection.hidden = count === 0;
-  }
-
-  // Filter Kelas (Semua/X/XI/XII) di "Semua Pelajaran" -- tiap kelompok
-  // Mapel disembunyikan seluruhnya kalau tidak ada sesi yang cocok filter
-  // (supaya tidak ada judul mapel nongkrong kosong tanpa isi). Sejak
-  // babGroups dihitung per-Kelas (lihat komentar di atas const
-  // mapelGroups), tiap [data-pd-kelas-group] sudah homogen isinya satu
-  // kelas saja -- jadi filter cukup sembunyikan/tampilkan seluruh blok
-  // Kelas itu langsung, tidak perlu lagi cek satu-satu tiap kartu/bab di
-  // dalamnya.
-  const filters = document.querySelector<HTMLElement>('[data-pd-filters]');
-  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-pd-mapel-group]'));
-  const gridEmpty = document.querySelector<HTMLElement>('[data-pd-grid-empty]');
-
-  if (filters && groups.length > 0) {
-    let activeKelas = '';
-
-    const applyFilter = () => {
-      let anyVisible = false;
-      for (const group of groups) {
-        let groupHasVisible = false;
-        const kelasGroupsInMapel = group.querySelectorAll<HTMLElement>('[data-pd-kelas-group]');
-        for (const kelasGroup of kelasGroupsInMapel) {
-          const visible = !activeKelas || kelasGroup.dataset.kelas === activeKelas;
-          kelasGroup.hidden = !visible;
-          if (visible) groupHasVisible = true;
-        }
-        group.hidden = !groupHasVisible;
-        if (groupHasVisible) anyVisible = true;
-      }
-      if (gridEmpty) gridEmpty.hidden = anyVisible;
-    };
-
-    filters.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter-kelas]');
-      if (!btn) return;
-      activeKelas = btn.dataset.filterKelas ?? '';
-      for (const b of filters.querySelectorAll<HTMLButtonElement>('[data-filter-kelas]')) {
-        b.setAttribute('aria-pressed', String(b === btn));
-      }
-      applyFilter();
-    });
-
-    applyFilter();
-  }
-</script>
 
 <style>
   .pd-hero {
@@ -282,123 +122,76 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
     margin-bottom: 0.25rem;
   }
 
-  .pd-hari-ini {
-    padding-block: 1rem 2.5rem;
-  }
-
-  .pd-tanggal {
+  .pd-section-lede {
     color: var(--ink-soft);
     font-size: 0.9375rem;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.75rem;
   }
 
-  .pd-hari-ini-grid,
-  .pd-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-    gap: 1.25rem;
-  }
-
-  .pd-empty {
-    color: var(--ink-soft);
-    padding-block: 1rem;
-  }
-
-  .pd-silabus {
+  .pd-kelas-section {
     padding-block: 1rem 3rem;
   }
 
-  .pd-silabus-lede {
+  .pd-kelas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pd-kelas-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pd-kelas-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .pd-kelas-card-title {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .pd-kelas-card-desc {
     color: var(--ink-soft);
     font-size: 0.9375rem;
-    margin: 0 0 1.25rem;
+    margin: 0;
+    flex-grow: 1;
   }
 
-  .pd-filter-row {
+  .pd-kelas-card-footer {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
   }
 
-  .filter-btn {
-    border: 1px solid transparent;
-    cursor: pointer;
-    font-family: var(--font-body);
-  }
-
-  .filter-btn[aria-pressed='true'] {
-    border-color: currentColor;
-  }
-
-  .pd-mapel-group {
-    margin-bottom: 2.5rem;
-  }
-
-  .pd-mapel-group:last-child {
-    margin-bottom: 0;
-  }
-
-  .pd-mapel-title {
-    font-size: 1.0625rem;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .pd-kelas-group {
-    margin-bottom: 2.5rem;
-  }
-
-  .pd-kelas-group:last-child {
-    margin-bottom: 0;
-  }
-
-  .pd-kelas-title {
-    font-family: var(--font-display);
+  .pd-kelas-card-stat {
     font-size: 0.8125rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
     color: var(--ink-soft);
-    margin: 0 0 1.1rem;
+    font-weight: 500;
   }
 
-  .pd-bab-group {
-    margin-bottom: 2rem;
-  }
-
-  .pd-bab-group:last-child {
-    margin-bottom: 0;
-  }
-
-  .pd-bab-title {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin: 0 0 0.9rem;
-  }
-
-  .pd-bab-nomor {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--accent-ink);
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    flex-shrink: 0;
-  }
-
-  .pd-bab-nama {
-    font-family: var(--font-display);
-    font-size: 1rem;
+  .pd-kelas-card-cta {
+    font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--accent);
   }
 
   .pd-panduan-link {

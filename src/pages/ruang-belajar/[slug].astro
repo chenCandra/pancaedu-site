@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { extractYoutubeId } from '../../lib/youtube';
+import { kelasToSlug } from '../../lib/ruangBelajar';
 
 export async function getStaticPaths() {
   const entries = await getCollection('ruangBelajar', ({ data }) => !data.draft);
@@ -166,7 +167,7 @@ const langkah = [
   description={deskripsiTampil ?? `${mapel} Kelas ${kelas}: ${judul}`}
 >
   <article class="container pd-detail">
-    <a href="/ruang-belajar" class="small-back">&larr; Semua Ruang Belajar</a>
+    <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`} class="small-back">&larr; Kelas {kelas}</a>
 
     <p class="eyebrow">{mapel} — Kelas {kelas}</p>
     <h1>{judul}</h1>
@@ -254,7 +255,7 @@ const langkah = [
             <span class="pd-next-label">🎉 Sesi Terakhir</span>
             <p>
               Ini pembelajaran terakhir yang tersedia untuk {mapel} Kelas {kelas} saat ini. Sesi berikutnya akan
-              ditambahkan menyusul -- lihat <a href="/ruang-belajar">semua Ruang Belajar</a> sementara menunggu.
+              ditambahkan menyusul -- lihat <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`}>semua Bab Kelas {kelas}</a> sementara menunggu.
             </p>
           </div>
         )}

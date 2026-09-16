@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RuangBelajarCard from '../../../components/RuangBelajarCard.astro';
+import { kelasToSlug, type Kelas } from '../../../lib/ruangBelajar';
+
+export async function getStaticPaths() {
+  const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+  const kelasList = (['X', 'XI', 'XII'] as Kelas[]).filter((k) => semua.some((p) => p.data.kelas === k));
+  return kelasList.map((kelas) => ({
+    params: { kelas: kelasToSlug(kelas) },
+    props: { kelas },
+  }));
+}
+
+const { kelas } = Astro.props as { kelas: Kelas };
+
+const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+
+// Dikelompokkan per Mata Pelajaran (saat ini selalu "Fisika", tapi field
+// `mapel` tetap bebas teks -- lihat content.config.ts), lalu di dalamnya
+// per Bab, urut tanggal ASCENDING (progres belajar dari sesi pertama ke
+// terakhir). Nomor Bab dihitung dari urutan MUNCUL PERTAMA KALI, sama
+// seperti babInfo di [slug].astro (lihat komentar di sana).
+const mapelGroups = [...new Set(semua.filter((p) => p.data.kelas === kelas).map((p) => p.data.mapel))]
+  .sort((a, b) => a.localeCompare(b, 'id'))
+  .map((mapel) => {
+    const entries = semua
+      .filter((p) => p.data.mapel === mapel && p.data.kelas === kelas)
+      .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
+
+    const babGroups: { nama: string; entries: typeof entries }[] = [];
+    const tanpaBab: typeof entries = [];
+    for (const entry of entries) {
+      const nama = entry.data.bab;
+      if (!nama) { tanpaBab.push(entry); continue; }
+      let grup = babGroups.find((g) => g.nama === nama);
+      if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
+      grup.entries.push(entry);
+    }
+
+    return { mapel, entries, babGroups, tanpaBab };
+  });
+---
+
+<BaseLayout
+  title={`Kelas ${kelas} — Ruang Belajar`}
+  description={`Ruang Belajar Kelas ${kelas} PancaEdu -- bab demi bab tersusun berurutan, siap dipelajari kapan saja.`}
+>
+  <section class="container pd-hero">
+    <a href="/ruang-belajar" class="small-back">&larr; Semua Kelas</a>
+    <p class="eyebrow">🎓 Ruang Belajar</p>
+    <h1>Kelas {kelas}</h1>
+    <p class="pd-hero-lede">Ikuti bab-babnya berurutan dari atas ke bawah, dari sesi paling awal ke terbaru.</p>
+  </section>
+
+  {mapelGroups.length > 0 ? (
+    <section class="container pd-silabus">
+      {mapelGroups.map((group) => (
+        <div class="pd-mapel-group">
+          {mapelGroups.length > 1 && <h2 class="pd-mapel-title">{group.mapel}</h2>}
+
+          {group.babGroups.map((babGroup, i) => (
+            <div class="pd-bab-group">
+              <h3 class="pd-bab-title">
+                <span class="pd-bab-nomor">Bab {i + 1}</span>
+                <span class="pd-bab-nama">{babGroup.nama}</span>
+              </h3>
+              <div class="pd-grid">
+                {babGroup.entries.map((entry) => <RuangBelajarCard entry={entry} />)}
+              </div>
+            </div>
+          ))}
+
+          {group.tanpaBab.length > 0 && (
+            <div class="pd-grid">
+              {group.tanpaBab.map((entry) => <RuangBelajarCard entry={entry} />)}
+            </div>
+          )}
+        </div>
+      ))}
+    </section>
+  ) : (
+    <section class="container pd-silabus">
+      <p class="pd-empty">Belum ada pembelajaran untuk Kelas {kelas}.</p>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .pd-hero {
+    padding-block: 3rem 1.5rem;
+    max-width: var(--measure);
+  }
+
+  .small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .pd-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pd-silabus {
+    padding-block: 1rem 3rem;
+  }
+
+  .pd-empty {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+
+  .pd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .pd-mapel-group {
+    margin-bottom: 2.5rem;
+  }
+
+  .pd-mapel-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .pd-mapel-title {
+    font-size: 1.0625rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pd-bab-group {
+    margin-bottom: 2rem;
+  }
+
+  .pd-bab-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .pd-bab-title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 0.9rem;
+  }
+
+  .pd-bab-nomor {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .pd-bab-nama {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+</style>
