@@ -264,7 +264,7 @@
       'C_total ikut mendekati nol, mengikuti C1 yang terkecil', 'C_total malah membesar mendekati C2', 'C_total tidak terpengaruh sama sekali', 'C_total menjadi negatif'
     ], 0, (correct) => {
       const fb = document.getElementById('circQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + '1/C_total = 1/C1 + 1/C2 -- kalau C1 mendekati nol, 1/C1 jadi sangat besar, sehingga C_total juga ikut mendekati nol. Pada rangkaian SERI, kapasitor terkecil selalu "mendominasi" dan menyeret C_total ke bawah. Coba geser slider C1 ke angka terkecil sambil mode Seri aktif, lihat sendiri C_total-nya.',
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + '1/C_total = 1/C1 + 1/C2 -- kalau C1 mendekati nol, 1/C1 jadi sangat besar, sehingga C_total juga ikut mendekati nol. Pada rangkaian SERI, kapasitor terkecil selalu "mendominasi" dan menyeret C_total ke bawah. Coba geser slider C1 ke angka terkecil sambil mode Seri aktif, lihat sendiri C_total-nya.';
     });
 
     window.onload = () => { resizeCanvas(); update(); };

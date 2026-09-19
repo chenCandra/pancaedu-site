@@ -392,7 +392,7 @@
       'Faktor Lorentz, γ = 1/√(1−v²/c²)', 'Massa diam benda, m₀', 'Percepatan gravitasi, g', 'Panjang gelombang cahaya, λ'
     ], 0, (correct) => {
       const fb = document.getElementById('relQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Δt\' = γΔt, L = L₀/γ, dan m = γm₀ -- ketiganya "digerakkan" oleh γ yang sama. Coba geser slider v/c di atas dan lihat ketiga tab berubah bersamaan.',
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Δt\' = γΔt, L = L₀/γ, dan m = γm₀ -- ketiganya "digerakkan" oleh γ yang sama. Coba geser slider v/c di atas dan lihat ketiga tab berubah bersamaan.';
     });
 
     window.onload = () => { resizeAllCanvas(); requestAnimationFrame(renderWaktu); requestAnimationFrame(renderPanjang); };

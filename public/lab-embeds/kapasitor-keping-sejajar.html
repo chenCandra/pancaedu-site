@@ -266,7 +266,7 @@
       'Energi jadi setengahnya, karena W berbanding terbalik dengan d', 'Energi tidak berubah, karena V tetap', 'Energi jadi dua kali lipat', 'Energi jadi seperempatnya'
     ], 0, (correct) => {
       const fb = document.getElementById('capQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'C = κε₀A/d berbanding terbalik dengan d, jadi kalau d naik 2×, C jadi setengahnya. Karena W = ½CV² dan V tetap, W juga jadi setengahnya. Coba buktikan sendiri dengan slider jarak (d) di atas -- perhatikan nilai C dan W-nya berubah.',
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'C = κε₀A/d berbanding terbalik dengan d, jadi kalau d naik 2×, C jadi setengahnya. Karena W = ½CV² dan V tetap, W juga jadi setengahnya. Coba buktikan sendiri dengan slider jarak (d) di atas -- perhatikan nilai C dan W-nya berubah.';
     });
 
     window.onload = () => { resizeCanvas(); update(); };

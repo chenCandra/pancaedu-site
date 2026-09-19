@@ -218,7 +218,7 @@
       'Eter mungkin tidak ada, dan kecepatan cahaya sama bagi semua pengamat, tidak peduli arah gerak sumbernya', 'Alat percobaannya rusak sehingga tidak bisa mendeteksi apa pun', 'Bumi sebenarnya diam, tidak bergerak mengelilingi Matahari', 'Cahaya tidak bisa merambat lewat ruang hampa'
     ], 0, (correct) => {
       const fb = document.getElementById('mmQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Hasil nihil ini sangat mengejutkan pada masanya -- alatnya presisi dan sudah diuji berulang. Kesimpulan paling masuk akal (yang akhirnya dikonfirmasi Einstein lewat teori relativitas khusus): kecepatan cahaya memang konstan bagi SEMUA pengamat, berapa pun kecepatan sumbernya, tidak butuh medium eter sama sekali.',
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Hasil nihil ini sangat mengejutkan pada masanya -- alatnya presisi dan sudah diuji berulang. Kesimpulan paling masuk akal (yang akhirnya dikonfirmasi Einstein lewat teori relativitas khusus): kecepatan cahaya memang konstan bagi SEMUA pengamat, berapa pun kecepatan sumbernya, tidak butuh medium eter sama sekali.';
     });
 
     window.onload = () => { resizeCanvas(); update(); requestAnimationFrame(render); };

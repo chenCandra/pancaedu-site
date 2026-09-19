@@ -353,7 +353,7 @@
       'Step-down, Vs = 44 V', 'Step-up, Vs = 1100 V', 'Rasio 1:1, Vs = 220 V', 'Step-down, Vs = 100 V'
     ], 0, (correct) => {
       const fb = document.getElementById('genQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena Ns (100) < Np (500), ini trafo STEP-DOWN. Vs = Vp×(Ns/Np) = 220×(100/500) = 44 V. Coba buktikan sendiri di tab Transformator dengan nilai Np/Ns yang sama.',
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena Ns (100) < Np (500), ini trafo STEP-DOWN. Vs = Vp×(Ns/Np) = 220×(100/500) = 44 V. Coba buktikan sendiri di tab Transformator dengan nilai Np/Ns yang sama.';
     });
 
     window.onload = () => { resizeGenCanvas(); resizeTrafoCanvas(); updateTrafo(); requestAnimationFrame(renderGen); };
