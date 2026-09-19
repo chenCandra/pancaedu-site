@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lab Maya: Torsi dan Dinamika Rotasi"
+  description="Tab Momen Gaya: atur gaya, lengan, dan sudut, lihat torsi berubah. Tab Dinamika Rotasi: pilih bentuk benda, atur torsi, lihat percepatan sudut dan energi kinetik rotasi berubah real-time."
+  disableCursor
+>
+  <section class="container page-header">
+    <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    <p class="eyebrow">🧪 Lab Maya · Torsi dan Dinamika Rotasi · Kelas XI</p>
+    <h1>Laboratorium Maya: Torsi dan Dinamika Rotasi</h1>
+    <p class="page-lede">
+      Tab "Momen Gaya (Torsi)": atur besar gaya, panjang lengan, dan sudutnya, lalu amati torsi berubah. Tab
+      "Dinamika Rotasi": pilih bentuk benda (cincin/piringan/bola/batang), atur torsi yang diberikan, lalu lihat
+      sendiri momen inersia, percepatan sudut, dan energi kinetik rotasinya berubah.
+    </p>
+  </section>
+
+  <section class="container lab-wrap">
+    <div class="gl-frame-wrap card">
+      <iframe
+        data-gl-frame
+        src="/lab-embeds/torsi-dan-dinamika-rotasi.html"
+        title="Laboratorium Maya: Torsi dan Dinamika Rotasi"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <p class="lab-note">
+      Simulasi ini dijalankan dari file mandiri (bukan komponen situs) — makanya nuansa visualnya
+      beda dari halaman sekitarnya. Itu disengaja, bukan bug.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header { padding-block: 3rem 1.5rem; max-width: 42rem; }
+  .back-link { display: inline-block; font-size: 0.875rem; color: var(--ink-soft); text-decoration: none; margin-bottom: 1rem; }
+  .back-link:hover { color: var(--accent); }
+  .page-lede { color: var(--ink-soft); font-size: 1.0625rem; }
+  .lab-wrap { max-width: 60rem; padding-block: 1rem 4rem; }
+  .gl-frame-wrap { padding: 0; overflow: hidden; }
+  .gl-frame-wrap iframe { display: block; width: 100%; height: 980px; border: 0; }
+  .lab-note { margin-top: 0.75rem; font-size: 0.8125rem; color: var(--ink-faint); text-align: center; }
+</style>
+
+<script>
+  const iframe = document.querySelector<HTMLIFrameElement>('[data-gl-frame]');
+  function resizeIframe() {
+    if (!iframe?.contentDocument) return;
+    const height = iframe.contentDocument.documentElement.scrollHeight;
+    if (height > 0) iframe.style.height = `${height}px`;
+  }
+  iframe?.addEventListener('load', () => {
+    resizeIframe();
+    window.addEventListener('resize', () => setTimeout(resizeIframe, 150));
+  });
+</script>

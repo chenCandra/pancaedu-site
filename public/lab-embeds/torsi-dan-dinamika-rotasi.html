@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Torsi dan Dinamika Rotasi</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+  select { width: 100%; background: rgba(15,23,42,0.7); color: var(--text-main); border: 1.5px solid var(--card-border); border-radius: 8px; padding: 8px; font-size: 0.85rem; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔧</span><h1>Laboratorium Maya: Torsi dan Dinamika Rotasi</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnTorsi">🔧 Momen Gaya (Torsi)</button>
+    <button class="tab-btn" id="tabBtnRotasi">🌀 Dinamika Rotasi</button>
+  </div>
+
+  <!-- ================= TAB TORSI ================= -->
+  <div class="tab-panel is-active" id="tabTorsi">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Gaya (F)</span><span class="control-value" id="fVal">20 N</span></div>
+          <input type="range" id="fSlider" min="5" max="60" step="5" value="20">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Lengan Gaya (r)</span><span class="control-value" id="rVal">0,5 m</span></div>
+          <input type="range" id="rSlider" min="0.1" max="1.5" step="0.1" value="0.5">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Sudut Gaya (θ)</span><span class="control-value" id="thetaVal">90°</span></div>
+          <input type="range" id="thetaSlider" min="0" max="180" step="10" value="90">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="torsiCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Momen Gaya (τ)</div><div class="v" id="torsiVal">0</div></div>
+          </div>
+          <div class="formula-box" id="torsiFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Momen gaya (torsi, τ) = F × r × sinθ -- makin jauh gaya diberikan dari sumbu putar (r besar) atau makin tegak lurus arahnya (θ mendekati 90°), makin besar torsinya. Inilah kenapa kunci pas/obeng bertangkai panjang lebih mudah memutar baut.
+    </div>
+  </div>
+
+  <!-- ================= TAB DINAMIKA ROTASI ================= -->
+  <div class="tab-panel" id="tabRotasi">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Bentuk Benda</span></div>
+          <select id="bentukSelect">
+            <option value="cincin">Cincin/Hoop (I = MR²)</option>
+            <option value="piringan" selected>Piringan Pejal (I = ½MR²)</option>
+            <option value="bola">Bola Pejal (I = ⅖MR²)</option>
+            <option value="batang">Batang, poros di ujung (I = ⅓ML²)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa (M)</span><span class="control-value" id="mRotVal">2 kg</span></div>
+          <input type="range" id="mRotSlider" min="1" max="10" step="1" value="2">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jari-jari/Panjang (R atau L)</span><span class="control-value" id="rRotVal">0,5 m</span></div>
+          <input type="range" id="rRotSlider" min="0.1" max="1.5" step="0.1" value="0.5">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Torsi yang Diberikan (τ)</span><span class="control-value" id="tauVal">4 N·m</span></div>
+          <input type="range" id="tauSlider" min="1" max="20" step="1" value="4">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Lama Torsi Bekerja (t)</span><span class="control-value" id="tRotVal">2 s</span></div>
+          <input type="range" id="tRotSlider" min="0.5" max="10" step="0.5" value="2">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="rotasiCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Momen Inersia (I)</div><div class="v" id="iVal">0</div></div>
+            <div class="result-highlight"><div class="k">Percepatan Sudut (α)</div><div class="v" id="alphaVal">0</div></div>
+            <div class="result-highlight"><div class="k">Kecepatan Sudut (ω)</div><div class="v" id="omegaVal">0</div></div>
+            <div class="result-highlight"><div class="k">Energi Kinetik Rotasi</div><div class="v" id="ekRotVal">0</div></div>
+          </div>
+          <div class="formula-box" id="rotasiFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Momen inersia (I) menyatakan "kelembaman rotasi" -- bergantung bentuk & sebaran massa benda, BUKAN cuma massa totalnya. Hukum II Newton versi rotasi: τ = I×α, sehingga α = τ/I. Kecepatan sudut ω = α×t (dari diam), dan energi kinetik rotasi Ek = ½Iω².
+    </div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCH ----------
+    const tabBtnTorsi = document.getElementById('tabBtnTorsi');
+    const tabBtnRotasi = document.getElementById('tabBtnRotasi');
+    const tabTorsi = document.getElementById('tabTorsi');
+    const tabRotasi = document.getElementById('tabRotasi');
+    tabBtnTorsi.addEventListener('click', () => {
+      tabBtnTorsi.classList.add('is-active'); tabBtnRotasi.classList.remove('is-active');
+      tabTorsi.classList.add('is-active'); tabRotasi.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnRotasi.addEventListener('click', () => {
+      tabBtnRotasi.classList.add('is-active'); tabBtnTorsi.classList.remove('is-active');
+      tabRotasi.classList.add('is-active'); tabTorsi.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- TORSI ----------
+    const fSlider = document.getElementById('fSlider'), fVal = document.getElementById('fVal');
+    const rSlider = document.getElementById('rSlider'), rVal = document.getElementById('rVal');
+    const thetaSlider = document.getElementById('thetaSlider'), thetaVal = document.getElementById('thetaVal');
+    const torsiVal = document.getElementById('torsiVal');
+    const torsiFormula = document.getElementById('torsiFormula');
+    const torsiCanvas = document.getElementById('torsiCanvas');
+    const torsiCtx = torsiCanvas.getContext('2d');
+
+    let F = 20, rLengan = 0.5, thetaDeg = 90;
+
+    function updateTorsi() {
+      const theta = thetaDeg * Math.PI / 180;
+      const tau = F * rLengan * Math.sin(theta);
+      torsiVal.textContent = tau.toFixed(2) + ' N·m';
+      torsiFormula.innerHTML = `τ = F×r×sinθ = ${F}×${rLengan.toFixed(1)}×sin${thetaDeg}° = <span class="math-num">${tau.toFixed(2)} N·m</span>`;
+      renderTorsi();
+    }
+    fSlider.addEventListener('input', () => { F = parseFloat(fSlider.value); fVal.textContent = F + ' N'; updateTorsi(); });
+    rSlider.addEventListener('input', () => { rLengan = parseFloat(rSlider.value); rVal.textContent = rLengan.toFixed(1) + ' m'; updateTorsi(); });
+    thetaSlider.addEventListener('input', () => { thetaDeg = parseFloat(thetaSlider.value); thetaVal.textContent = thetaDeg + '°'; updateTorsi(); });
+
+    function renderTorsi() {
+      const w = torsiCanvas.parentElement.clientWidth, h = torsiCanvas.parentElement.clientHeight;
+      torsiCtx.clearRect(0, 0, w, h);
+      const cx = w * 0.25, cy = h * 0.55;
+      const lenPx = Math.min(w * 0.5, 160) * (rLengan / 1.5);
+
+      torsiCtx.save();
+      torsiCtx.fillStyle = '#facc15';
+      torsiCtx.beginPath(); torsiCtx.arc(cx, cy, 6, 0, Math.PI * 2); torsiCtx.fill();
+
+      torsiCtx.strokeStyle = 'rgba(248,250,252,0.8)'; torsiCtx.lineWidth = 4;
+      const barEndX = cx + lenPx, barEndY = cy;
+      torsiCtx.beginPath(); torsiCtx.moveTo(cx, cy); torsiCtx.lineTo(barEndX, barEndY); torsiCtx.stroke();
+
+      const theta = thetaDeg * Math.PI / 180;
+      const arrowLen = 60;
+      const fx = barEndX + arrowLen * Math.cos(Math.PI - theta);
+      const fy = barEndY - arrowLen * Math.sin(theta);
+      torsiCtx.strokeStyle = '#38bdf8'; torsiCtx.lineWidth = 3;
+      torsiCtx.beginPath(); torsiCtx.moveTo(barEndX, barEndY); torsiCtx.lineTo(fx, fy); torsiCtx.stroke();
+      const angle = Math.atan2(fy - barEndY, fx - barEndX);
+      torsiCtx.beginPath();
+      torsiCtx.moveTo(fx, fy);
+      torsiCtx.lineTo(fx - 10 * Math.cos(angle - 0.4), fy - 10 * Math.sin(angle - 0.4));
+      torsiCtx.lineTo(fx - 10 * Math.cos(angle + 0.4), fy - 10 * Math.sin(angle + 0.4));
+      torsiCtx.closePath(); torsiCtx.fillStyle = '#38bdf8'; torsiCtx.fill();
+
+      torsiCtx.fillStyle = '#f8fafc'; torsiCtx.font = '12px system-ui'; torsiCtx.textAlign = 'center';
+      torsiCtx.fillText('F', fx + 12, fy);
+      torsiCtx.fillText('r = ' + rLengan.toFixed(1) + ' m', (cx + barEndX) / 2, cy + 20);
+      torsiCtx.restore();
+    }
+
+    // ---------- DINAMIKA ROTASI ----------
+    const bentukSelect = document.getElementById('bentukSelect');
+    const mRotSlider = document.getElementById('mRotSlider'), mRotVal = document.getElementById('mRotVal');
+    const rRotSlider = document.getElementById('rRotSlider'), rRotVal = document.getElementById('rRotVal');
+    const tauSlider = document.getElementById('tauSlider'), tauVal = document.getElementById('tauVal');
+    const tRotSlider = document.getElementById('tRotSlider'), tRotVal = document.getElementById('tRotVal');
+    const iVal = document.getElementById('iVal'), alphaVal = document.getElementById('alphaVal');
+    const omegaVal = document.getElementById('omegaVal'), ekRotVal = document.getElementById('ekRotVal');
+    const rotasiFormula = document.getElementById('rotasiFormula');
+    const rotasiCanvas = document.getElementById('rotasiCanvas');
+    const rotasiCtx = rotasiCanvas.getContext('2d');
+
+    let bentuk = 'piringan', mRot = 2, rRot = 0.5, tau = 4, tRot = 2;
+    let rotasiAngle = 0;
+    let currentOmega = 0;
+
+    function koefisienI(b) {
+      if (b === 'cincin') return { k: 1, label: 'MR²' };
+      if (b === 'piringan') return { k: 0.5, label: '½MR²' };
+      if (b === 'bola') return { k: 0.4, label: '⅖MR²' };
+      return { k: 1 / 3, label: '⅓ML²' }; // batang di ujung
+    }
+
+    function updateRotasi() {
+      const { k, label } = koefisienI(bentuk);
+      const I = k * mRot * rRot * rRot;
+      const alpha = tau / I;
+      const omega = alpha * tRot;
+      const ek = 0.5 * I * omega * omega;
+
+      iVal.textContent = I.toFixed(3) + ' kg·m²';
+      alphaVal.textContent = alpha.toFixed(2) + ' rad/s²';
+      omegaVal.textContent = omega.toFixed(2) + ' rad/s';
+      ekRotVal.textContent = ek.toFixed(2) + ' J';
+
+      rotasiFormula.innerHTML =
+        `I = ${label} = ${k}×${mRot}×${rRot.toFixed(1)}² = <span class="math-num">${I.toFixed(3)} kg·m²</span><br>` +
+        `α = τ/I = ${tau}/${I.toFixed(3)} = <span class="math-num">${alpha.toFixed(2)} rad/s²</span><br>` +
+        `ω = α×t = ${alpha.toFixed(2)}×${tRot} = <span class="math-num">${omega.toFixed(2)} rad/s</span><br>` +
+        `Ek rotasi = ½Iω² = <span class="math-num">${ek.toFixed(2)} J</span>`;
+
+      currentOmega = omega;
+    }
+
+    bentukSelect.addEventListener('change', () => { bentuk = bentukSelect.value; updateRotasi(); });
+    mRotSlider.addEventListener('input', () => { mRot = parseFloat(mRotSlider.value); mRotVal.textContent = mRot + ' kg'; updateRotasi(); });
+    rRotSlider.addEventListener('input', () => { rRot = parseFloat(rRotSlider.value); rRotVal.textContent = rRot.toFixed(1) + ' m'; updateRotasi(); });
+    tauSlider.addEventListener('input', () => { tau = parseFloat(tauSlider.value); tauVal.textContent = tau + ' N·m'; updateRotasi(); });
+    tRotSlider.addEventListener('input', () => { tRot = parseFloat(tRotSlider.value); tRotVal.textContent = tRot + ' s'; updateRotasi(); });
+
+    function renderRotasi() {
+      const w = rotasiCanvas.parentElement.clientWidth, h = rotasiCanvas.parentElement.clientHeight;
+      rotasiCtx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+      const radiusPx = Math.min(w, h) * 0.32;
+
+      rotasiAngle += Math.min(currentOmega, 15) * 0.05;
+
+      rotasiCtx.save();
+      rotasiCtx.strokeStyle = '#38bdf8'; rotasiCtx.lineWidth = 3;
+      rotasiCtx.beginPath(); rotasiCtx.arc(cx, cy, radiusPx, 0, Math.PI * 2); rotasiCtx.stroke();
+
+      // Marker berputar
+      const mx = cx + radiusPx * Math.cos(rotasiAngle);
+      const my = cy + radiusPx * Math.sin(rotasiAngle);
+      rotasiCtx.fillStyle = '#facc15';
+      rotasiCtx.beginPath(); rotasiCtx.arc(mx, my, 8, 0, Math.PI * 2); rotasiCtx.fill();
+
+      rotasiCtx.fillStyle = 'rgba(56,189,248,0.5)';
+      rotasiCtx.beginPath(); rotasiCtx.arc(cx, cy, 4, 0, Math.PI * 2); rotasiCtx.fill();
+
+      rotasiCtx.fillStyle = '#f8fafc'; rotasiCtx.font = 'bold 12px system-ui'; rotasiCtx.textAlign = 'center';
+      rotasiCtx.fillText(bentuk.toUpperCase(), cx, cy - radiusPx - 14);
+      rotasiCtx.restore();
+    }
+
+    function animLoop() {
+      if (tabRotasi.classList.contains('is-active')) renderRotasi();
+      requestAnimationFrame(animLoop);
+    }
+
+    function resizeAll() {
+      [torsiCanvas, rotasiCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderTorsi();
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateTorsi();
+      updateRotasi();
+      requestAnimationFrame(animLoop);
+    };
+  </script>
+</body>
+</html>
