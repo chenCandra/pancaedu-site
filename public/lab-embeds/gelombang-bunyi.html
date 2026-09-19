@@ -317,31 +317,83 @@
       fPrimeVal.textContent = fPrime.toFixed(1) + ' Hz';
       const tanda = arahDoppler === 'mendekat' ? '−' : '+';
       dopplerFormula.innerHTML = `f' = f×v/(v${tanda}vs) = ${fSumber}×${vBunyi}/(${vBunyi}${tanda}${vs}) = <span class="math-num">${fPrime.toFixed(1)} Hz</span>`;
-      renderDoppler();
     }
     fSumberSlider.addEventListener('input', () => { fSumber = parseFloat(fSumberSlider.value); fSumberVal.textContent = fSumber + ' Hz'; updateDoppler(); });
     vsSlider.addEventListener('input', () => { vs = parseFloat(vsSlider.value); vsVal.textContent = vs + ' m/s'; updateDoppler(); });
     dopplerArahBtns.forEach((btn) => btn.addEventListener('click', () => {
       dopplerArahBtns.forEach((b) => b.classList.remove('is-active')); btn.classList.add('is-active');
-      arahDoppler = btn.dataset.arah; updateDoppler();
+      arahDoppler = btn.dataset.arah;
+      dopplerWavefronts = []; dopplerSrcT = 0;
+      updateDoppler();
     }));
 
-    function renderDoppler() {
+    // Animated moving source: emits expanding wavefronts continuously while
+    // traveling toward/away from a fixed listener -- circles bunch up ahead
+    // of the motion and spread out behind it, the classic Doppler picture.
+    let dopplerWavefronts = [];
+    let dopplerSrcT = 0;
+    let dopplerLastFrameTime = null;
+    let dopplerLastEmitTime = null;
+    const DOPPLER_EMIT_INTERVAL = 650; // ms between emitted wavefronts
+    const DOPPLER_WAVE_SPEED = 90; // px/s, visual stand-in for v
+    const DOPPLER_SRC_MAX_SPEED = 55; // px/s at vs=60 (top of slider) -- stylized for visibility, not to scale with v=340
+
+    function isDopplerVisible() {
+      return tabPanels.Intensitas.classList.contains('is-active') && dopplerPanel.style.display !== 'none';
+    }
+
+    function animDoppler(now) {
+      requestAnimationFrame(animDoppler);
+      if (!isDopplerVisible()) { dopplerLastFrameTime = null; return; }
+      if (dopplerLastFrameTime === null) { dopplerLastFrameTime = now; dopplerLastEmitTime = now; }
+      const dt = (now - dopplerLastFrameTime) / 1000;
+      dopplerLastFrameTime = now;
+
       const w = dopplerCanvas.parentElement.clientWidth, h = dopplerCanvas.parentElement.clientHeight;
-      dopplerCtx.clearRect(0, 0, w, h);
       const cy = h / 2;
+      const listenerX = w * 0.85;
+      const pathStartX = arahDoppler === 'mendekat' ? w * 0.12 : w * 0.72;
+      const pathEndX = arahDoppler === 'mendekat' ? w * 0.72 : w * 0.12;
+      const pathLen = Math.abs(pathEndX - pathStartX) || 1;
+      const srcSpeed = DOPPLER_SRC_MAX_SPEED * (vs / 60);
+
+      dopplerSrcT += (srcSpeed / pathLen) * dt;
+      if (dopplerSrcT > 1) { dopplerSrcT -= 1; dopplerWavefronts = []; }
+      const srcX = pathStartX + (pathEndX - pathStartX) * dopplerSrcT;
+
+      if (now - dopplerLastEmitTime >= DOPPLER_EMIT_INTERVAL) {
+        dopplerLastEmitTime = now;
+        dopplerWavefronts.push({ x: srcX, born: now });
+      }
+
+      dopplerCtx.clearRect(0, 0, w, h);
+
+      dopplerWavefronts = dopplerWavefronts.filter((wf) => {
+        const r = ((now - wf.born) / 1000) * DOPPLER_WAVE_SPEED;
+        if (r > Math.max(w, h)) return false;
+        dopplerCtx.save();
+        dopplerCtx.strokeStyle = '#38bdf8';
+        dopplerCtx.globalAlpha = Math.max(0, 1 - r / Math.max(w, h));
+        dopplerCtx.lineWidth = 2;
+        dopplerCtx.beginPath();
+        dopplerCtx.arc(wf.x, cy, r, 0, Math.PI * 2);
+        dopplerCtx.stroke();
+        dopplerCtx.restore();
+        return true;
+      });
+
+      dopplerCtx.save();
+      dopplerCtx.fillStyle = '#94a3b8';
+      dopplerCtx.beginPath(); dopplerCtx.arc(listenerX, cy, 6, 0, Math.PI * 2); dopplerCtx.fill();
+      dopplerCtx.font = '11px sans-serif'; dopplerCtx.textAlign = 'center';
+      dopplerCtx.fillText('Pendengar', listenerX, cy + 24);
+      dopplerCtx.restore();
+
       dopplerCtx.save();
       dopplerCtx.fillStyle = '#facc15';
-      const srcX = arahDoppler === 'mendekat' ? w * 0.2 : w * 0.8;
-      dopplerCtx.beginPath(); dopplerCtx.arc(srcX, cy, 10, 0, Math.PI * 2); dopplerCtx.fill();
-      dopplerCtx.strokeStyle = '#38bdf8';
-      for (let i = 1; i <= 4; i++) {
-        dopplerCtx.beginPath();
-        const r = i * 25;
-        dopplerCtx.arc(srcX, cy, r, 0, Math.PI * 2);
-        dopplerCtx.globalAlpha = 1 - i * 0.2;
-        dopplerCtx.stroke();
-      }
+      dopplerCtx.beginPath(); dopplerCtx.arc(srcX, cy, 8, 0, Math.PI * 2); dopplerCtx.fill();
+      dopplerCtx.font = '11px sans-serif'; dopplerCtx.textAlign = 'center';
+      dopplerCtx.fillText('Sumber', srcX, cy - 16);
       dopplerCtx.restore();
     }
 
@@ -400,7 +452,6 @@
         c.width = rect.width * dpr; c.height = rect.height * dpr;
         c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
       });
-      renderDoppler();
     }
     window.addEventListener('resize', resizeAll);
 
@@ -412,6 +463,7 @@
       updatePipa();
       updatePelayangan();
       requestAnimationFrame(animCepat);
+      requestAnimationFrame(animDoppler);
     };
   </script>
 </body>
