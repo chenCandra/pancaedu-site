@@ -2,6 +2,7 @@
 import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
 import { ambilSesi } from '../../lib/adminPanca/auth';
 import { daftarSesi } from '../../lib/penugasan/sesi';
+import { daftarPin } from '../../lib/adminPanca/db';
 import { env } from 'cloudflare:workers';
 import { getCollection } from 'astro:content';
 
@@ -14,9 +15,20 @@ const semuaPenugasan = await getCollection('penugasan', ({ data }) => !data.draf
 const slug = Astro.url.searchParams.get('slug') ?? '';
 const entry = slug ? semuaPenugasan.find((p) => p.id === slug) : undefined;
 const daftarSesiPenugasan = entry ? await daftarSesi(env.DB, slug) : [];
+// PIN leaderboard Penugasan ini yang dibuat lewat D1 (scope
+// 'leaderboard:<slug>') -- lihat POST /api/admin-panca/sesi. Kalau kosong,
+// leaderboard-nya masih dipandu PIN statis lama di frontmatter Penugasan
+// (`pinHash`), yang TIDAK bisa dilihat lagi plaintext-nya dari sini.
+const daftarPinLeaderboard = entry ? await daftarPin(env.DB, `leaderboard:${slug}`) : [];
 
 function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; kelas: string } {
   if (s.revoked_at) return { label: 'Dicabut', kelas: 'status-dicabut' };
+  return { label: 'Aktif', kelas: 'status-aktif' };
+}
+
+function statusPinLeaderboard(p: (typeof daftarPinLeaderboard)[number]): { label: string; kelas: string } {
+  if (p.revoked_at) return { label: 'Dicabut', kelas: 'status-dicabut' };
+  if (new Date(p.expires_at).getTime() < Date.now()) return { label: 'Kedaluwarsa', kelas: 'status-kedaluwarsa' };
   return { label: 'Aktif', kelas: 'status-aktif' };
 }
 ---
@@ -70,6 +82,17 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
               required
             />
           </label>
+          <label>
+            PIN Leaderboard (opsional -- kosongkan kalau tidak ingin mengubah)
+            <input
+              type="text"
+              name="leaderboardPin"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="mis. LEADERBOARD-DIMENSI-1"
+            />
+          </label>
           <p class="sesi-error" data-sesi-form-error hidden></p>
           <button type="submit" class="panca-btn panca-btn-primary" data-sesi-submit>Buat Sesi</button>
         </form>
@@ -77,6 +100,65 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
           ⚠️ Begitu sesi PERTAMA dibuat untuk Penugasan ini, murid WAJIB isi kode sesi sebelum mulai mengerjakan
           (kode sesi manapun yang masih aktif). Kalau semua sesi dicabut, murid kembali bisa mulai tanpa kode.
         </p>
+        <p class="sesi-hint">
+          🏆 Isi "PIN Leaderboard" kalau sekalian mau menyetel/mengganti PIN buka papan peringkat Penugasan ini --
+          dibuat sebagai PIN baru yang aktif berdampingan dengan PIN lama (kalau ada), tidak menggantikannya. Beda
+          dari Kode Sesi di atas, PIN ini dipakai murid di halaman <em>leaderboard</em>, bukan buat mulai mengerjakan.
+        </p>
+      </section>
+
+      <section class="panca-card sesi-list-card">
+        <h2 class="section-title">PIN Leaderboard untuk "{entry.data.judul}"</h2>
+        {daftarPinLeaderboard.length === 0 ? (
+          <p class="pin-empty">
+            Belum pernah dibuat lewat sini -- leaderboard-nya masih dipandu PIN lama di konten (kalau ada). Isi
+            form di atas untuk membuat PIN baru lewat D1, yang bisa dilihat lagi kapan saja di sini.
+          </p>
+        ) : (
+          <div class="table-scroll">
+            <table class="sesi-table">
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>PIN</th>
+                  <th>Status</th>
+                  <th>Berlaku Hingga</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {daftarPinLeaderboard.map((p) => {
+                  const status = statusPinLeaderboard(p);
+                  return (
+                    <tr>
+                      <td>{p.label}</td>
+                      <td>
+                        {p.pin ? (
+                          <code class="sesi-pin-kode">{p.pin}</code>
+                        ) : (
+                          <span class="sesi-pin-lama">(tidak tersimpan)</span>
+                        )}
+                      </td>
+                      <td><span class={`sesi-status ${status.kelas}`}>{status.label}</span></td>
+                      <td>{p.expires_at.slice(0, 10)}</td>
+                      <td>
+                        {!p.revoked_at && (
+                          <form
+                            method="post"
+                            action={`/api/admin-panca/pins/${p.id}?next=${encodeURIComponent(`/admin-panca/sesi?slug=${slug}`)}`}
+                            data-confirm="Yakin cabut PIN leaderboard ini? PIN tidak akan bisa dipakai lagi."
+                          >
+                            <button type="submit" class="panca-btn panca-btn-ghost">Cabut</button>
+                          </form>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       <section class="panca-card sesi-list-card">
@@ -147,12 +229,13 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
 
     const data = new FormData(form);
     const pin = String(data.get('kode') ?? '').trim();
+    const leaderboardPin = String(data.get('leaderboardPin') ?? '').trim();
 
     try {
       const res = await fetch('/api/admin-panca/sesi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug, label: data.get('label'), pin }),
+        body: JSON.stringify({ slug, label: data.get('label'), pin, leaderboardPin }),
       });
       if (res.ok) {
         window.location.reload();
@@ -304,5 +387,10 @@ function statusSesi(s: (typeof daftarSesiPenugasan)[number]): { label: string; k
   .status-dicabut {
     background: var(--rose-soft);
     color: var(--rose);
+  }
+
+  .status-kedaluwarsa {
+    background: var(--accent-soft);
+    color: var(--ink-soft);
   }
 </style>

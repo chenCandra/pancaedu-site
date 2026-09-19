@@ -29,6 +29,12 @@ export type Pin = {
   label: string;
   scope: string;
   pin_hash: string;
+  // NULL untuk PIN scope 'rekap' (form /admin-panca/pin sengaja cuma kirim
+  // hash, tanpa plaintext) dan baris lama dari sebelum kolom ini ada --
+  // lihat migrations/0005_pins_plaintext.sql. Diisi kalau dibuat lewat
+  // /admin-panca/sesi (scope 'leaderboard:<slug>'), supaya guru bisa lihat
+  // lagi PIN-nya kapan saja tanpa perlu cabut & buat baru cuma karena lupa.
+  pin: string | null;
   created_by: number | null;
   created_at: string;
   expires_at: string;
@@ -46,11 +52,11 @@ export async function daftarPin(db: D1Database, scope: string): Promise<Pin[]> {
 
 export async function buatPin(
   db: D1Database,
-  params: { label: string; scope: string; pinHash: string; createdBy: number; expiresAt: string }
+  params: { label: string; scope: string; pinHash: string; pin?: string; createdBy: number; expiresAt: string }
 ): Promise<void> {
   await db
-    .prepare('INSERT INTO pins (label, scope, pin_hash, created_by, expires_at) VALUES (?1, ?2, ?3, ?4, ?5)')
-    .bind(params.label, params.scope, params.pinHash, params.createdBy, params.expiresAt)
+    .prepare('INSERT INTO pins (label, scope, pin_hash, pin, created_by, expires_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
+    .bind(params.label, params.scope, params.pinHash, params.pin ?? null, params.createdBy, params.expiresAt)
     .run();
 }
 

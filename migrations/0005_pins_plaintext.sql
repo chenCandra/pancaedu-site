@@ -1,0 +1,12 @@
+-- PIN Leaderboard yang dibuat lewat /admin-panca/sesi (scope
+-- 'leaderboard:<slug penugasan>') adalah kode yang dibagikan terbuka ke
+-- murid juga -- sama alasannya dengan Kode Sesi di
+-- migrations/0004_sesi_pin_plaintext.sql -- jadi guru perlu bisa
+-- melihatnya lagi kapan saja kalau lupa, tanpa harus cabut & buat PIN baru.
+--
+-- `pin_hash` TETAP satu-satunya kolom yang dipakai untuk VALIDASI (tidak
+-- berubah, lihat pinValid() di src/lib/adminPanca/db.ts) -- kolom `pin` di
+-- sini murni buat DITAMPILKAN ULANG di halaman Kelola Sesi. NULL untuk
+-- baris lama dan untuk PIN scope 'rekap' (dibuat dari /admin-panca/pin,
+-- form itu sengaja tetap cuma kirim hash, tanpa plaintext, ke server).
+ALTER TABLE pins ADD COLUMN pin TEXT;
