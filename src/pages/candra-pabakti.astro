@@ -36,7 +36,7 @@ const works = [
   },
 ];
 
-const canonicalURL = new URL('/tentang', Astro.site).toString();
+const canonicalURL = new URL('/candra-pabakti', Astro.site).toString();
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -46,15 +46,16 @@ const jsonLd = {
   email: 'mailto:gravi.tazy@gmail.com',
   jobTitle: 'Guru Fisika',
   description:
-    'Guru, wali kelas, dan operator Dana BOS. Penulis dan pengelola tunggal PancaEdu, situs belajar fisika gratis di pancaedu.web.id.',
+    'Guru, wali kelas, dan operator Dana BOS. Pendiri dan pengelola tunggal PancaEdu, ruang belajar digital gratis di pancaedu.web.id.',
   knowsAbout: ['Fisika', 'Pendidikan Fisika', 'Media Pembelajaran Interaktif'],
   worksFor: { '@type': 'Organization', name: 'PancaEdu', url: 'https://pancaedu.web.id' },
 };
 ---
 
 <BaseLayout
-  title="Tentang Candra Pabakti"
-  description="Candra Pabakti — guru fisika, wali kelas, dan operator Dana BOS. Penulis dan pengelola PancaEdu, situs belajar fisika gratis di pancaedu.web.id."
+  title="Candra Pabakti — Pengembang PancaEdu"
+  titleIsFull
+  description="Candra Pabakti, guru fisika sekaligus pendiri dan pengembang PancaEdu, ruang belajar digital berisi materi pembelajaran, artikel pendidikan, dan Lab Maya interaktif."
   jsonLd={jsonLd}
 >
   <article class="container page">
@@ -63,11 +64,12 @@ const jsonLd = {
         <span>CP</span>
       </div>
       <div class="hero-text">
-        <p class="eyebrow">Tentang Penulis</p>
+        <p class="eyebrow">Pengembang PancaEdu</p>
         <h1>Candra Pabakti</h1>
         <p class="hero-tagline">
-          Penulis &amp; pengelola tunggal <strong>PancaEdu</strong> — situs belajar fisika gratis
-          di <a href="https://pancaedu.web.id">pancaedu.web.id</a>.
+          Pendidik dan pengembang media pembelajaran digital, pendiri &amp; pengelola tunggal
+          <strong>PancaEdu</strong> — ruang belajar digital gratis di
+          <a href="https://pancaedu.web.id">pancaedu.web.id</a>.
         </p>
         <ul class="hero-roles">
           {roles.map((r) => (
@@ -84,12 +86,13 @@ const jsonLd = {
         saya juga seorang pembelajar yang senang menambah ilmu baru — termasuk belajar menulis
         dan membangun situs ini dari nol.
       </p>
+
+      <h2>Tentang PancaEdu</h2>
       <p>
-        <strong>PancaEdu</strong> adalah ruang menulis pribadi saya — tempat saya membagikan
-        artikel seputar pendidikan, refleksi dari ruang kelas, catatan studi, dan materi
-        pelajaran yang saya susun sendiri untuk dipakai gratis oleh siapa saja yang
-        membutuhkan. Semua tulisan, materi, dan sistem interaktif di situs ini — Ruang Belajar,
-        Lab Maya, sampai Penugasan — saya rancang dan kelola sendiri.
+        <strong>PancaEdu</strong> adalah ruang belajar digital yang saya kembangkan untuk
+        menyediakan materi pembelajaran, artikel pendidikan, dan laboratorium maya interaktif —
+        semuanya gratis untuk dipakai siapa saja. Semua tulisan, materi, dan sistem interaktif di
+        situs ini — Ruang Belajar, Lab Maya, sampai Penugasan — saya rancang dan kelola sendiri.
       </p>
       <p>
         Kalau Anda seorang guru, murid, atau siapa pun yang menemukan materi di sini bermanfaat,

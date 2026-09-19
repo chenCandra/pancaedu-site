@@ -4,6 +4,7 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import AuthorByline from '../components/AuthorByline.astro';
 
 interface Props {
   title: string;
@@ -17,9 +18,39 @@ interface Props {
   // buat kesan halus di halaman biasa, tapi bikin interaksi drag terasa
   // lag/nggak responsif.
   disableCursor?: boolean;
+  // Lihat catatan titleIsFull di SEO.astro.
+  titleIsFull?: boolean;
 }
 
-const { title, description, image, article, jsonLd, noindex, disableCursor } = Astro.props;
+const { title, description, image, article, jsonLd, noindex, disableCursor, titleIsFull } =
+  Astro.props;
+
+// Lab Maya (~40 halaman statis di src/pages/lab-maya/*.astro) SENGAJA tidak
+// disentuh satu-satu -- byline & JSON-LD authorship-nya diterapkan otomatis
+// di sini, satu tempat, berlaku ke semuanya. Index listing "/lab-maya"
+// sendiri dikecualikan (itu halaman direktori, bukan satu Lab Maya) dengan
+// strip trailing slash dulu sebelum cek startsWith.
+const pathNoTrailingSlash = Astro.url.pathname.replace(/\/+$/, '');
+const isLabMayaDetail = pathNoTrailingSlash.startsWith('/lab-maya/');
+
+const authorUrl = new URL('/candra-pabakti', Astro.site).toString();
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const autoJsonLd =
+  !jsonLd && isLabMayaDetail
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        name: title,
+        description,
+        url: canonicalURL,
+        author: { '@type': 'Person', name: 'Candra Pabakti', url: authorUrl },
+        creator: { '@type': 'Person', name: 'Candra Pabakti', url: authorUrl },
+        publisher: { '@type': 'Organization', name: 'PancaEdu', url: Astro.site?.toString() },
+      }
+    : undefined;
+
+const finalJsonLd = jsonLd ?? autoJsonLd;
 ---
 
 <!doctype html>
@@ -28,9 +59,16 @@ const { title, description, image, article, jsonLd, noindex, disableCursor } = A
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <SEO title={title} description={description} image={image} article={article} noindex={noindex} />
-    {jsonLd && (
-      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      article={article}
+      noindex={noindex}
+      titleIsFull={titleIsFull}
+    />
+    {finalJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(finalJsonLd)} />
     )}
     <!-- TODO: tempel script verifikasi Google AdSense di sini setelah akun disetujui -->
   </head>
@@ -42,6 +80,7 @@ const { title, description, image, article, jsonLd, noindex, disableCursor } = A
     </div>
     <Header />
     <main>
+      {isLabMayaDetail && <AuthorByline wrap />}
       <slot />
     </main>
     <Footer />

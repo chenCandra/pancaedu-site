@@ -50,6 +50,13 @@ export default defineConfig({
     // angkatan Kenangan Kelas baru sendiri, redirect itu malah membajak
     // URL-nya. Jangan pasang redirect serupa lagi buat slug tahun ajaran,
     // slug-slug itu memang dipakai berulang tiap tahun.
+
+    // /tentang -> /candra-pabakti: rename halaman profil penulis (2026-09-19,
+    // rebranding SEO/identitas) supaya URL-nya eksplisit menyebut nama.
+    // Aman dipakai di sini -- beda dari kasus /admin (lihat komentar di
+    // adminDevRedirect di atas), /tentang tidak punya folder statis
+    // tandingan di public/ yang bisa saling lempar redirect.
+    '/tentang': '/candra-pabakti',
   },
   integrations: [
     adminDevRedirect(),

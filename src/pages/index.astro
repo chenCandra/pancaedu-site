@@ -53,6 +53,30 @@ const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? a
 const modeDaring = await getEntry('modeDaring', 'index');
 const daringAktif = modeDaring?.data.aktif ?? false;
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${Astro.site}#website`,
+      name: 'PancaEdu',
+      url: Astro.site?.toString(),
+      publisher: { '@id': `${Astro.site}#organization` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${Astro.site}#organization`,
+      name: 'PancaEdu',
+      url: Astro.site?.toString(),
+      founder: {
+        '@type': 'Person',
+        name: 'Candra Pabakti',
+        url: new URL('/candra-pabakti', Astro.site).toString(),
+      },
+    },
+  ],
+};
+
 const workItems = materiPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4)
@@ -66,8 +90,10 @@ const workItems = materiPosts
 ---
 
 <BaseLayout
-  title="PancaEdu"
-  description="Artikel dan materi pelajaran ditulis oleh seorang guru yang juga pembelajar — refleksi mengajar, bahan ajar, dan catatan belajar."
+  title="PancaEdu — Ruang Belajar Digital oleh Candra Pabakti"
+  titleIsFull
+  description="PancaEdu adalah ruang belajar digital yang dikembangkan oleh Candra Pabakti, berisi materi pembelajaran, artikel pendidikan, dan laboratorium maya interaktif."
+  jsonLd={jsonLd}
 >
   <Hero />
   <Counters counters={counters} />

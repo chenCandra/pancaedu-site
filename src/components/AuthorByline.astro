@@ -1,0 +1,40 @@
+---
+// Byline "Oleh Candra Pabakti" dipakai ulang di 2 tempat: auto-inject dari
+// BaseLayout khusus halaman Lab Maya (wrap=true, berdiri sendiri di luar
+// container manapun) dan manual di artikel/materi (wrap=false, sudah di
+// dalam .container/.post milik halaman itu sendiri).
+interface Props {
+  wrap?: boolean;
+}
+
+const { wrap = false } = Astro.props;
+---
+
+{wrap ? (
+  <p class="container author-byline author-byline--wrap">
+    Oleh <a href="/candra-pabakti">Candra Pabakti</a>
+  </p>
+) : (
+  <p class="author-byline">
+    Oleh <a href="/candra-pabakti">Candra Pabakti</a>
+  </p>
+)}
+
+<style>
+  .author-byline {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+  }
+
+  .author-byline a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .author-byline--wrap {
+    padding-top: 1.5rem;
+  }
+</style>
