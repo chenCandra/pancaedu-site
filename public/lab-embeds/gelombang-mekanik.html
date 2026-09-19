@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gelombang Mekanik</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 240px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 210px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌊</span><h1>Laboratorium Maya: Gelombang Mekanik</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnBerjalan">➡️ Gelombang Berjalan</button>
+    <button class="tab-btn" id="tabBtnStasioner">📍 Gelombang Stasioner</button>
+  </div>
+
+  <!-- ================= TAB GELOMBANG BERJALAN ================= -->
+  <div class="tab-panel is-active" id="tabBerjalan">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Amplitudo (A)</span><span class="control-value" id="ampVal">1 cm</span></div>
+          <input type="range" id="ampSlider" min="0.5" max="3" step="0.5" value="1">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Gelombang (λ)</span><span class="control-value" id="lambdaVal">2 m</span></div>
+          <input type="range" id="lambdaSlider" min="0.5" max="4" step="0.5" value="2">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Frekuensi (f)</span><span class="control-value" id="freqVal">1 Hz</span></div>
+          <input type="range" id="freqSlider" min="0.2" max="3" step="0.2" value="1">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="berjalanCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Cepat Rambat (v)</div><div class="v" id="vBerjalanVal">0</div></div>
+            <div class="result-highlight"><div class="k">Periode (T)</div><div class="v" id="tBerjalanVal">0</div></div>
+          </div>
+          <div class="formula-box" id="berjalanFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Cepat rambat gelombang: v = λ × f -- hasil kali panjang gelombang dan frekuensi. Gelombang berjalan memindahkan ENERGI dan POLA getaran, bukan memindahkan materi/partikelnya sendiri secara permanen.
+    </div>
+  </div>
+
+  <!-- ================= TAB GELOMBANG STASIONER ================= -->
+  <div class="tab-panel" id="tabStasioner">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jumlah Setengah Gelombang</span><span class="control-value" id="nStasVal">2</span></div>
+          <input type="range" id="nStasSlider" min="1" max="6" step="1" value="2">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="stasionerCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Jumlah Simpul (Node)</div><div class="v" id="simpulVal">0</div></div>
+            <div class="result-highlight"><div class="k">Jumlah Perut (Antinode)</div><div class="v" id="perutVal">0</div></div>
+          </div>
+          <div class="formula-box" id="stasionerFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Gelombang stasioner terbentuk dari SUPERPOSISI (penjumlahan) dua gelombang identik yang merambat berlawanan arah -- misalnya gelombang datang dan pantulannya. Titik yang selalu diam disebut SIMPUL (node), titik yang bergetar dengan amplitudo maksimum disebut PERUT (antinode).
+    </div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCH ----------
+    const tabBtnBerjalan = document.getElementById('tabBtnBerjalan');
+    const tabBtnStasioner = document.getElementById('tabBtnStasioner');
+    const tabBerjalan = document.getElementById('tabBerjalan');
+    const tabStasioner = document.getElementById('tabStasioner');
+    tabBtnBerjalan.addEventListener('click', () => {
+      tabBtnBerjalan.classList.add('is-active'); tabBtnStasioner.classList.remove('is-active');
+      tabBerjalan.classList.add('is-active'); tabStasioner.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnStasioner.addEventListener('click', () => {
+      tabBtnStasioner.classList.add('is-active'); tabBtnBerjalan.classList.remove('is-active');
+      tabStasioner.classList.add('is-active'); tabBerjalan.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- GELOMBANG BERJALAN ----------
+    const ampSlider = document.getElementById('ampSlider'), ampVal = document.getElementById('ampVal');
+    const lambdaSlider = document.getElementById('lambdaSlider'), lambdaVal = document.getElementById('lambdaVal');
+    const freqSlider = document.getElementById('freqSlider'), freqVal = document.getElementById('freqVal');
+    const vBerjalanVal = document.getElementById('vBerjalanVal'), tBerjalanVal = document.getElementById('tBerjalanVal');
+    const berjalanFormula = document.getElementById('berjalanFormula');
+    const berjalanCanvas = document.getElementById('berjalanCanvas');
+    const berjalanCtx = berjalanCanvas.getContext('2d');
+
+    let amp = 1, lambda = 2, freq = 1, tStartBerjalan = performance.now();
+
+    function updateBerjalan() {
+      const v = lambda * freq;
+      const T = 1 / freq;
+      vBerjalanVal.textContent = v.toFixed(2) + ' m/s';
+      tBerjalanVal.textContent = T.toFixed(2) + ' s';
+      berjalanFormula.innerHTML = `v = λ×f = ${lambda}×${freq} = <span class="math-num">${v.toFixed(2)} m/s</span><br>T = 1/f = <span class="math-num">${T.toFixed(2)} s</span>`;
+    }
+    ampSlider.addEventListener('input', () => { amp = parseFloat(ampSlider.value); ampVal.textContent = amp + ' cm'; updateBerjalan(); });
+    lambdaSlider.addEventListener('input', () => { lambda = parseFloat(lambdaSlider.value); lambdaVal.textContent = lambda + ' m'; updateBerjalan(); });
+    freqSlider.addEventListener('input', () => { freq = parseFloat(freqSlider.value); freqVal.textContent = freq.toFixed(1) + ' Hz'; updateBerjalan(); });
+
+    function renderBerjalan(t) {
+      const w = berjalanCanvas.parentElement.clientWidth, h = berjalanCanvas.parentElement.clientHeight;
+      berjalanCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const pxPerM = w / 8;
+      const ampPx = amp * 20;
+      const k = (2 * Math.PI) / lambda;
+      const omega = 2 * Math.PI * freq;
+
+      berjalanCtx.save();
+      berjalanCtx.strokeStyle = 'rgba(248,250,252,0.3)'; berjalanCtx.lineWidth = 1;
+      berjalanCtx.beginPath(); berjalanCtx.moveTo(0, cy); berjalanCtx.lineTo(w, cy); berjalanCtx.stroke();
+
+      berjalanCtx.strokeStyle = '#38bdf8'; berjalanCtx.lineWidth = 2.5;
+      berjalanCtx.beginPath();
+      for (let px = 0; px <= w; px += 2) {
+        const x = px / pxPerM;
+        const y = ampPx * Math.sin(k * x - omega * t);
+        if (px === 0) berjalanCtx.moveTo(px, cy - y); else berjalanCtx.lineTo(px, cy - y);
+      }
+      berjalanCtx.stroke();
+      berjalanCtx.restore();
+    }
+
+    function animBerjalan(now) {
+      if (tabBerjalan.classList.contains('is-active')) renderBerjalan((now - tStartBerjalan) / 1000);
+      requestAnimationFrame(animBerjalan);
+    }
+
+    // ---------- GELOMBANG STASIONER ----------
+    const nStasSlider = document.getElementById('nStasSlider'), nStasVal = document.getElementById('nStasVal');
+    const simpulVal = document.getElementById('simpulVal'), perutVal = document.getElementById('perutVal');
+    const stasionerFormula = document.getElementById('stasionerFormula');
+    const stasionerCanvas = document.getElementById('stasionerCanvas');
+    const stasionerCtx = stasionerCanvas.getContext('2d');
+
+    let nStas = 2, tStartStas = performance.now();
+
+    function updateStasioner() {
+      const jumlahSimpul = nStas + 1;
+      const jumlahPerut = nStas;
+      simpulVal.textContent = jumlahSimpul;
+      perutVal.textContent = jumlahPerut;
+      stasionerFormula.innerHTML = `Dengan ${nStas} setengah-gelombang di sepanjang tali (kedua ujung terikat): jumlah simpul = n+1 = <span class="math-num">${jumlahSimpul}</span>, jumlah perut = n = <span class="math-num">${jumlahPerut}</span>`;
+    }
+    nStasSlider.addEventListener('input', () => { nStas = parseInt(nStasSlider.value); nStasVal.textContent = nStas; updateStasioner(); });
+
+    function renderStasioner(t) {
+      const w = stasionerCanvas.parentElement.clientWidth, h = stasionerCanvas.parentElement.clientHeight;
+      stasionerCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const ampPx = 60;
+      const omega = 2 * Math.PI * 0.5;
+      const envelope = Math.cos(omega * t);
+
+      stasionerCtx.save();
+      stasionerCtx.strokeStyle = 'rgba(248,250,252,0.3)'; stasionerCtx.lineWidth = 1;
+      stasionerCtx.beginPath(); stasionerCtx.moveTo(20, cy); stasionerCtx.lineTo(w - 20, cy); stasionerCtx.stroke();
+
+      stasionerCtx.strokeStyle = '#facc15'; stasionerCtx.lineWidth = 2.5;
+      stasionerCtx.beginPath();
+      const usableW = w - 40;
+      for (let px = 0; px <= usableW; px += 2) {
+        const frac = px / usableW;
+        const y = ampPx * Math.sin(nStas * Math.PI * frac) * envelope;
+        if (px === 0) stasionerCtx.moveTo(20 + px, cy - y); else stasionerCtx.lineTo(20 + px, cy - y);
+      }
+      stasionerCtx.stroke();
+
+      // Tandai simpul (node)
+      stasionerCtx.fillStyle = '#ef4444';
+      for (let i = 0; i <= nStas; i++) {
+        const x = 20 + (i / nStas) * usableW;
+        stasionerCtx.beginPath(); stasionerCtx.arc(x, cy, 5, 0, Math.PI * 2); stasionerCtx.fill();
+      }
+      stasionerCtx.restore();
+    }
+
+    function animStasioner(now) {
+      if (tabStasioner.classList.contains('is-active')) renderStasioner((now - tStartStas) / 1000);
+      requestAnimationFrame(animStasioner);
+    }
+
+    function resizeAll() {
+      [berjalanCanvas, stasionerCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateBerjalan();
+      updateStasioner();
+      requestAnimationFrame(animBerjalan);
+      requestAnimationFrame(animStasioner);
+    };
+  </script>
+</body>
+</html>

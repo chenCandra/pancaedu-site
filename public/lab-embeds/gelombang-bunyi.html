@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gelombang Bunyi</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tab-btn { flex: 1; min-width: 100px; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.78rem; padding: 10px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-btn { background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; padding: 9px 6px; border-radius: 10px; cursor: pointer; text-align: center; }
+  .mode-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 220px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.76rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔊</span><h1>Laboratorium Maya: Gelombang Bunyi</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnCepat">🔊 Cepat Rambat</button>
+    <button class="tab-btn" id="tabBtnIntensitas">📢 Intensitas &amp; Doppler</button>
+    <button class="tab-btn" id="tabBtnResonansi">🎵 Resonansi &amp; Pelayangan</button>
+  </div>
+
+  <!-- ================= TAB CEPAT RAMBAT ================= -->
+  <div class="tab-panel is-active" id="tabCepat">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Suhu Udara (T)</span><span class="control-value" id="suhuVal">20°C</span></div>
+          <input type="range" id="suhuSlider" min="-10" max="40" step="1" value="20">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Frekuensi Bunyi (f)</span><span class="control-value" id="fCepatVal">340 Hz</span></div>
+          <input type="range" id="fCepatSlider" min="20" max="2000" step="10" value="340">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hasil</span></div>
+        <div class="canvas-wrapper"><canvas id="cepatCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Cepat Rambat (v)</div><div class="v" id="vCepatVal">0</div></div>
+            <div class="result-highlight"><div class="k">Panjang Gelombang (λ)</div><div class="v" id="lambdaCepatVal">0</div></div>
+          </div>
+          <div class="formula-box" id="cepatFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card"><div class="theory-title">📌 Ringkasan Konsep</div>Cepat rambat bunyi di udara bergantung suhu: v = 331 + 0,6T (T dalam °C). Makin panas udara, makin cepat bunyi merambat. λ = v/f seperti biasa.</div>
+  </div>
+
+  <!-- ================= TAB INTENSITAS & DOPPLER ================= -->
+  <div class="tab-panel" id="tabIntensitas">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Mode</span></div>
+      <div class="mode-row" id="intModeRow">
+        <button class="mode-btn is-active" data-int-mode="intensitas">Intensitas Bunyi</button>
+        <button class="mode-btn" data-int-mode="doppler">Efek Doppler</button>
+      </div>
+    </div>
+
+    <div class="main-container" id="intensitasPanel">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Daya Sumber (P)</span><span class="control-value" id="pSumberVal">1 W</span></div>
+          <input type="range" id="pSumberSlider" min="0.1" max="10" step="0.1" value="1">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jarak (r)</span><span class="control-value" id="rJarakVal">2 m</span></div>
+          <input type="range" id="rJarakSlider" min="0.5" max="20" step="0.5" value="2">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hasil</span></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Intensitas (I)</div><div class="v" id="iVal">0</div></div>
+            <div class="result-highlight"><div class="k">Taraf Intensitas (TI)</div><div class="v" id="tiVal">0</div></div>
+          </div>
+          <div class="formula-box" id="intensitasFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container" id="dopplerPanel" style="display:none;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Frekuensi Sumber (f)</span><span class="control-value" id="fSumberVal">500 Hz</span></div>
+          <input type="range" id="fSumberSlider" min="100" max="2000" step="50" value="500">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kecepatan Sumber (vs)</span><span class="control-value" id="vsVal">20 m/s</span></div>
+          <input type="range" id="vsSlider" min="0" max="60" step="2" value="20">
+        </div>
+        <div class="mode-row" id="dopplerArahRow">
+          <button class="mode-btn is-active" data-arah="mendekat">Sumber Mendekat</button>
+          <button class="mode-btn" data-arah="menjauh">Sumber Menjauh</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hasil</span></div>
+        <div class="canvas-wrapper"><canvas id="dopplerCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Frekuensi Terdengar (f')</div><div class="v" id="fPrimeVal">0</div></div>
+          </div>
+          <div class="formula-box" id="dopplerFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card"><div class="theory-title">📌 Ringkasan Konsep</div>Intensitas: I=P/(4πr²), makin jauh makin lemah (kuadrat terbalik). Taraf Intensitas: TI=10log(I/I0), I0=10⁻¹² W/m². Efek Doppler: frekuensi yang terdengar berubah kalau sumber/pendengar bergerak relatif -- mendekat terdengar LEBIH TINGGI, menjauh LEBIH RENDAH.</div>
+  </div>
+
+  <!-- ================= TAB RESONANSI & PELAYANGAN ================= -->
+  <div class="tab-panel" id="tabResonansi">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Mode</span></div>
+      <div class="mode-row" id="resModeRow">
+        <button class="mode-btn is-active" data-res-mode="resonansi">Resonansi Kolom Udara</button>
+        <button class="mode-btn" data-res-mode="pelayangan">Pelayangan Bunyi</button>
+      </div>
+    </div>
+
+    <div class="main-container" id="resonansiPanel">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="mode-row" id="pipaModeRow">
+          <button class="mode-btn is-active" data-pipa="terbuka">Pipa Terbuka</button>
+          <button class="mode-btn" data-pipa="tertutup">Pipa Tertutup</button>
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Kolom Udara (L)</span><span class="control-value" id="lPipaVal">0,5 m</span></div>
+          <input type="range" id="lPipaSlider" min="0.1" max="2" step="0.05" value="0.5">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hasil (Harmonik Dasar, n=1)</span></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Panjang Gelombang (λ)</div><div class="v" id="lambdaPipaVal">0</div></div>
+            <div class="result-highlight"><div class="k">Frekuensi (f)</div><div class="v" id="fPipaVal">0</div></div>
+          </div>
+          <div class="formula-box" id="pipaFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container" id="pelayanganPanel" style="display:none;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Frekuensi 1 (f1)</span><span class="control-value" id="f1PelVal">440 Hz</span></div>
+          <input type="range" id="f1PelSlider" min="200" max="1000" step="1" value="440">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Frekuensi 2 (f2)</span><span class="control-value" id="f2PelVal">444 Hz</span></div>
+          <input type="range" id="f2PelSlider" min="200" max="1000" step="1" value="444">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hasil</span></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Frekuensi Pelayangan (fb)</div><div class="v" id="fbVal">0</div></div>
+          </div>
+          <div class="formula-box" id="pelayanganFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card"><div class="theory-title">📌 Ringkasan Konsep</div>Resonansi kolom udara: pipa terbuka (kedua ujung terbuka) L=n(λ/2); pipa tertutup (satu ujung tertutup) L=(2n-1)(λ/4). Pelayangan (beat): dua bunyi dengan frekuensi HAMPIR sama menghasilkan bunyi berdenyut naik-turun dengan frekuensi pelayangan fb=|f1-f2|.</div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCH (level 1) ----------
+    const tabs = ['Cepat', 'Intensitas', 'Resonansi'];
+    const tabBtns = {}, tabPanels = {};
+    tabs.forEach((name) => {
+      tabBtns[name] = document.getElementById('tabBtn' + name);
+      tabPanels[name] = document.getElementById('tab' + name);
+      tabBtns[name].addEventListener('click', () => {
+        tabs.forEach((n) => { tabBtns[n].classList.toggle('is-active', n === name); tabPanels[n].classList.toggle('is-active', n === name); });
+        resizeAll();
+      });
+    });
+
+    // ---------- TAB 1: CEPAT RAMBAT ----------
+    const suhuSlider = document.getElementById('suhuSlider'), suhuVal = document.getElementById('suhuVal');
+    const fCepatSlider = document.getElementById('fCepatSlider'), fCepatVal = document.getElementById('fCepatVal');
+    const vCepatVal = document.getElementById('vCepatVal'), lambdaCepatVal = document.getElementById('lambdaCepatVal');
+    const cepatFormula = document.getElementById('cepatFormula');
+    const cepatCanvas = document.getElementById('cepatCanvas');
+    const cepatCtx = cepatCanvas.getContext('2d');
+    let suhu = 20, fCepat = 340, tStartCepat = performance.now();
+
+    function updateCepat() {
+      const v = 331 + 0.6 * suhu;
+      const lambda = v / fCepat;
+      vCepatVal.textContent = v.toFixed(1) + ' m/s';
+      lambdaCepatVal.textContent = lambda.toFixed(2) + ' m';
+      cepatFormula.innerHTML = `v = 331 + 0,6T = 331 + 0,6×${suhu} = <span class="math-num">${v.toFixed(1)} m/s</span><br>λ = v/f = ${v.toFixed(1)}/${fCepat} = <span class="math-num">${lambda.toFixed(2)} m</span>`;
+    }
+    suhuSlider.addEventListener('input', () => { suhu = parseFloat(suhuSlider.value); suhuVal.textContent = suhu + '°C'; updateCepat(); });
+    fCepatSlider.addEventListener('input', () => { fCepat = parseFloat(fCepatSlider.value); fCepatVal.textContent = fCepat + ' Hz'; updateCepat(); });
+
+    function renderCepat(t) {
+      const w = cepatCanvas.parentElement.clientWidth, h = cepatCanvas.parentElement.clientHeight;
+      cepatCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const v = 331 + 0.6 * suhu;
+      const lambda = v / fCepat;
+      const pxPerM = Math.max(20, Math.min(150, w / (lambda * 4)));
+      const k = (2 * Math.PI) / lambda;
+      const omega = 2 * Math.PI * fCepat;
+      cepatCtx.save();
+      cepatCtx.strokeStyle = '#38bdf8'; cepatCtx.lineWidth = 2;
+      cepatCtx.beginPath();
+      for (let px = 0; px <= w; px += 2) {
+        const x = px / pxPerM;
+        const y = 40 * Math.sin(k * x - omega * t * 0.05);
+        if (px === 0) cepatCtx.moveTo(px, cy - y); else cepatCtx.lineTo(px, cy - y);
+      }
+      cepatCtx.stroke();
+      cepatCtx.restore();
+    }
+    function animCepat(now) { if (tabPanels.Cepat.classList.contains('is-active')) renderCepat((now - tStartCepat) / 1000); requestAnimationFrame(animCepat); }
+
+    // ---------- TAB 2: INTENSITAS & DOPPLER ----------
+    const intModeBtns = Array.from(document.querySelectorAll('#intModeRow .mode-btn'));
+    const intensitasPanel = document.getElementById('intensitasPanel'), dopplerPanel = document.getElementById('dopplerPanel');
+    intModeBtns.forEach((btn) => btn.addEventListener('click', () => {
+      intModeBtns.forEach((b) => b.classList.remove('is-active')); btn.classList.add('is-active');
+      const mode = btn.dataset.intMode;
+      intensitasPanel.style.display = mode === 'intensitas' ? '' : 'none';
+      dopplerPanel.style.display = mode === 'doppler' ? '' : 'none';
+      resizeAll();
+    }));
+
+    const pSumberSlider = document.getElementById('pSumberSlider'), pSumberVal = document.getElementById('pSumberVal');
+    const rJarakSlider = document.getElementById('rJarakSlider'), rJarakVal = document.getElementById('rJarakVal');
+    const iVal = document.getElementById('iVal'), tiVal = document.getElementById('tiVal');
+    const intensitasFormula = document.getElementById('intensitasFormula');
+    let pSumber = 1, rJarak = 2;
+
+    function updateIntensitas() {
+      const I = pSumber / (4 * Math.PI * rJarak * rJarak);
+      const TI = 10 * Math.log10(I / 1e-12);
+      iVal.textContent = I.toExponential(2) + ' W/m²';
+      tiVal.textContent = TI.toFixed(1) + ' dB';
+      intensitasFormula.innerHTML = `I = P/(4πr²) = ${pSumber}/(4π×${rJarak}²) = <span class="math-num">${I.toExponential(2)} W/m²</span><br>TI = 10log(I/I0) = <span class="math-num">${TI.toFixed(1)} dB</span>`;
+    }
+    pSumberSlider.addEventListener('input', () => { pSumber = parseFloat(pSumberSlider.value); pSumberVal.textContent = pSumber.toFixed(1) + ' W'; updateIntensitas(); });
+    rJarakSlider.addEventListener('input', () => { rJarak = parseFloat(rJarakSlider.value); rJarakVal.textContent = rJarak.toFixed(1) + ' m'; updateIntensitas(); });
+
+    const fSumberSlider = document.getElementById('fSumberSlider'), fSumberVal = document.getElementById('fSumberVal');
+    const vsSlider = document.getElementById('vsSlider'), vsVal = document.getElementById('vsVal');
+    const dopplerArahBtns = Array.from(document.querySelectorAll('#dopplerArahRow .mode-btn'));
+    const fPrimeVal = document.getElementById('fPrimeVal');
+    const dopplerFormula = document.getElementById('dopplerFormula');
+    const dopplerCanvas = document.getElementById('dopplerCanvas');
+    const dopplerCtx = dopplerCanvas.getContext('2d');
+    let fSumber = 500, vs = 20, arahDoppler = 'mendekat', vBunyi = 340;
+
+    function updateDoppler() {
+      const fPrime = arahDoppler === 'mendekat' ? fSumber * vBunyi / (vBunyi - vs) : fSumber * vBunyi / (vBunyi + vs);
+      fPrimeVal.textContent = fPrime.toFixed(1) + ' Hz';
+      const tanda = arahDoppler === 'mendekat' ? '−' : '+';
+      dopplerFormula.innerHTML = `f' = f×v/(v${tanda}vs) = ${fSumber}×${vBunyi}/(${vBunyi}${tanda}${vs}) = <span class="math-num">${fPrime.toFixed(1)} Hz</span>`;
+      renderDoppler();
+    }
+    fSumberSlider.addEventListener('input', () => { fSumber = parseFloat(fSumberSlider.value); fSumberVal.textContent = fSumber + ' Hz'; updateDoppler(); });
+    vsSlider.addEventListener('input', () => { vs = parseFloat(vsSlider.value); vsVal.textContent = vs + ' m/s'; updateDoppler(); });
+    dopplerArahBtns.forEach((btn) => btn.addEventListener('click', () => {
+      dopplerArahBtns.forEach((b) => b.classList.remove('is-active')); btn.classList.add('is-active');
+      arahDoppler = btn.dataset.arah; updateDoppler();
+    }));
+
+    function renderDoppler() {
+      const w = dopplerCanvas.parentElement.clientWidth, h = dopplerCanvas.parentElement.clientHeight;
+      dopplerCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      dopplerCtx.save();
+      dopplerCtx.fillStyle = '#facc15';
+      const srcX = arahDoppler === 'mendekat' ? w * 0.2 : w * 0.8;
+      dopplerCtx.beginPath(); dopplerCtx.arc(srcX, cy, 10, 0, Math.PI * 2); dopplerCtx.fill();
+      dopplerCtx.strokeStyle = '#38bdf8';
+      for (let i = 1; i <= 4; i++) {
+        dopplerCtx.beginPath();
+        const r = i * 25;
+        dopplerCtx.arc(srcX, cy, r, 0, Math.PI * 2);
+        dopplerCtx.globalAlpha = 1 - i * 0.2;
+        dopplerCtx.stroke();
+      }
+      dopplerCtx.restore();
+    }
+
+    // ---------- TAB 3: RESONANSI & PELAYANGAN ----------
+    const resModeBtns = Array.from(document.querySelectorAll('#resModeRow .mode-btn'));
+    const resonansiPanel = document.getElementById('resonansiPanel'), pelayanganPanel = document.getElementById('pelayanganPanel');
+    resModeBtns.forEach((btn) => btn.addEventListener('click', () => {
+      resModeBtns.forEach((b) => b.classList.remove('is-active')); btn.classList.add('is-active');
+      const mode = btn.dataset.resMode;
+      resonansiPanel.style.display = mode === 'resonansi' ? '' : 'none';
+      pelayanganPanel.style.display = mode === 'pelayangan' ? '' : 'none';
+    }));
+
+    const pipaModeBtns = Array.from(document.querySelectorAll('#pipaModeRow .mode-btn'));
+    const lPipaSlider = document.getElementById('lPipaSlider'), lPipaVal = document.getElementById('lPipaVal');
+    const lambdaPipaVal = document.getElementById('lambdaPipaVal'), fPipaVal = document.getElementById('fPipaVal');
+    const pipaFormula = document.getElementById('pipaFormula');
+    let jenisPipa = 'terbuka', lPipa = 0.5;
+
+    function updatePipa() {
+      const v = 340;
+      let lambda;
+      if (jenisPipa === 'terbuka') lambda = 2 * lPipa;
+      else lambda = 4 * lPipa;
+      const f = v / lambda;
+      lambdaPipaVal.textContent = lambda.toFixed(2) + ' m';
+      fPipaVal.textContent = f.toFixed(1) + ' Hz';
+      pipaFormula.innerHTML = jenisPipa === 'terbuka'
+        ? `Pipa terbuka: L=λ/2 &rarr; λ=2L=2×${lPipa.toFixed(2)}=<span class="math-num">${lambda.toFixed(2)} m</span><br>f=v/λ=<span class="math-num">${f.toFixed(1)} Hz</span>`
+        : `Pipa tertutup: L=λ/4 &rarr; λ=4L=4×${lPipa.toFixed(2)}=<span class="math-num">${lambda.toFixed(2)} m</span><br>f=v/λ=<span class="math-num">${f.toFixed(1)} Hz</span>`;
+    }
+    pipaModeBtns.forEach((btn) => btn.addEventListener('click', () => {
+      pipaModeBtns.forEach((b) => b.classList.remove('is-active')); btn.classList.add('is-active');
+      jenisPipa = btn.dataset.pipa; updatePipa();
+    }));
+    lPipaSlider.addEventListener('input', () => { lPipa = parseFloat(lPipaSlider.value); lPipaVal.textContent = lPipa.toFixed(2) + ' m'; updatePipa(); });
+
+    const f1PelSlider = document.getElementById('f1PelSlider'), f1PelVal = document.getElementById('f1PelVal');
+    const f2PelSlider = document.getElementById('f2PelSlider'), f2PelVal = document.getElementById('f2PelVal');
+    const fbVal = document.getElementById('fbVal');
+    const pelayanganFormula = document.getElementById('pelayanganFormula');
+    let f1Pel = 440, f2Pel = 444;
+
+    function updatePelayangan() {
+      const fb = Math.abs(f1Pel - f2Pel);
+      fbVal.textContent = fb.toFixed(1) + ' Hz';
+      pelayanganFormula.innerHTML = `fb = |f1−f2| = |${f1Pel}−${f2Pel}| = <span class="math-num">${fb.toFixed(1)} Hz</span>`;
+    }
+    f1PelSlider.addEventListener('input', () => { f1Pel = parseFloat(f1PelSlider.value); f1PelVal.textContent = f1Pel + ' Hz'; updatePelayangan(); });
+    f2PelSlider.addEventListener('input', () => { f2Pel = parseFloat(f2PelSlider.value); f2PelVal.textContent = f2Pel + ' Hz'; updatePelayangan(); });
+
+    function resizeAll() {
+      [cepatCanvas, dopplerCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderDoppler();
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateCepat();
+      updateIntensitas();
+      updateDoppler();
+      updatePipa();
+      updatePelayangan();
+      requestAnimationFrame(animCepat);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Getaran Harmonis Sederhana</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌀</span><h1>Laboratorium Maya: Getaran Harmonis Sederhana</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnPegas">🧵 Pegas</button>
+    <button class="tab-btn" id="tabBtnBandul">🪀 Bandul</button>
+  </div>
+
+  <!-- ================= TAB PEGAS ================= -->
+  <div class="tab-panel is-active" id="tabPegas">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa Beban (m)</span><span class="control-value" id="mPegasVal">1 kg</span></div>
+          <input type="range" id="mPegasSlider" min="0.2" max="5" step="0.1" value="1">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Konstanta Pegas (k)</span><span class="control-value" id="kPegasVal">4 N/m</span></div>
+          <input type="range" id="kPegasSlider" min="1" max="50" step="1" value="4">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="pegasCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Periode (T)</div><div class="v" id="tPegasVal">0</div></div>
+            <div class="result-highlight"><div class="k">Frekuensi (f)</div><div class="v" id="fPegasVal">0</div></div>
+          </div>
+          <div class="formula-box" id="pegasFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Periode getaran pegas: T = 2π√(m/k) -- makin besar massa beban, makin lama periodenya (getaran lebih lambat); makin besar konstanta pegas (makin kaku), makin cepat periodenya.
+    </div>
+  </div>
+
+  <!-- ================= TAB BANDUL ================= -->
+  <div class="tab-panel" id="tabBandul">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Tali (L)</span><span class="control-value" id="lBandulVal">2,45 m</span></div>
+          <input type="range" id="lBandulSlider" min="0.2" max="5" step="0.05" value="2.45">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="bandulCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Periode (T)</div><div class="v" id="tBandulVal">0</div></div>
+            <div class="result-highlight"><div class="k">Frekuensi (f)</div><div class="v" id="fBandulVal">0</div></div>
+          </div>
+          <div class="formula-box" id="bandulFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Periode ayunan bandul: T = 2π√(L/g) -- HANYA bergantung panjang tali (L) dan gravitasi (g), TIDAK bergantung massa beban maupun besar simpangan awal (untuk simpangan kecil).
+    </div>
+  </div>
+
+  <script>
+    const G = 9.8;
+
+    // ---------- TAB SWITCH ----------
+    const tabBtnPegas = document.getElementById('tabBtnPegas');
+    const tabBtnBandul = document.getElementById('tabBtnBandul');
+    const tabPegas = document.getElementById('tabPegas');
+    const tabBandul = document.getElementById('tabBandul');
+    tabBtnPegas.addEventListener('click', () => {
+      tabBtnPegas.classList.add('is-active'); tabBtnBandul.classList.remove('is-active');
+      tabPegas.classList.add('is-active'); tabBandul.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnBandul.addEventListener('click', () => {
+      tabBtnBandul.classList.add('is-active'); tabBtnPegas.classList.remove('is-active');
+      tabBandul.classList.add('is-active'); tabPegas.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- PEGAS ----------
+    const mPegasSlider = document.getElementById('mPegasSlider'), mPegasVal = document.getElementById('mPegasVal');
+    const kPegasSlider = document.getElementById('kPegasSlider'), kPegasVal = document.getElementById('kPegasVal');
+    const tPegasVal = document.getElementById('tPegasVal'), fPegasVal = document.getElementById('fPegasVal');
+    const pegasFormula = document.getElementById('pegasFormula');
+    const pegasCanvas = document.getElementById('pegasCanvas');
+    const pegasCtx = pegasCanvas.getContext('2d');
+
+    let mPegas = 1, kPegas = 4, tPegasStart = performance.now();
+
+    function updatePegas() {
+      const T = 2 * Math.PI * Math.sqrt(mPegas / kPegas);
+      const f = 1 / T;
+      tPegasVal.textContent = T.toFixed(2) + ' s';
+      fPegasVal.textContent = f.toFixed(3) + ' Hz';
+      pegasFormula.innerHTML =
+        `T = 2π√(m/k) = 2π√(${mPegas}/${kPegas}) = <span class="math-num">${T.toFixed(2)} s</span><br>` +
+        `f = 1/T = <span class="math-num">${f.toFixed(3)} Hz</span>`;
+    }
+    mPegasSlider.addEventListener('input', () => { mPegas = parseFloat(mPegasSlider.value); mPegasVal.textContent = mPegas.toFixed(1) + ' kg'; updatePegas(); });
+    kPegasSlider.addEventListener('input', () => { kPegas = parseFloat(kPegasSlider.value); kPegasVal.textContent = kPegas + ' N/m'; updatePegas(); });
+
+    function renderPegas(t) {
+      const w = pegasCanvas.parentElement.clientWidth, h = pegasCanvas.parentElement.clientHeight;
+      pegasCtx.clearRect(0, 0, w, h);
+      const T = 2 * Math.PI * Math.sqrt(mPegas / kPegas);
+      const omega = 2 * Math.PI / T;
+      const amp = Math.min(h * 0.25, 70);
+      const y = amp * Math.sin(omega * t);
+
+      const cx = w / 2, topY = 20;
+      const massY = topY + 100 + y;
+
+      pegasCtx.save();
+      pegasCtx.strokeStyle = '#94a3b8'; pegasCtx.lineWidth = 6;
+      pegasCtx.beginPath(); pegasCtx.moveTo(cx - 50, topY); pegasCtx.lineTo(cx + 50, topY); pegasCtx.stroke();
+
+      pegasCtx.strokeStyle = '#a78bfa'; pegasCtx.lineWidth = 3;
+      const coils = 8; const segLen = (massY - topY) / (coils * 2);
+      pegasCtx.beginPath(); pegasCtx.moveTo(cx, topY);
+      for (let i = 0; i < coils * 2; i++) {
+        const yy = topY + segLen * (i + 1);
+        const xx = cx + (i % 2 === 0 ? 16 : -16);
+        pegasCtx.lineTo(xx, yy);
+      }
+      pegasCtx.lineTo(cx, massY);
+      pegasCtx.stroke();
+
+      pegasCtx.fillStyle = '#38bdf8';
+      const size = 20 + Math.min(20, mPegas * 4);
+      pegasCtx.fillRect(cx - size / 2, massY, size, size);
+      pegasCtx.restore();
+    }
+
+    function animPegas(now) {
+      if (tabPegas.classList.contains('is-active')) {
+        renderPegas((now - tPegasStart) / 1000);
+      }
+      requestAnimationFrame(animPegas);
+    }
+
+    // ---------- BANDUL ----------
+    const lBandulSlider = document.getElementById('lBandulSlider'), lBandulVal = document.getElementById('lBandulVal');
+    const tBandulVal = document.getElementById('tBandulVal'), fBandulVal = document.getElementById('fBandulVal');
+    const bandulFormula = document.getElementById('bandulFormula');
+    const bandulCanvas = document.getElementById('bandulCanvas');
+    const bandulCtx = bandulCanvas.getContext('2d');
+
+    let lBandul = 2.45, tBandulStart = performance.now();
+
+    function updateBandul() {
+      const T = 2 * Math.PI * Math.sqrt(lBandul / G);
+      const f = 1 / T;
+      tBandulVal.textContent = T.toFixed(2) + ' s';
+      fBandulVal.textContent = f.toFixed(3) + ' Hz';
+      bandulFormula.innerHTML =
+        `T = 2π√(L/g) = 2π√(${lBandul.toFixed(2)}/9,8) = <span class="math-num">${T.toFixed(2)} s</span><br>` +
+        `f = 1/T = <span class="math-num">${f.toFixed(3)} Hz</span>`;
+    }
+    lBandulSlider.addEventListener('input', () => { lBandul = parseFloat(lBandulSlider.value); lBandulVal.textContent = lBandul.toFixed(2) + ' m'; updateBandul(); });
+
+    function renderBandul(t) {
+      const w = bandulCanvas.parentElement.clientWidth, h = bandulCanvas.parentElement.clientHeight;
+      bandulCtx.clearRect(0, 0, w, h);
+      const T = 2 * Math.PI * Math.sqrt(lBandul / G);
+      const omega = 2 * Math.PI / T;
+      const thetaMax = 0.4; // rad, simpangan kecil
+      const theta = thetaMax * Math.sin(omega * t);
+
+      const cx = w / 2, pivotY = 20;
+      const lenPx = Math.min(h - 60, lBandul * 40);
+      const bobX = cx + lenPx * Math.sin(theta);
+      const bobY = pivotY + lenPx * Math.cos(theta);
+
+      bandulCtx.save();
+      bandulCtx.fillStyle = '#94a3b8';
+      bandulCtx.beginPath(); bandulCtx.arc(cx, pivotY, 5, 0, Math.PI * 2); bandulCtx.fill();
+
+      bandulCtx.strokeStyle = 'rgba(248,250,252,0.7)'; bandulCtx.lineWidth = 2;
+      bandulCtx.beginPath(); bandulCtx.moveTo(cx, pivotY); bandulCtx.lineTo(bobX, bobY); bandulCtx.stroke();
+
+      bandulCtx.fillStyle = '#facc15';
+      bandulCtx.beginPath(); bandulCtx.arc(bobX, bobY, 14, 0, Math.PI * 2); bandulCtx.fill();
+      bandulCtx.restore();
+    }
+
+    function animBandul(now) {
+      if (tabBandul.classList.contains('is-active')) {
+        renderBandul((now - tBandulStart) / 1000);
+      }
+      requestAnimationFrame(animBandul);
+    }
+
+    function resizeAll() {
+      [pegasCanvas, bandulCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updatePegas();
+      updateBandul();
+      requestAnimationFrame(animPegas);
+      requestAnimationFrame(animBandul);
+    };
+  </script>
+</body>
+</html>
