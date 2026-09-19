@@ -7,7 +7,7 @@
 // src/lib/penugasan/tampilan.ts).
 export const prerender = false;
 
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { env } from 'cloudflare:workers';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { KELAS_UMUM } from '../../lib/penugasan/kelas';
@@ -39,11 +39,23 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
 // mayoritas Penugasan TIDAK punya sesi sama sekali, jadi field ini
 // tersembunyi buat mereka & murid mulai seperti biasa tanpa kode tambahan.
 const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
+
+// tugasUrl di ruang-belajar selalu berformat penuh
+// "https://pancaedu.web.id/penugasan/<slug>" -- dipakai buat cari sesi Ruang
+// Belajar mana yang nautkan ke Penugasan ini, supaya tombol kembali nggak
+// ke laman "Semua Penugasan" yang generik tapi balik langsung ke sesinya.
+const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find((s) =>
+  s.data.tugasUrl?.endsWith(`/penugasan/${entry.id}`)
+);
 ---
 
 <BaseLayout title={judul} description={deskripsi ?? judul} disableCursor>
   <section class="container pn-header" data-pn-app data-slug={entry.id}>
-    <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
+    {rbEntry ? (
+      <a href={`/ruang-belajar/${rbEntry.id}`} class="back-link">&larr; Kembali ke Ruang Belajar: {rbEntry.data.judul}</a>
+    ) : (
+      <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
+    )}
     <p class="eyebrow">📝 Penugasan · {mapel} · Kelas {kelas}</p>
     <h1>{judul}</h1>
     {deskripsi && <p class="pn-lede">{deskripsi}</p>}

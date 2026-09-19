@@ -23,7 +23,7 @@ interface Props {
   jumlahTampil?: number;
 }
 
-const { soal, jumlahTampil = 15 } = Astro.props;
+const { soal, jumlahTampil = 6 } = Astro.props;
 const totalStok = soal?.length ?? 0;
 const jumlahDitampilkan = Math.min(jumlahTampil, totalStok);
 // escape "</" biar teks soal yang (kebetulan) mengandung itu nggak nutup tag <script> lebih awal
@@ -177,7 +177,7 @@ const poolJson = soal ? JSON.stringify(soal).replace(/<\//g, '<\\/') : '[]';
     const poolScript = quiz.querySelector<HTMLScriptElement>('[data-kuis-pool]');
     const scoreEl = quiz.querySelector<HTMLElement>('[data-kuis-score]');
     const resetBtn = quiz.querySelector<HTMLButtonElement>('[data-kuis-reset]');
-    const jumlahTampil = Number(quiz.dataset.jumlahTampil) || 15;
+    const jumlahTampil = Number(quiz.dataset.jumlahTampil) || 6;
     if (!list || !poolScript) return;
 
     let pool: SoalKuis[] = [];
