@@ -11,6 +11,11 @@ simulasi:
   judul: "Laboratorium Maya: Gelombang Bunyi"
   sumber: "Lab Maya PancaEdu"
   tinggi: 1000
+simulasiTambahan:
+  - url: "https://phet.colorado.edu/sims/html/sound-waves/latest/sound-waves_en.html"
+    judul: "Sound Waves (coba layar 'Two Sources' untuk pelayangan bunyi)"
+    sumber: "PhET Interactive Simulations, University of Colorado Boulder, licensed under CC-BY-4.0 (https://phet.colorado.edu)"
+    tinggi: 700
 kuis:
   - soal: "Resonansi bunyi terjadi ketika..."
     pilihan: ["Frekuensi getaran suatu sumber sama dengan frekuensi alami sistem lain, sehingga sistem itu ikut bergetar dengan amplitudo besar", "Dua bunyi saling meniadakan sepenuhnya", "Bunyi dipantulkan sempurna oleh dinding", "Frekuensi bunyi berubah karena gerak sumbernya"]

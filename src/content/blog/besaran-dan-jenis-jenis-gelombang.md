@@ -11,6 +11,11 @@ simulasi:
   judul: "Laboratorium Maya: Gelombang Mekanik"
   sumber: "Lab Maya PancaEdu"
   tinggi: 900
+simulasiTambahan:
+  - url: "https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_in.html"
+    judul: "Wave on a String (Gelombang pada Tali)"
+    sumber: "PhET Interactive Simulations, University of Colorado Boulder, licensed under CC-BY-4.0 (https://phet.colorado.edu)"
+    tinggi: 700
 kuis:
   - soal: "Rumus cepat rambat gelombang adalah..."
     pilihan: ["v = λ × f", "v = λ / f", "v = λ + f", "v = f / λ"]

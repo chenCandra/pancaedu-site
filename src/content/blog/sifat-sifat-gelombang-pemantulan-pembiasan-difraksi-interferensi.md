@@ -6,6 +6,11 @@ mapel: Fisika
 kelas: XI
 pubDate: 2026-11-09
 tags: ["Sifat Gelombang", "Pemantulan", "Pembiasan", "Difraksi", "Interferensi", "Fisika Kelas XI", "Fase F", "Gelombang"]
+simulasiTambahan:
+  - url: "https://phet.colorado.edu/sims/html/wave-interference/latest/wave-interference_en.html"
+    judul: "Wave Interference (Difraksi & Interferensi Gelombang)"
+    sumber: "PhET Interactive Simulations, University of Colorado Boulder, licensed under CC-BY-4.0 (https://phet.colorado.edu)"
+    tinggi: 700
 kuis:
   - soal: "Pemantulan (refleksi) gelombang terjadi ketika..."
     pilihan: ["Gelombang mengenai suatu penghalang/batas medium dan berbalik arah", "Gelombang berbelok arah saat memasuki medium baru", "Gelombang menyebar/melentur setelah melewati celah sempit", "Dua gelombang bertemu dan saling menguatkan atau melemahkan"]

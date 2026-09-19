@@ -463,6 +463,28 @@ collections:
             widget: number
             default: 600
             required: false
+      - name: "simulasiTambahan"
+        label: "Simulasi Tambahan (Pihak Ketiga, mis. PhET)"
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.judul}}"
+        hint: "MELENGKAPI Lab Maya di atas, bukan menggantikan. Untuk embed simulasi pihak ketiga (PhET Colorado dsb.) yang dipasang APA ADANYA (bukan hasil hosting sendiri) -- atribusi Sumber wajib diisi sesuai ketentuan lisensinya."
+        fields:
+          - label: "URL Simulasi"
+            name: url
+            widget: string
+            pattern: ['^https?://\S+$', 'Harus link http(s) yang valid']
+          - { label: "Judul Simulasi", name: judul, widget: string }
+          - label: "Sumber (wajib -- atribusi lisensi)"
+            name: sumber
+            widget: string
+            hint: "mis. PhET Interactive Simulations, University of Colorado Boulder, CC BY 4.0"
+          - label: "Tinggi Embed (px)"
+            name: tinggi
+            widget: number
+            default: 600
+            required: false
       - name: "kuis"
         label: "Kuis (Uji Pemahaman)"
         widget: list

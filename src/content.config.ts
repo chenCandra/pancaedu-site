@@ -61,6 +61,22 @@ const blog = defineCollection({
         })
         .optional()
     ),
+    // Simulasi PIHAK KETIGA tambahan (mis. PhET Colorado) yang MELENGKAPI
+    // `simulasi` (Lab Maya kita sendiri) di atas, BUKAN menggantikannya --
+    // array terpisah supaya field `simulasi` yang sudah dipakai 100+ artikel
+    // lama tidak perlu dimigrasikan jadi array. `sumber` WAJIB diisi di sini
+    // (beda dari `simulasi.sumber` yang opsional) karena lisensi CC BY 4.0
+    // PhET mewajibkan atribusi yang tampil di titik penggunaan.
+    simulasiTambahan: z
+      .array(
+        z.object({
+          url: z.string().url(),
+          judul: z.string(),
+          sumber: z.string(),
+          tinggi: z.number().default(600),
+        })
+      )
+      .default([]),
     // Kuis pilihan ganda di akhir materi — feedback langsung per soal
     // (bukan submit-semua-baru-dinilai). `jawaban` adalah index 0-based ke
     // array `pilihan`. Khusus category:materi; artikel tidak pakai ini.

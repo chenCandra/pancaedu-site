@@ -11,6 +11,15 @@ simulasi:
   judul: "Laboratorium Maya: Getaran Harmonis Sederhana"
   sumber: "Lab Maya PancaEdu"
   tinggi: 950
+simulasiTambahan:
+  - url: "https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_en.html"
+    judul: "Pendulum Lab (Simulasi Bandul)"
+    sumber: "PhET Interactive Simulations, University of Colorado Boulder, licensed under CC-BY-4.0 (https://phet.colorado.edu)"
+    tinggi: 700
+  - url: "https://phet.colorado.edu/sims/html/masses-and-springs/latest/masses-and-springs_en.html"
+    judul: "Masses and Springs (Simulasi Pegas)"
+    sumber: "PhET Interactive Simulations, University of Colorado Boulder, licensed under CC-BY-4.0 (https://phet.colorado.edu)"
+    tinggi: 700
 kuis:
   - soal: "Getaran (osilasi) adalah gerak..."
     pilihan: ["Bolak-balik suatu benda melalui titik setimbangnya secara berulang", "Lurus dengan kecepatan tetap", "Melingkar dengan jari-jari tetap", "Jatuh bebas ke bawah"]
