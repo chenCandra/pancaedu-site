@@ -4,7 +4,7 @@ description: "Kenapa mobil punya airbag dan kenapa sarung tinju empuk? Belajar m
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-09-30
+pubDate: 2026-10-04
 tags: ["Momentum", "Impuls", "Kekekalan Momentum", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/momentum-impuls.html"

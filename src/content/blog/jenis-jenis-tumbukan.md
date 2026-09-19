@@ -4,7 +4,7 @@ description: "Momentum SELALU kekal pada tiap tumbukan -- tapi energi kinetiknya
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-10-02
+pubDate: 2026-10-06
 tags: ["Tumbukan", "Lenting Sempurna", "Koefisien Restitusi", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/momentum-impuls.html"

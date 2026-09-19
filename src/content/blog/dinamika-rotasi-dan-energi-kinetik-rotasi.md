@@ -4,7 +4,7 @@ description: "Hukum II Newton punya 'versi rotasi': τ=Iα. Belajar menghitung p
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-10-10
+pubDate: 2026-10-14
 tags: ["Dinamika Rotasi", "Energi Kinetik Rotasi", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/torsi-dan-dinamika-rotasi.html"

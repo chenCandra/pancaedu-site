@@ -4,7 +4,7 @@ description: "Kenapa jungkat-jungkit bisa seimbang meski dua anak yang naik berb
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-10-12
+pubDate: 2026-10-16
 tags: ["Kesetimbangan Benda Tegar", "Titik Berat", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 kuis:
   - soal: "Syarat KESETIMBANGAN benda tegar adalah..."

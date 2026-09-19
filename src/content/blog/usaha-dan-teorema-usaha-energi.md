@@ -4,7 +4,7 @@ description: "Bukan cuma menghitung usaha (W=F cosθ × s) -- belajar menghubung
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-10-04
+pubDate: 2026-10-08
 tags: ["Usaha", "Teorema Usaha-Energi", "Energi Kinetik", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/usaha-dan-daya.html"

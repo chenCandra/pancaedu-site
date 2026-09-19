@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Susunan Pegas Seri dan Paralel</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.15rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-btn { background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 10px 6px; border-radius: 10px; cursor: pointer; text-align: center; }
+  .mode-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .per-pegas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .per-pegas { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 8px; padding: 8px 10px; }
+  .per-pegas .k { font-size: 0.72rem; color: var(--text-muted); }
+  .per-pegas .v { font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🧵</span><h1>Laboratorium Maya: Susunan Pegas Seri dan Paralel</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Mode Susunan</span></div>
+    <div class="mode-row" id="modeRow">
+      <button class="mode-btn is-active" data-mode="paralel">Paralel</button>
+      <button class="mode-btn" data-mode="seri">Seri</button>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Konstanta Pegas 1 (k1)</span><span class="control-value" id="k1Val">100 N/m</span></div>
+        <input type="range" id="k1Slider" min="20" max="300" step="10" value="100">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Konstanta Pegas 2 (k2)</span><span class="control-value" id="k2Val">150 N/m</span></div>
+        <input type="range" id="k2Slider" min="20" max="300" step="10" value="150">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Beban / Gaya (F)</span><span class="control-value" id="fVal">10 N</span></div>
+        <input type="range" id="fSlider" min="1" max="30" step="1" value="10">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visualisasi</span></div>
+      <div class="canvas-wrapper"><canvas id="pegasCanvas"></canvas></div>
+      <div class="results-panel">
+        <div class="result-grid">
+          <div class="result-highlight"><div class="k">Konstanta Pegas Total (k_total)</div><div class="v" id="ktotVal">0</div></div>
+        </div>
+        <div class="per-pegas-grid">
+          <div class="per-pegas"><div class="k">Pegas 1 — Δx1</div><div class="v" id="pegas1Val">-</div></div>
+          <div class="per-pegas"><div class="k">Pegas 2 — Δx2</div><div class="v" id="pegas2Val">-</div></div>
+        </div>
+        <div class="formula-box" id="pegasFormula"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    <span class="math-num">Paralel</span>: k_total = k1+k2 (membesar), pertambahan panjang (Δx) SAMA di tiap pegas, gaya yang ditanggung berbeda-beda. <span class="math-num">Seri</span>: 1/k_total = 1/k1+1/k2 (mengecil), gaya (F) SAMA di tiap pegas, Δx berbeda-beda. Polanya persis SAMA seperti rangkaian kapasitor (bukan resistor)! Geser slider dan ganti mode, lalu perhatikan k_total dan Δx masing-masing pegas berubah.
+  </div>
+
+  <script>
+    const k1Slider = document.getElementById('k1Slider'), k1Val = document.getElementById('k1Val');
+    const k2Slider = document.getElementById('k2Slider'), k2Val = document.getElementById('k2Val');
+    const fSlider = document.getElementById('fSlider'), fVal = document.getElementById('fVal');
+    const modeBtns = Array.from(document.querySelectorAll('.mode-btn'));
+    const ktotVal = document.getElementById('ktotVal');
+    const pegas1Val = document.getElementById('pegas1Val'), pegas2Val = document.getElementById('pegas2Val');
+    const pegasFormula = document.getElementById('pegasFormula');
+    const pegasCanvas = document.getElementById('pegasCanvas');
+    const pegasCtx = pegasCanvas.getContext('2d');
+
+    let k1 = 100, k2 = 150, F = 10, mode = 'paralel';
+
+    k1Slider.addEventListener('input', () => { k1 = parseFloat(k1Slider.value); k1Val.textContent = k1 + ' N/m'; update(); });
+    k2Slider.addEventListener('input', () => { k2 = parseFloat(k2Slider.value); k2Val.textContent = k2 + ' N/m'; update(); });
+    fSlider.addEventListener('input', () => { F = parseFloat(fSlider.value); fVal.textContent = F + ' N'; update(); });
+    modeBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        mode = btn.dataset.mode;
+        update();
+      });
+    });
+
+    function update() {
+      let kTotal, dx1, dx2, F1, F2;
+      if (mode === 'paralel') {
+        kTotal = k1 + k2;
+        const dxSama = F / kTotal;
+        dx1 = dxSama; dx2 = dxSama;
+        F1 = k1 * dxSama; F2 = k2 * dxSama;
+      } else {
+        kTotal = (k1 * k2) / (k1 + k2);
+        F1 = F; F2 = F;
+        dx1 = F / k1; dx2 = F / k2;
+      }
+
+      ktotVal.textContent = kTotal.toFixed(1) + ' N/m';
+      pegas1Val.textContent = dx1.toFixed(3) + ' m / ' + F1.toFixed(1) + ' N';
+      pegas2Val.textContent = dx2.toFixed(3) + ' m / ' + F2.toFixed(1) + ' N';
+
+      if (mode === 'paralel') {
+        pegasFormula.innerHTML =
+          `k_total = k1 + k2 = ${k1} + ${k2} = <span class="math-num">${kTotal.toFixed(1)} N/m</span><br>` +
+          `Δx sama di tiap pegas = F/k_total = <span class="math-num">${(F / kTotal).toFixed(3)} m</span><br>` +
+          `F1 = k1×Δx = <span class="math-num">${F1.toFixed(1)} N</span> &nbsp;|&nbsp; F2 = k2×Δx = <span class="math-num">${F2.toFixed(1)} N</span>`;
+      } else {
+        pegasFormula.innerHTML =
+          `1/k_total = 1/k1 + 1/k2 &rarr; k_total = (k1×k2)/(k1+k2) = <span class="math-num">${kTotal.toFixed(1)} N/m</span><br>` +
+          `Gaya sama di tiap pegas = <span class="math-num">${F} N</span><br>` +
+          `Δx1 = F/k1 = <span class="math-num">${dx1.toFixed(3)} m</span> &nbsp;|&nbsp; Δx2 = F/k2 = <span class="math-num">${dx2.toFixed(3)} m</span>`;
+      }
+
+      render();
+    }
+
+    function drawSpring(ctx, x1, y1, x2, y2, coils) {
+      ctx.save();
+      ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 3;
+      const dx = x2 - x1, dy = y2 - y1;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const ux = dx / len, uy = dy / len;
+      const px = -uy, py = ux;
+      const segLen = len / (coils * 2);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      for (let i = 0; i < coils * 2; i++) {
+        const t = segLen * (i + 1);
+        const side = i % 2 === 0 ? 10 : -10;
+        ctx.lineTo(x1 + ux * t + px * side, y1 + uy * t + py * side);
+      }
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function resizeCanvas() {
+      const rect = pegasCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      pegasCanvas.width = rect.width * dpr; pegasCanvas.height = rect.height * dpr;
+      pegasCtx.setTransform(1, 0, 0, 1, 0, 0); pegasCtx.scale(dpr, dpr);
+      render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function render() {
+      const w = pegasCanvas.parentElement.clientWidth, h = pegasCanvas.parentElement.clientHeight;
+      pegasCtx.clearRect(0, 0, w, h);
+      pegasCtx.save();
+      pegasCtx.strokeStyle = 'rgba(248,250,252,0.7)'; pegasCtx.lineWidth = 4; pegasCtx.font = 'bold 12px system-ui'; pegasCtx.fillStyle = '#f8fafc'; pegasCtx.textAlign = 'center';
+
+      // Langit-langit (statif)
+      pegasCtx.beginPath(); pegasCtx.moveTo(w * 0.2, 20); pegasCtx.lineTo(w * 0.8, 20); pegasCtx.stroke();
+
+      if (mode === 'paralel') {
+        const x1 = w * 0.35, x2 = w * 0.65;
+        const topY = 20, bottomY = h * 0.55;
+        drawSpring(pegasCtx, x1, topY, x1, bottomY, 6);
+        drawSpring(pegasCtx, x2, topY, x2, bottomY, 6);
+        pegasCtx.fillText('k1', x1 - 20, (topY + bottomY) / 2);
+        pegasCtx.fillText('k2', x2 + 20, (topY + bottomY) / 2);
+        // Batang beban menghubungkan keduanya
+        pegasCtx.beginPath(); pegasCtx.moveTo(x1, bottomY); pegasCtx.lineTo(x2, bottomY); pegasCtx.stroke();
+        pegasCtx.fillStyle = '#facc15';
+        pegasCtx.fillRect((x1 + x2) / 2 - 25, bottomY, 50, 24);
+        pegasCtx.fillStyle = '#1e293b'; pegasCtx.fillText('F', (x1 + x2) / 2, bottomY + 16);
+      } else {
+        const cx = w / 2;
+        const topY = 20, midY = h * 0.35, bottomY = h * 0.62;
+        drawSpring(pegasCtx, cx, topY, cx, midY, 5);
+        pegasCtx.fillText('k1', cx + 24, (topY + midY) / 2);
+        drawSpring(pegasCtx, cx, midY, cx, bottomY, 5);
+        pegasCtx.fillText('k2', cx + 24, (midY + bottomY) / 2);
+        pegasCtx.fillStyle = '#facc15';
+        pegasCtx.fillRect(cx - 25, bottomY, 50, 24);
+        pegasCtx.fillStyle = '#1e293b'; pegasCtx.fillText('F', cx, bottomY + 16);
+      }
+      pegasCtx.restore();
+    }
+
+    window.onload = () => { resizeCanvas(); update(); };
+  </script>
+</body>
+</html>

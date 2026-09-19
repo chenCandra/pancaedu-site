@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gravitasi dan Hukum Kepler</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🪐</span><h1>Laboratorium Maya: Gravitasi dan Hukum Kepler</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnGravitasi">🪐 Hukum Gravitasi</button>
+    <button class="tab-btn" id="tabBtnKepler">🛰️ Hukum Kepler</button>
+  </div>
+
+  <!-- ================= TAB GRAVITASI ================= -->
+  <div class="tab-panel is-active" id="tabGravitasi">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa 1 (m1)</span><span class="control-value" id="m1Val">1.000 kg</span></div>
+          <input type="range" id="m1Slider" min="100" max="10000" step="100" value="1000">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa 2 (m2)</span><span class="control-value" id="m2Val">1.000 kg</span></div>
+          <input type="range" id="m2Slider" min="100" max="10000" step="100" value="1000">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jarak (r)</span><span class="control-value" id="rGravVal">10 m</span></div>
+          <input type="range" id="rGravSlider" min="1" max="100" step="1" value="10">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="gravCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Gaya Gravitasi (F)</div><div class="v" id="fGravVal">0</div></div>
+            <div class="result-highlight"><div class="k">Medan Gravitasi m1 di jarak r</div><div class="v" id="medanVal">0</div></div>
+          </div>
+          <div class="formula-box" id="gravFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Hukum Gravitasi Newton: F = G×m1×m2/r² -- gaya tarik-menarik antara dua massa berbanding lurus dengan hasil kali kedua massa, dan berbanding TERBALIK dengan KUADRAT jaraknya. G = 6,674×10⁻¹¹ N·m²/kg² (konstanta gravitasi universal). Medan gravitasi (g) di suatu titik akibat massa m1 = G×m1/r².
+    </div>
+  </div>
+
+  <!-- ================= TAB KEPLER ================= -->
+  <div class="tab-panel" id="tabKepler">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter (Planet Mengorbit Matahari)</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jarak Planet A (r_A) dari Matahari</span><span class="control-value" id="rAVal">1 SA</span></div>
+          <input type="range" id="rASlider" min="0.2" max="30" step="0.1" value="1">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jarak Planet B (r_B) dari Matahari</span><span class="control-value" id="rBVal">5 SA</span></div>
+          <input type="range" id="rBSlider" min="0.2" max="30" step="0.1" value="5">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="keplerCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Periode Planet A (T_A)</div><div class="v" id="tAVal">0</div></div>
+            <div class="result-highlight"><div class="k">Periode Planet B (T_B)</div><div class="v" id="tBVal">0</div></div>
+          </div>
+          <div class="formula-box" id="keplerFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Hukum Kepler III: T²/r³ bernilai SAMA untuk semua planet yang mengorbit Matahari yang sama -- makin jauh planet (r besar), makin lama periode orbitnya (T besar), tapi dengan perbandingan T²:r³ yang tetap konsisten. Dalam satuan SA (Satuan Astronomi) dan tahun, berlaku hubungan sederhana T² = r³.
+    </div>
+  </div>
+
+  <script>
+    const G = 6.674e-11; // N·m²/kg²
+
+    // ---------- TAB SWITCH ----------
+    const tabBtnGravitasi = document.getElementById('tabBtnGravitasi');
+    const tabBtnKepler = document.getElementById('tabBtnKepler');
+    const tabGravitasi = document.getElementById('tabGravitasi');
+    const tabKepler = document.getElementById('tabKepler');
+    tabBtnGravitasi.addEventListener('click', () => {
+      tabBtnGravitasi.classList.add('is-active'); tabBtnKepler.classList.remove('is-active');
+      tabGravitasi.classList.add('is-active'); tabKepler.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnKepler.addEventListener('click', () => {
+      tabBtnKepler.classList.add('is-active'); tabBtnGravitasi.classList.remove('is-active');
+      tabKepler.classList.add('is-active'); tabGravitasi.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- GRAVITASI ----------
+    const m1Slider = document.getElementById('m1Slider'), m1Val = document.getElementById('m1Val');
+    const m2Slider = document.getElementById('m2Slider'), m2Val = document.getElementById('m2Val');
+    const rGravSlider = document.getElementById('rGravSlider'), rGravVal = document.getElementById('rGravVal');
+    const fGravVal = document.getElementById('fGravVal'), medanVal = document.getElementById('medanVal');
+    const gravFormula = document.getElementById('gravFormula');
+    const gravCanvas = document.getElementById('gravCanvas');
+    const gravCtx = gravCanvas.getContext('2d');
+
+    let m1 = 1000, m2 = 1000, rGrav = 10;
+
+    function fmtID(n) { return n.toLocaleString('id-ID'); }
+
+    function updateGrav() {
+      const F = (G * m1 * m2) / (rGrav * rGrav);
+      const medan = (G * m1) / (rGrav * rGrav);
+      fGravVal.textContent = F.toExponential(3) + ' N';
+      medanVal.textContent = medan.toExponential(3) + ' N/kg';
+      gravFormula.innerHTML =
+        `F = G×m1×m2/r² = (6,674×10⁻¹¹)×${fmtID(m1)}×${fmtID(m2)}/${rGrav}² = <span class="math-num">${F.toExponential(3)} N</span><br>` +
+        `g (medan m1 di jarak r) = G×m1/r² = <span class="math-num">${medan.toExponential(3)} N/kg</span>`;
+      renderGrav();
+    }
+    m1Slider.addEventListener('input', () => { m1 = parseFloat(m1Slider.value); m1Val.textContent = fmtID(m1) + ' kg'; updateGrav(); });
+    m2Slider.addEventListener('input', () => { m2 = parseFloat(m2Slider.value); m2Val.textContent = fmtID(m2) + ' kg'; updateGrav(); });
+    rGravSlider.addEventListener('input', () => { rGrav = parseFloat(rGravSlider.value); rGravVal.textContent = rGrav + ' m'; updateGrav(); });
+
+    function renderGrav() {
+      const w = gravCanvas.parentElement.clientWidth, h = gravCanvas.parentElement.clientHeight;
+      gravCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const gap = Math.min(w * 0.6, 40 + rGrav * 2);
+      const x1 = w / 2 - gap / 2, x2 = w / 2 + gap / 2;
+      const r1 = 14 + Math.min(20, m1 / 500), r2 = 14 + Math.min(20, m2 / 500);
+
+      gravCtx.save();
+      gravCtx.fillStyle = '#38bdf8';
+      gravCtx.beginPath(); gravCtx.arc(x1, cy, r1, 0, Math.PI * 2); gravCtx.fill();
+      gravCtx.fillStyle = '#f472b6';
+      gravCtx.beginPath(); gravCtx.arc(x2, cy, r2, 0, Math.PI * 2); gravCtx.fill();
+
+      gravCtx.strokeStyle = 'rgba(250,204,21,0.7)'; gravCtx.lineWidth = 2; gravCtx.setLineDash([4, 4]);
+      gravCtx.beginPath(); gravCtx.moveTo(x1 + r1, cy); gravCtx.lineTo(x2 - r2, cy); gravCtx.stroke();
+      gravCtx.setLineDash([]);
+
+      gravCtx.fillStyle = '#f8fafc'; gravCtx.font = 'bold 12px system-ui'; gravCtx.textAlign = 'center';
+      gravCtx.fillText('m1', x1, cy - r1 - 10);
+      gravCtx.fillText('m2', x2, cy - r2 - 10);
+      gravCtx.fillText('r = ' + rGrav + ' m', w / 2, cy + 30);
+      gravCtx.restore();
+    }
+
+    // ---------- KEPLER ----------
+    const rASlider = document.getElementById('rASlider'), rAVal = document.getElementById('rAVal');
+    const rBSlider = document.getElementById('rBSlider'), rBVal = document.getElementById('rBVal');
+    const tAValEl = document.getElementById('tAVal'), tBValEl = document.getElementById('tBVal');
+    const keplerFormula = document.getElementById('keplerFormula');
+    const keplerCanvas = document.getElementById('keplerCanvas');
+    const keplerCtx = keplerCanvas.getContext('2d');
+
+    let rA = 1, rB = 5;
+    let orbitAngleA = 0, orbitAngleB = Math.PI / 2;
+
+    function updateKepler() {
+      const tA = Math.pow(rA, 1.5);
+      const tB = Math.pow(rB, 1.5);
+      tAValEl.textContent = tA.toFixed(2) + ' tahun';
+      tBValEl.textContent = tB.toFixed(2) + ' tahun';
+
+      const rasioA = (tA * tA) / (rA * rA * rA);
+      const rasioB = (tB * tB) / (rB * rB * rB);
+
+      keplerFormula.innerHTML =
+        `T_A = r_A^1,5 = ${rA}^1,5 = <span class="math-num">${tA.toFixed(2)} tahun</span><br>` +
+        `T_B = r_B^1,5 = ${rB}^1,5 = <span class="math-num">${tB.toFixed(2)} tahun</span><br>` +
+        `T_A²/r_A³ = <span class="math-num">${rasioA.toFixed(3)}</span> &nbsp;|&nbsp; T_B²/r_B³ = <span class="math-num">${rasioB.toFixed(3)}</span> (SAMA -- Hukum Kepler III)`;
+    }
+    rASlider.addEventListener('input', () => { rA = parseFloat(rASlider.value); rAVal.textContent = rA.toFixed(1) + ' SA'; updateKepler(); });
+    rBSlider.addEventListener('input', () => { rB = parseFloat(rBSlider.value); rBVal.textContent = rB.toFixed(1) + ' SA'; updateKepler(); });
+
+    function renderKepler() {
+      const w = keplerCanvas.parentElement.clientWidth, h = keplerCanvas.parentElement.clientHeight;
+      keplerCtx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+      const maxR = Math.max(rA, rB, 1);
+      const scale = Math.min(w, h) * 0.4 / Math.max(Math.sqrt(maxR), 1);
+
+      keplerCtx.save();
+      keplerCtx.fillStyle = '#facc15';
+      keplerCtx.beginPath(); keplerCtx.arc(cx, cy, 10, 0, Math.PI * 2); keplerCtx.fill();
+
+      const radiusA = Math.sqrt(rA) * scale + 20;
+      const radiusB = Math.sqrt(rB) * scale + 20;
+
+      keplerCtx.strokeStyle = 'rgba(56,189,248,0.4)'; keplerCtx.lineWidth = 1.5;
+      keplerCtx.beginPath(); keplerCtx.arc(cx, cy, radiusA, 0, Math.PI * 2); keplerCtx.stroke();
+      keplerCtx.strokeStyle = 'rgba(244,114,182,0.4)';
+      keplerCtx.beginPath(); keplerCtx.arc(cx, cy, radiusB, 0, Math.PI * 2); keplerCtx.stroke();
+
+      const speedA = 1 / Math.pow(rA, 1.5);
+      const speedB = 1 / Math.pow(rB, 1.5);
+      orbitAngleA += speedA * 0.05;
+      orbitAngleB += speedB * 0.05;
+
+      const ax = cx + radiusA * Math.cos(orbitAngleA), ay = cy + radiusA * Math.sin(orbitAngleA);
+      const bx = cx + radiusB * Math.cos(orbitAngleB), by = cy + radiusB * Math.sin(orbitAngleB);
+      keplerCtx.fillStyle = '#38bdf8';
+      keplerCtx.beginPath(); keplerCtx.arc(ax, ay, 7, 0, Math.PI * 2); keplerCtx.fill();
+      keplerCtx.fillStyle = '#f472b6';
+      keplerCtx.beginPath(); keplerCtx.arc(bx, by, 7, 0, Math.PI * 2); keplerCtx.fill();
+
+      keplerCtx.fillStyle = '#f8fafc'; keplerCtx.font = 'bold 11px system-ui'; keplerCtx.textAlign = 'center';
+      keplerCtx.fillText('A', ax, ay - 12);
+      keplerCtx.fillText('B', bx, by - 12);
+      keplerCtx.restore();
+    }
+
+    function animLoop() {
+      if (tabKepler.classList.contains('is-active')) renderKepler();
+      requestAnimationFrame(animLoop);
+    }
+
+    function resizeAll() {
+      [gravCanvas, keplerCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderGrav();
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateGrav();
+      updateKepler();
+      requestAnimationFrame(animLoop);
+    };
+  </script>
+</body>
+</html>

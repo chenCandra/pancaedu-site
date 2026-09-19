@@ -1,5 +1,5 @@
 ---
-tanggal: 2026-09-30
+tanggal: 2026-10-04
 kelas: XI
 mapel: Fisika
 bab: "Gerak dan Gaya"

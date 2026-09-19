@@ -4,7 +4,7 @@ description: "Kenapa kunci pas bertangkai panjang lebih mudah memutar baut keras
 category: materi
 mapel: Fisika
 kelas: XI
-pubDate: 2026-10-08
+pubDate: 2026-10-12
 tags: ["Momen Gaya", "Torsi", "Momen Inersia", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/torsi-dan-dinamika-rotasi.html"
