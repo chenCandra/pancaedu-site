@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Termodinamika Gas dan Mesin Kalor</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .mode-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mode-btn { background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.75rem; padding: 9px 4px; border-radius: 10px; cursor: pointer; text-align: center; }
+  .mode-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">⚙️</span><h1>Laboratorium Maya: Termodinamika Gas dan Mesin Kalor</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnGas">💨 Proses Gas</button>
+    <button class="tab-btn" id="tabBtnMesin">🔧 Mesin Kalor</button>
+  </div>
+
+  <!-- ================= TAB PROSES GAS ================= -->
+  <div class="tab-panel is-active" id="tabGas">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Jenis Proses</span></div>
+      <div class="mode-row" id="prosesRow">
+        <button class="mode-btn is-active" data-proses="isobarik">Isobarik (P tetap)</button>
+        <button class="mode-btn" data-proses="isokhorik">Isokhorik (V tetap)</button>
+        <button class="mode-btn" data-proses="isotermal">Isotermal (T tetap)</button>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Tekanan Awal (P1)</span><span class="control-value" id="p1Val">1×10⁵ Pa</span></div>
+          <input type="range" id="p1Slider" min="1" max="5" step="0.5" value="1">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Volume Awal (V1)</span><span class="control-value" id="v1Val">0,01 m³</span></div>
+          <input type="range" id="v1Slider" min="0.005" max="0.05" step="0.005" value="0.01">
+        </div>
+        <div class="control-group" id="v2Group">
+          <div class="control-label-row"><span class="control-label">Volume Akhir (V2)</span><span class="control-value" id="v2Val">0,02 m³</span></div>
+          <input type="range" id="v2Slider" min="0.005" max="0.08" step="0.005" value="0.02">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Diagram P-V</span></div>
+        <div class="canvas-wrapper"><canvas id="pvCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Usaha Gas (W)</div><div class="v" id="wVal">0</div></div>
+          </div>
+          <div class="formula-box" id="gasFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Hukum I Termodinamika: ΔU = Q − W. Usaha gas (W) dihitung dari luas daerah di bawah kurva P-V: Isobarik (P tetap) W=P×ΔV; Isokhorik (V tetap) W=0 (gas tidak berubah volume, tidak ada usaha); Isotermal (T tetap) W=P1V1×ln(V2/V1).
+    </div>
+  </div>
+
+  <!-- ================= TAB MESIN KALOR ================= -->
+  <div class="tab-panel" id="tabMesin">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Suhu Reservoir Panas (Th)</span><span class="control-value" id="thVal">600 K</span></div>
+          <input type="range" id="thSlider" min="350" max="1000" step="10" value="600">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Suhu Reservoir Dingin (Tc)</span><span class="control-value" id="tcVal">300 K</span></div>
+          <input type="range" id="tcSlider" min="200" max="350" step="10" value="300">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kalor Masuk (Qmasuk)</span><span class="control-value" id="qMasukVal">1000 J</span></div>
+          <input type="range" id="qMasukSlider" min="100" max="5000" step="100" value="1000">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="mesinCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Efisiensi Carnot (η)</div><div class="v" id="etaVal">0</div></div>
+            <div class="result-highlight"><div class="k">Usaha (W)</div><div class="v" id="wMesinVal">0</div></div>
+          </div>
+          <div class="formula-box" id="mesinFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Hukum II Termodinamika: tidak ada mesin kalor yang efisiensinya 100% -- selalu ada kalor yang "terbuang" ke reservoir dingin. Efisiensi maksimum (Carnot): η = 1 − Tc/Th (suhu dalam Kelvin). Makin besar selisih suhu panas-dingin, makin tinggi efisiensi maksimum yang mungkin dicapai.
+  </div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCH ----------
+    const tabBtnGas = document.getElementById('tabBtnGas');
+    const tabBtnMesin = document.getElementById('tabBtnMesin');
+    const tabGas = document.getElementById('tabGas');
+    const tabMesin = document.getElementById('tabMesin');
+    tabBtnGas.addEventListener('click', () => {
+      tabBtnGas.classList.add('is-active'); tabBtnMesin.classList.remove('is-active');
+      tabGas.classList.add('is-active'); tabMesin.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnMesin.addEventListener('click', () => {
+      tabBtnMesin.classList.add('is-active'); tabBtnGas.classList.remove('is-active');
+      tabMesin.classList.add('is-active'); tabGas.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- PROSES GAS ----------
+    const prosesBtns = Array.from(document.querySelectorAll('.mode-btn'));
+    const p1Slider = document.getElementById('p1Slider'), p1Val = document.getElementById('p1Val');
+    const v1Slider = document.getElementById('v1Slider'), v1Val = document.getElementById('v1Val');
+    const v2Slider = document.getElementById('v2Slider'), v2Val = document.getElementById('v2Val');
+    const v2Group = document.getElementById('v2Group');
+    const wVal = document.getElementById('wVal');
+    const gasFormula = document.getElementById('gasFormula');
+    const pvCanvas = document.getElementById('pvCanvas');
+    const pvCtx = pvCanvas.getContext('2d');
+
+    let proses = 'isobarik', p1 = 1e5, v1 = 0.01, v2 = 0.02;
+
+    prosesBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        prosesBtns.forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        proses = btn.dataset.proses;
+        v2Group.style.display = proses === 'isokhorik' ? 'none' : '';
+        updateGas();
+      });
+    });
+    p1Slider.addEventListener('input', () => { p1 = parseFloat(p1Slider.value) * 1e5; p1Val.textContent = parseFloat(p1Slider.value) + '×10⁵ Pa'; updateGas(); });
+    v1Slider.addEventListener('input', () => { v1 = parseFloat(v1Slider.value); v1Val.textContent = v1.toFixed(3) + ' m³'; updateGas(); });
+    v2Slider.addEventListener('input', () => { v2 = parseFloat(v2Slider.value); v2Val.textContent = v2.toFixed(3) + ' m³'; updateGas(); });
+
+    function updateGas() {
+      let W = 0, p1Str = (p1 / 1e5).toFixed(1);
+      if (proses === 'isobarik') {
+        W = p1 * (v2 - v1);
+        gasFormula.innerHTML = `W = P×ΔV = (${p1Str}×10⁵)×(${v2.toFixed(3)}−${v1.toFixed(3)}) = <span class="math-num">${W.toFixed(1)} J</span>`;
+      } else if (proses === 'isokhorik') {
+        W = 0;
+        gasFormula.innerHTML = `Isokhorik: V tetap, ΔV=0, sehingga <span class="math-num">W = 0 J</span> (gas tidak melakukan usaha)`;
+      } else {
+        W = p1 * v1 * Math.log(v2 / v1);
+        gasFormula.innerHTML = `W = P1×V1×ln(V2/V1) = (${p1Str}×10⁵)×${v1.toFixed(3)}×ln(${v2.toFixed(3)}/${v1.toFixed(3)}) = <span class="math-num">${W.toFixed(1)} J</span>`;
+      }
+      wVal.textContent = W.toFixed(1) + ' J';
+      renderPV();
+    }
+
+    function renderPV() {
+      const w = pvCanvas.parentElement.clientWidth, h = pvCanvas.parentElement.clientHeight;
+      pvCtx.clearRect(0, 0, w, h);
+      const padL = 50, padB = 30, padT = 20, padR = 20;
+      const plotW = w - padL - padR, plotH = h - padT - padB;
+
+      pvCtx.save();
+      pvCtx.strokeStyle = 'rgba(248,250,252,0.4)'; pvCtx.lineWidth = 1.5;
+      pvCtx.beginPath(); pvCtx.moveTo(padL, padT); pvCtx.lineTo(padL, h - padB); pvCtx.lineTo(w - padR, h - padB); pvCtx.stroke();
+      pvCtx.fillStyle = '#94a3b8'; pvCtx.font = '10px system-ui'; pvCtx.textAlign = 'center';
+      pvCtx.fillText('V (m³)', w - padR - 20, h - padB + 18);
+      pvCtx.save(); pvCtx.translate(padL - 35, padT + 10); pvCtx.fillText('P', 0, 0); pvCtx.restore();
+
+      const maxV = Math.max(v1, v2) * 1.3;
+      const maxP = (p1 / 1e5) * 1.5;
+      const px = (vv) => padL + (vv / maxV) * plotW;
+      const py = (pp) => h - padB - (pp / maxP) * plotH;
+
+      const x1 = px(v1), y1 = py(p1 / 1e5);
+      let x2, y2;
+      pvCtx.strokeStyle = '#38bdf8'; pvCtx.lineWidth = 2.5;
+      pvCtx.beginPath(); pvCtx.moveTo(x1, y1);
+      if (proses === 'isobarik') {
+        x2 = px(v2); y2 = py(p1 / 1e5);
+        pvCtx.lineTo(x2, y2);
+      } else if (proses === 'isokhorik') {
+        x2 = px(v1); y2 = py((p1 / 1e5) * 0.4);
+        pvCtx.lineTo(x2, y2);
+      } else {
+        const steps = 20;
+        for (let i = 1; i <= steps; i++) {
+          const vv = v1 + ((v2 - v1) * i) / steps;
+          const pp = (p1 * v1) / vv / 1e5;
+          pvCtx.lineTo(px(vv), py(pp));
+        }
+        x2 = px(v2); y2 = py((p1 * v1) / v2 / 1e5);
+      }
+      pvCtx.stroke();
+
+      // arsir area di bawah kurva (usaha)
+      if (proses !== 'isokhorik') {
+        pvCtx.fillStyle = 'rgba(56,189,248,0.15)';
+        pvCtx.lineTo(x2, h - padB); pvCtx.lineTo(x1, h - padB); pvCtx.closePath(); pvCtx.fill();
+      }
+
+      pvCtx.fillStyle = '#facc15';
+      pvCtx.beginPath(); pvCtx.arc(x1, y1, 4, 0, Math.PI * 2); pvCtx.fill();
+      pvCtx.beginPath(); pvCtx.arc(x2, y2, 4, 0, Math.PI * 2); pvCtx.fill();
+      pvCtx.restore();
+    }
+
+    // ---------- MESIN KALOR ----------
+    const thSlider = document.getElementById('thSlider'), thValEl = document.getElementById('thVal');
+    const tcSlider = document.getElementById('tcSlider'), tcValEl = document.getElementById('tcVal');
+    const qMasukSlider = document.getElementById('qMasukSlider'), qMasukVal = document.getElementById('qMasukVal');
+    const etaVal = document.getElementById('etaVal'), wMesinVal = document.getElementById('wMesinVal');
+    const mesinFormula = document.getElementById('mesinFormula');
+    const mesinCanvas = document.getElementById('mesinCanvas');
+    const mesinCtx = mesinCanvas.getContext('2d');
+
+    let Th = 600, Tc = 300, qMasuk = 1000;
+
+    function updateMesin() {
+      const eta = 1 - Tc / Th;
+      const W = eta * qMasuk;
+      const qKeluar = qMasuk - W;
+      etaVal.textContent = (eta * 100).toFixed(1) + '%';
+      wMesinVal.textContent = W.toFixed(0) + ' J';
+      mesinFormula.innerHTML =
+        `η = 1 − Tc/Th = 1 − ${Tc}/${Th} = <span class="math-num">${(eta * 100).toFixed(1)}%</span><br>` +
+        `W = η×Qmasuk = <span class="math-num">${W.toFixed(0)} J</span> &nbsp;|&nbsp; Qkeluar = Qmasuk−W = <span class="math-num">${qKeluar.toFixed(0)} J</span>`;
+      renderMesin(eta);
+    }
+    thSlider.addEventListener('input', () => { Th = parseFloat(thSlider.value); thValEl.textContent = Th + ' K'; updateMesin(); });
+    tcSlider.addEventListener('input', () => { Tc = parseFloat(tcSlider.value); tcValEl.textContent = Tc + ' K'; updateMesin(); });
+    qMasukSlider.addEventListener('input', () => { qMasuk = parseFloat(qMasukSlider.value); qMasukVal.textContent = qMasuk + ' J'; updateMesin(); });
+
+    function renderMesin(eta) {
+      const w = mesinCanvas.parentElement.clientWidth, h = mesinCanvas.parentElement.clientHeight;
+      mesinCtx.clearRect(0, 0, w, h);
+      const cx = w / 2;
+      mesinCtx.save();
+      mesinCtx.fillStyle = '#ef4444'; mesinCtx.fillRect(cx - 60, 20, 120, 30);
+      mesinCtx.fillStyle = '#fff'; mesinCtx.font = 'bold 12px system-ui'; mesinCtx.textAlign = 'center';
+      mesinCtx.fillText('Reservoir Panas (Th)', cx, 40);
+
+      mesinCtx.fillStyle = '#7c3aed'; mesinCtx.beginPath(); mesinCtx.arc(cx, h / 2, 35, 0, Math.PI * 2); mesinCtx.fill();
+      mesinCtx.fillStyle = '#fff'; mesinCtx.fillText('Mesin', cx, h / 2 - 4);
+      mesinCtx.fillText((eta * 100).toFixed(0) + '%', cx, h / 2 + 12);
+
+      mesinCtx.fillStyle = '#3b82f6'; mesinCtx.fillRect(cx - 60, h - 50, 120, 30);
+      mesinCtx.fillStyle = '#fff'; mesinCtx.fillText('Reservoir Dingin (Tc)', cx, h - 30);
+
+      mesinCtx.strokeStyle = '#facc15'; mesinCtx.lineWidth = 2;
+      mesinCtx.beginPath(); mesinCtx.moveTo(cx, 50); mesinCtx.lineTo(cx, h / 2 - 35); mesinCtx.stroke();
+      mesinCtx.beginPath(); mesinCtx.moveTo(cx, h / 2 + 35); mesinCtx.lineTo(cx, h - 50); mesinCtx.stroke();
+      mesinCtx.beginPath(); mesinCtx.moveTo(cx + 35, h / 2); mesinCtx.lineTo(cx + 80, h / 2); mesinCtx.stroke();
+      mesinCtx.fillStyle = '#facc15'; mesinCtx.fillText('W', cx + 90, h / 2 + 4);
+      mesinCtx.restore();
+    }
+
+    function resizeAll() {
+      [pvCanvas, mesinCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderPV();
+      renderMesin(1 - Tc / Th);
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateGas();
+      updateMesin();
+    };
+  </script>
+</body>
+</html>

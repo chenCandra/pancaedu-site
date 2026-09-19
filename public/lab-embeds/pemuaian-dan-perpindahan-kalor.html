@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Pemuaian dan Perpindahan Kalor</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.1rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.82rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+  select { width: 100%; background: rgba(15,23,42,0.7); color: var(--text-main); border: 1.5px solid var(--card-border); border-radius: 8px; padding: 8px; font-size: 0.85rem; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌡️</span><h1>Laboratorium Maya: Pemuaian dan Perpindahan Kalor</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnMuai">📏 Pemuaian</button>
+    <button class="tab-btn" id="tabBtnKonduksi">🔥 Perpindahan Kalor</button>
+  </div>
+
+  <!-- ================= TAB PEMUAIAN ================= -->
+  <div class="tab-panel is-active" id="tabMuai">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Bahan Batang</span></div>
+          <select id="bahanMuaiSelect">
+            <option value="9">Kaca (α=9×10⁻⁶/°C)</option>
+            <option value="12" selected>Baja (α=12×10⁻⁶/°C)</option>
+            <option value="17">Tembaga (α=17×10⁻⁶/°C)</option>
+            <option value="24">Aluminium (α=24×10⁻⁶/°C)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Awal (L0)</span><span class="control-value" id="l0Val">2 m</span></div>
+          <input type="range" id="l0Slider" min="0.5" max="10" step="0.5" value="2">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kenaikan Suhu (ΔT)</span><span class="control-value" id="dtVal">50°C</span></div>
+          <input type="range" id="dtSlider" min="0" max="200" step="5" value="50">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="muaiCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Pertambahan Panjang (ΔL)</div><div class="v" id="dlVal">0</div></div>
+          </div>
+          <div class="formula-box" id="muaiFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Pemuaian panjang: ΔL = L0×α×ΔT -- makin besar koefisien muai (α, tergantung bahan), makin panjang batang mula-mula, dan makin besar kenaikan suhu, makin besar pertambahan panjangnya. Inilah kenapa rel kereta api sengaja diberi celah kecil antar sambungan.
+    </div>
+  </div>
+
+  <!-- ================= TAB PERPINDAHAN KALOR ================= -->
+  <div class="tab-panel" id="tabKonduksi">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter (Konduksi)</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Bahan Penghantar</span></div>
+          <select id="bahanKondSelect">
+            <option value="0.15">Kayu (k=0,15 W/m°C)</option>
+            <option value="50">Baja (k=50 W/m°C)</option>
+            <option value="205" selected>Aluminium (k=205 W/m°C)</option>
+            <option value="385">Tembaga (k=385 W/m°C)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Luas Penampang (A)</span><span class="control-value" id="aVal">0,01 m²</span></div>
+          <input type="range" id="aSlider" min="0.001" max="0.05" step="0.001" value="0.01">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Batang (L)</span><span class="control-value" id="lKondVal">0,5 m</span></div>
+          <input type="range" id="lKondSlider" min="0.1" max="2" step="0.1" value="0.5">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Beda Suhu Ujung (ΔT)</span><span class="control-value" id="dtKondVal">80°C</span></div>
+          <input type="range" id="dtKondSlider" min="10" max="200" step="10" value="80">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="kondCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Laju Perpindahan Kalor (H)</div><div class="v" id="hVal">0</div></div>
+          </div>
+          <div class="formula-box" id="kondFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Laju konduksi kalor: H = k×A×ΔT/L -- makin besar konduktivitas termal (k), luas penampang (A), dan beda suhu (ΔT), makin cepat kalor berpindah; makin panjang batang (L), makin lambat. Logam (k besar) menghantar panas jauh lebih cepat daripada kayu (k kecil).
+    </div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCH ----------
+    const tabBtnMuai = document.getElementById('tabBtnMuai');
+    const tabBtnKonduksi = document.getElementById('tabBtnKonduksi');
+    const tabMuai = document.getElementById('tabMuai');
+    const tabKonduksi = document.getElementById('tabKonduksi');
+    tabBtnMuai.addEventListener('click', () => {
+      tabBtnMuai.classList.add('is-active'); tabBtnKonduksi.classList.remove('is-active');
+      tabMuai.classList.add('is-active'); tabKonduksi.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnKonduksi.addEventListener('click', () => {
+      tabBtnKonduksi.classList.add('is-active'); tabBtnMuai.classList.remove('is-active');
+      tabKonduksi.classList.add('is-active'); tabMuai.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- PEMUAIAN ----------
+    const bahanMuaiSelect = document.getElementById('bahanMuaiSelect');
+    const l0Slider = document.getElementById('l0Slider'), l0Val = document.getElementById('l0Val');
+    const dtSlider = document.getElementById('dtSlider'), dtVal = document.getElementById('dtVal');
+    const dlVal = document.getElementById('dlVal');
+    const muaiFormula = document.getElementById('muaiFormula');
+    const muaiCanvas = document.getElementById('muaiCanvas');
+    const muaiCtx = muaiCanvas.getContext('2d');
+
+    let alpha = 12e-6, l0 = 2, dT = 50;
+
+    function updateMuai() {
+      const dl = l0 * alpha * dT;
+      dlVal.textContent = (dl * 1000).toFixed(3) + ' mm';
+      muaiFormula.innerHTML =
+        `ΔL = L0×α×ΔT = ${l0}×(${(alpha * 1e6).toFixed(0)}×10⁻⁶)×${dT} = <span class="math-num">${(dl * 1000).toFixed(3)} mm</span>`;
+      renderMuai(dl);
+    }
+    bahanMuaiSelect.addEventListener('change', () => { alpha = parseFloat(bahanMuaiSelect.value) * 1e-6; updateMuai(); });
+    l0Slider.addEventListener('input', () => { l0 = parseFloat(l0Slider.value); l0Val.textContent = l0 + ' m'; updateMuai(); });
+    dtSlider.addEventListener('input', () => { dT = parseFloat(dtSlider.value); dtVal.textContent = dT + '°C'; updateMuai(); });
+
+    function renderMuai(dl) {
+      const w = muaiCanvas.parentElement.clientWidth, h = muaiCanvas.parentElement.clientHeight;
+      muaiCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const baseLen = Math.min(w * 0.6, 300);
+      const extra = Math.min(60, dl * 3000);
+      const startX = (w - baseLen) / 2;
+
+      muaiCtx.save();
+      muaiCtx.fillStyle = '#94a3b8';
+      muaiCtx.fillRect(startX - 8, cy - 30, 8, 60);
+      muaiCtx.fillRect(startX + baseLen + extra, cy - 30, 8, 60);
+
+      muaiCtx.fillStyle = '#f87171';
+      muaiCtx.fillRect(startX, cy - 10, baseLen, 20);
+      muaiCtx.fillStyle = '#facc15';
+      muaiCtx.fillRect(startX + baseLen, cy - 10, extra, 20);
+
+      muaiCtx.fillStyle = '#f8fafc'; muaiCtx.font = '11px system-ui'; muaiCtx.textAlign = 'center';
+      muaiCtx.fillText('L0', startX + baseLen / 2, cy + 35);
+      if (extra > 2) muaiCtx.fillText('ΔL', startX + baseLen + extra / 2, cy - 20);
+      muaiCtx.restore();
+    }
+
+    // ---------- KONDUKSI ----------
+    const bahanKondSelect = document.getElementById('bahanKondSelect');
+    const aSlider = document.getElementById('aSlider'), aValEl = document.getElementById('aVal');
+    const lKondSlider = document.getElementById('lKondSlider'), lKondVal = document.getElementById('lKondVal');
+    const dtKondSlider = document.getElementById('dtKondSlider'), dtKondVal = document.getElementById('dtKondVal');
+    const hVal = document.getElementById('hVal');
+    const kondFormula = document.getElementById('kondFormula');
+    const kondCanvas = document.getElementById('kondCanvas');
+    const kondCtx = kondCanvas.getContext('2d');
+
+    let kKond = 205, aKond = 0.01, lKond = 0.5, dtKond = 80;
+
+    function updateKond() {
+      const H = (kKond * aKond * dtKond) / lKond;
+      hVal.textContent = H.toFixed(1) + ' Watt';
+      kondFormula.innerHTML =
+        `H = k×A×ΔT/L = ${kKond}×${aKond.toFixed(3)}×${dtKond}/${lKond.toFixed(1)} = <span class="math-num">${H.toFixed(1)} W</span>`;
+      renderKond();
+    }
+    bahanKondSelect.addEventListener('change', () => { kKond = parseFloat(bahanKondSelect.value); updateKond(); });
+    aSlider.addEventListener('input', () => { aKond = parseFloat(aSlider.value); aValEl.textContent = aKond.toFixed(3) + ' m²'; updateKond(); });
+    lKondSlider.addEventListener('input', () => { lKond = parseFloat(lKondSlider.value); lKondVal.textContent = lKond.toFixed(1) + ' m'; updateKond(); });
+    dtKondSlider.addEventListener('input', () => { dtKond = parseFloat(dtKondSlider.value); dtKondVal.textContent = dtKond + '°C'; updateKond(); });
+
+    let flowOffset = 0;
+    function renderKond() {
+      const w = kondCanvas.parentElement.clientWidth, h = kondCanvas.parentElement.clientHeight;
+      kondCtx.clearRect(0, 0, w, h);
+      const cy = h / 2;
+      const barX = w * 0.2, barW = w * 0.6, barH = 30;
+
+      kondCtx.save();
+      const grad = kondCtx.createLinearGradient(barX, 0, barX + barW, 0);
+      grad.addColorStop(0, '#ef4444'); grad.addColorStop(1, '#3b82f6');
+      kondCtx.fillStyle = grad;
+      kondCtx.fillRect(barX, cy - barH / 2, barW, barH);
+
+      const H = (kKond * aKond * dtKond) / lKond;
+      const nArrows = Math.max(2, Math.min(10, Math.round(H / 20)));
+      kondCtx.fillStyle = '#facc15';
+      for (let i = 0; i < nArrows; i++) {
+        const x = barX + ((i + (flowOffset % 1)) / nArrows) * barW;
+        if (x > barX + barW) continue;
+        kondCtx.beginPath();
+        kondCtx.moveTo(x, cy - 20); kondCtx.lineTo(x + 8, cy - 20); kondCtx.lineTo(x + 4, cy - 12);
+        kondCtx.closePath(); kondCtx.fill();
+      }
+
+      kondCtx.fillStyle = '#f8fafc'; kondCtx.font = 'bold 11px system-ui'; kondCtx.textAlign = 'center';
+      kondCtx.fillText('Panas', barX, cy - 30);
+      kondCtx.fillText('Dingin', barX + barW, cy - 30);
+      kondCtx.fillText('L = ' + lKond.toFixed(1) + ' m', barX + barW / 2, cy + 35);
+      kondCtx.restore();
+    }
+
+    function animLoop() {
+      if (tabKonduksi.classList.contains('is-active')) { flowOffset += 0.02; renderKond(); }
+      requestAnimationFrame(animLoop);
+    }
+
+    function resizeAll() {
+      [muaiCanvas, kondCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderMuai(l0 * alpha * dT);
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => {
+      resizeAll();
+      updateMuai();
+      updateKond();
+      requestAnimationFrame(animLoop);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Kalorimetri dan Asas Black</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.15rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 1fr 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+  .card-title.b { color: #f472b6; }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+  select { width: 100%; background: rgba(15,23,42,0.7); color: var(--text-main); border: 1.5px solid var(--card-border); border-radius: 8px; padding: 8px; font-size: 0.85rem; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 220px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🌡️</span><h1>Laboratorium Maya: Kalorimetri dan Asas Black</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">🔴 Zat 1 (Lebih Panas)</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Jenis Zat</span></div>
+        <select id="zat1Select">
+          <option value="4200" selected>Air (c=4200 J/kg°C)</option>
+          <option value="900">Aluminium (c=900 J/kg°C)</option>
+          <option value="450">Besi (c=450 J/kg°C)</option>
+          <option value="380">Tembaga (c=380 J/kg°C)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Massa (m1)</span><span class="control-value" id="m1Val">0,3 kg</span></div>
+        <input type="range" id="m1Slider" min="0.1" max="2" step="0.1" value="0.3">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Suhu Awal (T1)</span><span class="control-value" id="t1Val">90°C</span></div>
+        <input type="range" id="t1Slider" min="30" max="100" step="5" value="90">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title b">🔵 Zat 2 (Lebih Dingin)</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Jenis Zat</span></div>
+        <select id="zat2Select">
+          <option value="4200" selected>Air (c=4200 J/kg°C)</option>
+          <option value="900">Aluminium (c=900 J/kg°C)</option>
+          <option value="450">Besi (c=450 J/kg°C)</option>
+          <option value="380">Tembaga (c=380 J/kg°C)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Massa (m2)</span><span class="control-value" id="m2Val">0,2 kg</span></div>
+        <input type="range" id="m2Slider" min="0.1" max="2" step="0.1" value="0.2">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Suhu Awal (T2)</span><span class="control-value" id="t2Val">20°C</span></div>
+        <input type="range" id="t2Slider" min="0" max="30" step="5" value="20">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Hasil Pencampuran (Asas Black)</span></div>
+    <div class="canvas-wrapper"><canvas id="mixCanvas"></canvas></div>
+    <div class="results-panel">
+      <div class="result-grid">
+        <div class="result-highlight"><div class="k">Suhu Akhir Campuran (Tc)</div><div class="v" id="tcVal">0</div></div>
+        <div class="result-highlight"><div class="k">Kalor yang Berpindah (Q)</div><div class="v" id="qVal">0</div></div>
+      </div>
+      <div class="formula-box" id="mixFormula"></div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Asas Black: kalor yang DILEPAS zat panas = kalor yang DITERIMA zat dingin (Q_lepas = Q_terima), sampai keduanya mencapai suhu akhir (Tc) yang SAMA. m1c1(T1−Tc) = m2c2(Tc−T2). Kalor sensibel Q=mcΔT (mengubah suhu tanpa mengubah wujud); kalor laten Q=mL (mengubah wujud tanpa mengubah suhu, misal es mencair atau air mendidih).
+  </div>
+
+  <script>
+    const zat1Select = document.getElementById('zat1Select'), zat2Select = document.getElementById('zat2Select');
+    const m1Slider = document.getElementById('m1Slider'), m1Val = document.getElementById('m1Val');
+    const m2Slider = document.getElementById('m2Slider'), m2Val = document.getElementById('m2Val');
+    const t1Slider = document.getElementById('t1Slider'), t1Val = document.getElementById('t1Val');
+    const t2Slider = document.getElementById('t2Slider'), t2Val = document.getElementById('t2Val');
+    const tcVal = document.getElementById('tcVal'), qVal = document.getElementById('qVal');
+    const mixFormula = document.getElementById('mixFormula');
+    const mixCanvas = document.getElementById('mixCanvas');
+    const mixCtx = mixCanvas.getContext('2d');
+
+    let c1 = 4200, c2 = 4200, m1 = 0.3, m2 = 0.2, t1 = 90, t2 = 20;
+
+    function update() {
+      const tc = (m1 * c1 * t1 + m2 * c2 * t2) / (m1 * c1 + m2 * c2);
+      const q = m1 * c1 * (t1 - tc);
+
+      tcVal.textContent = tc.toFixed(1) + '°C';
+      qVal.textContent = q.toFixed(0) + ' J';
+
+      mixFormula.innerHTML =
+        `Tc = (m1c1T1 + m2c2T2)/(m1c1+m2c2) = <span class="math-num">${tc.toFixed(1)}°C</span><br>` +
+        `Q lepas (zat 1) = m1c1(T1−Tc) = <span class="math-num">${q.toFixed(0)} J</span><br>` +
+        `Q terima (zat 2) = m2c2(Tc−T2) = <span class="math-num">${(m2 * c2 * (tc - t2)).toFixed(0)} J</span> (sama dengan Q lepas ✓)`;
+
+      render(tc);
+    }
+    zat1Select.addEventListener('change', () => { c1 = parseFloat(zat1Select.value); update(); });
+    zat2Select.addEventListener('change', () => { c2 = parseFloat(zat2Select.value); update(); });
+    m1Slider.addEventListener('input', () => { m1 = parseFloat(m1Slider.value); m1Val.textContent = m1.toFixed(1) + ' kg'; update(); });
+    m2Slider.addEventListener('input', () => { m2 = parseFloat(m2Slider.value); m2Val.textContent = m2.toFixed(1) + ' kg'; update(); });
+    t1Slider.addEventListener('input', () => { t1 = parseFloat(t1Slider.value); t1Val.textContent = t1 + '°C'; update(); });
+    t2Slider.addEventListener('input', () => { t2 = parseFloat(t2Slider.value); t2Val.textContent = t2 + '°C'; update(); });
+
+    function render(tc) {
+      const w = mixCanvas.parentElement.clientWidth, h = mixCanvas.parentElement.clientHeight;
+      mixCtx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+
+      mixCtx.save();
+      mixCtx.strokeStyle = 'rgba(248,250,252,0.6)'; mixCtx.lineWidth = 2;
+      const boxW = 140, boxH = 90;
+      mixCtx.strokeRect(cx - boxW / 2, cy - boxH / 2, boxW, boxH);
+
+      const hue = Math.max(0, Math.min(1, (tc - t2) / Math.max(1, t1 - t2)));
+      const r = Math.round(239 * hue + 59 * (1 - hue));
+      const b = Math.round(68 * hue + 246 * (1 - hue));
+      mixCtx.fillStyle = `rgba(${r},120,${b},0.5)`;
+      mixCtx.fillRect(cx - boxW / 2 + 3, cy - boxH / 2 + 3, boxW - 6, boxH - 6);
+
+      mixCtx.fillStyle = '#f8fafc'; mixCtx.font = 'bold 16px system-ui'; mixCtx.textAlign = 'center';
+      mixCtx.fillText(tc.toFixed(1) + '°C', cx, cy + 6);
+      mixCtx.font = '11px system-ui';
+      mixCtx.fillText('Campuran', cx, cy - boxH / 2 - 10);
+      mixCtx.restore();
+    }
+
+    function resizeCanvas() {
+      const rect = mixCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      mixCanvas.width = rect.width * dpr; mixCanvas.height = rect.height * dpr;
+      mixCtx.setTransform(1, 0, 0, 1, 0, 0); mixCtx.scale(dpr, dpr);
+      update();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.onload = resizeCanvas;
+  </script>
+</body>
+</html>
