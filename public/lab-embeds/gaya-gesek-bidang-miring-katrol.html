@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Gaya Gesek, Bidang Miring, dan Sistem Katrol</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --pos: #ef4444; --neg: #3b82f6;
+    --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.15rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 11px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+
+  .tab-panel { display: none; flex-direction: column; gap: 12px; }
+  .tab-panel.is-active { display: flex; }
+
+  .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-btn { background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; padding: 9px 6px; border-radius: 10px; cursor: pointer; text-align: center; }
+  .mode-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .toggle-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">📐</span><h1>Laboratorium Maya: Gaya Gesek, Bidang Miring, dan Sistem Katrol</h1></div>
+    <span class="header-badge">SMA Kelas XI</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnMiring">📐 Bidang Miring</button>
+    <button class="tab-btn" id="tabBtnKatrol">🎣 Sistem Katrol</button>
+  </div>
+
+  <!-- ================= TAB BIDANG MIRING ================= -->
+  <div class="tab-panel is-active" id="tabMiring">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Sudut Kemiringan (θ)</span><span class="control-value" id="sudutVal">30°</span></div>
+          <input type="range" id="sudutSlider" min="0" max="60" step="5" value="30">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa Benda (m)</span><span class="control-value" id="massaVal">4 kg</span></div>
+          <input type="range" id="massaSlider" min="1" max="10" step="1" value="4">
+        </div>
+        <div class="toggle-row">
+          <input type="checkbox" id="chkGesekMiring">
+          <label for="chkGesekMiring">Aktifkan gaya gesek (μ = 0,2)</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="miringCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Percepatan (a)</div><div class="v" id="miringAVal">0</div></div>
+            <div class="result-highlight"><div class="k">Gaya Normal (N)</div><div class="v" id="miringNVal">0</div></div>
+          </div>
+          <div class="formula-box" id="miringFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Gaya berat (mg) diuraikan jadi 2 komponen: <span class="math-var">sejajar bidang (mg sinθ)</span> yang menariknya turun, dan <span class="math-var">tegak lurus bidang (mg cosθ)</span> yang ditahan gaya normal (N = mg cosθ). Kalau ada gesekan, gaya geseknya <span class="math-var">f = μN</span> melawan arah gerak (menahan benda turun). Percepatan benda: <span class="math-var">a = g sinθ − μg cosθ</span>.
+    </div>
+  </div>
+
+  <!-- ================= TAB SISTEM KATROL ================= -->
+  <div class="tab-panel" id="tabKatrol">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa di Meja (m1)</span><span class="control-value" id="m1Val">3 kg</span></div>
+          <input type="range" id="m1Slider" min="1" max="10" step="1" value="3">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa Menggantung (m2)</span><span class="control-value" id="m2Val">5 kg</span></div>
+          <input type="range" id="m2Slider" min="1" max="10" step="1" value="5">
+        </div>
+        <div class="toggle-row">
+          <input type="checkbox" id="chkGesekKatrol">
+          <label for="chkGesekKatrol">Aktifkan gaya gesek pada m1 (μ = 0,2)</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="katrolCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Percepatan (a)</div><div class="v" id="katrolAVal">0</div></div>
+            <div class="result-highlight"><div class="k">Tegangan Tali (T)</div><div class="v" id="katrolTVal">0</div></div>
+          </div>
+          <div class="formula-box" id="katrolFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      m2 yang menggantung ditarik gravitasi (m2·g), sementara m1 di atas meja cuma bisa bergerak mendatar (ditahan gesekan kalau ada). Karena terhubung tali sama, KEDUA benda punya percepatan (a) yang SAMA besar. Percepatan sistem: <span class="math-var">a = (m2g − f) / (m1 + m2)</span>, dengan f = gaya gesek pada m1 (nol kalau licin).
+    </div>
+  </div>
+
+  <script>
+    const G = 10; // m/s^2, pakai g=10 supaya angkanya bulat (konvensi soal SMA)
+
+    // ---------- TAB SWITCH ----------
+    const tabBtnMiring = document.getElementById('tabBtnMiring');
+    const tabBtnKatrol = document.getElementById('tabBtnKatrol');
+    const tabMiring = document.getElementById('tabMiring');
+    const tabKatrol = document.getElementById('tabKatrol');
+    tabBtnMiring.addEventListener('click', () => {
+      tabBtnMiring.classList.add('is-active'); tabBtnKatrol.classList.remove('is-active');
+      tabMiring.classList.add('is-active'); tabKatrol.classList.remove('is-active');
+      resizeAll();
+    });
+    tabBtnKatrol.addEventListener('click', () => {
+      tabBtnKatrol.classList.add('is-active'); tabBtnMiring.classList.remove('is-active');
+      tabKatrol.classList.add('is-active'); tabMiring.classList.remove('is-active');
+      resizeAll();
+    });
+
+    // ---------- BIDANG MIRING ----------
+    const sudutSlider = document.getElementById('sudutSlider'), sudutVal = document.getElementById('sudutVal');
+    const massaSlider = document.getElementById('massaSlider'), massaVal = document.getElementById('massaVal');
+    const chkGesekMiring = document.getElementById('chkGesekMiring');
+    const miringAVal = document.getElementById('miringAVal'), miringNVal = document.getElementById('miringNVal');
+    const miringFormula = document.getElementById('miringFormula');
+    const miringCanvas = document.getElementById('miringCanvas');
+    const miringCtx = miringCanvas.getContext('2d');
+
+    let sudut = 30, massaMiring = 4, gesekMiring = false;
+    const MU_MIRING = 0.2;
+
+    function updateMiring() {
+      const theta = sudut * Math.PI / 180;
+      const wSejajar = massaMiring * G * Math.sin(theta);
+      const N = massaMiring * G * Math.cos(theta);
+      const f = gesekMiring ? MU_MIRING * N : 0;
+      const sisaGaya = wSejajar - f; // positif = benda meluncur turun
+      const a = sisaGaya / massaMiring;
+
+      miringAVal.textContent = a.toFixed(2) + ' m/s²' + (sisaGaya < 0 ? ' (diam, gesekan menahan)' : '');
+      miringNVal.textContent = N.toFixed(1) + ' N';
+
+      miringFormula.innerHTML =
+        `mg sinθ = ${massaMiring}×${G}×sin${sudut}° = <span class="math-num">${wSejajar.toFixed(1)} N</span><br>` +
+        `N = mg cosθ = <span class="math-num">${N.toFixed(1)} N</span>` +
+        (gesekMiring ? ` &nbsp;|&nbsp; f = μN = <span class="math-num">${f.toFixed(1)} N</span>` : '') + `<br>` +
+        `a = (mg sinθ − f) / m = <span class="math-num">${a.toFixed(2)} m/s²</span>`;
+
+      renderMiring();
+    }
+
+    sudutSlider.addEventListener('input', () => { sudut = parseFloat(sudutSlider.value); sudutVal.textContent = sudut + '°'; updateMiring(); });
+    massaSlider.addEventListener('input', () => { massaMiring = parseFloat(massaSlider.value); massaVal.textContent = massaMiring + ' kg'; updateMiring(); });
+    chkGesekMiring.addEventListener('change', () => { gesekMiring = chkGesekMiring.checked; updateMiring(); });
+
+    function renderMiring() {
+      const w = miringCanvas.parentElement.clientWidth, h = miringCanvas.parentElement.clientHeight;
+      miringCtx.clearRect(0, 0, w, h);
+      const theta = sudut * Math.PI / 180;
+
+      const baseX = w * 0.12, baseY = h * 0.85;
+      const rampLen = Math.min(w * 0.75, 320);
+      const topX = baseX + rampLen * Math.cos(theta);
+      const topY = baseY - rampLen * Math.sin(theta);
+
+      miringCtx.save();
+      miringCtx.fillStyle = 'rgba(148,163,184,0.15)';
+      miringCtx.strokeStyle = 'rgba(248,250,252,0.7)'; miringCtx.lineWidth = 2.5;
+      miringCtx.beginPath();
+      miringCtx.moveTo(baseX, baseY);
+      miringCtx.lineTo(topX, topY);
+      miringCtx.lineTo(baseX + rampLen, baseY);
+      miringCtx.closePath();
+      miringCtx.fill(); miringCtx.stroke();
+
+      // Blok di tengah bidang miring
+      const t = 0.45;
+      const blockX = baseX + (topX - baseX) * t;
+      const blockY = baseY + (topY - baseY) * t;
+      const size = 26;
+      miringCtx.translate(blockX, blockY);
+      miringCtx.rotate(-theta);
+      miringCtx.fillStyle = '#38bdf8';
+      miringCtx.fillRect(-size / 2, -size, size, size);
+      miringCtx.restore();
+
+      // Label sudut
+      miringCtx.save();
+      miringCtx.fillStyle = '#facc15'; miringCtx.font = 'bold 13px system-ui'; miringCtx.textAlign = 'left';
+      miringCtx.fillText(sudut + '°', baseX + 14, baseY - 10);
+      miringCtx.restore();
+    }
+
+    // ---------- SISTEM KATROL ----------
+    const m1Slider = document.getElementById('m1Slider'), m1Val = document.getElementById('m1Val');
+    const m2Slider = document.getElementById('m2Slider'), m2Val = document.getElementById('m2Val');
+    const chkGesekKatrol = document.getElementById('chkGesekKatrol');
+    const katrolAVal = document.getElementById('katrolAVal'), katrolTVal = document.getElementById('katrolTVal');
+    const katrolFormula = document.getElementById('katrolFormula');
+    const katrolCanvas = document.getElementById('katrolCanvas');
+    const katrolCtx = katrolCanvas.getContext('2d');
+
+    let m1 = 3, m2 = 5, gesekKatrol = false;
+    const MU_KATROL = 0.2;
+
+    function updateKatrol() {
+      const f = gesekKatrol ? MU_KATROL * m1 * G : 0;
+      const a = (m2 * G - f) / (m1 + m2);
+      // Tegangan tali dihitung dari sisi m1 (gaya total m1 = T - f = m1*a -> T = m1*a + f)
+      const T = m1 * a + f;
+
+      katrolAVal.textContent = a.toFixed(2) + ' m/s²';
+      katrolTVal.textContent = T.toFixed(1) + ' N';
+
+      katrolFormula.innerHTML =
+        `a = (m2·g − f) / (m1+m2) = (${m2}×${G}${gesekKatrol ? ' − ' + f.toFixed(1) : ''}) / (${m1}+${m2}) = <span class="math-num">${a.toFixed(2)} m/s²</span><br>` +
+        `T = m1·a + f = (${m1}×${a.toFixed(2)})${gesekKatrol ? ' + ' + f.toFixed(1) : ''} = <span class="math-num">${T.toFixed(1)} N</span>`;
+
+      renderKatrol();
+    }
+
+    m1Slider.addEventListener('input', () => { m1 = parseFloat(m1Slider.value); m1Val.textContent = m1 + ' kg'; updateKatrol(); });
+    m2Slider.addEventListener('input', () => { m2 = parseFloat(m2Slider.value); m2Val.textContent = m2 + ' kg'; updateKatrol(); });
+    chkGesekKatrol.addEventListener('change', () => { gesekKatrol = chkGesekKatrol.checked; updateKatrol(); });
+
+    function renderKatrol() {
+      const w = katrolCanvas.parentElement.clientWidth, h = katrolCanvas.parentElement.clientHeight;
+      katrolCtx.clearRect(0, 0, w, h);
+
+      const tableY = h * 0.45;
+      const tableLeft = w * 0.08;
+      const tableRight = w * 0.62;
+
+      katrolCtx.save();
+      katrolCtx.strokeStyle = 'rgba(248,250,252,0.7)'; katrolCtx.lineWidth = 3;
+      katrolCtx.beginPath();
+      katrolCtx.moveTo(tableLeft, tableY);
+      katrolCtx.lineTo(tableRight, tableY);
+      katrolCtx.stroke();
+      // kaki meja
+      katrolCtx.beginPath();
+      katrolCtx.moveTo(tableLeft + 10, tableY); katrolCtx.lineTo(tableLeft + 10, tableY + 60);
+      katrolCtx.moveTo(tableRight - 10, tableY); katrolCtx.lineTo(tableRight - 10, tableY + 30);
+      katrolCtx.stroke();
+      katrolCtx.restore();
+
+      // Katrol (lingkaran) di ujung meja
+      const pulleyX = tableRight, pulleyY = tableY - 14;
+      katrolCtx.save();
+      katrolCtx.strokeStyle = '#facc15'; katrolCtx.lineWidth = 3;
+      katrolCtx.beginPath(); katrolCtx.arc(pulleyX, pulleyY, 14, 0, Math.PI * 2); katrolCtx.stroke();
+      katrolCtx.restore();
+
+      // Blok m1 di atas meja
+      const size1 = 20 + m1 * 2;
+      const m1X = (tableLeft + tableRight) / 2;
+      katrolCtx.save();
+      katrolCtx.fillStyle = '#38bdf8';
+      katrolCtx.fillRect(m1X - size1 / 2, tableY - size1, size1, size1);
+      katrolCtx.fillStyle = '#fff'; katrolCtx.font = 'bold 11px system-ui'; katrolCtx.textAlign = 'center';
+      katrolCtx.fillText('m1', m1X, tableY - size1 / 2 + 4);
+      katrolCtx.restore();
+
+      // Tali dari m1 ke katrol, lalu turun ke m2
+      const size2 = 20 + m2 * 2;
+      const ropeDownLen = Math.min(h - pulleyY - size2 - 10, 90);
+      katrolCtx.save();
+      katrolCtx.strokeStyle = 'rgba(248,250,252,0.6)'; katrolCtx.lineWidth = 2;
+      katrolCtx.beginPath();
+      katrolCtx.moveTo(m1X + size1 / 2, tableY - size1 / 2);
+      katrolCtx.lineTo(pulleyX, pulleyY);
+      katrolCtx.lineTo(pulleyX, pulleyY + ropeDownLen);
+      katrolCtx.stroke();
+      katrolCtx.restore();
+
+      // Blok m2 menggantung
+      katrolCtx.save();
+      katrolCtx.fillStyle = '#ef4444';
+      katrolCtx.fillRect(pulleyX - size2 / 2, pulleyY + ropeDownLen, size2, size2);
+      katrolCtx.fillStyle = '#fff'; katrolCtx.font = 'bold 11px system-ui'; katrolCtx.textAlign = 'center';
+      katrolCtx.fillText('m2', pulleyX, pulleyY + ropeDownLen + size2 / 2 + 4);
+      katrolCtx.restore();
+    }
+
+    function resizeAll() {
+      [miringCanvas, katrolCanvas].forEach((c) => {
+        const rect = c.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        c.width = rect.width * dpr; c.height = rect.height * dpr;
+        c.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); c.getContext('2d').scale(dpr, dpr);
+      });
+      renderMiring();
+      renderKatrol();
+    }
+    window.addEventListener('resize', resizeAll);
+
+    window.onload = () => { resizeAll(); updateMiring(); updateKatrol(); };
+  </script>
+</body>
+</html>
