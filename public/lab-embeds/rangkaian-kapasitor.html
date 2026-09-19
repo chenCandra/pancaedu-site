@@ -23,11 +23,23 @@
   .mode-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
 
   .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
-  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 300px 1fr; } }
 
   .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
   .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
   .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .hint-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  .palette { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cap-chip {
+    touch-action: none; cursor: grab;
+    background: rgba(56,189,248,0.12); border: 1.5px solid rgba(56,189,248,0.5);
+    color: var(--text-main); font-family: 'Courier New', monospace; font-weight: 700;
+    font-size: 0.85rem; padding: 8px 12px; border-radius: 10px;
+  }
+  .cap-chip:active { cursor: grabbing; }
+  .cap-chip-ghost { opacity: 0.85; transform: scale(1.08); box-shadow: 0 6px 18px rgba(0,0,0,0.4); }
 
   .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
   .control-label-row { display: flex; justify-content: space-between; align-items: center; }
@@ -35,9 +47,24 @@
   .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
   input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
 
+  .clear-btn {
+    background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.4); color: #fca5a5;
+    font-weight: 700; font-size: 0.8rem; padding: 9px 6px; border-radius: 10px; cursor: pointer;
+  }
+
   .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
   @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
   canvas { display: block; width: 100%; height: 100%; }
+
+  .drop-zone {
+    position: absolute; width: 46px; height: 46px; z-index: 2;
+    border: 2px dashed rgba(148,163,184,0.55); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: var(--text-muted); text-align: center; line-height: 1.1;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .drop-zone.is-filled { border-style: solid; border-color: rgba(56,189,248,0.35); }
+  .drop-zone.drop-zone-hover { border-color: var(--text-highlight); background: rgba(250,204,21,0.15); }
 
   .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   .result-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -84,15 +111,19 @@
 
   <div class="main-container">
     <div class="card">
-      <div class="card-header"><span class="card-title">Panel Parameter</span></div>
-      <div class="control-group">
-        <div class="control-label-row"><span class="control-label">Kapasitor 1 (C1)</span><span class="control-value" id="c1Val">4 μF</span></div>
-        <input type="range" id="c1Slider" min="1" max="20" step="1" value="4">
+      <div class="card-header"><span class="card-title">Palet Kapasitor</span></div>
+      <p class="hint-text">Seret (drag) kapasitor di bawah ini ke slot kosong pada rangkaian di sebelah kanan untuk menyusun sendiri rangkaiannya.</p>
+      <div class="palette" id="palette">
+        <button type="button" class="cap-chip" data-value="2">2 μF</button>
+        <button type="button" class="cap-chip" data-value="3">3 μF</button>
+        <button type="button" class="cap-chip" data-value="4">4 μF</button>
+        <button type="button" class="cap-chip" data-value="5">5 μF</button>
+        <button type="button" class="cap-chip" data-value="6">6 μF</button>
+        <button type="button" class="cap-chip" data-value="8">8 μF</button>
+        <button type="button" class="cap-chip" data-value="10">10 μF</button>
+        <button type="button" class="cap-chip" data-value="12">12 μF</button>
       </div>
-      <div class="control-group">
-        <div class="control-label-row"><span class="control-label">Kapasitor 2 (C2)</span><span class="control-value" id="c2Val">6 μF</span></div>
-        <input type="range" id="c2Slider" min="1" max="20" step="1" value="6">
-      </div>
+      <button type="button" class="clear-btn" id="clearBtn">🗑️ Kosongkan Rangkaian</button>
       <div class="control-group">
         <div class="control-label-row"><span class="control-label">Tegangan Sumber (V)</span><span class="control-value" id="vVal">9 V</span></div>
         <input type="range" id="vSlider" min="1" max="24" step="1" value="9">
@@ -101,27 +132,31 @@
 
     <div class="card">
       <div class="card-header"><span class="card-title">Visualisasi</span></div>
-      <div class="canvas-wrapper"><canvas id="circCanvas"></canvas></div>
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="circCanvas"></canvas>
+        <div class="drop-zone" id="slotA" data-slot="A">Seret kapasitor di sini</div>
+        <div class="drop-zone" id="slotB" data-slot="B">Seret kapasitor di sini</div>
+      </div>
       <div class="results-panel">
         <div class="result-grid">
-          <div class="result-highlight"><div class="k">Kapasitansi Total (C_total)</div><div class="v" id="ctotVal">0</div></div>
+          <div class="result-highlight"><div class="k">Kapasitansi Total (C_total)</div><div class="v" id="ctotVal">-</div></div>
         </div>
         <div class="per-cap-grid">
           <div class="per-cap"><div class="k">C1 — Q1 / V1</div><div class="v" id="cap1Val">-</div></div>
           <div class="per-cap"><div class="k">C2 — Q2 / V2</div><div class="v" id="cap2Val">-</div></div>
         </div>
-        <div class="formula-box" id="circFormula"></div>
+        <div class="formula-box" id="circFormula">Seret dua kapasitor dari palet ke slot rangkaian dulu.</div>
       </div>
     </div>
   </div>
 
   <div class="theory-card">
     <div class="theory-title">📌 Ringkasan Konsep</div>
-    <span class="math-var">Paralel</span>: C_total = C1+C2 (membesar), tegangan SAMA di tiap kapasitor, muatan berbeda-beda. <span class="math-var">Seri</span>: 1/C_total = 1/C1+1/C2 (mengecil), muatan SAMA di tiap kapasitor, tegangan berbeda-beda. Kebalikan dari pola resistor! Geser slider C1/C2/V dan ganti mode, lalu perhatikan kapasitansi total dan pembagian muatan/tegangannya berubah.
+    <span class="math-var">Paralel</span>: C_total = C1+C2 (membesar), tegangan SAMA di tiap kapasitor, muatan berbeda-beda. <span class="math-var">Seri</span>: 1/C_total = 1/C1+1/C2 (mengecil), muatan SAMA di tiap kapasitor, tegangan berbeda-beda. Kebalikan dari pola resistor! Susun kapasitor dengan nilai berbeda-beda ke tiap slot, ganti mode, lalu perhatikan kapasitansi total dan pembagian muatan/tegangannya berubah.
   </div>
 
   <div class="card quiz-card">
-    <span class="quiz-q">🤔 Kalau C1 dan C2 dirangkai SERI, lalu C1 diperkecil jadi mendekati nol, apa yang terjadi pada C_total?</span>
+    <span class="quiz-q">🤔 Kalau C1 dan C2 dirangkai SERI, lalu C1 diganti dengan kapasitor bernilai sangat kecil (mendekati nol), apa yang terjadi pada C_total?</span>
     <div class="quiz-opts" id="circQuizOpts"></div>
     <div class="quiz-fb" id="circQuizFb"></div>
   </div>
@@ -129,47 +164,102 @@
   <script>
     const canvas = document.getElementById('circCanvas');
     const ctx = canvas.getContext('2d');
-    const c1Slider = document.getElementById('c1Slider'), c1Val = document.getElementById('c1Val');
-    const c2Slider = document.getElementById('c2Slider'), c2Val = document.getElementById('c2Val');
+    const canvasWrapper = document.getElementById('canvasWrapper');
     const vSlider = document.getElementById('vSlider'), vVal = document.getElementById('vVal');
     const modeBtns = Array.from(document.querySelectorAll('.mode-btn'));
     const ctotVal = document.getElementById('ctotVal');
     const cap1Val = document.getElementById('cap1Val'), cap2Val = document.getElementById('cap2Val');
     const circFormula = document.getElementById('circFormula');
+    const slotAEl = document.getElementById('slotA'), slotBEl = document.getElementById('slotB');
+    const clearBtn = document.getElementById('clearBtn');
 
-    let C1 = 4, C2 = 6, V = 9, mode = 'paralel';
+    let C1 = null, C2 = null, V = 9, mode = 'paralel';
 
-    c1Slider.addEventListener('input', () => { C1 = parseFloat(c1Slider.value); c1Val.textContent = C1 + ' μF'; update(); });
-    c2Slider.addEventListener('input', () => { C2 = parseFloat(c2Slider.value); c2Val.textContent = C2 + ' μF'; update(); });
     vSlider.addEventListener('input', () => { V = parseFloat(vSlider.value); vVal.textContent = V + ' V'; update(); });
     modeBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         modeBtns.forEach((b) => b.classList.remove('is-active'));
         btn.classList.add('is-active');
         mode = btn.dataset.mode;
+        positionOverlay();
         update();
       });
     });
+    clearBtn.addEventListener('click', () => { C1 = null; C2 = null; update(); });
+
+    function placeCapacitor(slot, value) {
+      if (slot === 'A') C1 = value; else C2 = value;
+      update();
+    }
+
+    // ---------- Drag & drop (Pointer Events -- bekerja di mouse & sentuhan) ----------
+    function makeDraggable(chip) {
+      chip.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const value = parseFloat(chip.dataset.value);
+        const ghost = chip.cloneNode(true);
+        ghost.classList.add('cap-chip-ghost');
+        ghost.style.position = 'fixed';
+        ghost.style.pointerEvents = 'none';
+        ghost.style.zIndex = '9999';
+        ghost.style.left = '0px'; ghost.style.top = '0px';
+        document.body.appendChild(ghost);
+
+        function moveGhost(x, y) {
+          ghost.style.transform = `translate(${x - ghost.offsetWidth / 2}px, ${y - ghost.offsetHeight / 2}px)`;
+        }
+        moveGhost(e.clientX, e.clientY);
+
+        function currentZone(x, y) {
+          const el = document.elementFromPoint(x, y);
+          return el && el.closest ? el.closest('.drop-zone') : null;
+        }
+
+        function onMove(ev) {
+          moveGhost(ev.clientX, ev.clientY);
+          document.querySelectorAll('.drop-zone').forEach((z) => z.classList.remove('drop-zone-hover'));
+          const zone = currentZone(ev.clientX, ev.clientY);
+          if (zone) zone.classList.add('drop-zone-hover');
+        }
+        function onUp(ev) {
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          ghost.remove();
+          document.querySelectorAll('.drop-zone').forEach((z) => z.classList.remove('drop-zone-hover'));
+          const zone = currentZone(ev.clientX, ev.clientY);
+          if (zone) placeCapacitor(zone.dataset.slot, value);
+        }
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp, { once: true });
+      });
+    }
+    Array.from(document.querySelectorAll('.cap-chip')).forEach(makeDraggable);
 
     function update() {
-      let Ctotal, Q1, Q2, V1, V2, Qtotal;
-      if (mode === 'paralel') {
-        Ctotal = C1 + C2;
-        V1 = V; V2 = V;
-        Q1 = C1 * V1; Q2 = C2 * V2;
-        Qtotal = Q1 + Q2;
-      } else {
-        Ctotal = (C1 * C2) / (C1 + C2);
-        Qtotal = Ctotal * V;
-        Q1 = Qtotal; Q2 = Qtotal;
-        V1 = Q1 / C1; V2 = Q2 / C2;
+      let Ctotal = null, Q1 = null, Q2 = null, V1 = null, V2 = null, Qtotal = null;
+      const filled = C1 !== null && C2 !== null;
+
+      if (filled) {
+        if (mode === 'paralel') {
+          Ctotal = C1 + C2;
+          V1 = V; V2 = V;
+          Q1 = C1 * V1; Q2 = C2 * V2;
+          Qtotal = Q1 + Q2;
+        } else {
+          Ctotal = (C1 * C2) / (C1 + C2);
+          Qtotal = Ctotal * V;
+          Q1 = Qtotal; Q2 = Qtotal;
+          V1 = Q1 / C1; V2 = Q2 / C2;
+        }
       }
 
-      ctotVal.textContent = Ctotal.toFixed(2) + ' μF';
-      cap1Val.textContent = Q1.toFixed(1) + ' μC / ' + V1.toFixed(1) + ' V';
-      cap2Val.textContent = Q2.toFixed(1) + ' μC / ' + V2.toFixed(1) + ' V';
+      ctotVal.textContent = filled ? Ctotal.toFixed(2) + ' μF' : '-';
+      cap1Val.textContent = C1 === null ? '-' : (filled ? Q1.toFixed(1) + ' μC / ' + V1.toFixed(1) + ' V' : C1 + ' μF (menunggu C2)');
+      cap2Val.textContent = C2 === null ? '-' : (filled ? Q2.toFixed(1) + ' μC / ' + V2.toFixed(1) + ' V' : C2 + ' μF (menunggu C1)');
 
-      if (mode === 'paralel') {
+      if (!filled) {
+        circFormula.innerHTML = 'Seret dua kapasitor dari palet ke slot rangkaian dulu.';
+      } else if (mode === 'paralel') {
         circFormula.innerHTML =
           `C_total = C1 + C2 = ${C1} + ${C2} = <span class="math-num">${Ctotal.toFixed(2)} μF</span><br>` +
           `V sama di tiap kapasitor = <span class="math-num">${V} V</span><br>` +
@@ -181,6 +271,8 @@
           `V1 = Q/C1 = <span class="math-num">${V1.toFixed(1)} V</span> &nbsp;|&nbsp; V2 = Q/C2 = <span class="math-num">${V2.toFixed(1)} V</span> (jumlah ≈ ${V} V)`;
       }
 
+      slotAEl.classList.toggle('is-filled', C1 !== null);
+      slotBEl.classList.toggle('is-filled', C2 !== null);
       render();
     }
 
@@ -189,9 +281,31 @@
       const dpr = window.devicePixelRatio || 1;
       canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
       ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      positionOverlay();
       render();
     }
     window.addEventListener('resize', resizeCanvas);
+
+    // Posisi slot A/B HARUS sama persis dengan posisi simbol kapasitor yang
+    // digambar render() -- dipakai bersama supaya drop-zone selalu pas di
+    // atas gambar kapasitornya, di mode apapun dan ukuran layar berapapun.
+    function getSlotPositions(w, h) {
+      const cy = h / 2;
+      if (mode === 'paralel') {
+        return { aX: w * 0.5, aY: cy, bX: w * 0.75, bY: cy };
+      }
+      return { aX: w * 0.45, aY: cy, bX: w * 0.68, bY: cy };
+    }
+
+    function positionOverlay() {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      const { aX, aY, bX, bY } = getSlotPositions(w, h);
+      const size = 46;
+      slotAEl.style.left = (aX - size / 2) + 'px';
+      slotAEl.style.top = (aY - size / 2) + 'px';
+      slotBEl.style.left = (bX - size / 2) + 'px';
+      slotBEl.style.top = (bY - size / 2) + 'px';
+    }
 
     function drawCapSymbol(x, y, horizontal) {
       ctx.save();
@@ -206,6 +320,14 @@
       ctx.restore();
     }
 
+    function drawEmptySlot(x, y) {
+      ctx.save();
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = 'rgba(148,163,184,0.5)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+
     function render() {
       const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
       ctx.clearRect(0, 0, w, h);
@@ -213,6 +335,8 @@
       ctx.strokeStyle = 'rgba(248,250,252,0.7)'; ctx.lineWidth = 2.5; ctx.font = 'bold 12px system-ui'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
 
       const cx = w / 2, cy = h / 2;
+      const { aX, aY, bX, bY } = getSlotPositions(w, h);
+
       // Simbol baterai di kiri
       const battX = w * 0.14;
       ctx.beginPath(); ctx.moveTo(battX - 5, cy - 18); ctx.lineTo(battX - 5, cy + 18); ctx.stroke();
@@ -223,25 +347,22 @@
 
       if (mode === 'paralel') {
         const topY = cy - 45, botY = cy + 45;
-        const c1X = w * 0.5, c2X = w * 0.75;
-        // rel atas & bawah
         ctx.beginPath(); ctx.moveTo(battX, cy - 18); ctx.lineTo(battX, topY); ctx.lineTo(w * 0.85, topY); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(battX, cy + 18); ctx.lineTo(battX, botY); ctx.lineTo(w * 0.85, botY); ctx.stroke();
-        [c1X, c2X].forEach((x) => { ctx.beginPath(); ctx.moveTo(x, topY); ctx.lineTo(x, botY); ctx.stroke(); });
-        drawCapSymbol(c1X, cy, false);
-        drawCapSymbol(c2X, cy, false);
-        ctx.fillText('C1', c1X, cy - 40);
-        ctx.fillText('C2', c2X, cy - 40);
+        [aX, bX].forEach((x) => { ctx.beginPath(); ctx.moveTo(x, topY); ctx.lineTo(x, botY); ctx.stroke(); });
+        C1 !== null ? drawCapSymbol(aX, aY, false) : drawEmptySlot(aX, aY);
+        C2 !== null ? drawCapSymbol(bX, bY, false) : drawEmptySlot(bX, bY);
+        ctx.fillText(C1 !== null ? `C1 = ${C1} μF` : 'C1', aX, aY - 40);
+        ctx.fillText(C2 !== null ? `C2 = ${C2} μF` : 'C2', bX, bY - 40);
       } else {
         const midY = cy;
-        const c1X = w * 0.45, c2X = w * 0.68;
-        ctx.beginPath(); ctx.moveTo(battX, cy - 18); ctx.lineTo(battX, midY); ctx.lineTo(c1X - 16, midY); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(c1X + 16, midY); ctx.lineTo(c2X - 16, midY); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(c2X + 16, midY); ctx.lineTo(w * 0.85, midY); ctx.lineTo(w * 0.85, cy + 18); ctx.lineTo(battX, cy + 18); ctx.stroke();
-        drawCapSymbol(c1X, midY, true);
-        drawCapSymbol(c2X, midY, true);
-        ctx.fillText('C1', c1X, midY - 26);
-        ctx.fillText('C2', c2X, midY - 26);
+        ctx.beginPath(); ctx.moveTo(battX, cy - 18); ctx.lineTo(battX, midY); ctx.lineTo(aX - 16, midY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(aX + 16, midY); ctx.lineTo(bX - 16, midY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bX + 16, midY); ctx.lineTo(w * 0.85, midY); ctx.lineTo(w * 0.85, cy + 18); ctx.lineTo(battX, cy + 18); ctx.stroke();
+        C1 !== null ? drawCapSymbol(aX, midY, true) : drawEmptySlot(aX, midY);
+        C2 !== null ? drawCapSymbol(bX, midY, true) : drawEmptySlot(bX, midY);
+        ctx.fillText(C1 !== null ? `C1 = ${C1} μF` : 'C1', aX, midY - 26);
+        ctx.fillText(C2 !== null ? `C2 = ${C2} μF` : 'C2', bX, midY - 26);
       }
       ctx.restore();
     }
@@ -264,7 +385,7 @@
       'C_total ikut mendekati nol, mengikuti C1 yang terkecil', 'C_total malah membesar mendekati C2', 'C_total tidak terpengaruh sama sekali', 'C_total menjadi negatif'
     ], 0, (correct) => {
       const fb = document.getElementById('circQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
-      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + '1/C_total = 1/C1 + 1/C2 -- kalau C1 mendekati nol, 1/C1 jadi sangat besar, sehingga C_total juga ikut mendekati nol. Pada rangkaian SERI, kapasitor terkecil selalu "mendominasi" dan menyeret C_total ke bawah. Coba geser slider C1 ke angka terkecil sambil mode Seri aktif, lihat sendiri C_total-nya.';
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + '1/C_total = 1/C1 + 1/C2 -- kalau C1 mendekati nol, 1/C1 jadi sangat besar, sehingga C_total juga ikut mendekati nol. Pada rangkaian SERI, kapasitor terkecil selalu "mendominasi" dan menyeret C_total ke bawah. Coba susun sendiri: seret kapasitor 2 μF ke salah satu slot sambil mode Seri aktif, lihat C_total-nya mendekati berapa.';
     });
 
     window.onload = () => { resizeCanvas(); update(); };
