@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Benar-benar hilang, melanggar Hukum Kekekalan Energi", "Berubah jadi energi panas (kalor) akibat gesekan dengan lantai", "Berubah jadi energi potensial", "Tetap sebagai energi kinetik, cuma tidak terlihat"]
     jawaban: 1
     penjelasan: "Energi kinetik bola berubah jadi energi panas akibat gesekan dengan lantai -- energinya tidak hilang, cuma berubah bentuk jadi kalor yang menyebar ke lingkungan sekitar."
+  - soal: "Panel surya melibatkan perubahan energi dari bentuk apa ke bentuk apa, menurut materi?"
+    pilihan: ["Energi Kimia ke Energi Listrik", "Energi Cahaya (matahari) ke Energi Listrik", "Energi Listrik ke Energi Cahaya", "Energi Potensial ke Energi Listrik"]
+    jawaban: 1
+    penjelasan: "Diagram pada materi menunjukkan panel surya mengubah energi cahaya matahari langsung menjadi energi listrik."
+  - soal: "Senter melibatkan rantai perubahan energi seperti apa, menurut materi?"
+    pilihan: ["Energi Kimia (baterai) → Energi Listrik → Energi Cahaya (+ sedikit panas)", "Energi Cahaya → Energi Kimia → Energi Listrik", "Energi Listrik → Energi Kimia → Energi Cahaya", "Energi Kimia langsung menjadi Energi Cahaya tanpa tahap listrik"]
+    jawaban: 0
+    penjelasan: "Diagram pada materi menunjukkan senter: Energi Kimia (baterai) → Energi Listrik → Energi Cahaya, plus sedikit energi panas."
+  - soal: "Gitar yang dipetik melibatkan perubahan energi dari bentuk apa ke bentuk apa, menurut materi?"
+    pilihan: ["Energi Kinetik ke Energi Bunyi", "Energi Potensial Elastis (senar ditarik) ke Energi Bunyi (+ sedikit panas dari gesekan)", "Energi Listrik ke Energi Bunyi", "Energi Bunyi ke Energi Potensial Elastis"]
+    jawaban: 1
+    penjelasan: "Diagram pada materi menunjukkan gitar dipetik: Energi Potensial Elastis (senar ditarik) → Energi Bunyi, plus sedikit energi panas dari gesekan."
+  - soal: "Kenapa pernyataan 'setiap ada perubahan energi, sebagian energinya pasti hilang' dianggap salah kata oleh materi ini?"
+    pilihan: ["Karena tidak ada yang benar-benar hilang -- yang terjadi biasanya sebagian energi berubah jadi bentuk yang tidak diinginkan (biasanya panas), bukan lenyap begitu saja", "Karena energi memang selalu bertambah setiap kali berubah bentuk", "Karena perubahan energi selalu 100% efisien", "Karena energi yang hilang berubah jadi materi"]
+    jawaban: 0
+    penjelasan: "Sesuai Hukum Kekekalan Energi, energi tidak lenyap -- yang terjadi biasanya sebagian energi berubah jadi bentuk yang tidak kita inginkan (biasanya panas)."
+  - soal: "Menurut materi, kenapa hampir semua rantai perubahan energi berakhir dengan sedikit 'kebocoran' energi jadi panas?"
+    pilihan: ["Itu bukan kebetulan -- itulah yang mendasari konsep efisiensi yang dibahas selanjutnya", "Karena semua alat di dunia ini rusak", "Karena panas adalah bentuk energi yang paling diinginkan", "Karena energi panas selalu lebih besar dari energi awalnya"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan pola 'kebocoran' energi jadi panas ini bukan kebetulan -- pola inilah yang jadi dasar konsep efisiensi yang dibahas di bagian selanjutnya."
+  - soal: "Rumus efisiensi energi menurut materi adalah..."
+    pilihan: ["η = (Energi Total / Energi Berguna) × 100%", "η = (Energi Berguna / Energi Total) × 100%", "η = Energi Berguna − Energi Total", "η = Energi Berguna × Energi Total"]
+    jawaban: 1
+    penjelasan: "Efisiensi (η) = (Energi Berguna / Energi Total) × 100% -- seberapa besar bagian energi input yang berhasil dimanfaatkan."
+  - soal: "Kenapa lampu LED lebih hemat energi dibanding lampu pijar untuk menghasilkan tingkat terang yang sama?"
+    pilihan: ["Karena LED memakai energi lebih banyak tapi menghasilkan cahaya lebih terang", "Karena efisiensi LED jauh lebih tinggi (~80-90%) dibanding lampu pijar (~5-10%), sehingga lebih sedikit energi terbuang jadi panas", "Karena LED tidak memerlukan energi listrik sama sekali", "Karena lampu pijar mengubah semua energinya jadi cahaya"]
+    jawaban: 1
+    penjelasan: "Lampu pijar cuma punya efisiensi sekitar 5-10% (sebagian besar energinya jadi panas), sedangkan LED bisa mencapai 80-90% -- jauh lebih sedikit energi yang terbuang."
+  - soal: "Sebuah kompor listrik menerima energi 400 J dan menghasilkan 320 J energi panas yang benar-benar dipakai untuk memasak (sisanya terbuang ke udara sekitar). Berapa efisiensi kompor tersebut?"
+    pilihan: ["40%", "80%", "64%", "20%"]
+    jawaban: 1
+    penjelasan: "Efisiensi = (320/400) × 100% = 80%."
+  - soal: "Sebuah motor listrik menerima energi 500 J dengan efisiensi 60%. Berapa energi berguna (energi kinetik) yang dihasilkannya?"
+    pilihan: ["200 J", "300 J", "60 J", "500 J"]
+    jawaban: 1
+    penjelasan: "Energi berguna = efisiensi × energi total = 60% × 500 J = 300 J."
+  - soal: "Kenapa pernyataan 'energi yang hilang jadi panas benar-benar lenyap dari alam semesta' dianggap salah oleh materi ini?"
+    pilihan: ["Karena energi itu tetap ada, cuma berubah jadi kalor yang menyebar ke lingkungan sekitar -- sesuai Hukum Kekekalan Energi", "Karena panas sebenarnya bukan bentuk energi", "Karena energi memang bisa lenyap kalau jumlahnya kecil", "Karena Hukum Kekekalan Energi cuma berlaku untuk energi listrik"]
+    jawaban: 0
+    penjelasan: "Sesuai Hukum Kekekalan Energi, energi yang berubah jadi panas tidak lenyap -- jumlah totalnya tetap ada, cuma menyebar sebagai kalor ke lingkungan sekitar."
+  - soal: "Kenapa pernyataan 'efisiensi 100% cuma soal teknologi yang belum cukup maju' dianggap keliru?"
+    pilihan: ["Karena selalu ada energi yang berubah jadi panas akibat gesekan/hambatan -- ini karakteristik dasar proses perubahan energi, bukan keterbatasan teknologi", "Karena teknologi masa depan pasti bisa mencapai efisiensi 100%", "Karena efisiensi 100% sebenarnya sudah tercapai pada mesin modern", "Karena gesekan dan hambatan bisa dihilangkan total dengan teknologi apa pun"]
+    jawaban: 0
+    penjelasan: "Selalu ada energi yang berubah jadi panas akibat gesekan/hambatan -- ini bukan soal teknologi belum cukup maju, melainkan karakteristik dasar dari proses perubahan energi itu sendiri."
+  - soal: "Kenapa pernyataan 'perubahan energi cuma terjadi satu tahap, dari sumber langsung ke hasil akhir' dianggap terlalu sederhana?"
+    pilihan: ["Karena kebanyakan perubahan energi terjadi lewat beberapa tahap, seperti kendaraan bermotor: kimia → panas → kinetik, bukan langsung kimia → kinetik", "Karena perubahan energi sebenarnya tidak pernah punya lebih dari satu tahap", "Karena energi kimia tidak bisa berubah jadi energi lain", "Karena semua alat mengubah energi dalam satu tahap tunggal tanpa kecuali"]
+    jawaban: 0
+    penjelasan: "Kebanyakan rantai perubahan energi melewati beberapa tahap -- contohnya kendaraan bermotor: energi kimia → panas → kinetik, bukan langsung dari kimia ke kinetik."
+  - soal: "Menurut Hukum Kekekalan Energi yang diingatkan kembali di materi ini, energi tidak diciptakan atau dimusnahkan, melainkan..."
+    pilihan: ["Cuma berubah bentuk, dengan jumlah totalnya tetap sama", "Berkurang jumlahnya setiap kali berubah bentuk", "Bertambah jumlahnya setiap kali berubah bentuk", "Hilang sepenuhnya setelah dipakai"]
+    jawaban: 0
+    penjelasan: "Hukum Kekekalan Energi menyatakan energi tidak diciptakan atau dimusnahkan, cuma berubah bentuk -- jumlah totalnya tetap sama."
+  - soal: "Berdasarkan bagian Intinya, efisiensi sebenarnya mengukur apa?"
+    pilihan: ["Seberapa banyak energi yang hilang dari alam semesta", "Seberapa besar bagian energi yang berhasil diarahkan ke bentuk yang diinginkan, dibanding yang 'bocor' jadi panas di sepanjang jalan", "Berapa lama sebuah mesin bisa bertahan sebelum rusak", "Berapa banyak uang yang dihabiskan untuk sebuah mesin"]
+    jawaban: 1
+    penjelasan: "Efisiensi bukan mengukur 'seberapa banyak energi hilang' (karena tidak ada yang benar-benar hilang), tapi seberapa besar bagian energi yang berhasil diarahkan ke bentuk yang diinginkan."
+  - soal: "Kipas angin listrik yang badannya terasa hangat setelah menyala lama menunjukkan bahwa sebagian energi listrik yang masuk berubah jadi apa, selain energi kinetik baling-baling?"
+    pilihan: ["Energi kimia", "Energi panas, akibat hambatan listrik/gesekan pada motor kipas", "Energi potensial", "Energi nuklir"]
+    jawaban: 1
+    penjelasan: "Rasa hangat pada badan kipas menunjukkan sebagian energi listrik 'bocor' jadi energi panas akibat hambatan listrik dan gesekan pada motor, bukan seluruhnya jadi energi kinetik baling-baling."
+  - soal: "Pada simulasi Energi Mekanik yang dirujuk materi ini, saat benda meluncur turun, energi kinetik (Eₖ) dan energi potensial (Eₚ) saling bertukar, tapi apa yang tetap sama nilainya?"
+    pilihan: ["Jumlah total energi mekanik (Em)", "Massa benda saja", "Kecepatan benda saja", "Ketinggian benda saja"]
+    jawaban: 0
+    penjelasan: "Simulasi menunjukkan Eₖ dan Eₚ saling bertukar besarnya, tapi jumlah total energi mekanik (Em = Eₖ + Eₚ) tetap sama, sesuai Hukum Kekekalan Energi."
+  - soal: "Simulasi lanjutan 'Energy Conservation Lab' yang dirujuk materi ini menawarkan fitur tambahan berupa apa, dibanding simulasi Energi Mekanik biasa?"
+    pilihan: ["Prediksi, grafik real-time, mode gesekan, dan perbandingan dua jalur luncuran", "Cuma tampilan warna yang lebih bagus", "Kemampuan mengubah Hukum Kekekalan Energi", "Simulasi tanpa gravitasi sama sekali"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan Energy Conservation Lab dilengkapi fitur prediksi, grafik real-time, mode gesekan, sampai perbandingan dua jalur luncuran."
+  - soal: "Menurut materi, berapa kira-kira efisiensi lampu pijar lama?"
+    pilihan: ["Sekitar 80-90%", "Sekitar 5-10%", "Sekitar 50%", "Sekitar 100%"]
+    jawaban: 1
+    penjelasan: "Materi menyebutkan lampu pijar lama cuma punya efisiensi sekitar 5-10% -- sebagian besar energi listriknya jadi panas, bukan cahaya."
+  - soal: "Menurut materi, berapa kira-kira efisiensi lampu LED?"
+    pilihan: ["Sekitar 5-10%", "Sekitar 80-90%", "Sekitar 25%", "Sekitar 100%, benar-benar sempurna"]
+    jawaban: 1
+    penjelasan: "Materi menyebutkan lampu LED punya efisiensi jauh lebih tinggi, sekitar 80-90%, dibanding lampu pijar."
+  - soal: "Materi selanjutnya yang dirujuk di akhir artikel Perubahan Energi ini membahas tentang apa?"
+    pilihan: ["Usaha dan Daya", "Sumber Energi", "Vektor", "Pengukuran"]
+    jawaban: 0
+    penjelasan: "Artikel ini ditutup dengan mengarahkan pembaca ke materi Usaha dan Daya, membahas dua istilah yang selalu muncul tiap kali energi 'dipakai'."
 draft: false
 ---
 

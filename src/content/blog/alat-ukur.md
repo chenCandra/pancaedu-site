@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Kesalahan paralaks", "Kesalahan satuan", "Kesalahan massa", "Kesalahan gravitasi"]
     jawaban: 0
     penjelasan: "Membaca skala dari posisi mata yang tidak tepat dapat menyebabkan kesalahan paralaks. Posisi mata sebaiknya dibuat sesuai dengan arah pembacaan skala."
+  - soal: "Seorang siswa mengukur panjang pensil dengan penggaris yang bagian awalnya sudah rusak. Ujung awal pensil berada di angka 2,1 cm dan ujung akhirnya di angka 9,3 cm. Berapa panjang pensil sebenarnya?"
+    pilihan: ["7,2 cm", "9,3 cm", "11,4 cm", "2,1 cm"]
+    jawaban: 0
+    penjelasan: "Karena bagian nol penggaris tidak bisa dipakai, panjang dihitung dari selisih posisi akhir dan posisi awal: 9,3 cm − 2,1 cm = 7,2 cm."
+  - soal: "Dalam Sistem Internasional (SI), satuan panjang yang digunakan adalah..."
+    pilihan: ["Sentimeter", "Meter", "Milimeter", "Kilometer"]
+    jawaban: 1
+    penjelasan: "Penggaris umumnya berskala cm/mm, tapi satuan dasar panjang dalam SI adalah meter (m)."
+  - soal: "Bagian jangka sorong yang digunakan untuk mengukur kedalaman sebuah lubang adalah..."
+    pilihan: ["Rahang luar", "Rahang dalam", "Batang kedalaman", "Skala nonius"]
+    jawaban: 2
+    penjelasan: "Batang kedalaman pada jangka sorong dirancang khusus untuk mengukur kedalaman lubang, berbeda dari rahang luar (diameter luar) dan rahang dalam (diameter dalam)."
+  - soal: "Hasil pengukuran pada jangka sorong diperoleh dengan cara..."
+    pilihan: ["Skala utama dikali skala nonius", "Skala utama ditambah pembacaan skala nonius", "Skala nonius dikurangi skala utama", "Skala utama dibagi skala nonius"]
+    jawaban: 1
+    penjelasan: "Prinsip pembacaan jangka sorong adalah skala utama ditambah pembacaan skala nonius."
+  - soal: "Dibandingkan penggaris, kelebihan utama jangka sorong dan mikrometer sekrup adalah..."
+    pilihan: ["Bisa mengukur suhu benda", "Memiliki ketelitian yang lebih tinggi untuk benda kecil seperti diameter atau ketebalan", "Lebih murah harganya", "Tidak memerlukan skala apa pun"]
+    jawaban: 1
+    penjelasan: "Jangka sorong dan mikrometer sekrup dirancang untuk memberikan ketelitian lebih tinggi dibanding penggaris, terutama untuk benda-benda kecil."
+  - soal: "Hasil pengukuran pada mikrometer sekrup dihitung dari..."
+    pilihan: ["Skala utama dikurangi skala putar", "Skala utama ditambah skala putar", "Skala putar saja, tanpa skala utama", "Skala utama saja, tanpa skala putar"]
+    jawaban: 1
+    penjelasan: "Sama seperti jangka sorong, mikrometer sekrup dibaca dengan menggabungkan lebih dari satu skala: hasil pengukuran = skala utama + skala putar."
+  - soal: "Urutan alat ukur panjang dari yang paling umum digunakan sehari-hari hingga yang paling teliti untuk benda sangat kecil adalah..."
+    pilihan: ["Mikrometer sekrup - jangka sorong - penggaris", "Penggaris - jangka sorong - mikrometer sekrup", "Jangka sorong - penggaris - mikrometer sekrup", "Penggaris - mikrometer sekrup - jangka sorong"]
+    jawaban: 1
+    penjelasan: "Penggaris cocok untuk benda berukuran biasa, jangka sorong untuk benda yang butuh ketelitian lebih tinggi, dan mikrometer sekrup untuk benda yang jauh lebih kecil dan butuh ketelitian tertinggi."
+  - soal: "Alat yang paling sesuai digunakan untuk mengukur ketebalan selembar kertas adalah..."
+    pilihan: ["Penggaris", "Jangka sorong", "Mikrometer sekrup", "Neraca"]
+    jawaban: 2
+    penjelasan: "Ketebalan lembaran yang sangat tipis membutuhkan alat dengan ketelitian tertinggi, yaitu mikrometer sekrup."
+  - soal: "Berikut ini yang termasuk jenis-jenis neraca yang disebutkan dalam materi ini adalah..."
+    pilihan: ["Neraca digital, neraca tiga lengan, dan neraca analitik", "Neraca pegas, barometer, dan dinamometer", "Termometer digital dan termometer inframerah", "Amperemeter dan voltmeter"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan neraca digital, neraca tiga lengan, dan neraca analitik sebagai contoh alat ukur massa."
+  - soal: "Sebuah benda memiliki massa 2 kg dan berada di tempat dengan percepatan gravitasi 10 m/s². Berat benda tersebut adalah..."
+    pilihan: ["2 N", "20 N", "0,2 N", "20 kg"]
+    jawaban: 1
+    penjelasan: "Berat dihitung dengan w = m × g = 2 kg × 10 m/s² = 20 N. Perhatikan satuannya newton (N), bukan kg, karena berat adalah gaya."
+  - soal: "Dalam Sistem Internasional (SI), satuan massa yang diukur menggunakan neraca adalah..."
+    pilihan: ["Gram", "Kilogram", "Newton", "Ons"]
+    jawaban: 1
+    penjelasan: "Dalam SI, satuan massa adalah kilogram (kg)."
+  - soal: "Stopwatch dalam pengukuran Fisika paling tepat digunakan untuk mengukur..."
+    pilihan: ["Massa benda", "Durasi suatu peristiwa, seperti waktu berlari atau waktu ayunan bandul", "Suhu ruangan", "Kuat arus listrik"]
+    jawaban: 1
+    penjelasan: "Stopwatch dipakai untuk mengukur durasi suatu peristiwa, misalnya waktu berlari, waktu reaksi, atau waktu ayunan bandul."
+  - soal: "Sebuah stopwatch digital hanya bisa menampilkan waktu sampai satu angka di belakang koma, misalnya 12,3 s. Sikap yang tepat saat mencatat hasil pengukuran adalah..."
+    pilihan: ["Menuliskan lebih banyak angka di belakang koma agar terlihat lebih teliti, misalnya 12,347 s", "Menuliskan hasil sesuai kemampuan alat, yaitu 12,3 s", "Membulatkan menjadi angka bulat 12 s", "Tidak perlu menuliskan satuan sekon"]
+    jawaban: 1
+    penjelasan: "Kita tidak boleh menuliskan hasil pengukuran lebih teliti daripada kemampuan alat yang digunakan."
+  - soal: "Satuan suhu termodinamik dalam Sistem Internasional (SI) adalah..."
+    pilihan: ["Celsius", "Fahrenheit", "Kelvin", "Reamur"]
+    jawaban: 2
+    penjelasan: "Dalam SI, satuan suhu termodinamik adalah kelvin (K), meski Celsius juga umum dipakai sehari-hari."
+  - soal: "Berikut yang termasuk jenis-jenis termometer yang disebutkan dalam materi ini adalah..."
+    pilihan: ["Termometer zat cair, termometer digital, dan termometer inframerah", "Termometer air raksa, jangka sorong, dan mikrometer", "Barometer, hygrometer, dan anemometer", "Neraca pegas, dinamometer, dan spring gauge"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan termometer zat cair, termometer digital, dan termometer inframerah sebagai contoh jenis termometer."
+  - soal: "Satuan SI untuk kuat arus listrik, yang diukur menggunakan amperemeter, adalah..."
+    pilihan: ["Volt (V)", "Ampere (A)", "Ohm (Ω)", "Watt (W)"]
+    jawaban: 1
+    penjelasan: "Satuan SI kuat arus listrik adalah ampere (A), diukur menggunakan amperemeter."
+  - soal: "Alat ukur listrik yang dipasang secara PARALEL terhadap komponen yang ingin diukur beda potensialnya adalah..."
+    pilihan: ["Amperemeter", "Voltmeter", "Termometer", "Neraca"]
+    jawaban: 1
+    penjelasan: "Voltmeter dipasang paralel terhadap komponen yang diukur tegangannya, berbeda dari amperemeter yang dipasang seri."
+  - soal: "Satuan SI untuk tegangan (beda potensial), yang diukur dengan voltmeter, adalah..."
+    pilihan: ["Ampere (A)", "Volt (V)", "Ohm (Ω)", "Joule (J)"]
+    jawaban: 1
+    penjelasan: "Satuan SI tegangan adalah volt (V), diukur menggunakan voltmeter."
+  - soal: "Sebuah penggaris memiliki pembagian terkecil sebesar 1 mm. Maka skala terkecil penggaris tersebut adalah..."
+    pilihan: ["1 cm", "1 mm", "1 m", "0,1 mm"]
+    jawaban: 1
+    penjelasan: "Skala terkecil adalah nilai pengukuran terkecil yang dapat dibaca alat -- pada contoh ini, 1 mm."
+  - soal: "Kemampuan suatu alat ukur memberikan hasil pengukuran yang konsisten atau rapat satu sama lain (meski belum tentu mendekati nilai sebenarnya) disebut..."
+    pilihan: ["Ketepatan", "Ketelitian", "Kalibrasi", "Kesalahan paralaks"]
+    jawaban: 1
+    penjelasan: "Ketelitian berkaitan dengan konsistensi hasil pengukuran, sedangkan ketepatan berkaitan dengan seberapa dekat hasil ke nilai sebenarnya."
 draft: false
 ---
 

@@ -35,6 +35,90 @@ kuis:
       - "Buang data itu, jangan dipakai"
     jawaban: 2
     penjelasan: "Jujur sama data adalah bagian dari fisika sebagai sikap — ilmuwan yang baik berani bilang 'ternyata dugaan saya salah'."
+  - soal: "Kata 'fisika' berasal dari bahasa Yunani 'physis' yang artinya..."
+    pilihan: ["Alam", "Ilmu", "Angka", "Gerak"]
+    jawaban: 0
+    penjelasan: "Physis dalam bahasa Yunani berarti alam -- sesuai namanya, fisika adalah ilmu yang coba menjelaskan bagaimana alam ini bekerja."
+  - soal: "Cabang fisika yang membahas gerak benda dan gaya yang menyebabkan gerak itu disebut..."
+    pilihan: ["Mekanika", "Termodinamika", "Optika", "Elektromagnetik"]
+    jawaban: 0
+    penjelasan: "Mekanika membahas gerak benda dan gaya yang menyebabkan gerak itu -- biasanya cabang fisika yang paling sering ketemu duluan di SMA."
+  - soal: "Cabang fisika yang membahas hubungan panas, energi, dan kerja disebut..."
+    pilihan: ["Termodinamika", "Mekanika", "Optika", "Fisika Modern"]
+    jawaban: 0
+    penjelasan: "Termodinamika adalah cabang fisika yang membahas hubungan antara panas, energi, dan kerja."
+  - soal: "Cabang fisika yang membahas relativitas dan mekanika kuantum disebut..."
+    pilihan: ["Fisika Modern", "Mekanika", "Termodinamika", "Optika"]
+    jawaban: 0
+    penjelasan: "Fisika Modern membahas bagian yang lebih 'nyeleneh', seperti relativitas dan mekanika kuantum."
+  - soal: "'Fisika sebagai proses' menurut materi ini merujuk pada..."
+    pilihan: ["Cara kerja untuk menemukan sesuatu: mengamati, bertanya, mencoba, mengukur", "Hasil akhir berupa hukum dan teori", "Nilai yang menempel pada orangnya seperti kejujuran", "Kumpulan rumus yang siap dihafal"]
+    jawaban: 0
+    penjelasan: "Fisika sebagai proses adalah cara kerja untuk menemukan sesuatu: mengamati, bertanya, mencoba, dan mengukur -- beda dari sikap (nilai) atau produk (hasil jadi)."
+  - soal: "Hukum Newton disebut sebagai contoh 'fisika sebagai produk' karena..."
+    pilihan: ["Hukum Newton adalah hasil akhir dari proses panjang yang sudah diuji berkali-kali", "Hukum Newton adalah sikap ilmuwan yang jujur", "Hukum Newton adalah cara mengamati alam", "Hukum Newton belum pernah diuji sama sekali"]
+    jawaban: 0
+    penjelasan: "Hukum Newton adalah produk -- hasil akhir dari proses panjang yang sudah diuji berkali-kali, bukan sekadar dugaan awal."
+  - soal: "Pernyataan 'ilmuwan tiba-tiba menemukan hukum fisika dari mimpi begitu saja' kurang tepat karena..."
+    pilihan: ["Ada proses yang dilewati: mengamati, penasaran, lalu mencoba membuktikan sendiri lewat percobaan", "Semua hukum fisika memang ditemukan lewat mimpi", "Hukum fisika tidak butuh pembuktian", "Ilmuwan tidak pernah mengamati alam sama sekali"]
+    jawaban: 0
+    penjelasan: "Fisika sebagai proses melibatkan tahapan nyata: mengamati sesuatu, penasaran kenapa bisa begitu, lalu mencoba membuktikan sendiri lewat percobaan -- bukan tiba-tiba muncul dari mimpi."
+  - soal: "Sikap ilmiah yang baik menurut materi ini termasuk..."
+    pilihan: ["Mau mendengar kritik dan siap mengganti pendapat kalau buktinya memang begitu", "Membela dugaan awal mati-matian apa pun buktinya", "Mengubah data biar sesuai dugaan", "Menolak semua kritik dari orang lain"]
+    jawaban: 0
+    penjelasan: "Ilmuwan yang baik mau mendengar kritik dan siap mengganti pendapat kalau buktinya memang menunjukkan hal lain -- bukan membela dugaan awal mati-matian."
+  - soal: "Pada contoh jemuran baju di materi ini, mengamati 'kok jemuranku kering duluan dibanding punya tetangga' termasuk langkah metode ilmiah..."
+    pilihan: ["Identifikasi Masalah (Observasi)", "Hipotesis", "Analisis Data", "Kesimpulan"]
+    jawaban: 0
+    penjelasan: "Mengamati sesuatu yang memicu pertanyaan, seperti jemuran yang kering duluan, adalah langkah pertama: Identifikasi Masalah lewat observasi."
+  - soal: "Pada contoh jemuran baju, dugaan sementara 'makin panas & makin banyak angin, makin cepat baju kering' termasuk langkah..."
+    pilihan: ["Hipotesis", "Rumusan Masalah", "Analisis Data", "Identifikasi Masalah"]
+    jawaban: 0
+    penjelasan: "Dugaan sementara berdasarkan pengetahuan yang sudah ada, sebelum dibuktikan lewat percobaan, disebut hipotesis."
+  - soal: "Pada contoh jemuran baju, menjemur dua baju identik di tempat berbeda dan mencatat waktu keringnya termasuk langkah..."
+    pilihan: ["Merancang dan Melakukan Penelitian", "Rumusan Masalah", "Kesimpulan", "Hipotesis"]
+    jawaban: 0
+    penjelasan: "Melakukan percobaan nyata, seperti menjemur dua baju di kondisi berbeda dan mencatat hasilnya, adalah langkah merancang dan melakukan penelitian."
+  - soal: "Pada contoh jemuran baju, membandingkan catatan waktu kering dari dua baju untuk melihat mana yang lebih cepat termasuk langkah..."
+    pilihan: ["Analisis Data", "Hipotesis", "Rumusan Masalah", "Identifikasi Masalah"]
+    jawaban: 0
+    penjelasan: "Membandingkan hasil catatan untuk melihat mana yang lebih cepat dan seberapa jauh bedanya adalah langkah analisis data."
+  - soal: "Mengubah observasi 'jemuranku kering duluan' menjadi pertanyaan jelas seperti 'apa hubungan panas & angin terhadap kecepatan baju kering?' termasuk langkah..."
+    pilihan: ["Rumusan Masalah", "Hipotesis", "Kesimpulan", "Analisis Data"]
+    jawaban: 0
+    penjelasan: "Observasi yang diubah menjadi pertanyaan yang jelas dan bisa diteliti disebut rumusan masalah."
+  - soal: "Pernyataan 'sekali eksperimen langsung jadi hukum fisika' menurut materi ini..."
+    pilihan: ["Belum tentu benar -- biasanya harus diuji ulang berkali-kali, termasuk oleh orang lain, sebelum dipercaya jadi pengetahuan yang mantap", "Benar, satu eksperimen sudah cukup untuk jadi hukum", "Hanya berlaku untuk fisika modern", "Berlaku kalau eksperimennya dilakukan di laboratorium besar"]
+    jawaban: 0
+    penjelasan: "Satu percobaan saja belum cukup untuk jadi 'hukum' -- biasanya harus diuji ulang berkali-kali, termasuk oleh orang lain, sebelum dipercaya jadi pengetahuan yang mantap."
+  - soal: "Menurut materi ini, prinsip fisika diterapkan di bidang kesehatan lewat teknologi seperti..."
+    pilihan: ["MRI, CT scan, dan terapi radiasi kanker", "Sistem irigasi pertanian", "Aerodinamika kendaraan", "Panel surya"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan MRI, CT scan, dan terapi radiasi kanker sebagai contoh penerapan fisika di bidang kesehatan."
+  - soal: "Materi ini menyebut GPS di HP sebagai contoh penerapan fisika di bidang..."
+    pilihan: ["Transportasi", "Kesehatan", "Pertanian", "Termodinamika"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebut aerodinamika, sistem suspensi, dan GPS sebagai contoh penerapan fisika di bidang transportasi."
+  - soal: "Menurut materi ini, prinsip fisika diterapkan di bidang pertanian lewat..."
+    pilihan: ["Sistem irigasi dan cara penyimpanan hasil panen", "Terapi radiasi kanker", "GPS di kendaraan", "Layar HP"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan sistem irigasi dan cara penyimpanan hasil panen sebagai contoh penerapan fisika di bidang pertanian."
+  - soal: "Materi ini memberi contoh bahwa kita sebenarnya sudah sering memakai metode ilmiah tanpa sadar, misalnya saat..."
+    pilihan: ["Mengira-ngira kenapa HP nge-lag lalu mencoba membenarkannya sendiri", "Menghafal rumus fisika di buku paket", "Membaca berita tentang penemuan ilmiah", "Menonton video eksperimen di internet"]
+    jawaban: 0
+    penjelasan: "Materi ini memberi contoh mengira-ngira kenapa HP nge-lag lalu mencoba membenarkannya sendiri sebagai bentuk metode ilmiah yang sering dipakai tanpa sadar."
+  - soal: "Sebelum masuk ke besaran dan pengukuran, materi ini menyarankan dua bekal penting yang perlu dikuasai dulu, salah satunya adalah..."
+    pilihan: ["Keselamatan Kerja di Laboratorium", "Perubahan Iklim", "Jejak Karbon dan Aksi Individu", "Gas Rumah Kaca"]
+    jawaban: 0
+    penjelasan: "Materi ini menyarankan Keselamatan Kerja di Laboratorium dan Merancang dan Melakukan Penyelidikan Ilmiah sebagai dua bekal penting sebelum masuk ke besaran dan pengukuran."
+  - soal: "Menurut materi ini, metode ilmiah terdiri dari berapa langkah?"
+    pilihan: ["6", "3", "4", "8"]
+    jawaban: 0
+    penjelasan: "Metode ilmiah pada materi ini terdiri dari 6 langkah: Identifikasi Masalah, Rumusan Masalah, Hipotesis, Penelitian, Analisis Data, dan Kesimpulan."
+  - soal: "Pernyataan 'metode ilmiah itu cuma tinggal nebak terus ditulis di laporan' menurut materi ini..."
+    pilihan: ["Kurang tepat -- ada 6 tahapan yang harus dilewati agar hasilnya bisa dipercaya", "Benar, metode ilmiah memang cuma menebak", "Hanya berlaku untuk pelajaran fisika, bukan ilmu lain", "Berlaku kalau tebakannya masuk akal"]
+    jawaban: 0
+    penjelasan: "Metode ilmiah bukan sekadar menebak -- ada 6 tahapan berurutan yang harus dilewati (identifikasi masalah sampai kesimpulan) agar hasilnya bisa dipercaya."
 draft: false
 ---
 

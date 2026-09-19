@@ -32,6 +32,86 @@ kuis:
     pilihan: ["30°", "45°", "60°", "90°"]
     jawaban: 1
     penjelasan: "Jangkauan maksimum tercapai saat sin(2θ) = 1, yaitu ketika 2θ = 90°, sehingga θ = 45°."
+  - soal: "Kenapa lintasan gerak parabola berbentuk lengkung, padahal salah satu komponen geraknya (horizontal) adalah GLB yang lurus?"
+    pilihan: ["Karena gravitasi membelokkan arah gerak horizontal", "Karena gerak vertikalnya adalah GLBB yang melengkung, dan gabungannya dengan gerak horizontal lurus membentuk lengkungan", "Karena udara membuat lintasannya melengkung", "Sebenarnya lintasannya tidak melengkung, cuma tampak melengkung"]
+    jawaban: 1
+    penjelasan: "Gabungan gerak horizontal (GLB, lurus) dan gerak vertikal (GLBB, dipengaruhi gravitasi) itulah yang menghasilkan lintasan gabungan berbentuk parabola."
+  - soal: "Pada saat benda baru ditembakkan (t = 0) dengan sudut elevasi tertentu, nilai vy saat itu adalah..."
+    pilihan: ["Selalu nol", "Sama dengan v0y = v0 sin θ", "Sama dengan v0x = v0 cos θ", "Selalu sama dengan kecepatan gravitasi"]
+    jawaban: 1
+    penjelasan: "Pada t = 0, vy(t) = v0y - gt = v0y - 0 = v0y = v0 sin θ, yang nilainya tidak nol kecuali benda ditembakkan mendatar (θ = 0°)."
+  - soal: "Rumus untuk komponen horizontal dari kecepatan awal (v0x) adalah..."
+    pilihan: ["v0x = v0 sin θ", "v0x = v0 cos θ", "v0x = v0 tan θ", "v0x = v0 / cos θ"]
+    jawaban: 1
+    penjelasan: "Komponen horizontal kecepatan awal diuraikan dengan v0x = v0 cos θ, sesuai aturan penguraian vektor."
+  - soal: "Rumus untuk komponen vertikal dari kecepatan awal (v0y) adalah..."
+    pilihan: ["v0y = v0 cos θ", "v0y = v0 sin θ", "v0y = v0 tan θ", "v0y = v0 × g"]
+    jawaban: 1
+    penjelasan: "Komponen vertikal kecepatan awal diuraikan dengan v0y = v0 sin θ, sesuai aturan penguraian vektor."
+  - soal: "Sebuah bola ditendang dengan v0x = 5 m/s dan v0y = 10 m/s (g = 10 m/s²). Waktu yang dibutuhkan untuk mencapai titik tertinggi adalah..."
+    pilihan: ["0,5 s", "1 s", "1,5 s", "2 s"]
+    jawaban: 1
+    penjelasan: "t naik = v0y/g = 10/10 = 1 s."
+  - soal: "Masih pada bola yang sama (v0x = 5 m/s, v0y = 10 m/s, g = 10 m/s²), tinggi maksimum yang dicapai adalah..."
+    pilihan: ["2,5 m", "5 m", "10 m", "20 m"]
+    jawaban: 1
+    penjelasan: "h maks = v0y²/(2g) = 10²/(2×10) = 100/20 = 5 m."
+  - soal: "Sebuah peluru ditembakkan dengan v0x = 20 m/s dan v0y = 10 m/s (g = 10 m/s²). Jangkauannya adalah..."
+    pilihan: ["20 m", "30 m", "40 m", "50 m"]
+    jawaban: 2
+    penjelasan: "t naik = 10/10 = 1 s, t total = 2×1 = 2 s. R = v0x × t total = 20×2 = 40 m."
+  - soal: "Sebuah benda ditembakkan dengan v0x = 8 m/s dan v0y = 20 m/s (g = 10 m/s²). Waktu total benda itu berada di udara adalah..."
+    pilihan: ["2 s", "3 s", "4 s", "5 s"]
+    jawaban: 2
+    penjelasan: "t naik = v0y/g = 20/10 = 2 s. t total = 2 × t naik = 2×2 = 4 s."
+  - soal: "Sebuah peluru ditembakkan dengan v0x = 25 m/s dan v0y = 30 m/s (g = 10 m/s²). Tinggi maksimum yang dicapai peluru itu adalah..."
+    pilihan: ["30 m", "35 m", "40 m", "45 m"]
+    jawaban: 3
+    penjelasan: "h maks = v0y²/(2g) = 30²/(2×10) = 900/20 = 45 m."
+  - soal: "Masih pada peluru yang sama (v0x = 25 m/s, v0y = 30 m/s, g = 10 m/s²), jangkauannya adalah..."
+    pilihan: ["100 m", "125 m", "150 m", "175 m"]
+    jawaban: 2
+    penjelasan: "t total = 2 × (v0y/g) = 2×3 = 6 s. R = v0x × t total = 25×6 = 150 m."
+  - soal: "Kalau sudut elevasi diperbesar dari 30° menjadi 45° (dengan v0 tetap sama), yang terjadi pada jangkauan (R) adalah..."
+    pilihan: ["R bertambah, karena sin(2θ) makin mendekati nilai maksimumnya", "R berkurang, karena sudutnya makin besar", "R tetap sama saja", "R menjadi nol"]
+    jawaban: 0
+    penjelasan: "sin(2×30°) = sin60° ≈ 0,87 sedangkan sin(2×45°) = sin90° = 1 -- karena sin(2θ) bertambah mendekati sudut 45°, jangkauannya juga bertambah."
+  - soal: "Kalau sudut elevasi diperbesar dari 45° menjadi 80° (dengan v0 tetap sama), yang terjadi pada jangkauan (R) adalah..."
+    pilihan: ["R bertambah, karena sudutnya makin besar", "R berkurang, karena sin(2θ) menjauh dari nilai maksimumnya", "R tetap sama saja", "Tidak dapat ditentukan"]
+    jawaban: 1
+    penjelasan: "sin(2×80°) = sin160° ≈ 0,34, jauh lebih kecil dari sin(2×45°) = sin90° = 1 -- sehingga jangkauan pada sudut 80° justru lebih pendek dibanding 45°."
+  - soal: "Karena lintasan gerak parabola simetris, hubungan antara waktu naik (sampai titik tertinggi) dan waktu turun (dari titik tertinggi sampai mendarat) adalah..."
+    pilihan: ["Waktu naik selalu lebih lama dari waktu turun", "Waktu turun selalu lebih lama dari waktu naik", "Waktu naik dan waktu turun besarnya sama", "Tidak ada hubungan tetap antara keduanya"]
+    jawaban: 2
+    penjelasan: "Karena lintasannya simetris terhadap titik tertinggi, waktu yang dibutuhkan untuk naik sama dengan waktu yang dibutuhkan untuk turun -- itulah kenapa t total = 2 × t naik."
+  - soal: "'Semakin jauh benda sudah jatuh secara vertikal, semakin lambat pula gerak horizontalnya.' Pernyataan ini..."
+    pilihan: ["Benar, karena energi benda terbagi antara gerak vertikal dan horizontal", "Salah -- gerak horizontal dan vertikal saling independen, vx tetap konstan tidak peduli sejauh mana benda sudah jatuh", "Benar, tapi hanya untuk sudut elevasi di atas 45°", "Salah, karena sebenarnya vx yang memengaruhi laju jatuh vertikal"]
+    jawaban: 1
+    penjelasan: "Gerak horizontal dan vertikal pada gerak parabola saling bebas -- gravitasi cuma bekerja pada sumbu vertikal, sehingga vx tidak pernah berubah sepanjang lintasan."
+  - soal: "Kenapa komponen kecepatan vertikal (vy) berubah sepanjang gerak parabola, sedangkan komponen horizontal (vx) tidak?"
+    pilihan: ["Karena gravitasi hanya bekerja pada sumbu vertikal, tidak ada gaya pada sumbu horizontal", "Karena udara memberi gaya hambat hanya pada sumbu vertikal", "Karena vy memang selalu lebih besar dari vx", "Karena vx berubah menjadi vy di titik tertinggi"]
+    jawaban: 0
+    penjelasan: "Gravitasi (g) hanya bekerja ke arah vertikal (ke bawah), sehingga cuma vy yang berubah terhadap waktu -- vx tidak punya gaya yang mempengaruhinya sama sekali."
+  - soal: "Sebuah benda ditembakkan dengan v0 = 20 m/s pada sudut elevasi 30° (sin 30° = 0,5). Komponen kecepatan vertikal awalnya (v0y) adalah..."
+    pilihan: ["5 m/s", "10 m/s", "15 m/s", "17,3 m/s"]
+    jawaban: 1
+    penjelasan: "v0y = v0 sin θ = 20 × 0,5 = 10 m/s."
+  - soal: "Sebuah peluru ditembakkan dengan v0 = 40 m/s pada sudut elevasi 30° (sin 30° = 0,5, g = 10 m/s²). Tinggi maksimum yang dicapainya adalah..."
+    pilihan: ["10 m", "15 m", "20 m", "25 m"]
+    jawaban: 2
+    penjelasan: "v0y = v0 sin θ = 40 × 0,5 = 20 m/s. h maks = v0y²/(2g) = 20²/20 = 20 m."
+  - soal: "Kalau sebuah benda ditembakkan dengan sudut elevasi 45°, hubungan antara v0x dan v0y-nya adalah..."
+    pilihan: ["v0x selalu dua kali v0y", "v0x = v0y, karena sin 45° = cos 45°", "v0y selalu dua kali v0x", "Tidak ada hubungan khusus antara keduanya"]
+    jawaban: 1
+    penjelasan: "Pada sudut 45°, sin 45° = cos 45° (keduanya ≈ 0,707), sehingga v0x = v0 cos45° dan v0y = v0 sin45° bernilai sama besar."
+  - soal: "Bola A ditendang dengan sudut elevasi 25° dan Bola B dengan sudut 65°, keduanya dengan kecepatan awal yang sama besar. Jangkauan keduanya..."
+    pilihan: ["Bola A lebih jauh", "Bola B lebih jauh", "Sama jauh, karena 25° + 65° = 90°", "Tidak dapat ditentukan tanpa nilai v0"]
+    jawaban: 2
+    penjelasan: "Karena 25° dan 65° adalah sudut yang saling melengkapi (jumlahnya 90°), sin(2×25°) = sin50° = sin(2×65°) = sin130°, sehingga jangkauannya sama."
+  - soal: "Masih pada Bola A (25°) dan Bola B (65°) dengan v0 sama, bola mana yang mencapai titik tertinggi yang lebih tinggi?"
+    pilihan: ["Bola A, karena sudutnya lebih kecil", "Bola B, karena v0y = v0 sin 65° lebih besar dari v0 sin 25°", "Sama tingginya, seperti jangkauannya", "Tidak dapat ditentukan"]
+    jawaban: 1
+    penjelasan: "Tinggi maksimum ditentukan oleh v0y = v0 sin θ. Karena sin 65° > sin 25°, Bola B punya v0y yang lebih besar, sehingga mencapai titik yang lebih tinggi meskipun jangkauannya sama dengan Bola A."
 draft: false
 ---
 

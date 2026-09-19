@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Supaya tabelnya kelihatan lebih panjang", "Untuk mengurangi pengaruh kesalahan acak dan mendapat rata-rata yang lebih dapat dipercaya", "Karena aturan wajib tanpa alasan ilmiah", "Supaya semua anggota kelompok kebagian tugas mengukur"]
     jawaban: 1
     penjelasan: "Sama seperti prinsip pengukuran berulang -- data yang diambil beberapa kali dan dirata-ratakan lebih tahan terhadap kesalahan acak dibanding satu kali pengukuran saja."
+  - soal: "Urutan pertama dalam menyusun sebuah rancangan percobaan adalah menentukan..."
+    pilihan: ["Alat dan bahan", "Rumusan masalah dan hipotesis", "Tabel pengumpulan data", "Prosedur kerja"]
+    jawaban: 1
+    penjelasan: "Langkah pertama menyusun rancangan percobaan adalah menentukan rumusan masalah (pertanyaan yang mau dijawab) dan hipotesis (dugaan awal jawabannya)."
+  - soal: "Setelah rumusan masalah dan hipotesis ditentukan, langkah berikutnya dalam rancangan percobaan adalah..."
+    pilihan: ["Menulis kesimpulan", "Menentukan variabel bebas, terikat, dan kontrolnya", "Mempresentasikan hasil ke kelas", "Membuang data yang tidak sesuai"]
+    jawaban: 1
+    penjelasan: "Setelah rumusan masalah dan hipotesis jelas, langkah selanjutnya adalah menentukan ketiga jenis variabel -- ini menentukan apa yang diubah, diukur, dan dijaga tetap."
+  - soal: "Kenapa tabel pengumpulan data sebaiknya disiapkan SEBELUM percobaan dimulai, bukan sesudahnya?"
+    pilihan: ["Supaya laporan terlihat lebih formal", "Supaya data bisa langsung dicatat rapi saat percobaan berjalan, bukan diingat-ingat setelahnya", "Karena itu aturan baku tanpa alasan khusus", "Supaya waktu percobaan jadi lebih singkat"]
+    jawaban: 1
+    penjelasan: "Tabel yang sudah disiapkan sebelum percobaan memungkinkan data langsung dicatat rapi saat itu juga, sehingga tidak ada data yang terlewat atau salah diingat."
+  - soal: "Pada contoh rancangan percobaan bandul di materi ini, hipotesis yang diajukan adalah..."
+    pilihan: ["Semakin berat beban, semakin besar periode ayunannya", "Semakin panjang tali, semakin besar periode ayunannya", "Panjang tali tidak memengaruhi periode ayunan", "Semakin besar sudut simpangan, semakin besar periodenya"]
+    jawaban: 1
+    penjelasan: "Hipotesis pada contoh rancangan itu adalah 'semakin panjang tali bandul, semakin besar periode ayunannya' -- dugaan awal sebelum data dikumpulkan."
+  - soal: "Pada contoh rancangan percobaan bandul, setiap panjang tali diukur periode ayunannya sebanyak..."
+    pilihan: ["1 kali", "2 kali", "3 kali", "5 kali"]
+    jawaban: 2
+    penjelasan: "Sesuai tabel data pada contoh rancangan, tiap panjang tali diukur sebanyak 3 kali percobaan, sesuai prinsip pengukuran berulang."
+  - soal: "Pada prosedur kerja contoh percobaan bandul, setelah bandul disimpangkan 10° dan dilepaskan, langkah berikutnya adalah..."
+    pilihan: ["Langsung mencatat panjang tali", "Mengukur waktu 10 ayunan penuh dengan stopwatch, lalu membaginya dengan 10 untuk mendapat periode satu ayunan", "Mengganti beban dengan yang lebih berat", "Mengukur suhu ruangan"]
+    jawaban: 1
+    penjelasan: "Sesuai prosedur kerja contoh, periode satu ayunan didapat dengan mengukur waktu 10 ayunan penuh lalu membaginya 10, supaya lebih presisi daripada mengukur satu ayunan saja."
+  - soal: "Dalam struktur laporan hasil penyelidikan, bagian yang berisi konsep atau rumus yang mendasari percobaan disebut..."
+    pilihan: ["Tujuan", "Dasar teori", "Pembahasan", "Kesimpulan"]
+    jawaban: 1
+    penjelasan: "Bagian dasar teori berisi konsep atau rumus yang menjadi landasan percobaan, misalnya rumus periode bandul untuk contoh di materi ini."
+  - soal: "Dalam struktur laporan hasil penyelidikan, bagian 'Pembahasan' seharusnya berisi..."
+    pilihan: ["Daftar alat dan bahan yang dipakai", "Analisis data -- apakah sesuai hipotesis dan kenapa bisa begitu", "Judul percobaan", "Tabel data mentah saja tanpa analisis"]
+    jawaban: 1
+    penjelasan: "Bagian pembahasan berisi analisis terhadap data yang diperoleh -- apakah hasilnya sesuai hipotesis awal, dan penjelasan kenapa hasilnya bisa seperti itu."
+  - soal: "Dalam struktur laporan hasil penyelidikan, bagian 'Kesimpulan' seharusnya berisi..."
+    pilihan: ["Dugaan awal sebelum percobaan dilakukan", "Jawaban atas rumusan masalah, berdasarkan data yang diperoleh", "Daftar alat yang rusak selama percobaan", "Nama-nama anggota kelompok"]
+    jawaban: 1
+    penjelasan: "Kesimpulan menjawab rumusan masalah yang diajukan di awal, berdasarkan bukti dari data yang benar-benar diperoleh selama percobaan -- bukan sekadar mengulang hipotesis."
+  - soal: "Dalam laporan hasil penyelidikan, bagian 'Langkah Kerja' seharusnya ditulis dalam bentuk kalimat seperti apa?"
+    pilihan: ["Bentuk perintah, seperti instruksi resep", "Bentuk lampau, seperti 'bandul digantung pada statif...'", "Bentuk pertanyaan retoris", "Bentuk daftar tanpa kalimat lengkap"]
+    jawaban: 1
+    penjelasan: "Langkah kerja dalam laporan ditulis dalam bentuk lampau (menceritakan apa yang SUDAH dilakukan), berbeda dengan prosedur kerja pada rancangan yang ditulis dalam bentuk instruksi/perintah."
+  - soal: "Kenapa rancangan percobaan (termasuk variabel dan prosedurnya) harus disusun SEBELUM percobaan dilakukan, bukan direka-reka setelahnya?"
+    pilihan: ["Supaya laporan lebih cepat selesai", "Supaya rancangan tidak direkayasa agar cocok dengan hasil yang diinginkan -- itu bertentangan dengan sikap ilmiah jujur", "Karena guru selalu memeriksa urutannya", "Supaya kelompok lain tidak bisa menyontek"]
+    jawaban: 1
+    penjelasan: "Kalau rancangan dibuat setelah tahu hasilnya, ada risiko rancangan itu 'disesuaikan' supaya cocok dengan hasil yang diinginkan -- ini bertentangan dengan sikap ilmiah yang objektif dan jujur."
+  - soal: "'Kalau cuma ada satu variabel bebas, tidak perlu memikirkan variabel kontrol.' Kenapa pernyataan ini keliru?"
+    pilihan: ["Karena variabel kontrol sebenarnya tidak pernah dibutuhkan", "Tanpa variabel kontrol yang terjaga tetap, kita tidak bisa yakin perubahan hasil murni disebabkan oleh variabel bebas, bukan faktor lain", "Karena variabel kontrol hanya penting kalau ada dua variabel bebas atau lebih", "Karena variabel kontrol otomatis terjaga tanpa perlu direncanakan"]
+    jawaban: 1
+    penjelasan: "Variabel kontrol tetap wajib dijaga apa pun jumlah variabel bebasnya -- tanpa itu, perubahan hasil percobaan bisa saja disebabkan faktor lain yang ikut berubah, bukan cuma variabel bebas yang diteliti."
+  - soal: "'Data yang tidak sesuai hipotesis boleh tidak dicantumkan dalam laporan.' Kenapa pernyataan ini tidak boleh dibenarkan?"
+    pilihan: ["Karena data yang tidak sesuai hipotesis pasti salah ukur", "Semua data harus dilaporkan apa adanya -- ini bagian dari sikap ilmiah yang jujur", "Karena guru akan selalu tahu kalau ada data yang dihilangkan", "Karena hipotesis harus selalu benar di akhir laporan"]
+    jawaban: 1
+    penjelasan: "Sikap ilmiah yang jujur mengharuskan semua data dilaporkan apa adanya, termasuk yang tidak sesuai dugaan awal -- data seperti itu justru bisa jadi temuan penting, bukan sesuatu yang harus disembunyikan."
+  - soal: "Kalau variabel kontrol pada percobaan bandul tidak dijaga tetap (misalnya sudut simpangannya berubah-ubah setiap kali dicoba), akibatnya adalah..."
+    pilihan: ["Hasil percobaan pasti tetap akurat", "Kita jadi tidak bisa yakin apakah perubahan periode benar-benar disebabkan oleh panjang tali, atau ikut dipengaruhi faktor lain yang berubah", "Percobaan akan otomatis lebih cepat selesai", "Variabel bebas otomatis berubah menjadi variabel terikat"]
+    jawaban: 1
+    penjelasan: "Kalau variabel kontrol (mis. sudut simpangan) ikut berubah-ubah, kita tidak bisa memastikan lagi bahwa perubahan periode itu murni akibat panjang tali -- bisa jadi ikut dipengaruhi faktor lain."
+  - soal: "Kalau pada percobaan bandul kita justru memvariasikan massa beban sementara panjang tali dijaga tetap, maka massa beban berubah peran menjadi variabel..."
+    pilihan: ["Terikat", "Bebas", "Kontrol yang diabaikan", "Tidak berperan sama sekali"]
+    jawaban: 1
+    penjelasan: "Peran suatu faktor (bebas/terikat/kontrol) bergantung pada rancangan percobaannya -- kalau massa beban yang SENGAJA divariasikan, ia berperan sebagai variabel bebas, bukan lagi variabel kontrol."
+  - soal: "Kenapa penyelidikan ilmiah tidak boleh dilakukan 'sekadar coba-coba' tanpa rancangan yang jelas?"
+    pilihan: ["Karena coba-coba selalu menghasilkan data yang salah", "Hasilnya akan susah dipercaya dan susah diulang orang lain", "Karena coba-coba butuh waktu lebih lama", "Karena guru tidak menyukai metode coba-coba"]
+    jawaban: 1
+    penjelasan: "Tanpa rancangan yang jelas (variabel, prosedur, dst), hasil eksperimen jadi susah dipercaya dan susah direplikasi oleh orang lain -- berbeda dengan penyelidikan ilmiah yang sesungguhnya."
+  - soal: "Yang dimaksud 'replikasi' dalam konteks sebuah penyelidikan ilmiah adalah..."
+    pilihan: ["Kemampuan sebuah percobaan untuk diulang orang lain dan menghasilkan data yang konsisten/sebanding", "Proses menyalin laporan orang lain", "Jumlah anggota kelompok yang mengikuti praktikum", "Banyaknya alat yang dipakai dalam satu percobaan"]
+    jawaban: 0
+    penjelasan: "Replikasi berarti percobaan itu bisa diulang oleh orang lain, dengan prosedur yang sama, dan menghasilkan data yang konsisten atau sebanding -- inilah yang membuat hasil ilmiah bisa dipercaya."
+  - soal: "Dalam menentukan alat dan bahan pada sebuah rancangan percobaan, pemilihan alat ukur harus disesuaikan dengan..."
+    pilihan: ["Harga alat yang paling murah", "Ketelitian yang dibutuhkan percobaan tersebut", "Warna alat yang paling mencolok", "Merek alat yang paling populer"]
+    jawaban: 1
+    penjelasan: "Alat ukur yang dipilih harus sesuai ketelitian yang dibutuhkan -- misalnya stopwatch untuk mengukur waktu ayunan, mistar untuk mengukur panjang tali, sesuai materi Alat Ukur sebelumnya."
+  - soal: "Menurut bagian 'Intinya' pada materi ini, pertanyaan kunci yang menentukan apakah sebuah rancangan percobaan sudah cukup ketat adalah..."
+    pilihan: ["Apakah percobaannya selesai tepat waktu?", "Kalau orang lain mengulang persis rancangan itu, apakah mereka akan mendapat hasil yang mirip?", "Apakah semua anggota kelompok setuju dengan hasilnya?", "Apakah hasilnya sesuai keinginan guru?"]
+    jawaban: 1
+    penjelasan: "Pertanyaan kunci itu menguji seberapa ketat rancangan percobaan kita -- kalau jawabannya 'belum tentu', berarti ada bagian rancangan (variabel kontrol atau prosedur) yang belum cukup jelas."
+  - soal: "Dalam penyelidikan 'pengaruh warna kertas terhadap kecepatan kertas memanas di bawah matahari', yang seharusnya menjadi variabel kontrol antara lain..."
+    pilihan: ["Warna kertas yang diuji", "Suhu akhir kertas setelah dijemur", "Ukuran/ketebalan kertas serta lama penjemuran, yang harus dijaga sama untuk semua warna", "Waktu mulai pengamatan dilakukan"]
+    jawaban: 2
+    penjelasan: "Supaya perbedaan hasil murni disebabkan warna kertas (variabel bebas), faktor lain seperti ukuran, ketebalan kertas, dan lama penjemuran harus dijaga sama (jadi variabel kontrol) untuk semua warna yang diuji."
 draft: false
 ---
 

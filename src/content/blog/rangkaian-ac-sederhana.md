@@ -28,6 +28,90 @@ kuis:
     pilihan: ["Frekuensi rangkaian dinaikkan", "Frekuensi rangkaian diturunkan", "Kapasitansinya diperkecil", "Tegangan sumber diperkecil"]
     jawaban: 0
     penjelasan: "XC = 1/(2πfC) berbanding TERBALIK dengan frekuensi -- makin tinggi f, makin kecil XC."
+  - soal: "Kalau frekuensi arus AC pada suatu rangkaian dinaikkan dari 50 Hz menjadi 100 Hz (dua kali lipat), apa yang terjadi pada nilai XL sebuah induktor di rangkaian itu (L tetap)?"
+    pilihan: ["XL menjadi dua kali lipat", "XL menjadi setengahnya", "XL tetap sama", "XL menjadi empat kali lipat"]
+    jawaban: 0
+    penjelasan: "XL = 2πfL berbanding lurus dengan f, jadi kalau f dua kali lipat, XL juga dua kali lipat."
+  - soal: "Kalau frekuensi arus AC pada suatu rangkaian dinaikkan dua kali lipat, apa yang terjadi pada nilai XC sebuah kapasitor di rangkaian itu (C tetap)?"
+    pilihan: ["XC menjadi setengahnya", "XC menjadi dua kali lipat", "XC tetap sama", "XC menjadi empat kali lipat"]
+    jawaban: 0
+    penjelasan: "XC = 1/(2πfC) berbanding terbalik dengan f, jadi kalau f dua kali lipat, XC menjadi setengahnya."
+  - soal: "Pada frekuensi f = 0 Hz (yaitu arus DC), berapa besar reaktansi kapasitif (XC) sebuah kapasitor?"
+    pilihan: ["Tak terhingga (sangat besar), sehingga kapasitor menghalangi total arus DC", "Nol, sehingga kapasitor melewatkan semua arus DC", "Sama dengan nilai resistansi R", "Tidak terdefinisi sama sekali"]
+    jawaban: 0
+    penjelasan: "XC = 1/(2πfC); saat f = 0, XC menuju tak terhingga -- sesuai artikel, kapasitor 'menghalangi total arus DC yang frekuensinya dianggap 0 Hz'."
+  - soal: "Kenapa resistor tidak punya reaktansi yang berubah terhadap frekuensi, berbeda dengan induktor dan kapasitor?"
+    pilihan: ["Karena resistor mengubah energi listrik langsung menjadi panas, bukan menyimpan energi sesaat", "Karena resistor tidak dialiri arus AC sama sekali", "Karena resistor hanya bisa dipakai pada rangkaian DC", "Karena nilai resistansinya berubah acak"]
+    jawaban: 0
+    penjelasan: "Resistor mengubah energi listrik langsung jadi panas (disipasi), tanpa proses penyimpanan energi sesaat, sehingga nilainya tidak bergantung frekuensi."
+  - soal: "Jembatan keledai 'ELI' dipakai untuk mengingat hubungan fase pada komponen apa?"
+    pilihan: ["Induktor (L) -- tegangan (E) lebih dulu dari arus (I)", "Kapasitor (C) -- arus (I) lebih dulu dari tegangan (E)", "Resistor (R) -- tegangan dan arus sefase", "Tidak berlaku untuk komponen manapun"]
+    jawaban: 0
+    penjelasan: "ELI: pada L (induktor), E (tegangan) lebih dulu dari I (arus) -- artinya arus tertinggal."
+  - soal: "Jembatan keledai 'ICE' dipakai untuk mengingat hubungan fase pada komponen apa?"
+    pilihan: ["Kapasitor (C) -- arus (I) lebih dulu dari tegangan (E)", "Induktor (L) -- tegangan (E) lebih dulu dari arus (I)", "Resistor (R) -- arus dan tegangan berlawanan fase", "Tidak ada jembatan keledai untuk kapasitor"]
+    jawaban: 0
+    penjelasan: "ICE: pada C (kapasitor), I (arus) lebih dulu dari E (tegangan) -- arus mendahului tegangan."
+  - soal: "Kenapa arus pada induktor 'tertinggal' terhadap tegangan, menurut Hukum Lenz?"
+    pilihan: ["Karena induktor menghasilkan GGL induksi yang melawan setiap perubahan arus yang mencoba mengalir lewatnya", "Karena induktor menyimpan muatan listrik seperti kapasitor", "Karena induktor selalu memiliki resistansi yang sangat besar", "Karena arus AC tidak bisa mengalir lewat induktor sama sekali"]
+    jawaban: 0
+    penjelasan: "Induktor terus melawan perubahan arus AC yang mencoba mengalir lewatnya (Hukum Lenz), sehingga arusnya jadi tertinggal dari tegangan."
+  - soal: "Kenapa arus pada kapasitor 'mendahului' tegangan?"
+    pilihan: ["Karena arus harus mengalir dulu untuk mengubah muatan pada keping, sebelum tegangannya sempat berubah", "Karena kapasitor menghasilkan GGL induksi seperti induktor", "Karena kapasitor selalu punya resistansi negatif", "Karena kapasitor tidak bisa dialiri arus AC"]
+    jawaban: 0
+    penjelasan: "Muatan pada keping kapasitor harus berubah dulu (lewat arus) sebelum tegangannya sempat berubah, sehingga arus mendahului tegangan."
+  - soal: "Kalau sebuah rangkaian hanya berisi resistor murni yang dialiri AC, hukum apa yang tetap berlaku persis seperti pada rangkaian DC?"
+    pilihan: ["Hukum Ohm (V = I × R)", "Hukum Lenz", "Hukum Faraday", "Hukum Coulomb"]
+    jawaban: 0
+    penjelasan: "Resistor tidak peduli AC atau DC -- Hukum Ohm (V = I × R) tetap berlaku persis seperti sebelumnya."
+  - soal: "Satuan dari reaktansi (XL maupun XC) adalah..."
+    pilihan: ["Ohm (Ω), sama seperti resistansi", "Farad (F)", "Henry (H)", "Watt (W)"]
+    jawaban: 0
+    penjelasan: "Reaktansi dan resistansi satuannya sama-sama Ohm (Ω), meski keduanya besaran fisis yang berbeda secara konsep."
+  - soal: "Apa perbedaan UTAMA antara reaktansi (XL, XC) dan resistansi (R) dari segi energi?"
+    pilihan: ["Reaktansi tidak menghasilkan disipasi panas, energinya hanya disimpan sesaat lalu dikembalikan ke rangkaian; resistansi mengubah energi jadi panas", "Reaktansi selalu menghasilkan panas lebih besar dari resistansi", "Reaktansi dan resistansi sama-sama tidak menghasilkan panas", "Resistansi menyimpan energi dalam medan magnet, reaktansi mengubahnya jadi panas"]
+    jawaban: 0
+    penjelasan: "Induktor dan kapasitor hanya menyimpan energi sesaat lalu mengembalikannya, tidak seperti resistor yang mengubah energi jadi panas."
+  - soal: "Pada rangkaian penyaring audio (speaker crossover), kenapa kapasitor diarahkan ke tweeter (frekuensi tinggi)?"
+    pilihan: ["Karena XC mengecil saat frekuensi tinggi, sehingga arus frekuensi tinggi lebih mudah lewat kapasitor", "Karena XC membesar saat frekuensi tinggi, sehingga arus frekuensi tinggi terhalang di komponen lain", "Karena kapasitor hanya bisa dialiri arus DC", "Karena tweeter tidak membutuhkan arus listrik"]
+    jawaban: 0
+    penjelasan: "XC mengecil seiring frekuensi naik, sehingga kapasitor meloloskan sinyal frekuensi tinggi ke tweeter."
+  - soal: "Pada rangkaian speaker crossover yang sama, kenapa induktor diarahkan ke woofer (frekuensi rendah/bass)?"
+    pilihan: ["Karena XL mengecil saat frekuensi rendah, sehingga arus frekuensi rendah lebih mudah lewat induktor", "Karena XL membesar saat frekuensi rendah, sehingga arus frekuensi rendah lebih mudah lewat induktor", "Karena induktor hanya bisa dialiri arus AC berfrekuensi tinggi", "Karena woofer tidak membutuhkan arus listrik sama sekali"]
+    jawaban: 0
+    penjelasan: "XL = 2πfL berbanding lurus f, jadi frekuensi rendah membuat XL kecil, sehingga arus frekuensi rendah lebih mudah lewat induktor."
+  - soal: "Kalau frekuensi sinyal audio dinaikkan terus-menerus, apa yang terjadi pada besar arus yang mengalir lewat cabang KAPASITOR pada speaker crossover?"
+    pilihan: ["Arusnya makin besar, karena XC makin kecil", "Arusnya makin kecil, karena XC makin besar", "Arusnya tetap konstan", "Arusnya langsung nol"]
+    jawaban: 0
+    penjelasan: "XC mengecil seiring frekuensi naik, sehingga arus yang bisa lewat kapasitor makin besar."
+  - soal: "Kalau frekuensi sinyal audio dinaikkan terus-menerus, apa yang terjadi pada besar arus yang mengalir lewat cabang INDUKTOR pada speaker crossover?"
+    pilihan: ["Arusnya makin kecil, karena XL makin besar", "Arusnya makin besar, karena XL makin kecil", "Arusnya tetap konstan", "Arusnya langsung nol"]
+    jawaban: 0
+    penjelasan: "XL membesar seiring frekuensi naik, sehingga arus yang bisa lewat induktor makin kecil."
+  - soal: "Induktor sering dipakai sebagai penyaring yang meloloskan sinyal frekuensi RENDAH tapi menghalangi frekuensi TINGGI, sedangkan kapasitor sebaliknya. Fenomena ini terjadi karena..."
+    pilihan: ["XL berbanding lurus dengan frekuensi, sedangkan XC berbanding terbalik dengan frekuensi", "XL dan XC berbanding lurus dengan frekuensi", "XL dan XC keduanya tidak dipengaruhi frekuensi", "XL berbanding terbalik, XC berbanding lurus dengan frekuensi"]
+    jawaban: 0
+    penjelasan: "XL naik seiring frekuensi (menghalangi frekuensi tinggi), sedangkan XC turun seiring frekuensi (menghalangi frekuensi rendah)."
+  - soal: "Grafik gelombang sinus tegangan V(t) dan arus I(t) pada RESISTOR, jika digambar bersama, akan tampak..."
+    pilihan: ["Menempel (sefase), hanya beda ketinggian puncaknya saja", "Bergeser seperempat gelombang", "Saling berlawanan arah sepenuhnya", "Tidak berbentuk gelombang sinus sama sekali"]
+    jawaban: 0
+    penjelasan: "Pada resistor, V(t) dan I(t) sefase -- kurvanya tampak menempel, cuma beda ketinggian puncaknya."
+  - soal: "Kalau di simulasi kamu menaikkan nilai induktansi (L) sebuah induktor tanpa mengubah frekuensi, apa yang terjadi pada XL?"
+    pilihan: ["XL bertambah besar", "XL berkurang", "XL tidak berubah", "XL menjadi negatif"]
+    jawaban: 0
+    penjelasan: "XL = 2πfL juga berbanding lurus dengan L, jadi menaikkan L (f tetap) memperbesar XL."
+  - soal: "Kalau di simulasi kamu menaikkan nilai kapasitansi (C) sebuah kapasitor tanpa mengubah frekuensi, apa yang terjadi pada XC?"
+    pilihan: ["XC berkurang", "XC bertambah besar", "XC tidak berubah", "XC menjadi negatif"]
+    jawaban: 0
+    penjelasan: "XC = 1/(2πfC) berbanding terbalik dengan C, jadi menaikkan C memperkecil XC."
+  - soal: "Manakah alat elektronik sehari-hari yang disebutkan artikel sebagai contoh yang memanfaatkan perbedaan perilaku resistor, induktor, dan kapasitor terhadap AC?"
+    pilihan: ["Radio, speaker, dan charger HP", "Kompor listrik", "Termometer digital", "Kalkulator sederhana"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut radio, speaker, dan charger HP sebagai contoh alat yang memanfaatkan perbedaan perilaku ketiga komponen ini."
+  - soal: "Setelah materi Rangkaian AC Sederhana ini, topik apa yang dibahas selanjutnya menurut penutup artikel?"
+    pilihan: ["Spektrum Elektromagnetik", "Semikonduktor dan Dioda", "Sinyal Analog dan Digital", "Teori Relativitas Khusus"]
+    jawaban: 0
+    penjelasan: "Penutup artikel mengarahkan ke materi Spektrum Elektromagnetik sebagai sesi terakhir Bab Fenomena Elektromagnetik."
 draft: false
 ---
 

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Generator dan Transformator</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .tab-row { display: flex; gap: 8px; }
+  .tab-btn { flex: 1; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.85rem; padding: 11px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; }
+  .tab-panel.is-active { display: block; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 280px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 240px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔄</span><h1>Laboratorium Maya: Generator dan Transformator</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnGen">🔁 Generator</button>
+    <button class="tab-btn" id="tabBtnTrafo">🔌 Transformator</button>
+  </div>
+
+  <!-- TAB GENERATOR -->
+  <div class="tab-panel is-active" id="tabGen">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kecepatan Putar (ω)</span><span class="control-value" id="omegaVal">4 rad/s</span></div>
+          <input type="range" id="omegaSlider" min="1" max="10" step="0.5" value="4">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Jumlah Lilitan (N)</span><span class="control-value" id="nVal">50</span></div>
+          <input type="range" id="nSlider" min="10" max="200" step="10" value="50">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Kuat Medan Magnet (B)</span><span class="control-value" id="bGenVal">0.5 T</span></div>
+          <input type="range" id="bGenSlider" min="0.1" max="2" step="0.1" value="0.5">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="genCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">GGL Sesaat (ε)</div><div class="v" id="epsInstVal">0 V</div></div>
+            <div class="result-highlight"><div class="k">GGL Maksimum (ε₀)</div><div class="v" id="epsMaxVal">0 V</div></div>
+          </div>
+          <div class="formula-box" id="genFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Generator mengubah energi gerak jadi energi listrik: kumparan (N lilitan, luas A) diputar dengan kecepatan sudut ω di dalam medan magnet B, sehingga fluks yang menembusnya terus berubah dan timbul GGL induksi <span class="math-var">ε = NBAω sin(ωt)</span>. GGL maksimum <span class="math-var">ε₀ = NBAω</span> tercapai saat kumparan sejajar bidang medan (fluks berubah paling cepat). Coba geser ω, N, atau B, dan perhatikan grafik GGL-nya makin "tinggi" (amplitudonya naik).
+    </div>
+  </div>
+
+  <!-- TAB TRANSFORMATOR -->
+  <div class="tab-panel" id="tabTrafo">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Tegangan Primer (Vp)</span><span class="control-value" id="vpVal">220 V</span></div>
+          <input type="range" id="vpSlider" min="20" max="220" step="10" value="220">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Lilitan Primer (Np)</span><span class="control-value" id="npVal">500</span></div>
+          <input type="range" id="npSlider" min="50" max="1000" step="50" value="500">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Lilitan Sekunder (Ns)</span><span class="control-value" id="nsVal">100</span></div>
+          <input type="range" id="nsSlider" min="50" max="1000" step="50" value="100">
+        </div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Arus Primer (Ip)</span><span class="control-value" id="ipVal">2 A</span></div>
+          <input type="range" id="ipSlider" min="0.5" max="10" step="0.5" value="2">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Visualisasi</span></div>
+        <div class="canvas-wrapper"><canvas id="trafoCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Tegangan Sekunder (Vs)</div><div class="v" id="vsVal">0 V</div></div>
+            <div class="result-highlight"><div class="k">Arus Sekunder (Is)</div><div class="v" id="isVal">0 A</div></div>
+          </div>
+          <div class="formula-box" id="trafoFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan Konsep</div>
+      Transformator memanfaatkan induksi elektromagnetik lewat dua kumparan (primer & sekunder) yang berbagi inti besi yang sama, TIDAK terhubung kabel langsung. Perbandingan tegangan sebanding perbandingan lilitan: <span class="math-var">Vp/Vs = Np/Ns</span>. Kalau dianggap ideal (tanpa kerugian energi), daya primer = daya sekunder, jadi <span class="math-var">Ip/Is = Ns/Np</span> -- makin tegangan dinaikkan (step-up), makin arusnya diturunkan, dan sebaliknya.
+    </div>
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Sebuah trafo punya Np = 500 dan Ns = 100. Kalau Vp = 220 V, trafo ini termasuk jenis apa dan berapa Vs-nya?</span>
+    <div class="quiz-opts" id="genQuizOpts"></div>
+    <div class="quiz-fb" id="genQuizFb"></div>
+  </div>
+
+  <script>
+    // ---------- TAB SWITCHING ----------
+    const tabBtnGen = document.getElementById('tabBtnGen');
+    const tabBtnTrafo = document.getElementById('tabBtnTrafo');
+    const tabGen = document.getElementById('tabGen');
+    const tabTrafo = document.getElementById('tabTrafo');
+    tabBtnGen.addEventListener('click', () => {
+      tabBtnGen.classList.add('is-active'); tabBtnTrafo.classList.remove('is-active');
+      tabGen.classList.add('is-active'); tabTrafo.classList.remove('is-active');
+      resizeGenCanvas();
+    });
+    tabBtnTrafo.addEventListener('click', () => {
+      tabBtnTrafo.classList.add('is-active'); tabBtnGen.classList.remove('is-active');
+      tabTrafo.classList.add('is-active'); tabGen.classList.remove('is-active');
+      resizeTrafoCanvas();
+    });
+
+    // ---------- GENERATOR ----------
+    const genCanvas = document.getElementById('genCanvas');
+    const genCtx = genCanvas.getContext('2d');
+    const omegaSlider = document.getElementById('omegaSlider'), omegaVal = document.getElementById('omegaVal');
+    const nSlider = document.getElementById('nSlider'), nVal = document.getElementById('nVal');
+    const bGenSlider = document.getElementById('bGenSlider'), bGenVal = document.getElementById('bGenVal');
+    const epsInstVal = document.getElementById('epsInstVal'), epsMaxVal = document.getElementById('epsMaxVal');
+    const genFormula = document.getElementById('genFormula');
+
+    let omega = 4, N = 50, Bgen = 0.5, theta = 0;
+    const A_koil = 0.02; // m^2, tetap -- fokus eksplorasi ke omega/N/B
+
+    omegaSlider.addEventListener('input', () => { omega = parseFloat(omegaSlider.value); omegaVal.textContent = omega + ' rad/s'; });
+    nSlider.addEventListener('input', () => { N = parseFloat(nSlider.value); nVal.textContent = N; });
+    bGenSlider.addEventListener('input', () => { Bgen = parseFloat(bGenSlider.value); bGenVal.textContent = Bgen + ' T'; });
+
+    function resizeGenCanvas() {
+      const rect = genCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      genCanvas.width = rect.width * dpr; genCanvas.height = rect.height * dpr;
+      genCtx.setTransform(1, 0, 0, 1, 0, 0); genCtx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', () => { resizeGenCanvas(); resizeTrafoCanvas(); });
+
+    const genTrail = [];
+    function renderGen() {
+      const w = genCanvas.parentElement.clientWidth, h = genCanvas.parentElement.clientHeight;
+      genCtx.clearRect(0, 0, w, h);
+
+      const epsMax = N * Bgen * A_koil * omega;
+      const epsInst = epsMax * Math.sin(theta);
+      epsInstVal.textContent = epsInst.toFixed(2) + ' V';
+      epsMaxVal.textContent = epsMax.toFixed(2) + ' V';
+      genFormula.innerHTML =
+        `ε₀ = NBAω = (${N})(${Bgen})(${A_koil})(${omega}) = <span class="math-num">${epsMax.toFixed(2)} V</span><br>` +
+        `ε(t) = ε₀ sin(ωt) = <span class="math-num">${epsInst.toFixed(2)} V</span> (saat ini)`;
+
+      // Kumparan berputar (dilihat dari samping -- garis yang memendek saat sejajar sumbu pandang)
+      const coilCx = w * 0.22, coilCy = h * 0.5, coilLen = Math.min(h * 0.32, 70);
+      genCtx.save();
+      genCtx.translate(coilCx, coilCy);
+      const scaleX = Math.abs(Math.cos(theta));
+      genCtx.strokeStyle = '#facc15'; genCtx.lineWidth = 6; genCtx.lineCap = 'round';
+      genCtx.beginPath(); genCtx.moveTo(0, -coilLen * scaleX - 4 * (1 - scaleX)); genCtx.lineTo(0, coilLen * scaleX + 4 * (1 - scaleX)); genCtx.stroke();
+      genCtx.restore();
+
+      // Panah medan magnet B (horizontal, menembus area kumparan)
+      genCtx.save();
+      genCtx.strokeStyle = 'rgba(56,189,248,0.5)'; genCtx.fillStyle = 'rgba(56,189,248,0.5)'; genCtx.lineWidth = 1.5;
+      for (let i = 0; i < 4; i++) {
+        const y = coilCy - 45 + i * 30;
+        genCtx.beginPath(); genCtx.moveTo(20, y); genCtx.lineTo(w * 0.42, y); genCtx.stroke();
+        genCtx.beginPath(); genCtx.moveTo(w * 0.42 - 6, y - 4); genCtx.lineTo(w * 0.42, y); genCtx.lineTo(w * 0.42 - 6, y + 4); genCtx.stroke();
+      }
+      genCtx.fillStyle = 'rgba(148,163,184,0.8)'; genCtx.font = '11px system-ui';
+      genCtx.fillText('B', 20, coilCy - 55);
+      genCtx.restore();
+
+      // Grafik gelombang sinus GGL
+      genTrail.push(epsInst);
+      if (genTrail.length > 160) genTrail.shift();
+      const graphX = w * 0.5, graphW = w * 0.44, graphY = h * 0.5, graphAmp = h * 0.32;
+      genCtx.save();
+      genCtx.strokeStyle = 'rgba(148,163,184,0.3)'; genCtx.lineWidth = 1;
+      genCtx.beginPath(); genCtx.moveTo(graphX, graphY); genCtx.lineTo(graphX + graphW, graphY); genCtx.stroke();
+      genCtx.strokeStyle = '#38bdf8'; genCtx.lineWidth = 2;
+      genCtx.beginPath();
+      genTrail.forEach((v, i) => {
+        const x = graphX + (i / 160) * graphW;
+        const y = graphY - (epsMax > 0 ? v / epsMax : 0) * graphAmp;
+        if (i === 0) genCtx.moveTo(x, y); else genCtx.lineTo(x, y);
+      });
+      genCtx.stroke();
+      genCtx.restore();
+
+      theta += omega * 0.02;
+      requestAnimationFrame(renderGen);
+    }
+
+    // ---------- TRANSFORMATOR ----------
+    const trafoCanvas = document.getElementById('trafoCanvas');
+    const trafoCtx = trafoCanvas.getContext('2d');
+    const vpSlider = document.getElementById('vpSlider'), vpVal = document.getElementById('vpVal');
+    const npSlider = document.getElementById('npSlider'), npVal = document.getElementById('npVal');
+    const nsSlider = document.getElementById('nsSlider'), nsVal = document.getElementById('nsVal');
+    const ipSlider = document.getElementById('ipSlider'), ipVal = document.getElementById('ipVal');
+    const vsVal = document.getElementById('vsVal'), isVal = document.getElementById('isVal');
+    const trafoFormula = document.getElementById('trafoFormula');
+
+    let Vp = 220, Np = 500, Ns = 100, Ip = 2;
+
+    vpSlider.addEventListener('input', () => { Vp = parseFloat(vpSlider.value); vpVal.textContent = Vp + ' V'; updateTrafo(); });
+    npSlider.addEventListener('input', () => { Np = parseFloat(npSlider.value); npVal.textContent = Np; updateTrafo(); });
+    nsSlider.addEventListener('input', () => { Ns = parseFloat(nsSlider.value); nsVal.textContent = Ns; updateTrafo(); });
+    ipSlider.addEventListener('input', () => { Ip = parseFloat(ipSlider.value); ipVal.textContent = Ip + ' A'; updateTrafo(); });
+
+    function resizeTrafoCanvas() {
+      const rect = trafoCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      trafoCanvas.width = rect.width * dpr; trafoCanvas.height = rect.height * dpr;
+      trafoCtx.setTransform(1, 0, 0, 1, 0, 0); trafoCtx.scale(dpr, dpr);
+      renderTrafo();
+    }
+
+    function updateTrafo() {
+      const Vs = Vp * (Ns / Np);
+      const Is = Ip * (Np / Ns);
+      vsVal.textContent = Vs.toFixed(1) + ' V';
+      isVal.textContent = Is.toFixed(2) + ' A';
+      const jenis = Ns > Np ? 'STEP-UP (menaikkan tegangan)' : Ns < Np ? 'STEP-DOWN (menurunkan tegangan)' : 'RASIO 1:1 (tegangan tidak berubah)';
+      trafoFormula.innerHTML =
+        `Vp/Vs = Np/Ns &rarr; Vs = Vp×(Ns/Np) = <span class="math-num">${Vs.toFixed(1)} V</span><br>` +
+        `Ip/Is = Ns/Np &rarr; Is = Ip×(Np/Ns) = <span class="math-num">${Is.toFixed(2)} A</span><br>` +
+        `Jenis trafo: <span class="math-var">${jenis}</span>`;
+      renderTrafo();
+    }
+
+    function renderTrafo() {
+      const w = trafoCanvas.parentElement.clientWidth, h = trafoCanvas.parentElement.clientHeight;
+      trafoCtx.clearRect(0, 0, w, h);
+
+      const coreX = w * 0.5 - 20, coreY = h * 0.2, coreW = 40, coreH = h * 0.6;
+      trafoCtx.save();
+      trafoCtx.fillStyle = 'rgba(148,163,184,0.25)'; trafoCtx.strokeStyle = 'rgba(148,163,184,0.6)'; trafoCtx.lineWidth = 2;
+      trafoCtx.fillRect(coreX, coreY, coreW, coreH);
+      trafoCtx.strokeRect(coreX, coreY, coreW, coreH);
+      trafoCtx.restore();
+
+      // Lilitan primer (kiri) & sekunder (kanan) -- jumlah loop digambar proporsional (dibatasi biar tidak penuh)
+      const nLoopP = Math.max(3, Math.min(14, Math.round(Np / 70)));
+      const nLoopS = Math.max(3, Math.min(14, Math.round(Ns / 70)));
+      drawCoilLoops(coreX, coreY, coreH, nLoopP, -1, '#ef4444');
+      drawCoilLoops(coreX + coreW, coreY, coreH, nLoopS, 1, '#3b82f6');
+
+      trafoCtx.save();
+      trafoCtx.font = 'bold 12px system-ui'; trafoCtx.textAlign = 'center'; trafoCtx.fillStyle = '#f8fafc';
+      trafoCtx.fillText('Primer (Np=' + Np + ')', coreX - 55, coreY + coreH + 20);
+      trafoCtx.fillText('Sekunder (Ns=' + Ns + ')', coreX + coreW + 55, coreY + coreH + 20);
+      trafoCtx.fillStyle = '#facc15';
+      trafoCtx.fillText('Vp=' + Vp + 'V', coreX - 55, coreY - 10);
+      trafoCtx.fillText('Vs=' + (Vp * (Ns / Np)).toFixed(0) + 'V', coreX + coreW + 55, coreY - 10);
+      trafoCtx.restore();
+    }
+
+    function drawCoilLoops(baseX, topY, height, n, dir, color) {
+      trafoCtx.save();
+      trafoCtx.strokeStyle = color; trafoCtx.lineWidth = 2.5;
+      for (let i = 0; i < n; i++) {
+        const y = topY + ((i + 0.5) / n) * height;
+        trafoCtx.beginPath();
+        trafoCtx.ellipse(baseX + dir * 14, y, 14, 9, 0, 0, Math.PI * 2);
+        trafoCtx.stroke();
+      }
+      trafoCtx.restore();
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('genQuizOpts'), [
+      'Step-down, Vs = 44 V', 'Step-up, Vs = 1100 V', 'Rasio 1:1, Vs = 220 V', 'Step-down, Vs = 100 V'
+    ], 0, (correct) => {
+      const fb = document.getElementById('genQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Karena Ns (100) < Np (500), ini trafo STEP-DOWN. Vs = Vp×(Ns/Np) = 220×(100/500) = 44 V. Coba buktikan sendiri di tab Transformator dengan nilai Np/Ns yang sama.',
+    });
+
+    window.onload = () => { resizeGenCanvas(); resizeTrafoCanvas(); updateTrafo(); requestAnimationFrame(renderGen); };
+  </script>
+</body>
+</html>

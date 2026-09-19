@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Barometer", "Venturimeter", "Termometer", "Hidrometer"]
     jawaban: 1
     penjelasan: "Venturimeter memanfaatkan penyempitan pipa dan asas Bernoulli untuk mengukur kecepatan (dan debit) aliran fluida dari selisih tekanan yang terbaca."
+  - soal: "Bentuk umum persamaan Bernoulli yang memperhitungkan ketinggian (h) adalah..."
+    pilihan: ["P + ½ρv² = konstan", "P + ½ρv² + ρgh = konstan", "P × v = konstan", "P/v = konstan"]
+    jawaban: 1
+    penjelasan: "Bentuk umum Bernoulli memperhitungkan ketinggian lewat suku ρgh: P + ½ρv² + ρgh = konstan."
+  - soal: "Kenapa suku ρgh bisa dihilangkan dari persamaan Bernoulli untuk pipa yang mendatar?"
+    pilihan: ["Karena massa jenis fluida nol", "Karena h1 = h2 sehingga suku ρgh saling meniadakan di kedua sisi persamaan", "Karena tekanan selalu nol pada pipa mendatar", "Karena kecepatan aliran nol"]
+    jawaban: 1
+    penjelasan: "Untuk pipa mendatar, ketinggian di semua titik sama (h1 = h2), sehingga suku ρgh sama besar di kedua sisi dan saling meniadakan, menyisakan P + ½ρv² = konstan."
+  - soal: "Semboyan singkat yang meringkas Asas Bernoulli adalah..."
+    pilihan: ["Aliran cepat, tekanan tinggi", "Aliran cepat, tekanan rendah", "Aliran lambat, tekanan rendah", "Tekanan tidak berhubungan dengan aliran"]
+    jawaban: 1
+    penjelasan: "Asas Bernoulli sering diringkas: 'aliran cepat, tekanan rendah' -- semakin cepat alirannya, semakin rendah tekanannya."
+  - soal: "Pada simulasi Lab Maya Asas Bernoulli, kolom manometer di atas bagian pipa yang SEMPIT akan terlihat..."
+    pilihan: ["Lebih tinggi dari kolom di bagian lebar", "Lebih pendek dari kolom di bagian lebar", "Sama tinggi dengan kolom di bagian lebar", "Kosong tanpa fluida"]
+    jawaban: 1
+    penjelasan: "Bagian pipa yang sempit punya aliran lebih cepat sehingga tekanannya lebih rendah, ditunjukkan lewat kolom manometer yang lebih pendek."
+  - soal: "Penyemprot parfum bisa menyemburkan cairan parfumnya karena..."
+    pilihan: ["Udara yang ditiup cepat melintasi ujung pipa vertikal menciptakan tekanan rendah yang menghisap cairan naik", "Cairan parfum lebih ringan dari udara", "Tekanan tinggi mendorong cairan keluar dari botol", "Gravitasi menarik cairan naik"]
+    jawaban: 0
+    penjelasan: "Meniup udara cepat melintasi ujung pipa vertikal menciptakan tekanan rendah (asas Bernoulli) yang 'menghisap' cairan parfum naik lalu ikut tersembur."
+  - soal: "Pada karburator, udara yang mengalir cepat lewat penyempitan (venturi) berfungsi untuk..."
+    pilihan: ["Mendinginkan mesin", "Menciptakan tekanan rendah yang menarik bahan bakar untuk bercampur dengan udara", "Membersihkan saluran bahan bakar", "Menambah tekanan udara ke mesin"]
+    jawaban: 1
+    penjelasan: "Udara cepat lewat venturi menciptakan tekanan rendah yang menarik bahan bakar keluar untuk bercampur dengan udara, sama seperti prinsip penyemprot parfum."
+  - soal: "Air mengalir dengan kecepatan 2 m/s di pipa berdiameter 8 cm, lalu memasuki penyempitan berdiameter 4 cm. Berapa kecepatan aliran di bagian yang sempit itu?"
+    pilihan: ["2 m/s", "4 m/s", "8 m/s", "16 m/s"]
+    jawaban: 2
+    penjelasan: "v2 = v1×(d1/d2)² = 2×(8/4)² = 2×4 = 8 m/s (asas kontinuitas)."
+  - soal: "Sebuah pipa mendatar mengalirkan air (ρ = 1.000 kg/m³) dengan kecepatan 3 m/s di bagian lebar dan 5 m/s di bagian sempit. Berapa selisih tekanan (P1 − P2) antara kedua bagian itu?"
+    pilihan: ["4.000 Pa", "8.000 Pa", "16.000 Pa", "2.000 Pa"]
+    jawaban: 1
+    penjelasan: "ΔP = ½ρ(v2² − v1²) = ½×1.000×(25 − 9) = 500×16 = 8.000 Pa."
+  - soal: "Kalau kecepatan aliran fluida di suatu titik pipa BERTAMBAH, sesuai Bernoulli, tekanan di titik itu akan..."
+    pilihan: ["Bertambah", "Berkurang", "Tetap sama", "Menjadi nol"]
+    jawaban: 1
+    penjelasan: "Karena P + ½ρv² = konstan, kenaikan v harus diimbangi penurunan P supaya jumlahnya tetap."
+  - soal: "Tirai kamar mandi kadang 'tersedot' ke arah pancuran shower yang menyala. Fenomena ini paling tepat dijelaskan oleh..."
+    pilihan: ["Hukum Archimedes", "Asas Bernoulli -- aliran air/udara cepat di dekat pancuran menurunkan tekanan di sana, menarik tirai mendekat", "Tegangan permukaan air", "Tekanan hidrostatis"]
+    jawaban: 1
+    penjelasan: "Aliran cepat di sekitar pancuran shower menurunkan tekanan udara di sana, sehingga tekanan yang lebih tinggi di luar mendorong tirai mendekat ke pancuran."
+  - soal: "Dua kapal yang berlayar sejajar dan berdekatan di laut bisa saling tertarik mendekat. Penjelasan Bernoulli untuk ini adalah..."
+    pilihan: ["Air di celah sempit antara kedua kapal mengalir lebih cepat sehingga tekanannya lebih rendah dari sisi luar, menarik kapal saling mendekat", "Kedua kapal punya muatan magnet", "Gaya gravitasi antar kapal saling menarik", "Air di celah antara kapal mengalir lebih lambat"]
+    jawaban: 0
+    penjelasan: "Celah sempit antara dua kapal membuat air mengalir lebih cepat di sana, sehingga tekanannya lebih rendah dari sisi luar -- selisih tekanan ini menarik kedua kapal saling mendekat."
+  - soal: "Manakah yang PALING TEPAT menjelaskan kenapa sayap pesawat dirancang melengkung di bagian atas?"
+    pilihan: ["Supaya lebih ringan", "Supaya udara mengalir lebih cepat di sisi atas dibanding bawah, menciptakan tekanan lebih rendah di atas dan gaya angkat", "Supaya lebih tahan panas", "Supaya lebih mudah dicat"]
+    jawaban: 1
+    penjelasan: "Lengkungan sayap membuat udara mengalir lebih cepat di sisi atas, menurunkan tekanan di atas, sehingga selisih tekanan mendorong sayap ke atas (gaya angkat)."
+  - soal: "Kesalahan umum yang sering terjadi soal Asas Bernoulli adalah menganggap..."
+    pilihan: ["Tekanan tinggi terjadi di tempat aliran fluidanya cepat -- padahal justru sebaliknya", "Tekanan rendah terjadi di tempat aliran lambat -- ini sudah benar", "Aliran fluida tidak berhubungan dengan tekanan sama sekali", "Bernoulli hanya berlaku untuk gas"]
+    jawaban: 0
+    penjelasan: "Kesalahan paling umum adalah mengira tekanan tinggi terjadi di tempat aliran cepat -- padahal justru terbalik, tekanan RENDAH terjadi di tempat aliran CEPAT."
+  - soal: "Venturimeter mengukur kecepatan aliran fluida dengan memanfaatkan..."
+    pilihan: ["Perbedaan suhu di dua titik pipa", "Selisih tekanan akibat penyempitan pipa", "Perbedaan warna fluida", "Gaya gesek dinding pipa"]
+    jawaban: 1
+    penjelasan: "Venturimeter memanfaatkan penyempitan pipa yang menghasilkan selisih tekanan (sesuai Bernoulli) untuk menghitung kecepatan dan debit aliran."
+  - soal: "Materi Asas Bernoulli ini melanjutkan pembahasan dari materi sebelumnya tentang..."
+    pilihan: ["Hukum Newton", "Asas Kontinuitas -- yang membahas bagaimana KECEPATAN aliran berubah saat pipa menyempit", "Hukum Archimedes", "Tegangan permukaan"]
+    jawaban: 1
+    penjelasan: "Setelah Asas Kontinuitas membahas perubahan kecepatan aliran, materi ini melanjutkan dengan apa yang terjadi pada tekanannya."
+  - soal: "Kalau tekanan di bagian pipa lebar (P1) adalah 50.000 Pa dan selisih tekanan (P1 − P2) adalah 12.000 Pa, berapa tekanan di bagian pipa yang sempit (P2)?"
+    pilihan: ["38.000 Pa", "50.000 Pa", "62.000 Pa", "12.000 Pa"]
+    jawaban: 0
+    penjelasan: "P2 = P1 − (P1 − P2) = 50.000 − 12.000 = 38.000 Pa."
+  - soal: "Pada persamaan Bernoulli P + ½ρv² + ρgh = konstan, suku ½ρv² menyatakan..."
+    pilihan: ["Tekanan statis fluida", "Energi kinetik fluida per satuan volume", "Energi potensial fluida per satuan volume", "Massa jenis fluida"]
+    jawaban: 1
+    penjelasan: "Suku ½ρv² merepresentasikan energi kinetik fluida per satuan volume, sedangkan ρgh merepresentasikan energi potensialnya."
+  - soal: "Kalau kecepatan aliran di suatu titik pipa mendatar berkurang menjadi setengah dari semula, tekanan di titik itu akan..."
+    pilihan: ["Berkurang", "Bertambah", "Tetap sama", "Menjadi nol"]
+    jawaban: 1
+    penjelasan: "Karena P + ½ρv² konstan, kalau v mengecil maka P harus membesar supaya jumlahnya tetap."
+  - soal: "Apa perbedaan mendasar antara Asas Kontinuitas dan Asas Bernoulli?"
+    pilihan: ["Kontinuitas membahas kecepatan dan debit aliran, sedangkan Bernoulli membahas hubungan kecepatan dengan tekanan", "Kontinuitas membahas tekanan, sedangkan Bernoulli membahas debit", "Keduanya membahas hal yang sama sehingga bisa dipilih salah satu saja", "Kontinuitas berlaku untuk gas dan Bernoulli untuk cairan"]
+    jawaban: 0
+    penjelasan: "Asas Kontinuitas menjelaskan hubungan luas penampang dan kecepatan aliran (debit tetap), sedangkan Asas Bernoulli menjelaskan hubungan kecepatan aliran dengan tekanan."
+  - soal: "Sebuah pipa venturi mengalirkan air (ρ = 1.000 kg/m³) dengan kecepatan 2 m/s di bagian lebar dan 6 m/s di bagian sempit. Berapa selisih tekanannya (P1 − P2)?"
+    pilihan: ["8.000 Pa", "16.000 Pa", "32.000 Pa", "4.000 Pa"]
+    jawaban: 1
+    penjelasan: "ΔP = ½ρ(v2² − v1²) = ½×1.000×(36 − 4) = 500×32 = 16.000 Pa."
 draft: false
 ---
 

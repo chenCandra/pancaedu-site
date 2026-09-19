@@ -32,6 +32,86 @@ kuis:
     pilihan: ["P = V × I", "P = V / I", "P = I / V", "P = V + I"]
     jawaban: 0
     penjelasan: "Daya listrik P = V × I -- hasil kali tegangan dan arus."
+  - soal: "Simbol I dalam rangkaian listrik merujuk pada besaran apa, dan apa satuannya?"
+    pilihan: ["Arus listrik, satuan Ampere (A)", "Tegangan listrik, satuan Volt (V)", "Hambatan listrik, satuan Ohm (Ω)", "Daya listrik, satuan Watt (W)"]
+    jawaban: 0
+    penjelasan: "I adalah simbol arus listrik, yaitu banyaknya muatan yang mengalir tiap detik, dengan satuan Ampere (A)."
+  - soal: "Hambatan (resistansi) sebuah komponen listrik menggambarkan apa?"
+    pilihan: ["Seberapa besar komponen itu 'menghalangi' aliran arus listrik", "Seberapa cepat energi listrik dipakai atau diubah", "Banyaknya muatan yang mengalir tiap detik", "Beda potensial antara dua titik dalam rangkaian"]
+    jawaban: 0
+    penjelasan: "Hambatan (R) menggambarkan seberapa besar sebuah komponen 'menghalangi' aliran arus listrik yang melewatinya, diukur dalam satuan Ohm (Ω)."
+  - soal: "Tegangan (beda potensial) diibaratkan sebagai apa dalam materi ini?"
+    pilihan: ["'Dorongan' yang membuat muatan mengalir", "Penghalang yang menahan aliran arus", "Jumlah muatan yang tersimpan dalam komponen", "Kecepatan aliran arus dalam kabel"]
+    jawaban: 0
+    penjelasan: "Tegangan (V) diibaratkan sebagai 'dorongan' yang membuat muatan listrik mau mengalir dalam rangkaian."
+  - soal: "Sebuah resistor 45 Ω dihubungkan ke sumber tegangan 9 V. Berapa arus yang mengalir?"
+    pilihan: ["0,2 A", "0,5 A", "5 A", "45 A"]
+    jawaban: 0
+    penjelasan: "I = V/R = 9/45 = 0,2 A."
+  - soal: "Sebuah komponen dialiri arus 0,4 A ketika dipasang pada tegangan 12 V. Berapa hambatan komponen tersebut?"
+    pilihan: ["30 Ω", "3 Ω", "0,03 Ω", "300 Ω"]
+    jawaban: 0
+    penjelasan: "R = V/I = 12/0,4 = 30 Ω."
+  - soal: "Sebuah resistor 15 Ω dialiri arus 2 A. Berapa tegangan yang terpasang di ujung-ujung resistor tersebut?"
+    pilihan: ["30 V", "7,5 V", "17 V", "0,13 V"]
+    jawaban: 0
+    penjelasan: "V = I × R = 2 × 15 = 30 V."
+  - soal: "Kenapa amperemeter harus dipasang secara seri, bukan paralel?"
+    pilihan: ["Supaya seluruh arus yang mau diukur melewati amperemeter itu", "Supaya bisa mengukur beda potensial di kedua ujung komponen", "Supaya arus terbagi dua sebelum diukur", "Karena amperemeter punya hambatan yang sangat besar, sehingga kalau dipasang paralel akan menghalangi seluruh arus"]
+    jawaban: 0
+    penjelasan: "Amperemeter dipasang seri (disisipkan di jalur utama) supaya SELURUH arus yang mau diukur melewatinya -- kalau dipasang paralel, pembacaannya jadi tidak akurat."
+  - soal: "Kenapa voltmeter harus dipasang secara paralel, bukan seri?"
+    pilihan: ["Supaya bisa membandingkan beda potensial di kedua ujung komponen tanpa mengubah arus utama", "Supaya seluruh arus yang mau diukur melewatinya", "Supaya tegangan terbagi rata ke semua komponen dalam rangkaian", "Karena voltmeter tidak bisa dipasang seri sama sekali, secara fisik"]
+    jawaban: 0
+    penjelasan: "Voltmeter dipasang paralel (melintang) di komponen yang diukur, supaya bisa membandingkan beda potensial kedua ujungnya tanpa mengganggu arus utama yang mengalir."
+  - soal: "Pada simulasi Virtual Circuit Lab, apa yang terjadi kalau amperemeter atau voltmeter dipasang di titik yang salah?"
+    pilihan: ["Muncul peringatan 'CONNECTION ERROR'", "Simulasi otomatis memperbaiki posisinya sendiri", "Tidak ada perubahan apapun pada tampilan", "Nilai yang terbaca justru jadi lebih akurat"]
+    jawaban: 0
+    penjelasan: "Simulasi akan menampilkan peringatan 'CONNECTION ERROR' kalau amperemeter atau voltmeter dipasang di titik yang salah -- cara belajar langsung lewat coba-coba."
+  - soal: "Sebuah lampu menyala pada tegangan 12 V dan arus 0,5 A. Berapa daya lampu tersebut?"
+    pilihan: ["6 W", "24 W", "6,5 W", "0,04 W"]
+    jawaban: 0
+    penjelasan: "P = V × I = 12 × 0,5 = 6 W."
+  - soal: "Lampu berdaya 6 W (dari soal sebelumnya) dinyalakan selama 3 jam. Berapa energi listrik yang terpakai?"
+    pilihan: ["18 Wh", "2 Wh", "18 W", "9 Wh"]
+    jawaban: 0
+    penjelasan: "E = P × t = 6 × 3 = 18 Wh."
+  - soal: "Rumus energi listrik E = P × t jadi dasar untuk menghitung apa dalam kehidupan sehari-hari?"
+    pilihan: ["Tagihan listrik rumah tangga (biasanya dalam satuan kWh)", "Warna kabel yang dipakai di rumah", "Jenis sekring yang harus dipasang", "Besar hambatan alat elektronik"]
+    jawaban: 0
+    penjelasan: "E = P × t adalah dasar perhitungan tagihan listrik rumah tangga, yang biasanya ditagih dalam satuan kWh (kilowatt-jam)."
+  - soal: "Kenapa pernyataan 'amperemeter dan voltmeter sama-sama boleh dipasang seri atau paralel, tidak masalah' itu keliru?"
+    pilihan: ["Karena amperemeter WAJIB seri dan voltmeter WAJIB paralel -- terbalik membuat pembacaan tidak akurat", "Karena keduanya justru wajib dipasang seri semua", "Karena keduanya justru wajib dipasang paralel semua", "Pernyataan itu sebenarnya benar, tidak ada masalah"]
+    jawaban: 0
+    penjelasan: "Amperemeter wajib dipasang seri, voltmeter wajib dipasang paralel -- memasang terbalik membuat pembacaan alat ukur jadi tidak akurat, bahkan bisa merusak alat ukur dalam praktik nyata."
+  - soal: "Kenapa menurunkan hambatan rangkaian sampai nol itu justru berbahaya, bukannya aman?"
+    pilihan: ["Karena menyebabkan hubung singkat (short circuit) dan arus jadi sangat besar", "Karena arusnya justru menjadi nol", "Karena tegangannya jadi naik tak terbatas dengan sendirinya", "Karena komponen jadi menyimpan muatan berlebih secara permanen"]
+    jawaban: 0
+    penjelasan: "Hambatan yang terlalu kecil (mendekati nol) menyebabkan hubung singkat (short circuit) -- arus jadi sangat besar dan berbahaya, itulah kenapa ada mode proteksi otomatis pada sumber daya nyata."
+  - soal: "Sebuah rangkaian sederhana memakai sumber tegangan 12 V dan resistor 50 Ω. Berapa arus yang mengalir?"
+    pilihan: ["0,24 A", "2,4 A", "24 A", "4,2 A"]
+    jawaban: 0
+    penjelasan: "I = V/R = 12/50 = 0,24 A."
+  - soal: "Melanjutkan soal sebelumnya (12 V, 50 Ω): kalau resistornya diganti jadi 100 Ω (dua kali lipat) dengan tegangan tetap 12 V, apa yang terjadi pada arusnya?"
+    pilihan: ["Arusnya jadi setengah dari semula, yaitu 0,12 A", "Arusnya jadi dua kali lipat, yaitu 0,48 A", "Arusnya tetap sama, yaitu 0,24 A", "Arusnya langsung jadi nol"]
+    jawaban: 0
+    penjelasan: "I = V/R, kalau R jadi dua kali lipat sementara V tetap, arusnya jadi setengah dari semula: I = 12/100 = 0,12 A."
+  - soal: "Secara umum, kalau tegangan (V) pada suatu rangkaian tetap sama tapi hambatannya (R) diperbesar, apa yang terjadi pada arusnya (I)?"
+    pilihan: ["Arus mengecil, karena berbanding terbalik dengan R", "Arus membesar", "Arus tetap sama", "Arus langsung menjadi nol"]
+    jawaban: 0
+    penjelasan: "Dari I = V/R, kalau V tetap dan R membesar, maka I mengecil -- arus berbanding terbalik dengan hambatan."
+  - soal: "Secara umum, kalau hambatan (R) tetap sama tapi tegangan (V) diperbesar, apa yang terjadi pada arusnya (I)?"
+    pilihan: ["Arus membesar, karena berbanding lurus dengan V", "Arus mengecil", "Arus tetap sama", "Arus menjadi negatif"]
+    jawaban: 0
+    penjelasan: "Dari I = V/R, kalau R tetap dan V membesar, maka I ikut membesar -- arus berbanding lurus dengan tegangan."
+  - soal: "Materi Hukum Ohm ini melanjutkan pembahasan dari materi sebelumnya yang membahas apa?"
+    pilihan: ["Listrik Statis (Hukum Coulomb)", "Rangkaian Seri dan Paralel", "Kapasitor Keping Sejajar", "Medan Listrik"]
+    jawaban: 0
+    penjelasan: "Setelah membahas Listrik Statis (Hukum Coulomb, muatan diam), materi ini masuk ke Listrik Dinamis -- listrik yang bergerak sebagai arus dalam rangkaian."
+  - soal: "Menurut pengantar materi ini, apa perbedaan mendasar antara Listrik Statis dan Listrik Dinamis?"
+    pilihan: ["Listrik statis membahas muatan diam, listrik dinamis membahas muatan yang bergerak sebagai arus", "Listrik statis cuma berlaku untuk logam, listrik dinamis untuk non-logam", "Listrik statis memakai satuan volt, listrik dinamis memakai satuan newton", "Tidak ada perbedaan, keduanya istilah untuk hal yang sama"]
+    jawaban: 0
+    penjelasan: "Listrik statis membahas muatan yang diam (seperti pada Hukum Coulomb), sedangkan listrik dinamis membahas muatan yang bergerak sebagai arus, mengalir dalam rangkaian."
 draft: false
 ---
 

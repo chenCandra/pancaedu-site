@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Energi kimia", "Energi nuklir", "Energi listrik", "Energi bunyi"]
     jawaban: 1
     penjelasan: "E = mc² (rumus Einstein) menjelaskan kesetaraan massa dan energi -- dasar dari reaksi nuklir, yang melepaskan energi dalam jumlah sangat besar dari perubahan massa inti atom yang kecil."
+  - soal: "Sebuah benda bermassa 4 kg bergerak dengan kecepatan 5 m/s. Energi kinetiknya adalah..."
+    pilihan: ["20 J", "40 J", "50 J", "100 J"]
+    jawaban: 2
+    penjelasan: "Ek = ½mv² = ½ × 4 × 5² = ½ × 4 × 25 = 50 J."
+  - soal: "Sebuah benda bermassa 1 kg bergerak dengan kecepatan 6 m/s. Energi kinetiknya adalah..."
+    pilihan: ["6 J", "12 J", "18 J", "36 J"]
+    jawaban: 2
+    penjelasan: "Ek = ½mv² = ½ × 1 × 6² = ½ × 36 = 18 J."
+  - soal: "Sebuah benda bermassa 2 kg berada pada ketinggian 5 m (g = 10 m/s²). Energi potensial gravitasinya adalah..."
+    pilihan: ["50 J", "100 J", "150 J", "200 J"]
+    jawaban: 1
+    penjelasan: "Ep = mgh = 2 × 10 × 5 = 100 J."
+  - soal: "Sebuah benda bermassa 3 kg berada pada ketinggian 4 m (g = 10 m/s²). Energi potensial gravitasinya adalah..."
+    pilihan: ["70 J", "90 J", "120 J", "140 J"]
+    jawaban: 2
+    penjelasan: "Ep = mgh = 3 × 10 × 4 = 120 J."
+  - soal: "Sebuah pegas dengan konstanta 200 N/m ditekan sejauh 0,1 m. Energi potensial elastisnya adalah..."
+    pilihan: ["0,5 J", "1 J", "2 J", "20 J"]
+    jawaban: 1
+    penjelasan: "Ep = ½kx² = ½ × 200 × 0,1² = ½ × 200 × 0,01 = 1 J."
+  - soal: "Sebuah pegas dengan konstanta 100 N/m diregangkan sejauh 0,2 m. Energi potensial elastisnya adalah..."
+    pilihan: ["1 J", "2 J", "4 J", "10 J"]
+    jawaban: 1
+    penjelasan: "Ep = ½kx² = ½ × 100 × 0,2² = ½ × 100 × 0,04 = 2 J."
+  - soal: "Energi kinetik dan energi potensial (baik gravitasi maupun elastis), kalau digabungkan, disebut sebagai..."
+    pilihan: ["Energi mekanik", "Energi termal", "Energi kimia", "Energi nuklir"]
+    jawaban: 0
+    penjelasan: "Energi kinetik dan energi potensial bersama-sama disebut energi mekanik, sesuai yang dijelaskan pada materi ini."
+  - soal: "Rumus Ep = mgh berkaitan dengan bentuk energi..."
+    pilihan: ["Energi kinetik", "Energi potensial gravitasi", "Energi potensial elastis", "Energi termal"]
+    jawaban: 1
+    penjelasan: "Ep = mgh adalah rumus energi potensial gravitasi, yang bergantung pada massa, percepatan gravitasi, dan ketinggian benda."
+  - soal: "Rumus Ep = ½kx² berlaku pada benda seperti apa, dan disebut bentuk energi apa?"
+    pilihan: ["Benda yang jatuh bebas, disebut energi kinetik", "Pegas atau karet yang diregangkan/ditekan, disebut energi potensial elastis", "Benda yang dipanaskan, disebut energi termal", "Baterai yang mengalirkan arus, disebut energi listrik"]
+    jawaban: 1
+    penjelasan: "Ep = ½kx² berlaku pada benda elastis seperti pegas atau karet gelang yang diregangkan/ditekan dari bentuk normalnya -- inilah energi potensial elastis."
+  - soal: "Konstanta pegas (k) yang muncul dalam rumus energi potensial elastis berasal dari hukum..."
+    pilihan: ["Hukum Newton", "Hukum Hooke", "Hukum Kekekalan Energi", "Hukum Kekekalan Massa"]
+    jawaban: 1
+    penjelasan: "Konstanta pegas (k) berasal dari Hukum Hooke (F = k·Δx), yang menjelaskan hubungan antara gaya dan pertambahan panjang pegas."
+  - soal: "Energi yang terkait dengan pergerakan partikel penyusun benda -- makin panas suatu benda, makin besar energi ini -- disebut..."
+    pilihan: ["Energi kimia", "Energi termal", "Energi listrik", "Energi bunyi"]
+    jawaban: 1
+    penjelasan: "Energi termal terkait langsung dengan pergerakan partikel penyusun benda -- makin panas suatu benda, makin cepat pergerakan partikelnya, makin besar energi termalnya."
+  - soal: "Energi yang tersimpan dalam ikatan kimia dan dilepaskan saat ikatan itu berubah (misalnya bahan bakar dibakar) disebut..."
+    pilihan: ["Energi kimia", "Energi nuklir", "Energi cahaya", "Energi mekanik"]
+    jawaban: 0
+    penjelasan: "Energi kimia tersimpan dalam ikatan kimia suatu zat, dan dilepaskan saat ikatan tersebut berubah, misalnya saat bahan bakar dibakar atau makanan dicerna."
+  - soal: "Energi yang terkait aliran muatan listrik dalam konduktor, dihitung dari tegangan, arus, dan waktu (W = VIt), disebut..."
+    pilihan: ["Energi listrik", "Energi termal", "Energi kimia", "Energi nuklir"]
+    jawaban: 0
+    penjelasan: "Energi listrik terkait dengan aliran muatan listrik dalam konduktor, dan besarnya dapat dihitung dengan rumus W = VIt (tegangan × arus × waktu)."
+  - soal: "Energi yang terbawa oleh gelombang elektromagnetik yang terlihat, berasal dari matahari atau lampu, disebut..."
+    pilihan: ["Energi bunyi", "Energi cahaya", "Energi kimia", "Energi termal"]
+    jawaban: 1
+    penjelasan: "Energi cahaya terbawa oleh gelombang elektromagnetik yang terlihat -- contohnya cahaya dari matahari atau lampu."
+  - soal: "Energi yang terbawa oleh getaran partikel udara (atau medium lain) yang merambat disebut..."
+    pilihan: ["Energi bunyi", "Energi cahaya", "Energi listrik", "Energi nuklir"]
+    jawaban: 0
+    penjelasan: "Energi bunyi terbawa oleh getaran partikel udara atau medium lain yang merambat, seperti suara atau gelombang ultrasonik."
+  - soal: "Energi nuklir dilepaskan lewat dua proses utama pada inti atom, yaitu..."
+    pilihan: ["Kondensasi dan penguapan", "Fisi (pemecahan inti) dan fusi (penggabungan inti)", "Oksidasi dan reduksi", "Pemuaian dan penyusutan"]
+    jawaban: 1
+    penjelasan: "Energi nuklir dilepaskan ketika inti atom pecah (fisi, seperti pada PLTN) atau bergabung (fusi, seperti pada matahari)."
+  - soal: "'Benda diam tidak punya energi apa pun' adalah pernyataan yang salah, karena benda diam tetap bisa memiliki..."
+    pilihan: ["Energi kinetik yang besar", "Energi potensial atau energi kimia", "Energi bunyi yang konstan", "Tidak ada energi sama sekali, pernyataan ini benar"]
+    jawaban: 1
+    penjelasan: "Benda diam masih bisa memiliki energi potensial (karena posisi/ketinggiannya) atau energi kimia (tersimpan dalam ikatan molekulnya), meskipun energi kinetiknya nol."
+  - soal: "'Energi nuklir cuma soal bom atom' adalah pernyataan yang terlalu sempit, karena energi nuklir juga dimanfaatkan untuk..."
+    pilihan: ["Menggerakkan kendaraan bermotor biasa", "Pembangkit listrik (PLTN), dan matahari sendiri bersinar karena reaksi fusi di intinya", "Menghasilkan energi angin", "Membuat pegas menjadi elastis"]
+    jawaban: 1
+    penjelasan: "Energi nuklir dimanfaatkan secara damai lewat PLTN untuk menghasilkan listrik, dan bahkan matahari bersinar karena reaksi nuklir (fusi) yang terjadi di intinya."
+  - soal: "Menurut pembagian bentuk energi vs sumber energi, matahari, angin, air, dan bahan bakar fosil termasuk contoh dari..."
+    pilihan: ["Bentuk energi", "Sumber energi", "Satuan energi", "Alat pengukur energi"]
+    jawaban: 1
+    penjelasan: "Matahari, angin, air, dan bahan bakar fosil adalah SUMBER energi (dari mana energi berasal), bukan bentuk energi -- bentuk energinya sendiri tetap kinetik, cahaya, kimia, dst."
+  - soal: "Urutan perubahan bentuk energi yang paling tepat dari sebuah senter yang menyala memakai baterai adalah..."
+    pilihan: ["Energi cahaya → energi kimia → energi listrik", "Energi kimia (baterai) → energi listrik → energi cahaya (dan panas)", "Energi listrik → energi nuklir → energi cahaya", "Energi termal → energi kimia → energi cahaya"]
+    jawaban: 1
+    penjelasan: "Baterai menyimpan energi kimia, yang diubah menjadi energi listrik saat senter dinyalakan, lalu energi listrik itu diubah lagi menjadi energi cahaya (dan sebagian jadi panas) oleh lampu senter."
 draft: false
 ---
 

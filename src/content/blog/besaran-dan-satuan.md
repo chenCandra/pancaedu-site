@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Massa", "Waktu", "Kecepatan", "Jarak"]
     jawaban: 2
     penjelasan: "Kecepatan punya arah (mis. 'ke utara'), jadi termasuk besaran vektor. Massa, waktu, dan jarak cuma punya nilai tanpa arah -- termasuk besaran skalar."
+  - soal: "Satuan didefinisikan dalam materi ini sebagai..."
+    pilihan: ["Nama alat ukur yang digunakan", "Besaran pembanding yang digunakan untuk menyatakan hasil pengukuran suatu besaran", "Angka hasil pengukuran", "Besaran yang tidak bisa diukur"]
+    jawaban: 1
+    penjelasan: "Satuan adalah besaran pembanding -- misalnya '1 meter' -- yang dipakai untuk menyatakan seberapa besar hasil pengukuran suatu besaran."
+  - soal: "Pada kalimat 'massa buku = 250 gram', bagian mana yang berperan sebagai NILAI hasil pengukuran?"
+    pilihan: ["Massa", "250", "Gram", "Buku"]
+    jawaban: 1
+    penjelasan: "Dalam sebuah pernyataan besaran, ada tiga bagian: besaran yang diukur (massa), nilai (250), dan satuan (gram)."
+  - soal: "Pada kalimat 'massa buku = 250 gram', yang berperan sebagai SATUAN adalah..."
+    pilihan: ["Massa", "Buku", "250", "Gram"]
+    jawaban: 3
+    penjelasan: "Gram adalah satuan pembanding yang dipakai untuk menyatakan hasil pengukuran massa buku tersebut."
+  - soal: "Manakah yang termasuk contoh satuan TIDAK BAKU?"
+    pilihan: ["Meter, kilogram, sekon", "Jengkal, hasta, depa", "Ampere, kelvin, mol", "Newton, joule, watt"]
+    jawaban: 1
+    penjelasan: "Jengkal, hasta, dan depa nilainya berbeda-beda tergantung orang yang mengukur, sehingga termasuk satuan tidak baku."
+  - soal: "Ciri utama satuan baku, berbeda dari satuan tidak baku, adalah..."
+    pilihan: ["Namanya lebih pendek", "Nilainya tetap dan sama untuk semua orang, di mana pun diukur", "Hanya dipakai di satu negara", "Hanya bisa dipakai untuk mengukur panjang"]
+    jawaban: 1
+    penjelasan: "Satuan baku seperti meter, kilogram, dan sekon nilainya tetap dan konsisten untuk siapa saja, di mana saja -- berbeda dari jengkal atau hasta yang berubah-ubah."
+  - soal: "Salah satu syarat satuan baku yang baik adalah 'tetap', artinya..."
+    pilihan: ["Nilainya tidak berubah-ubah karena waktu, tempat, atau kondisi", "Namanya tidak boleh diubah selamanya", "Hanya boleh dipakai oleh satu ilmuwan", "Harus ditulis dengan huruf kapital"]
+    jawaban: 0
+    penjelasan: "Syarat 'tetap' berarti nilai satuan tersebut konsisten, tidak berubah karena faktor waktu, tempat, atau kondisi pengukuran."
+  - soal: "Syarat 'mudah ditiru ulang' pada satuan baku berarti satuan tersebut..."
+    pilihan: ["Harus mahal alat ukurnya", "Bisa direproduksi di laboratorium mana pun dengan hasil yang sama", "Hanya boleh diukur satu kali", "Tidak boleh diverifikasi ulang"]
+    jawaban: 1
+    penjelasan: "Satuan baku harus bisa direproduksi ulang di laboratorium mana pun di dunia dengan hasil yang konsisten."
+  - soal: "Definisi 1 meter saat ini didasarkan pada..."
+    pilihan: ["Sepersepuluh juta jarak kutub Bumi ke khatulistiwa", "Jarak yang ditempuh cahaya dalam waktu sangat singkat tertentu", "Panjang lengan bawah manusia dewasa", "Jarak dua kota besar di Eropa"]
+    jawaban: 1
+    penjelasan: "Definisi 1 meter sudah berubah -- sekarang didasarkan pada jarak yang ditempuh cahaya dalam waktu sangat singkat tertentu, bukan lagi jarak kutub-khatulistiwa Bumi."
+  - soal: "Kenapa definisi 1 meter beralih dari jarak kutub-khatulistiwa Bumi ke jarak tempuh cahaya?"
+    pilihan: ["Karena jarak kutub-khatulistiwa sudah tidak ada", "Karena kecepatan cahaya lebih presisi dan bisa direproduksi ulang di laboratorium mana pun", "Karena cahaya lebih murah diukur", "Karena permintaan negara-negara Eropa"]
+    jawaban: 1
+    penjelasan: "Kecepatan cahaya jauh lebih presisi dan bisa direproduksi ulang di laboratorium mana pun di dunia, sehingga jadi acuan yang lebih baik dibanding jarak geografis Bumi."
+  - soal: "Berdasarkan cara memperolehnya, besaran turunan berbeda dari besaran pokok karena..."
+    pilihan: ["Besaran turunan tidak memiliki satuan", "Besaran turunan dibentuk dari kombinasi besaran pokok", "Besaran turunan hanya ada satu macam", "Besaran turunan tidak dapat diukur"]
+    jawaban: 1
+    penjelasan: "Besaran pokok adalah besaran dasar, sedangkan besaran turunan dibentuk dari kombinasi besaran pokok, misalnya luas dan kecepatan."
+  - soal: "Manakah dari berikut yang termasuk besaran SKALAR?"
+    pilihan: ["Gaya", "Percepatan", "Suhu", "Perpindahan"]
+    jawaban: 2
+    penjelasan: "Suhu cukup dinyatakan dengan nilai saja tanpa arah, jadi termasuk besaran skalar. Gaya, percepatan, dan perpindahan termasuk besaran vektor."
+  - soal: "Manakah dari berikut yang termasuk besaran VEKTOR?"
+    pilihan: ["Massa", "Suhu", "Gaya", "Energi"]
+    jawaban: 2
+    penjelasan: "Gaya memerlukan nilai sekaligus arah, sehingga termasuk besaran vektor. Massa, suhu, dan energi termasuk besaran skalar."
+  - soal: "Massa termasuk kombinasi klasifikasi..."
+    pilihan: ["Besaran turunan dan skalar", "Besaran pokok dan skalar", "Besaran pokok dan vektor", "Besaran turunan dan vektor"]
+    jawaban: 1
+    penjelasan: "Massa adalah besaran pokok (tidak diturunkan dari besaran lain) sekaligus besaran skalar (cukup dinyatakan dengan nilai, tanpa arah)."
+  - soal: "Gaya termasuk kombinasi klasifikasi..."
+    pilihan: ["Besaran pokok dan skalar", "Besaran turunan dan skalar", "Besaran turunan dan vektor", "Besaran pokok dan vektor"]
+    jawaban: 2
+    penjelasan: "Gaya dibentuk dari massa dan percepatan (besaran turunan) dan memerlukan arah untuk dinyatakan lengkap (vektor)."
+  - soal: "'Besaran dan satuan itu sama saja, cuma istilah beda' -- pernyataan ini..."
+    pilihan: ["Benar, keduanya bisa dipakai bertukar-tukar", "Salah, besaran adalah apa yang diukur sedangkan satuan adalah cara menyatakan hasil ukurnya", "Benar, tapi hanya untuk besaran pokok", "Salah, karena besaran hanya berlaku untuk besaran turunan"]
+    jawaban: 1
+    penjelasan: "Besaran (mis. panjang) dan satuan (mis. meter) adalah dua hal berbeda yang sering tertukar -- besaran adalah APA yang diukur, satuan adalah CARA menyatakan hasilnya."
+  - soal: "Seorang siswa berkata 'yang penting satuan saya konsisten dipakai sendiri, tidak masalah beda dari orang lain'. Pandangan ini..."
+    pilihan: ["Benar, karena yang penting konsisten untuk dirinya sendiri", "Keliru, karena tujuan satuan baku adalah supaya hasil pengukuran dapat dibandingkan antar orang", "Benar, karena satuan tidak baku juga diakui secara internasional", "Keliru, karena satuan tidak boleh dipakai berulang kali"]
+    jawaban: 1
+    penjelasan: "Tujuan satuan baku justru supaya hasil pengukuran bisa dibandingkan ANTAR orang -- kalau tiap orang pakai patokan sendiri, hasilnya tidak bisa dipercaya di luar lingkupnya sendiri."
+  - soal: "'Semua besaran pokok itu skalar, semua besaran turunan itu vektor' -- pernyataan ini..."
+    pilihan: ["Benar tanpa kecuali", "Salah, contohnya waktu (pokok) itu skalar, tapi massa jenis (turunan) tetap skalar juga", "Benar, karena besaran turunan selalu punya arah", "Salah, karena besaran pokok tidak punya klasifikasi skalar/vektor"]
+    jawaban: 1
+    penjelasan: "Dua klasifikasi ini independen satu sama lain -- waktu (pokok) skalar, kecepatan (turunan) vektor, tapi massa jenis (turunan) tetap skalar."
+  - soal: "Luas dan kecepatan termasuk contoh besaran..."
+    pilihan: ["Pokok", "Turunan", "Skalar murni", "Tidak memiliki klasifikasi"]
+    jawaban: 1
+    penjelasan: "Luas dan kecepatan sama-sama dibentuk dari kombinasi besaran pokok, sehingga termasuk besaran turunan."
+  - soal: "Materi ini menganalogikan 7 besaran pokok seperti alfabet, maksudnya..."
+    pilihan: ["Besaran pokok jumlahnya harus 26 seperti huruf alfabet", "Dari sejumlah kecil besaran pokok yang mendasar, bisa dibentuk banyak sekali besaran turunan, mirip huruf yang membentuk banyak kata", "Besaran pokok harus dihafal urut seperti alfabet", "Besaran pokok tidak ada hubungannya dengan besaran turunan"]
+    jawaban: 1
+    penjelasan: "Sama seperti 26 huruf alfabet bisa membentuk jutaan kata, 7 besaran pokok jadi 'bahan dasar' untuk menyusun banyak besaran turunan."
+  - soal: "Perbedaan antara 'mobil bergerak dengan kelajuan 60 km/jam' dan 'mobil bergerak dengan kecepatan 60 km/jam ke arah utara' terletak pada..."
+    pilihan: ["Satuan yang dipakai", "Ada atau tidaknya informasi arah, sesuai perbedaan besaran skalar dan vektor", "Besaran pokok yang digunakan", "Jenis alat ukur yang dipakai"]
+    jawaban: 1
+    penjelasan: "Kelajuan (skalar) cuma menyatakan nilai, sedangkan kecepatan (vektor) menyatakan nilai sekaligus arah -- perbedaan ini persis mengikuti klasifikasi skalar/vektor."
 draft: false
 ---
 

@@ -1,6 +1,16 @@
 ---
 // Kuis pilihan ganda di akhir materi — feedback langsung tiap soal dijawab
 // (bukan submit-semua-baru-dinilai). Lihat schema `kuis` di content.config.ts.
+//
+// Stok soal per materi BISA lebih banyak dari yang ditampilkan (mis. 25
+// soal ditulis, tapi cuma `jumlahTampil` yang muncul per pengerjaan) --
+// makanya render soal harus di CLIENT (browser), bukan di build time:
+// kalau dirender statis saat build, semua pengunjung bakal dapat subset
+// "acak" yang SAMA terus (acaknya cuma sekali, pas Claude/CMS nge-build
+// situsnya), bukan acak beda tiap kali murid mengerjakan/coba lagi.
+// Makanya seluruh pool soal ditempel sebagai JSON di <script
+// type="application/json">, lalu di-shuffle & dirender ulang oleh JS tiap
+// halaman dibuka DAN tiap tombol "Coba Lagi" dipencet.
 interface SoalKuis {
   soal: string;
   pilihan: string[];
@@ -10,35 +20,30 @@ interface SoalKuis {
 
 interface Props {
   soal: SoalKuis[] | undefined;
+  jumlahTampil?: number;
 }
 
-const { soal } = Astro.props;
+const { soal, jumlahTampil = 15 } = Astro.props;
+const totalStok = soal?.length ?? 0;
+const jumlahDitampilkan = Math.min(jumlahTampil, totalStok);
+// escape "</" biar teks soal yang (kebetulan) mengandung itu nggak nutup tag <script> lebih awal
+const poolJson = soal ? JSON.stringify(soal).replace(/<\//g, '<\\/') : '[]';
 ---
 
 {soal && soal.length > 0 && (
-  <section class="kuis card" data-kuis id="kuis">
+  <section class="kuis card" data-kuis data-jumlah-tampil={jumlahDitampilkan} id="kuis">
     <div class="kuis-header">
       <h2>🧠 Uji Pemahaman</h2>
       <p class="kuis-score" data-kuis-score hidden></p>
     </div>
-    <ol class="kuis-list">
-      {soal.map((item, qIndex) => (
-        <li class="kuis-item" data-kuis-item data-correct-index={item.jawaban}>
-          <p class="kuis-question">{qIndex + 1}. {item.soal}</p>
-          <div class="kuis-options" role="group" aria-label={`Pilihan jawaban soal ${qIndex + 1}`}>
-            {item.pilihan.map((opsi, oIndex) => (
-              <button type="button" class="kuis-option" data-kuis-option data-index={oIndex}>
-                {opsi}
-              </button>
-            ))}
-          </div>
-          {item.penjelasan && (
-            <p class="kuis-explanation" data-kuis-explanation hidden>💡 {item.penjelasan}</p>
-          )}
-        </li>
-      ))}
-    </ol>
-    <button type="button" class="btn kuis-reset" data-kuis-reset hidden>Coba Lagi</button>
+    {totalStok > jumlahDitampilkan && (
+      <p class="kuis-pool-note">
+        🔀 {jumlahDitampilkan} soal diacak dari stok {totalStok} soal — coba lagi buat dapat kombinasi baru.
+      </p>
+    )}
+    <ol class="kuis-list" data-kuis-list></ol>
+    <button type="button" class="btn kuis-reset" data-kuis-reset hidden>Coba Lagi (Soal Baru)</button>
+    <script type="application/json" data-kuis-pool set:html={poolJson} />
   </section>
 )}
 
@@ -54,7 +59,7 @@ const { soal } = Astro.props;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.5rem;
   }
 
   .kuis-header h2 {
@@ -67,6 +72,12 @@ const { soal } = Astro.props;
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--accent);
+  }
+
+  .kuis-pool-note {
+    margin: 0 0 1.25rem;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
   }
 
   .kuis-list {
@@ -145,13 +156,42 @@ const { soal } = Astro.props;
 </style>
 
 <script>
+  interface SoalKuis {
+    soal: string;
+    pilihan: string[];
+    jawaban: number;
+    penjelasan?: string;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
   document.querySelectorAll<HTMLElement>('[data-kuis]').forEach((quiz) => {
-    const items = Array.from(quiz.querySelectorAll<HTMLElement>('[data-kuis-item]'));
+    const list = quiz.querySelector<HTMLElement>('[data-kuis-list]');
+    const poolScript = quiz.querySelector<HTMLScriptElement>('[data-kuis-pool]');
     const scoreEl = quiz.querySelector<HTMLElement>('[data-kuis-score]');
     const resetBtn = quiz.querySelector<HTMLButtonElement>('[data-kuis-reset]');
-    const answered = new Map<HTMLElement, boolean>();
+    const jumlahTampil = Number(quiz.dataset.jumlahTampil) || 15;
+    if (!list || !poolScript) return;
 
-    const updateScore = () => {
+    let pool: SoalKuis[] = [];
+    try {
+      pool = JSON.parse(poolScript.textContent || '[]');
+    } catch {
+      pool = [];
+    }
+    if (pool.length === 0) return;
+
+    const answered = new Map<HTMLElement, boolean>();
+    let items: HTMLElement[] = [];
+
+    function updateScore() {
       if (!scoreEl || !resetBtn) return;
       if (answered.size === items.length && items.length > 0) {
         const correctCount = [...answered.values()].filter(Boolean).length;
@@ -159,45 +199,81 @@ const { soal } = Astro.props;
         scoreEl.textContent = `Skor: ${correctCount} dari ${items.length} benar`;
         resetBtn.hidden = false;
       }
-    };
+    }
 
-    items.forEach((item) => {
-      const correctIndex = Number(item.dataset.correctIndex);
-      const options = Array.from(item.querySelectorAll<HTMLButtonElement>('[data-kuis-option]'));
-      const explanation = item.querySelector<HTMLElement>('[data-kuis-explanation]');
-
-      options.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          if (answered.has(item)) return; // sudah dijawab — dikunci, nggak bisa ganti
-
-          const chosen = Number(btn.dataset.index);
-          const isCorrect = chosen === correctIndex;
-          answered.set(item, isCorrect);
-
-          options.forEach((b, i) => {
-            b.disabled = true;
-            if (i === correctIndex) b.classList.add('kuis-correct');
-            else if (b === btn) b.classList.add('kuis-incorrect');
-          });
-
-          if (explanation) explanation.hidden = false;
-          updateScore();
-        });
-      });
-    });
-
-    resetBtn?.addEventListener('click', () => {
+    function renderQuiz() {
       answered.clear();
-      items.forEach((item) => {
-        item.querySelectorAll<HTMLButtonElement>('[data-kuis-option]').forEach((b) => {
-          b.disabled = false;
-          b.classList.remove('kuis-correct', 'kuis-incorrect');
-        });
-        const explanation = item.querySelector<HTMLElement>('[data-kuis-explanation]');
-        if (explanation) explanation.hidden = true;
-      });
       if (scoreEl) scoreEl.hidden = true;
-      resetBtn.hidden = true;
-    });
+      if (resetBtn) resetBtn.hidden = true;
+      list!.innerHTML = '';
+
+      const dipilih = shuffle(pool).slice(0, jumlahTampil);
+
+      dipilih.forEach((soalItem, qIndex) => {
+        const li = document.createElement('li');
+        li.className = 'kuis-item';
+        li.dataset.correctIndex = String(soalItem.jawaban);
+
+        const q = document.createElement('p');
+        q.className = 'kuis-question';
+        q.textContent = `${qIndex + 1}. ${soalItem.soal}`;
+        li.appendChild(q);
+
+        const optsWrap = document.createElement('div');
+        optsWrap.className = 'kuis-options';
+        optsWrap.setAttribute('role', 'group');
+        optsWrap.setAttribute('aria-label', `Pilihan jawaban soal ${qIndex + 1}`);
+
+        soalItem.pilihan.forEach((opsi, oIndex) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'kuis-option';
+          btn.dataset.index = String(oIndex);
+          btn.textContent = opsi;
+          optsWrap.appendChild(btn);
+        });
+        li.appendChild(optsWrap);
+
+        if (soalItem.penjelasan) {
+          const p = document.createElement('p');
+          p.className = 'kuis-explanation';
+          p.hidden = true;
+          p.textContent = `💡 ${soalItem.penjelasan}`;
+          li.appendChild(p);
+        }
+
+        list!.appendChild(li);
+      });
+
+      items = Array.from(list!.querySelectorAll<HTMLElement>('.kuis-item'));
+
+      items.forEach((item) => {
+        const correctIndex = Number(item.dataset.correctIndex);
+        const options = Array.from(item.querySelectorAll<HTMLButtonElement>('.kuis-option'));
+        const explanation = item.querySelector<HTMLElement>('.kuis-explanation');
+
+        options.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (answered.has(item)) return; // sudah dijawab — dikunci, nggak bisa ganti
+
+            const chosen = Number(btn.dataset.index);
+            const isCorrect = chosen === correctIndex;
+            answered.set(item, isCorrect);
+
+            options.forEach((b, i) => {
+              b.disabled = true;
+              if (i === correctIndex) b.classList.add('kuis-correct');
+              else if (b === btn) b.classList.add('kuis-incorrect');
+            });
+
+            if (explanation) explanation.hidden = false;
+            updateScore();
+          });
+        });
+      });
+    }
+
+    resetBtn?.addEventListener('click', renderQuiz);
+    renderQuiz();
   });
 </script>

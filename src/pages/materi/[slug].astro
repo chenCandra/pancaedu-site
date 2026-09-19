@@ -6,7 +6,6 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import BookmarkButton from '../../components/BookmarkButton.astro';
-import Kuis from '../../components/Kuis.astro';
 import { extractYoutubeId } from '../../lib/youtube';
 
 export async function getStaticPaths() {
@@ -47,6 +46,16 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
   year: 'numeric',
 });
 
+// Setiap materi yang jadi bagian sesi Ruang Belajar TERTAUT ke SATU sesi
+// saja (1 materiSlug = 1 sesi, dicek pas nambah simulasi kemarin) --
+// dipakai buat tombol pemandu "Kembali ke Ruang Belajar" di atas & bawah
+// halaman, supaya siswa nggak perlu mengandalkan tombol Back browser cuma
+// buat balik ke menu langkah-langkah pembelajaran.
+const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find(
+  (s) => s.data.materiSlug === post.id
+);
+const hasKuis = Boolean(kuis && kuis.length > 0);
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LearningResource',
@@ -66,6 +75,11 @@ const jsonLd = {
 <BaseLayout title={title} description={description} image={coverImage} article jsonLd={jsonLd}>
   <ReadingProgress />
   <article class="container post">
+    {rbEntry ? (
+      <a href={`/ruang-belajar/${rbEntry.id}`} class="back-link">&larr; Kembali ke Ruang Belajar: {rbEntry.data.judul}</a>
+    ) : (
+      <a href="/materi" class="back-link">&larr; Semua Materi</a>
+    )}
     <p class="eyebrow">
       Materi Pelajaran{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
     </p>
@@ -116,8 +130,6 @@ const jsonLd = {
       </section>
     )}
 
-    <Kuis soal={kuis} />
-
     <AdSlot label="Iklan" />
 
     {tags.length > 0 && (
@@ -125,6 +137,23 @@ const jsonLd = {
         {tags.map((tag: string) => <li class="badge badge-gold">{tag}</li>)}
       </ul>
     )}
+
+    <div class="next-step">
+      {hasKuis ? (
+        <a href={`/materi/${post.id}/uji-pemahaman`} class="btn btn-primary next-step-btn">
+          🧠 Mulai Uji Pemahaman &rarr;
+        </a>
+      ) : rbEntry ? (
+        <a href={`/ruang-belajar/${rbEntry.id}`} class="btn btn-primary next-step-btn">
+          &larr; Kembali ke Ruang Belajar
+        </a>
+      ) : null}
+      {hasKuis && rbEntry && (
+        <a href={`/ruang-belajar/${rbEntry.id}`} class="next-step-secondary">
+          Lewati kuis, kembali ke Ruang Belajar &rarr;
+        </a>
+      )}
+    </div>
   </article>
 
   <RelatedPosts posts={related} />
@@ -134,6 +163,45 @@ const jsonLd = {
   .post {
     padding-block: 3rem 4rem;
     max-width: var(--measure);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .next-step {
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .next-step-btn {
+    font-size: 1rem;
+    padding: 0.85rem 1.75rem;
+  }
+
+  .next-step-secondary {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+
+  .next-step-secondary:hover {
+    color: var(--ink-soft);
+    text-decoration: underline;
   }
 
   .post-meta-row {

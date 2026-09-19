@@ -7,6 +7,11 @@ kelas: XII
 pubDate: 2024-01-14
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Kontraksi Panjang", "Fisika Kelas XII"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
+  judul: "Laboratorium Maya: Efek Relativistik (Kontraksi Panjang)"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1400
 kuis:
   - soal: "Kontraksi panjang terjadi pada arah..."
     pilihan: ["Segala arah", "Searah dengan arah gerak benda saja", "Tegak lurus arah gerak saja", "Tidak tentu arah"]
@@ -24,6 +29,90 @@ kuis:
     pilihan: ["Tetap 20 m", "Lebih dari 20 m", "Kurang dari 20 m", "Jadi 0 m"]
     jawaban: 2
     penjelasan: "Karena bergerak mendekati kecepatan cahaya, panjang yang terukur pengamat diam lebih pendek dari panjang diamnya (20 m)."
+  - soal: "Kontraksi panjang lahir dari akar yang sama dengan dilatasi waktu, yaitu..."
+    pilihan: ["Postulat kecepatan cahaya yang konstan bagi semua pengamat", "Hukum Newton II tentang gaya dan percepatan", "Hukum kekekalan energi mekanik", "Postulat bahwa waktu selalu mutlak bagi semua pengamat"]
+    jawaban: 0
+    penjelasan: "Kontraksi panjang dan dilatasi waktu keduanya lahir dari postulat kecepatan cahaya yang konstan bagi semua pengamat -- karena ruang dan waktu saling terkait erat (Transformasi Lorentz), perubahan pada satu pasti diiringi perubahan pada yang lain."
+  - soal: "Panjang sejati (proper length, L₀) sebuah benda adalah panjang yang terukur oleh pengamat yang..."
+    pilihan: ["Diam relatif terhadap benda itu (atau ikut bergerak bersamanya)", "Bergerak sangat cepat menjauhi benda itu", "Berada di kerangka acuan mana pun, hasilnya selalu sama", "Berada tepat di kecepatan cahaya"]
+    jawaban: 0
+    penjelasan: "L₀ (panjang sejati) adalah panjang yang terukur pengamat yang DIAM relatif terhadap benda -- inilah panjang yang paling besar/panjang dibanding hasil ukur pengamat mana pun yang bergerak relatif terhadapnya."
+  - soal: "Bagi astronot yang ikut bergerak BERSAMA sebuah roket yang melesat mendekati kecepatan cahaya, panjang roket itu sendiri (menurut si astronot) akan terukur..."
+    pilihan: ["Tetap sama dengan panjang aslinya (tidak memendek sama sekali)", "Memendek drastis, sama seperti yang diukur pengamat di Bumi", "Menjadi nol", "Bertambah panjang"]
+    jawaban: 0
+    penjelasan: "Kontraksi panjang hanya terjadi bagi pengamat yang bergerak RELATIF terhadap benda itu. Astronot yang ikut bergerak bersama roketnya sendiri tidak punya gerak relatif terhadap roket, sehingga tetap mengukur panjang aslinya (L₀), tidak memendek."
+  - soal: "Kalau sebuah roket berbentuk tabung melesat sangat cepat searah panjangnya, apa yang terjadi pada DIAMETER roket itu menurut pengamat diam?"
+    pilihan: ["Diameternya tetap sama, tidak berubah", "Diameternya ikut memendek sama seperti panjangnya", "Diameternya justru bertambah besar", "Diameternya menjadi nol"]
+    jawaban: 0
+    penjelasan: "Kontraksi panjang HANYA terjadi pada arah SEARAH gerak benda. Diameter roket (tegak lurus arah gerak) sama sekali tidak berubah, meski panjangnya (searah gerak) memendek."
+  - soal: "Faktor √(1−v²/c²) yang muncul dalam rumus kontraksi panjang selalu bernilai..."
+    pilihan: ["Antara 0 dan 1, untuk v<c", "Selalu lebih besar dari 1", "Selalu negatif", "Selalu sama dengan 1, berapa pun kecepatannya"]
+    jawaban: 0
+    penjelasan: "Untuk v<c, faktor √(1−v²/c²) selalu berada di antara 0 dan 1 -- itulah kenapa L (=L₀ dikali faktor ini) selalu LEBIH KECIL dari L₀."
+  - soal: "Kenapa kontraksi panjang tidak pernah kita sadari pada kecepatan mobil atau pesawat komersial sehari-hari?"
+    pilihan: ["Karena rasio v/c sangat kecil, sehingga faktor √(1−v²/c²) nyaris persis 1 dan kontraksinya tidak terdeteksi", "Karena kontraksi panjang hanya berlaku untuk benda yang sangat besar ukurannya", "Karena mobil dan pesawat tidak punya massa", "Karena kontraksi panjang hanya terjadi di luar atmosfer Bumi"]
+    jawaban: 0
+    penjelasan: "Kecepatan mobil/pesawat jauh lebih kecil dari kecepatan cahaya, sehingga v/c mendekati 0 dan faktor √(1−v²/c²) mendekati 1 -- kontraksinya ada secara matematis, tapi terlalu kecil untuk terdeteksi."
+  - soal: "Di bidang fisika apa efek kontraksi panjang benar-benar teramati dan terukur secara nyata?"
+    pilihan: ["Fisika partikel, di akselerator partikel yang mempercepat partikel subatomik mendekati kecepatan cahaya", "Astronomi pengamatan bintang jauh dengan teleskop biasa", "Kimia organik dalam reaksi molekul", "Fisika benda sehari-hari seperti mobil dan pesawat"]
+    jawaban: 0
+    penjelasan: "Di akselerator partikel, partikel subatomik dipercepat sampai mendekati kecepatan cahaya (v/c yang besar) -- di sinilah efek relativistik seperti kontraksi panjang benar-benar signifikan dan terukur."
+  - soal: "Sebuah pesawat luar angkasa sepanjang 100 m (saat diam) bergerak dengan kecepatan 0,6c relatif terhadap Bumi. Berapa panjang pesawat itu menurut pengamat di Bumi?"
+    pilihan: ["80 m", "60 m", "100 m", "36 m"]
+    jawaban: 0
+    penjelasan: "L = L₀×√(1−v²/c²) = 100×√(1−0,36) = 100×√0,64 = 100×0,8 = 80 m."
+  - soal: "Sebuah batang sepanjang 10 m (saat diam) bergerak dengan kecepatan 0,6c. Berapa panjang batang itu yang terukur oleh pengamat diam?"
+    pilihan: ["8 m", "10 m", "6 m", "4 m"]
+    jawaban: 0
+    penjelasan: "L = L₀×√(1−v²/c²) = 10×√(1−0,36) = 10×0,8 = 8 m."
+  - soal: "Sebuah penggaris sepanjang 1 m (saat diam) dibawa Dede yang bergerak dengan v=0,75c relatif terhadap Didi yang diam di Bumi, dengan arah penggaris searah gerak pesawat. Berapa panjang penggaris itu menurut Didi?"
+    pilihan: ["Sekitar 0,66 m", "1 m (tidak berubah)", "0,75 m", "0,5 m"]
+    jawaban: 0
+    penjelasan: "L = L₀×√(1−v²/c²) = 1×√(1−0,75²) = 1×√(1−0,5625) = 1×√0,4375 ≈ 1×0,661 ≈ 0,66 m."
+  - soal: "Sebuah benda diukur memiliki panjang 15 m oleh pengamat yang diam relatif terhadapnya (L₀=15 m), dan bergerak dengan kecepatan 0,6c terhadap pengamat lain yang diam di Bumi. Berapa panjang benda itu menurut pengamat di Bumi?"
+    pilihan: ["12 m", "15 m", "9 m", "18 m"]
+    jawaban: 0
+    penjelasan: "L = 15×√(1−0,6²) = 15×√(1−0,36) = 15×√0,64 = 15×0,8 = 12 m."
+  - soal: "Andaikan sebuah benda BISA mencapai kecepatan persis v=c (secara hipotetis), berapa panjangnya yang akan terukur pengamat diam, menurut rumus kontraksi panjang?"
+    pilihan: ["Nol (menyusut habis)", "Tetap sama dengan L₀", "Menjadi tak terhingga", "Dua kali L₀"]
+    jawaban: 0
+    penjelasan: "Kalau v=c, maka v²/c²=1, sehingga faktor √(1−v²/c²)=√0=0 -- secara matematis, panjangnya akan menyusut jadi nol. Inilah salah satu alasan kenapa v=c tidak bisa benar-benar dicapai benda bermassa."
+  - soal: "Kalau kecepatan sebuah benda dinaikkan dari 0,6c menjadi 0,8c, apa yang terjadi pada panjang terukurnya (L) dibanding sebelumnya?"
+    pilihan: ["L menjadi lebih kecil lagi, karena faktor √(1−v²/c²) makin mengecil seiring v mendekati c", "L menjadi lebih besar, karena kecepatan makin tinggi", "L tidak berubah sama sekali", "L menjadi negatif"]
+    jawaban: 0
+    penjelasan: "Semakin besar v mendekati c, semakin kecil faktor √(1−v²/c²), sehingga L (=L₀ dikali faktor itu) menjadi semakin pendek juga -- pola ini konsisten selama v<c."
+  - soal: "Klaim bahwa 'kontraksi panjang cuma ilusi optik, benda kelihatan pendek padahal sebenarnya tidak berubah' adalah pemahaman yang..."
+    pilihan: ["Salah -- kontraksi panjang adalah hasil pengukuran yang sah, bukan sekadar ilusi mata", "Benar sepenuhnya, karena panjang benda tidak pernah benar-benar berubah", "Benar, karena hanya berlaku untuk alat ukur optik seperti kamera", "Tidak relevan, karena kontraksi panjang tidak pernah bisa diukur"]
+    jawaban: 0
+    penjelasan: "Kontraksi panjang bukan ilusi optik -- bagi pengamat yang diam, panjang benda itu BENAR-BENAR terukur lebih pendek dengan alat ukur apa pun, ini konsekuensi nyata dari sifat ruang-waktu, bukan sekadar tampilan visual yang menipu mata."
+  - soal: "Materi Kontraksi Panjang ini melengkapi materi sebelumnya yang membahas perubahan pada besaran WAKTU, yaitu..."
+    pilihan: ["Dilatasi Waktu", "Efek Fotolistrik", "Hukum Faraday dan Lenz", "Inti Atom dan Radioaktivitas"]
+    jawaban: 0
+    penjelasan: "Dilatasi Waktu membahas bagaimana waktu 'melambat' bagi benda yang bergerak sangat cepat, sedangkan Kontraksi Panjang membahas bagaimana ruang (panjang) juga ikut berubah -- keduanya adalah pasangan efek relativistik yang saling terkait."
+  - soal: "Kontraksi panjang TIDAK mempengaruhi besaran-besaran berikut pada suatu benda, KECUALI..."
+    pilihan: ["Panjang benda pada arah searah geraknya", "Massa diam benda", "Volume total benda secara nyata", "Warna benda"]
+    jawaban: 0
+    penjelasan: "Kontraksi panjang secara spesifik hanya mengubah panjang TERUKUR pada arah searah gerak -- ia tidak mengubah massa diam, warna, ataupun sifat fisik lain dari benda itu sendiri."
+  - soal: "Sebuah benda bergerak dengan kecepatan 0,9c relatif terhadap pengamat. Kira-kira berapa persen dari panjang aslinya (L₀) yang terukur oleh pengamat itu?"
+    pilihan: ["Sekitar 44%", "Sekitar 90%", "Sekitar 10%", "Sekitar 81%"]
+    jawaban: 0
+    penjelasan: "√(1−0,9²) = √(1−0,81) = √0,19 ≈ 0,436, jadi panjang terukurnya sekitar 43,6% dari L₀ -- dibulatkan, sekitar 44%."
+  - soal: "Kontraksi panjang berkaitan erat dengan Transformasi Lorentz yang disinggung di materi Dilatasi Waktu, karena..."
+    pilihan: ["Ruang dan waktu saling terkait erat lewat transformasi itu, sehingga perubahan pada satu diiringi perubahan pada yang lain", "Transformasi Lorentz hanya berlaku untuk waktu, tidak untuk ruang sama sekali", "Kontraksi panjang tidak ada hubungannya dengan Transformasi Lorentz", "Transformasi Lorentz hanya berlaku pada kecepatan rendah"]
+    jawaban: 0
+    penjelasan: "Transformasi Lorentz menunjukkan ruang dan waktu bukan dua hal yang independen -- keduanya terjalin erat, sehingga efek relativistik pada waktu (dilatasi) selalu punya pasangannya pada ruang (kontraksi panjang)."
+  - soal: "Sebuah kereta bergerak dengan kecepatan sangat rendah (misalnya 100 km/jam) dibandingkan kecepatan cahaya. Menurut rumus kontraksi panjang, faktor √(1−v²/c²) untuk kereta ini akan bernilai..."
+    pilihan: ["Sangat mendekati 1, sehingga kontraksinya praktis tidak terdeteksi", "Sangat mendekati 0, sehingga panjangnya menyusut drastis", "Persis sama dengan 0,5", "Lebih besar dari 1"]
+    jawaban: 0
+    penjelasan: "Karena v jauh lebih kecil dari c, rasio v²/c² sangat mendekati 0, sehingga √(1−v²/c²) sangat mendekati 1 -- kontraksinya ada secara matematis tapi nilainya sangat kecil, praktis tak terdeteksi alat ukur biasa."
+  - soal: "L (panjang terukur pengamat bergerak relatif) dan L₀ (panjang sejati) dalam rumus kontraksi panjang, mana yang nilainya selalu LEBIH BESAR?"
+    pilihan: ["L₀ selalu lebih besar atau sama dengan L", "L selalu lebih besar atau sama dengan L₀", "Keduanya selalu sama persis", "Tergantung arah gerak benda, bisa L₀ atau L yang lebih besar"]
+    jawaban: 0
+    penjelasan: "Karena faktor √(1−v²/c²) selalu antara 0 dan 1 (untuk v<c), maka L = L₀ × (faktor ≤1) selalu LEBIH KECIL ATAU SAMA DENGAN L₀ -- L₀ (panjang sejati/diam) selalu yang paling panjang."
+  - soal: "Simulasi Laboratorium Maya pada materi ini secara spesifik dirancang untuk memvisualisasikan efek relativistik..."
+    pilihan: ["Kontraksi panjang", "Reaksi fisi nuklir", "Gerbang logika digital", "Medan magnet permanen"]
+    jawaban: 0
+    penjelasan: "Simulasi Laboratorium Maya pada materi Kontraksi Panjang ini dirancang untuk membantu memvisualisasikan bagaimana panjang benda tampak memendek pada kecepatan mendekati kecepatan cahaya."
 draft: false
 ---
 

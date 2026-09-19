@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Air biasa disiramkan langsung", "Alat Pemadam Api Ringan (APAR) yang sesuai jenis kebakarannya", "Kipas angin untuk mengusir asap", "Dibiarkan saja sampai padam sendiri"]
     jawaban: 1
     penjelasan: "APAR dirancang khusus buat berbagai jenis kebakaran. Air justru berbahaya untuk kebakaran akibat bahan kimia atau listrik tertentu -- bisa memperparah, bukan memadamkan."
+  - soal: "Fungsi utama jas laboratorium sebagai APD adalah..."
+    pilihan: ["Membuat penampilan terlihat rapi", "Melindungi kulit dan pakaian dari percikan bahan kimia atau panas", "Menahan bau bahan kimia", "Menandakan jabatan seseorang di lab"]
+    jawaban: 1
+    penjelasan: "Jas laboratorium jadi lapisan pelindung antara tubuh/pakaian kita dengan percikan bahan kimia atau panas yang mungkin muncul selama praktikum."
+  - soal: "Kacamata pelindung dipakai selama praktikum untuk melindungi mata dari..."
+    pilihan: ["Cahaya matahari", "Percikan cairan, serpihan kaca, atau uap yang mengiritasi", "Debu ruangan biasa", "Pantulan cahaya lampu neon"]
+    jawaban: 1
+    penjelasan: "Kacamata pelindung secara khusus dirancang buat menahan percikan cairan, pecahan kaca, atau uap yang bisa mengiritasi mata selama praktikum."
+  - soal: "Sarung tangan dipakai di laboratorium terutama untuk mencegah..."
+    pilihan: ["Tangan menjadi kotor", "Kontak langsung kulit dengan bahan kimia yang korosif atau beracun", "Tangan berkeringat", "Sidik jari tertinggal di alat"]
+    jawaban: 1
+    penjelasan: "Sarung tangan melindungi kulit dari kontak langsung dengan bahan-bahan yang korosif atau beracun, yang bisa berbahaya kalau menyentuh kulit."
+  - soal: "Rambut panjang wajib diikat sebelum praktikum, alasannya adalah..."
+    pilihan: ["Supaya rapi dan terlihat sopan", "Mencegah rambut tersangkut alat atau terkena api bunsen", "Karena itu aturan sekolah untuk semua kegiatan", "Supaya tidak mengganggu teman sebelah"]
+    jawaban: 1
+    penjelasan: "Rambut panjang yang tidak diikat berisiko tersangkut ke alat yang berputar, atau -- lebih berbahaya lagi -- terkena api dari pembakar bunsen."
+  - soal: "Kalau kacamata pelindung cuma digantung di leher, bukan dipakai menutup mata, apakah itu tetap memberi perlindungan?"
+    pilihan: ["Ya, karena sudah dipakai di tubuh", "Tidak -- APD cuma efektif kalau dipakai dengan benar sesuai fungsinya", "Ya, tapi hanya 50% perlindungan", "Tidak masalah, asal dibawa ke lab"]
+    jawaban: 1
+    penjelasan: "APD yang tidak dipakai sesuai fungsinya (mis. kacamata digantung di leher, bukan menutup mata) sama saja tidak memberi perlindungan apa pun saat kejadian tak terduga terjadi."
+  - soal: "Simbol bahaya berbentuk gambar 'meledak' (💥) pada kemasan bahan kimia berarti bahan itu harus dijauhkan dari..."
+    pilihan: ["Cahaya matahari saja", "Benturan, gesekan, panas, dan api terbuka", "Udara terbuka", "Air dan kelembapan"]
+    jawaban: 1
+    penjelasan: "Simbol bahan mudah meledak menandakan bahan itu harus dihindarkan dari benturan, gesekan, panas, dan api terbuka yang bisa memicu ledakan."
+  - soal: "Simbol bahaya 'korosif' pada kemasan bahan kimia menunjukkan bahan tersebut dapat..."
+    pilihan: ["Membuat bahan lain menjadi berwarna", "Merusak jaringan hidup (kulit) dan bahan lain seperti logam", "Mengubah suhu ruangan", "Menghasilkan aroma menyengat saja"]
+    jawaban: 1
+    penjelasan: "Bahan korosif dapat merusak jaringan hidup seperti kulit, dan bahkan bisa merusak bahan lain seperti logam kalau bersentuhan langsung."
+  - soal: "Simbol bahaya 'oksidator' pada kemasan bahan kimia berarti bahan tersebut dapat..."
+    pilihan: ["Memicu atau memperhebat kebakaran bahan lain di sekitarnya", "Membuat bahan lain menjadi dingin", "Menyerap oksigen dari udara sekitar", "Meredam api yang sudah menyala"]
+    jawaban: 0
+    penjelasan: "Bahan oksidator bisa memicu atau memperhebat kebakaran bahan lain di sekitarnya, jadi harus dijauhkan dari bahan yang mudah terbakar."
+  - soal: "Simbol bahaya 'iritan' pada kemasan bahan kimia menunjukkan bahan tersebut dapat menyebabkan..."
+    pilihan: ["Kebakaran hebat", "Ledakan", "Iritasi pada kulit, mata, atau saluran pernapasan", "Kerusakan permanen pada logam"]
+    jawaban: 2
+    penjelasan: "Bahan iritan bisa menyebabkan iritasi (perih, gatal, kemerahan) pada kulit, mata, atau saluran pernapasan kalau terkena kontak."
+  - soal: "Simbol 'berbahaya bagi lingkungan' pada kemasan bahan kimia berarti bahan itu..."
+    pilihan: ["Boleh dibuang ke saluran air biasa karena aman", "Tidak boleh dibuang sembarangan, karena berbahaya bagi ekosistem air/tanah", "Aman untuk tanaman", "Hanya berbahaya kalau tertelan manusia"]
+    jawaban: 1
+    penjelasan: "Bahan dengan simbol ini tidak boleh dibuang sembarangan karena bisa mencemari dan merusak ekosistem air atau tanah di sekitarnya."
+  - soal: "Salah satu aturan tata tertib lab adalah dilarang makan/minum di dalam ruang praktikum. Alasan utamanya adalah..."
+    pilihan: ["Supaya ruangan tetap bersih dari sampah", "Risiko bahan kimia tercampur makanan/minuman sangat berbahaya bagi kesehatan", "Karena mengganggu konsentrasi teman lain", "Karena aturan sekolah pada umumnya"]
+    jawaban: 1
+    penjelasan: "Makan atau minum di lab berisiko tercampurnya bahan kimia ke makanan/minuman tanpa disadari, yang bisa berakibat serius kalau tertelan."
+  - soal: "Sebelum menyentuh alat atau bahan apa pun di laboratorium, hal pertama yang wajib dilakukan adalah..."
+    pilihan: ["Bertanya ke teman sebelah", "Membaca label dan prosedur percobaan lebih dulu", "Mencoba-coba dulu, baru membaca petunjuknya", "Meminta izin ke petugas kebersihan"]
+    jawaban: 1
+    penjelasan: "Membaca label dan prosedur percobaan dulu memastikan kita tahu cara menangani alat/bahan itu dengan benar sebelum menyentuhnya, bukan asal coba-coba."
+  - soal: "Kalau terjadi tumpahan atau kejadian tak terduga saat praktikum, hal yang seharusnya dilakukan adalah..."
+    pilihan: ["Membersihkannya sendiri secepat mungkin tanpa lapor", "Melaporkannya segera, dan tidak mencoba membereskan sendiri kalau tidak yakin caranya", "Mendiamkannya sampai praktikum selesai", "Menyuruh teman lain membersihkannya"]
+    jawaban: 1
+    penjelasan: "Kejadian tak terduga wajib segera dilaporkan ke guru/petugas -- membereskan sendiri tanpa tahu caranya bisa memperparah risiko, apalagi untuk bahan yang butuh penanganan khusus."
+  - soal: "Cara yang benar menuangkan bahan kimia cair adalah..."
+    pilihan: ["Menuang sambil mendekatkan wajah ke wadah agar terlihat jelas", "Menuang menjauhi tubuh, tanpa mencondongkan wajah ke arah wadah", "Menuang secepat mungkin supaya cepat selesai", "Menuang dari jarak yang sangat jauh tanpa melihat wadahnya"]
+    jawaban: 1
+    penjelasan: "Menuang bahan kimia harus dilakukan menjauhi tubuh, dan jangan mencondongkan wajah ke arah wadah -- ini mencegah cipratan atau uap mengenai wajah."
+  - soal: "Cara yang benar mengambil cairan kimia dalam jumlah kecil di laboratorium adalah dengan..."
+    pilihan: ["Menghisapnya langsung memakai mulut", "Menggunakan pipet atau alat bantu khusus", "Menuangnya langsung ke tangan", "Menciumnya dulu sebelum diambil"]
+    jawaban: 1
+    penjelasan: "Cairan kimia harus diambil memakai pipet atau alat bantu lain -- tidak boleh dihisap langsung dengan mulut, karena berisiko tertelan atau terhirup."
+  - soal: "Limbah bahan kimia sisa praktikum seharusnya dibuang ke..."
+    pilihan: ["Wastafel biasa, langsung dialirkan", "Wadah limbah sesuai jenisnya, bukan sembarangan ke wastafel", "Tempat sampah biasa di kelas", "Dibiarkan saja di meja praktikum"]
+    jawaban: 1
+    penjelasan: "Limbah bahan kimia, terutama yang korosif atau beracun, harus dibuang ke wadah limbah yang sesuai -- bukan dituang sembarangan ke wastafel yang bisa mencemari saluran air."
+  - soal: "Kalau bahan kimia mengenai mata, tindakan pertama yang tepat adalah..."
+    pilihan: ["Mengusap mata dengan tisu kering", "Membilas dengan air bersih mengalir sambil mata tetap terbuka, minimal 15 menit", "Menutup mata rapat-rapat dan menunggu", "Meneteskan obat tetes mata tanpa dibilas dulu"]
+    jawaban: 1
+    penjelasan: "Mata yang terkena bahan kimia harus segera dibilas dengan air bersih mengalir (memakai eyewash station kalau ada), sambil mata tetap terbuka, selama minimal 15 menit."
+  - soal: "Kalau terjadi luka akibat pecahan kaca di laboratorium, tindakan pertama yang tepat adalah..."
+    pilihan: ["Membiarkannya saja sampai berhenti sendiri", "Membersihkan luka, menekan dengan kain bersih untuk menghentikan pendarahan, lalu melaporkannya", "Menutup luka dengan bahan kimia yang ada di dekatnya", "Melanjutkan praktikum seperti biasa"]
+    jawaban: 1
+    penjelasan: "Luka akibat pecahan kaca perlu dibersihkan, ditekan dengan kain bersih untuk menghentikan pendarahan, lalu segera dilaporkan ke guru atau petugas lab."
+  - soal: "Kalau ada tumpahan bahan kimia di lantai atau meja, tindakan yang tepat adalah..."
+    pilihan: ["Menyentuh dan mengelapnya sendiri secepat mungkin", "Tidak menyentuhnya langsung, dan melaporkan ke guru karena biasanya butuh bahan penyerap/penetral khusus", "Menutupinya dengan buku catatan", "Menyapunya dengan sapu biasa"]
+    jawaban: 1
+    penjelasan: "Tumpahan bahan kimia berisiko kalau disentuh langsung -- biasanya perlu bahan penyerap atau penetral khusus, jadi harus dilaporkan ke guru/petugas dulu."
+  - soal: "Menurut bagian 'Intinya' pada materi ini, pola pikir yang sebenarnya diajarkan oleh semua aturan keselamatan kerja di lab adalah..."
+    pilihan: ["Menghafal semua simbol bahaya sebanyak mungkin", "Selalu bertanya 'apa yang bisa salah?' SEBELUM melakukan sesuatu, bukan sesudahnya", "Menghindari praktikum kalau memungkinkan", "Mengandalkan keberuntungan supaya tidak celaka"]
+    jawaban: 1
+    penjelasan: "Semua aturan K3 lab -- APD, simbol bahaya, tata tertib, penanganan kecelakaan -- mengajarkan pola pikir preventif: memikirkan risiko SEBELUM bertindak, bukan bereaksi setelah kejadian terjadi."
 draft: false
 ---
 

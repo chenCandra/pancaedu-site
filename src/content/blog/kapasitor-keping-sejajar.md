@@ -6,6 +6,11 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-09
 tags: ["Kapasitor", "Kapasitor Keping Sejajar", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/kapasitor-keping-sejajar.html"
+  judul: "Laboratorium Maya: Kapasitor Keping Sejajar"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1150
 kuis:
   - soal: "Kapasitor pada dasarnya berfungsi untuk..."
     pilihan: ["Menghasilkan muatan listrik dari nol", "Menyimpan muatan dan energi listrik dalam bentuk medan listrik", "Mengubah listrik AC menjadi DC", "Menghambat aliran arus seperti resistor"]
@@ -31,6 +36,82 @@ kuis:
     pilihan: ["3 μC", "16 μC", "48 μC", "0,33 μC"]
     jawaban: 2
     penjelasan: "Q = CV = (4×10⁻⁶)(12) = 48 × 10⁻⁶ C = 48 μC."
+  - soal: "Kenapa lampu kilat (flash) kamera bisa menyala sangat terang walau cuma sekejap dan baterainya kecil?"
+    pilihan: ["Karena kapasitor mengisi energi pelan-pelan dari baterai, lalu melepaskannya sekaligus dalam waktu sangat singkat", "Karena baterai kamera sebenarnya berkapasitas sangat besar", "Karena lampu kilat punya sumber listrik sendiri, terpisah dari baterai", "Karena resistor di dalam kamera memperbesar arus baterai"]
+    jawaban: 0
+    penjelasan: "Kapasitor mengisi energi secara perlahan dari baterai, lalu melepaskan semuanya sekaligus dalam waktu sangat singkat -- itulah kenapa cahayanya bisa jauh lebih terang daripada kemampuan baterai mendorong arus secara langsung."
+  - soal: "Menurut analogi ember, kenapa arus berhenti mengalir begitu kapasitor penuh terisi, meski baterainya belum dilepas?"
+    pilihan: ["Karena beda potensial di kedua keping sudah menyamai tegangan baterai, sama seperti ember yang sudah penuh air", "Karena baterainya kehabisan energi sepenuhnya", "Karena kabel penghubungnya putus secara otomatis", "Karena kapasitor berubah menjadi resistor setelah penuh"]
+    jawaban: 0
+    penjelasan: "Begitu beda potensial kedua keping menyamai tegangan sumbernya, kapasitor 'berhenti menerima' muatan baru -- persis seperti ember yang penuh, air berhenti masuk walau keran masih terbuka."
+  - soal: "Pada kapasitor keping sejajar yang terisi muatan (+Q di satu keping, −Q di keping lainnya), ke mana arah medan listrik di antara kedua keping itu?"
+    pilihan: ["Dari keping positif menuju keping negatif", "Dari keping negatif menuju keping positif", "Sejajar dengan permukaan keping, bukan tegak lurus", "Tidak ada medan listrik di antara keduanya"]
+    jawaban: 0
+    penjelasan: "Medan listrik di antara kedua keping mengarah dari keping positif ke keping negatif -- di sinilah energi kapasitor 'disimpan'."
+  - soal: "Benarkah kapasitor dengan kapasitansi (C) besar pasti menyimpan muatan (Q) yang besar juga?"
+    pilihan: ["Belum tentu -- muatan (Q) tergantung DUA hal, yaitu C dan tegangan (V) yang diberikan, lewat Q = CV", "Benar, kapasitansi besar pasti menyimpan muatan besar berapa pun tegangannya", "Salah total, kapasitansi tidak berhubungan dengan muatan sama sekali", "Benar, tapi hanya kalau bahan dielektriknya udara"]
+    jawaban: 0
+    penjelasan: "Kapasitor berkapasitansi besar yang diberi tegangan kecil bisa saja menyimpan muatan lebih sedikit dibanding kapasitor kecil yang diberi tegangan besar -- karena Q = CV tergantung kedua faktor itu."
+  - soal: "Menurut tabel faktor-faktor pada materi ini, apa efek memperbesar luas keping (A) terhadap kapasitansi (C)?"
+    pilihan: ["C ikut membesar (berbanding lurus)", "C mengecil (berbanding terbalik)", "Tidak berpengaruh sama sekali", "C menjadi nol"]
+    jawaban: 0
+    penjelasan: "Dari C = ε₀A/d, luas keping (A) berbanding lurus dengan kapasitansi (C) -- makin luas kepingnya, makin besar C-nya."
+  - soal: "Menurut tabel faktor-faktor pada materi ini, apa efek memperbesar konstanta dielektrik (εᵣ) terhadap kapasitansi (C)?"
+    pilihan: ["C ikut membesar (berbanding lurus)", "C mengecil (berbanding terbalik)", "Tidak berpengaruh sama sekali", "C menjadi negatif"]
+    jawaban: 0
+    penjelasan: "Dari C = ε₀εᵣA/d, konstanta dielektrik (εᵣ) berbanding lurus dengan kapasitansi -- bahan dielektrik dengan εᵣ lebih besar menghasilkan C yang lebih besar."
+  - soal: "Sebuah kapasitor 5 μF dihubungkan ke sumber tegangan 8 V. Berapa energi yang tersimpan?"
+    pilihan: ["1,6 × 10⁻⁴ J", "4 × 10⁻⁵ J", "3,2 × 10⁻⁴ J", "2 × 10⁻⁵ J"]
+    jawaban: 0
+    penjelasan: "W = ½CV² = ½ × (5×10⁻⁶) × 8² = ½ × 5×10⁻⁶ × 64 = 1,6 × 10⁻⁴ J."
+  - soal: "Kalau luas keping (A) DAN jarak antar keping (d) sama-sama diperbesar 3 kali lipat, apa yang terjadi pada kapasitansinya?"
+    pilihan: ["Tidak berubah (efek keduanya saling meniadakan)", "Menjadi 3 kali lebih besar", "Menjadi 9 kali lebih besar", "Menjadi 1/3 kali (mengecil)"]
+    jawaban: 0
+    penjelasan: "C_baru = ε₀(3A)/(3d) = ε₀A/d = C -- efek memperbesar A (3×) dan efek memperbesar d (1/3×) saling meniadakan, sama seperti kasus Dani di materi ini, cuma dengan faktor berbeda."
+  - soal: "Sebuah kapasitor keping sejajar di udara punya luas keping 6 × 10⁻² m² dan jarak antar keping 3 mm. Berapa kapasitansinya? (ε₀ = 8,85 × 10⁻¹² C²/N·m²)"
+    pilihan: ["1,77 × 10⁻¹⁰ F", "5,31 × 10⁻¹⁰ F", "2,95 × 10⁻¹¹ F", "1,77 × 10⁻⁸ F"]
+    jawaban: 0
+    penjelasan: "C = ε₀A/d = (8,85×10⁻¹²)(6×10⁻²) / (3×10⁻³) = 1,77 × 10⁻¹⁰ F."
+  - soal: "Sebuah kapasitor 8 μF dihubungkan ke sumber tegangan 5 V. Berapa muatan dan energi yang tersimpan?"
+    pilihan: ["Q = 40 μC, W = 1×10⁻⁴ J", "Q = 40 μC, W = 2×10⁻⁴ J", "Q = 1,6 μC, W = 1×10⁻⁴ J", "Q = 40 μC, W = 40 J"]
+    jawaban: 0
+    penjelasan: "Q = CV = (8×10⁻⁶)(5) = 40 μC. W = ½CV² = ½(8×10⁻⁶)(5)² = 1×10⁻⁴ J."
+  - soal: "Sebuah kapasitor keping sejajar di udara punya kapasitansi 3 pF. Kalau disisipkan bahan dielektrik dengan εᵣ = 4 (tanpa mengubah A atau d), berapa kapasitansi barunya?"
+    pilihan: ["12 pF", "7 pF", "0,75 pF", "3 pF (tidak berubah)"]
+    jawaban: 0
+    penjelasan: "C_baru = εᵣ × C_awal = 4 × 3 pF = 12 pF."
+  - soal: "Dua kapasitor keping sejajar, A dan B, punya luas keping dan bahan dielektrik yang identik. Jarak antar keping kapasitor B adalah DUA kali jarak antar keping kapasitor A. Kalau keduanya dihubungkan ke tegangan yang sama, kapasitor mana yang menyimpan muatan lebih banyak, dan berapa kali lipat?"
+    pilihan: ["Kapasitor A, dua kali lebih banyak daripada B", "Kapasitor B, dua kali lebih banyak daripada A", "Sama besar, karena tegangannya sama", "Kapasitor A, empat kali lebih banyak daripada B"]
+    jawaban: 0
+    penjelasan: "Karena C berbanding terbalik dengan d, C_A = 2×C_B. Dengan V yang sama untuk keduanya, Q = CV, sehingga Q_A = 2×Q_B -- kapasitor A (jarak lebih kecil) menyimpan muatan dua kali lebih banyak."
+  - soal: "Kapasitor pada materi ini memanfaatkan konsep dari materi apa yang sudah dipelajari sebelumnya?"
+    pilihan: ["Medan Listrik", "Hukum Ohm dan Rangkaian Sederhana", "Rangkaian Seri dan Paralel", "Gerbang Logika"]
+    jawaban: 0
+    penjelasan: "Kapasitor memanfaatkan langsung ide dari materi Medan Listrik -- bahwa muatan listrik menciptakan medan di sekitarnya, lalu dipakai untuk menyimpan muatan di antara dua permukaan konduktor."
+  - soal: "Kenapa kapasitor yang biasa kita temui sehari-hari bersatuan mikrofarad (μF), nanofarad (nF), atau pikofarad (pF), bukan farad (F) langsung?"
+    pilihan: ["Karena satu farad itu satuan yang sangat besar untuk ukuran kapasitor sehari-hari", "Karena farad hanya berlaku untuk kapasitor buatan luar negeri", "Karena farad sebenarnya satuan untuk resistor, bukan kapasitor", "Karena alat ukur kapasitansi tidak bisa membaca satuan farad"]
+    jawaban: 0
+    penjelasan: "Satu farad adalah satuan yang sangat besar untuk kapasitor sehari-hari, jadi dalam praktiknya dipakai satuan yang lebih kecil: mikrofarad (μF), nanofarad (nF), atau pikofarad (pF)."
+  - soal: "Apa perbedaan mendasar antara kapasitor dan resistor dalam merespons arus dari sumber tegangan konstan?"
+    pilihan: ["Kapasitor berhenti menerima arus begitu penuh terisi, resistor membiarkan arus terus mengalir selama ada tegangan", "Kapasitor selalu membiarkan arus mengalir tanpa henti, resistor yang berhenti setelah penuh", "Keduanya sama-sama berhenti mengalirkan arus setelah beberapa saat", "Keduanya sama-sama membiarkan arus terus mengalir selamanya"]
+    jawaban: 0
+    penjelasan: "Kapasitor berhenti menerima muatan baru begitu penuh terisi (beda potensialnya menyamai tegangan sumber), sedangkan resistor membiarkan arus terus mengalir selama ada tegangan yang terpasang."
+  - soal: "Kalau jarak antar keping kapasitor keping sejajar diperkecil jadi sepertiga (1/3) dari semula (luas & bahan tetap), kapasitansinya menjadi berapa kali semula?"
+    pilihan: ["3 kali lebih besar", "1/3 kali (lebih kecil)", "9 kali lebih besar", "Tidak berubah"]
+    jawaban: 0
+    penjelasan: "C = ε₀A/d -- kalau d dijadikan 1/3 kali, maka C_baru = ε₀A/(d/3) = 3 × ε₀A/d = 3 kali kapasitansi semula."
+  - soal: "Kalau luas keping kapasitor keping sejajar diperbesar jadi 4 kali lipat (jarak & bahan tetap), kapasitansinya menjadi berapa kali semula?"
+    pilihan: ["4 kali lebih besar", "4 kali lebih kecil", "2 kali lebih besar", "Tidak berubah"]
+    jawaban: 0
+    penjelasan: "C = ε₀A/d -- karena A berbanding lurus dengan C, memperbesar A jadi 4 kali lipat membuat C juga jadi 4 kali lipat."
+  - soal: "Pada kasus lampu kilat kamera, bagaimana energi yang tersimpan pada kapasitor (W = ½CV²) itu dilepaskan?"
+    pilihan: ["Dilepaskan sekaligus dalam waktu sangat singkat, menghasilkan cahaya yang jauh lebih terang daripada kemampuan baterai secara langsung", "Dilepaskan sangat pelan selama beberapa jam", "Tidak pernah dilepaskan, hanya tersimpan permanen di kapasitor", "Diubah langsung menjadi energi kimia baterai"]
+    jawaban: 0
+    penjelasan: "Energi yang tersimpan dilepaskan sekaligus dalam waktu sangat singkat, sehingga cahaya lampu kilat bisa jauh lebih terang daripada kemampuan baterai mendorong arus secara langsung."
+  - soal: "Menurut ringkasan materi ini, besaran apa yang berbanding TERBALIK dengan kapasitansi (C) pada kapasitor keping sejajar?"
+    pilihan: ["Jarak antar keping (d)", "Luas keping (A)", "Konstanta dielektrik (εᵣ)", "Semua besaran berbanding lurus dengan C, tidak ada yang terbalik"]
+    jawaban: 0
+    penjelasan: "Dari C = ε₀εᵣA/d, C berbanding lurus dengan A dan εᵣ, tapi berbanding TERBALIK dengan jarak antar keping (d)."
 draft: false
 ---
 

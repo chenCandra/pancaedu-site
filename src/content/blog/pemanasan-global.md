@@ -23,6 +23,90 @@ kuis:
     pilihan: ["Efeknya diperkuat berlebihan oleh gas rumah kaca tambahan dari aktivitas manusia", "Efek rumah kaca itu sendiri, yang seharusnya tidak pernah ada", "Matahari yang tiba-tiba memancarkan lebih banyak panas", "Bumi yang jaraknya semakin dekat dengan matahari"]
     jawaban: 0
     penjelasan: "Efek rumah kaca alami itu penting dan bermanfaat -- masalahnya adalah manusia MEMPERKUATNYA secara berlebihan lewat gas rumah kaca tambahan."
+  - soal: "Menurut mekanisme efek rumah kaca pada materi ini, apa yang terjadi saat matahari memancarkan panas ke bumi?"
+    pilihan: ["Sebagian panas diserap permukaan bumi, sebagian dipantulkan kembali ke luar angkasa", "Semua panas langsung dipantulkan tanpa ada yang diserap", "Semua panas diserap dan tidak ada yang dipantulkan", "Panas matahari tidak pernah mencapai permukaan bumi"]
+    jawaban: 0
+    penjelasan: "Sebagian panas matahari diserap permukaan bumi, sebagian lagi dipantulkan kembali ke arah luar angkasa -- inilah langkah pertama mekanisme efek rumah kaca."
+  - soal: "Kenapa fenomena penahanan panas oleh gas-gas atmosfer ini disebut 'efek rumah kaca'?"
+    pilihan: ["Karena gas rumah kaca menahan panas mirip cara kaca rumah kaca di kebun menahan panas di dalamnya", "Karena efek ini hanya terjadi di rumah berkaca", "Karena gas rumah kaca terbuat dari kaca", "Karena efek ini ditemukan oleh petani rumah kaca"]
+    jawaban: 0
+    penjelasan: "Gas-gas tertentu di atmosfer menahan sebagian panas pantulan, mirip cara kaca rumah kaca di kebun menahan panas di dalamnya -- itulah asal nama 'efek rumah kaca'."
+  - soal: "Efek rumah kaca alami menurut materi ini bersifat..."
+    pilihan: ["Alami dan penting untuk menjaga bumi tetap hangat", "Selalu berbahaya dan harus dihilangkan", "Baru muncul sejak revolusi industri", "Hanya terjadi di daerah kutub"]
+    jawaban: 0
+    penjelasan: "Efek rumah kaca alami bersifat alami dan penting -- ia menjaga bumi tetap hangat dan layak huni, tanpanya suhu bumi akan jauh lebih dingin."
+  - soal: "Sejak revolusi industri, manusia mulai melepaskan gas rumah kaca tambahan terutama lewat..."
+    pilihan: ["Pembakaran bahan bakar fosil dalam skala besar", "Penguapan air laut yang meningkat", "Aktivitas gunung berapi", "Rotasi bumi yang melambat"]
+    jawaban: 0
+    penjelasan: "Sejak revolusi industri, manusia mulai melepaskan gas rumah kaca tambahan dalam jumlah besar lewat pembakaran bahan bakar fosil."
+  - soal: "Materi Pemanasan Global ini disebut sebagai kelanjutan dari materi yang membahas dampak lingkungan sebagai salah satu masalah energi, yaitu..."
+    pilihan: ["Permasalahan dan Upaya Pemenuhan Kebutuhan Energi", "Gas Rumah Kaca: Jenis dan Sumbernya", "Perubahan Iklim", "Jejak Karbon dan Aksi Individu"]
+    jawaban: 0
+    penjelasan: "Materi ini melanjutkan dari materi Permasalahan dan Upaya Pemenuhan Kebutuhan Energi, di mana dampak lingkungan sempat disinggung sebagai salah satu masalah energi."
+  - soal: "Kenapa pemanasan global berbeda dari sekadar 'hari yang panas'?"
+    pilihan: ["Pemanasan global bicara soal tren suhu bertahun-tahun bahkan puluhan tahun, bukan cuaca panas sesaat", "Pemanasan global hanya terjadi satu hari dalam setahun", "Pemanasan global sama persis dengan cuaca panas harian", "Hari yang panas selalu disebabkan oleh pemanasan global"]
+    jawaban: 0
+    penjelasan: "Pemanasan global bicara soal tren suhu bertahun-tahun bahkan puluhan tahun, bukan cuaca panas sesaat di satu daerah."
+  - soal: "Pernyataan 'efek rumah kaca itu selalu buruk, seharusnya dihilangkan sama sekali' menurut materi ini..."
+    pilihan: ["Tidak tepat -- efek rumah kaca alami penting untuk menjaga bumi tetap hangat dan layak huni", "Benar, efek rumah kaca harus dihilangkan total", "Hanya berlaku untuk gas fluorinasi", "Berlaku kalau suhu bumi sudah di atas 20°C"]
+    jawaban: 0
+    penjelasan: "Efek rumah kaca alami itu penting untuk menjaga bumi tetap hangat dan layak huni -- yang jadi masalah adalah efeknya yang diperkuat berlebihan oleh gas rumah kaca tambahan dari aktivitas manusia."
+  - soal: "Pernyataan 'pemanasan global cuma soal cuaca yang kadang panas' menurut materi ini..."
+    pilihan: ["Kurang tepat -- pemanasan global adalah tren jangka panjang kenaikan suhu rata-rata bumi, bukan cuaca panas di satu hari", "Benar, pemanasan global sama dengan cuaca panas", "Hanya berlaku untuk negara tropis", "Berlaku kalau cuacanya panas selama sebulan penuh"]
+    jawaban: 0
+    penjelasan: "Pemanasan global adalah tren jangka panjang kenaikan suhu rata-rata bumi selama puluhan tahun, diukur secara global -- bukan cuaca panas di satu tempat pada satu hari tertentu."
+  - soal: "Menurut materi ini, cuaca panas di satu daerah pada satu hari lebih tepat disebut sebagai..."
+    pilihan: ["Cuaca, bukan iklim", "Iklim, bukan cuaca", "Pemanasan global itu sendiri", "Efek rumah kaca"]
+    jawaban: 0
+    penjelasan: "Cuaca panas di satu tempat pada satu hari tertentu lebih tepat disebut cuaca, bukan iklim -- pemanasan global bicara soal tren iklim jangka panjang."
+  - soal: "Menurut materi ini, suhu rata-rata bumi saat ini (dengan efek rumah kaca alami) sekitar..."
+    pilihan: ["15°C", "-18°C", "0°C", "50°C"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan suhu rata-rata bumi sekarang sekitar 15°C, jauh lebih hangat dibanding perkiraan -18°C jika tanpa efek rumah kaca sama sekali."
+  - soal: "Revolusi industri, yang disebut sebagai titik mulai masalah pemanasan global, terjadi sekitar..."
+    pilihan: ["Akhir abad ke-18", "Abad ke-21", "Zaman purba", "Abad pertengahan"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebut revolusi industri terjadi sekitar akhir abad ke-18, saat manusia mulai membakar bahan bakar fosil dalam skala besar."
+  - soal: "Pada bagian Coba Pikirkan, adik SD bertanya 'kok bumi bisa makin panas, kan mataharinya sama saja dari dulu?'. Jawaban yang paling sesuai dengan materi ini adalah..."
+    pilihan: ["Bukan matahari yang berubah, tapi gas rumah kaca tambahan dari manusia yang menahan lebih banyak panas pantulan bumi", "Matahari memang menjadi lebih panas dari waktu ke waktu", "Bumi menjadi lebih dekat ke matahari", "Efek rumah kaca tidak ada hubungannya dengan panas matahari"]
+    jawaban: 0
+    penjelasan: "Bukan matahari yang berubah -- gas rumah kaca tambahan dari aktivitas manusia menahan lebih banyak panas pantulan bumi, sehingga suhu bumi naik meski pancaran matahari relatif sama."
+  - soal: "Setelah membahas mekanisme dasar pemanasan global, materi selanjutnya dalam bab ini membahas..."
+    pilihan: ["Gas Rumah Kaca: Jenis dan Sumbernya", "Faktor Penyebab Pemanasan Global", "Upaya Global dan Nasional", "Jejak Karbon dan Aksi Individu"]
+    jawaban: 0
+    penjelasan: "Materi ini diakhiri dengan tautan lanjutan ke Gas Rumah Kaca: Jenis dan Sumbernya, membahas gas apa saja yang berperan dan dari mana asalnya."
+  - soal: "Materi ini menjelaskan mekanisme efek rumah kaca dalam berapa langkah?"
+    pilihan: ["4", "2", "6", "3"]
+    jawaban: 0
+    penjelasan: "Materi ini menjelaskan mekanisme efek rumah kaca dalam 4 langkah, dari matahari memancarkan panas sampai masalah yang muncul sejak revolusi industri."
+  - soal: "Pemanasan global diukur secara..."
+    pilihan: ["Global, bukan hanya satu daerah tertentu", "Lokal, hanya di satu kota", "Nasional, hanya di satu negara", "Musiman, hanya saat kemarau"]
+    jawaban: 0
+    penjelasan: "Pemanasan global adalah tren kenaikan suhu rata-rata permukaan bumi secara global, bukan fenomena lokal di satu daerah saja."
+  - soal: "Menurut materi ini, penyebab pemanasan global secara ringkas adalah..."
+    pilihan: ["Efek rumah kaca yang diperkuat berlebihan oleh aktivitas manusia", "Matahari yang semakin dekat ke bumi", "Gunung berapi yang semakin aktif", "Rotasi bumi yang melambat"]
+    jawaban: 0
+    penjelasan: "Penyebab pemanasan global menurut materi ini adalah efek rumah kaca yang diperkuat berlebihan, bukan faktor astronomis seperti jarak matahari."
+  - soal: "Gas rumah kaca di atmosfer menahan panas yang sebenarnya berasal dari..."
+    pilihan: ["Panas pantulan dari permukaan bumi", "Panas yang langsung dari inti bumi", "Panas dari gunung berapi", "Panas dari lapisan ozon"]
+    jawaban: 0
+    penjelasan: "Gas rumah kaca menahan sebagian panas pantulan dari permukaan bumi setelah bumi menyerap panas matahari, bukan panas dari sumber lain."
+  - soal: "Kalau efek rumah kaca dihilangkan sama sekali, dampaknya bagi kehidupan di bumi adalah..."
+    pilihan: ["Bumi menjadi terlalu dingin dan sulit dihuni", "Bumi menjadi lebih nyaman untuk dihuni", "Tidak ada dampak apa pun", "Bumi menjadi lebih hangat dari sekarang"]
+    jawaban: 0
+    penjelasan: "Tanpa efek rumah kaca, suhu rata-rata bumi diperkirakan sekitar -18°C, jauh lebih dingin dan sulit dihuni dibanding kondisi sekarang."
+  - soal: "Efek rumah kaca alami sendiri sudah ada sejak..."
+    pilihan: ["Sebelum revolusi industri, sebagai fenomena alami", "Baru muncul setelah revolusi industri", "Baru ditemukan 5 tahun terakhir", "Hanya ada sejak manusia menemukan listrik"]
+    jawaban: 0
+    penjelasan: "Efek rumah kaca alami sudah ada sebelum revolusi industri -- yang berubah sejak revolusi industri adalah manusia menambah gas rumah kaca ekstra yang memperkuat efek itu secara berlebihan."
+  - soal: "Kenapa penting membedakan 'efek rumah kaca alami' dengan 'efek rumah kaca yang diperkuat manusia', menurut materi ini?"
+    pilihan: ["Karena yang jadi masalah bukan efek rumah kacanya, tapi penguatannya yang berlebihan oleh aktivitas manusia", "Karena keduanya sebenarnya adalah fenomena yang sama sekali berbeda", "Karena efek rumah kaca alami sebenarnya juga berbahaya", "Karena hanya efek buatan manusia yang bermanfaat"]
+    jawaban: 0
+    penjelasan: "Membedakan keduanya penting karena efek rumah kaca alami itu bermanfaat dan perlu -- yang jadi masalah adalah penguatannya yang berlebihan oleh gas rumah kaca tambahan dari aktivitas manusia."
+  - soal: "Materi Pemanasan Global ini menyebutkan bahwa bab yang baru dimulai ini nantinya akan berakhir pada pembahasan..."
+    pilihan: ["Langkah-langkah nyata yang bisa dilakukan individu sendiri", "Rumus matematis suhu bumi", "Sejarah revolusi industri secara detail", "Perbandingan negara maju dan berkembang"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan bahwa bab Pemanasan Global akan berakhir di langkah-langkah nyata yang bisa dilakukan individu sendiri -- merujuk ke materi penutup bab, Jejak Karbon dan Aksi Individu."
 draft: false
 ---
 

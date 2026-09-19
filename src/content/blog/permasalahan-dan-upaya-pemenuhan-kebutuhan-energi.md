@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Karena daerah itu tidak membutuhkan listrik", "Karena tantangan geografis dan infrastruktur membuat distribusi energi ke daerah terpencil lebih sulit dan mahal", "Karena daerah itu sengaja tidak diberi akses", "Karena listrik tidak bisa didistribusikan sama sekali ke daerah pedesaan"]
     jawaban: 1
     penjelasan: "Daerah terpencil/kepulauan sering menghadapi tantangan biaya dan infrastruktur untuk membangun jaringan distribusi energi konvensional -- salah satu alasan energi terbarukan skala kecil (mis. panel surya) jadi solusi potensial di sana."
+  - soal: "Menurut materi, apa penyebab utama dampak lingkungan dari pemakaian energi fosil?"
+    pilihan: ["Pembakaran bahan bakar fosil menghasilkan emisi gas rumah kaca, berkontribusi pada pemanasan global dan pencemaran udara", "Energi fosil menyebabkan gempa bumi secara langsung", "Energi fosil tidak punya dampak lingkungan sama sekali", "Dampak lingkungan cuma disebabkan oleh energi terbarukan"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan pembakaran bahan bakar fosil menghasilkan emisi gas rumah kaca, yang berkontribusi pada pemanasan global dan pencemaran udara."
+  - soal: "Upaya mengatasi masalah dampak lingkungan dari energi, menurut materi, meliputi apa saja?"
+    pilihan: ["Pengembangan teknologi energi bersih, kebijakan pemerintah (insentif energi terbarukan/standar emisi), dan edukasi masyarakat", "Menambang bahan bakar fosil lebih cepat", "Menghentikan seluruh aktivitas industri", "Mengimpor energi tanpa kebijakan apa pun"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan tiga upaya untuk dampak lingkungan: teknologi energi bersih, kebijakan pemerintah, dan edukasi masyarakat soal gaya hidup hemat energi."
+  - soal: "Upaya apa yang disebut materi untuk mengatasi masalah pemerataan akses energi di daerah terpencil?"
+    pilihan: ["Pembangunan infrastruktur energi terdesentralisasi, misalnya panel surya skala kecil", "Membangun kabel listrik sepanjang mungkin dari pembangkit besar", "Melarang daerah terpencil memakai listrik", "Mengabaikan masalah tersebut karena dianggap tidak penting"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan upaya utamanya adalah infrastruktur energi terdesentralisasi seperti panel surya skala kecil di daerah terpencil."
+  - soal: "Kenapa panel surya skala kecil dianggap cocok untuk daerah terpencil, dibanding jaringan listrik konvensional dari pembangkit besar?"
+    pilihan: ["Karena panel surya tidak butuh jaringan kabel panjang dari pembangkit besar yang mahal dibangun", "Karena panel surya menghasilkan listrik lebih banyak dari pembangkit besar", "Karena daerah terpencil tidak boleh memakai listrik dari pembangkit besar", "Karena panel surya lebih murah dibeli daripada dipasang di kota"]
+    jawaban: 0
+    penjelasan: "Panel surya skala kecil tidak butuh jaringan kabel panjang dari pembangkit besar -- solusi ini menghindari biaya infrastruktur konvensional yang mahal di daerah terpencil."
+  - soal: "Simulasi 'Energy Efficiency Lab' yang dirujuk materi ini melatih siswa untuk mencari apa?"
+    pilihan: ["Strategi paling hemat energi di sebuah ruangan virtual", "Cara menambang batu bara paling efisien", "Cara membangun pembangkit nuklir", "Cara memasang kabel listrik bawah laut"]
+    jawaban: 0
+    penjelasan: "Energy Efficiency Lab mengajak siswa mengatur ruangan virtual dan mencari strategi paling hemat energi -- praktik langsung dari konsep konservasi/efisiensi energi."
+  - soal: "Pada simulasi 'Energy Crisis Lab', siswa berperan sebagai apa?"
+    pilihan: ["Pengelola energi sebuah kota, mengatur kombinasi pembangkit untuk memenuhi kebutuhan listrik sambil menyeimbangkan emisi, biaya, dan keandalan pasokan", "Petani yang mengatur irigasi sawah", "Sopir kendaraan listrik keliling kota", "Guru yang mengajar materi energi"]
+    jawaban: 0
+    penjelasan: "Energy Crisis Lab menempatkan siswa sebagai pengelola energi Kota Panca, mengatur kombinasi pembangkit surya, angin, air, gas, dan batu bara sambil menyeimbangkan emisi, biaya, dan keandalan pasokan."
+  - soal: "Apa perbedaan utama antara 'Energy Crisis Lab' dan 'Energy Planning Lab' menurut materi?"
+    pilihan: ["Crisis Lab mengelola sistem energi yang sudah berjalan, sedangkan Planning Lab merancang sistem energi kota dari nol lengkap dengan baterai penyimpanan", "Keduanya persis sama, cuma beda nama", "Crisis Lab untuk SD, Planning Lab untuk SMA", "Planning Lab tidak melibatkan energi terbarukan sama sekali"]
+    jawaban: 0
+    penjelasan: "Materi menjelaskan Crisis Lab soal MENGELOLA sistem energi yang sudah berjalan, sementara Planning Lab soal MERANCANG sistem energi kota dari nol, termasuk baterai penyimpanan dan skenario jangka panjang."
+  - soal: "Kenapa pernyataan 'masalah energi cuma urusan pemerintah dan perusahaan besar, bukan urusan individu' dianggap tidak sepenuhnya benar?"
+    pilihan: ["Karena kebiasaan kecil tiap individu, kalau dilakukan jutaan orang sekaligus, bisa berdampak besar juga", "Karena individu sebenarnya tidak memakai energi sama sekali", "Karena pemerintah tidak punya peran dalam masalah energi", "Karena perusahaan besar tidak memakai energi"]
+    jawaban: 0
+    penjelasan: "Meski kebijakan besar tetap butuh peran pemerintah, kebiasaan kecil individu -- kalau dilakukan jutaan orang -- bisa berdampak besar juga terhadap konsumsi energi."
+  - soal: "Sebutkan salah satu contoh peran individu dalam mengatasi masalah energi, menurut materi."
+    pilihan: ["Mematikan lampu dan elektronik yang tidak dipakai", "Menambang batu bara sendiri di rumah", "Membangun pembangkit listrik pribadi", "Menghentikan sekolah supaya hemat energi"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan contoh sederhana peran individu seperti mematikan lampu/elektronik yang tidak dipakai, memilih alat elektronik hemat energi, dan mengurangi pemakaian kendaraan pribadi jarak dekat."
+  - soal: "Kenapa pernyataan 'masalah energi cuma soal kehabisan sumbernya saja' dianggap terlalu sempit oleh materi ini?"
+    pilihan: ["Karena ada minimal empat sisi masalah -- keterbatasan sumber, kenaikan permintaan, pemerataan akses, dan dampak lingkungan -- yang semuanya perlu ditangani", "Karena sumber energi sebenarnya tidak akan pernah habis", "Karena masalah energi cuma soal biaya, tidak ada hubungan dengan sumbernya", "Karena kehabisan sumber energi bukan masalah nyata"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan ada minimal empat sisi masalah energi, bukan cuma soal kehabisan sumber -- keempatnya perlu ditangani, bukan cuma satu aspek saja."
+  - soal: "Kenapa pernyataan 'solusinya cukup satu: ganti semua energi fosil dengan energi terbarukan secepatnya' dianggap terlalu sederhana?"
+    pilihan: ["Karena transisi energi butuh waktu, biaya, dan penyesuaian infrastruktur -- efisiensi dan pemerataan akses juga sama pentingnya", "Karena energi terbarukan sebenarnya tidak bisa dipakai sama sekali", "Karena energi fosil tidak boleh diganti dalam kondisi apa pun", "Karena mengganti energi fosil tidak membutuhkan biaya sama sekali"]
+    jawaban: 0
+    penjelasan: "Transisi energi butuh waktu, biaya, dan penyesuaian infrastruktur -- bukan cuma soal ganti sumber energi, tapi juga soal efisiensi pemakaian dan pemerataan akses."
+  - soal: "Berdasarkan bagian Intinya, apa 'ketegangan dasar' yang jadi akar dari keempat masalah energi tersebut?"
+    pilihan: ["Kebutuhan energi manusia terus tumbuh, sementara sumber daya dan infrastruktur untuk memenuhinya punya keterbatasan", "Manusia sebenarnya tidak membutuhkan energi sama sekali", "Energi terbarukan dan energi fosil sebenarnya sumber yang identik", "Masalah energi hanya terjadi di negara berkembang"]
+    jawaban: 0
+    penjelasan: "Materi menyimpulkan hampir semua masalah energi berakar dari satu ketegangan dasar: kebutuhan energi terus tumbuh, sementara sumber daya dan infrastrukturnya terbatas."
+  - soal: "Menurut kesimpulan materi, solusi yang dibutuhkan untuk menghadapi masalah energi adalah..."
+    pilihan: ["Kombinasi diversifikasi sumber, efisiensi pemakaian, pemerataan infrastruktur, dan kesadaran individu, berjalan bersamaan", "Cukup satu solusi tunggal yang berlaku untuk semua masalah", "Menghentikan seluruh pemakaian energi", "Membiarkan masalah energi terselesaikan sendiri tanpa upaya apa pun"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan tidak ada solusi tunggal -- yang dibutuhkan adalah kombinasi diversifikasi sumber, efisiensi, pemerataan infrastruktur, dan kesadaran individu yang berjalan bersamaan."
+  - soal: "Menurut materi, kenaikan permintaan energi secara global terutama didorong oleh pertumbuhan di sektor apa?"
+    pilihan: ["Industri, transportasi, dan rumah tangga baru, seiring pertambahan populasi dan aktivitas ekonomi", "Cuma sektor pertanian saja", "Cuma sektor pariwisata saja", "Tidak ada sektor tertentu yang mendorongnya"]
+    jawaban: 0
+    penjelasan: "Pertambahan populasi dan pertumbuhan ekonomi (industri, transportasi, rumah tangga baru) mendorong kebutuhan energi terus meningkat."
+  - soal: "Upaya utama yang disebut materi untuk menghadapi masalah kenaikan permintaan energi adalah..."
+    pilihan: ["Konservasi dan efisiensi energi -- memakai energi seperlunya dan mengurangi pemborosan", "Menambah jumlah penduduk supaya permintaan energi turun", "Menghentikan pertumbuhan ekonomi secara total", "Membiarkan permintaan energi naik tanpa upaya apa pun"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan upaya utama menghadapi kenaikan permintaan energi adalah konservasi dan efisiensi energi."
+  - soal: "Ada berapa masalah energi utama yang dibahas dalam materi ini?"
+    pilihan: ["Empat", "Dua", "Enam", "Satu"]
+    jawaban: 0
+    penjelasan: "Materi membahas empat masalah energi utama: keterbatasan sumber tak terbarukan, kenaikan permintaan, pemerataan akses, dan dampak lingkungan."
+  - soal: "Manakah urutan keempat masalah energi utama sesuai yang dibahas materi ini?"
+    pilihan: ["Keterbatasan sumber tak terbarukan, kenaikan permintaan, pemerataan akses, dampak lingkungan", "Dampak lingkungan, pemerataan akses, keterbatasan sumber, kenaikan permintaan", "Kenaikan permintaan, dampak lingkungan, keterbatasan sumber, pemerataan akses", "Pemerataan akses, keterbatasan sumber, dampak lingkungan, kenaikan permintaan"]
+    jawaban: 0
+    penjelasan: "Materi membahasnya dalam urutan: keterbatasan sumber energi tak terbarukan, kenaikan permintaan energi, pemerataan akses energi, dan dampak lingkungan."
+  - soal: "Kebijakan pemerintah seperti insentif energi terbarukan dan standar emisi kendaraan, menurut materi, termasuk upaya untuk mengatasi masalah apa?"
+    pilihan: ["Dampak lingkungan", "Pemerataan akses energi semata", "Kenaikan permintaan energi semata", "Keterbatasan sumber energi tak terbarukan semata"]
+    jawaban: 0
+    penjelasan: "Materi menempatkan kebijakan pemerintah (insentif energi terbarukan, standar emisi) sebagai bagian dari upaya mengatasi dampak lingkungan."
+  - soal: "Kenapa daerah kepulauan atau terpencil sering jadi contoh utama masalah pemerataan akses energi?"
+    pilihan: ["Karena tantangan geografis dan biaya infrastruktur jaringan konvensional membuat distribusi energi ke sana lebih sulit dan mahal", "Karena daerah tersebut sebenarnya tidak membutuhkan listrik", "Karena pemerintah sengaja tidak memberi akses ke daerah tersebut", "Karena daerah kepulauan selalu punya listrik lebih dari cukup"]
+    jawaban: 0
+    penjelasan: "Daerah terpencil/kepulauan menghadapi tantangan geografis dan biaya infrastruktur untuk membangun jaringan distribusi energi konvensional."
+  - soal: "Memahami keempat masalah energi yang dibahas materi ini penting sebagai bekal untuk menyadari apa?"
+    pilihan: ["Tidak ada satu solusi tunggal untuk masalah energi -- dibutuhkan kombinasi berbagai upaya yang berjalan bersamaan", "Masalah energi sebenarnya sudah selesai dan tidak perlu upaya lagi", "Cuma pemerintah yang perlu memikirkan solusi energi", "Masalah energi hanya relevan untuk pelajaran Fisika, tidak berlaku di kehidupan nyata"]
+    jawaban: 0
+    penjelasan: "Memahami keempat masalah ini membuat kita sadar bahwa dibutuhkan kombinasi berbagai upaya (diversifikasi, efisiensi, pemerataan, kesadaran individu) sekaligus, bukan solusi tunggal."
 draft: false
 ---
 

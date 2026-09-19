@@ -28,6 +28,86 @@ kuis:
     pilihan: ["Panjang", "Waktu", "Kecepatan", "Suhu"]
     jawaban: 2
     penjelasan: "Kecepatan dibentuk dari panjang dibagi waktu -- jadi kecepatan termasuk besaran TURUNAN, bukan besaran pokok."
+  - soal: "Besaran pokok didefinisikan sebagai..."
+    pilihan: ["Besaran yang paling sering diukur sehari-hari", "Besaran yang ditetapkan sebagai besaran dasar dalam SI dan tidak diturunkan dari besaran pokok lainnya", "Besaran yang hanya dimiliki oleh 7 negara", "Besaran yang tidak memiliki satuan"]
+    jawaban: 1
+    penjelasan: "Besaran pokok adalah besaran dasar dalam Sistem Internasional yang tidak diturunkan dari besaran pokok lainnya."
+  - soal: "Berikut ini yang BUKAN alat ukur panjang yang disebutkan dalam materi ini adalah..."
+    pilihan: ["Penggaris/mistar", "Jangka sorong", "Mikrometer sekrup", "Amperemeter"]
+    jawaban: 3
+    penjelasan: "Amperemeter dipakai untuk mengukur kuat arus listrik, bukan panjang. Penggaris, jangka sorong, dan mikrometer sekrup adalah alat ukur panjang."
+  - soal: "Sebuah apel memiliki massa 350 gram. Dinyatakan dalam satuan SI, massa apel tersebut adalah..."
+    pilihan: ["3,5 kg", "0,35 kg", "35 kg", "0,035 kg"]
+    jawaban: 1
+    penjelasan: "1 kg = 1000 gram, sehingga 350 gram = 350/1000 = 0,35 kg."
+  - soal: "Berikut yang termasuk alat yang dapat digunakan untuk mengukur massa adalah..."
+    pilihan: ["Neraca Ohaus, neraca digital, dan timbangan", "Amperemeter, voltmeter, dan ohmmeter", "Jam, stopwatch, dan timer digital", "Termometer zat cair dan termometer digital"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan neraca Ohaus, neraca digital, dan timbangan sebagai alat untuk mengukur massa."
+  - soal: "'Berat benda adalah 5 kg' -- pernyataan ini..."
+    pilihan: ["Benar, karena berat memang dinyatakan dalam kg", "Kurang tepat, karena 5 kg sebenarnya menyatakan massa, sedangkan berat dinyatakan dalam newton (N)", "Benar, karena kg dan N adalah satuan yang sama", "Kurang tepat, karena berat seharusnya dinyatakan dalam gram"]
+    jawaban: 1
+    penjelasan: "Kilogram adalah satuan massa. Berat adalah gaya gravitasi yang bekerja pada benda, satuannya newton (N)."
+  - soal: "Satuan SI untuk waktu, yang dapat diukur dengan jam, stopwatch, atau timer digital, adalah..."
+    pilihan: ["Menit", "Jam", "Sekon", "Abad"]
+    jawaban: 2
+    penjelasan: "Satuan SI untuk waktu adalah sekon (s)."
+  - soal: "Seorang siswa berlari sejauh lintasan tertentu dalam waktu 12 sekon. Dalam Fisika, informasi waktu ini berguna untuk..."
+    pilihan: ["Menentukan massa siswa", "Mempelajari gerak siswa tersebut", "Mengukur suhu tubuh siswa", "Menentukan jumlah zat dalam tubuh siswa"]
+    jawaban: 1
+    penjelasan: "Waktu menjadi salah satu besaran penting untuk menjelaskan bagaimana sesuatu berubah atau bergerak, bukan cuma untuk mengetahui 'jam berapa sekarang'."
+  - soal: "Kuat arus listrik dalam suatu rangkaian diukur menggunakan amperemeter yang dipasang secara..."
+    pilihan: ["Seri, dengan satuan SI ampere (A)", "Paralel, dengan satuan SI ampere (A)", "Seri, dengan satuan SI volt (V)", "Paralel, dengan satuan SI volt (V)"]
+    jawaban: 0
+    penjelasan: "Amperemeter dipasang seri dengan komponen yang arusnya diukur, dan satuan SI kuat arus adalah ampere (A)."
+  - soal: "Sebuah rangkaian memiliki kuat arus 0,5 A. Besaran yang dimaksud dan alat ukurnya adalah..."
+    pilihan: ["Tegangan, diukur voltmeter", "Kuat arus listrik, diukur amperemeter", "Daya, diukur wattmeter", "Hambatan, diukur ohmmeter"]
+    jawaban: 1
+    penjelasan: "Satuan ampere (A) menunjukkan besaran kuat arus listrik, yang diukur menggunakan amperemeter."
+  - soal: "Suhu ruangan tercatat 27 °C. Dinyatakan dalam kelvin, suhu tersebut adalah..."
+    pilihan: ["273,15 K", "300,15 K", "246,15 K", "27 K"]
+    jawaban: 1
+    penjelasan: "T(K) = T(°C) + 273,15, sehingga 27 + 273,15 = 300,15 K."
+  - soal: "Suhu digunakan untuk menyatakan..."
+    pilihan: ["Banyaknya materi dalam suatu benda", "Keadaan termal suatu benda atau lingkungan", "Laju aliran muatan listrik", "Banyaknya entitas elementer dalam suatu zat"]
+    jawaban: 1
+    penjelasan: "Suhu menyatakan keadaan termal suatu benda atau lingkungan, seperti perbedaan antara es batu dan teh panas."
+  - soal: "Besaran 'jumlah zat' digunakan untuk menyatakan..."
+    pilihan: ["Massa total suatu zat", "Banyaknya entitas elementer (atom, molekul, ion, dst) dalam suatu sistem", "Volume suatu zat", "Suhu suatu zat"]
+    jawaban: 1
+    penjelasan: "Jumlah zat menyatakan banyaknya entitas elementer seperti atom, molekul, ion, elektron, atau partikel lain dalam suatu sistem."
+  - soal: "Satuan SI untuk besaran jumlah zat adalah..."
+    pilihan: ["Gram", "Mol", "Kandela", "Kelvin"]
+    jawaban: 1
+    penjelasan: "Satuan SI untuk jumlah zat adalah mol."
+  - soal: "Intensitas cahaya menyatakan..."
+    pilihan: ["Banyaknya foton yang dipancarkan per detik", "Kuatnya cahaya yang dipancarkan oleh suatu sumber dalam arah tertentu", "Jarak sumber cahaya ke pengamat", "Warna cahaya yang dipancarkan"]
+    jawaban: 1
+    penjelasan: "Intensitas cahaya menyatakan kuatnya cahaya yang dipancarkan oleh suatu sumber dalam arah tertentu."
+  - soal: "Satuan SI untuk intensitas cahaya adalah kandela (cd), yang biasa dimanfaatkan dalam bidang..."
+    pilihan: ["Teknologi pencahayaan, lampu kendaraan, dan fotografi", "Pengukuran kuat arus listrik", "Pengukuran massa jenis zat", "Pengukuran jumlah zat dalam larutan"]
+    jawaban: 0
+    penjelasan: "Intensitas cahaya dipakai dalam berbagai bidang seperti teknologi pencahayaan, lampu kendaraan, desain penerangan, dan fotografi."
+  - soal: "Simbol satuan SI untuk besaran suhu termodinamik adalah..."
+    pilihan: ["°C", "°K", "K", "T"]
+    jawaban: 2
+    penjelasan: "Simbol satuan suhu termodinamik dalam SI adalah K, tanpa simbol derajat (°)."
+  - soal: "Simbol satuan SI untuk besaran jumlah zat adalah..."
+    pilihan: ["Mol", "n", "N", "Av"]
+    jawaban: 0
+    penjelasan: "Simbol satuan jumlah zat dalam SI adalah mol."
+  - soal: "Menurut materi ini, alasan ditetapkannya 7 besaran pokok adalah..."
+    pilihan: ["Karena hanya 7 besaran yang bisa diukur manusia", "Karena ketujuh besaran itu ditetapkan sebagai besaran dasar dalam SI, dan besaran lainnya dapat dinyatakan melalui hubungan matematis dari besaran-besaran itu", "Karena jumlah alat ukur yang ada cuma 7 jenis", "Karena disepakati oleh 7 negara pendiri SI"]
+    jawaban: 1
+    penjelasan: "Ketujuh besaran pokok jadi fondasi -- besaran lain (seperti kecepatan atau gaya) dinyatakan melalui hubungan matematis dari besaran-besaran dasar ini."
+  - soal: "Ketika mengendarai sepeda, waktu perjalanan yang diukur termasuk besaran pokok dengan satuan SI..."
+    pilihan: ["Meter (m)", "Kilogram (kg)", "Sekon (s)", "Ampere (A)"]
+    jawaban: 2
+    penjelasan: "Waktu perjalanan termasuk besaran pokok waktu, dengan satuan SI sekon (s)."
+  - soal: "'Semua benda yang bisa diukur merupakan besaran pokok' -- pernyataan ini..."
+    pilihan: ["Benar, semua yang terukur adalah besaran pokok", "Salah, banyak besaran yang dapat diukur tetapi termasuk besaran turunan, bukan besaran pokok", "Benar, tapi hanya untuk besaran fisika mekanika", "Salah, karena besaran pokok tidak dapat diukur"]
+    jawaban: 1
+    penjelasan: "Banyak besaran yang dapat diukur (seperti luas, kecepatan, gaya) justru termasuk besaran turunan, bukan besaran pokok."
 draft: false
 ---
 

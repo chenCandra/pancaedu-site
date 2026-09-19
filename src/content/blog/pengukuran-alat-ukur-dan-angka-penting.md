@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Supaya terlihat lebih rapi saja", "Karena angka desimal x̄ yang melebihi ketelitian Δx tidak punya arti -- kita memang tidak yakin sampai situ", "Karena aturannya harus selalu 2 angka di belakang koma", "Tidak ada alasan khusus, itu cuma kebiasaan"]
     jawaban: 1
     penjelasan: "Δx menunjukkan sampai angka desimal keberapa hasil pengukuran bisa dipercaya. Melaporkan x̄ lebih presisi dari itu cuma memberi kesan palsu bahwa hasilnya lebih teliti dari kenyataan."
+  - soal: "Menurut materi, pengukuran didefinisikan sebagai..."
+    pilihan: ["Proses membandingkan suatu besaran dengan besaran sejenis yang sudah ditetapkan sebagai satuan baku, menggunakan alat ukur", "Proses menebak nilai suatu besaran dengan mata saja", "Proses menghitung luas suatu ruangan", "Proses mencatat hasil percobaan tanpa alat ukur"]
+    jawaban: 0
+    penjelasan: "Materi mendefinisikan pengukuran sebagai proses membandingkan suatu besaran dengan besaran sejenis yang sudah ditetapkan sebagai satuan baku, memakai alat ukur."
+  - soal: "NST pada alat ukur adalah singkatan dari..."
+    pilihan: ["Nilai Skala Terkecil", "Nilai Standar Terukur", "Notasi Satuan Tunggal", "Nomor Seri Terdaftar"]
+    jawaban: 0
+    penjelasan: "NST adalah Nilai Skala Terkecil -- jarak antara dua garis skala terdekat pada alat ukur."
+  - soal: "Kenapa pernyataan 'mengukur itu tinggal kira-kira saja pakai mata' dianggap tidak tepat oleh materi ini?"
+    pilihan: ["Karena mata manusia tidak bisa melihat sama sekali", "Karena supaya hasilnya bisa dipercaya dan dibandingkan orang lain, pengukuran harus pakai alat yang standar, bukan sekadar tebakan", "Karena alat ukur tidak boleh dilihat pakai mata", "Karena kira-kira selalu menghasilkan angka yang sama dengan alat ukur"]
+    jawaban: 1
+    penjelasan: "Supaya hasil pengukuran bisa dipercaya dan dibandingkan oleh orang lain, pengukuran harus memakai alat ukur standar, bukan sekadar tebakan mata."
+  - soal: "Kenapa setiap pengukuran, walaupun memakai alat yang bagus, tetap selalu punya ketidakpastian?"
+    pilihan: ["Karena orang yang mengukur pasti ceroboh", "Karena memang begitu sifat dasar pengukuran -- selalu ada batas ketelitian, bukan soal alat jelek atau orangnya ceroboh", "Karena alat ukur di sekolah biasanya rusak", "Ketidakpastian hanya muncul kalau alatnya sudah tua"]
+    jawaban: 1
+    penjelasan: "Ketidakpastian bukan karena alat jelek atau orangnya ceroboh -- itu memang sifat dasar pengukuran, karena selalu ada batas ketelitian pada alat ukur apa pun."
+  - soal: "Panjang sebuah pensil dibaca 12,3 cm memakai mistar dengan NST 1 mm. Penulisan hasil pengukuran tunggal yang benar adalah..."
+    pilihan: ["x = (12,3 ± 0,05) cm", "x = (12,3 ± 0,5) cm", "x = (12,3 ± 1) cm", "x = 12,3 cm saja, tanpa ketidakpastian"]
+    jawaban: 0
+    penjelasan: "Ketidakpastian pengukuran tunggal = ½ NST = ½ × 1 mm = 0,5 mm = 0,05 cm, sehingga ditulis x = (12,3 ± 0,05) cm."
+  - soal: "Kenapa ketidakpastian 0,5 mm pada contoh pengukuran pensil dituliskan sebagai 0,05 cm pada hasil akhirnya?"
+    pilihan: ["Supaya angkanya kelihatan lebih kecil", "Supaya satuannya sepadan dengan angka hasil bacaan yang dinyatakan dalam cm", "Karena aturannya harus selalu dalam cm", "Karena 0,5 mm dan 0,05 cm adalah nilai yang berbeda besarnya"]
+    jawaban: 1
+    penjelasan: "0,5 mm dikonversi ke 0,05 cm supaya satuan ketidakpastiannya sepadan (sama satuan) dengan angka hasil pembacaan panjang pensil yang dinyatakan dalam cm."
+  - soal: "Kenapa kesalahan acak yang muncul pada tiap pengukuran bisa 'saling menutupi' ketika pengukuran diulang beberapa kali?"
+    pilihan: ["Karena kesalahan acak kadang membuat hasil lebih besar, kadang lebih kecil, sehingga rata-ratanya mendekati nilai sebenarnya", "Karena alat ukur memperbaiki dirinya sendiri setiap diulang", "Karena kesalahan acak selalu membuat hasil lebih besar setiap kali", "Karena pengukuran berulang menghilangkan kesalahan sistematis"]
+    jawaban: 0
+    penjelasan: "Kesalahan acak sifatnya kebetulan -- kadang membuat hasil lebih besar, kadang lebih kecil. Saat dirata-rata dari beberapa pengukuran, efek-efek itu saling menutupi dan mendekati nilai sebenarnya."
+  - soal: "Kenapa pernyataan 'kalau sudah diulang 5 kali, hasil yang dipakai adalah yang paling sering muncul' dianggap salah oleh materi ini?"
+    pilihan: ["Karena yang seharusnya dihitung adalah rata-rata dari semua data, bukan modus (nilai yang paling sering muncul)", "Karena pengukuran berulang tidak butuh perhitungan apa pun", "Karena nilai yang paling sering muncul selalu sama dengan rata-rata", "Karena pengukuran cukup dilakukan sekali saja"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan yang dihitung dari data pengukuran berulang adalah nilai rata-rata (x̄), bukan modus atau nilai yang paling sering muncul."
+  - soal: "Urutan langkah yang benar dalam melaporkan hasil pengukuran berulang adalah..."
+    pilihan: ["Hitung rata-rata → hitung selisih tiap data → kuadratkan & jumlahkan → hitung Δx → laporkan x = (x̄ ± Δx)", "Hitung Δx → hitung rata-rata → laporkan hasil, tanpa perlu menghitung selisih", "Laporkan hasil dulu → baru hitung rata-rata dan Δx", "Kuadratkan data mentah → langsung laporkan tanpa menghitung rata-rata"]
+    jawaban: 0
+    penjelasan: "Lima langkah yang benar: hitung rata-rata, hitung selisih (deviasi) tiap data, kuadratkan dan jumlahkan, hitung Δx, lalu laporkan x = (x̄ ± Δx) satuan."
+  - soal: "Kenapa selisih (deviasi) tiap data terhadap rata-rata harus dikuadratkan dulu sebelum dijumlahkan, bukan dijumlahkan langsung?"
+    pilihan: ["Supaya angkanya kelihatan lebih besar", "Supaya nilai selisih yang negatif dan positif tidak saling menghilangkan saat dijumlahkan", "Karena aturan matematika melarang penjumlahan langsung", "Supaya satuannya berubah jadi satuan luas"]
+    jawaban: 1
+    penjelasan: "Selisih (xᵢ − x̄) bisa positif atau negatif. Kalau langsung dijumlahkan, nilai positif dan negatif bisa saling menghilangkan dan hasilnya jadi menyesatkan -- karena itu dikuadratkan dulu."
+  - soal: "Rumus ketidakpastian (Δx) pada pengukuran berulang adalah..."
+    pilihan: ["Δx = √[Σ(xᵢ − x̄)² / (n(n−1))]", "Δx = Σ(xᵢ − x̄) / n", "Δx = x̄ / n", "Δx = ½ NST, sama seperti pengukuran tunggal"]
+    jawaban: 0
+    penjelasan: "Rumus ketidakpastian pengukuran berulang adalah Δx = √[Σ(xᵢ − x̄)² / (n(n−1))], berbeda dari rumus ketidakpastian pengukuran tunggal (½ NST)."
+  - soal: "Dari contoh soal lengkap di materi (5 data panjang meja), berapa jumlah kuadrat selisihnya, Σ(xᵢ − x̄)²?"
+    pilihan: ["0,10", "0,05", "0,20", "1,00"]
+    jawaban: 0
+    penjelasan: "Σ(xᵢ − x̄)² = 0,01 + 0,01 + 0,04 + 0 + 0,04 = 0,10, sesuai tabel pada contoh soal."
+  - soal: "Masih dari contoh soal yang sama (Σ(xᵢ − x̄)² = 0,10 dan n = 5), berapa nilai Δx yang dihasilkan?"
+    pilihan: ["≈ 0,07 cm", "≈ 0,10 cm", "≈ 0,02 cm", "≈ 0,50 cm"]
+    jawaban: 0
+    penjelasan: "Δx = √[0,10 / (5 × 4)] = √0,005 ≈ 0,07 cm."
+  - soal: "Berdasarkan seluruh perhitungan pada contoh soal panjang meja, bagaimana hasil akhirnya dilaporkan?"
+    pilihan: ["x = (120,30 ± 0,07) cm", "x = (120,3 ± 0,1) cm", "x = (120 ± 0,07) cm", "x = 120,30 cm, tanpa ketidakpastian"]
+    jawaban: 0
+    penjelasan: "Hasil akhirnya dilaporkan sebagai x = (120,30 ± 0,07) cm -- rata-rata dan ketidakpastian disamakan jumlah angka desimalnya."
+  - soal: "Kenapa pada hasil akhir contoh soal, x̄ ditulis 120,30 dan bukan 120,3?"
+    pilihan: ["Supaya jumlah angka desimalnya disamakan dengan Δx (dua angka desimal) -- angka desimal ketiga dan seterusnya sudah tidak bisa dipercaya", "Karena aturan pembulatan matematika biasa", "Karena 120,3 dianggap salah hitung", "Tidak ada alasan khusus, cuma gaya penulisan"]
+    jawaban: 0
+    penjelasan: "Jumlah angka desimal x̄ disamakan dengan Δx supaya keduanya sepadan -- menuliskan lebih presisi dari itu cuma memberi kesan palsu soal ketelitian hasil."
+  - soal: "Rumus ketidakpastian relatif suatu hasil pengukuran adalah..."
+    pilihan: ["(Δx / x̄) × 100%", "(x̄ / Δx) × 100%", "Δx × x̄ × 100%", "(Δx + x̄) × 100%"]
+    jawaban: 0
+    penjelasan: "Ketidakpastian relatif dihitung dengan (Δx / x̄) × 100% -- membandingkan ketidakpastian dengan nilai rata-ratanya."
+  - soal: "Kalau ketidakpastian relatif suatu hasil pengukuran sekitar 0,05% (kurang dari 0,1%), menurut tabel pada materi, berapa jumlah angka penting yang disarankan?"
+    pilihan: ["4 angka penting", "1 angka penting", "2 angka penting", "3 angka penting"]
+    jawaban: 0
+    penjelasan: "Menurut tabel, ketidakpastian relatif kurang dari 0,1% disarankan dilaporkan dengan 4 angka penting."
+  - soal: "Kalau ketidakpastian relatif suatu hasil pengukuran sekitar 5% (berada di rentang 1%-10%), berapa jumlah angka penting yang disarankan menurut tabel pada materi?"
+    pilihan: ["2 angka penting", "4 angka penting", "1 angka penting", "3 angka penting"]
+    jawaban: 0
+    penjelasan: "Menurut tabel, ketidakpastian relatif di rentang 1%-10% disarankan dilaporkan dengan 2 angka penting."
+  - soal: "Kenapa pernyataan 'kalau sudah diukur berulang, ketidakpastiannya tidak perlu ditulis lagi' dianggap salah?"
+    pilihan: ["Karena hasil pengukuran berulang justru wajib disertai Δx -- itu bagian yang menunjukkan seberapa bisa dipercaya rata-ratanya", "Karena ketidakpastian hanya berlaku untuk pengukuran tunggal", "Karena Δx cuma diperlukan kalau datanya kurang dari 3 kali", "Karena rata-rata sudah pasti benar tanpa ketidakpastian"]
+    jawaban: 0
+    penjelasan: "Hasil pengukuran berulang tetap wajib disertai Δx -- itu bagian penting yang menunjukkan seberapa dapat dipercaya nilai rata-ratanya."
+  - soal: "Kenapa pernyataan 'semakin banyak data diulang, ketidakpastiannya pasti makin kecil, berapa pun jumlah pengulangannya' tidak sepenuhnya benar?"
+    pilihan: ["Karena kalau ada kesalahan sistematis (misalnya alat tidak dikalibrasi dengan benar), mengulang pengukuran sebanyak apa pun tidak akan memperbaikinya -- pengulangan cuma efektif mengurangi kesalahan acak", "Karena mengulang pengukuran justru selalu memperbesar ketidakpastian", "Karena rumus Δx tidak melibatkan jumlah data n sama sekali", "Karena kesalahan acak dan kesalahan sistematis sebenarnya hal yang sama"]
+    jawaban: 0
+    penjelasan: "Pengulangan pengukuran cuma efektif mengurangi kesalahan acak. Kalau ada kesalahan sistematis (misalnya alat tidak terkalibrasi benar), pengulangan sebanyak apa pun tidak akan memperbaikinya."
 draft: false
 ---
 

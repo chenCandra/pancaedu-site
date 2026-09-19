@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Efek Relativistik</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .shared-control { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .shared-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .shared-label { font-size: 0.9rem; font-weight: 600; }
+  .shared-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); font-size: 0.95rem; }
+  .gamma-readout { font-family: 'Courier New', monospace; font-weight: 800; color: var(--text-highlight); font-size: 1.1rem; }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .tab-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tab-btn { flex: 1; min-width: 110px; background: var(--card-bg); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; padding: 11px 6px; border-radius: 12px; cursor: pointer; }
+  .tab-btn.is-active { color: #fff; background: var(--accent-cyan); border-color: transparent; }
+  .tab-panel { display: none; }
+  .tab-panel.is-active { display: block; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 280px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 230px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">⏱️</span><h1>Laboratorium Maya: Efek Relativistik</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="shared-control">
+    <div class="shared-row">
+      <span class="shared-label">Kecepatan Objek (v), sebagai pecahan kecepatan cahaya</span>
+      <span class="shared-value" id="betaVal">0,60 c</span>
+    </div>
+    <input type="range" id="betaSlider" min="0" max="0.99" step="0.01" value="0.6">
+    <div class="shared-row">
+      <span class="shared-label">Faktor Lorentz</span>
+      <span class="gamma-readout" id="gammaVal">γ = 1,25</span>
+    </div>
+    <p style="font-size:0.72rem;color:var(--text-muted);">Slider ini dipakai bersama di ketiga tab -- γ inilah "tokoh utama" di balik dilatasi waktu, kontraksi panjang, dan massa/momentum relativistik.</p>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab-btn is-active" id="tabBtnWaktu">🕐 Dilatasi Waktu</button>
+    <button class="tab-btn" id="tabBtnPanjang">📏 Kontraksi Panjang</button>
+    <button class="tab-btn" id="tabBtnMassa">⚛️ Massa &amp; Momentum</button>
+  </div>
+
+  <!-- TAB DILATASI WAKTU -->
+  <div class="tab-panel is-active" id="tabWaktu">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Waktu Sejati (Δt, kerangka objek)</span><span class="control-value" id="dt0Val">1 s</span></div>
+          <input type="range" id="dt0Slider" min="1" max="10" step="1" value="1">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Dua Jam Cahaya</span></div>
+        <div class="canvas-wrapper"><canvas id="waktuCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Waktu Sejati (Δt)</div><div class="v" id="dt0Out">1,00 s</div></div>
+            <div class="result-highlight"><div class="k">Waktu Teramati (Δt')</div><div class="v" id="dtOut">1,25 s</div></div>
+          </div>
+          <div class="formula-box" id="waktuFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan</div>
+      Jam yang IKUT bergerak bersama objek (kerangka objek) mengalami waktu sejati Δt seperti biasa. Tapi bagi pengamat yang DIAM, jam yang bergerak itu tampak berdetak lebih LAMBAT: <span class="math-var">Δt' = γΔt</span>. Perhatikan jam "bergerak" di kanan berdetak lebih lambat daripada jam "diam" di kiri.
+    </div>
+  </div>
+
+  <!-- TAB KONTRAKSI PANJANG -->
+  <div class="tab-panel" id="tabPanjang">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Panjang Sejati (L₀, diam)</span><span class="control-value" id="l0Val">10 m</span></div>
+          <input type="range" id="l0Slider" min="2" max="20" step="1" value="10">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Batang yang Bergerak</span></div>
+        <div class="canvas-wrapper"><canvas id="panjangCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Panjang Sejati (L₀)</div><div class="v" id="l0Out">10,00 m</div></div>
+            <div class="result-highlight"><div class="k">Panjang Teramati (L)</div><div class="v" id="lOut">8,00 m</div></div>
+          </div>
+          <div class="formula-box" id="panjangFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan</div>
+      Panjang sejati L₀ diukur saat benda DIAM (atau oleh pengamat yang ikut bergerak bersamanya). Bagi pengamat yang diam melihat benda itu LEWAT dengan kecepatan v, panjangnya tampak MENGERUT jadi <span class="math-var">L = L₀/γ = L₀√(1−v²/c²)</span> -- hanya searah gerak, bukan ke segala arah.
+    </div>
+  </div>
+
+  <!-- TAB MASSA & MOMENTUM -->
+  <div class="tab-panel" id="tabMassa">
+    <div class="main-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Parameter</span></div>
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Massa Diam (m₀)</span><span class="control-value" id="m0Val">1 kg</span></div>
+          <input type="range" id="m0Slider" min="1" max="5" step="0.5" value="1">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Klasik vs Relativistik</span></div>
+        <div class="canvas-wrapper"><canvas id="massaCanvas"></canvas></div>
+        <div class="results-panel">
+          <div class="result-grid">
+            <div class="result-highlight"><div class="k">Massa Relativistik (m)</div><div class="v" id="mOut">1,25 kg</div></div>
+            <div class="result-highlight"><div class="k">Momentum Relativistik (p)</div><div class="v" id="pOut">0 kg·m/s</div></div>
+          </div>
+          <div class="formula-box" id="massaFormula"></div>
+        </div>
+      </div>
+    </div>
+    <div class="theory-card">
+      <div class="theory-title">📌 Ringkasan</div>
+      Makin cepat suatu benda bergerak, massa yang "terukur" pengamat diam makin besar: <span class="math-var">m = γm₀</span>. Momentumnya pun ikut membesar lebih cepat dari prediksi klasik: <span class="math-var">p = γm₀v</span> (bandingkan dengan p klasik = m₀v yang naik LURUS terhadap v). Inilah salah satu alasan benda bermassa TIDAK BISA mencapai kecepatan cahaya -- makin dekat ke c, makin butuh energi tak terbatas untuk terus mempercepatnya.
+    </div>
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Dilatasi waktu, kontraksi panjang, dan massa relativistik sama-sama dikendalikan satu faktor yang sama. Faktor apa itu?</span>
+    <div class="quiz-opts" id="relQuizOpts"></div>
+    <div class="quiz-fb" id="relQuizFb"></div>
+  </div>
+
+  <script>
+    // ---------- SHARED β/γ ----------
+    const betaSlider = document.getElementById('betaSlider'), betaVal = document.getElementById('betaVal');
+    const gammaVal = document.getElementById('gammaVal');
+    let beta = 0.6;
+
+    function gamma() { return 1 / Math.sqrt(1 - beta * beta); }
+
+    betaSlider.addEventListener('input', () => {
+      beta = parseFloat(betaSlider.value);
+      betaVal.textContent = beta.toFixed(2) + ' c';
+      gammaVal.textContent = 'γ = ' + gamma().toFixed(3);
+      updateAll();
+    });
+
+    // ---------- TAB SWITCHING ----------
+    const tabs = [
+      { btn: document.getElementById('tabBtnWaktu'), panel: document.getElementById('tabWaktu') },
+      { btn: document.getElementById('tabBtnPanjang'), panel: document.getElementById('tabPanjang') },
+      { btn: document.getElementById('tabBtnMassa'), panel: document.getElementById('tabMassa') },
+    ];
+    tabs.forEach((t) => {
+      t.btn.addEventListener('click', () => {
+        tabs.forEach((o) => { o.btn.classList.remove('is-active'); o.panel.classList.remove('is-active'); });
+        t.btn.classList.add('is-active'); t.panel.classList.add('is-active');
+        resizeAllCanvas();
+      });
+    });
+
+    // ---------- TAB 1: DILATASI WAKTU ----------
+    const waktuCanvas = document.getElementById('waktuCanvas'), waktuCtx = waktuCanvas.getContext('2d');
+    const dt0Slider = document.getElementById('dt0Slider'), dt0Val = document.getElementById('dt0Val');
+    const dt0Out = document.getElementById('dt0Out'), dtOut = document.getElementById('dtOut');
+    const waktuFormula = document.getElementById('waktuFormula');
+    let dt0 = 1, tickA = 0, tickB = 0;
+
+    dt0Slider.addEventListener('input', () => { dt0 = parseFloat(dt0Slider.value); dt0Val.textContent = dt0 + ' s'; updateAll(); });
+
+    function updateWaktu() {
+      const g = gamma();
+      const dt = g * dt0;
+      dt0Out.textContent = dt0.toFixed(2) + ' s';
+      dtOut.textContent = dt.toFixed(2) + ' s';
+      waktuFormula.innerHTML = `Δt' = γΔt = (${g.toFixed(3)})(${dt0.toFixed(2)}) = <span class="math-num">${dt.toFixed(2)} s</span>`;
+    }
+
+    function renderWaktu() {
+      const w = waktuCanvas.parentElement.clientWidth, h = waktuCanvas.parentElement.clientHeight;
+      waktuCtx.clearRect(0, 0, w, h);
+      const g = gamma();
+      tickA += 0.05; tickB += 0.05 / g; // jam bergerak "berdetak" lebih lambat sebesar 1/γ
+
+      drawLightClock(waktuCtx, w * 0.27, h / 2, 55, tickA, '#38bdf8', 'Diam');
+      drawLightClock(waktuCtx, w * 0.73, h / 2, 55, tickB, '#facc15', 'Bergerak');
+
+      requestAnimationFrame(renderWaktu);
+    }
+
+    function drawLightClock(c, cx, cy, halfH, phase, color, label) {
+      c.save();
+      c.strokeStyle = 'rgba(148,163,184,0.5)'; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(cx, cy - halfH); c.lineTo(cx, cy + halfH); c.stroke();
+      c.fillStyle = 'rgba(148,163,184,0.7)';
+      c.fillRect(cx - 14, cy - halfH - 3, 28, 6);
+      c.fillRect(cx - 14, cy + halfH - 3, 28, 6);
+
+      const y = cy + Math.sin(phase) * halfH;
+      c.fillStyle = color; c.shadowColor = color; c.shadowBlur = 10;
+      c.beginPath(); c.arc(cx, y, 6, 0, Math.PI * 2); c.fill();
+      c.shadowBlur = 0;
+
+      c.fillStyle = '#f8fafc'; c.font = '12px system-ui'; c.textAlign = 'center';
+      c.fillText(label, cx, cy + halfH + 22);
+      c.restore();
+    }
+
+    // ---------- TAB 2: KONTRAKSI PANJANG ----------
+    const panjangCanvas = document.getElementById('panjangCanvas'), panjangCtx = panjangCanvas.getContext('2d');
+    const l0Slider = document.getElementById('l0Slider'), l0Val = document.getElementById('l0Val');
+    const l0Out = document.getElementById('l0Out'), lOut = document.getElementById('lOut');
+    const panjangFormula = document.getElementById('panjangFormula');
+    let l0 = 10, rodOffset = 0;
+
+    l0Slider.addEventListener('input', () => { l0 = parseFloat(l0Slider.value); l0Val.textContent = l0 + ' m'; updateAll(); });
+
+    function updatePanjang() {
+      const g = gamma();
+      const l = l0 / g;
+      l0Out.textContent = l0.toFixed(2) + ' m';
+      lOut.textContent = l.toFixed(2) + ' m';
+      panjangFormula.innerHTML = `L = L₀/γ = (${l0.toFixed(2)})/(${g.toFixed(3)}) = <span class="math-num">${l.toFixed(2)} m</span>`;
+    }
+
+    function renderPanjang() {
+      const w = panjangCanvas.parentElement.clientWidth, h = panjangCanvas.parentElement.clientHeight;
+      panjangCtx.clearRect(0, 0, w, h);
+      const g = gamma();
+      const scale = Math.min(w * 0.7, 260) / 20; // px per meter, skala tetap terhadap L0 maksimum slider (20m)
+      const l0px = l0 * scale, lpx = (l0 / g) * scale;
+      const cy = h / 2;
+
+      // Garis acuan panjang sejati (transparan)
+      panjangCtx.save();
+      panjangCtx.strokeStyle = 'rgba(148,163,184,0.4)'; panjangCtx.lineWidth = 2; panjangCtx.setLineDash([4, 4]);
+      panjangCtx.strokeRect(w / 2 - l0px / 2, cy - 20, l0px, 40);
+      panjangCtx.setLineDash([]);
+      panjangCtx.fillStyle = 'rgba(148,163,184,0.7)'; panjangCtx.font = '11px system-ui'; panjangCtx.textAlign = 'center';
+      panjangCtx.fillText('L₀ (diam)', w / 2, cy - 30);
+      panjangCtx.restore();
+
+      // Batang teramati (kontraksi), bergerak maju-mundur perlahan sebagai penekan "sedang bergerak"
+      rodOffset += 0.6;
+      const drift = Math.sin(rodOffset * 0.02) * 20;
+      panjangCtx.save();
+      panjangCtx.fillStyle = 'rgba(56,189,248,0.85)';
+      panjangCtx.fillRect(w / 2 - lpx / 2 + drift, cy - 20, lpx, 40);
+      panjangCtx.fillStyle = '#f8fafc'; panjangCtx.font = '11px system-ui'; panjangCtx.textAlign = 'center';
+      panjangCtx.fillText('L (teramati, bergerak)', w / 2 + drift, cy + 38);
+      panjangCtx.restore();
+
+      requestAnimationFrame(renderPanjang);
+    }
+
+    // ---------- TAB 3: MASSA & MOMENTUM ----------
+    const massaCanvas = document.getElementById('massaCanvas'), massaCtx = massaCanvas.getContext('2d');
+    const m0Slider = document.getElementById('m0Slider'), m0Val = document.getElementById('m0Val');
+    const mOut = document.getElementById('mOut'), pOut = document.getElementById('pOut');
+    const massaFormula = document.getElementById('massaFormula');
+    let m0 = 1;
+
+    m0Slider.addEventListener('input', () => { m0 = parseFloat(m0Slider.value); m0Val.textContent = m0 + ' kg'; updateAll(); });
+
+    function updateMassa() {
+      const g = gamma();
+      const m = g * m0;
+      const pClassical = m0 * beta; // dalam satuan m0*c
+      const pRel = g * m0 * beta;
+      mOut.textContent = m.toFixed(2) + ' kg';
+      pOut.textContent = pRel.toFixed(2) + ' m₀c';
+      massaFormula.innerHTML =
+        `m = γm₀ = (${g.toFixed(3)})(${m0.toFixed(1)}) = <span class="math-num">${m.toFixed(2)} kg</span><br>` +
+        `p = γm₀v &rarr; p klasik = <span class="math-num">${pClassical.toFixed(2)} m₀c</span>, p relativistik = <span class="math-num">${pRel.toFixed(2)} m₀c</span>`;
+      renderMassa();
+    }
+
+    function renderMassa() {
+      const w = massaCanvas.parentElement.clientWidth, h = massaCanvas.parentElement.clientHeight;
+      massaCtx.clearRect(0, 0, w, h);
+      const g = gamma();
+      const baseY = h - 30, maxBarH = h - 70;
+      const barW = Math.min(w * 0.14, 60);
+
+      const bars = [
+        { x: w * 0.2, val: m0, max: 5, color: '#94a3b8', label: 'm₀ (diam)' },
+        { x: w * 0.42, val: g * m0, max: 5 * 5, color: '#facc15', label: 'm (relativ.)' },
+        { x: w * 0.65, val: m0 * beta, max: 5, color: '#38bdf8', label: 'p klasik' },
+        { x: w * 0.87, val: g * m0 * beta, max: 5 * 5, color: '#ef4444', label: 'p relativ.' },
+      ];
+      bars.forEach((b) => {
+        const barH = Math.min(maxBarH, (b.val / b.max) * maxBarH);
+        massaCtx.save();
+        massaCtx.fillStyle = b.color;
+        massaCtx.fillRect(b.x - barW / 2, baseY - barH, barW, barH);
+        massaCtx.fillStyle = '#f8fafc'; massaCtx.font = '10px system-ui'; massaCtx.textAlign = 'center';
+        massaCtx.fillText(b.label, b.x, baseY + 16);
+        massaCtx.fillText(b.val.toFixed(2), b.x, baseY - barH - 6);
+        massaCtx.restore();
+      });
+    }
+
+    // ---------- UPDATE SEMUA ----------
+    function updateAll() {
+      updateWaktu();
+      updatePanjang();
+      updateMassa();
+    }
+
+    function resizeAllCanvas() {
+      [waktuCanvas, panjangCanvas, massaCanvas].forEach((cv) => {
+        const rect = cv.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        cv.width = rect.width * dpr; cv.height = rect.height * dpr;
+        cv.getContext('2d').setTransform(1, 0, 0, 1, 0, 0); cv.getContext('2d').scale(dpr, dpr);
+      });
+      updateAll();
+    }
+    window.addEventListener('resize', resizeAllCanvas);
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('relQuizOpts'), [
+      'Faktor Lorentz, γ = 1/√(1−v²/c²)', 'Massa diam benda, m₀', 'Percepatan gravitasi, g', 'Panjang gelombang cahaya, λ'
+    ], 0, (correct) => {
+      const fb = document.getElementById('relQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Δt\' = γΔt, L = L₀/γ, dan m = γm₀ -- ketiganya "digerakkan" oleh γ yang sama. Coba geser slider v/c di atas dan lihat ketiga tab berubah bersamaan.',
+    });
+
+    window.onload = () => { resizeAllCanvas(); requestAnimationFrame(renderWaktu); requestAnimationFrame(renderPanjang); };
+  </script>
+</body>
+</html>

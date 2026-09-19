@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Ruas kiri dan kanan sama-sama berdimensi L", "Ruas kiri L sedangkan ruas kanan T", "Ruas kiri T sedangkan ruas kanan L", "Kedua ruas tidak memiliki dimensi"]
     jawaban: 0
     penjelasan: "Dimensi ruas kanan adalah LT⁻¹ × T = L, sama dengan dimensi ruas kiri. Jadi persamaan tersebut konsisten secara dimensi."
+  - soal: "Simbol dimensi untuk besaran massa adalah..."
+    pilihan: ["L", "M", "T", "I"]
+    jawaban: 1
+    penjelasan: "Dimensi massa dinyatakan dengan simbol M."
+  - soal: "Simbol dimensi untuk besaran waktu adalah..."
+    pilihan: ["L", "M", "T", "N"]
+    jawaban: 2
+    penjelasan: "Dimensi waktu dinyatakan dengan simbol T."
+  - soal: "Simbol dimensi untuk besaran suhu termodinamik adalah..."
+    pilihan: ["T", "I", "Θ", "N"]
+    jawaban: 2
+    penjelasan: "Dimensi suhu termodinamik dinyatakan dengan simbol Θ."
+  - soal: "Simbol dimensi untuk besaran kuat arus listrik adalah..."
+    pilihan: ["I", "J", "N", "M"]
+    jawaban: 0
+    penjelasan: "Dimensi kuat arus listrik dinyatakan dengan simbol I."
+  - soal: "Luas diperoleh dari panjang dikalikan panjang (A = p × l). Dimensi luas adalah..."
+    pilihan: ["L", "L²", "L³", "2L"]
+    jawaban: 1
+    penjelasan: "[A] = [L][L] = L², karena dua besaran panjang dikalikan."
+  - soal: "Dimensi volume, yang diperoleh dari tiga besaran panjang dikalikan (V = p × l × t), adalah..."
+    pilihan: ["L²", "L³", "3L", "L⁻³"]
+    jawaban: 1
+    penjelasan: "[V] = [L][L][L] = L³, karena tiga besaran panjang dikalikan."
+  - soal: "Percepatan diperoleh dari a = Δv/Δt. Jika dimensi kecepatan adalah LT⁻¹, maka dimensi percepatan adalah..."
+    pilihan: ["LT⁻¹", "LT⁻²", "LT", "L²T⁻¹"]
+    jawaban: 1
+    penjelasan: "[a] = LT⁻¹ / T = LT⁻², karena percepatan adalah kecepatan dibagi waktu."
+  - soal: "Massa jenis dirumuskan ρ = m/V. Jika dimensi massa M dan dimensi volume L³, maka dimensi massa jenis adalah..."
+    pilihan: ["ML³", "ML⁻³", "M⁻¹L³", "ML"]
+    jawaban: 1
+    penjelasan: "[ρ] = M / L³ = ML⁻³."
+  - soal: "Tekanan dirumuskan P = F/A. Jika dimensi gaya MLT⁻² dan dimensi luas L², maka dimensi tekanan adalah..."
+    pilihan: ["MLT⁻²", "ML⁻¹T⁻²", "ML²T⁻²", "MLT⁻⁴"]
+    jawaban: 1
+    penjelasan: "[P] = MLT⁻² / L² = ML⁻¹T⁻²."
+  - soal: "Usaha dirumuskan W = F × s. Jika dimensi gaya MLT⁻² dan dimensi perpindahan L, maka dimensi usaha (dan energi) adalah..."
+    pilihan: ["MLT⁻²", "ML²T⁻²", "ML²T⁻³", "ML⁻²T⁻²"]
+    jawaban: 1
+    penjelasan: "[W] = MLT⁻² × L = ML²T⁻², dan energi memiliki dimensi yang sama dengan usaha."
+  - soal: "Daya dirumuskan P = W/t. Jika dimensi usaha ML²T⁻² dan dimensi waktu T, maka dimensi daya adalah..."
+    pilihan: ["ML²T⁻²", "ML²T⁻³", "MLT⁻³", "ML³T⁻²"]
+    jawaban: 1
+    penjelasan: "[P] = ML²T⁻² / T = ML²T⁻³."
+  - soal: "Menurut langkah yang dijelaskan dalam materi ini, langkah PERTAMA untuk menentukan dimensi suatu besaran adalah..."
+    pilihan: ["Langsung menghafal tabel dimensi", "Mencari persamaan yang menghubungkan besaran tersebut", "Mengganti tiap besaran dengan satuannya", "Menyederhanakan hasil akhir"]
+    jawaban: 1
+    penjelasan: "Langkah pertama adalah mencari persamaan besaran tersebut, misalnya F = ma untuk gaya, sebelum mengganti tiap besaran dengan dimensinya."
+  - soal: "Perbedaan mendasar antara satuan dan dimensi adalah..."
+    pilihan: ["Satuan menjawab 'diukur dengan apa', dimensi menjawab 'tersusun dari besaran apa'", "Satuan dan dimensi adalah dua istilah yang persis sama", "Dimensi hanya dipakai untuk besaran pokok, satuan hanya untuk besaran turunan", "Satuan selalu ditulis dengan kurung siku, dimensi tidak"]
+    jawaban: 0
+    penjelasan: "Satuan menjawab pertanyaan 'diukur dengan apa', sedangkan dimensi menjawab 'tersusun dari besaran apa'."
+  - soal: "Persamaan s = vt² diperiksa secara dimensi (dengan s berdimensi L, v berdimensi LT⁻¹, dan t berdimensi T). Hasil pemeriksaannya adalah..."
+    pilihan: ["Konsisten, karena kedua ruas sama-sama L", "Tidak konsisten, karena ruas kanan menjadi LT sedangkan ruas kiri L", "Konsisten, karena kedua ruas sama-sama LT", "Tidak konsisten, karena ruas kiri seharusnya L³"]
+    jawaban: 1
+    penjelasan: "[vt²] = (LT⁻¹)(T²) = LT, sedangkan [s] = L. Karena L ≠ LT, persamaan ini tidak konsisten secara dimensi."
+  - soal: "'Kalau dimensi dua ruas persamaan sama, berarti persamaannya pasti benar secara Fisika' -- pernyataan ini..."
+    pilihan: ["Benar sepenuhnya", "Belum tentu, karena analisis dimensi hanya membantu memeriksa konsistensi, bukan bukti kebenaran penuh", "Benar, tapi hanya untuk persamaan gerak", "Belum tentu, karena dimensi tidak bisa dipakai memeriksa persamaan sama sekali"]
+    jawaban: 1
+    penjelasan: "Persamaan yang konsisten secara dimensi belum tentu benar secara Fisika -- analisis dimensi membantu menemukan kesalahan, tapi tidak membuktikan kebenaran penuh."
+  - soal: "Energi dan usaha memiliki satuan SI yang sama (joule). Hal ini menunjukkan bahwa keduanya juga memiliki..."
+    pilihan: ["Dimensi yang berbeda, yaitu ML²T⁻² untuk usaha dan MLT⁻² untuk energi", "Dimensi yang sama, yaitu ML²T⁻²", "Satuan yang sama tapi tidak memiliki dimensi sama sekali", "Besaran pokok yang berbeda"]
+    jawaban: 1
+    penjelasan: "Energi dan usaha memiliki satuan SI yang sama (joule) dan dimensi yang sama, yaitu ML²T⁻²."
+  - soal: "'Dimensi digunakan untuk menggantikan satuan dalam perhitungan sehari-hari' -- pernyataan ini..."
+    pilihan: ["Benar, dimensi bisa dipakai langsung untuk menghitung hasil pengukuran", "Salah, satuan dipakai dalam pengukuran & perhitungan kuantitatif, sedangkan dimensi dipakai untuk menunjukkan susunan besaran dan memeriksa persamaan", "Benar, tapi hanya untuk besaran turunan", "Salah, karena dimensi hanya dipakai di negara yang belum memakai SI"]
+    jawaban: 1
+    penjelasan: "Satuan dipakai dalam pengukuran dan perhitungan kuantitatif, sedangkan dimensi menunjukkan susunan suatu besaran dan membantu memeriksa persamaan Fisika."
+  - soal: "Simbol dimensi untuk besaran jumlah zat adalah..."
+    pilihan: ["N", "J", "M", "I"]
+    jawaban: 0
+    penjelasan: "Dimensi jumlah zat dinyatakan dengan simbol N."
+  - soal: "Simbol dimensi untuk besaran intensitas cahaya adalah..."
+    pilihan: ["I", "J", "N", "Θ"]
+    jawaban: 1
+    penjelasan: "Dimensi intensitas cahaya dinyatakan dengan simbol J."
+  - soal: "Salah satu kegunaan utama analisis dimensi menurut materi ini adalah..."
+    pilihan: ["Menggantikan kebutuhan menghafal semua rumus Fisika", "Memeriksa apakah suatu persamaan Fisika konsisten atau masuk akal secara susunan besaran", "Menentukan harga alat ukur yang tepat", "Mengukur suhu suatu benda secara langsung"]
+    jawaban: 1
+    penjelasan: "Salah satu kegunaan dimensi adalah memeriksa apakah sebuah persamaan Fisika masuk akal secara dimensi, meski bukan bukti kebenaran penuh."
 draft: false
 ---
 

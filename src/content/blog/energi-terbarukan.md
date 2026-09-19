@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Batu bara yang sudah lama terkubur", "Bahan organik seperti sisa tumbuhan, kotoran ternak, atau sampah organik", "Reaksi fisi inti atom", "Panas dari dalam Bumi"]
     jawaban: 1
     penjelasan: "Biomassa memanfaatkan bahan organik (sisa tumbuhan, limbah pertanian, kotoran ternak, dst) yang bisa diolah jadi bahan bakar atau dibakar langsung untuk energi."
+  - soal: "Turbin angin menghasilkan listrik dengan cara memanfaatkan..."
+    pilihan: ["Energi potensial angin yang diam", "Energi kinetik angin yang bertiup untuk memutar generator", "Energi kimia dalam udara", "Panas yang dihasilkan oleh gesekan angin"]
+    jawaban: 1
+    penjelasan: "Turbin angin memanfaatkan energi kinetik angin yang bertiup untuk memutar generator."
+  - soal: "Energi ombak dan pasang surut, menurut materi ini, tergolong sumber energi yang..."
+    pilihan: ["Sudah dipakai secara luas di seluruh dunia", "Masih dalam tahap pengembangan di banyak negara", "Sudah ditinggalkan karena tidak efektif", "Hanya bisa dipakai di danau"]
+    jawaban: 1
+    penjelasan: "Energi ombak dan pasang surut memanfaatkan gerakan air laut, tapi masih dalam tahap pengembangan di banyak negara."
+  - soal: "Prinsip kerja PLTA (potensial → kinetik → listrik) disebutkan dalam materi ini sama persis dengan konsep yang dibahas di materi..."
+    pilihan: ["Dimensi", "Perubahan Energi", "Besaran Turunan", "Alat Ukur"]
+    jawaban: 1
+    penjelasan: "Materi ini menyebutkan bahwa PLTA memakai prinsip perubahan energi yang sama seperti dibahas di materi Perubahan Energi -- potensial ke kinetik, lalu ke listrik."
+  - soal: "Salah satu kelebihan energi surya menurut tabel pada materi ini adalah..."
+    pilihan: ["Pasokannya sangat stabil sepanjang hari", "Hampir tanpa emisi dan cocok untuk negara tropis", "Tidak membutuhkan lahan sama sekali", "Bisa dibangun di lokasi mana pun tanpa syarat"]
+    jawaban: 1
+    penjelasan: "Kelebihan energi surya menurut tabel materi ini adalah hampir tanpa emisi dan cocok di negara tropis."
+  - soal: "Salah satu tantangan energi surya menurut tabel pada materi ini adalah..."
+    pilihan: ["Menghasilkan emisi karbon yang sangat besar", "Cuma optimal siang hari cerah dan butuh area luas untuk skala besar", "Tidak bisa dipasang di negara tropis", "Teknologinya belum ditemukan"]
+    jawaban: 1
+    penjelasan: "Tantangan energi surya adalah pasokannya cuma optimal siang hari cerah dan butuh area luas untuk skala besar."
+  - soal: "Selain tidak stabil karena bergantung cuaca, tantangan lain dari energi angin menurut materi ini adalah..."
+    pilihan: ["Menghasilkan limbah radioaktif", "Berisik dan dapat mengganggu jalur burung", "Tidak bisa menghasilkan listrik sama sekali", "Hanya bisa dipakai di daerah tropis"]
+    jawaban: 1
+    penjelasan: "Selain tidak stabil, energi angin juga berisik dan bisa mengganggu jalur burung."
+  - soal: "Kelebihan energi air (hidro) menurut tabel pada materi ini adalah..."
+    pilihan: ["Pasokannya relatif stabil dan teknologinya sudah matang", "Tidak memerlukan sungai atau bendungan", "Tidak berdampak pada ekosistem sekitar sama sekali", "Bisa dibangun di semua jenis lahan"]
+    jawaban: 0
+    penjelasan: "Kelebihan energi air (hidro) adalah pasokannya relatif stabil dan teknologinya sudah matang."
+  - soal: "Tantangan utama energi air (hidro) menurut materi ini adalah..."
+    pilihan: ["Pasokannya sangat tidak stabil", "Butuh bendungan besar dan bisa mengubah ekosistem sungai", "Tidak bisa menghasilkan listrik dalam jumlah besar", "Hanya bisa dibangun di negara empat musim"]
+    jawaban: 1
+    penjelasan: "Tantangan hidro adalah kebutuhan bendungan besar yang bisa mengubah ekosistem sungai."
+  - soal: "Kelebihan utama panas bumi (geothermal) dibanding surya dan angin, menurut tabel pada materi ini, adalah..."
+    pilihan: ["Bisa dibangun di sembarang tempat", "Pasokannya sangat stabil dan tidak bergantung cuaca", "Tidak membutuhkan teknologi khusus", "Menghasilkan emisi karbon paling rendah di antara semua sumber"]
+    jawaban: 1
+    penjelasan: "Panas bumi punya pasokan yang sangat stabil dan tidak bergantung cuaca, berbeda dari surya dan angin."
+  - soal: "'Karena tidak tergantung cuaca, panas bumi bisa dibangun di mana saja' -- pernyataan ini..."
+    pilihan: ["Benar, panas bumi bisa dibangun di lokasi mana pun", "Salah, panas bumi cuma bisa dimanfaatkan di lokasi dengan aktivitas geologis tertentu, biasanya dekat gunung berapi", "Benar, karena panas bumi tidak bergantung pada faktor geografis apa pun", "Salah, karena panas bumi sebenarnya bergantung pada cuaca"]
+    jawaban: 1
+    penjelasan: "Panas bumi cuma bisa dimanfaatkan di lokasi dengan aktivitas geologis tertentu, tidak bisa dibangun sembarang tempat."
+  - soal: "Kelebihan biomassa sebagai sumber energi terbarukan, menurut tabel pada materi ini, adalah..."
+    pilihan: ["Tidak menghasilkan emisi sama sekali", "Memanfaatkan limbah organik yang sudah ada", "Pasokannya paling stabil di antara semua sumber terbarukan", "Tidak memerlukan proses pembakaran"]
+    jawaban: 1
+    penjelasan: "Kelebihan biomassa adalah memanfaatkan limbah organik yang sudah tersedia."
+  - soal: "'Biomassa tidak menghasilkan emisi sama sekali karena berasal dari bahan organik' -- pernyataan ini..."
+    pilihan: ["Benar sepenuhnya", "Kurang tepat, karena pembakaran biomassa tetap melepas karbon dioksida, meski dianggap lebih netral karena tumbuhan penggantinya menyerap CO₂ lagi saat tumbuh", "Benar, karena bahan organik tidak bisa terbakar", "Kurang tepat, karena biomassa sebenarnya termasuk energi tak terbarukan"]
+    jawaban: 1
+    penjelasan: "Pembakaran biomassa tetap melepas karbon dioksida, meski secara umum dianggap lebih netral karena tumbuhan penggantinya menyerap CO₂ lagi saat tumbuh."
+  - soal: "'Energi terbarukan tidak punya kekurangan sama sekali' -- pernyataan ini..."
+    pilihan: ["Benar, karena semuanya bersumber dari alam", "Keliru, karena tiap sumber terbarukan punya tantangan sendiri seperti stabilitas pasokan, kebutuhan lahan, hingga dampak ekosistem lokal", "Benar, hanya energi fosil yang punya kekurangan", "Keliru, karena energi terbarukan sebenarnya tidak bisa dipakai sama sekali"]
+    jawaban: 1
+    penjelasan: "Tiap sumber terbarukan punya tantangan sendiri -- stabilitas pasokan, kebutuhan lahan, sampai dampak pada ekosistem lokal. 'Terbarukan' bukan berarti 'sempurna'."
+  - soal: "Pada simulasi di materi ini, siswa diminta menjadi 'operator' panel surya, turbin angin, dan turbin air untuk..."
+    pilihan: ["Menghitung emisi karbon global", "Menggeser parameter dan melihat langsung apa yang memengaruhi daya listrik yang dihasilkan, lalu membandingkan ketiganya", "Membangun reaktor nuklir virtual", "Mengukur suhu bumi"]
+    jawaban: 1
+    penjelasan: "Simulasi mengajak siswa menggeser parameter panel surya, turbin angin, dan turbin air, lalu membandingkan daya listrik yang dihasilkan ketiganya."
+  - soal: "Menurut bagian 'Intinya' pada materi ini, pola yang berulang dari tantangan berbagai sumber energi terbarukan adalah..."
+    pilihan: ["Semuanya membutuhkan bahan bakar fosil sebagai cadangan", "Hampir semua sumber terbarukan sangat bergantung pada kondisi geografis dan alam setempat", "Semuanya memerlukan reaktor nuklir sebagai pendukung", "Semuanya hanya bisa dipakai di negara empat musim"]
+    jawaban: 1
+    penjelasan: "Surya butuh sinar matahari, angin butuh kecepatan angin cukup, hidro butuh sungai/bendungan, panas bumi butuh lokasi vulkanik -- semuanya sangat bergantung kondisi geografis setempat."
+  - soal: "Karena ketergantungan pada kondisi geografis, materi ini menyimpulkan bahwa..."
+    pilihan: ["Ada satu sumber energi terbarukan yang selalu terbaik di semua negara", "Tidak ada satu sumber energi terbarukan 'terbaik' secara universal -- pilihan tepatnya tergantung lokasi", "Sumber energi terbarukan sebaiknya tidak dipakai sama sekali", "Hanya negara tropis yang bisa memakai energi terbarukan"]
+    jawaban: 1
+    penjelasan: "Tidak ada satu sumber energi terbarukan 'terbaik' secara universal -- pilihan yang tepat selalu tergantung di mana sumber itu akan dipakai."
+  - soal: "Karena tidak ada sumber terbarukan yang universal terbaik, strategi energi suatu negara biasanya..."
+    pilihan: ["Hanya memakai satu sumber energi terbarukan saja", "Menggabungkan beberapa sumber energi sekaligus, disesuaikan dengan kondisi geografisnya", "Sepenuhnya bergantung pada energi nuklir", "Menunggu teknologi baru ditemukan sebelum memakai energi terbarukan apa pun"]
+    jawaban: 1
+    penjelasan: "Strategi energi suatu negara biasanya menggabungkan beberapa sumber sekaligus, disesuaikan dengan kondisi geografisnya masing-masing."
+  - soal: "Berdasarkan kondisi geografis Indonesia (banyak gunung berapi, garis pantai panjang, sinar matahari sepanjang tahun), sumber energi terbarukan yang paling relevan untuk dikembangkan antara lain..."
+    pilihan: ["Panas bumi dan surya", "Hanya energi angin", "Hanya biomassa", "Tidak ada yang cocok"]
+    jawaban: 0
+    penjelasan: "Karena banyak gunung berapi dan sinar matahari sepanjang tahun, panas bumi dan surya jadi sumber terbarukan yang paling potensial untuk Indonesia."
+  - soal: "Negara dengan empat musim dan wilayah pegunungan bersalju kemungkinan akan lebih mengandalkan sumber energi terbarukan seperti hidro atau angin dibanding surya sepanjang tahun, karena..."
+    pilihan: ["Sinar matahari yang diterima tidak sepanjang tahun seperti di negara tropis", "Negara empat musim tidak memiliki gunung", "Hidro dan angin tidak bergantung kondisi geografis", "Surya lebih mahal di semua negara"]
+    jawaban: 0
+    penjelasan: "Karena sinar mataharinya tidak sepanjang tahun seperti negara tropis, negara empat musim biasanya lebih mengandalkan sumber lain seperti hidro atau angin."
+  - soal: "Berikut yang termasuk salah satu jenis energi terbarukan yang disebutkan dalam materi ini adalah..."
+    pilihan: ["Energi nuklir", "Energi ombak dan pasang surut", "Energi dari batu bara", "Energi dari gas alam"]
+    jawaban: 1
+    penjelasan: "Energi ombak dan pasang surut disebutkan sebagai salah satu jenis energi terbarukan, memanfaatkan gerakan air laut."
 draft: false
 ---
 

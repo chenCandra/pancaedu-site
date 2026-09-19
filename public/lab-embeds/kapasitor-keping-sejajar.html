@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Kapasitor Keping Sejajar</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --pos: #ef4444; --neg: #3b82f6;
+    --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+
+  .diel-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .diel-btn { background: rgba(15,23,42,0.5); border: 1.5px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.78rem; padding: 9px 6px; border-radius: 10px; cursor: pointer; text-align: center; }
+  .diel-btn.is-active { color: #fff; background: #7c3aed; border-color: transparent; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 300px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 260px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-highlight { background: rgba(250,204,21,0.1); border-left: 4px solid var(--text-highlight); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .result-highlight .k { font-size: 0.75rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔋</span><h1>Laboratorium Maya: Kapasitor Keping Sejajar</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Luas Keping (A)</span><span class="control-value" id="aVal">100 cm²</span></div>
+        <input type="range" id="aSlider" min="20" max="500" step="10" value="100">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Jarak Antar Keping (d)</span><span class="control-value" id="dVal">2 mm</span></div>
+        <input type="range" id="dSlider" min="0.5" max="10" step="0.5" value="2">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Tegangan (V)</span><span class="control-value" id="vVal">6 V</span></div>
+        <input type="range" id="vSlider" min="1" max="12" step="1" value="6">
+      </div>
+      <div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Bahan Dielektrik (κ)</p>
+        <div class="diel-row" id="dielRow">
+          <button class="diel-btn is-active" data-k="1" data-nama="Vakum/Udara">Vakum/Udara (κ=1)</button>
+          <button class="diel-btn" data-k="3.5" data-nama="Kertas">Kertas (κ=3,5)</button>
+          <button class="diel-btn" data-k="5.4" data-nama="Mika">Mika (κ=5,4)</button>
+          <button class="diel-btn" data-k="7.5" data-nama="Kaca">Kaca (κ=7,5)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visualisasi</span></div>
+      <div class="canvas-wrapper"><canvas id="capCanvas"></canvas></div>
+      <div class="results-panel">
+        <div class="result-grid">
+          <div class="result-highlight"><div class="k">Kapasitansi (C)</div><div class="v" id="cVal">0</div></div>
+          <div class="result-highlight"><div class="k">Muatan (Q)</div><div class="v" id="qVal">0</div></div>
+          <div class="result-highlight"><div class="k">Energi (W)</div><div class="v" id="wVal">0</div></div>
+        </div>
+        <div class="formula-box" id="capFormula"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Kapasitansi kapasitor keping sejajar mengikuti <span class="math-var">C = κε₀A/d</span> -- makin LUAS kepingnya atau makin BESAR permitivitas dielektriknya (κ), makin besar kapasitansinya; makin JAUH jaraknya, makin kecil kapasitansinya. Muatan yang tersimpan <span class="math-var">Q = CV</span>, dan energi yang tersimpan <span class="math-var">W = ½CV²</span>. Geser slider dan ganti dielektriknya, lalu perhatikan garis-garis medan listrik di antara keping berubah kepadatannya.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kalau jarak antar keping (d) diperbesar 2 kali lipat, sementara A, κ, dan V tetap, apa yang terjadi pada energi yang tersimpan (W)?</span>
+    <div class="quiz-opts" id="capQuizOpts"></div>
+    <div class="quiz-fb" id="capQuizFb"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('capCanvas');
+    const ctx = canvas.getContext('2d');
+    const aSlider = document.getElementById('aSlider'), aVal = document.getElementById('aVal');
+    const dSlider = document.getElementById('dSlider'), dVal = document.getElementById('dVal');
+    const vSlider = document.getElementById('vSlider'), vVal = document.getElementById('vVal');
+    const dielBtns = Array.from(document.querySelectorAll('.diel-btn'));
+    const cVal = document.getElementById('cVal'), qVal = document.getElementById('qVal'), wVal = document.getElementById('wVal');
+    const capFormula = document.getElementById('capFormula');
+
+    const EPS0 = 8.85e-12; // F/m
+    let A_cm2 = 100, d_mm = 2, V = 6, kappa = 1, dielNama = 'Vakum/Udara';
+
+    aSlider.addEventListener('input', () => { A_cm2 = parseFloat(aSlider.value); aVal.textContent = A_cm2 + ' cm²'; update(); });
+    dSlider.addEventListener('input', () => { d_mm = parseFloat(dSlider.value); dVal.textContent = d_mm + ' mm'; update(); });
+    vSlider.addEventListener('input', () => { V = parseFloat(vSlider.value); vVal.textContent = V + ' V'; update(); });
+    dielBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dielBtns.forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        kappa = parseFloat(btn.dataset.k);
+        dielNama = btn.dataset.nama;
+        update();
+      });
+    });
+
+    function formatSatuan(farad) {
+      if (farad >= 1e-6) return (farad * 1e6).toFixed(2) + ' µF';
+      if (farad >= 1e-9) return (farad * 1e9).toFixed(2) + ' nF';
+      return (farad * 1e12).toFixed(2) + ' pF';
+    }
+
+    function update() {
+      const A = A_cm2 * 1e-4; // cm^2 -> m^2
+      const d = d_mm * 1e-3; // mm -> m
+      const C = (kappa * EPS0 * A) / d;
+      const Q = C * V;
+      const W = 0.5 * C * V * V;
+
+      cVal.textContent = formatSatuan(C);
+      qVal.textContent = (Q * 1e9).toFixed(2) + ' nC';
+      wVal.textContent = (W * 1e9).toFixed(2) + ' nJ';
+
+      capFormula.innerHTML =
+        `C = κε₀A/d = (${kappa})(8,85×10⁻¹²)(${A.toExponential(2)})/(${d.toExponential(2)}) = <span class="math-num">${formatSatuan(C)}</span><br>` +
+        `Q = CV = <span class="math-num">${(Q * 1e9).toFixed(2)} nC</span> &nbsp;|&nbsp; W = ½CV² = <span class="math-num">${(W * 1e9).toFixed(2)} nJ</span><br>` +
+        `Dielektrik: <span class="math-var">${dielNama} (κ=${kappa})</span>`;
+
+      render();
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function render() {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      // Jarak plat divisualisasikan proporsional (tapi dibatasi biar tetap kelihatan di layar kecil)
+      const gapPx = Math.max(30, Math.min(160, d_mm * 14));
+      const plateW = Math.min(w * 0.6, 260);
+      const plateH = 14;
+      const cx = w / 2, cy = h / 2;
+      const topY = cy - gapPx / 2, botY = cy + gapPx / 2;
+      const leftX = cx - plateW / 2, rightX = cx + plateW / 2;
+
+      // Dielektrik (kalau kappa > 1)
+      if (kappa > 1) {
+        ctx.save();
+        const alpha = 0.12 + Math.min(0.28, (kappa - 1) * 0.03);
+        ctx.fillStyle = `rgba(124,58,237,${alpha})`;
+        ctx.fillRect(leftX, topY, plateW, gapPx);
+        ctx.strokeStyle = 'rgba(124,58,237,0.5)'; ctx.lineWidth = 1;
+        ctx.strokeRect(leftX, topY, plateW, gapPx);
+        ctx.restore();
+      }
+
+      // Garis medan listrik -- kepadatan proporsional terhadap E = V/d (dibatasi jumlah garis)
+      const fieldStrength = V / Math.max(0.5, d_mm);
+      const nLines = Math.max(3, Math.min(11, Math.round(fieldStrength * 1.4)));
+      ctx.save();
+      ctx.strokeStyle = 'rgba(56,189,248,0.75)';
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i < nLines; i++) {
+        const x = leftX + ((i + 0.5) / nLines) * plateW;
+        ctx.beginPath(); ctx.moveTo(x, topY + 4); ctx.lineTo(x, botY - 4); ctx.stroke();
+        // anak panah kecil menunjuk ke bawah (arah E dari + ke -)
+        ctx.beginPath();
+        ctx.moveTo(x - 4, botY - 12); ctx.lineTo(x, botY - 4); ctx.lineTo(x + 4, botY - 12); ctx.stroke();
+      }
+      ctx.restore();
+
+      // Keping atas (+) dan bawah (-)
+      ctx.save();
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(leftX, topY - plateH, plateW, plateH);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fillRect(leftX, botY, plateW, plateH);
+      ctx.restore();
+
+      // Simbol muatan di sepanjang keping
+      ctx.save();
+      ctx.font = 'bold 13px system-ui'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
+      const nCharge = 8;
+      for (let i = 0; i < nCharge; i++) {
+        const x = leftX + ((i + 0.5) / nCharge) * plateW;
+        ctx.fillText('+', x, topY - plateH / 2 + 4);
+        ctx.fillText('−', x, botY + plateH / 2 + 4);
+      }
+      ctx.restore();
+
+      // Label jarak d
+      ctx.save();
+      ctx.strokeStyle = 'rgba(248,250,252,0.5)'; ctx.fillStyle = 'rgba(248,250,252,0.8)';
+      ctx.font = '11px system-ui'; ctx.textAlign = 'left';
+      ctx.beginPath(); ctx.moveTo(rightX + 14, topY); ctx.lineTo(rightX + 14, botY); ctx.stroke();
+      ctx.fillText('d = ' + d_mm + ' mm', rightX + 20, cy + 4);
+      ctx.restore();
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('capQuizOpts'), [
+      'Energi jadi setengahnya, karena W berbanding terbalik dengan d', 'Energi tidak berubah, karena V tetap', 'Energi jadi dua kali lipat', 'Energi jadi seperempatnya'
+    ], 0, (correct) => {
+      const fb = document.getElementById('capQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'C = κε₀A/d berbanding terbalik dengan d, jadi kalau d naik 2×, C jadi setengahnya. Karena W = ½CV² dan V tetap, W juga jadi setengahnya. Coba buktikan sendiri dengan slider jarak (d) di atas -- perhatikan nilai C dan W-nya berubah.',
+    });
+
+    window.onload = () => { resizeCanvas(); update(); };
+  </script>
+</body>
+</html>

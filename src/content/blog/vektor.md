@@ -36,6 +36,82 @@ kuis:
     pilihan: ["tan θ = Ry/Rx", "tan θ = Rx/Ry", "sin θ = Ry", "cos θ = Rx"]
     jawaban: 0
     penjelasan: "Arah resultan dihitung dengan θ = arctan(Ry/Rx), dari komponen Ry dan Rx yang sudah dijumlahkan."
+  - soal: "Manakah dari berikut yang termasuk besaran skalar (bukan vektor)?"
+    pilihan: ["Kecepatan", "Gaya", "Massa", "Perpindahan"]
+    jawaban: 2
+    penjelasan: "Massa cuma punya nilai, tanpa arah -- termasuk besaran skalar. Kecepatan, gaya, dan perpindahan semuanya punya arah, jadi termasuk vektor."
+  - soal: "Kenapa vektor kecepatan berbeda dari sekadar 'kelajuan' (seberapa cepat) suatu benda bergerak?"
+    pilihan: ["Karena vektor kecepatan juga menyertakan informasi arah gerak, bukan cuma seberapa cepat", "Karena kecepatan cuma berlaku untuk benda yang diam", "Karena kelajuan justru lebih detail dari kecepatan", "Karena vektor kecepatan tidak punya nilai numerik"]
+    jawaban: 0
+    penjelasan: "Vektor kecepatan menyatakan kecepatan berikut arah geraknya -- beda dengan kelajuan yang cuma besaran skalar (seberapa cepat saja, tanpa arah)."
+  - soal: "Sebuah gaya besarnya 10 N membentuk sudut 60° terhadap sumbu x. Berapa komponen gaya tersebut pada sumbu x (Fx)?"
+    pilihan: ["5 N", "8,66 N", "10 N", "0 N"]
+    jawaban: 0
+    penjelasan: "Fx = F cos θ = 10 × cos 60° = 10 × 0,5 = 5 N."
+  - soal: "Masih dari gaya 10 N pada sudut 60° yang sama, berapa komponen gaya tersebut pada sumbu y (Fy)?"
+    pilihan: ["8,66 N", "5 N", "10 N", "0 N"]
+    jawaban: 0
+    penjelasan: "Fy = F sin θ = 10 × sin 60° ≈ 10 × 0,866 = 8,66 N."
+  - soal: "Sebuah vektor perpindahan besarnya 20 m, membentuk sudut 90° terhadap sumbu x (tepat searah sumbu y). Berapa komponen vektor itu pada sumbu x (Rx)?"
+    pilihan: ["0 m", "20 m", "10 m", "14,1 m"]
+    jawaban: 0
+    penjelasan: "Rx = R cos θ = 20 × cos 90° = 20 × 0 = 0 m -- karena vektornya tepat searah sumbu y, tidak ada komponen pada sumbu x."
+  - soal: "Dua vektor gaya, 6 N dan 8 N, bekerja pada benda yang sama dengan arah tegak lurus satu sama lain. Berapa besar resultannya?"
+    pilihan: ["10 N", "14 N", "2 N", "48 N"]
+    jawaban: 0
+    penjelasan: "Karena tegak lurus, R = √(6² + 8²) = √(36 + 64) = √100 = 10 N (pola segitiga 6-8-10)."
+  - soal: "Dua vektor gaya, 5 N dan 12 N, bekerja tegak lurus pada benda yang sama. Berapa besar resultannya?"
+    pilihan: ["13 N", "17 N", "7 N", "60 N"]
+    jawaban: 0
+    penjelasan: "Karena tegak lurus, R = √(5² + 12²) = √(25 + 144) = √169 = 13 N (pola segitiga 5-12-13)."
+  - soal: "Vektor A besarnya 8 N searah sumbu x positif, dan vektor B besarnya 5 N searah sumbu x negatif (segaris, tapi berlawanan arah dan besarnya tidak sama). Berapa besar dan arah resultannya?"
+    pilihan: ["3 N, searah vektor A", "13 N, searah vektor A", "8 N, searah vektor B", "5 N, tidak memiliki arah"]
+    jawaban: 0
+    penjelasan: "Karena berlawanan arah, kedua vektor saling mengurangi: R = 8 − 5 = 3 N, dan arahnya mengikuti vektor yang lebih besar (vektor A)."
+  - soal: "Pada metode grafis jajaran genjang, kedua vektor digambar dari titik pangkal seperti apa?"
+    pilihan: ["Titik pangkal yang sama, lalu resultannya adalah diagonal jajaran genjang dari titik pangkal bersama itu", "Titik pangkal yang berbeda, lalu resultannya sembarang", "Ujung vektor pertama, seperti pada metode segitiga", "Tidak masalah dari titik pangkal mana pun, hasilnya selalu sama"]
+    jawaban: 0
+    penjelasan: "Pada metode jajaran genjang, kedua vektor digambar dari titik pangkal yang SAMA, membentuk jajaran genjang -- resultannya adalah diagonal jajaran genjang itu."
+  - soal: "Pada metode analitis (komponen), setelah tiap vektor diuraikan jadi komponen x dan y, langkah selanjutnya adalah..."
+    pilihan: ["Menjumlahkan semua komponen x secara terpisah dan semua komponen y secara terpisah (Rx = ΣAx, Ry = ΣAy)", "Mengalikan seluruh komponen x dengan komponen y", "Mengambil komponen x dan y yang nilainya paling besar saja", "Membuang komponen y dan hanya memakai komponen x"]
+    jawaban: 0
+    penjelasan: "Setelah diuraikan, seluruh komponen x dijumlahkan terpisah dan seluruh komponen y dijumlahkan terpisah: Rx = ΣAx dan Ry = ΣAy."
+  - soal: "Kalau hasil penjumlahan komponen dari beberapa vektor menghasilkan Rx = 9 dan Ry = 12, berapa besar resultannya?"
+    pilihan: ["15", "21", "3", "108"]
+    jawaban: 0
+    penjelasan: "R = √(Rx² + Ry²) = √(9² + 12²) = √(81 + 144) = √225 = 15."
+  - soal: "Masih dari komponen Rx = 9 dan Ry = 12 di atas, rumus yang benar untuk menghitung ARAH resultannya adalah..."
+    pilihan: ["θ = arctan(12/9)", "θ = arctan(9/12)", "θ = arctan(9 × 12)", "θ = arctan(12 + 9)"]
+    jawaban: 0
+    penjelasan: "Arah resultan dihitung dengan θ = arctan(Ry/Rx) = arctan(12/9), bukan kebalikannya atau operasi lain."
+  - soal: "Menurut materi, vektor posisi menyatakan apa?"
+    pilihan: ["Letak suatu titik relatif terhadap titik acuan (biasanya titik asal/origin)", "Kecepatan suatu benda berikut arahnya", "Besar dorongan/tarikan suatu gaya", "Perubahan posisi dari titik awal ke titik akhir"]
+    jawaban: 0
+    penjelasan: "Vektor posisi menyatakan letak suatu titik relatif terhadap titik acuan, biasanya titik asal (origin)."
+  - soal: "Menurut materi, vektor gaya menyatakan apa?"
+    pilihan: ["Letak suatu titik relatif terhadap titik acuan", "Besar dorongan/tarikan berikut arah gaya itu bekerja", "Kecepatan berikut arah geraknya", "Perubahan posisi dalam garis lurus"]
+    jawaban: 1
+    penjelasan: "Vektor gaya menyatakan besar dorongan/tarikan berikut arah gaya itu bekerja pada suatu benda."
+  - soal: "Secara notasi, vektor biasa dituliskan dengan cara apa, menurut materi?"
+    pilihan: ["Huruf tebal (A) atau huruf dengan tanda panah di atasnya (A⃗)", "Huruf miring saja, tanpa tanda tambahan", "Angka di dalam kurung siku", "Simbol persen (%) di belakang angkanya"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan vektor biasa dituliskan dengan huruf tebal (A) atau huruf dengan tanda panah di atasnya (A⃗)."
+  - soal: "Besar suatu vektor A dituliskan dengan notasi apa, menurut materi?"
+    pilihan: ["|A| atau A saja (tanpa tanda tebal/panah)", "A⃗ dengan tanda panah tetap dipakai", "A² selalu dikuadratkan", "%A dengan simbol persen"]
+    jawaban: 0
+    penjelasan: "Besar vektor A dituliskan sebagai |A| atau cukup A saja, tanpa huruf tebal atau tanda panah -- karena besar vektor sudah tidak membawa informasi arah."
+  - soal: "Kalau dua vektor gaya besarnya sama dan SEARAH (bukan berlawanan), bagaimana resultannya?"
+    pilihan: ["Dua kali besar salah satu vektor, karena keduanya saling menambah penuh", "Tetap sama dengan besar salah satu vektor saja, tidak berubah", "Nol, karena saling meniadakan", "Tidak dapat ditentukan tanpa sudut tambahan"]
+    jawaban: 0
+    penjelasan: "Kalau dua vektor sama besar dan searah, komponen keduanya saling menambah penuh, sehingga resultannya dua kali besar salah satu vektor -- beda dengan kasus berlawanan arah yang justru saling meniadakan."
+  - soal: "Sebuah kapal berlayar dengan kecepatan 9 m/s ke arah timur, sementara arus air laut mendorongnya dengan kecepatan 12 m/s ke arah utara (tegak lurus arah kapal). Berapa besar kecepatan resultan kapal itu terhadap daratan?"
+    pilihan: ["15 m/s", "21 m/s", "3 m/s", "108 m/s"]
+    jawaban: 0
+    penjelasan: "Karena tegak lurus, R = √(9² + 12²) = √(81 + 144) = √225 = 15 m/s (pola segitiga 9-12-15, kelipatan dari 3-4-5)."
+  - soal: "Kalau tiga vektor dijumlahkan berturut-turut memakai metode segitiga (poligon), resultannya digambar dari mana sampai mana?"
+    pilihan: ["Dari pangkal vektor pertama sampai ujung vektor terakhir (ketiga)", "Dari ujung vektor pertama sampai pangkal vektor kedua saja", "Dari pangkal vektor kedua sampai pangkal vektor ketiga", "Metode segitiga tidak bisa dipakai untuk lebih dari dua vektor"]
+    jawaban: 0
+    penjelasan: "Pada metode segitiga (poligon), tiap vektor disambung ujung ke pangkal secara berurutan -- resultannya adalah anak panah dari pangkal vektor pertama sampai ujung vektor terakhir."
 draft: false
 ---
 

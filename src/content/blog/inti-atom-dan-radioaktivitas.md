@@ -28,6 +28,90 @@ kuis:
     pilihan: ["25%", "50%", "0%", "75%"]
     jawaban: 0
     penjelasan: "Setelah 1×T½ tersisa 50%, setelah 2×T½ tersisa setengah dari 50% = 25%."
+  - soal: "Nomor atom (Z) sebuah inti menunjukkan jumlah..."
+    pilihan: ["Proton", "Neutron", "Proton ditambah neutron", "Elektron di kulit terluar"]
+    jawaban: 0
+    penjelasan: "Nomor atom (Z) adalah jumlah PROTON dalam inti -- inilah yang menentukan jenis unsur suatu atom, bukan jumlah neutron."
+  - soal: "Nomor massa (A) sebuah inti menunjukkan jumlah..."
+    pilihan: ["Proton ditambah neutron (total nukleon)", "Proton saja", "Neutron saja", "Elektron yang mengelilingi inti"]
+    jawaban: 0
+    penjelasan: "Nomor massa (A) adalah jumlah total nukleon, yaitu proton DITAMBAH neutron -- bukan proton atau neutron saja."
+  - soal: "Inti Nitrogen-14 ditulis ¹⁴₇N. Berapa jumlah neutron dalam inti ini?"
+    pilihan: ["7", "14", "21", "0"]
+    jawaban: 0
+    penjelasan: "Jumlah neutron = A − Z = 14 − 7 = 7. Nomor massa (A=14) dikurangi nomor atom/jumlah proton (Z=7)."
+  - soal: "Dua atom disebut ISOTOP kalau keduanya punya..."
+    pilihan: ["Jumlah proton (Z) yang sama, tapi jumlah neutron yang berbeda", "Jumlah neutron yang sama, tapi jumlah proton yang berbeda", "Jumlah proton dan neutron yang sama persis", "Jumlah elektron yang berbeda tapi proton sama"]
+    jawaban: 0
+    penjelasan: "Isotop adalah atom-atom dari unsur yang SAMA (Z/jumlah proton sama, jadi tetap unsur yang sama) tapi jumlah neutronnya berbeda, sehingga nomor massanya (A) juga berbeda."
+  - soal: "Karbon-12 (stabil) dan Karbon-14 (radioaktif) adalah isotop satu sama lain karena..."
+    pilihan: ["Keduanya sama-sama punya 6 proton, tapi jumlah neutronnya berbeda", "Keduanya punya jumlah neutron yang sama", "Keduanya adalah unsur yang berbeda jenis", "Keduanya punya jumlah proton yang berbeda"]
+    jawaban: 0
+    penjelasan: "Karbon-12 dan Karbon-14 sama-sama punya 6 proton (makanya sama-sama disebut karbon), tapi Karbon-14 punya 2 neutron ekstra (8 neutron) dibanding Karbon-12 (6 neutron) -- perbedaan neutron inilah yang membuat Karbon-14 tidak stabil."
+  - soal: "Alasan proton-proton di dalam inti atom tidak langsung tolak-menolak dan membuat inti berantakan, meski sama-sama bermuatan positif dan berjarak sangat dekat, adalah..."
+    pilihan: ["Adanya gaya inti (gaya nuklir kuat) yang bekerja di jarak sangat pendek dan lebih kuat dari gaya Coulomb pada jarak itu", "Karena neutron menetralkan muatan semua proton", "Karena gaya Coulomb tidak berlaku di dalam inti atom", "Karena proton di dalam inti sebenarnya tidak bermuatan"]
+    jawaban: 0
+    penjelasan: "Gaya inti (gaya nuklir kuat) bekerja pada jarak sangat pendek setingkat inti atom, dan jauh lebih kuat dari gaya tolak Coulomb pada jarak itu, sehingga mampu menahan semua nukleon (proton dan neutron) tetap menyatu."
+  - soal: "Defek massa (Δm) pada sebuah inti atom adalah..."
+    pilihan: ["Selisih antara jumlah massa proton+neutron penyusunnya secara terpisah, dengan massa inti yang sebenarnya (lebih kecil)", "Massa total inti atom itu sendiri", "Massa elektron yang hilang dari atom", "Selisih jumlah proton dan neutron dalam inti"]
+    jawaban: 0
+    penjelasan: "Defek massa adalah selisih antara massa nukleon-nukleon penyusun secara terpisah dengan massa inti yang terukur -- massa inti selalu SEDIKIT LEBIH KECIL, dan selisih itulah defek massa."
+  - soal: "'Massa yang hilang' pada defek massa sebuah inti sebenarnya berubah menjadi..."
+    pilihan: ["Energi ikat inti, yang menahan nukleon-nukleon tetap menyatu", "Panas yang terbuang begitu saja tanpa fungsi", "Partikel neutron baru", "Muatan listrik tambahan pada inti"]
+    jawaban: 0
+    penjelasan: "Sesuai E=mc², massa yang 'hilang' (defek massa) berubah menjadi energi ikat inti -- energi inilah yang menahan nukleon-nukleon tetap menyatu, dan yang harus 'dibayar' untuk memisahkan kembali inti itu."
+  - soal: "Satuan energi yang lebih praktis dipakai di skala inti atom dibanding Joule adalah..."
+    pilihan: ["MeV (juta elektron-volt)", "Kalori", "Watt", "Newton"]
+    jawaban: 0
+    penjelasan: "MeV (mega elektron-volt) jauh lebih praktis untuk energi di skala inti atom, dengan konversi 1 sma ≈ 931 MeV/c², dibanding memakai Joule yang angkanya jadi sangat kecil."
+  - soal: "Sebuah inti Litium punya massa terukur 7,0160 sma, sementara jumlah massa nukleon penyusunnya (proton+neutron) secara terpisah adalah 7,0562 sma. Berapa defek massanya?"
+    pilihan: ["0,0402 sma", "7,0562 sma", "7,0160 sma", "14,0722 sma"]
+    jawaban: 0
+    penjelasan: "Δm = massa nukleon terpisah − massa inti sebenarnya = 7,0562 − 7,0160 = 0,0402 sma."
+  - soal: "Peluruhan yang memancarkan partikel setara inti Helium (2 proton + 2 neutron), sehingga nomor massa (A) berkurang 4 dan nomor atom (Z) berkurang 2, adalah peluruhan..."
+    pilihan: ["Alfa (α)", "Beta (β)", "Gamma (γ)", "Semua jenis peluruhan menyebabkan hal ini"]
+    jawaban: 0
+    penjelasan: "Peluruhan alfa memancarkan partikel alfa (inti Helium, 2p+2n), sehingga A berkurang 4 dan Z berkurang 2 -- inilah satu-satunya jenis peluruhan yang mengubah A."
+  - soal: "Peluruhan yang mengubah nomor atom (Z) sebesar ±1, TAPI TIDAK mengubah nomor massa (A), adalah peluruhan..."
+    pilihan: ["Beta (β)", "Alfa (α)", "Gamma (γ)", "Tidak ada jenis peluruhan yang seperti ini"]
+    jawaban: 0
+    penjelasan: "Peluruhan beta memancarkan elektron (β⁻) atau positron (β⁺) dari inti -- ini mengubah jumlah proton efektif (Z berubah ±1) tapi total nukleon (A) tetap sama."
+  - soal: "Jenis radiasi radioaktif yang PALING LEMAH daya tembusnya, cukup dihalangi selembar kertas, adalah..."
+    pilihan: ["Alfa (α)", "Beta (β)", "Gamma (γ)", "Ketiganya punya daya tembus yang sama"]
+    jawaban: 0
+    penjelasan: "Partikel alfa (inti Helium) berukuran relatif besar dan bermuatan besar, sehingga daya tembusnya paling lemah di antara ketiganya -- cukup dihalangi selembar kertas saja."
+  - soal: "Jenis radiasi radioaktif yang PALING KUAT daya tembusnya, membutuhkan beton atau timbal tebal untuk menghalanginya, adalah..."
+    pilihan: ["Gamma (γ)", "Alfa (α)", "Beta (β)", "Ketiganya butuh pelindung yang sama"]
+    jawaban: 0
+    penjelasan: "Radiasi gamma berupa foton berenergi sangat tinggi (bukan partikel bermassa), sehingga daya tembusnya paling kuat -- butuh beton atau timbal tebal untuk benar-benar menghalanginya."
+  - soal: "Peristiwa peluruhan gamma pada inti atom, konsepnya paling mirip dengan fenomena apa pada kulit elektron atom?"
+    pilihan: ["Elektron yang berpindah tingkat energi dan memancarkan foton", "Elektron yang lepas dari atom sepenuhnya (ionisasi)", "Proton yang berubah menjadi neutron", "Inti atom yang membelah jadi dua"]
+    jawaban: 0
+    penjelasan: "Peluruhan gamma terjadi saat inti dalam keadaan tereksitasi (kelebihan energi) melepaskan energi ekstra sebagai foton gamma -- mirip elektron yang turun tingkat energi dan memancarkan foton, tapi ini terjadi di INTI, bukan di kulit elektron."
+  - soal: "Kamu TIDAK BISA memprediksi secara pasti kapan satu inti radioaktif tertentu akan meluruh, tapi untuk sekumpulan besar inti radioaktif, polanya bisa diprediksi secara statistik. Ini menunjukkan bahwa peluruhan radioaktif bersifat..."
+    pilihan: ["Probabilistik/acak untuk satu inti, tapi terprediksi secara statistik untuk kumpulan besar inti", "Selalu bisa dipastikan waktunya untuk satu inti tertentu", "Tidak mengikuti hukum fisika apapun", "Hanya terjadi pada inti yang sudah sangat tua usianya"]
+    jawaban: 0
+    penjelasan: "Peluruhan satu inti individual bersifat acak (probabilistik) dan tidak bisa diprediksi kapan persisnya -- tapi untuk kumpulan BESAR inti, pola statistiknya sangat konsisten mengikuti hukum peluruhan eksponensial."
+  - soal: "Sebuah sampel radioaktif dengan T½=10 tahun awalnya berjumlah 100 gram. Berapa gram yang tersisa setelah 30 tahun berlalu?"
+    pilihan: ["12,5 gram", "25 gram", "50 gram", "0 gram"]
+    jawaban: 0
+    penjelasan: "30 tahun = 3 kali waktu paruh. N = 100 × (1/2)³ = 100 × 1/8 = 12,5 gram."
+  - soal: "Sebuah fosil purba mengandung Karbon-14 sebanyak 12,5% dibanding organisme hidup sezamannya. Kalau T½ Karbon-14 = 5.730 tahun, berapa perkiraan umur fosil itu?"
+    pilihan: ["17.190 tahun", "11.460 tahun", "5.730 tahun", "22.920 tahun"]
+    jawaban: 0
+    penjelasan: "12,5% = 1/8 = (1/2)³, berarti sudah berlalu 3 kali waktu paruh. Umur fosil = 3 × 5.730 = 17.190 tahun."
+  - soal: "Teknesium-99m yang dipakai di kedokteran nuklir punya waktu paruh sangat pendek, cuma 6 jam. Kenapa waktu paruh PENDEK justru jadi keunggulan untuk isotop yang disuntikkan ke tubuh pasien?"
+    pilihan: ["Radioaktivitasnya cepat hilang dari tubuh, sehingga risiko paparan radiasi jangka panjang ke pasien jauh lebih kecil", "Karena isotop berwaktu paruh pendek lebih murah harganya", "Karena isotop itu tidak akan pernah benar-benar meluruh", "Karena waktu paruh pendek membuat radiasinya jadi lebih kuat"]
+    jawaban: 0
+    penjelasan: "Isotop berwaktu paruh pendek cepat meluruh jadi tidak radioaktif lagi, sehingga radiasi di dalam tubuh pasien cepat berkurang -- ini mengurangi risiko paparan radiasi berkepanjangan dibanding isotop berwaktu paruh sangat panjang."
+  - soal: "Detektor asap yang memakai sedikit Americium-241 bekerja dengan cara..."
+    pilihan: ["Mengionisasi udara di dalamnya; asap yang masuk mengganggu aliran ion ini dan memicu alarm", "Membakar asap secara langsung untuk menghasilkan bunyi", "Mendinginkan udara di sekitar sensor", "Menyimpan gambar asap untuk dianalisis komputer"]
+    jawaban: 0
+    penjelasan: "Radiasi dari Americium-241 mengionisasi udara di dalam detektor, menghasilkan aliran ion kecil yang konstan -- ketika asap masuk dan mengganggu aliran ion itu, alarm terpicu."
+  - soal: "PLTN (Pembangkit Listrik Tenaga Nuklir) menghasilkan listrik dengan cara..."
+    pilihan: ["Reaksi fisi inti atom berat menghasilkan panas, yang memutar turbin dan generator", "Meluruhkan Karbon-14 secara langsung menjadi listrik", "Memancarkan sinar gamma langsung ke kabel listrik", "Menggunakan waktu paruh sebagai sumber energi langsung"]
+    jawaban: 0
+    penjelasan: "PLTN memanfaatkan reaksi fisi (pembelahan) inti atom berat seperti Uranium-235 untuk menghasilkan panas -- panas inilah yang kemudian memutar turbin dan generator, sama seperti PLTU tapi sumber panasnya dari reaksi nuklir."
 draft: false
 ---
 

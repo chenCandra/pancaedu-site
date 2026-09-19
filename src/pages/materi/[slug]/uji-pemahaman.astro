@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Kuis from '../../../components/Kuis.astro';
+
+// Uji Pemahaman sengaja dipisah ke laman sendiri (bukan ditempel di
+// bawah materi) -- masukan dari murid: kuis yang nyatu di laman materi
+// bikin mereka harus pencet Back browser buat lanjut ke langkah
+// berikutnya di Ruang Belajar. Dipisah + dikasih tombol pemandu di sini
+// dan di materi/[slug].astro supaya alurnya jelas tanpa Back browser.
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    'blog',
+    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.kuis?.length)
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, mapel, kelas, kuis } = post.data;
+
+const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find(
+  (s) => s.data.materiSlug === post.id
+);
+---
+
+<BaseLayout
+  title={`Uji Pemahaman: ${title}`}
+  description={`Uji pemahamanmu tentang ${title} lewat kuis pilihan ganda dengan pembahasan langsung.`}
+>
+  <article class="container quiz-page">
+    <a href={`/materi/${post.id}`} class="back-link">&larr; Kembali ke Materi: {title}</a>
+    <p class="eyebrow">
+      Uji Pemahaman{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
+    </p>
+    <h1>🧠 {title}</h1>
+    <p class="quiz-lede">
+      Jawab soal-soal di bawah buat menguji seberapa paham kamu sama materi ini. Setiap soal langsung
+      dikasih feedback -- kalau masih ragu, buka lagi halaman materinya lewat tombol di atas.
+    </p>
+
+    <Kuis soal={kuis} />
+
+    <div class="next-step">
+      {rbEntry ? (
+        <a href={`/ruang-belajar/${rbEntry.id}`} class="btn btn-primary next-step-btn">
+          &larr; Kembali ke Ruang Belajar
+        </a>
+      ) : (
+        <a href="/materi" class="btn btn-primary next-step-btn">
+          &larr; Semua Materi
+        </a>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .quiz-page {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .quiz-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+    margin-top: 0.5rem;
+  }
+
+  .next-step {
+    margin-top: 1.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+  }
+
+  .next-step-btn {
+    font-size: 1rem;
+    padding: 0.85rem 1.75rem;
+  }
+</style>

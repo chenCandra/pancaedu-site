@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laboratorium Maya: Percobaan Michelson-Morley</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+  .control-note { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+
+  .btn-reset { background: linear-gradient(135deg, #64748b 0%, #475569 100%); color: #fff; border: none; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 260px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 220px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 640px) { .compare-grid { grid-template-columns: 1fr 1fr; } }
+  .compare-box { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .compare-title { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+  .compare-value { font-size: 1.3rem; font-weight: 800; font-family: 'Courier New', monospace; }
+  .compare-value.predicted { color: #f59e0b; }
+  .compare-value.actual { color: #22c55e; }
+  .fringe-strip { height: 26px; border-radius: 6px; overflow: hidden; background: #090d16; position: relative; }
+  .fringe-strip .stripes { position: absolute; top: 0; left: 0; height: 100%; width: 220%; background: repeating-linear-gradient(90deg, #f8fafc 0px, #f8fafc 6px, #0f172a 6px, #0f172a 12px); }
+
+  .formula-box { background: #090d16; padding: 12px; border-radius: 8px; border: 1px dashed #334155; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; }
+  .math-var { color: #38bdf8; font-weight: bold; }
+  .math-num { color: #f59e0b; }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .quiz-card { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-q { font-size: 0.9rem; font-weight: 700; }
+  .quiz-opts { display: grid; gap: 8px; }
+  @media (min-width: 640px) { .quiz-opts { grid-template-columns: 1fr 1fr; } }
+  .quiz-opt { background: rgba(15,23,42,0.6); border: 1.5px solid var(--card-border); color: var(--text-main); border-radius: 10px; padding: 10px 13px; font-size: 0.83rem; text-align: left; cursor: pointer; }
+  .quiz-opt:disabled { cursor: default; opacity: 0.65; }
+  .quiz-opt.is-correct { border-color: #22c55e; background: rgba(34,197,94,0.15); }
+  .quiz-opt.is-wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .quiz-fb { font-size: 0.85rem; line-height: 1.55; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08); display: none; }
+  .quiz-fb.is-visible { display: block; }
+  .quiz-fb.is-wrong { border-left-color: #ef4444; background: rgba(239,68,68,0.06); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title"><span style="font-size:1.5rem;">🔬</span><h1>Laboratorium Maya: Percobaan Michelson-Morley</h1></div>
+    <span class="header-badge">SMA Kelas XII</span>
+  </header>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Panel Parameter</span></div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Andaikan Kecepatan "Angin Eter" (v)</span><span class="control-value" id="vVal">30 km/s</span></div>
+        <input type="range" id="vSlider" min="10" max="300" step="10" value="30">
+        <p class="control-note">Kecepatan orbit Bumi sebenarnya &asymp; 30 km/s. Geser sampai 300 km/s (10&times; lipat) supaya efek yang DIPREDIKSI lebih jelas terlihat -- tapi perhatikan hasil sebenarnya di kanan.</p>
+      </div>
+      <button class="btn-reset" id="btnRotate">🔄 Putar Interferometer 90°</button>
+      <p class="control-note" id="rotateNote">Orientasi: Lengan A sejajar arah gerak Bumi.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visualisasi Interferometer</span></div>
+      <div class="canvas-wrapper"><canvas id="mmCanvas"></canvas></div>
+
+      <div class="compare-grid">
+        <div class="compare-box">
+          <span class="compare-title">📐 PREDIKSI (kalau eter ada)</span>
+          <span class="compare-value predicted" id="predictedVal">0,00 pinggir</span>
+          <div class="fringe-strip"><div class="stripes" id="stripesPredicted"></div></div>
+        </div>
+        <div class="compare-box">
+          <span class="compare-title">🔬 HASIL SEBENARNYA (diukur)</span>
+          <span class="compare-value actual" id="actualVal">≈ 0,00 pinggir</span>
+          <div class="fringe-strip"><div class="stripes" id="stripesActual"></div></div>
+        </div>
+      </div>
+      <div class="formula-box" id="mmFormula"></div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="theory-title">📌 Ringkasan Konsep</div>
+    Kalau eter benar-benar ada dan diam mutlak, Bumi yang bergerak menembusnya seharusnya membuat cahaya di lengan yang SEJAJAR arah gerak Bumi menempuh waktu sedikit berbeda dibanding lengan yang TEGAK LURUS -- menghasilkan pergeseran pola interferensi sebesar <span class="math-var">Δn = 2Lv²/(λc²)</span>. Geser slider v di atas: kotak kiri ("Prediksi") menunjukkan pergeseran yang SEHARUSNYA terjadi kalau eter ada, makin besar makin cepat "v"-nya. Tapi kotak kanan ("Hasil Sebenarnya") menunjukkan apa yang benar-benar Michelson dan Morley ukur: TIDAK ADA pergeseran sama sekali, berapa pun "v" yang diandaikan, dan tetap nol meski alatnya diputar 90°.
+  </div>
+
+  <div class="card quiz-card">
+    <span class="quiz-q">🤔 Kalau hasil percobaan menunjukkan TIDAK ADA pergeseran pola interferensi sama sekali, apa kesimpulan paling masuk akal?</span>
+    <div class="quiz-opts" id="mmQuizOpts"></div>
+    <div class="quiz-fb" id="mmQuizFb"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('mmCanvas');
+    const ctx = canvas.getContext('2d');
+    const vSlider = document.getElementById('vSlider'), vVal = document.getElementById('vVal');
+    const btnRotate = document.getElementById('btnRotate'), rotateNote = document.getElementById('rotateNote');
+    const predictedVal = document.getElementById('predictedVal'), actualVal = document.getElementById('actualVal');
+    const stripesPredicted = document.getElementById('stripesPredicted'), stripesActual = document.getElementById('stripesActual');
+    const mmFormula = document.getElementById('mmFormula');
+
+    const C = 3e5; // km/s (skala satuan km/s dipakai konsisten di seluruh perhitungan)
+    const L = 11; // meter, panjang efektif lengan interferometer Michelson (lewat multi-pantulan)
+    const LAMBDA = 590e-9; // meter, cahaya natrium kuning yang dipakai Michelson & Morley
+
+    let v = 30, rotated = false, t = 0;
+
+    vSlider.addEventListener('input', () => { v = parseFloat(vSlider.value); vVal.textContent = v + ' km/s'; update(); });
+    btnRotate.addEventListener('click', () => {
+      rotated = !rotated;
+      rotateNote.textContent = rotated ? 'Orientasi: Lengan A tegak lurus arah gerak Bumi.' : 'Orientasi: Lengan A sejajar arah gerak Bumi.';
+      update();
+    });
+
+    function update() {
+      const beta = v / C; // v/c, dua-duanya dalam km/s
+      const deltaN = (2 * L * beta * beta) / LAMBDA; // rumus prediksi klasik Michelson-Morley
+      predictedVal.textContent = deltaN.toFixed(2) + ' pinggir';
+      actualVal.textContent = '≈ 0,00 pinggir';
+
+      const fracPredicted = deltaN % 1;
+      stripesPredicted.style.transform = `translateX(-${fracPredicted * 12}px)`;
+      stripesActual.style.transform = 'translateX(0px)';
+
+      mmFormula.innerHTML =
+        `Δn = 2Lv²/(λc²) = 2(${L})(${v})²/((${LAMBDA.toExponential(1)})(${C})²)<br>` +
+        `Δn (diprediksi) = <span class="math-num">${deltaN.toFixed(2)} pinggir</span> &nbsp;|&nbsp; Δn (diukur) = <span class="math-num">≈ 0</span>`;
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function render() {
+      const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2, armLen = Math.min(w, h) * 0.36;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotated ? Math.PI / 2 : 0);
+
+      // Sumber cahaya & cermin setengah perak (tengah)
+      ctx.fillStyle = 'rgba(248,250,252,0.9)';
+      ctx.fillRect(-6, -6, 12, 12);
+
+      // Lengan A (horizontal) & Lengan B (vertikal)
+      ctx.strokeStyle = 'rgba(148,163,184,0.5)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-armLen, 0); ctx.lineTo(armLen, 0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -armLen); ctx.lineTo(0, armLen); ctx.stroke();
+
+      // Cermin ujung lengan
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(armLen - 4, -12, 4, 24);
+      ctx.fillRect(-4, -armLen - 4, 24, 4);
+
+      // Titik cahaya berjalan bolak-balik di tiap lengan (dekoratif, laju sama -- menekankan hasil nyata: kecepatan cahaya konstan)
+      const posA = Math.abs(((t * 1.5) % (armLen * 2)) - armLen);
+      const posB = Math.abs(((t * 1.5) % (armLen * 2)) - armLen);
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath(); ctx.arc(posA, 0, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, -posB, 5, 0, Math.PI * 2); ctx.fill();
+
+      ctx.restore();
+
+      ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('🔭 ke teleskop pengamat', cx, h - 8);
+
+      t += 1;
+      requestAnimationFrame(render);
+    }
+
+    function renderQuizOptions(container, options, correctIdx, onAnswered) {
+      container.innerHTML = ''; let done = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      options.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.className = 'quiz-opt';
+        btn.innerHTML = `<strong>${letters[i]}.</strong> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (done) return; done = true;
+          container.querySelectorAll('.quiz-opt').forEach((b, j) => { b.disabled = true; if (j === correctIdx) b.classList.add('is-correct'); else if (j === i) b.classList.add('is-wrong'); });
+          onAnswered(i === correctIdx);
+        });
+        container.appendChild(btn);
+      });
+    }
+    renderQuizOptions(document.getElementById('mmQuizOpts'), [
+      'Eter mungkin tidak ada, dan kecepatan cahaya sama bagi semua pengamat, tidak peduli arah gerak sumbernya', 'Alat percobaannya rusak sehingga tidak bisa mendeteksi apa pun', 'Bumi sebenarnya diam, tidak bergerak mengelilingi Matahari', 'Cahaya tidak bisa merambat lewat ruang hampa'
+    ], 0, (correct) => {
+      const fb = document.getElementById('mmQuizFb'); fb.classList.add('is-visible'); fb.classList.toggle('is-wrong', !correct);
+      fb.innerHTML = (correct ? '✅ <strong>Tepat!</strong> ' : '💡 <strong>Coba pikirkan lagi.</strong> ') + 'Hasil nihil ini sangat mengejutkan pada masanya -- alatnya presisi dan sudah diuji berulang. Kesimpulan paling masuk akal (yang akhirnya dikonfirmasi Einstein lewat teori relativitas khusus): kecepatan cahaya memang konstan bagi SEMUA pengamat, berapa pun kecepatan sumbernya, tidak butuh medium eter sama sekali.',
+    });
+
+    window.onload = () => { resizeCanvas(); update(); requestAnimationFrame(render); };
+  </script>
+</body>
+</html>

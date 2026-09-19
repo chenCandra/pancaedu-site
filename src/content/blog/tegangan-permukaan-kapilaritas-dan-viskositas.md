@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Tetap sama", "2 kali lebih besar", "4 kali lebih besar", "Setengah kali"]
     jawaban: 1
     penjelasan: "Fs berbanding lurus dengan r (pangkat 1), jadi kalau r menjadi 2 kali, Fs juga menjadi 2 kali lebih besar (dengan η dan v tetap)."
+  - soal: "Rumus tegangan permukaan γ = F/d menunjukkan bahwa tegangan permukaan adalah..."
+    pilihan: ["Gaya dikali panjang permukaan", "Gaya per satuan panjang permukaan/keliling kontak", "Panjang permukaan dikali luas", "Massa per satuan volume"]
+    jawaban: 1
+    penjelasan: "Tegangan permukaan γ = F/d, yaitu gaya per satuan panjang permukaan atau keliling kontak (N/m)."
+  - soal: "Kenapa tetesan air cenderung berbentuk BULAT?"
+    pilihan: ["Karena gravitasi menariknya jadi bulat", "Karena tegangan permukaan menarik permukaan tetesan sekecil mungkin, dan bola punya luas permukaan terkecil untuk volume tertentu", "Karena udara mendorong dari segala arah", "Karena air tidak punya bentuk tetap"]
+    jawaban: 1
+    penjelasan: "Tegangan permukaan cenderung mengecilkan luas permukaan tetesan -- dan bentuk bola punya luas permukaan terkecil untuk volume tertentu."
+  - soal: "Jarum baja yang massa jenisnya lebih besar dari air bisa 'mengapung' mendatar di permukaan air karena ditopang oleh..."
+    pilihan: ["Gaya apung Archimedes", "Tegangan permukaan air, bukan gaya apung", "Tekanan hidrostatis", "Gaya gesek udara"]
+    jawaban: 1
+    penjelasan: "Jarum baja mengapung karena ditopang oleh tegangan permukaan air yang berperilaku seperti membran elastis, bukan karena gaya apung Archimedes."
+  - soal: "Serangga air (water strider) bisa 'berjalan' di atas air meski massa jenis tubuhnya lebih besar dari air karena..."
+    pilihan: ["Tubuhnya sangat ringan sehingga tidak punya berat", "Kakinya menyebarkan berat tubuh ke area luas tanpa memecah tegangan permukaan air", "Ia terbang, tidak menyentuh air sama sekali", "Ia memiliki gaya apung khusus"]
+    jawaban: 1
+    penjelasan: "Kaki serangga air menyebarkan beratnya ke area yang luas sehingga tidak memecah 'membran' tegangan permukaan air, membuatnya bisa berjalan di atas air."
+  - soal: "Pada rumus kapilaritas h = 2γcosθ/(ρgr), kalau jari-jari pipa kapiler (r) diperbesar, kenaikan/penurunan fluida (h) akan..."
+    pilihan: ["Membesar", "Mengecil", "Tetap sama", "Menjadi nol"]
+    jawaban: 1
+    penjelasan: "h berbanding terbalik dengan r, jadi pipa yang lebih lebar (r besar) menghasilkan kenaikan/penurunan kapiler yang lebih kecil."
+  - soal: "Meniskus CEKUNG (melengkung ke bawah) pada permukaan fluida di pipa kapiler menunjukkan bahwa..."
+    pilihan: ["Kohesi lebih kuat dari adhesi, sehingga fluida turun", "Adhesi lebih kuat dari kohesi, sehingga fluida naik", "Fluida tidak memiliki tegangan permukaan", "Pipa terbuat dari logam"]
+    jawaban: 1
+    penjelasan: "Meniskus cekung (seperti pada air) terjadi saat adhesi (tarikan fluida ke dinding) lebih kuat dari kohesi antar-molekul fluida, sehingga fluida naik."
+  - soal: "Meniskus CEMBUNG (melengkung ke atas) seperti pada raksa di pipa kaca menunjukkan bahwa..."
+    pilihan: ["Adhesi raksa-kaca lebih kuat dari kohesi antar-molekul raksa", "Kohesi antar-molekul raksa lebih kuat dari adhesinya ke kaca, sehingga raksa turun", "Raksa tidak memiliki gaya tarik-menarik molekul", "Raksa lebih ringan dari kaca"]
+    jawaban: 1
+    penjelasan: "Meniskus cembung pada raksa terjadi karena kohesi antar-molekul raksa lebih kuat dari adhesinya ke kaca, sehingga permukaannya turun."
+  - soal: "Air merembes naik dari akar ke daun tanaman lewat pembuluh yang sangat sempit. Fenomena ini adalah contoh dari..."
+    pilihan: ["Viskositas", "Kapilaritas", "Gaya apung", "Tekanan hidrostatis"]
+    jawaban: 1
+    penjelasan: "Air naik lewat pembuluh sempit pada tanaman adalah contoh kapilaritas, sama seperti air merambat naik lewat sumbu kompor minyak."
+  - soal: "Tinta yang merambat naik di kertas tisu adalah contoh penerapan..."
+    pilihan: ["Viskositas tinggi", "Kapilaritas", "Tegangan permukaan yang sangat rendah", "Gaya apung"]
+    jawaban: 1
+    penjelasan: "Serat-serat tisu berperan seperti pipa kapiler yang sangat sempit, sehingga tinta bisa merambat naik lewat kapilaritas."
+  - soal: "Kenapa madu mengalir jauh lebih lambat dari air ketika dituang?"
+    pilihan: ["Madu punya massa jenis yang jauh lebih kecil", "Madu punya viskositas (kekentalan) yang jauh lebih tinggi dari air", "Madu punya tegangan permukaan nol", "Madu lebih dingin dari air"]
+    jawaban: 1
+    penjelasan: "Madu punya viskositas (gesekan internal) yang jauh lebih tinggi dari air, sehingga mengalir jauh lebih lambat."
+  - soal: "Manakah urutan fluida dari viskositas TERTINGGI ke TERENDAH?"
+    pilihan: ["Air, oli, madu", "Madu, oli, air", "Oli, madu, air", "Air, madu, oli"]
+    jawaban: 1
+    penjelasan: "Urutan viskositas dari tertinggi ke terendah: madu (sangat kental) > oli (sedang) > air (rendah)."
+  - soal: "Menurut Hukum Stokes (Fs = 6πηrv), kalau kecepatan bola (v) diperbesar 3 kali sementara r dan η tetap, gaya gesek Stokes menjadi..."
+    pilihan: ["Tetap sama", "3 kali lebih besar", "9 kali lebih besar", "Sepertiga kali"]
+    jawaban: 1
+    penjelasan: "Fs berbanding lurus dengan v (pangkat 1), jadi kalau v menjadi 3 kali, Fs juga menjadi 3 kali lebih besar."
+  - soal: "Kalau koefisien viskositas fluida (η) diperbesar 2 kali sementara r dan v tetap, gaya gesek Stokes (Fs) menjadi..."
+    pilihan: ["Setengah kali", "Tetap sama", "2 kali lebih besar", "4 kali lebih besar"]
+    jawaban: 2
+    penjelasan: "Fs berbanding lurus dengan η (pangkat 1), jadi kalau η menjadi 2 kali, Fs juga menjadi 2 kali lebih besar."
+  - soal: "'Kecepatan terminal' pada bola yang jatuh dalam fluida kental terjadi saat..."
+    pilihan: ["Bola berhenti bergerak sama sekali", "Berat bola (dikurangi gaya apung) persis diimbangi oleh gaya gesek Stokes, sehingga bola bergerak dengan kecepatan tetap", "Bola bergerak makin cepat tanpa batas", "Gaya gesek Stokes menjadi nol"]
+    jawaban: 1
+    penjelasan: "Kecepatan terminal tercapai saat berat bola (dikurangi gaya apung) persis diimbangi gaya gesek Stokes, sehingga percepatannya nol dan bola bergerak dengan kecepatan tetap."
+  - soal: "Kalau kamu menjatuhkan kelereng identik ke dalam air dan ke dalam madu secara bersamaan dari ketinggian yang sama, mana yang lebih dulu mencapai dasar wadah?"
+    pilihan: ["Kelereng di madu, karena madu lebih kental jadi mendorong kelereng lebih cepat", "Kelereng di air, karena viskositas air jauh lebih rendah sehingga gaya gesek Stokes yang menghambatnya lebih kecil", "Keduanya sampai bersamaan", "Tidak bisa ditentukan"]
+    jawaban: 1
+    penjelasan: "Viskositas air yang jauh lebih rendah dari madu menghasilkan gaya gesek Stokes yang lebih kecil, sehingga kelereng di air mencapai kecepatan terminal yang lebih besar dan lebih dulu sampai dasar."
+  - soal: "Kenapa pernyataan 'kapilaritas selalu membuat fluida naik di pipa sempit' itu tidak tepat?"
+    pilihan: ["Karena kapilaritas hanya terjadi pada air", "Karena arahnya (naik/turun) bergantung pada perbandingan adhesi vs kohesi fluida terhadap dinding pipa -- air naik, tapi raksa justru turun", "Karena kapilaritas hanya terjadi di pipa besar", "Karena kapilaritas tidak pernah terjadi pada zat cair"]
+    jawaban: 1
+    penjelasan: "Arah kapilaritas bergantung pada perbandingan adhesi dan kohesi -- air naik (adhesi lebih kuat), tapi raksa justru turun (kohesi lebih kuat), jadi bukan sifat universal semua fluida."
+  - soal: "Molekul di DALAM fluida (bukan di permukaan) tidak menimbulkan tegangan permukaan karena..."
+    pilihan: ["Molekul di dalam ditarik ke segala arah secara merata sehingga gaya-gayanya saling meniadakan", "Molekul di dalam tidak punya gaya kohesi", "Molekul di dalam bergerak terlalu cepat", "Molekul di dalam lebih berat"]
+    jawaban: 0
+    penjelasan: "Molekul di dalam fluida ditarik merata ke segala arah oleh molekul-molekul sekitarnya, sehingga gaya-gayanya saling meniadakan -- beda dengan molekul di permukaan."
+  - soal: "Tiga sifat fluida yang dibahas dalam materi ini adalah tegangan permukaan, kapilaritas, dan..."
+    pilihan: ["Debit aliran", "Viskositas", "Tekanan hidrostatis", "Gaya apung"]
+    jawaban: 1
+    penjelasan: "Materi ini membahas tiga sifat fluida yang jarang disadari: tegangan permukaan, kapilaritas, dan viskositas."
+  - soal: "Oli mesin dan minyak goreng tergolong fluida dengan viskositas..."
+    pilihan: ["Sangat rendah, seperti air", "Sedang -- terasa lebih 'berat' saat dituang dibanding air", "Sangat tinggi, hampir seperti padatan", "Nol, karena berupa cairan"]
+    jawaban: 1
+    penjelasan: "Oli mesin dan minyak goreng tergolong viskositas sedang, terasa lebih 'berat' saat dituang dibanding air, tapi masih jauh lebih encer dari madu."
+  - soal: "Satuan koefisien viskositas (η) pada Hukum Stokes adalah..."
+    pilihan: ["N/m", "Pa·s", "kg/m³", "m/s²"]
+    jawaban: 1
+    penjelasan: "Koefisien viskositas (η) memiliki satuan Pascal-sekon (Pa·s)."
 draft: false
 ---
 

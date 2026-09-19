@@ -32,6 +32,86 @@ kuis:
     pilihan: ["130 N", "150 N", "170 N", "20 N"]
     jawaban: 0
     penjelasan: "Fa = ρgV = 1.000×10×0,002 = 20 N. Berat semu = W − Fa = 150 − 20 = 130 N."
+  - soal: "Kenapa rem hidrolik mobil bisa mengunci keempat roda secara serentak?"
+    pilihan: ["Karena setiap roda punya rem terpisah tanpa hubungan", "Karena tekanan dari pedal rem diteruskan sama besar ke seluruh sistem fluida tertutup sesuai Hukum Pascal", "Karena roda mobil terhubung langsung secara mekanik tanpa fluida", "Karena gravitasi menekan semua roda sama besar"]
+    jawaban: 1
+    penjelasan: "Tekanan dari pedal rem diteruskan sama besar ke segala arah lewat fluida tertutup (Hukum Pascal), sehingga mengunci keempat roda serentak."
+  - soal: "Pada kursi hidrolik salon/bengkel, pompa kaki kecil bisa menaikkan kursi berikut orang yang duduk di atasnya karena..."
+    pilihan: ["Kursi terbuat dari bahan ringan", "Tekanan dari pompa kecil diteruskan sama besar ke piston besar penopang kursi, menghasilkan gaya angkat yang jauh lebih besar", "Orang yang duduk tidak memiliki berat", "Pompa kaki menghasilkan gaya gravitasi negatif"]
+    jawaban: 1
+    penjelasan: "Sama seperti dongkrak hidrolik, tekanan dari piston kecil diteruskan ke piston besar sehingga menghasilkan gaya angkat yang jauh lebih besar dari gaya pompa."
+  - soal: "Sebuah dongkrak hidrolik punya piston kecil berluas 5 cm² dan piston besar berluas 200 cm². Kalau gaya input F1 = 100 N, berapa gaya keluar F2?"
+    pilihan: ["400 N", "2.000 N", "4.000 N", "20.000 N"]
+    jawaban: 2
+    penjelasan: "F2 = F1×(A2/A1) = 100×(200/5) = 100×40 = 4.000 N."
+  - soal: "Sebuah dongkrak hidrolik menghasilkan gaya keluar 3.000 N dari gaya input 100 N. Kalau luas piston kecil adalah 20 cm², berapa luas piston besar?"
+    pilihan: ["60 cm²", "200 cm²", "600 cm²", "3.000 cm²"]
+    jawaban: 2
+    penjelasan: "A2 = A1×(F2/F1) = 20×(3.000/100) = 20×30 = 600 cm²."
+  - soal: "Kenapa piston yang lebih LUAS pada sistem hidrolik menghasilkan gaya yang lebih BESAR?"
+    pilihan: ["Karena tekanan P = F/A harus sama di seluruh fluida tertutup, sehingga A besar butuh F besar juga untuk P yang sama", "Karena piston besar lebih berat", "Karena fluida mengalir lebih cepat di piston besar", "Karena piston besar terbuat dari logam yang lebih kuat"]
+    jawaban: 0
+    penjelasan: "Karena P1 = P2 (Hukum Pascal), dan P = F/A, piston dengan luas (A) lebih besar harus menghasilkan gaya (F) yang lebih besar juga supaya tekanannya tetap sama."
+  - soal: "Kondisi 'melayang' pada Hukum Archimedes terjadi ketika..."
+    pilihan: ["W lebih besar dari Fa maksimum", "W = Fa saat benda tercelup penuh", "W = Fa saat benda tercelup sebagian", "Fa = 0"]
+    jawaban: 1
+    penjelasan: "Melayang terjadi saat berat benda (W) persis sama dengan gaya apung (Fa) ketika benda tercelup penuh -- benda diam di tengah fluida, tidak naik maupun turun."
+  - soal: "Kondisi 'terapung' pada Hukum Archimedes terjadi ketika..."
+    pilihan: ["W = Fa saat tercelup penuh", "W = Fa saat benda cukup naik sedikit sampai tercelup sebagian", "W lebih besar dari Fa maksimum", "Fa lebih besar dari W meski tercelup penuh dan terus bertambah"]
+    jawaban: 1
+    penjelasan: "Terapung terjadi saat benda naik sedikit sampai hanya tercelup sebagian, di titik itu Fa (dari volume tercelup yang lebih kecil) sudah cukup menyeimbangkan W."
+  - soal: "Sebuah benda bervolume 1.000 cm³ (0,001 m³) dicelupkan penuh ke dalam air (ρ = 1.000 kg/m³, g = 10 m/s²). Berapa gaya apung (Fa) yang dialaminya?"
+    pilihan: ["1 N", "10 N", "100 N", "1.000 N"]
+    jawaban: 1
+    penjelasan: "Fa = ρgV = 1.000×10×0,001 = 10 N."
+  - soal: "Sebuah benda bervolume 500 cm³ (0,0005 m³) beratnya 8 N di udara, lalu dicelupkan penuh ke dalam air raksa (ρ = 13.600 kg/m³, g = 10 m/s²). Berapa gaya apung yang dialaminya?"
+    pilihan: ["5 N", "34 N", "68 N", "136 N"]
+    jawaban: 2
+    penjelasan: "Fa = ρgV = 13.600×10×0,0005 = 68 N."
+  - soal: "Sebuah benda beratnya 8 N di udara, saat dicelupkan penuh ke air raksa mengalami gaya apung 68 N (lebih besar dari beratnya). Apa yang terjadi pada benda itu?"
+    pilihan: ["Benda tenggelam", "Benda melayang tepat di titik itu", "Benda akan terapung/naik ke permukaan karena Fa lebih besar dari W", "Benda meledak"]
+    jawaban: 2
+    penjelasan: "Karena Fa (68 N) lebih besar dari W (8 N), benda akan terdorong naik dan terapung -- inilah kenapa benda ringan bisa terapung di fluida yang sangat rapat seperti air raksa."
+  - soal: "Kenapa gaya apung yang dialami sebuah benda BUKAN nilai tetap, melainkan bergantung pada jenis fluida tempat benda itu dicelupkan?"
+    pilihan: ["Karena Fa = ρ_fluida × g × V_tercelup, dan ρ_fluida berbeda-beda tergantung jenis fluidanya", "Karena berat benda selalu berubah-ubah", "Karena volume benda berubah setiap saat", "Karena gravitasi berbeda di setiap fluida"]
+    jawaban: 0
+    penjelasan: "Rumus Fa = ρ_fluida×g×V_tercelup menunjukkan gaya apung bergantung pada massa jenis fluidanya (ρ_fluida), bukan cuma volume benda."
+  - soal: "Sebuah benda yang sama akan mendapat gaya apung yang lebih BESAR ketika dicelupkan ke..."
+    pilihan: ["Udara", "Air biasa (ρ = 1.000 kg/m³)", "Air raksa (ρ = 13.600 kg/m³)", "Ruang hampa"]
+    jawaban: 2
+    penjelasan: "Karena Fa berbanding lurus dengan massa jenis fluida, benda yang sama akan mendapat gaya apung paling besar di air raksa yang massa jenisnya jauh lebih besar dari air."
+  - soal: "Kapal yang sama akan lebih mudah mengapung di air laut dibanding di air sungai (tawar). Kenapa?"
+    pilihan: ["Air laut lebih dingin", "Massa jenis air laut sedikit lebih besar dari air tawar, sehingga gaya apung yang dihasilkan untuk volume tercelup yang sama juga lebih besar", "Air sungai lebih kental", "Air laut tidak memiliki gaya apung"]
+    jawaban: 1
+    penjelasan: "Massa jenis air laut yang sedikit lebih besar menghasilkan gaya apung yang sedikit lebih besar pula, sehingga kapal lebih mudah mengapung di laut dibanding di sungai."
+  - soal: "Kenapa berat badanmu terasa jauh lebih kecil saat 'ditimbang' di dalam air dibanding di darat?"
+    pilihan: ["Karena timbangan bawah air rusak", "Karena gaya apung dari air menopang sebagian beratmu, mengurangi berat semu yang terbaca", "Karena massa tubuhmu benar-benar berkurang di air", "Karena air menambah gaya gravitasi"]
+    jawaban: 1
+    penjelasan: "Gaya apung dari air ikut menopang sebagian beratmu, sehingga berat semu (berat − gaya apung) yang terbaca jadi lebih kecil dari berat sebenarnya."
+  - soal: "Kapal selam bisa mengatur naik-turunnya di dalam air dengan cara..."
+    pilihan: ["Mengubah bentuk lambung kapal", "Mengisi/mengosongkan tangki ballast dengan air untuk mengubah massa jenis rata-rata kapal", "Mempercepat mesin kapal", "Mengubah warna badan kapal"]
+    jawaban: 1
+    penjelasan: "Mengisi tangki ballast dengan air menambah massa jenis rata-rata kapal selam (tenggelam), sedangkan mengosongkannya menguranginya (naik)."
+  - soal: "Manakah pernyataan yang PALING TEPAT tentang Hukum Pascal?"
+    pilihan: ["Tekanan pada fluida tertutup hanya diteruskan ke satu arah tertentu", "Tekanan pada fluida tertutup diteruskan sama besar ke segala arah", "Tekanan pada fluida tertutup selalu hilang seiring jarak", "Hukum Pascal hanya berlaku untuk gas"]
+    jawaban: 1
+    penjelasan: "Hukum Pascal: tekanan yang diberikan pada fluida tertutup diteruskan sama besar ke segala arah."
+  - soal: "Rumus gaya apung Fa = ρ_fluida × g × V_tercelup menunjukkan bahwa gaya apung besarnya sama dengan..."
+    pilihan: ["Berat benda itu sendiri", "Berat fluida yang dipindahkan oleh bagian benda yang tercelup", "Massa benda dikali gravitasi", "Volume benda dikali beratnya"]
+    jawaban: 1
+    penjelasan: "Menurut Hukum Archimedes, gaya apung besarnya sama dengan berat fluida yang dipindahkan oleh bagian benda yang tercelup, bukan berat benda itu sendiri."
+  - soal: "Sebuah benda bervolume 3.000 cm³ (0,003 m³) beratnya 40 N di udara, dicelupkan penuh ke air (ρ = 1.000 kg/m³, g = 10 m/s²). Berapa berat semunya di dalam air?"
+    pilihan: ["10 N", "20 N", "30 N", "40 N"]
+    jawaban: 0
+    penjelasan: "Fa = ρgV = 1.000×10×0,003 = 30 N. Berat semu = 40 − 30 = 10 N."
+  - soal: "Kalau sebuah benda dicelupkan HANYA SEBAGIAN ke dalam fluida (bukan penuh), volume yang dipakai dalam rumus Fa = ρgV adalah..."
+    pilihan: ["Volume total benda", "Volume bagian benda yang tercelup saja", "Volume fluida seluruhnya", "Volume benda dikurangi volume fluida"]
+    jawaban: 1
+    penjelasan: "V pada rumus Fa selalu merujuk pada volume bagian benda yang TERCELUP dalam fluida, bukan volume total benda."
+  - soal: "Kenapa besi (ρ ≈ 7.870 kg/m³) yang jauh lebih rapat dari air tetap bisa dibuat menjadi kapal yang mengapung?"
+    pilihan: ["Karena besi berubah sifat saat jadi kapal", "Karena bentuk kapal dibuat berongga sehingga massa jenis RATA-RATA kapal jadi lebih kecil dari air, meski bahannya besi", "Karena air laut selalu lebih rapat dari besi", "Karena kapal tidak mematuhi Hukum Archimedes"]
+    jawaban: 1
+    penjelasan: "Badan kapal yang berongga membuat volume totalnya jauh lebih besar dari volume besi solidnya, sehingga massa jenis rata-rata kapal jadi lebih kecil dari air."
 draft: false
 ---
 

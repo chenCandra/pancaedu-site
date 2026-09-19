@@ -32,6 +32,174 @@ kuis:
     pilihan: ["Relatif, tergantung pengamat", "Mutlak/absolut, tidak berubah", "Tidak ada", "Sama dengan energi"]
     jawaban: 1
     penjelasan: "Fisika klasik menganggap ruang & waktu mutlak; fisika modern (relativitas) menyatakan keduanya relatif."
+  - soal: "Einstein lahir pada tanggal dan di kota mana?"
+    pilihan:
+      - "14 Maret 1879, di Ulm, Jerman"
+      - "1 Januari 1900, di Bern, Swiss"
+      - "14 Maret 1905, di Berlin, Jerman"
+      - "21 April 1879, di Wina, Austria"
+    jawaban: 0
+    penjelasan: "Albert Einstein lahir 14 Maret 1879 di Ulm, Jerman."
+  - soal: "Tahun 1905 dijuluki oleh sejarawan sains sebagai..."
+    pilihan:
+      - "Annus Mirabilis (tahun ajaib)"
+      - "Tahun Nobel Pertama"
+      - "Zaman Keemasan Fisika Klasik"
+      - "Tahun Kelahiran Elektromagnetisme"
+    jawaban: 0
+    penjelasan: "Tahun 1905 dijuluki Annus Mirabilis (tahun ajaib) karena Einstein menerbitkan empat makalah penting sekaligus."
+  - soal: "Berapa makalah ilmiah yang diterbitkan Einstein di jurnal Annalen der Physik pada tahun 1905?"
+    pilihan:
+      - "Empat makalah"
+      - "Satu makalah"
+      - "Sepuluh makalah"
+      - "Dua makalah"
+    jawaban: 0
+    penjelasan: "Einstein menerbitkan empat makalah ilmiah sekaligus di jurnal Annalen der Physik pada tahun 1905."
+  - soal: "Selain makalah relativitas khusus, makalah lain Einstein di tahun 1905 yang memuat rumus E=mc² berjudul..."
+    pilihan:
+      - "Does the Inertia of a Body Depend Upon Its Energy Content?"
+      - "On the Electrodynamics of Moving Bodies"
+      - "The Photoelectric Effect Explained"
+      - "General Theory of Relativity"
+    jawaban: 0
+    penjelasan: "Makalah 'Does the Inertia of a Body Depend Upon Its Energy Content?' memuat rumus paling terkenal di dunia, E=mc²."
+  - soal: "Einstein mendapat Hadiah Nobel Fisika pada tahun 1921, tapi BUKAN untuk teori relativitas. Ia mendapatkannya untuk penjelasannya tentang..."
+    pilihan:
+      - "Efek fotolistrik"
+      - "Percobaan Michelson-Morley"
+      - "Dilatasi waktu"
+      - "Kontraksi panjang"
+    jawaban: 0
+    penjelasan: "Einstein meraih Nobel Fisika 1921 untuk penjelasan efek fotolistrik, bukan untuk relativitas khusus."
+  - soal: "Sebelum menjadi ilmuwan terkenal, Einstein bekerja sebagai..."
+    pilihan:
+      - "Pegawai kantor paten di Bern, Swiss"
+      - "Profesor fisika di Universitas Berlin"
+      - "Guru sekolah menengah di Jerman"
+      - "Insinyur listrik di sebuah pabrik"
+    jawaban: 0
+    penjelasan: "Einstein bekerja sebagai pegawai kantor paten di Bern, Swiss, bukan profesor di universitas ternama, saat mengajukan teorinya."
+  - soal: "Postulat PERTAMA dari dua postulat dasar relativitas khusus Einstein adalah..."
+    pilihan:
+      - "Hukum fisika berlaku sama di semua kerangka acuan inersia"
+      - "Kecepatan cahaya konstan untuk semua pengamat"
+      - "Massa dan energi setara"
+      - "Ruang dan waktu itu mutlak"
+    jawaban: 0
+    penjelasan: "Postulat 1 (Prinsip Relativitas): hukum fisika berlaku sama di semua kerangka acuan inersia."
+  - soal: "Apa yang dimaksud dengan kerangka acuan inersia dalam postulat pertama relativitas khusus?"
+    pilihan:
+      - "Kerangka acuan yang tidak mengalami percepatan"
+      - "Kerangka acuan yang selalu diam total"
+      - "Kerangka acuan yang bergerak mendekati kecepatan cahaya"
+      - "Kerangka acuan yang hanya berlaku di luar angkasa"
+    jawaban: 0
+    penjelasan: "Kerangka acuan inersia adalah kerangka yang tidak mengalami percepatan."
+  - soal: "Dalam fisika klasik, kalau kamu melempar bola dengan kecepatan 10 m/s dari mobil yang melaju 20 m/s, berapa kecepatan bola itu menurut pengamat yang diam di pinggir jalan?"
+    pilihan:
+      - "30 m/s (dijumlahkan)"
+      - "10 m/s saja"
+      - "20 m/s saja"
+      - "200 m/s (dikalikan)"
+    jawaban: 0
+    penjelasan: "Dalam fisika klasik, kecepatan bersifat aditif -- 10 m/s + 20 m/s = 30 m/s bagi pengamat di pinggir jalan."
+  - soal: "Berbeda dari bola yang dilempar dari mobil, kecepatan CAHAYA yang dipancarkan dari sumber yang bergerak akan tetap terukur sebesar..."
+    pilihan:
+      - "c, tidak peduli seberapa cepat sumbernya bergerak"
+      - "c ditambah kecepatan sumbernya"
+      - "c dikurangi kecepatan sumbernya"
+      - "Nol, karena cahaya tidak punya kecepatan tetap"
+    jawaban: 0
+    penjelasan: "Berapa pun cepatnya sumber cahaya bergerak, cahaya yang dipancarkannya tetap terukur secepat c oleh siapa pun."
+  - soal: "Supaya kecepatan cahaya bisa tetap konstan bagi semua pengamat, harga apa yang harus dibayar menurut relativitas khusus?"
+    pilihan:
+      - "Ruang dan waktu itu sendiri harus menjadi relatif, bukan lagi mutlak"
+      - "Massa benda harus menjadi nol"
+      - "Gravitasi harus dihilangkan sepenuhnya"
+      - "Hukum Newton harus dibuang sepenuhnya untuk semua kecepatan"
+    jawaban: 0
+    penjelasan: "Supaya kecepatan cahaya konsisten konstan bagi semua pengamat, ruang dan waktu itu sendiri yang harus jadi relatif."
+  - soal: "Tiga konsekuensi mengejutkan dari relativitas khusus yang disebutkan akan dibahas di bab ini adalah..."
+    pilihan:
+      - "Dilatasi waktu, kontraksi panjang, dan massa relativistik"
+      - "Hukum Newton, gaya gravitasi, dan gaya Lorentz"
+      - "Medan listrik, medan magnet, dan gelombang elektromagnetik"
+      - "Doping semikonduktor, dioda, dan transistor"
+    jawaban: 0
+    penjelasan: "Tiga konsekuensi yang disebut: dilatasi waktu, kontraksi panjang, dan massa relativistik."
+  - soal: "Menurut tabel perbandingan, dalam fisika modern (Einstein), massa dan energi dianggap..."
+    pilihan:
+      - "Setara (E=mc²)"
+      - "Dua hal yang sepenuhnya terpisah"
+      - "Tidak berhubungan sama sekali"
+      - "Sama dengan kecepatan cahaya"
+    jawaban: 0
+    penjelasan: "Tabel menyebut massa dan energi setara (E=mc²) dalam fisika modern, berbeda dari fisika klasik yang menganggapnya terpisah."
+  - soal: "Apakah relativitas khusus membatalkan Hukum Newton menurut artikel?"
+    pilihan:
+      - "Tidak -- pada kecepatan sehari-hari, rumus relativistik kembali menjadi sama persis dengan rumus Newton"
+      - "Ya, Hukum Newton sepenuhnya tidak berlaku lagi setelah 1905"
+      - "Ya, tapi hanya untuk benda yang sangat berat"
+      - "Tidak relevan, karena Newton tidak pernah membahas gerak"
+    jawaban: 0
+    penjelasan: "Rumus relativistik secara matematis kembali sama persis dengan rumus Newton pada kecepatan sehari-hari."
+  - soal: "TV tabung (CRT) lawas jadi salah satu contoh penerapan relativitas khusus karena elektron yang ditembakkan di dalamnya bergerak dengan kecepatan sekitar..."
+    pilihan:
+      - "30% kecepatan cahaya"
+      - "99% kecepatan cahaya"
+      - "3% kecepatan cahaya"
+      - "150% kecepatan cahaya"
+    jawaban: 0
+    penjelasan: "TV tabung menembakkan elektron dengan kecepatan sekitar 30% kecepatan cahaya."
+  - soal: "Salah satu alasan emas berwarna kuning keemasan (bukan abu-abu seperti kebanyakan logam) berkaitan dengan efek relativistik pada elektronnya yang bergerak sekitar..."
+    pilihan:
+      - "58% kecepatan cahaya"
+      - "10% kecepatan cahaya"
+      - "99,9% kecepatan cahaya"
+      - "Elektron emas tidak bergerak sama sekali"
+    jawaban: 0
+    penjelasan: "Elektron di atom emas bergerak sekitar 58% kecepatan cahaya, cukup cepat untuk menggeser energi elektronnya lewat efek relativistik."
+  - soal: "Tanpa koreksi memakai rumus relativitas khusus, posisi yang dihitung GPS bisa meleset..."
+    pilihan:
+      - "Beberapa kilometer per hari"
+      - "Beberapa milimeter per tahun"
+      - "Tidak meleset sama sekali"
+      - "Hanya di malam hari"
+    jawaban: 0
+    penjelasan: "Tanpa koreksi relativistik, posisi GPS bisa meleset beberapa kilometer per hari."
+  - soal: "Manakah pernyataan yang PALING tepat tentang anggapan bahwa relativitas artinya semua serba relatif, jadi tidak ada yang pasti dalam alam semesta?"
+    pilihan:
+      - "Tidak tepat -- justru kecepatan cahaya ditemukan sebagai satu hal yang mutlak dan tidak berubah bagi siapa pun"
+      - "Tepat sepenuhnya, semua besaran fisika menjadi relatif tanpa kecuali"
+      - "Tidak relevan, karena relativitas tidak membahas apa pun yang mutlak maupun relatif"
+      - "Tepat, tapi hanya berlaku untuk kecepatan cahaya"
+    jawaban: 0
+    penjelasan: "Nama 'relativitas' agak menyesatkan -- intinya justru menemukan kecepatan cahaya sebagai satu hal yang mutlak bagi semua pengamat."
+  - soal: "Kalau kamu menyalakan senter di dalam mobil yang melaju 100 km/jam, menurut postulat kedua relativitas khusus, berapa kecepatan cahaya senter itu bagi pengamat yang diam di pinggir jalan?"
+    pilihan:
+      - "Tetap c, tidak ditambah 100 km/jam"
+      - "c + 100 km/jam"
+      - "c − 100 km/jam"
+      - "Setengah dari c"
+    jawaban: 0
+    penjelasan: "Kecepatan cahaya selalu terukur c bagi semua pengamat, tidak peduli seberapa cepat sumbernya bergerak."
+  - soal: "Kenapa efek relativitas khusus baru terasa signifikan pada kecepatan yang MENDEKATI kecepatan cahaya, meski secara teori berlaku untuk semua kecepatan?"
+    pilihan:
+      - "Karena pada kecepatan sehari-hari efeknya sangat kecil sehingga praktis tidak teramati, baru jadi signifikan mendekati c"
+      - "Karena relativitas khusus memang hanya berlaku di atas kecepatan cahaya"
+      - "Karena kecepatan rendah membuat waktu berhenti sepenuhnya"
+      - "Karena efek relativistik hanya berlaku untuk benda yang sangat ringan"
+    jawaban: 0
+    penjelasan: "Efek relativistik memang berlaku di semua kecepatan, tapi besarnya sangat kecil pada kecepatan sehari-hari sehingga praktis tidak teramati."
+  - soal: "Materi berikutnya setelah Teori Relativitas Khusus, menurut penutup artikel, membahas latar belakang eksperimen yang gagal membuktikan keberadaan..."
+    pilihan:
+      - "Eter"
+      - "Elektron"
+      - "Foton"
+      - "Medan gravitasi"
+    jawaban: 0
+    penjelasan: "Penutup artikel mengarahkan ke materi Percobaan Michelson-Morley, eksperimen yang gagal membuktikan keberadaan eter."
 draft: false
 ---
 

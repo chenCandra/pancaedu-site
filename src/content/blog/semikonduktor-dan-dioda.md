@@ -28,6 +28,90 @@ kuis:
     pilihan: ["Dipasang forward bias dan tegangannya melebihi tegangan ambang", "Dipasang reverse bias", "Suhu ruangan sangat rendah", "Tidak dialiri arus sama sekali"]
     jawaban: 0
     penjelasan: "LED adalah jenis dioda khusus -- sama seperti dioda biasa, ia baru menghantar (dan pada LED, memancarkan cahaya) saat forward bias melebihi tegangan ambang."
+  - soal: "Kenapa Silikon dan Germanium dalam keadaan MURNI (belum didoping) hampir berperilaku seperti isolator?"
+    pilihan: ["Karena belum diberi atom pengotor yang bisa mengubah sifat kelistrikannya secara drastis", "Karena keduanya logam berat", "Karena keduanya selalu dalam bentuk cairan", "Karena keduanya tidak punya elektron sama sekali"]
+    jawaban: 0
+    penjelasan: "Dalam keadaan murni, Silikon dan Germanium nyaris seperti isolator -- baru lewat proses doping sifat kelistrikannya bisa diubah drastis."
+  - soal: "Doping semikonduktor dengan atom trivalen (3 elektron valensi, misalnya Boron) menghasilkan semikonduktor tipe..."
+    pilihan: ["P (kekurangan elektron/hole sebagai pembawa muatan mayoritas)", "N (kelebihan elektron bebas)", "Netral, tidak berubah sama sekali", "Isolator sempurna"]
+    jawaban: 0
+    penjelasan: "Atom trivalen (mis. Boron) menghasilkan semikonduktor tipe-P, dengan hole sebagai pembawa muatan mayoritas."
+  - soal: "Apa sebenarnya 'hole' pada semikonduktor tipe-P?"
+    pilihan: ["Tempat kosong yang ditinggalkan elektron, yang berperilaku seolah pembawa muatan positif yang bergerak", "Partikel sungguhan yang bermuatan positif seperti proton bebas", "Lubang fisik yang bisa dilihat pada permukaan bahan", "Elektron ekstra yang tertahan di dalam bahan"]
+    jawaban: 0
+    penjelasan: "Hole bukan benda sungguhan -- ia menggambarkan tempat kosong yang ditinggalkan elektron, yang berperilaku seolah pembawa muatan positif."
+  - soal: "Yang SEBENARNYA bergerak saat 'hole' tampak berpindah di semikonduktor tipe-P adalah..."
+    pilihan: ["Elektron-elektron di sekitarnya yang mengisi kekosongan itu satu per satu", "Proton yang berpindah dari satu atom ke atom lain", "Hole itu sendiri sebagai partikel fisik", "Inti atom silikon yang bergeser"]
+    jawaban: 0
+    penjelasan: "Yang sebenarnya bergerak adalah elektron-elektron di sekitar yang mengisi kekosongan satu per satu, bukan hole sebagai benda fisik."
+  - soal: "Berapa kira-kira tegangan ambang (threshold) forward bias yang harus dilampaui agar dioda silikon mulai menghantarkan arus?"
+    pilihan: ["Sekitar 0,7 V", "Sekitar 5 V", "Sekitar 12 V", "Sekitar 220 V"]
+    jawaban: 0
+    penjelasan: "Dioda silikon baru menghantar saat forward bias melebihi tegangan ambang sekitar 0,7 V."
+  - soal: "Pada kondisi forward bias, kutub P dihubungkan ke kutub (+) sumber tegangan, sedangkan kutub N dihubungkan ke..."
+    pilihan: ["Kutub (−) sumber tegangan", "Kutub (+) sumber tegangan juga", "Tidak dihubungkan sama sekali", "Ground netral tanpa polaritas"]
+    jawaban: 0
+    penjelasan: "Forward bias: P ke (+), N ke (−) sumber tegangan."
+  - soal: "Pada kondisi reverse bias (P ke −, N ke +), apa yang terjadi pada arus yang melewati dioda?"
+    pilihan: ["Tidak ada arus yang mengalir, berapa pun besar tegangannya (sampai batas tertentu)", "Arus mengalir sama besar seperti forward bias", "Arus mengalir dua kali lebih besar dari forward bias", "Arus mengalir tapi arahnya bolak-balik"]
+    jawaban: 0
+    penjelasan: "Pada reverse bias, dioda tetap 'tertutup' -- tidak ada arus yang mengalir, berapa pun besar tegangannya (sampai batas tertentu)."
+  - soal: "Kenapa dioda sangat berguna sebagai penyearah (rectifier) dalam mengubah arus AC menjadi DC?"
+    pilihan: ["Karena sifatnya yang cuma mengalirkan arus satu arah bisa memotong bagian gelombang AC yang arahnya salah", "Karena dioda bisa menyimpan energi listrik dalam jumlah besar", "Karena dioda bisa mengubah tegangan AC menjadi lebih tinggi", "Karena dioda tidak pernah menghasilkan panas"]
+    jawaban: 0
+    penjelasan: "Sifat satu-arah dioda membuatnya bisa memotong bagian gelombang AC yang arahnya salah, mengubah AC jadi DC."
+  - soal: "Pada contoh charger HP yang mengubah 220V AC dari stopkontak jadi tegangan DC, komponen apa (selain trafo) yang disebut artikel sebagai salah satu kunci prosesnya?"
+    pilihan: ["Dioda penyearah", "Resistor pemanas", "Kapasitor keping sejajar saja", "Solenoida"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut dioda penyearah sebagai salah satu komponen kunci selain trafo untuk mengubah AC 220V jadi DC."
+  - soal: "LED adalah singkatan dari..."
+    pilihan: ["Light Emitting Diode", "Low Energy Device", "Light Electric Detector", "Linear Electronic Diode"]
+    jawaban: 0
+    penjelasan: "LED singkatan dari Light Emitting Diode -- dioda yang memancarkan cahaya saat forward bias."
+  - soal: "Kenapa LED yang dipasang TERBALIK (reverse bias) tidak akan menyala walau sudah diberi sumber tegangan?"
+    pilihan: ["Karena pada reverse bias, dioda (termasuk LED) tetap tertutup dan tidak ada arus yang mengalir", "Karena LED hanya menyala dengan arus DC, tidak pernah dengan tegangan sumber apa pun", "Karena LED akan langsung terbakar saat dipasang terbalik", "Karena posisi kutub tidak berpengaruh sama sekali pada LED"]
+    jawaban: 0
+    penjelasan: "LED adalah jenis dioda -- pada reverse bias ia tetap tertutup, tidak ada arus yang mengalir, sehingga tidak menyala."
+  - soal: "Manakah pernyataan yang benar tentang muatan keseluruhan semikonduktor tipe-P?"
+    pilihan: ["Tetap netral secara keseluruhan, meski hole berperilaku seolah pembawa muatan positif", "Bermuatan positif secara keseluruhan karena kelebihan proton", "Bermuatan negatif secara keseluruhan", "Tidak memiliki muatan apa pun, bahkan hole-nya"]
+    jawaban: 0
+    penjelasan: "Semikonduktor tipe-P tetap netral secara keseluruhan -- jumlah total proton dan elektron tetap seimbang."
+  - soal: "Sama seperti tipe-P, semikonduktor tipe-N yang kelebihan elektron bebas juga tetap..."
+    pilihan: ["Netral secara keseluruhan", "Bermuatan negatif secara keseluruhan", "Bermuatan positif secara keseluruhan", "Kehilangan elektron sepenuhnya"]
+    jawaban: 0
+    penjelasan: "Semikonduktor tipe-N juga tetap netral secara keseluruhan meski kelebihan elektron bebas."
+  - soal: "Kenapa remote control TV inframerah memilih LED (bukan lampu pijar biasa) untuk mengirim sinyal?"
+    pilihan: ["Karena LED bisa dinyalakan/dimatikan dengan sangat cepat dan hemat energi untuk sinyal digital, sedangkan lampu pijar merespons terlalu lambat", "Karena lampu pijar tidak bisa memancarkan cahaya inframerah sama sekali", "Karena LED jauh lebih besar ukurannya", "Karena lampu pijar hanya bisa menyala dengan arus AC"]
+    jawaban: 0
+    penjelasan: "LED merespons sangat cepat dan hemat energi, cocok untuk sinyal digital berkedip cepat seperti pada remote inframerah."
+  - soal: "Golongan bahan yang daya hantar listriknya di ANTARA konduktor dan isolator, dan sifatnya bisa diatur, disebut..."
+    pilihan: ["Semikonduktor", "Superkonduktor", "Isolator murni", "Elektrolit"]
+    jawaban: 0
+    penjelasan: "Semikonduktor punya daya hantar di antara konduktor dan isolator, dan sifat ini bisa diatur lewat doping."
+  - soal: "Apa yang disebut sebagai komponen elektronika PALING DASAR yang tercipta saat semikonduktor tipe-P dan tipe-N disambung jadi satu?"
+    pilihan: ["Dioda", "Transistor", "Resistor", "Kapasitor"]
+    jawaban: 0
+    penjelasan: "Sambungan P-N menciptakan dioda -- komponen paling dasar dalam elektronika."
+  - soal: "Menurut tabel doping pada artikel, pembawa muatan mayoritas pada semikonduktor tipe-N adalah..."
+    pilihan: ["Elektron bebas", "Hole", "Proton bebas", "Ion positif"]
+    jawaban: 0
+    penjelasan: "Tabel doping menyebut elektron bebas sebagai pembawa muatan mayoritas pada tipe-N."
+  - soal: "Materi Semikonduktor dan Dioda ini disebutkan sebagai jawaban atas pertanyaan lanjutan dari materi apa (yang membahas kenapa dunia digital cuma butuh dua keadaan 0 dan 1)?"
+    pilihan: ["Sinyal Analog dan Digital", "Rangkaian AC Sederhana", "Spektrum Elektromagnetik", "Percobaan Michelson-Morley"]
+    jawaban: 0
+    penjelasan: "Artikel membuka dengan menyebut materi Sinyal Analog dan Digital sebagai dasar pertanyaan yang dijawab di sini."
+  - soal: "Setelah materi ini, topik apa yang dibahas selanjutnya menurut penutup artikel, sebagai komponen yang jadi dasar chip komputer modern?"
+    pilihan: ["Transistor: Saklar dan Penguat", "Bilangan Biner", "Gaya Lorentz", "Spektrum Elektromagnetik"]
+    jawaban: 0
+    penjelasan: "Penutup artikel mengarahkan ke materi Transistor sebagai komponen yang jadi dasar chip komputer modern."
+  - soal: "Apa perbedaan mendasar antara konduktor seperti tembaga dan semikonduktor?"
+    pilihan: ["Konduktor selalu menghantar listrik dengan baik, sedangkan sifat hantar semikonduktor bisa diubah lewat doping", "Konduktor dan semikonduktor punya daya hantar yang identik", "Semikonduktor selalu menghantar listrik lebih baik dari konduktor", "Konduktor tidak bisa menghantarkan listrik sama sekali"]
+    jawaban: 0
+    penjelasan: "Konduktor menghantar listrik dengan sangat baik dan tetap, sedangkan semikonduktor sifat hantarnya bisa diatur lewat doping."
+  - soal: "Kalau tegangan forward bias yang diberikan pada dioda silikon MASIH DI BAWAH tegangan ambang (misalnya 0,3 V), apa yang terjadi?"
+    pilihan: ["Dioda belum menghantarkan arus secara signifikan", "Dioda langsung menghantarkan arus penuh seperti biasa", "Dioda akan rusak permanen", "Dioda akan berfungsi sebagai reverse bias"]
+    jawaban: 0
+    penjelasan: "Dioda baru menghantar signifikan setelah tegangan forward bias melebihi tegangan ambang (~0,7V); di bawah itu belum menghantar signifikan."
 draft: false
 ---
 

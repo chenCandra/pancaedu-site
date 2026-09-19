@@ -23,6 +23,90 @@ kuis:
     pilihan: ["Mematikan lampu dan alat elektronik yang tidak dipakai", "Membeli lebih banyak barang baru", "Menyalakan AC sepanjang hari meski ruangan kosong", "Menggunakan lebih banyak kantong plastik"]
     jawaban: 0
     penjelasan: "Menghemat penggunaan listrik (mematikan lampu/elektronik yang tidak dipakai) langsung mengurangi kebutuhan energi, yang sebagian besar masih dari bahan bakar fosil."
+  - soal: "Konsumsi listrik menyumbang jejak karbon karena..."
+    pilihan: ["Sebagian besar listrik masih dihasilkan dari bahan bakar fosil", "Listrik selalu berasal dari energi terbarukan", "Listrik tidak berhubungan dengan gas rumah kaca", "Listrik hanya dipakai di rumah tangga"]
+    jawaban: 0
+    penjelasan: "Sebagian besar listrik masih dihasilkan dari bahan bakar fosil -- makin boros listrik, makin besar jejak karbonnya."
+  - soal: "Sampah menyumbang jejak karbon terutama ketika..."
+    pilihan: ["Sampah organik dibuang begitu saja dan membusuk di TPA menghasilkan metana", "Sampah dipilah dan dikompos dengan baik", "Sampah didaur ulang menjadi barang baru", "Sampah dikurangi lewat penggunaan kembali"]
+    jawaban: 0
+    penjelasan: "Sampah organik yang dibuang begitu saja (bukan dikompos) membusuk di TPA dan menghasilkan gas metana."
+  - soal: "Dari segi pola makan, jejak karbon daging (terutama sapi) jauh lebih besar dari sayur/buah karena..."
+    pilihan: ["Peternakan menghasilkan metana dalam jumlah besar", "Sayur dan buah tidak bisa dimakan mentah", "Daging sapi tidak mengandung nutrisi", "Sayur membutuhkan lebih banyak listrik untuk tumbuh"]
+    jawaban: 0
+    penjelasan: "Peternakan menghasilkan metana dalam jumlah besar lewat proses pencernaan hewan, sehingga jejak karbon daging (terutama sapi) jauh lebih besar dari sayur/buah."
+  - soal: "Aksi 'Hemat Listrik' pada materi ini mencakup kebiasaan seperti..."
+    pilihan: ["Mematikan lampu/elektronik yang tidak dipakai dan mencabut charger yang tidak digunakan", "Menyalakan semua lampu sepanjang hari", "Membeli lebih banyak alat elektronik baru", "Menggunakan AC sepanjang hari"]
+    jawaban: 0
+    penjelasan: "Aksi hemat listrik mencakup mematikan lampu dan alat elektronik yang tidak dipakai, serta mencabut charger yang tidak digunakan."
+  - soal: "Aksi 'Transportasi Berkelanjutan' pada materi ini mencakup..."
+    pilihan: ["Jalan kaki/bersepeda untuk jarak dekat dan menggunakan transportasi umum atau berbonceng", "Selalu naik pesawat meski jarak dekat", "Menggunakan mobil pribadi sendirian setiap hari", "Menghindari transportasi umum karena dianggap tidak nyaman"]
+    jawaban: 0
+    penjelasan: "Transportasi berkelanjutan berarti jalan kaki atau bersepeda untuk jarak dekat, serta menggunakan transportasi umum atau berbonceng saat memungkinkan."
+  - soal: "Menurut materi ini, untuk mengurangi jejak karbon dari pola makan, seseorang..."
+    pilihan: ["Tidak perlu berhenti total makan daging, cukup mengurangi frekuensinya", "Harus berhenti total makan daging seumur hidup", "Harus mengganti semua makanan dengan daging", "Tidak perlu mengubah pola makan sama sekali"]
+    jawaban: 0
+    penjelasan: "Materi ini menegaskan tidak perlu berhenti total -- mengurangi frekuensi konsumsi daging saja sudah membantu menurunkan jejak karbon dari pola makan."
+  - soal: "Aksi 'Kelola Sampah dengan Baik' pada materi ini mencakup..."
+    pilihan: ["Memilah sampah organik untuk dikompos dan mengurangi plastik sekali pakai", "Membakar semua sampah di halaman rumah", "Membuang semua sampah tanpa dipilah", "Menumpuk sampah organik di TPA tanpa diolah"]
+    jawaban: 0
+    penjelasan: "Kelola sampah dengan baik mencakup memilah sampah organik untuk dikompos, mengurangi plastik sekali pakai, dan daur ulang saat memungkinkan."
+  - soal: "Aksi 'Ikut Menanam Pohon' membantu mengurangi jejak karbon karena..."
+    pilihan: ["Pohon menyerap CO2 lewat fotosintesis", "Pohon menghasilkan metana yang menguntungkan", "Pohon menggantikan kebutuhan listrik rumah tangga", "Pohon tidak berhubungan dengan gas rumah kaca"]
+    jawaban: 0
+    penjelasan: "Pohon menyerap CO2 lewat fotosintesis -- ikut menanam pohon lewat reboisasi/penghijauan membantu mengurangi jejak karbon."
+  - soal: "Menurut materi ini, ada berapa aksi nyata yang bisa dimulai untuk mengurangi jejak karbon pribadi?"
+    pilihan: ["5", "3", "7", "10"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan lima aksi nyata: hemat listrik, transportasi berkelanjutan, kurangi konsumsi daging, kelola sampah, dan ikut menanam pohon."
+  - soal: "Menurut materi ini, ada berapa sumber utama jejak karbon pribadi yang dibahas?"
+    pilihan: ["4", "2", "6", "8"]
+    jawaban: 0
+    penjelasan: "Materi ini membahas empat sumber jejak karbon pribadi: transportasi, konsumsi listrik, pola makan, dan sampah."
+  - soal: "Pernyataan 'aksi satu orang saja tidak akan berpengaruh apa-apa terhadap pemanasan global' menurut materi ini..."
+    pilihan: ["Kurang tepat -- aksi individu memang kecil sendirian, tapi berkumpul jadi besar", "Benar sepenuhnya, aksi individu memang tidak berguna", "Hanya berlaku untuk negara kecil", "Berlaku kalau orangnya tinggal di kota besar"]
+    jawaban: 0
+    penjelasan: "Aksi individu memang kecil sendirian, tapi kalau berkumpul (banyak orang melakukannya) jadi besar dampaknya -- kebijakan negara pun butuh partisipasi banyak individu supaya efektif."
+  - soal: "Materi ini mengaitkan kesalahan umum soal 'aksi individu tidak berpengaruh' dengan materi sebelumnya, yaitu..."
+    pilihan: ["Upaya Global dan Nasional", "Gas Rumah Kaca", "Perubahan Iklim", "Hakikat Fisika"]
+    jawaban: 0
+    penjelasan: "Materi ini mengingatkan bahwa kebijakan negara (dari materi Upaya Global dan Nasional) pun tetap butuh partisipasi banyak individu supaya benar-benar efektif."
+  - soal: "Selain karena aksi individu bisa berkumpul jadi besar, materi ini juga menyebut alasan lain pentingnya membangun kebiasaan ramah lingkungan sejak sekarang, yaitu..."
+    pilihan: ["Kebiasaan yang dibangun sekarang akan terbawa seumur hidup", "Kebiasaan itu hanya berlaku sampai lulus SMA", "Kebiasaan itu tidak akan memengaruhi masa depan", "Kebiasaan itu hanya penting untuk generasi tua"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan bahwa kebiasaan ramah lingkungan yang dibangun sekarang akan terbawa seumur hidup, bukan hanya berlaku sesaat."
+  - soal: "Jejak karbon biasanya dihitung dalam satuan..."
+    pilihan: ["Setara CO2", "Kilogram daging", "Liter bensin", "Watt listrik"]
+    jawaban: 0
+    penjelasan: "Jejak karbon biasanya dihitung dalam setara CO2, mencakup semua gas rumah kaca yang dikonversi ke satuan yang sama."
+  - soal: "Materi Jejak Karbon dan Aksi Individu ini berperan sebagai..."
+    pilihan: ["Penutup bab Pemanasan Global, membahas peran individu", "Pembuka bab Pemanasan Global", "Materi sisipan di tengah bab tentang gas rumah kaca", "Materi terpisah yang tidak terkait bab Pemanasan Global"]
+    jawaban: 0
+    penjelasan: "Materi ini adalah penutup bab Pemanasan Global -- setelah membahas gas, sektor, dampak keseharian, dampak skala bumi, dan upaya negara/dunia, kini fokus ke peran individu."
+  - soal: "Setelah bab Pemanasan Global selesai di materi ini, bab selanjutnya yang dimulai adalah..."
+    pilihan: ["Gerak Dua Dimensi, dimulai dari Gerak Lurus Beraturan (GLB)", "Hakikat Fisika", "Gas Rumah Kaca", "Upaya Global dan Nasional"]
+    jawaban: 0
+    penjelasan: "Materi ini diakhiri dengan tautan lanjutan ke Gerak Lurus Beraturan (GLB), pembuka bab baru Gerak Dua Dimensi."
+  - soal: "Kalau dua orang pergi ke tempat yang sama, jejak karbon per orang akan lebih kecil kalau mereka..."
+    pilihan: ["Berbonceng motor bersama dibanding masing-masing naik mobil sendiri-sendiri", "Masing-masing naik mobil sendiri-sendiri", "Naik pesawat untuk jarak sangat dekat", "Menyalakan AC di kendaraan sepanjang perjalanan"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebut berbonceng sebagai salah satu cara transportasi berkelanjutan yang mengurangi jejak karbon per orang, dibanding masing-masing naik kendaraan pribadi sendiri-sendiri."
+  - soal: "Renungan di bagian 'Coba Pikirkan' materi ini meminta siswa memeriksa tiga aspek keseharian, yaitu..."
+    pilihan: ["Cara berangkat ke sekolah, apa yang dimakan, dan penggunaan listrik di rumah", "Nilai ujian, jadwal pelajaran, dan tugas rumah", "Jumlah teman di media sosial", "Waktu tidur dan waktu bangun"]
+    jawaban: 0
+    penjelasan: "Bagian Coba Pikirkan meminta siswa merenungkan cara berangkat ke sekolah, apa yang dimakan, dan bagaimana menggunakan listrik di rumah -- tiga sumber jejak karbon pribadi."
+  - soal: "Setelah memilih satu aksi yang belum dilakukan, materi ini menyarankan siswa untuk..."
+    pilihan: ["Membuat komitmen sederhana untuk mulai mencobanya minggu itu", "Menunggu sampai lulus SMA untuk mencobanya", "Hanya membicarakannya tanpa tindakan nyata", "Menyuruh orang lain melakukannya"]
+    jawaban: 0
+    penjelasan: "Materi ini menyarankan siswa memilih satu aksi yang belum dilakukan dan membuat komitmen sederhana untuk mulai mencobanya minggu itu."
+  - soal: "Menurut materi ini, kenapa mendiskusikan komitmen mengurangi jejak karbon dengan teman sekelas dianggap membantu?"
+    pilihan: ["Karena saling mengingatkan biasanya lebih efektif daripada mencoba sendirian", "Karena teman sekelas akan menilai komitmen itu", "Karena komitmen individu tidak sah tanpa persetujuan teman", "Karena materi ini mengharuskan kerja kelompok"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan bahwa saling mengingatkan dengan teman biasanya lebih efektif daripada mencoba mengubah kebiasaan sendirian."
+  - soal: "Kenapa materi ini menyebut bahwa setiap pilihan sehari-hari (naik apa ke sekolah, makan apa, dan seterusnya) punya 'jejak' gas rumah kacanya masing-masing?"
+    pilihan: ["Karena setiap aktivitas menghasilkan emisi gas rumah kaca dalam besaran yang berbeda-beda", "Karena semua aktivitas menghasilkan jumlah emisi yang sama persis", "Karena hanya aktivitas di luar rumah yang punya jejak karbon", "Karena jejak karbon hanya berlaku untuk orang dewasa"]
+    jawaban: 0
+    penjelasan: "Setiap pilihan sehari-hari punya 'jejak' gas rumah kacanya masing-masing, meski besarnya berbeda-beda -- itulah inti konsep jejak karbon."
 draft: false
 ---
 

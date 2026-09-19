@@ -7,6 +7,11 @@ kelas: XII
 pubDate: 2024-01-11
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Michelson-Morley", "Fisika Kelas XII"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/percobaan-michelson-morley.html"
+  judul: "Laboratorium Maya: Percobaan Michelson-Morley"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1250
 kuis:
   - soal: "Apa tujuan awal percobaan Michelson-Morley?"
     pilihan: ["Membuktikan Bumi itu bulat", "Menguji keberadaan eter sebagai medium rambat cahaya", "Mengukur massa elektron", "Menghitung percepatan gravitasi"]
@@ -24,6 +29,90 @@ kuis:
     pilihan: ["Karena membuktikan hukum Newton benar", "Karena membuka jalan bagi teori relativitas khusus Einstein", "Karena menemukan partikel baru", "Karena berhasil mengukur usia alam semesta"]
     jawaban: 1
     penjelasan: "Hasil 'negatif' (tidak ada eter) menjadi salah satu petunjuk terkuat yang mengarah ke lahirnya teori relativitas khusus."
+  - soal: "Kenapa fisikawan abad ke-19 percaya cahaya membutuhkan medium bernama eter untuk merambat?"
+    pilihan: ["Karena mereka menganggap semua gelombang (seperti gelombang bunyi yang butuh udara) pasti butuh medium untuk merambat", "Karena eter sudah terbukti lewat percobaan sebelumnya", "Karena cahaya tidak bisa merambat di ruang hampa menurut pengamatan langsung", "Karena Newton yang pertama mengusulkan keberadaan eter"]
+    jawaban: 0
+    penjelasan: "Karena gelombang bunyi butuh medium (udara), fisikawan menyimpulkan cahaya (juga gelombang) pasti butuh medium serupa, yang mereka namai eter."
+  - soal: "Analogi 'angin eter' yang diprediksi ada akibat gerak Bumi menembus eter, paling mirip dengan pengalaman..."
+    pilihan: ["Menjulurkan tangan dari mobil yang melaju dan merasakan angin", "Berdiri diam di ruangan tanpa AC", "Mendengar gema di ruangan kosong", "Melihat pelangi setelah hujan"]
+    jawaban: 0
+    penjelasan: "Artikel memakai analogi ini persis: angin eter mirip angin yang terasa saat menjulurkan tangan dari mobil yang melaju."
+  - soal: "Kalau angin eter benar-benar ada, apa yang seharusnya terjadi pada kecepatan cahaya yang merambat SEARAH gerak Bumi dibanding yang TEGAK LURUS arah gerak Bumi?"
+    pilihan: ["Kecepatannya akan terukur sedikit berbeda", "Kecepatannya akan pasti sama, tidak terpengaruh arah", "Cahaya searah gerak Bumi akan berhenti total", "Cahaya tegak lurus gerak Bumi akan menghilang"]
+    jawaban: 0
+    penjelasan: "Kalau angin eter nyata, cahaya searah gerak Bumi seharusnya terukur sedikit berbeda kecepatannya dibanding yang tegak lurus arah gerak Bumi."
+  - soal: "Di kota mana Michelson dan Morley merancang dan menjalankan eksperimennya?"
+    pilihan: ["Cleveland, Ohio", "London, Inggris", "Bern, Swiss", "Berlin, Jerman"]
+    jawaban: 0
+    penjelasan: "Michelson dan Morley menjalankan eksperimennya di Cleveland, Ohio."
+  - soal: "Komponen kunci pada interferometer Michelson yang berfungsi membagi satu berkas cahaya menjadi dua adalah..."
+    pilihan: ["Cermin setengah perak (memantulkan sebagian cahaya, meneruskan sebagian lainnya)", "Lensa cembung biasa", "Prisma kaca solid", "Filter warna"]
+    jawaban: 0
+    penjelasan: "Cermin setengah perak memantulkan sebagian cahaya dan meneruskan sebagian lainnya, sehingga membagi satu berkas jadi dua."
+  - soal: "Setelah dibagi oleh cermin setengah perak, kedua berkas cahaya pada interferometer Michelson merambat pada dua lengan yang..."
+    pilihan: ["Saling tegak lurus satu sama lain", "Sejajar dan searah satu sama lain", "Membentuk sudut 45 derajat searah gerak Bumi", "Melingkar mengikuti bentuk alat"]
+    jawaban: 0
+    penjelasan: "Kedua berkas merambat di dua lengan yang saling tegak lurus -- satu searah gerak Bumi, satu tegak lurus terhadapnya."
+  - soal: "Setelah dipantulkan kembali oleh cermin di ujung tiap lengan, apa yang terjadi pada kedua berkas cahaya itu sebelum diamati lewat teleskop?"
+    pilihan: ["Digabung kembali di cermin setengah perak di tengah", "Dibiarkan terpisah selamanya tanpa digabung", "Diserap sepenuhnya oleh cermin di ujung lengan", "Dipantulkan langsung ke luar ruangan"]
+    jawaban: 0
+    penjelasan: "Kedua berkas digabung kembali di cermin setengah perak di tengah, lalu diamati lewat teleskop."
+  - soal: "Kenapa Michelson dan Morley memutar interferometernya ke berbagai arah dan mengulang percobaan di waktu berbeda sepanjang tahun?"
+    pilihan: ["Untuk menangkap variasi arah gerak Bumi mengelilingi Matahari", "Karena alatnya rusak dan harus diperbaiki berkali-kali", "Untuk mengukur suhu ruangan pada waktu berbeda", "Karena diminta menguji ulang oleh pemerintah"]
+    jawaban: 0
+    penjelasan: "Memutar alat ke berbagai arah dan waktu bertujuan menangkap variasi arah gerak Bumi mengelilingi Matahari."
+  - soal: "Apa yang seharusnya terlihat pada pola interferensi cahaya JIKA angin eter benar-benar ada?"
+    pilihan: ["Pola interferensinya bergeser saat alat diputar ke arah berbeda", "Pola interferensinya akan hilang total dan tidak terlihat sama sekali", "Warna cahaya akan berubah menjadi merah", "Cahaya akan berhenti merambat"]
+    jawaban: 0
+    penjelasan: "Kalau ada angin eter, pola interferensi seharusnya bergeser saat seluruh alat diputar perlahan."
+  - soal: "Hasil pengukuran kecepatan cahaya di kedua lengan interferometer, berapa pun arahnya, menunjukkan bahwa kecepatan cahaya itu..."
+    pilihan: ["Sama persis di kedua lengan", "Berbeda tapi hanya sedikit", "Jauh lebih cepat di salah satu lengan", "Tidak bisa diukur sama sekali"]
+    jawaban: 0
+    penjelasan: "Kecepatan cahaya terukur sama persis di kedua lengan, berapa pun arahnya -- tidak ada jejak angin eter."
+  - soal: "Michelson meraih Hadiah Nobel Fisika tahun berapa, justru untuk percobaan yang 'gagal' membuktikan hipotesisnya sendiri?"
+    pilihan: ["1907", "1887", "1905", "1921"]
+    jawaban: 0
+    penjelasan: "Michelson meraih Hadiah Nobel Fisika 1907, meski percobaan eternya justru 'gagal' menemukan apa yang dicari."
+  - soal: "Kenapa hasil 'nihil' (tidak ditemukan eter) tetap dianggap berharga secara ilmiah, bukan sekadar kegagalan?"
+    pilihan: ["Karena hasil negatif yang diukur dengan presisi tinggi tetap merupakan data ilmiah yang valid dan mendorong pencarian penjelasan baru", "Karena hasil negatif selalu lebih akurat dari hasil positif", "Karena percobaan itu sebenarnya berhasil menemukan eter, hanya belum diakui", "Karena hasil negatif tidak pernah dipublikasikan"]
+    jawaban: 0
+    penjelasan: "Hasil negatif yang presisi tetap data ilmiah valid, dan justru mendorong pencarian penjelasan baru yang berujung pada relativitas khusus."
+  - soal: "Kesimpulan radikal apa yang akhirnya diambil dari hasil nihil percobaan Michelson-Morley terkait kecepatan cahaya?"
+    pilihan: ["Cahaya merambat dengan kecepatan konstan c bagi SEMUA pengamat, tidak peduli bagaimana mereka bergerak", "Cahaya sebenarnya tidak bergerak sama sekali", "Kecepatan cahaya berbeda-beda tergantung waktu pengukuran", "Eter ternyata bergerak lebih cepat dari cahaya"]
+    jawaban: 0
+    penjelasan: "Hasil nihil menuntun pada kesimpulan bahwa cahaya secara alami merambat dengan kecepatan konstan c bagi semua pengamat."
+  - soal: "Berapa tahun setelah percobaan Michelson-Morley (1887), teori relativitas khusus Einstein diterbitkan (1905)?"
+    pilihan: ["18 tahun", "8 tahun", "28 tahun", "58 tahun"]
+    jawaban: 0
+    penjelasan: "1905 dikurangi 1887 sama dengan 18 tahun, sesuai yang disebut artikel: 'delapan belas tahun kemudian'."
+  - soal: "Bagaimana cara Einstein 'menjelaskan' hasil nihil Michelson-Morley, dibanding mencari alasan teknis kenapa percobaannya gagal?"
+    pilihan: ["Mengubah asumsi dasar bahwa ruang dan waktu itu relatif, bukan mutlak", "Merancang percobaan baru yang membuktikan eter benar-benar ada", "Menyatakan bahwa hasil percobaannya salah dan harus diulang", "Membuktikan bahwa cahaya sebenarnya tidak ada"]
+    jawaban: 0
+    penjelasan: "Einstein mengubah ASUMSI dasar (ruang & waktu relatif, bukan mutlak) supaya hasil Michelson-Morley jadi masuk akal."
+  - soal: "Manakah pernyataan yang PALING tepat soal anggapan bahwa 'percobaan Michelson-Morley itu percobaan yang gagal/tidak berguna'?"
+    pilihan: ["Tidak tepat -- hasil negatifnya justru jadi petunjuk penting yang mengarah ke relativitas khusus", "Tepat -- percobaan itu memang tidak menghasilkan apa pun yang berguna", "Tepat -- percobaan itu dirancang dengan asal-asalan", "Tidak relevan -- percobaan itu tidak pernah benar-benar dilakukan"]
+    jawaban: 0
+    penjelasan: "Hasil 'negatif' dalam sains bisa sama berharganya dengan hasil positif -- percobaan ini justru mendorong lahirnya relativitas khusus."
+  - soal: "Interferometer Michelson bisa mendeteksi perbedaan kecil dalam jarak tempuh cahaya lewat..."
+    pilihan: ["Pola interferensi (garis terang-gelap) yang muncul saat dua gelombang cahaya bertemu", "Perubahan warna cahaya yang terlihat mata telanjang", "Suara dengungan dari alat itu sendiri", "Perubahan suhu pada cermin"]
+    jawaban: 0
+    penjelasan: "Interferometer mendeteksi perbedaan superkecil lewat pola interferensi -- garis terang-gelap dari dua gelombang cahaya yang bertemu."
+  - soal: "Kalau percobaan Michelson-Morley BERHASIL mendeteksi angin eter sesuai prediksi awal, apa yang paling mungkin terjadi pada teori relativitas khusus Einstein?"
+    pilihan: ["Kemungkinan besar tidak akan lahir dengan bentuk yang sama, karena salah satu petunjuk pentingnya tidak akan ada", "Tidak berpengaruh sama sekali pada teori relativitas khusus", "Relativitas khusus akan tetap lahir persis sama seperti sekarang", "Eter akan digantikan oleh konsep medan magnet"]
+    jawaban: 0
+    penjelasan: "Hasil nihil Michelson-Morley adalah salah satu petunjuk terkuat menuju relativitas khusus -- kalau hasilnya positif, petunjuk penting ini tidak akan ada."
+  - soal: "Sebelum hasil Michelson-Morley terungkap, apa yang mereka HARAPKAN akan terjadi pada pola interferensi ketika interferometer diputar?"
+    pilihan: ["Terjadi pergeseran pola interferensi akibat perbedaan waktu tempuh cahaya di kedua lengan", "Pola interferensi akan tetap diam sama sekali tanpa perubahan", "Cahaya akan berhenti merambat total", "Interferometer akan meleleh karena panas"]
+    jawaban: 0
+    penjelasan: "Mereka berharap menemukan pergeseran pola interferensi sebagai bukti angin eter -- namun hasilnya nihil."
+  - soal: "Materi ini disebutkan sebagai kelanjutan pembahasan dari materi apa yang sudah dibahas sebelumnya?"
+    pilihan: ["Teori Relativitas Khusus", "Rangkaian AC Sederhana", "Spektrum Elektromagnetik", "Medan Magnet oleh Arus Listrik"]
+    jawaban: 0
+    penjelasan: "Artikel membuka dengan menyebut materi Teori Relativitas Khusus yang sempat menyinggung eksperimen ini."
+  - soal: "Materi selanjutnya setelah percobaan Michelson-Morley ini, menurut penutup artikel, membahas konsekuensi relativitas khusus berupa..."
+    pilihan: ["Dilatasi waktu", "Hukum Newton", "Rangkaian AC", "Bilangan biner"]
+    jawaban: 0
+    penjelasan: "Penutup artikel mengarahkan ke materi Dilatasi Waktu sebagai konsekuensi paling terkenal dari ruang dan waktu yang relatif."
 draft: false
 ---
 

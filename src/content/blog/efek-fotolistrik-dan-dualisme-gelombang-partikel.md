@@ -28,6 +28,90 @@ kuis:
     pilihan: ["Paket-paket energi diskrit yang disebut foton", "Partikel padat yang selalu bergerak lurus", "Gelombang mekanik yang butuh medium", "Medan gravitasi yang berosilasi"]
     jawaban: 0
     penjelasan: "Einstein (1905) mengusulkan cahaya terdiri dari foton, paket energi diskrit sebesar E=hf -- penjelasan inilah yang mengantarkannya meraih Nobel Fisika 1921."
+  - soal: "Efek fotolistrik pertama kali ditemukan (secara tidak sengaja) oleh fisikawan..."
+    pilihan: ["Heinrich Hertz", "Albert Einstein", "Louis de Broglie", "Max Planck"]
+    jawaban: 0
+    penjelasan: "Heinrich Hertz -- fisikawan yang juga membuktikan keberadaan gelombang radio -- tanpa sengaja menemukan efek fotolistrik pada tahun 1887."
+  - soal: "Tahun berapa Heinrich Hertz menemukan efek fotolistrik?"
+    pilihan: ["1887", "1905", "1924", "1921"]
+    jawaban: 0
+    penjelasan: "Hertz menemukan efek fotolistrik pada tahun 1887, jauh sebelum Einstein menjelaskannya secara teoretis."
+  - soal: "Tahun berapa Einstein mengusulkan penjelasan efek fotolistrik lewat konsep foton?"
+    pilihan: ["1905", "1887", "1924", "1915"]
+    jawaban: 0
+    penjelasan: "Einstein mengusulkan konsep foton di tahun 1905 -- tahun yang sama dengan makalah relativitas khususnya."
+  - soal: "Manakah dari tiga keanehan efek fotolistrik yang sesuai dengan pernyataan: di bawah frekuensi tertentu, tidak ada elektron yang terlepas walau intensitas cahaya dibesarkan berkali-kali lipat?"
+    pilihan: ["Adanya frekuensi ambang", "Elektron terlepas seketika", "Energi kinetik bergantung frekuensi", "Semua foton bergerak dengan kecepatan sama"]
+    jawaban: 0
+    penjelasan: "Ini adalah keanehan 'ada frekuensi ambang' -- teori gelombang klasik memprediksi cahaya seterang apa pun seharusnya bisa melepaskan elektron asal ditunggu cukup lama, tapi kenyataannya tidak."
+  - soal: "Teori gelombang klasik memprediksi elektron akan lepas dari logam setelah menunggu beberapa saat, karena energi 'terkumpul' pelan-pelan dari gelombang cahaya. Kenyataannya elektron terlepas..."
+    pilihan: ["Seketika, tanpa jeda waktu, begitu frekuensinya cukup", "Setelah menunggu berjam-jam", "Hanya pada malam hari", "Setelah logam dipanaskan dulu"]
+    jawaban: 0
+    penjelasan: "Begitu frekuensinya cukup, elektron langsung terlepas TANPA jeda waktu -- bahkan pada intensitas sangat rendah, karena satu foton langsung menyerahkan seluruh energinya ke satu elektron."
+  - soal: "Rumus energi satu foton menurut Einstein adalah..."
+    pilihan: ["E = h × f", "E = m × c²", "E = q × v × B", "E = 1/2 × m × v²"]
+    jawaban: 0
+    penjelasan: "Energi satu foton dirumuskan E = h × f = hc/λ, dengan h konstanta Planck dan f frekuensi cahaya."
+  - soal: "Simbol W₀ dalam Persamaan Fotolistrik Einstein melambangkan..."
+    pilihan: ["Fungsi kerja (energi minimum untuk melepas elektron dari logam)", "Berat foton", "Panjang gelombang cahaya", "Frekuensi ambang"]
+    jawaban: 0
+    penjelasan: "W₀ adalah fungsi kerja, energi minimum yang dibutuhkan elektron untuk lepas dari ikatan logamnya."
+  - soal: "Frekuensi ambang (f₀) dihitung dengan rumus..."
+    pilihan: ["f₀ = W₀/h", "f₀ = h/W₀", "f₀ = W₀ × h", "f₀ = h × c"]
+    jawaban: 0
+    penjelasan: "Frekuensi ambang adalah frekuensi minimum yang energi fotonnya persis sama dengan W₀, dihitung dari f₀ = W₀/h."
+  - soal: "Sebuah logam punya fungsi kerja W₀=4,14×10⁻¹⁹ J. Konstanta Planck h≈6,626×10⁻³⁴ J·s. Berapa frekuensi ambangnya (f₀)?"
+    pilihan: ["≈6,25×10¹⁴ Hz", "≈2,74×10⁻⁵² Hz", "≈4,14×10¹⁹ Hz", "≈1,6×10¹⁵ Hz"]
+    jawaban: 0
+    penjelasan: "f₀ = W₀/h = 4,14×10⁻¹⁹ / 6,626×10⁻³⁴ ≈ 6,25×10¹⁴ Hz."
+  - soal: "Sebuah logam punya fungsi kerja W₀=1,8 eV, disinari cahaya hijau dengan panjang gelombang 500 nm (pakai pendekatan hc≈1240 eV·nm). Berapa energi kinetik maksimum elektron yang terlepas?"
+    pilihan: ["≈0,68 eV", "≈1,8 eV", "≈2,48 eV", "≈4,28 eV"]
+    jawaban: 0
+    penjelasan: "E = hc/λ = 1240/500 = 2,48 eV. Eₖ maks = E − W₀ = 2,48 − 1,8 ≈ 0,68 eV."
+  - soal: "Logam kalium punya fungsi kerja W₀=2,3 eV. Kalau disinari cahaya dengan panjang gelombang 600 nm (hc≈1240 eV·nm), apakah elektron akan terlepas?"
+    pilihan: ["Tidak, karena energi foton (≈2,07 eV) lebih kecil dari fungsi kerja (2,3 eV)", "Ya, karena energi foton lebih besar dari fungsi kerja", "Ya, tapi hanya kalau intensitas cahaya diperbesar", "Tidak bisa ditentukan tanpa mengetahui intensitas cahaya"]
+    jawaban: 0
+    penjelasan: "E = hc/λ = 1240/600 ≈ 2,07 eV, lebih kecil dari W₀=2,3 eV. Karena energi satu foton tidak cukup, elektron TIDAK terlepas, berapa pun intensitasnya."
+  - soal: "Elektron terlepas dari sebuah logam dengan energi kinetik maksimum 1,2 eV, saat disinari cahaya berenergi foton 3,5 eV. Berapa fungsi kerja logam tersebut?"
+    pilihan: ["2,3 eV", "4,7 eV", "1,2 eV", "3,5 eV"]
+    jawaban: 0
+    penjelasan: "Dari Eₖ maks = E − W₀, maka W₀ = E − Eₖ maks = 3,5 − 1,2 = 2,3 eV."
+  - soal: "Kalau energi foton PERSIS sama dengan fungsi kerja logam (E=W₀), berapa energi kinetik maksimum elektron yang terlepas, dan apa artinya secara fisis?"
+    pilihan: ["Nol -- elektron baru bisa lepas tapi tanpa sisa energi gerak, ini kondisi frekuensi ambang", "Tak terhingga -- elektron langsung melesat dengan energi maksimum", "Negatif -- elektron tidak akan pernah lepas", "Sama dengan W₀ itu sendiri"]
+    jawaban: 0
+    penjelasan: "Kalau E=W₀, maka Eₖ maks = E − W₀ = 0 -- elektron pas bisa lepas tapi tanpa sisa energi kinetik. Inilah kondisi frekuensi ambang (f₀)."
+  - soal: "Kenapa logam dengan fungsi kerja tinggi seperti platina (6,35 eV) membutuhkan cahaya ultraviolet, bukan cahaya tampak biasa, untuk menghasilkan efek fotolistrik?"
+    pilihan: ["Karena cahaya tampak punya frekuensi (dan energi foton) yang tidak cukup tinggi untuk melampaui fungsi kerja platina yang besar", "Karena cahaya ultraviolet punya intensitas yang selalu lebih besar dari cahaya tampak", "Karena platina hanya bisa menyerap warna ungu", "Karena cahaya tampak tidak mengandung foton sama sekali"]
+    jawaban: 0
+    penjelasan: "Fungsi kerja platina yang tinggi butuh energi foton yang juga tinggi -- cahaya tampak biasa frekuensinya tidak cukup, sehingga perlu cahaya ultraviolet yang frekuensinya (dan energi fotonnya) lebih besar."
+  - soal: "Interferensi dan difraksi cahaya adalah bukti kuat bahwa cahaya bersifat seperti..."
+    pilihan: ["Gelombang", "Partikel", "Medan gravitasi", "Arus listrik"]
+    jawaban: 0
+    penjelasan: "Sebelum abad ke-20, interferensi dan difraksi cahaya (pola terang-gelap) sudah membuktikan cahaya adalah gelombang."
+  - soal: "Dualisme gelombang-partikel menyatakan bahwa cahaya (dan materi)..."
+    pilihan: ["Punya sifat gelombang sekaligus sifat partikel, tergantung jenis eksperimen yang mengamatinya", "Kadang berupa gelombang, kadang berupa partikel secara acak tanpa pola", "Sebenarnya hanya partikel murni, sifat gelombangnya cuma ilusi", "Sebenarnya hanya gelombang murni, sifat partikelnya cuma ilusi"]
+    jawaban: 0
+    penjelasan: "Dualisme gelombang-partikel berarti cahaya memiliki sifat gelombang SEKALIGUS sifat partikel -- aspek mana yang 'terlihat' bergantung jenis eksperimen yang dilakukan."
+  - soal: "Louis de Broglie di tahun 1924 mengusulkan hipotesis bahwa..."
+    pilihan: ["Partikel materi (seperti elektron) juga bisa berperilaku seperti gelombang", "Cahaya sepenuhnya adalah partikel, tidak ada sifat gelombang", "Elektron tidak punya massa sama sekali", "Semua partikel bergerak dengan kecepatan cahaya"]
+    jawaban: 0
+    penjelasan: "De Broglie berhipotesis bahwa partikel materi, yang biasanya dianggap partikel, juga bisa berperilaku seperti gelombang -- terbukti benar lewat eksperimen difraksi elektron."
+  - soal: "Panjang gelombang de Broglie suatu partikel bermomentum p dirumuskan sebagai..."
+    pilihan: ["λ = h/p", "λ = p/h", "λ = h×p", "λ = hc/p²"]
+    jawaban: 0
+    penjelasan: "Setiap partikel bermomentum p punya panjang gelombang de Broglie λ = h/p."
+  - soal: "Hipotesis de Broglie soal gelombang materi terbukti benar lewat eksperimen..."
+    pilihan: ["Difraksi elektron", "Efek fotolistrik pada logam", "Percobaan Michelson-Morley", "Pengukuran redshift bintang"]
+    jawaban: 0
+    penjelasan: "Hipotesis de Broglie sudah dibuktikan lewat eksperimen difraksi elektron, menunjukkan partikel materi juga punya sifat gelombang."
+  - soal: "Manakah aplikasi yang memanfaatkan efek fotolistrik untuk mendeteksi cahaya dalam jumlah sangat sedikit, bahkan satu foton saja?"
+    pilihan: ["Tabung penggandaan foton (photomultiplier tube)", "Kapasitor keping sejajar", "Transformator step-up", "Resistor variabel"]
+    jawaban: 0
+    penjelasan: "Photomultiplier tube, dipakai di teleskop dan detektor radiasi, memanfaatkan efek fotolistrik untuk mendeteksi cahaya dalam jumlah sangat sedikit."
+  - soal: "Seorang murid berpendapat: kalau lampu ultraviolet terlalu redup (intensitas sangat rendah), efek fotolistrik pasti tidak akan terjadi sama sekali, walau frekuensinya di atas ambang. Pendapat ini..."
+    pilihan: ["Salah -- asal frekuensinya di atas ambang, elektron tetap bisa lepas seketika walau intensitasnya rendah, hanya jumlah elektron yang lepas per detik lebih sedikit", "Benar, karena intensitas rendah selalu berarti energi foton juga rendah", "Benar, karena efek fotolistrik butuh akumulasi energi dari banyak foton", "Salah, karena intensitas cahaya tidak berpengaruh apa pun terhadap efek fotolistrik"]
+    jawaban: 0
+    penjelasan: "Intensitas rendah cuma berarti lebih sedikit foton per detik, bukan energi tiap foton yang lebih kecil. Asal frekuensinya di atas ambang, elektron tetap terlepas seketika, cuma jumlahnya yang lebih sedikit."
 draft: false
 ---
 

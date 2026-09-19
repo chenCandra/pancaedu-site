@@ -124,7 +124,7 @@ const langkah = [
     // jangan duplikasi). latihanUrl diutamakan kalau dua-duanya ada.
     tersedia: Boolean(latihanUrl) || Boolean(materi?.data.kuis?.length),
     cta: latihanUrl ? 'Kerjakan Latihan' : 'Kerjakan Kuis',
-    href: latihanUrl || (materi?.data.kuis?.length ? `/materi/${materi.id}#kuis` : undefined),
+    href: latihanUrl || (materi?.data.kuis?.length ? `/materi/${materi.id}/uji-pemahaman` : undefined),
     externalTarget: Boolean(latihanUrl),
     // Link Google Form/Wayground dkk sering gagal login kalau dibuka dari
     // in-app browser (WhatsApp/Instagram/dll) di Android -- lihat script
@@ -133,7 +133,7 @@ const langkah = [
     keterangan: latihanUrl
       ? 'Latihan lewat link yang sudah disiapkan guru.'
       : materi?.data.kuis?.length
-        ? 'Kuis uji pemahaman di halaman Materi.'
+        ? 'Kuis uji pemahaman di laman terpisah, dengan tombol kembali ke sini.'
         : 'Belum ada latihan untuk pembelajaran ini.',
   },
   {
@@ -146,7 +146,6 @@ const langkah = [
     externalTarget: true,
     forceChromeAndroid: true,
     keterangan: tugasUrl ? 'Kerjakan/kumpulkan lewat link yang sudah disiapkan guru.' : 'Belum ada tugas untuk pembelajaran ini.',
-    catatan: tugasUrl ? '⚠️ Presensi kehadiran hari ini didasarkan pada tugas ini terkirim atau tidak. Kalau tidak mengirim tugas, dianggap tidak hadir.' : undefined,
   },
   {
     nomor: '06',
@@ -208,7 +207,6 @@ const langkah = [
           <div class="pd-step-body">
             <h2>{l.ikon} {l.label}</h2>
             <p>{l.keterangan}</p>
-            {l.catatan && <p class="pd-step-catatan">{l.catatan}</p>}
             {l.tersedia ? (
               <a
                 href={l.href}
@@ -429,16 +427,6 @@ const langkah = [
     color: var(--ink-soft);
     font-size: 0.9375rem;
     margin: 0 0 0.85rem;
-  }
-
-  .pd-step-catatan {
-    color: var(--rose) !important;
-    background: var(--rose-soft);
-    border-radius: var(--radius-sm);
-    padding: 0.6rem 0.85rem;
-    font-size: 0.8125rem !important;
-    font-weight: 600;
-    margin: -0.35rem 0 0.85rem !important;
   }
 
   .pd-step-unavailable {

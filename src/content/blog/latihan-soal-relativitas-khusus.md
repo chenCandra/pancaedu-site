@@ -7,6 +7,11 @@ kelas: XII
 pubDate: 2024-01-15
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Latihan Soal", "Fisika Kelas XII"]
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
+  judul: "Laboratorium Maya: Efek Relativistik (Kalkulator Lengkap)"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1400
 kuis:
   - soal: "Soal paradoks kembar (seperti Goku & Boruto di latihan ini) berkaitan dengan konsep..."
     pilihan: ["Kontraksi panjang", "Dilatasi waktu", "Massa relativistik", "Hukum Newton III"]
@@ -28,6 +33,86 @@ kuis:
     pilihan: ["Sangat lambat", "Mendekati kecepatan cahaya", "Nol", "Konstan di semua kondisi"]
     jawaban: 1
     penjelasan: "Efek-efek relativistik ini cuma signifikan pada kecepatan yang sangat tinggi, mendekati kecepatan cahaya — di kecepatan sehari-hari nyaris tidak teramati."
+  - soal: "Seorang astronot mengalami waktu 8 tahun (menurut jamnya sendiri) dalam sebuah misi dengan kecepatan 0,6c. Berapa lama waktu itu berlalu menurut pengamat yang diam di Bumi?"
+    pilihan: ["10 tahun", "6,4 tahun", "8 tahun", "12,8 tahun"]
+    jawaban: 0
+    penjelasan: "Δt' = Δt/√(1−v²/c²) = 8/√(1−0,36) = 8/√0,64 = 8/0,8 = 10 tahun."
+  - soal: "Seorang astronot mengalami waktu 9 tahun (menurut jamnya sendiri) dalam sebuah misi dengan kecepatan 0,8c. Berapa lama waktu itu berlalu menurut pengamat yang diam di Bumi?"
+    pilihan: ["15 tahun", "9 tahun", "5,4 tahun", "24 tahun"]
+    jawaban: 0
+    penjelasan: "Δt' = Δt/√(1−v²/c²) = 9/√(1−0,64) = 9/√0,36 = 9/0,6 = 15 tahun."
+  - soal: "Dalam rumus dilatasi waktu Δt' = Δt/√(1−v²/c²), Δt (tanpa tanda aksen) merujuk pada waktu yang diukur oleh siapa?"
+    pilihan: ["Pengamat yang bergerak bersama peristiwa itu sendiri (waktu sejati/proper time)", "Pengamat yang diam, melihat dari jauh", "Pengamat mana saja, hasilnya selalu sama", "Bukan waktu yang diukur siapapun, murni angka matematis"]
+    jawaban: 0
+    penjelasan: "Δt adalah waktu sejati (proper time) -- waktu yang dialami langsung oleh pengamat yang bergerak bersama peristiwa itu, seperti Goku yang mengalami langsung 20 tahun perjalanannya."
+  - soal: "Sebuah pesawat memiliki panjang 50 m saat diam. Jika bergerak dengan kecepatan 0,6c relatif terhadap pengamat di Bumi, berapa panjang pesawat yang terukur oleh pengamat tersebut?"
+    pilihan: ["40 m", "30 m", "45 m", "62,5 m"]
+    jawaban: 0
+    penjelasan: "L = L₀ × √(1−v²/c²) = 50 × √(1−0,36) = 50 × √0,64 = 50 × 0,8 = 40 m."
+  - soal: "Sebuah tongkat sepanjang 10 m (diukur saat diam) bergerak dengan kecepatan 0,8c. Berapa panjang tongkat itu menurut pengamat yang diam?"
+    pilihan: ["6 m", "8 m", "4 m", "10 m (tidak berubah)"]
+    jawaban: 0
+    penjelasan: "L = L₀ × √(1−v²/c²) = 10 × √(1−0,64) = 10 × √0,36 = 10 × 0,6 = 6 m."
+  - soal: "Kalau kecepatan sebuah benda semakin mendekati kecepatan cahaya (v mendekati c), apa yang terjadi pada panjangnya menurut pengamat yang diam?"
+    pilihan: ["Panjangnya makin memendek, mendekati nol", "Panjangnya makin memanjang, tak terhingga", "Panjangnya tidak berubah sama sekali", "Panjangnya berubah jadi negatif"]
+    jawaban: 0
+    penjelasan: "Karena faktor √(1−v²/c²) makin mendekati nol saat v mendekati c, hasil kali L₀ × √(1−v²/c²) juga makin mendekati nol -- benda tampak makin memendek."
+  - soal: "Sebuah partikel bermassa diam 2 kg bergerak dengan kecepatan 0,6c. Berapa massa partikel tersebut menurut pengamat yang diam?"
+    pilihan: ["2,5 kg", "1,6 kg", "2 kg (tidak berubah)", "3,33 kg"]
+    jawaban: 0
+    penjelasan: "m = m₀/√(1−v²/c²) = 2/√(1−0,36) = 2/0,8 = 2,5 kg."
+  - soal: "Sebuah partikel bermassa diam 4 kg bergerak dengan kecepatan 0,8c. Berapa massa partikel itu menurut pengamat yang diam?"
+    pilihan: ["Sekitar 6,67 kg", "4,8 kg", "5 kg", "3,2 kg"]
+    jawaban: 0
+    penjelasan: "m = m₀/√(1−v²/c²) = 4/√(1−0,64) = 4/0,6 ≈ 6,67 kg."
+  - soal: "Kenapa massa yang terukur suatu benda bertambah saat bergerak mendekati kecepatan cahaya, berdasarkan rumus m = m₀/√(1−v²/c²)?"
+    pilihan: ["Karena faktor pembagi √(1−v²/c²) makin kecil (mendekati nol) saat v mendekati c, sehingga hasil pembagiannya makin besar", "Karena benda menyerap materi dari sekitarnya saat bergerak cepat", "Karena jumlah partikel penyusun benda ikut bertambah", "Karena kecepatan cahaya c sendiri berkurang saat benda bergerak cepat"]
+    jawaban: 0
+    penjelasan: "Semakin besar v, semakin kecil nilai √(1−v²/c²) -- karena ini pembagi, hasilnya (massa terukur) jadi makin besar dibanding massa diam m₀."
+  - soal: "Berdasarkan pembahasan Soal 5, kenapa mustahil mendorong sebuah benda bermassa sampai benar-benar mencapai kecepatan cahaya?"
+    pilihan: ["Karena massa dan energi yang dibutuhkan akan membengkak menuju tak terhingga saat v mendekati c", "Karena gaya gravitasi akan selalu menariknya kembali", "Karena cahaya akan memblokir gerakan benda tersebut", "Karena panjang benda itu akan menjadi negatif"]
+    jawaban: 0
+    penjelasan: "Saat v mendekati c, faktor Lorentz γ membesar tak terhingga -- massa dan energi kinetik yang dibutuhkan juga ikut membengkak tak terhingga, sehingga mustahil dicapai dengan energi berapa pun."
+  - soal: "Sebuah pesawat bermassa diam 1.000 kg bergerak dengan kecepatan 0,6c. Berapa energi kinetik relativistiknya (c = 3×10⁸ m/s)?"
+    pilihan: ["Sekitar 2,25×10¹⁹ J", "Sekitar 9×10¹⁹ J", "Sekitar 1,25×10¹⁹ J", "Sekitar 4,5×10¹⁹ J"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1−0,36) = 1/0,8 = 1,25. Eₖ = (γ−1)m₀c² = 0,25 × 1.000 × (3×10⁸)² = 0,25 × 1.000 × 9×10¹⁶ ≈ 2,25×10¹⁹ J."
+  - soal: "Sebuah roket bermassa diam 500 kg bergerak dengan kecepatan 0,8c. Berapa energi kinetik relativistiknya (c = 3×10⁸ m/s)?"
+    pilihan: ["Sekitar 3×10¹⁹ J", "Sekitar 4,5×10¹⁹ J", "Sekitar 1,67×10¹⁹ J", "Sekitar 7,5×10¹⁹ J"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1−0,64) = 1/0,6 ≈ 1,67. Eₖ = (γ−1)m₀c² ≈ 0,67 × 500 × (3×10⁸)² = 0,67 × 500 × 9×10¹⁶ ≈ 3×10¹⁹ J."
+  - soal: "Faktor Lorentz γ = 1/√(1−v²/c²) yang dipakai dalam rumus energi kinetik relativistik, juga muncul di rumus fisika apa saja menurut pembahasan Soal 5?"
+    pilihan: ["Dilatasi waktu, kontraksi panjang, dan massa relativistik", "Hanya di rumus dilatasi waktu saja", "Hanya di rumus Hukum Newton II", "Tidak muncul di rumus manapun selain energi kinetik"]
+    jawaban: 0
+    penjelasan: "Sesuai penjelasan Soal 5, faktor Lorentz γ adalah faktor yang sama yang muncul di rumus dilatasi waktu, kontraksi panjang, dan massa relativistik -- cuma disusun ulang jadi bentuk (γ−1)m₀c² untuk energi kinetik."
+  - soal: "Berapa nilai faktor Lorentz (γ) untuk benda yang bergerak dengan kecepatan 0,6c?"
+    pilihan: ["1,25", "0,8", "0,6", "1,6"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1−v²/c²) = 1/√(1−0,36) = 1/√0,64 = 1/0,8 = 1,25."
+  - soal: "Berapa nilai faktor Lorentz (γ) untuk benda yang bergerak dengan kecepatan 0,8c?"
+    pilihan: ["Sekitar 1,67", "Sekitar 0,6", "Sekitar 1,25", "Sekitar 2"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1−v²/c²) = 1/√(1−0,64) = 1/√0,36 = 1/0,6 ≈ 1,67."
+  - soal: "Salah satu kesalahan paling umum saat menghitung efek relativistik (dilatasi waktu, kontraksi panjang, massa relativistik) adalah..."
+    pilihan: ["Lupa mengkuadratkan v/c sebelum dikurangkan dari 1 -- memakai v/c biasa, bukan (v/c)²", "Lupa mengalikan hasil akhir dengan 100%", "Memakai satuan meter padahal seharusnya kilometer", "Menghitung kecepatan cahaya c sebagai variabel, bukan konstanta"]
+    jawaban: 0
+    penjelasan: "Kesalahan paling umum adalah lupa mengkuadratkan v/c sebelum dikurangkan dari 1 -- rumusnya (v/c)², bukan v/c biasa."
+  - soal: "Kesalahan umum lainnya dalam soal relativitas khusus adalah menukar antara..."
+    pilihan: ["Nilai 'diam/sejati' (L₀ atau m₀) dengan nilai hasil pengukuran pengamat yang bergerak relatif (L atau m)", "Kecepatan cahaya c dengan kecepatan suara", "Satuan waktu dengan satuan jarak", "Massa dengan berat benda"]
+    jawaban: 0
+    penjelasan: "Kesalahan paling umum lainnya adalah menukar mana yang nilai diam/sejati (L₀, m₀) dan mana yang nilai hasil pengukuran pengamat yang bergerak relatif (L, m)."
+  - soal: "Dalam paradoks kembar, siapa yang mengalami waktu (proper time) lebih singkat, sehingga jadi lebih muda saat mereka bertemu kembali?"
+    pilihan: ["Yang bepergian dengan kecepatan tinggi", "Yang tinggal diam di Bumi", "Keduanya mengalami waktu yang sama persis", "Tidak bisa ditentukan tanpa tahu jarak tempuhnya"]
+    jawaban: 0
+    penjelasan: "Yang bepergian dengan kecepatan tinggi mengalami waktu sejati (proper time) yang lebih singkat, sehingga saat kembali dia jadi lebih muda dibanding kembarannya yang tinggal diam di Bumi."
+  - soal: "Dua saudara kembar berusia 20 tahun. Satu tinggal di Bumi, satu lainnya melakukan perjalanan dengan kecepatan 0,8c yang menurut jamnya sendiri berlangsung total 12 tahun. Berapa usia saudara yang tinggal di Bumi saat mereka bertemu kembali?"
+    pilihan: ["40 tahun", "32 tahun", "28,8 tahun", "36 tahun"]
+    jawaban: 0
+    penjelasan: "Δt' = Δt/√(1−v²/c²) = 12/√(1−0,64) = 12/0,6 = 20 tahun yang berlalu menurut saudara di Bumi. Usianya jadi 20 + 20 = 40 tahun (sedangkan yang bepergian cuma jadi 20 + 12 = 32 tahun)."
+  - soal: "Kenapa efek-efek relativistik (dilatasi waktu, kontraksi panjang, massa relativistik) di materi ini dianggap 'aneh' dibandingkan Fisika klasik/Newton?"
+    pilihan: ["Karena waktu, panjang, dan massa yang di Fisika klasik dianggap 'mutlak' sama untuk semua pengamat, ternyata berubah tergantung kecepatan relatif pengamat", "Karena semua rumus relativistik menghasilkan nilai negatif", "Karena benda yang bergerak cepat menghilang dari pandangan pengamat", "Karena kecepatan cahaya c berbeda-beda tergantung kerangka acuan"]
+    jawaban: 0
+    penjelasan: "Di Fisika klasik, waktu, panjang, dan massa dianggap besaran mutlak yang sama untuk semua pengamat -- relativitas khusus menunjukkan bahwa ketiganya justru relatif, berubah tergantung kecepatan relatif antar pengamat."
 draft: false
 ---
 

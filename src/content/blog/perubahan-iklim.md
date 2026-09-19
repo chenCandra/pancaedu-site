@@ -23,6 +23,90 @@ kuis:
     pilihan: ["Banjir, kekeringan, dan badai besar terjadi lebih sering dan lebih intens", "Cuaca ekstrem tidak ada hubungannya dengan perubahan iklim", "Cuaca ekstrem hanya terjadi di satu benua saja", "Perubahan iklim membuat cuaca selalu lebih tenang"]
     jawaban: 0
     penjelasan: "Perubahan iklim membuat kejadian cuaca ekstrem (banjir, kekeringan, gelombang panas, badai) terjadi lebih sering dan lebih intens dari sebelumnya."
+  - soal: "Apa yang membedakan istilah 'perubahan iklim' dari 'pemanasan global' menurut materi ini?"
+    pilihan: ["Perubahan iklim lebih luas, mencakup semua perubahan pola iklim (bukan cuma suhu) sebagai akibat suhu bumi yang naik", "Perubahan iklim dan pemanasan global adalah istilah yang sama sekali tidak berhubungan", "Perubahan iklim hanya membahas suhu, sedangkan pemanasan global membahas segalanya", "Perubahan iklim hanya terjadi di laut, pemanasan global di darat"]
+    jawaban: 0
+    penjelasan: "Perubahan iklim adalah istilah yang lebih luas -- mencakup semua perubahan pola iklim jangka panjang (termasuk pola angin, curah hujan, kondisi laut), bukan cuma suhu, sebagai akibat dari suhu bumi yang terus naik."
+  - soal: "Selain suhu, perubahan iklim menurut materi ini juga mencakup perubahan pola..."
+    pilihan: ["Angin, curah hujan, dan kondisi laut", "Warna langit dan posisi bintang", "Jumlah penduduk dunia", "Kecepatan rotasi bumi"]
+    jawaban: 0
+    penjelasan: "Perubahan iklim mencakup perubahan pola angin, curah hujan, dan kondisi laut, sebagai akibat dari suhu bumi yang terus naik."
+  - soal: "Menurut materi ini, kenaikan suhu global berperan sebagai..."
+    pilihan: ["Pemicu berbagai dampak lain seperti mencairnya es dan cuaca ekstrem", "Satu-satunya dampak yang berdiri sendiri tanpa pengaruh ke hal lain", "Dampak yang hanya terjadi di kutub", "Dampak yang tidak berhubungan dengan es dan laut"]
+    jawaban: 0
+    penjelasan: "Kenaikan suhu rata-rata bumi yang terus naik dari waktu ke waktu memicu berbagai dampak lain, seperti mencairnya es dan cuaca ekstrem."
+  - soal: "Mencairnya es kutub dan gletser gunung terjadi karena..."
+    pilihan: ["Suhu yang lebih tinggi mempercepat pencairannya", "Curah hujan yang menurun", "Aktivitas gunung berapi", "Berkurangnya jumlah hewan di kutub"]
+    jawaban: 0
+    penjelasan: "Suhu yang lebih tinggi mempercepat pencairan es di kutub dan gletser gunung, menambah volume air laut."
+  - soal: "Kenapa negara kepulauan dan kota pesisir menghadapi risiko lebih besar dari kenaikan permukaan laut?"
+    pilihan: ["Karena sebagian daratannya hanya sedikit di atas permukaan laut, sehingga kenaikan sedikit saja berarti banjir rob lebih sering", "Karena daerah pesisir tidak punya penduduk sama sekali", "Karena laut di sekitar pesisir tidak pernah surut", "Karena pesisir selalu berada jauh dari sumber air laut"]
+    jawaban: 0
+    penjelasan: "Negara kepulauan dan kota pesisir berisiko lebih besar karena sebagian daratannya hanya sedikit di atas permukaan laut -- kenaikan beberapa sentimeter saja bisa berarti banjir rob yang lebih sering dan lebih parah."
+  - soal: "Sebuah kota pesisir menghadapi ancaman kenaikan permukaan laut. Dari lima dampak perubahan iklim yang dibahas, dampak yang paling langsung mengancam kota itu adalah..."
+    pilihan: ["Kenaikan permukaan laut", "Ancaman keanekaragaman hayati di hutan pegunungan", "Kekeringan di daerah gurun", "Perubahan pola migrasi burung"]
+    jawaban: 0
+    penjelasan: "Kenaikan permukaan laut, akibat es yang mencair dan air laut yang memuai, paling langsung mengancam kota-kota pesisir dan pulau kecil."
+  - soal: "Pernyataan 'perubahan iklim cuma soal cuaca jadi lebih panas' menurut materi ini..."
+    pilihan: ["Terlalu sempit -- perubahan iklim mencakup berbagai dampak seperti kenaikan permukaan laut, cuaca ekstrem, dan ancaman keanekaragaman hayati", "Benar sepenuhnya, perubahan iklim hanya soal suhu", "Hanya berlaku untuk daerah tropis", "Berlaku kalau suhunya naik lebih dari 5°C"]
+    jawaban: 0
+    penjelasan: "Perubahan iklim mencakup berbagai dampak -- kenaikan permukaan laut, cuaca ekstrem yang lebih sering, ancaman keanekaragaman hayati -- bukan cuma soal suhu naik."
+  - soal: "Materi ini menyebut beberapa jenis cuaca ekstrem yang terjadi lebih sering akibat perubahan iklim, yaitu..."
+    pilihan: ["Banjir, kekeringan, gelombang panas, dan badai besar", "Hujan salju di daerah tropis", "Gempa bumi dan tsunami", "Letusan gunung berapi"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan banjir, kekeringan, gelombang panas, dan badai besar sebagai cuaca ekstrem yang terjadi lebih sering dan lebih intens akibat perubahan iklim."
+  - soal: "Perubahan suhu dan habitat yang cepat meningkatkan risiko..."
+    pilihan: ["Kepunahan bagi spesies yang kesulitan beradaptasi", "Perkembangbiakan yang lebih cepat bagi semua spesies", "Migrasi yang lebih mudah bagi semua hewan", "Pertumbuhan populasi manusia"]
+    jawaban: 0
+    penjelasan: "Perubahan suhu dan habitat yang cepat membuat banyak spesies kesulitan beradaptasi, meningkatkan risiko kepunahan."
+  - soal: "Materi Perubahan Iklim ini adalah kelanjutan dari materi yang membahas dampak pemanasan global dalam skala keseharian, yaitu..."
+    pilihan: ["Dampak Pemanasan Global dalam Kehidupan Sehari-hari", "Gas Rumah Kaca: Jenis dan Sumbernya", "Jejak Karbon dan Aksi Individu", "Faktor Penyebab Pemanasan Global"]
+    jawaban: 0
+    penjelasan: "Materi ini melanjutkan dari Dampak Pemanasan Global dalam Kehidupan Sehari-hari, memperbesar sudut pandang ke skala bumi secara keseluruhan."
+  - soal: "Setelah membahas dampak skala bumi, materi selanjutnya dalam bab ini membahas..."
+    pilihan: ["Upaya Global dan Nasional", "Jejak Karbon dan Aksi Individu", "Hakikat Fisika", "Gas Rumah Kaca"]
+    jawaban: 0
+    penjelasan: "Materi ini diakhiri dengan tautan lanjutan ke Upaya Global dan Nasional, membahas upaya nyata menghadapi perubahan iklim di tingkat global dan negara."
+  - soal: "Menurut materi ini, ada berapa dampak perubahan iklim dalam skala bumi yang dibahas?"
+    pilihan: ["5", "3", "7", "2"]
+    jawaban: 0
+    penjelasan: "Materi ini membahas lima dampak: kenaikan suhu global, mencairnya es kutub/gletser, kenaikan permukaan laut, cuaca ekstrem, dan ancaman keanekaragaman hayati."
+  - soal: "Banjir rob yang lebih sering terjadi di daerah pesisir merupakan dampak turunan dari kombinasi kenaikan permukaan laut dengan..."
+    pilihan: ["Kondisi daratan pesisir yang hanya sedikit di atas permukaan laut", "Cuaca ekstrem di daerah gurun", "Ancaman keanekaragaman hayati", "Mencairnya gletser di pegunungan yang jauh dari laut"]
+    jawaban: 0
+    penjelasan: "Banjir rob lebih sering terjadi karena kombinasi kenaikan permukaan laut dengan kondisi daratan pesisir yang hanya sedikit di atas permukaan laut."
+  - soal: "Menurut materi ini, dampak perubahan iklim dirasakan..."
+    pilihan: ["Tidak sama rata di setiap daerah bumi", "Sama persis di semua daerah tanpa perbedaan", "Hanya di negara maju", "Hanya di belahan bumi utara"]
+    jawaban: 0
+    penjelasan: "Dampak perubahan iklim tidak dirasakan sama rata -- misalnya negara kepulauan dan kota pesisir menghadapi risiko lebih besar dari kenaikan permukaan laut."
+  - soal: "Materi ini menyebutkan bahwa banyak wilayah di negara mana yang termasuk daerah pesisir berisiko dari kenaikan permukaan laut?"
+    pilihan: ["Indonesia", "Swiss", "Mongolia", "Nepal"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan bahwa banyak wilayah di Indonesia termasuk kota-kota pesisir yang berisiko lebih besar dari kenaikan permukaan laut."
+  - soal: "Materi ini menyebutkan cuaca ekstrem terjadi lebih sering dan lebih intens di..."
+    pilihan: ["Berbagai belahan bumi", "Hanya satu benua saja", "Hanya di daerah kutub", "Hanya di negara berkembang"]
+    jawaban: 0
+    penjelasan: "Materi ini menyebutkan cuaca ekstrem seperti banjir, kekeringan, gelombang panas, dan badai terjadi lebih sering dan lebih intens di berbagai belahan bumi."
+  - soal: "Menurut materi ini, kenapa dampak perubahan iklim TIDAK dirasakan sama rata oleh setiap daerah di bumi?"
+    pilihan: ["Karena kondisi geografis tiap daerah berbeda, misalnya daerah pesisir dan pulau kecil lebih rentan terhadap kenaikan laut", "Karena perubahan iklim hanya terjadi di beberapa negara tertentu", "Karena hanya negara miskin yang terdampak", "Karena dampak perubahan iklim sebenarnya sama rata di semua tempat"]
+    jawaban: 0
+    penjelasan: "Dampak perubahan iklim dirasakan tidak sama rata karena kondisi geografis tiap daerah berbeda -- daerah pesisir dan pulau kecil, misalnya, jauh lebih rentan terhadap kenaikan permukaan laut."
+  - soal: "Mencairnya es kutub dan gletser menambah..."
+    pilihan: ["Volume air laut", "Jumlah spesies di kutub", "Curah hujan di gurun", "Suhu inti bumi"]
+    jawaban: 0
+    penjelasan: "Mencairnya es di kutub dan gletser gunung menambah volume air laut, salah satu penyebab kenaikan permukaan laut."
+  - soal: "Manakah yang TERMASUK salah satu dari lima dampak perubahan iklim skala bumi menurut materi ini?"
+    pilihan: ["Ancaman keanekaragaman hayati", "Peningkatan jumlah penduduk", "Penurunan harga bahan bakar fosil", "Peningkatan produksi pertanian secara global"]
+    jawaban: 0
+    penjelasan: "Ancaman keanekaragaman hayati adalah salah satu dari lima dampak perubahan iklim skala bumi yang dibahas materi ini, karena banyak spesies kesulitan beradaptasi."
+  - soal: "Menurut materi ini, perubahan iklim (termasuk perubahan pola angin dan curah hujan) terjadi sebagai akibat dari..."
+    pilihan: ["Suhu bumi yang terus naik", "Perubahan posisi benua", "Perubahan jumlah bintang di langit", "Peningkatan jumlah gunung berapi aktif"]
+    jawaban: 0
+    penjelasan: "Perubahan iklim, termasuk perubahan pola angin dan curah hujan, terjadi sebagai akibat dari suhu bumi yang terus naik."
+  - soal: "Sebuah spesies burung di pegunungan kesulitan menemukan habitat yang sesuai karena suhu di sekitarnya terus naik. Ini adalah contoh dampak perubahan iklim berupa..."
+    pilihan: ["Ancaman keanekaragaman hayati", "Kenaikan permukaan laut", "Mencairnya es kutub", "Cuaca ekstrem"]
+    jawaban: 0
+    penjelasan: "Kesulitan spesies beradaptasi dengan perubahan suhu dan habitat adalah contoh ancaman keanekaragaman hayati, salah satu dampak perubahan iklim skala bumi."
 draft: false
 ---
 

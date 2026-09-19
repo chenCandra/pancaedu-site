@@ -27,6 +27,86 @@ kuis:
     pilihan: ["Besaran yang tidak memiliki satuan", "Besaran yang hanya dapat diukur menggunakan alat khusus", "Besaran yang dibentuk dari kombinasi besaran pokok", "Besaran yang selalu memiliki nama satuan khusus"]
     jawaban: 2
     penjelasan: "Besaran turunan diperoleh dari kombinasi satu atau lebih besaran pokok melalui hubungan matematis."
+  - soal: "Sebuah kotak berukuran panjang 3 m, lebar 2 m, dan tinggi 0,5 m. Volume kotak tersebut adalah..."
+    pilihan: ["1,5 m³", "3 m³", "6 m³", "3 m²"]
+    jawaban: 1
+    penjelasan: "V = p × l × t = 3 × 2 × 0,5 = 3 m³."
+  - soal: "Satuan SI untuk volume, yang dibentuk dari tiga besaran panjang yang dikalikan, adalah..."
+    pilihan: ["m²", "m³", "m", "m/s³"]
+    jawaban: 1
+    penjelasan: "Volume balok V = p × l × t, sehingga satuannya m × m × m = m³."
+  - soal: "Sebuah sepeda menempuh jarak 150 m dalam waktu 10 s. Kecepatan sepeda tersebut adalah..."
+    pilihan: ["10 m/s", "15 m/s", "150 m/s", "1500 m/s"]
+    jawaban: 1
+    penjelasan: "v = s/t = 150/10 = 15 m/s."
+  - soal: "Kecepatan sebuah mobil berubah dari 10 m/s menjadi 30 m/s dalam waktu 4 s. Percepatan mobil tersebut adalah..."
+    pilihan: ["5 m/s²", "20 m/s²", "40 m/s²", "8 m/s²"]
+    jawaban: 0
+    penjelasan: "a = Δv/Δt = (30 − 10)/4 = 20/4 = 5 m/s²."
+  - soal: "Satuan SI untuk percepatan adalah..."
+    pilihan: ["m/s", "m/s²", "m·s", "m²/s"]
+    jawaban: 1
+    penjelasan: "Percepatan a = Δv/Δt, dengan satuan kecepatan (m/s) dibagi waktu (s), sehingga hasilnya m/s²."
+  - soal: "Sebuah benda memiliki massa 6 kg dan volume 0,002 m³. Massa jenis benda tersebut adalah..."
+    pilihan: ["300 kg/m³", "3000 kg/m³", "0,003 kg/m³", "12 kg/m³"]
+    jawaban: 1
+    penjelasan: "ρ = m/V = 6/0,002 = 3000 kg/m³."
+  - soal: "Massa jenis (ρ) didefinisikan sebagai perbandingan antara..."
+    pilihan: ["Massa terhadap waktu", "Massa terhadap volume", "Volume terhadap massa", "Berat terhadap volume"]
+    jawaban: 1
+    penjelasan: "Massa jenis dirumuskan ρ = m/V, yaitu massa dibagi volume."
+  - soal: "Pada bagian 'Hubungan Besaran Turunan dengan Dimensi' di materi ini, gaya (F = m × a) dinyatakan memiliki dimensi..."
+    pilihan: ["LT⁻²", "MLT⁻²", "ML²T⁻²", "ML⁻¹T⁻²"]
+    jawaban: 1
+    penjelasan: "Karena [F] = [m] × [a] = M × LT⁻² = MLT⁻², sesuai contoh yang diberikan di bagian tersebut."
+  - soal: "Satuan newton (N), jika diuraikan ke satuan dasar SI, setara dengan..."
+    pilihan: ["kg/m²", "kg·m/s²", "kg·m²/s²", "kg/s²"]
+    jawaban: 1
+    penjelasan: "Karena F = m × a, satuan gaya = satuan massa (kg) × satuan percepatan (m/s²) = kg·m/s²."
+  - soal: "Gaya sebesar 200 N bekerja pada permukaan seluas 4 m². Tekanan yang dihasilkan adalah..."
+    pilihan: ["50 Pa", "800 Pa", "5 Pa", "0,02 Pa"]
+    jawaban: 0
+    penjelasan: "P = F/A = 200/4 = 50 Pa."
+  - soal: "Tekanan (P) didefinisikan sebagai..."
+    pilihan: ["Gaya yang bekerja pada setiap satuan waktu", "Gaya yang bekerja pada setiap satuan luas", "Energi yang bekerja pada setiap satuan luas", "Massa yang bekerja pada setiap satuan luas"]
+    jawaban: 1
+    penjelasan: "Tekanan dirumuskan P = F/A, yaitu gaya per satuan luas permukaan."
+  - soal: "Sebuah gaya 15 N bekerja searah perpindahan sejauh 4 m. Usaha yang dilakukan adalah..."
+    pilihan: ["3,75 J", "19 J", "60 J", "11 J"]
+    jawaban: 2
+    penjelasan: "W = F × s = 15 × 4 = 60 J."
+  - soal: "Satuan SI untuk usaha dan energi adalah..."
+    pilihan: ["Newton (N)", "Pascal (Pa)", "Joule (J)", "Watt (W)"]
+    jawaban: 2
+    penjelasan: "Usaha dan energi sama-sama memiliki satuan SI joule (J)."
+  - soal: "Karena 1 J = 1 N·m dan 1 N = 1 kg·m/s², maka 1 J setara dengan..."
+    pilihan: ["1 kg·m/s", "1 kg·m²/s²", "1 kg²·m/s²", "1 kg/m²·s²"]
+    jawaban: 1
+    penjelasan: "1 J = 1 N·m = (1 kg·m/s²)·m = 1 kg·m²/s²."
+  - soal: "Dua orang melakukan usaha sebesar 500 J. Orang pertama menyelesaikannya dalam 10 s. Besar daya orang pertama adalah..."
+    pilihan: ["5 W", "50 W", "500 W", "5000 W"]
+    jawaban: 1
+    penjelasan: "P = W/t = 500/10 = 50 W."
+  - soal: "Dua orang melakukan usaha yang sama, tapi orang pertama menyelesaikannya lebih cepat daripada orang kedua. Maka..."
+    pilihan: ["Daya orang pertama lebih kecil", "Daya orang pertama lebih besar", "Daya keduanya pasti sama karena usahanya sama", "Usaha orang pertama lebih besar"]
+    jawaban: 1
+    penjelasan: "Daya = usaha/waktu. Usaha yang sama diselesaikan dalam waktu lebih singkat berarti daya yang lebih besar."
+  - soal: "Satuan SI untuk daya, yaitu usaha per satuan waktu, adalah..."
+    pilihan: ["Joule (J)", "Newton (N)", "Watt (W)", "Pascal (Pa)"]
+    jawaban: 2
+    penjelasan: "Daya P = W/t, dengan satuan SI watt (W), atau 1 W = 1 J/s."
+  - soal: "'Meter persegi adalah besaran turunan' -- pernyataan ini..."
+    pilihan: ["Benar", "Kurang tepat, karena luas adalah besaran turunannya, sedangkan meter persegi (m²) adalah satuannya", "Benar, tapi hanya untuk bidang datar", "Kurang tepat, karena meter persegi termasuk besaran pokok"]
+    jawaban: 1
+    penjelasan: "Luas adalah besaran turunan, sedangkan meter persegi (m²) adalah satuannya -- keduanya tidak boleh disamakan."
+  - soal: "'Semua besaran yang memiliki satuan khusus (seperti newton, pascal, joule, watt) merupakan besaran pokok' -- pernyataan ini..."
+    pilihan: ["Benar", "Salah, karena newton, pascal, joule, dan watt semuanya satuan untuk besaran TURUNAN", "Benar, tapi hanya berlaku untuk newton", "Salah, karena besaran pokok tidak punya satuan"]
+    jawaban: 1
+    penjelasan: "Newton, pascal, joule, dan watt punya nama satuan khusus, tapi semuanya merupakan satuan untuk besaran turunan (gaya, tekanan, usaha/energi, dan daya)."
+  - soal: "Cara sederhana untuk menentukan apakah suatu besaran termasuk besaran turunan adalah dengan bertanya..."
+    pilihan: ["'Apakah besaran ini punya nama satuan khusus?'", "'Apakah besaran ini dapat dinyatakan sebagai kombinasi dari besaran pokok?'", "'Apakah besaran ini sering muncul di soal ujian?'", "'Apakah besaran ini bisa diukur dengan alat digital?'"]
+    jawaban: 1
+    penjelasan: "Kuncinya adalah memeriksa apakah besaran tersebut dapat dinyatakan sebagai kombinasi dari besaran pokok, seperti kecepatan = panjang/waktu."
 draft: false
 ---
 

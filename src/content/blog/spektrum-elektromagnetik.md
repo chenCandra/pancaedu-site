@@ -28,6 +28,90 @@ kuis:
     pilihan: ["Sinar Gamma", "Gelombang Radio", "Inframerah", "Cahaya Tampak"]
     jawaban: 0
     penjelasan: "Sinar Gamma punya panjang gelombang paling pendek dan energi paling tinggi di seluruh spektrum, cukup kuat untuk merusak sel kanker maupun mensterilkan alat medis."
+  - soal: "Siapa fisikawan yang pertama menyadari bahwa medan listrik dan medan magnet yang berubah bisa saling 'menghidupkan' dan merambat sebagai gelombang?"
+    pilihan: ["James Clerk Maxwell", "Albert Einstein", "Isaac Newton", "Michael Faraday"]
+    jawaban: 0
+    penjelasan: "James Clerk Maxwell menyadari bahwa medan listrik dan magnet yang berosilasi bisa saling menghasilkan dan merambat sendiri sebagai gelombang elektromagnetik."
+  - soal: "Siapa yang membuktikan secara eksperimen prediksi Maxwell dengan menghasilkan dan mendeteksi gelombang radio di laboratoriumnya?"
+    pilihan: ["Heinrich Hertz", "Hans Christian Oersted", "Albert Einstein", "Thomas Edison"]
+    jawaban: 0
+    penjelasan: "Heinrich Hertz membuktikan prediksi Maxwell dengan menghasilkan dan mendeteksi gelombang radio."
+  - soal: "Kesimpulan radikal apa yang diambil Maxwell setelah menghitung kecepatan rambat gelombang elektromagnetik dan mendapati sama persis dengan kecepatan cahaya?"
+    pilihan: ["Cahaya itu sendiri adalah gelombang elektromagnetik", "Cahaya adalah partikel padat, bukan gelombang", "Kecepatan cahaya sebenarnya jauh lebih lambat dari perkiraan", "Gelombang elektromagnetik tidak berhubungan dengan cahaya"]
+    jawaban: 0
+    penjelasan: "Karena kecepatan rambat gelombang elektromagnetik sama dengan kecepatan cahaya, Maxwell menyimpulkan cahaya itu sendiri adalah gelombang elektromagnetik."
+  - soal: "Kenapa gelombang elektromagnetik bisa merambat TANPA butuh kawat atau muatan listrik sama sekali?"
+    pilihan: ["Karena medan listrik dan medan magnet yang berosilasi bisa saling menghasilkan satu sama lain sambil merambat", "Karena gelombang elektromagnetik sebenarnya memakai kawat yang sangat tipis", "Karena ruang hampa sendiri menghasilkan listrik", "Karena gelombang ini tidak benar-benar merambat, hanya terlihat merambat"]
+    jawaban: 0
+    penjelasan: "Medan listrik dan medan magnet yang saling berosilasi bisa 'menghidupkan' satu sama lain tanpa butuh kawat atau muatan."
+  - soal: "Berbeda dari gelombang elektromagnetik, gelombang BUNYI wajib membutuhkan..."
+    pilihan: ["Medium (udara, air, atau zat padat) untuk merambat", "Kecepatan cahaya untuk merambat", "Medan magnet untuk merambat", "Panjang gelombang yang sangat pendek"]
+    jawaban: 0
+    penjelasan: "Gelombang bunyi wajib butuh medium, berbeda dari gelombang elektromagnetik yang bisa merambat di ruang hampa."
+  - soal: "Kenapa cahaya matahari bisa sampai ke Bumi meski melewati ruang hampa udara di luar angkasa?"
+    pilihan: ["Karena gelombang elektromagnetik (termasuk cahaya) tidak membutuhkan medium untuk merambat", "Karena luar angkasa sebenarnya tidak hampa udara", "Karena cahaya matahari merambat lewat medan gravitasi", "Karena Bumi menarik cahaya matahari secara aktif"]
+    jawaban: 0
+    penjelasan: "Gelombang elektromagnetik tidak butuh medium, sehingga bisa menembus ruang hampa udara di luar angkasa."
+  - soal: "Kalau panjang gelombang suatu radiasi elektromagnetik adalah 2 meter, radiasi ini paling mungkin termasuk daerah..."
+    pilihan: ["Gelombang Radio", "Sinar Gamma", "Sinar-X", "Sinar Ultraviolet"]
+    jawaban: 0
+    penjelasan: "Menurut tabel di artikel, Gelombang Radio punya panjang gelombang lebih dari 1 meter -- 2 meter masuk daerah ini."
+  - soal: "Kalau panjang gelombang suatu radiasi elektromagnetik adalah 500 nanometer, radiasi ini termasuk daerah..."
+    pilihan: ["Cahaya Tampak", "Gelombang Mikro", "Sinar Gamma", "Sinar-X"]
+    jawaban: 0
+    penjelasan: "Menurut tabel di artikel, Cahaya Tampak berkisar 400-700 nm, dan 500 nm masuk rentang itu."
+  - soal: "Urutan daerah spektrum elektromagnetik dari panjang gelombang PALING BESAR ke PALING KECIL yang benar adalah..."
+    pilihan: ["Radio, Mikro, Inframerah, Cahaya Tampak, Ultraviolet, Sinar-X, Gamma", "Gamma, Sinar-X, Ultraviolet, Cahaya Tampak, Inframerah, Mikro, Radio", "Cahaya Tampak, Radio, Gamma, Mikro, Inframerah, Ultraviolet, Sinar-X", "Radio, Gamma, Mikro, Sinar-X, Ultraviolet, Inframerah, Cahaya Tampak"]
+    jawaban: 0
+    penjelasan: "Urutan dari panjang gelombang paling besar ke paling kecil sesuai tabel: Radio, Mikro, Inframerah, Cahaya Tampak, Ultraviolet, Sinar-X, Gamma."
+  - soal: "Kenapa daerah Cahaya Tampak disebut sebagai jendela kecil dalam keseluruhan spektrum elektromagnetik?"
+    pilihan: ["Karena rentangnya (400-700 nm) sangat sempit dibanding keseluruhan spektrum yang jauh lebih luas", "Karena cahaya tampak punya energi paling tinggi di seluruh spektrum", "Karena cahaya tampak satu-satunya gelombang yang bisa merambat di ruang hampa", "Karena cahaya tampak hanya ada pada malam hari"]
+    jawaban: 0
+    penjelasan: "Rentang Cahaya Tampak (400-700 nm) sangat sempit dibanding keseluruhan spektrum yang jauh lebih luas di kedua sisinya."
+  - soal: "WiFi dan Bluetooth di rumahmu memanfaatkan daerah spektrum elektromagnetik yang mana?"
+    pilihan: ["Gelombang Mikro", "Sinar Ultraviolet", "Sinar Gamma", "Sinar-X"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut WiFi dan Bluetooth sebagai pemanfaatan daerah Gelombang Mikro."
+  - soal: "Microwave oven memanaskan makanan lewat mekanisme..."
+    pilihan: ["Getaran molekul air akibat gelombang mikro", "Pembakaran langsung oleh api kecil di dalamnya", "Sinar-X yang menembus makanan", "Reaksi kimia dari sinar gamma"]
+    jawaban: 0
+    penjelasan: "Microwave oven memanaskan makanan lewat getaran molekul air akibat gelombang mikro."
+  - soal: "Remote control TV/AC dan kamera termal (thermal imaging) untuk mendeteksi suhu tubuh, keduanya memanfaatkan daerah spektrum..."
+    pilihan: ["Inframerah", "Ultraviolet", "Sinar-X", "Gelombang Radio"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut remote control dan kamera termal sebagai pemanfaatan daerah Inframerah."
+  - soal: "Sunburn (kulit terbakar matahari) dan sterilisasi ruangan dengan lampu UV, keduanya berkaitan dengan daerah spektrum..."
+    pilihan: ["Ultraviolet", "Inframerah", "Gelombang Mikro", "Gelombang Radio"]
+    jawaban: 0
+    penjelasan: "Sunburn dan sterilisasi lampu UV berkaitan dengan daerah Ultraviolet."
+  - soal: "Rontgen medis memanfaatkan sifat Sinar-X yang bisa..."
+    pilihan: ["Menembus jaringan lunak tapi diserap oleh tulang", "Menembus tulang tapi diserap jaringan lunak", "Dipantulkan sepenuhnya oleh kulit", "Tidak berinteraksi dengan tubuh manusia sama sekali"]
+    jawaban: 0
+    penjelasan: "Sinar-X menembus jaringan lunak tapi diserap tulang, sehingga tulang terlihat sebagai bayangan putih di hasil rontgen."
+  - soal: "Sinar Gamma di alam bisa dipancarkan secara alami lewat proses..."
+    pilihan: ["Peluruhan radioaktif inti atom", "Fotosintesis tumbuhan", "Getaran molekul air", "Pembangkitan listrik dari solenoida"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut Sinar Gamma dipancarkan lewat peluruhan radioaktif inti atom."
+  - soal: "Kenapa sinyal WiFi (gelombang mikro) lebih mudah menembus tembok dibanding cahaya tampak dari ruangan sebelah?"
+    pilihan: ["Karena panjang gelombang gelombang mikro jauh lebih besar, membuatnya lebih mudah menembus rintangan seperti tembok", "Karena gelombang mikro punya energi jauh lebih besar dari cahaya tampak", "Karena cahaya tampak sebenarnya tidak bisa merambat sama sekali", "Karena tembok hanya menghalangi gelombang berfrekuensi rendah"]
+    jawaban: 0
+    penjelasan: "Panjang gelombang gelombang mikro jauh lebih besar dari cahaya tampak, membuatnya lebih mudah menembus rintangan seperti tembok."
+  - soal: "Manakah pernyataan yang PALING tepat tentang hubungan gelombang radio dan cahaya tampak?"
+    pilihan: ["Keduanya adalah gelombang elektromagnetik yang persis sama secara fisis, hanya beda panjang gelombang dan frekuensi", "Keduanya adalah dua jenis gelombang yang benar-benar berbeda", "Gelombang radio adalah bentuk gelombang bunyi, bukan gelombang elektromagnetik", "Cahaya tampak tidak termasuk gelombang elektromagnetik"]
+    jawaban: 0
+    penjelasan: "Gelombang radio dan cahaya tampak sama-sama gelombang elektromagnetik, hanya beda panjang gelombang dan frekuensi."
+  - soal: "Apa dua fakta yang digabungkan Maxwell untuk melahirkan gagasan gelombang elektromagnetik?"
+    pilihan: ["Arus berubah menghasilkan medan magnet, dan medan magnet berubah menghasilkan medan listrik (GGL induksi)", "Massa dan energi setara, serta gravitasi memengaruhi cahaya", "Kecepatan cahaya konstan dan waktu bersifat relatif", "Semikonduktor bisa didoping dan dioda menyearahkan arus"]
+    jawaban: 0
+    penjelasan: "Maxwell menggabungkan fakta arus berubah menghasilkan medan magnet, dan medan magnet berubah menghasilkan medan listrik induksi."
+  - soal: "Bab apa yang baru selesai dibahas secara TUNTAS setelah materi Spektrum Elektromagnetik ini, menurut penutup artikel?"
+    pilihan: ["Fenomena Elektromagnetik", "Teori Dasar Digital", "Teori Dasar Fisika Modern", "Rangkaian Listrik"]
+    jawaban: 0
+    penjelasan: "Penutup artikel menyatakan bab Fenomena Elektromagnetik tuntas dibahas setelah materi ini."
+  - soal: "Pemindai keamanan di bandara memanfaatkan daerah spektrum elektromagnetik yang sama dengan yang dipakai untuk..."
+    pilihan: ["Rontgen medis (Sinar-X)", "Terapi kanker (Sinar Gamma)", "WiFi (Gelombang Mikro)", "Remote TV (Inframerah)"]
+    jawaban: 0
+    penjelasan: "Artikel menyebut pemindai keamanan bandara sebagai pemanfaatan Sinar-X, sama seperti rontgen medis."
 draft: false
 ---
 

@@ -35,6 +35,78 @@ kuis:
     pilihan: ["1", "2", "9", "Tak terhingga"]
     jawaban: 1
     penjelasan: "Pada notasi ilmiah, yang dihitung sebagai angka penting HANYA digit pada koefisiennya (4,7) -- pangkat 10 (10⁻⁹, atau awalan 'nano' yang mewakilinya) tidak ikut dihitung. Jumlah angka pentingnya 2."
+  - soal: "Bilangan 205 punya berapa jumlah angka penting?"
+    pilihan: ["1", "2", "3", "4"]
+    jawaban: 2
+    penjelasan: "Angka nol yang terletak di ANTARA dua angka bukan nol (2 dan 5) ikut dihitung sebagai angka penting. Jadi 205 punya 3 angka penting (2, 0, 5)."
+  - soal: "Bilangan 0,0034 punya berapa jumlah angka penting?"
+    pilihan: ["1", "2", "3", "4"]
+    jawaban: 1
+    penjelasan: "Angka nol di depan angka bukan nol (0,0034) cuma penanda tempat, bukan angka penting. Yang dihitung cuma 3 dan 4, jadi totalnya 2 angka penting."
+  - soal: "Manakah pernyataan yang benar soal jumlah angka penting pada 4,5 dibanding 4,50?"
+    pilihan: ["Keduanya sama, sama-sama 2 angka penting", "4,50 punya lebih banyak angka penting (3) daripada 4,5 (2)", "4,5 punya lebih banyak angka penting daripada 4,50", "Angka penting tidak berlaku untuk bilangan berkoma"]
+    jawaban: 1
+    penjelasan: "Angka nol di belakang koma setelah angka bukan nol tetap dihitung sebagai angka penting. 4,50 punya 3 angka penting (4, 5, 0), sedangkan 4,5 cuma 2 (4 dan 5)."
+  - soal: "Di dalam kelas ada 32 siswa. Angka '32' pada kalimat ini termasuk kategori apa dalam aturan angka penting?"
+    pilihan: ["Bilangan eksak, dengan angka penting tak terhingga", "Bilangan dengan 2 angka penting", "Bilangan dengan cuma 1 angka penting", "Bilangan yang wajib ditulis dalam notasi ilmiah"]
+    jawaban: 0
+    penjelasan: "32 siswa adalah hasil membilang langsung (bukan hasil pengukuran alat), jadi termasuk bilangan eksak yang dianggap punya angka penting tak terhingga -- tidak membatasi ketelitian hasil operasi hitung."
+  - soal: "Kenapa hasil bacaan jangka sorong tidak boleh dituliskan dengan dua angka taksiran, seperti '2,344 cm'?"
+    pilihan: ["Karena dalam satu hasil pengukuran cuma boleh ada SATU angka taksiran di ujung akhir", "Karena angka desimal lebih dari dua tidak diperbolehkan dalam matematika", "Karena jangka sorong tidak bisa mengukur sampai milimeter", "Karena angka penting hanya berlaku untuk bilangan bulat"]
+    jawaban: 0
+    penjelasan: "Aturan angka penting menetapkan hanya SATU angka taksiran yang boleh dituliskan di ujung akhir hasil pengukuran. Menuliskan dua angka taksiran seperti '2,344 cm' berarti berpura-pura lebih teliti dari kemampuan alatnya."
+  - soal: "Sesuai tabel awalan satuan, 1 km sama dengan berapa meter?"
+    pilihan: ["10³ m = 1.000 m", "10⁻³ m = 0,001 m", "10⁶ m = 1.000.000 m", "100 m"]
+    jawaban: 0
+    penjelasan: "Awalan 'kilo' (k) mewakili faktor pengali 10³, jadi 1 km = 10³ m = 1.000 m."
+  - soal: "Sebuah kapasitor bernilai 8 μF. Kalau ditulis tanpa awalan mikro (dalam notasi biasa), nilainya menjadi..."
+    pilihan: ["0,000008 F", "8.000.000 F", "0,008 F", "800.000 F"]
+    jawaban: 0
+    penjelasan: "Awalan 'mikro' (μ) mewakili faktor pengali 10⁻⁶, jadi 8 μF = 8 × 10⁻⁶ F = 0,000008 F."
+  - soal: "Hasil dari 5,62 + 1,3 menurut aturan angka penting adalah..."
+    pilihan: ["6,92", "6,9", "6,90", "7,0"]
+    jawaban: 1
+    penjelasan: "Hasil hitungan murni 5,62 + 1,3 = 6,92, tapi 1,3 cuma punya 1 angka di belakang koma, jadi hasil akhirnya dibulatkan jadi 1 angka di belakang koma juga: 6,9."
+  - soal: "Hasil dari 4,2 × 1,58 menurut aturan angka penting adalah..."
+    pilihan: ["6,636", "6,64", "6,6", "7"]
+    jawaban: 2
+    penjelasan: "Hasil hitungan murni 4,2 × 1,58 = 6,636. Karena 4,2 cuma punya 2 angka penting (paling sedikit di antara keduanya), hasil akhirnya dibulatkan jadi 2 angka penting: 6,6."
+  - soal: "6,35 dibulatkan sampai 2 angka penting menjadi..."
+    pilihan: ["6,3", "6,4", "6,35", "6,30"]
+    jawaban: 1
+    penjelasan: "Angka yang dibuang (5) lebih besar atau sama dengan 5, jadi angka terakhir yang disimpan dibulatkan naik satu: 6,3 menjadi 6,4."
+  - soal: "7,42 dibulatkan sampai 2 angka penting menjadi..."
+    pilihan: ["7,4", "7,5", "7,42", "7,40"]
+    jawaban: 0
+    penjelasan: "Angka yang dibuang (2) lebih kecil dari 5, jadi angka terakhir yang disimpan tetap: hasilnya 7,4."
+  - soal: "Menurut anggapan yang salah, semakin banyak angka di belakang koma yang dituliskan pada hasil pengukuran, semakin akurat hasilnya. Kenapa anggapan ini keliru?"
+    pilihan: ["Karena jumlah angka yang dituliskan harus sesuai ketelitian alat ukur, bukan ditambah-tambah supaya kelihatan presisi", "Anggapan itu benar, tidak keliru", "Karena angka di belakang koma tidak pernah termasuk angka penting", "Karena akurasi cuma berlaku untuk notasi ilmiah"]
+    jawaban: 0
+    penjelasan: "Menuliskan angka penting yang lebih banyak dari ketelitian alat justru menunjukkan belum paham cara membacanya, bukan sebaliknya. Ketelitian ditentukan alat ukur, bukan oleh banyaknya digit yang ditulis."
+  - soal: "Apa perbedaan patokan pembulatan pada operasi tambah-kurang dibanding kali-bagi angka penting?"
+    pilihan: ["Tambah-kurang berpatokan pada angka di belakang koma paling sedikit, kali-bagi berpatokan pada jumlah angka penting paling sedikit", "Keduanya berpatokan pada jumlah angka penting paling sedikit", "Keduanya berpatokan pada angka di belakang koma paling sedikit", "Tambah-kurang tidak punya aturan pembulatan sama sekali"]
+    jawaban: 0
+    penjelasan: "Ini pasangan aturan yang paling sering tertukar: tambah-kurang lihat angka di belakang koma, sedangkan kali-bagi lihat total angka penting."
+  - soal: "Kalkulator menampilkan hasil kali dua bilangan dengan banyak digit desimal. Bolehkah semua digit itu langsung ditulis sebagai jawaban akhir?"
+    pilihan: ["Tidak -- hasil akhir tetap harus dibulatkan sesuai jumlah angka penting paling sedikit dari bilangan yang dioperasikan", "Boleh, karena kalkulator selalu akurat", "Boleh, tapi hanya untuk pembagian", "Tidak, karena kalkulator tidak bisa menghitung perkalian angka penting"]
+    jawaban: 0
+    penjelasan: "Kalkulator tidak tahu berapa ketelitian alat ukur yang dipakai -- ia cuma menghitung angka murni. Pembulatan sesuai jumlah angka penting paling sedikit tetap harus dilakukan manual di akhir."
+  - soal: "Kenapa jumlah angka penting yang bisa dituliskan pada suatu hasil pengukuran bergantung pada alat ukur yang dipakai?"
+    pilihan: ["Karena ketelitian tiap alat ukur berbeda-beda, dan angka penting mencerminkan ketelitian itu", "Karena aturan angka penting berbeda-beda untuk setiap merk alat ukur", "Karena alat ukur modern selalu memberi lebih banyak angka penting daripada alat manual", "Angka penting sama sekali tidak berhubungan dengan alat ukur"]
+    jawaban: 0
+    penjelasan: "Angka penting menuliskan hasil pengukuran seteliti alat yang dipakai -- alat yang lebih teliti (skala lebih halus) memungkinkan lebih banyak angka penting dituliskan dengan jujur."
+  - soal: "Pada hasil bacaan jangka sorong 2,34 cm, angka manakah yang termasuk 'angka taksiran' (bukan angka pasti)?"
+    pilihan: ["Angka 4 (digit terakhir)", "Angka 2 (digit pertama)", "Angka 3 (digit tengah)", "Ketiga angka tersebut sama-sama taksiran"]
+    jawaban: 0
+    penjelasan: "Angka 2 dan 3 terbaca pasti dari skala utama, sedangkan angka 4 di ujung adalah perkiraan (taksiran) posisi di antara dua garis skala terkecil."
+  - soal: "Bilangan 0,00078 (dengan 2 angka penting) ditulis dalam notasi ilmiah sebagai..."
+    pilihan: ["7,8 × 10⁻⁴", "0,78 × 10⁻³", "78 × 10⁻⁵", "7,80 × 10⁻⁴"]
+    jawaban: 0
+    penjelasan: "Notasi ilmiah ditulis satu angka bukan nol di depan koma. Karena cuma 2 angka penting (7 dan 8) yang dipertahankan, bentuknya 7,8 × 10⁻⁴."
+  - soal: "Bilangan 250 (ditulis tanpa tanda koma sama sekali) tetap dianggap punya angka penting. Ini menunjukkan bahwa jumlah angka penting sebenarnya berkaitan dengan..."
+    pilihan: ["Ketelitian pengukuran, bukan sekadar ada-tidaknya tanda koma", "Keberadaan tanda koma pada bilangan tersebut", "Jumlah digit sebelum tanda koma saja", "Besar-kecilnya nilai bilangan tersebut"]
+    jawaban: 0
+    penjelasan: "Angka penting soal ketelitian pengukuran, bukan soal ada-tidaknya tanda koma. 245 atau 250 (tanpa koma) tetap punya angka penting yang bisa dihitung."
 draft: false
 ---
 

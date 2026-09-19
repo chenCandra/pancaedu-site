@@ -8,6 +8,11 @@ pubDate: 2024-01-13
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Dilatasi Waktu", "Fisika Kelas XII"]
 coverImage: "/images/dilatasi-waktu-cover.svg"
+simulasi:
+  url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
+  judul: "Laboratorium Maya: Efek Relativistik (Dilatasi Waktu)"
+  sumber: "Lab Maya PancaEdu"
+  tinggi: 1400
 kuis:
   - soal: "Dilatasi waktu adalah fenomena di mana..."
     pilihan: ["Waktu berhenti sama sekali", "Waktu berjalan lebih lambat bagi pengamat yang bergerak relatif", "Waktu berjalan lebih cepat buat semua orang", "Waktu jadi tidak terukur"]
@@ -25,6 +30,90 @@ kuis:
     pilihan: ["Karena sinyal GPS berwarna", "Karena satelit bergerak cepat sehingga jamnya berbeda dari jam di Bumi", "Karena GPS tidak pakai satelit", "Karena Bumi berputar terlalu lambat"]
     jawaban: 1
     penjelasan: "Perbedaan waktu antara jam satelit & Bumi bisa mencapai beberapa mikrodetik per hari — cukup besar untuk bikin salah posisi kalau tidak dikoreksi."
+  - soal: "Δt (waktu sejati/proper time) dalam rumus dilatasi waktu adalah selang waktu yang diukur oleh..."
+    pilihan: ["Pengamat/benda yang bergerak bersama kejadian itu sendiri", "Pengamat yang diam relatif terhadap benda tersebut", "Pengamat yang berada di tengah-tengah antara keduanya", "Semua pengamat, nilainya selalu sama"]
+    jawaban: 0
+    penjelasan: "Δt adalah selang waktu yang dialami LANGSUNG oleh benda/pengamat yang bergerak bersama kejadian itu, disebut waktu sejati (proper time)."
+  - soal: "Δt' dalam rumus dilatasi waktu selalu bernilai... dibanding Δt"
+    pilihan: ["Lebih panjang (lebih besar) daripada Δt", "Lebih pendek (lebih kecil) daripada Δt", "Selalu sama dengan Δt", "Bisa lebih besar atau lebih kecil, tergantung arah gerak"]
+    jawaban: 0
+    penjelasan: "Δt' selalu lebih panjang dari Δt, makanya disebut 'dilatasi' yang artinya pemuluran/pemekaran waktu."
+  - soal: "Faktor Lorentz γ dirumuskan sebagai..."
+    pilihan: ["γ = 1 / √(1 − v²/c²)", "γ = √(1 − v²/c²)", "γ = v²/c²", "γ = 1 − v/c"]
+    jawaban: 0
+    penjelasan: "Faktor Lorentz γ = 1 / √(1 − v²/c²), muncul berulang di rumus dilatasi waktu, kontraksi panjang, dan massa relativistik."
+  - soal: "Kalau kecepatan relatif v=0 (benda diam), maka nilai Δt' menurut rumus dilatasi waktu adalah..."
+    pilihan: ["Sama dengan Δt -- tidak ada dilatasi sama sekali", "Dua kali Δt", "Nol", "Tak terhingga"]
+    jawaban: 0
+    penjelasan: "Pada v=0, Δt' = Δt -- tidak ada dilatasi sama sekali, sesuai fisika klasik."
+  - soal: "Kenapa dilatasi waktu sama sekali tidak terasa pada kecepatan mobil atau pesawat komersial sehari-hari?"
+    pilihan: ["Karena v/c-nya sangat kecil sehingga γ nyaris persis 1", "Karena dilatasi waktu hanya berlaku di luar angkasa", "Karena mobil dan pesawat tidak punya jam", "Karena dilatasi waktu memerlukan medan gravitasi kuat"]
+    jawaban: 0
+    penjelasan: "Pada kecepatan sehari-hari, v/c terlalu kecil sampai γ nyaris persis 1, jadi efeknya sama sekali tidak terasa."
+  - soal: "Sebuah pesawat bergerak dengan v=0,6c. Berapa nilai faktor Lorentz (γ)-nya?"
+    pilihan: ["1,25", "0,8", "1,5", "2"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1 − 0,6²) = 1/√(1 − 0,36) = 1/√0,64 = 1/0,8 = 1,25."
+  - soal: "Seorang astronot bergerak dengan v=0,6c mengalami waktu 10 tahun menurut jamnya sendiri (Δt). Berapa lama waktu itu menurut pengamat yang diam di Bumi (Δt')?"
+    pilihan: ["12,5 tahun", "10 tahun", "8 tahun", "15 tahun"]
+    jawaban: 0
+    penjelasan: "Δt' = γ × Δt = 1,25 × 10 = 12,5 tahun."
+  - soal: "Sebuah partikel bergerak dengan v=0,8c. Berapa nilai faktor Lorentz (γ)-nya?"
+    pilihan: ["≈1,67", "≈1,25", "≈2,5", "≈0,6"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1 − 0,8²) = 1/√(1 − 0,64) = 1/√0,36 = 1/0,6 ≈ 1,67."
+  - soal: "Sebuah partikel di akselerator bergerak dengan v=0,8c dan punya 'usia hidup' 2 mikrodetik menurut waktu sejatinya. Berapa usia hidupnya menurut pengamat di laboratorium yang diam?"
+    pilihan: ["≈3,3 mikrodetik", "2 mikrodetik", "1,2 mikrodetik", "5 mikrodetik"]
+    jawaban: 0
+    penjelasan: "Δt' = γ × Δt ≈ 1,67 × 2 ≈ 3,3 mikrodetik -- inilah kenapa 'usia hidup' partikel yang harusnya singkat jadi terulur cukup lama untuk terdeteksi."
+  - soal: "Kalau Dede (dari contoh soal paradoks kembar) bergerak dengan kecepatan yang JAUH lebih tinggi (misalnya 0,99c) untuk 30 tahun perjalanan menurut jamnya sendiri (bukan 0,75c seperti di contoh), maka selisih umur dengan Didi dibanding contoh semula akan..."
+    pilihan: ["Semakin besar, karena γ semakin besar mendekati kecepatan cahaya", "Semakin kecil, karena kecepatan mendekati batas maksimum", "Tetap sama, karena waktu sejati Dede sama-sama 30 tahun", "Menjadi negatif, karena Dede jadi lebih tua dari Didi"]
+    jawaban: 0
+    penjelasan: "Makin tinggi v mendekati c, makin besar γ, sehingga Δt' (waktu menurut Didi) makin jauh lebih besar dari Δt Dede -- selisih umurnya makin besar."
+  - soal: "Kalau Dede menempuh perjalanan yang sama (30 tahun menurut jamnya sendiri) tapi dengan v=0,6c (bukan 0,75c), berapa lama waktu itu menurut Didi di Bumi?"
+    pilihan: ["37,5 tahun", "45,4 tahun", "30 tahun", "50 tahun"]
+    jawaban: 0
+    penjelasan: "Δt' = γ × Δt = 1,25 × 30 = 37,5 tahun."
+  - soal: "Dengan hasil sebelumnya (v=0,6c, 30 tahun waktu sejati Dede), berapa selisih umur Dede dan Didi saat bertemu kembali?"
+    pilihan: ["7,5 tahun", "15 tahun", "5 tahun", "10 tahun"]
+    jawaban: 0
+    penjelasan: "Selisihnya Δt' − Δt = 37,5 − 30 = 7,5 tahun -- Dede lebih muda 7,5 tahun dibanding Didi."
+  - soal: "Kenapa Paradoks Kembar sebenarnya BUKAN paradoks yang sesungguhnya?"
+    pilihan: ["Karena Dede mengalami percepatan/perubahan arah saat berbalik pulang, sehingga situasinya tidak simetris dengan Didi yang diam terus", "Karena sebenarnya waktu keduanya berjalan sama saja, tidak ada perbedaan nyata", "Karena kecepatan 0,75c tidak cukup tinggi untuk menimbulkan efek apa pun", "Karena Dede dan Didi bukan kembar identik yang sesungguhnya"]
+    jawaban: 0
+    penjelasan: "Dede-lah yang mengalami percepatan/perubahan arah saat berbalik pulang, sehingga perannya TIDAK simetris dengan Didi yang diam terus -- karena itu bukan paradoks sungguhan."
+  - soal: "Eksperimen Hafele-Keating (1971), yang menerbangkan jam atom mengelilingi Bumi lalu membandingkannya dengan jam kembarannya di darat, membuktikan bahwa dilatasi waktu..."
+    pilihan: ["Adalah efek fisik nyata yang bisa terukur, bukan sekadar ilusi penglihatan", "Hanya terjadi pada kecepatan mendekati kecepatan cahaya", "Tidak bisa dibuktikan lewat eksperimen apa pun di Bumi", "Cuma berlaku untuk partikel subatomik, bukan jam biasa"]
+    jawaban: 0
+    penjelasan: "Jam atom yang diterbangkan lalu dibandingkan dengan kembarannya di darat betul-betul menunjukkan selisih waktu terukur -- sudah dibuktikan lewat eksperimen sungguhan, bukan cuma prediksi di atas kertas."
+  - soal: "Kenapa satu-satunya cara memverifikasi dilatasi waktu secara langsung adalah dengan benda yang BENAR-BENAR bergerak sangat cepat, bukan sekadar dihitung di atas kertas?"
+    pilihan: ["Karena dilatasi waktu adalah fenomena fisik nyata yang perlu dibuktikan lewat pengukuran sungguhan, bukan cuma prediksi matematis", "Karena rumusnya tidak bisa dihitung secara matematis sama sekali", "Karena dilatasi waktu cuma berlaku dalam teori, tidak dalam kenyataan", "Karena alat ukur waktu manual sudah cukup akurat tanpa perlu percobaan"]
+    jawaban: 0
+    penjelasan: "Dilatasi waktu adalah efek fisik yang nyata, bukan ilusi -- karena itu satu-satunya cara memverifikasinya secara langsung adalah lewat pengukuran sungguhan pada benda yang benar-benar bergerak sangat cepat."
+  - soal: "Postulat kedua Einstein yang jadi 'biang keladi' munculnya dilatasi waktu adalah..."
+    pilihan: ["Kecepatan cahaya konstan bagi semua pengamat", "Massa selalu kekal dalam semua kerangka acuan", "Energi tidak bisa diciptakan atau dimusnahkan", "Gravitasi bekerja sama di semua tempat"]
+    jawaban: 0
+    penjelasan: "Postulat kedua Einstein (kecepatan cahaya selalu konstan bagi semua pengamat) adalah biang keladi dilatasi waktu -- supaya kecepatan cahaya tetap sama, ruang dan waktu yang harus 'mengalah'."
+  - soal: "Persamaan yang menghubungkan koordinat ruang dan waktu antara dua kerangka acuan yang bergerak relatif, tempat rumus dilatasi waktu diturunkan, disebut..."
+    pilihan: ["Transformasi Lorentz", "Hukum Newton II", "Persamaan Maxwell", "Hukum Kekekalan Momentum"]
+    jawaban: 0
+    penjelasan: "Rumus dilatasi waktu diturunkan dari Transformasi Lorentz, persamaan yang menghubungkan koordinat ruang dan waktu antar kerangka acuan yang bergerak relatif."
+  - soal: "Selisih waktu antara jam satelit GPS dan jam di Bumi akibat dilatasi waktu, meski cuma beberapa mikrodetik per hari, tetap perlu dikoreksi karena..."
+    pilihan: ["Cukup besar untuk menyebabkan kesalahan posisi kalau tidak dikoreksi", "Tidak berpengaruh apa pun pada akurasi GPS", "Bisa membuat satelit jatuh dari orbit", "Menyebabkan sinyal GPS berubah warna"]
+    jawaban: 0
+    penjelasan: "Selisih waktu beberapa mikrodetik per hari itu cukup besar untuk menyebabkan kesalahan posisi kalau tidak dikoreksi."
+  - soal: "Berdasarkan tabel kondisi ekstrem di materi ini, semakin kecepatan v mendekati c, maka nilai Δt' akan..."
+    pilihan: ["Membesar drastis, mendekati tak terhingga", "Mengecil drastis, mendekati nol", "Tetap konstan, tidak berubah", "Menjadi negatif"]
+    jawaban: 0
+    penjelasan: "Saat v mendekati c, Δt' membesar drastis, mendekati tak terhingga."
+  - soal: "Perubahan pada RUANG (panjang) akibat gerak mendekati kecepatan cahaya disebut kontraksi panjang, sedangkan perubahan pada WAKTU disebut..."
+    pilihan: ["Dilatasi waktu", "Transformasi Lorentz", "Efek Doppler", "Momentum relativistik"]
+    jawaban: 0
+    penjelasan: "Perubahan pada waktu akibat gerak mendekati kecepatan cahaya disebut dilatasi waktu, sedangkan perubahan pada ruang disebut kontraksi panjang."
+  - soal: "Sebuah partikel bergerak dengan v=0,5c. Berapa nilai faktor Lorentz (γ)-nya (dibulatkan 2 desimal)?"
+    pilihan: ["≈1,15", "≈1,50", "≈0,87", "≈2,00"]
+    jawaban: 0
+    penjelasan: "γ = 1/√(1 − 0,5²) = 1/√0,75 = 1/0,866 ≈ 1,15."
 draft: false
 ---
 

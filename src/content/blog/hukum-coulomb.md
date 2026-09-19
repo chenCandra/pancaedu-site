@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Keduanya sama persis, tidak ada beda", "Gaya gravitasi selalu tarik-menarik, sedangkan gaya Coulomb bisa tarik atau tolak tergantung jenis muatan", "Hukum Coulomb cuma berlaku untuk muatan negatif", "Hukum gravitasi berbanding lurus dengan jarak, Coulomb berbanding terbalik"]
     jawaban: 1
     penjelasan: "Struktur rumus keduanya mirip (berbanding terbalik kuadrat jarak), tapi gravitasi SELALU tarik-menarik (massa tidak punya 'jenis'), sedangkan gaya Coulomb bisa tarik ATAU tolak tergantung muatannya sejenis atau tidak."
+  - soal: "Hukum Coulomb dirumuskan oleh fisikawan Prancis bernama siapa, sekitar tahun berapa?"
+    pilihan: ["Charles-Augustin de Coulomb, sekitar tahun 1785", "Isaac Newton, sekitar tahun 1687", "Michael Faraday, sekitar tahun 1831", "James Clerk Maxwell, sekitar tahun 1865"]
+    jawaban: 0
+    penjelasan: "Hukum Coulomb dirumuskan oleh Charles-Augustin de Coulomb, fisikawan Prancis, pada tahun 1785."
+  - soal: "Menurut Hukum III Newton, bagaimana hubungan antara gaya yang dialami muatan A akibat muatan B, dengan gaya yang dialami muatan B akibat muatan A?"
+    pilihan: ["Besarnya sama, arahnya berlawanan", "Besarnya sama, arahnya juga sama", "Besarnya berbeda, arahnya sama", "Tidak ada hubungan sama sekali antara keduanya"]
+    jawaban: 0
+    penjelasan: "Sesuai Hukum III Newton (aksi-reaksi), gaya yang dialami muatan pertama akibat muatan kedua BESARNYA SAMA dengan gaya yang dialami muatan kedua akibat muatan pertama, cuma arahnya berlawanan."
+  - soal: "Arah gaya Coulomb antara dua muatan titik selalu berada sepanjang garis apa?"
+    pilihan: ["Garis lurus yang menghubungkan kedua muatan", "Garis tegak lurus terhadap garis penghubung kedua muatan", "Arah sembarang, tidak tentu", "Arah medan magnet bumi di lokasi itu"]
+    jawaban: 0
+    penjelasan: "Karena gaya adalah besaran vektor, arah gaya Coulomb selalu sepanjang garis lurus yang menghubungkan kedua muatan tersebut."
+  - soal: "Kalau ada 3 muatan segaris A, B, dan C, bagaimana cara menentukan gaya total yang dialami muatan B?"
+    pilihan: ["Jumlahkan gaya akibat A dan gaya akibat C sebagai vektor (prinsip superposisi)", "Cukup pakai gaya dari muatan yang paling besar saja", "Rata-ratakan gaya dari A dan dari C", "Kalikan gaya dari A dengan gaya dari C"]
+    jawaban: 0
+    penjelasan: "Untuk lebih dari dua muatan, Hukum Coulomb dipakai per pasangan muatan, lalu hasilnya dijumlahkan sebagai vektor -- inilah prinsip superposisi."
+  - soal: "Dua muatan, +6 μC dan +3 μC, terpisah sejauh 3 cm (0,03 m). Berapa besar gaya Coulomb di antara keduanya, dan bagaimana sifatnya?"
+    pilihan: ["180 N, tolak-menolak", "180 N, tarik-menarik", "18 N, tolak-menolak", "1800 N, tolak-menolak"]
+    jawaban: 0
+    penjelasan: "F = (9×10⁹) × (6×10⁻⁶ × 3×10⁻⁶) / (0,03)² = (9×10⁹ × 1,8×10⁻¹¹) / 9×10⁻⁴ = 0,162/0,0009 = 180 N. Karena kedua muatan sejenis (+ dan +), sifatnya tolak-menolak."
+  - soal: "Dua muatan, +2 μC dan −5 μC, terpisah sejauh 5 cm (0,05 m). Berapa besar gaya Coulomb di antara keduanya, dan bagaimana sifatnya?"
+    pilihan: ["36 N, tarik-menarik", "36 N, tolak-menolak", "3,6 N, tarik-menarik", "360 N, tarik-menarik"]
+    jawaban: 0
+    penjelasan: "F = (9×10⁹) × (2×10⁻⁶ × 5×10⁻⁶) / (0,05)² = (9×10⁹ × 1×10⁻¹¹) / 0,0025 = 0,09/0,0025 = 36 N. Karena kedua muatan berbeda jenis (+ dan −), sifatnya tarik-menarik."
+  - soal: "Dua muatan identik, masing-masing +3 μC, saling tolak dengan gaya 8,1 N. Berapa jarak antara keduanya?"
+    pilihan: ["10 cm", "5 cm", "15 cm", "20 cm"]
+    jawaban: 0
+    penjelasan: "r² = kq²/F = (9×10⁹) × (3×10⁻⁶)² / 8,1 = 0,081/8,1 = 0,01 m², jadi r = √0,01 = 0,1 m = 10 cm."
+  - soal: "Dua muatan menghasilkan gaya Coulomb F pada jarak r. Jika KEDUA muatannya digandakan (2 kali) dan jaraknya juga digandakan (2 kali), berapa gaya Coulomb yang baru?"
+    pilihan: ["Tetap F (tidak berubah)", "Menjadi 2F", "Menjadi 4F", "Menjadi F/4"]
+    jawaban: 0
+    penjelasan: "F_baru = k(2q₁)(2q₂)/(2r)² = 4kq₁q₂/4r² = kq₁q₂/r² = F. Faktor 4 di pembilang (dari menggandakan dua muatan) dan faktor 4 di penyebut (dari jarak kuadrat) saling membatalkan."
+  - soal: "Dua muatan identik berjarak r menghasilkan gaya F. Kalau jaraknya diubah jadi 3r (muatan tetap), berapa gaya Coulomb yang baru?"
+    pilihan: ["F/9", "F/3", "3F", "9F"]
+    jawaban: 0
+    penjelasan: "Gaya Coulomb berbanding terbalik dengan kuadrat jarak: F_baru = kq₁q₂/(3r)² = kq₁q₂/9r² = F/9."
+  - soal: "Melanjutkan soal sebelumnya (jarak jadi 3r): kalau kedua muatannya JUGA digandakan (2 kali) sementara jaraknya tetap 3r, berapa gaya Coulomb yang baru (dalam F)?"
+    pilihan: ["4F/9", "F/9", "4F", "2F/3"]
+    jawaban: 0
+    penjelasan: "F_baru = k(2q₁)(2q₂)/(3r)² = 4kq₁q₂/9r² = (4/9)F -- menggandakan kedua muatan mengalikan gaya dengan 4, tapi jarak 3 kali lebih jauh membaginya dengan 9."
+  - soal: "Dua muatan sejenis, Q₁ = +3 μC dan Q₂ = +27 μC, diletakkan segaris dengan jarak 20 cm. Di titik mana (diukur dari Q₁) resultan gaya Coulomb-nya sama dengan nol?"
+    pilihan: ["5 cm dari Q₁ (dan 15 cm dari Q₂)", "10 cm dari Q₁ dan 10 cm dari Q₂ (tepat di tengah)", "15 cm dari Q₁ dan 5 cm dari Q₂", "Tidak ada titik nolnya karena kedua muatan sejenis"]
+    jawaban: 0
+    penjelasan: "Perbandingan jarak harus sesuai akar perbandingan muatan: x/(20−x) = √(3/27) = 1/3, sehingga 20−x = 3x → x = 5 cm. Cek: k(3)/(0,05)² sama dengan k(27)/(0,15)² -- resultannya nol di titik itu, lebih dekat ke muatan yang lebih kecil (Q₁)."
+  - soal: "Kalau dua muatan BERBEDA jenis (satu positif, satu negatif) diletakkan segaris, apakah ada titik DI ANTARA keduanya yang resultan gaya Coulomb-nya nol?"
+    pilihan: ["Tidak ada di antara keduanya -- titik nolnya (jika ada) berada di LUAR garis hubung", "Ada, tepat di tengah-tengah antara keduanya", "Ada, tapi hanya kalau kedua muatan sama besar", "Ada di antara keduanya, sama seperti pada muatan sejenis"]
+    jawaban: 0
+    penjelasan: "Untuk muatan beda jenis, medan dari kedua muatan di titik manapun DI ANTARA keduanya justru mengarah ke arah yang sama (saling menguatkan, bukan membatalkan) -- jadi titik nolnya harus dicari di LUAR garis hubung, berbeda dengan muatan sejenis."
+  - soal: "Konstanta Coulomb (k) termasuk jenis besaran apa?"
+    pilihan: ["Konstanta empiris hasil pengukuran eksperimen, bukan besaran pokok maupun besaran turunan", "Besaran pokok, seperti massa dan panjang", "Besaran turunan, seperti gaya", "Besaran vektor, seperti perpindahan"]
+    jawaban: 0
+    penjelasan: "k adalah konstanta empiris (didapat dari hasil pengukuran eksperimen), bukan besaran pokok maupun besaran turunan."
+  - soal: "Muatan A sebesar 100 μC berjarak 10 m dari suatu titik, sedangkan muatan B sebesar 1 μC berjarak 1 cm dari titik yang sama. Muatan mana yang menghasilkan gaya Coulomb lebih besar di titik tersebut?"
+    pilihan: ["Muatan B -- karena jaraknya yang jauh lebih kecil (dibagi kuadrat) jauh lebih dominan dibanding besar muatan A", "Muatan A -- karena muatan yang lebih besar pasti menghasilkan gaya yang lebih besar", "Keduanya menghasilkan gaya yang sama besar", "Tidak bisa ditentukan tanpa tahu jenis muatannya"]
+    jawaban: 0
+    penjelasan: "Gaya sebanding dengan q/r². Untuk A, q/r² = 100/(10)² = 1; untuk B, q/r² = 1/(0,01)² = 10.000 -- jauh lebih besar. Muatan besar belum tentu menghasilkan gaya besar kalau jaraknya jauh."
+  - soal: "Konstanta Coulomb (k) juga bisa dituliskan dalam bentuk lain menggunakan permitivitas ruang hampa (ε₀), yaitu..."
+    pilihan: ["k = 1 / (4πε₀)", "k = 4πε₀", "k = ε₀ / 4π", "k = 4π / ε₀"]
+    jawaban: 0
+    penjelasan: "Konstanta Coulomb bisa dituliskan sebagai k = 1/(4πε₀), dengan ε₀ adalah permitivitas ruang hampa."
+  - soal: "Berapa nilai permitivitas ruang hampa (ε₀) menurut materi ini?"
+    pilihan: ["Sekitar 8,85 × 10⁻¹² C²/N·m²", "Sekitar 9 × 10⁹ C²/N·m²", "Sekitar 6,67 × 10⁻¹¹ C²/N·m²", "Sekitar 1,6 × 10⁻¹⁹ C²/N·m²"]
+    jawaban: 0
+    penjelasan: "ε₀ (permitivitas ruang hampa) nilainya sekitar 8,85 × 10⁻¹² C²/N·m² -- angka 9×10⁹ itu justru nilai k, bukan ε₀."
+  - soal: "Satuan gaya Coulomb (newton, N) berkaitan langsung dengan materi apa yang sudah dipelajari sebelumnya?"
+    pilihan: ["Besaran Turunan", "Besaran Pokok", "Gerak Lurus", "Fluida"]
+    jawaban: 0
+    penjelasan: "Gaya (F) dan satuannya (newton) sudah dikenal dari materi Besaran Turunan -- gaya Coulomb tetaplah gaya biasa, cuma penyebabnya beda (muatan listrik, bukan gesekan atau dorongan mekanis)."
+  - soal: "Kenapa gaya Coulomb dianggap sebagai besaran vektor, bukan cuma besaran skalar?"
+    pilihan: ["Karena punya arah (sepanjang garis penghubung muatan), bukan cuma besar", "Karena nilainya selalu negatif", "Karena cuma berlaku untuk muatan negatif", "Karena satuannya berbeda dari besaran skalar"]
+    jawaban: 0
+    penjelasan: "Selain besarnya, gaya Coulomb juga punya arah tertentu (sepanjang garis yang menghubungkan kedua muatan) -- karena punya besar dan arah, gaya termasuk besaran vektor."
+  - soal: "Muatan B mengalami gaya 6 N ke kiri akibat muatan A, dan gaya 2 N ke kanan akibat muatan C (ketiganya segaris). Berapa besar dan arah gaya total pada B menurut prinsip superposisi?"
+    pilihan: ["4 N ke kiri", "8 N ke kiri", "4 N ke kanan", "6 N ke kiri (gaya dari C diabaikan)"]
+    jawaban: 0
+    penjelasan: "Karena kedua gaya berlawanan arah, dijumlahkan sebagai vektor dengan tanda berlawanan: 6 N − 2 N = 4 N, searah dengan gaya yang lebih besar (ke kiri)."
+  - soal: "Kalau tiga muatan TIDAK segaris (membentuk sudut satu sama lain), bagaimana cara menjumlahkan gaya-gaya Coulomb yang bekerja pada salah satu muatan?"
+    pilihan: ["Dijumlahkan sebagai vektor menggunakan komponen x dan y", "Dijumlahkan langsung sebagai skalar tanpa memperhatikan arah", "Diambil rata-ratanya saja", "Hanya gaya terbesar yang diperhitungkan, yang lain diabaikan"]
+    jawaban: 0
+    penjelasan: "Kalau muatan-muatannya tidak segaris, penjumlahan vektor gaya harus dilakukan dengan menguraikan tiap gaya ke komponen x dan y, baru dijumlahkan per komponen -- sesuai aturan penjumlahan vektor pada umumnya."
 draft: false
 ---
 

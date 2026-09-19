@@ -28,6 +28,90 @@ kuis:
     pilihan: ["Kedua inputnya BERBEDA (satu 0, satu 1)", "Kedua inputnya SAMA", "Semua input bernilai 1", "Semua input bernilai 0"]
     jawaban: 0
     penjelasan: "XOR (exclusive OR) menghasilkan 1 hanya kalau kedua inputnya berbeda nilai."
+  - soal: "Sistem digital cuma mengenal dua keadaan (1 dan 0), berbeda dari sinyal analog yang..."
+    pilihan: ["Nilainya kontinu, bisa berapa saja", "Nilainya juga hanya 0 dan 1", "Tidak punya nilai sama sekali", "Hanya bisa bernilai negatif"]
+    jawaban: 0
+    penjelasan: "Sinyal analog nilainya kontinu (bisa berapa saja di suatu rentang), sedangkan sinyal digital cuma mengenal dua keadaan diskrit: 1 (HIGH) atau 0 (LOW)."
+  - soal: "Dalam sistem digital, keadaan 0 (LOW) merepresentasikan..."
+    pilihan: ["Tidak ada tegangan", "Ada tegangan penuh", "Tegangan negatif", "Tegangan bolak-balik"]
+    jawaban: 0
+    penjelasan: "Keadaan 0 (LOW) berarti tidak ada tegangan, sedangkan 1 (HIGH) berarti ada tegangan -- inilah dasar representasi fisik dari bit digital."
+  - soal: "Gerbang logika yang HANYA punya satu input (bukan dua atau lebih) adalah..."
+    pilihan: ["NOT", "AND", "OR", "XOR"]
+    jawaban: 0
+    penjelasan: "NOT (inverter) unik karena hanya punya satu input -- fungsinya cuma membalik nilai input itu, dari 0 jadi 1 atau sebaliknya."
+  - soal: "Kalau input A=1 dimasukkan ke gerbang NOT, outputnya adalah..."
+    pilihan: ["0", "1", "Tidak terdefinisi", "Tergantung input B"]
+    jawaban: 0
+    penjelasan: "NOT selalu membalik nilai input tunggalnya -- input 1 menghasilkan output 0."
+  - soal: "Gerbang AND dengan input A=1 dan B=1 akan menghasilkan output..."
+    pilihan: ["1", "0", "Tidak terdefinisi", "Bisa 1 atau 0"]
+    jawaban: 0
+    penjelasan: "Sesuai tabel kebenaran AND, output 1 muncul HANYA kalau semua input (A dan B) bernilai 1 -- kondisi ini terpenuhi di sini."
+  - soal: "Gerbang OR dengan input A=0 dan B=0 akan menghasilkan output..."
+    pilihan: ["0", "1", "Tidak terdefinisi", "Bisa 1 atau 0"]
+    jawaban: 0
+    penjelasan: "OR hanya menghasilkan 0 kalau SEMUA inputnya 0 -- karena A=0 dan B=0, outputnya pasti 0."
+  - soal: "Gerbang NAND dengan input A=0 dan B=0 akan menghasilkan output..."
+    pilihan: ["1", "0", "Tidak terdefinisi", "Sama dengan output AND"]
+    jawaban: 0
+    penjelasan: "NAND adalah kebalikan dari AND. AND(0,0)=0, jadi NAND(0,0) = NOT(0) = 1."
+  - soal: "Gerbang NOR akan menghasilkan output 1 HANYA JIKA..."
+    pilihan: ["SEMUA inputnya bernilai 0", "SEMUA inputnya bernilai 1", "Salah satu inputnya bernilai 1", "Kedua inputnya berbeda"]
+    jawaban: 0
+    penjelasan: "NOR adalah kebalikan dari OR. OR bernilai 0 hanya ketika semua input 0, jadi NOR bernilai 1 justru pada kondisi itu -- semua input 0."
+  - soal: "Gerbang XOR dengan input A=1 dan B=1 akan menghasilkan output..."
+    pilihan: ["0", "1", "Tidak terdefinisi", "Sama dengan output OR"]
+    jawaban: 0
+    penjelasan: "XOR hanya menghasilkan 1 kalau kedua inputnya BERBEDA. Karena A dan B sama-sama 1 (tidak berbeda), outputnya 0."
+  - soal: "Kalimat yang PALING TEPAT menggambarkan hubungan antara NAND, NOR, dan gerbang-gerbang dasar lainnya adalah..."
+    pilihan: ["NAND dan NOR disebut gerbang universal karena semua jenis gerbang lain bisa dibangun hanya dari kombinasi NAND saja, atau hanya dari NOR saja", "NAND dan NOR adalah gerbang yang persis identik, bisa saling dipertukarkan bebas", "Hanya AND dan OR yang bisa dipakai membangun gerbang lain", "Gerbang universal berarti gerbang yang bisa dipakai di semua negara"]
+    jawaban: 0
+    penjelasan: "NAND dan NOR disebut gerbang universal karena keduanya masing-masing cukup untuk membangun SEMUA jenis gerbang logika lainnya -- inilah salah satu alasan NAND/NOR jadi komponen favorit di desain chip."
+  - soal: "Kenapa NAND dan NOR jadi komponen favorit dalam desain chip komputer sungguhan?"
+    pilihan: ["Karena keduanya adalah gerbang universal -- cukup dipakai sendirian untuk membangun semua rangkaian logika lain", "Karena keduanya lebih murah untuk dibeli di toko", "Karena keduanya tidak butuh transistor sama sekali", "Karena keduanya hanya berlaku untuk sinyal analog"]
+    jawaban: 0
+    penjelasan: "Karena sifat universalnya, pabrik chip bisa memproduksi jutaan gerbang NAND/NOR yang seragam untuk membangun rangkaian apa pun -- lebih efisien dibanding memproduksi banyak jenis gerbang berbeda."
+  - soal: "Sebuah rangkaian menggabungkan gerbang OR dan NOT: input A dan B masuk ke gerbang OR, hasilnya masuk ke gerbang NOT. Kalau A=0 dan B=0, berapa output akhirnya?"
+    pilihan: ["1", "0", "Tidak terdefinisi", "Sama dengan output OR saja"]
+    jawaban: 0
+    penjelasan: "OR(0,0)=0, lalu NOT(0)=1. Rangkaian OR-lalu-NOT ini sebenarnya persis sama dengan gerbang NOR."
+  - soal: "Rangkaian OR-lalu-NOT (input masuk gerbang OR, hasilnya masuk gerbang NOT) pada dasarnya sama persis dengan gerbang tunggal..."
+    pilihan: ["NOR", "NAND", "XOR", "AND"]
+    jawaban: 0
+    penjelasan: "NOR = NOT + OR, jadi rangkaian OR yang hasilnya di-NOT-kan menghasilkan tabel kebenaran yang identik dengan gerbang NOR langsung."
+  - soal: "Sebuah rangkaian alarm keamanan baru menyala kalau SENSOR PINTU dan SENSOR GERAK sama-sama mendeteksi sesuatu. Logika gerbang apa yang paling menggambarkan rangkaian ini?"
+    pilihan: ["AND", "OR", "NOT", "NOR"]
+    jawaban: 0
+    penjelasan: "Karena alarm baru menyala kalau SEMUA syarat (kedua sensor) terpenuhi bersamaan, ini persis logika gerbang AND -- output 1 hanya kalau semua input 1."
+  - soal: "Sebuah sistem butuh menyalakan lampu HANYA KETIKA SALAH SATU dari dua saklar ditekan, TAPI TIDAK KEDUANYA sekaligus. Gerbang logika yang paling cocok untuk kasus ini adalah..."
+    pilihan: ["XOR", "AND", "OR", "NOT"]
+    jawaban: 0
+    penjelasan: "XOR menghasilkan 1 hanya kalau kedua inputnya BERBEDA (satu 1, satu 0) -- pas untuk kasus 'salah satu tapi tidak keduanya'. Gerbang OR biasa masih akan menyala 1 kalau KEDUA saklar ditekan sekaligus, jadi tidak cocok."
+  - soal: "Manakah pernyataan yang PALING TEPAT tentang hubungan NAND dan NOR?"
+    pilihan: ["NAND adalah kebalikan dari AND, sedangkan NOR adalah kebalikan dari OR -- keduanya punya tabel kebenaran yang berbeda satu sama lain", "NAND dan NOR punya tabel kebenaran yang identik, hanya namanya berbeda", "NAND adalah kebalikan dari OR, dan NOR adalah kebalikan dari AND", "NAND dan NOR sama sekali tidak berkaitan dengan AND maupun OR"]
+    jawaban: 0
+    penjelasan: "NAND = NOT+AND (kebalikan AND), NOR = NOT+OR (kebalikan OR) -- meski keduanya sama-sama disebut gerbang universal, tabel kebenarannya tetap berbeda satu sama lain."
+  - soal: "Blok bangunan paling dasar dari SEMUA sistem digital, mulai dari kalkulator sederhana sampai prosesor superkomputer, adalah..."
+    pilihan: ["Gerbang logika", "Baterai", "Kabel tembaga", "Layar LCD"]
+    jawaban: 0
+    penjelasan: "Kombinasi jutaan hingga miliaran gerbang logika inilah yang membentuk rangkaian logika kompleks pada semua perangkat digital, dari kalkulator sampai superkomputer."
+  - soal: "Sebelum gerbang logika, materi yang menjelaskan bagaimana satu komponen bisa berfungsi sebagai saklar digital ON/OFF adalah..."
+    pilihan: ["Transistor: Saklar dan Penguat", "Hukum Faraday dan Lenz", "Kapasitor Keping Sejajar", "Medan Magnet: Konsep Dasar"]
+    jawaban: 0
+    penjelasan: "Transistor bisa berfungsi sebagai saklar digital ON (1) atau OFF (0) -- inilah fondasi yang kemudian disusun jadi gerbang logika."
+  - soal: "Sebuah rangkaian menggabungkan gerbang AND dan NOT: input A dan B masuk ke gerbang AND, lalu hasilnya masuk ke gerbang NOT. Kalau A=1 dan B=1, berapa output akhirnya?"
+    pilihan: ["0", "1", "Tidak terdefinisi", "Sama dengan output AND saja"]
+    jawaban: 0
+    penjelasan: "AND(1,1)=1, lalu NOT(1)=0. Rangkaian AND-lalu-NOT ini sama persis dengan gerbang NAND, dan sesuai tabel kebenaran NAND, NAND(1,1)=0."
+  - soal: "Jumlah baris pada tabel kebenaran sebuah gerbang logika dengan DUA input (seperti AND, OR, NAND) selalu ada..."
+    pilihan: ["4 baris, mencakup semua kombinasi 0/1 dari dua input", "2 baris saja", "8 baris", "Tidak tentu, tergantung jenis gerbangnya"]
+    jawaban: 0
+    penjelasan: "Dengan dua input yang masing-masing punya 2 kemungkinan nilai (0 atau 1), total kombinasinya 2×2=4 baris -- inilah yang selalu muncul di tabel kebenaran gerbang AND, OR, NAND, NOR, dan XOR."
+  - soal: "Kalau sebuah gerbang NOT dipasang dua kali berurutan (output NOT pertama jadi input NOT kedua) untuk input A=1, hasil akhirnya adalah..."
+    pilihan: ["1, sama seperti input aslinya", "0", "Tidak terdefinisi", "Selalu 1 apapun inputnya"]
+    jawaban: 0
+    penjelasan: "NOT(1)=0, lalu NOT(0)=1 lagi -- dua NOT berurutan saling membatalkan efeknya, sehingga hasil akhirnya kembali sama dengan input semula."
 draft: false
 ---
 

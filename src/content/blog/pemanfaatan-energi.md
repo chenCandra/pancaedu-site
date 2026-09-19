@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Supaya materinya kelihatan lebih banyak", "Karena tiap sektor punya pola kebutuhan energi yang beda, sehingga solusi hemat/efisiensi energinya juga perlu disesuaikan per sektor", "Karena sektor-sektor itu tidak saling berhubungan sama sekali", "Karena cuma satu sektor saja yang penting dipelajari"]
     jawaban: 1
     penjelasan: "Rumah tangga, transportasi, industri, dan pertanian punya pola dan skala kebutuhan energi yang berbeda -- memahami ini penting supaya upaya hemat/efisiensi energi bisa lebih tepat sasaran."
+  - soal: "Di rumah tangga, gas LPG paling banyak dipakai untuk keperluan apa?"
+    pilihan: ["Memasak", "Mengisi daya HP", "Penerangan ruangan", "Mendinginkan ruangan (AC)"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan gas (LPG) dipakai untuk memasak, sedangkan listrik dipakai untuk penerangan, elektronik, dan AC."
+  - soal: "Kenapa sebagian besar industri berat masih mengandalkan energi fosil, dibanding energi terbarukan?"
+    pilihan: ["Karena energi fosil gratis", "Karena kebutuhan energinya sangat besar dan stabil, sesuatu yang selama ini lebih mudah dipenuhi energi fosil", "Karena energi terbarukan dilarang dipakai industri", "Karena industri tidak membutuhkan energi dalam jumlah besar"]
+    jawaban: 1
+    penjelasan: "Sesuai materi, industri berat butuh energi dalam skala besar dan stabil di satu lokasi -- kebutuhan seperti itu selama ini lebih mudah dipenuhi energi fosil."
+  - soal: "Menurut tabel ringkasan pada materi, sumber energi utama sektor transportasi adalah..."
+    pilihan: ["Batu bara dan gas", "BBM (minyak bumi) dan listrik (baterai)", "Energi panas bumi saja", "Biomassa dan angin"]
+    jawaban: 1
+    penjelasan: "Tabel ringkasan menunjukkan sumber energi utama transportasi adalah BBM dari minyak bumi, ditambah listrik dari baterai untuk kendaraan listrik."
+  - soal: "Menurut tabel ringkasan pada materi, sumber energi utama sektor industri adalah..."
+    pilihan: ["BBM dan gas LPG saja", "Fosil (batu bara, gas) dan listrik", "Energi surya saja", "Tidak disebutkan sumbernya"]
+    jawaban: 1
+    penjelasan: "Tabel ringkasan menyebutkan industri memakai sumber fosil (batu bara, gas) dan listrik untuk mesin produksi serta proses pemanasan/pendinginan."
+  - soal: "Menurut tabel ringkasan pada materi, contoh pemanfaatan energi di sektor pertanian meliputi..."
+    pilihan: ["Irigasi, traktor, dan penyimpanan hasil panen", "Cuma penerangan gudang", "Cuma untuk transportasi hasil panen", "Pertanian tidak masuk dalam tabel ringkasan"]
+    jawaban: 0
+    penjelasan: "Tabel ringkasan mencantumkan pertanian memanfaatkan energi untuk irigasi, traktor, dan penyimpanan hasil panen."
+  - soal: "Kenapa pernyataan 'kendaraan listrik otomatis 100% bebas emisi' dianggap kurang tepat oleh materi ini?"
+    pilihan: ["Karena kendaraan listrik sebenarnya lebih boros energi", "Karena listrik yang mengisi baterainya bisa saja berasal dari pembangkit fosil, jadi 'kebersihannya' tergantung dari mana listrik itu berasal", "Karena kendaraan listrik tidak bisa dipakai jarak jauh", "Karena kendaraan listrik masih memakai BBM juga"]
+    jawaban: 1
+    penjelasan: "Kendaraan listrik tidak menghasilkan emisi langsung dari kendaraannya, tapi listrik pengisi baterainya bisa berasal dari pembangkit fosil -- jadi seberapa bersih tergantung sumber listriknya."
+  - soal: "Kenapa pernyataan 'cuma sektor industri yang memakai energi dalam jumlah besar, rumah tangga tidak signifikan' dianggap kurang tepat?"
+    pilihan: ["Karena rumah tangga sebenarnya tidak memakai energi listrik", "Karena meski per rumah kecil, total konsumsi energi rumah tangga (dikalikan jutaan rumah) jadi sangat besar secara keseluruhan", "Karena industri sebenarnya tidak memakai energi sama sekali", "Karena rumah tangga selalu memakai energi lebih banyak dari industri"]
+    jawaban: 1
+    penjelasan: "Meski konsumsi tiap rumah kecil, totalnya jadi sangat besar kalau dikalikan jutaan rumah tangga -- itu sebabnya kampanye hemat energi rumah tangga tetap penting secara nasional."
+  - soal: "Kenapa tagihan listrik rumah tangga disebut sebagai salah satu indikator konsumsi energi yang paling mudah dirasakan langsung?"
+    pilihan: ["Karena tagihan listrik selalu sama tiap bulan", "Karena listrik rumah tangga dipakai untuk banyak keperluan sehari-hari yang terasa langsung dampaknya di dompet", "Karena rumah tangga tidak membayar listrik", "Karena tagihan listrik tidak berhubungan dengan energi yang dipakai"]
+    jawaban: 1
+    penjelasan: "Karena listrik dipakai untuk penerangan, elektronik, AC, dan berbagai keperluan harian, tagihannya jadi cara paling langsung untuk 'merasakan' konsumsi energi sendiri."
+  - soal: "Di sektor industri, energi dipakai untuk proses pemanasan, misalnya untuk kegiatan apa?"
+    pilihan: ["Peleburan logam dan pembuatan semen", "Mengisi daya HP karyawan", "Menyalakan lampu taman kantor", "Mencuci pakaian karyawan"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan proses pemanasan di industri contohnya peleburan logam dan pembuatan semen."
+  - soal: "Di sektor industri, energi dipakai untuk proses pendinginan, misalnya untuk keperluan apa?"
+    pilihan: ["Penyimpanan makanan berskala besar", "Mengisi daya kendaraan listrik", "Penerangan jalan", "Memasak makanan karyawan"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan proses pendinginan di industri contohnya penyimpanan makanan berskala besar."
+  - soal: "Berdasarkan bagian Intinya, kenapa tidak ada satu solusi energi yang cocok untuk semua sektor sekaligus?"
+    pilihan: ["Karena setiap sektor punya pola kebutuhan energi yang berbeda (skala, distribusi, dan kestabilannya)", "Karena semua sektor sebenarnya punya kebutuhan energi yang identik", "Karena cuma satu sektor yang benar-benar butuh energi", "Karena solusi energi tidak pernah ada"]
+    jawaban: 0
+    penjelasan: "Rumah tangga butuh energi yang fleksibel dan tersebar di jutaan titik kecil, sementara industri butuh energi skala besar dan stabil di satu lokasi -- pola yang berbeda ini butuh solusi yang berbeda pula."
+  - soal: "Menurut Intinya, rumah tangga membutuhkan energi dengan pola seperti apa, dibanding industri?"
+    pilihan: ["Fleksibel dan tersebar di jutaan titik kecil", "Sangat besar dan stabil di satu lokasi", "Tidak membutuhkan energi sama sekali", "Sama persis dengan pola industri"]
+    jawaban: 0
+    penjelasan: "Rumah tangga butuh energi yang fleksibel dan tersebar (jutaan titik kecil), berbeda dari industri yang butuh energi skala besar dan stabil di satu lokasi."
+  - soal: "Kenapa upaya hemat energi di rumah tangga (misalnya mematikan lampu) sangat berbeda pendekatannya dari upaya efisiensi energi di pabrik besar?"
+    pilihan: ["Karena keduanya sebenarnya identik", "Karena pola kebutuhan energi rumah tangga dan industri sangat berbeda, sehingga cara menghematnya juga perlu disesuaikan", "Karena pabrik besar tidak bisa menghemat energi", "Karena rumah tangga tidak bisa menghemat energi"]
+    jawaban: 1
+    penjelasan: "Karena pola kebutuhan energinya berbeda drastis, pendekatan efisiensi energi rumah tangga (tindakan kecil individu) berbeda dari pendekatan di industri (skala besar, sistemik)."
+  - soal: "Simulasi 'Energy Consumption Lab' pada materi ini mengajak siswa berperan sebagai apa?"
+    pilihan: ["Operator rumah sendiri -- menyalakan alat, mengatur lama pemakaian, dan melihat energi yang terpakai", "Menteri energi nasional", "Insinyur pembangkit listrik tenaga nuklir", "Petani yang mengatur irigasi"]
+    jawaban: 0
+    penjelasan: "Simulasi ini mengajak siswa jadi 'operator' rumahnya sendiri -- menyalakan alat-alat, mengatur lama pemakaian, dan melihat energi (kWh) yang terpakai serta estimasi biayanya."
+  - soal: "Apa dua hal yang bisa dihitung/dilihat langsung lewat simulasi Energy Consumption Lab?"
+    pilihan: ["Energi (kWh) yang terpakai dan estimasi biayanya", "Jumlah penduduk dan luas rumah", "Suhu ruangan dan kelembapan udara", "Jarak tempuh kendaraan dan konsumsi BBM"]
+    jawaban: 0
+    penjelasan: "Simulasi ini menghitung langsung berapa energi (kWh) yang terpakai dari alat-alat yang dinyalakan, beserta estimasi biayanya."
+  - soal: "Sektor transportasi, mulai dari motor, mobil, sampai pesawat terbang, sejauh ini masih sangat bergantung pada sumber energi apa?"
+    pilihan: ["Energi nuklir", "Bahan bakar minyak (BBM) hasil olahan minyak bumi", "Energi panas bumi", "Energi angin"]
+    jawaban: 1
+    penjelasan: "Materi menyebutkan sektor transportasi -- dari motor, mobil, sampai pesawat -- masih sangat bergantung pada BBM hasil olahan minyak bumi."
+  - soal: "Kendaraan listrik memakai energi yang berasal dari mana, menurut materi?"
+    pilihan: ["Baterai, yang diisi ulang dari jaringan listrik", "Pembakaran bensin langsung di dalam baterai", "Energi matahari langsung tanpa baterai", "Tidak memakai energi sama sekali"]
+    jawaban: 0
+    penjelasan: "Kendaraan listrik memakai energi dari baterai, yang diisi ulang dari jaringan listrik -- beda dari kendaraan BBM yang membakar bahan bakar langsung."
+  - soal: "Kenapa infrastruktur kendaraan listrik disebut 'masih terus dibangun di banyak tempat' oleh materi ini?"
+    pilihan: ["Karena kendaraan listrik sudah sepenuhnya menggantikan BBM", "Karena kendaraan listrik baru berkembang sebagai alternatif dan belum semerata infrastruktur BBM", "Karena kendaraan listrik dilarang di banyak tempat", "Karena tidak ada yang memakai kendaraan listrik"]
+    jawaban: 1
+    penjelasan: "Materi menyebutkan kendaraan listrik mulai berkembang sebagai alternatif, meski infrastrukturnya masih terus dibangun di banyak tempat -- artinya transisinya belum selesai."
+  - soal: "Untuk menilai alat rumah tangga mana yang paling banyak 'menyedot' energi, yang perlu diperhitungkan bukan cuma daya alatnya, tapi juga apa?"
+    pilihan: ["Warna alat tersebut", "Berapa lama alat itu menyala/dipakai", "Merek alat tersebut", "Jumlah orang di rumah"]
+    jawaban: 1
+    penjelasan: "Alat berdaya kecil yang menyala terus-menerus lama bisa menghabiskan energi total yang besar juga -- energi yang terpakai tergantung daya DAN durasi pemakaiannya, bukan daya saja."
+  - soal: "Listrik yang mengisi baterai kendaraan listrik bisa saja berasal dari pembangkit fosil. Apa yang bisa disimpulkan soal 'kebersihan' kendaraan listrik dari fakta ini?"
+    pilihan: ["Kendaraan listrik pasti selalu lebih bersih dibanding kendaraan BBM dalam kondisi apa pun", "Tingkat kebersihannya tetap bergantung pada sumber energi yang mengisi listriknya, bukan otomatis bersih karena tidak ada knalpot", "Kendaraan listrik justru selalu lebih kotor dari kendaraan BBM", "Pertanyaan ini tidak relevan dengan materi Pemanfaatan Energi"]
+    jawaban: 1
+    penjelasan: "Sesuai catatan di materi, kendaraan listrik tidak menghasilkan emisi langsung, tapi listrik yang mengisi baterainya bisa berasal dari pembangkit fosil -- jadi kebersihannya bergantung pada sumber listrik itu sendiri, bukan otomatis bersih."
 draft: false
 ---
 

@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Air jadi lebih ringan", "Luas penampang keluaran mengecil, sehingga menurut asas kontinuitas kecepatan aliran harus membesar", "Tekanan air di dalam selang menurun", "Ibu jari menambah energi pada air"]
     jawaban: 1
     penjelasan: "Menutup sebagian ujung selang memperkecil luas penampang keluaran (A). Karena debit Q = A×v harus tetap sama, mengecilnya A memaksa v (kecepatan) membesar -- makanya semburannya lebih deras dan jauh."
+  - soal: "Salah satu asumsi fluida ideal adalah 'aliran tunak/stasioner'. Artinya..."
+    pilihan: ["Kecepatan aliran di suatu titik berubah cepat terhadap waktu", "Kecepatan aliran di suatu titik tidak berubah terhadap waktu", "Fluida mengalir sangat lambat", "Fluida tidak bergerak sama sekali"]
+    jawaban: 1
+    penjelasan: "Aliran tunak/stasioner berarti kecepatan aliran di suatu titik tetap, tidak berubah dari waktu ke waktu."
+  - soal: "Kenapa fluida ideal diasumsikan alirannya laminar (mengikuti streamline)?"
+    pilihan: ["Karena kenyataannya semua fluida selalu laminar", "Supaya perhitungan alirannya mulus dan sederhana, tanpa turbulensi/gejolak yang rumit dihitung", "Karena laminar berarti fluida berhenti", "Karena laminar hanya berlaku untuk gas"]
+    jawaban: 1
+    penjelasan: "Aliran laminar (mengikuti garis arus) membuat perhitungan jadi sederhana, tanpa harus memperhitungkan gejolak/turbulensi yang rumit."
+  - soal: "Satuan debit aliran (Q) dalam Sistem Internasional (SI) adalah..."
+    pilihan: ["kg/s", "m³/s", "m/s²", "N/m²"]
+    jawaban: 1
+    penjelasan: "Debit adalah volume per satuan waktu, sehingga satuannya m³/s."
+  - soal: "Rumus debit Q = V/t juga bisa ditulis sebagai Q = A × v karena..."
+    pilihan: ["Volume fluida yang lewat penampang A dalam waktu t sama dengan A dikali jarak yang ditempuh (v×t)", "Luas penampang selalu sama dengan volume", "Kecepatan tidak berhubungan dengan volume", "A dan v adalah satuan yang sama"]
+    jawaban: 0
+    penjelasan: "Volume fluida yang melewati penampang A dalam waktu t adalah V = A×(v×t), sehingga Q = V/t = A×v."
+  - soal: "Kalau debit aliran di suatu pipa adalah 0,02 m³/s dan luas penampangnya 0,01 m², berapa kecepatan alirannya?"
+    pilihan: ["0,5 m/s", "1 m/s", "2 m/s", "4 m/s"]
+    jawaban: 2
+    penjelasan: "v = Q/A = 0,02/0,01 = 2 m/s."
+  - soal: "Air mengalir dengan kecepatan 3 m/s di pipa berdiameter 8 cm, lalu masuk ke pipa berdiameter 4 cm. Berapa kecepatan alirannya di pipa sempit itu?"
+    pilihan: ["6 m/s", "9 m/s", "12 m/s", "24 m/s"]
+    jawaban: 2
+    penjelasan: "v2 = v1×(d1/d2)² = 3×(8/4)² = 3×4 = 12 m/s."
+  - soal: "Kenapa debit aliran HARUS sama di setiap bagian pipa tertutup, menurut Asas Kontinuitas?"
+    pilihan: ["Karena fluida ideal tak termampatkan dan tidak ada fluida yang hilang di sepanjang pipa", "Karena kecepatan selalu sama di semua bagian", "Karena luas penampang selalu sama", "Karena tekanan selalu sama"]
+    jawaban: 0
+    penjelasan: "Karena fluida ideal tak termampatkan (massa jenis tetap) dan tidak ada fluida yang hilang di pipa tertutup, debitnya harus sama di setiap bagian."
+  - soal: "Kenapa aliran darah di pembuluh kapiler lebih lambat dibanding di arteri utama (aorta), meski tiap kapiler sangat sempit?"
+    pilihan: ["Darah kehilangan energi di kapiler", "Jantung memompa lebih lemah ke kapiler", "TOTAL luas penampang seluruh kapiler jauh lebih besar dari luas aorta, sehingga kecepatannya lebih kecil", "Kapiler tidak mematuhi asas kontinuitas"]
+    jawaban: 2
+    penjelasan: "Meski satu kapiler sangat sempit, jumlahnya sangat banyak sehingga TOTAL luas penampangnya jauh lebih besar dari aorta -- akibatnya kecepatan aliran di kapiler jadi lebih kecil."
+  - soal: "Aliran sungai terlihat jauh lebih deras di bagian yang menyempit (jeram) dibanding di bagian yang lebar dan tenang. Ini sesuai dengan..."
+    pilihan: ["Hukum Archimedes", "Asas Kontinuitas -- penampang mengecil membuat kecepatan aliran membesar", "Hukum Pascal", "Tegangan permukaan"]
+    jawaban: 1
+    penjelasan: "Penampang sungai yang menyempit memaksa kecepatan aliran membesar supaya debitnya tetap sama, sesuai asas kontinuitas."
+  - soal: "Pada simulasi Lab Maya tab Kontinuitas & Debit, ketika diameter pipa sempit diperkecil lagi, yang terjadi pada angka debit (Q) yang ditampilkan adalah..."
+    pilihan: ["Q membesar", "Q mengecil", "Q tetap sama, karena debit fluida ideal di pipa tertutup harus konstan", "Q menjadi nol"]
+    jawaban: 2
+    penjelasan: "Debit (Q) harus tetap sama di semua bagian pipa tertutup untuk fluida ideal, walau diameternya diubah-ubah -- hanya kecepatannya yang berubah."
+  - soal: "Kalau diameter pipa diperbesar 2 kali (dengan debit tetap sama), kecepatan alirannya menjadi..."
+    pilihan: ["2 kali lebih besar", "Tetap sama", "Setengah kali", "Seperempat kali"]
+    jawaban: 3
+    penjelasan: "v berbanding terbalik dengan kuadrat diameter (v2 = v1×(d1/d2)²), jadi diameter 2 kali lebih besar membuat kecepatan menjadi 1/4 kali."
+  - soal: "Perawat harus berhati-hati soal ukuran jarum suntik/selang infus karena berhubungan dengan..."
+    pilihan: ["Warna cairan infus", "Luas penampang jarum yang menentukan kecepatan aliran cairan sesuai asas kontinuitas", "Berat jarum", "Suhu cairan infus"]
+    jawaban: 1
+    penjelasan: "Luas penampang jarum/selang menentukan kecepatan aliran cairan (A dan v berbanding terbalik pada debit tetap), jadi ukurannya perlu dipilih hati-hati."
+  - soal: "Sebuah pipa berdiameter 6 cm mengalirkan air dengan kecepatan 4 m/s. Berapa debit alirannya? (π ≈ 3,14)"
+    pilihan: ["1,13 L/s", "11,3 L/s", "113 L/s", "0,113 L/s"]
+    jawaban: 1
+    penjelasan: "A = πr² = 3,14×(0,03)² ≈ 0,00283 m². Q = A×v = 0,00283×4 ≈ 0,0113 m³/s = 11,3 L/s."
+  - soal: "Kenapa pernyataan 'makin lebar pipanya, makin cepat alirannya' itu SALAH?"
+    pilihan: ["Karena lebar pipa tidak berhubungan dengan apa pun", "Karena menurut asas kontinuitas, A dan v berbanding TERBALIK -- pipa lebar justru punya aliran yang lebih lambat", "Karena debit selalu berubah-ubah", "Karena kecepatan hanya bergantung pada tekanan"]
+    jawaban: 1
+    penjelasan: "A1v1 = A2v2 berarti A dan v berbanding terbalik -- pipa yang lebih LEBAR justru punya aliran yang lebih LAMBAT untuk debit yang sama."
+  - soal: "Empat asumsi fluida ideal dalam Fisika SMA adalah tak termampatkan, aliran tunak, tak kental, dan..."
+    pilihan: ["Aliran turbulen", "Aliran laminar/mengikuti streamline", "Bersuhu tinggi", "Bermassa jenis besar"]
+    jawaban: 1
+    penjelasan: "Keempat asumsi fluida ideal adalah tak termampatkan, aliran tunak, tak kental, dan aliran laminar (mengikuti streamline)."
+  - soal: "Sifat 'tak kental' pada fluida ideal berarti fluida itu diasumsikan..."
+    pilihan: ["Tidak punya gesekan internal (viskositas) yang menghambat aliran", "Tidak bisa mengalir", "Selalu berwujud gas", "Selalu berwarna bening"]
+    jawaban: 0
+    penjelasan: "Tak kental berarti tidak ada gesekan internal (viskositas) yang menghambat aliran fluida."
+  - soal: "Materi Asas Kontinuitas ini membahas fluida dinamis dari sisi..."
+    pilihan: ["Tekanan fluida", "Kecepatan aliran (lewat debit dan luas penampang)", "Warna fluida", "Suhu fluida"]
+    jawaban: 1
+    penjelasan: "Asas Kontinuitas membahas bagaimana kecepatan aliran berubah lewat hubungan debit dan luas penampang -- soal tekanan dibahas di materi Asas Bernoulli selanjutnya."
+  - soal: "Air mengalir di pipa berdiameter 20 cm dengan debit 0,314 m³/s. Berapa kecepatan alirannya? (A = πr² ≈ 0,0314 m²)"
+    pilihan: ["1 m/s", "5 m/s", "10 m/s", "20 m/s"]
+    jawaban: 2
+    penjelasan: "v = Q/A = 0,314/0,0314 = 10 m/s."
+  - soal: "Kalau luas penampang pipa di bagian sempit adalah 1/5 dari luas penampang di bagian lebar, kecepatan aliran di bagian sempit dibanding bagian lebar menjadi..."
+    pilihan: ["1/5 kali", "Sama saja", "5 kali lebih besar", "25 kali lebih besar"]
+    jawaban: 2
+    penjelasan: "Karena A1v1 = A2v2, kalau A2 = A1/5 maka v2 harus 5 kali v1 supaya debitnya tetap sama."
+  - soal: "Setelah memahami Asas Kontinuitas (soal kecepatan aliran), materi selanjutnya di Bab Fluida Dinamis membahas apa yang terjadi pada..."
+    pilihan: ["Warna fluida", "Tekanan fluida (Asas Bernoulli)", "Suhu fluida", "Berat fluida"]
+    jawaban: 1
+    penjelasan: "Setelah membahas perubahan kecepatan aliran, materi selanjutnya (Asas Bernoulli) membahas apa yang terjadi pada tekanan fluida."
 draft: false
 ---
 

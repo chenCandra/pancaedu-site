@@ -32,6 +32,86 @@ kuis:
     pilihan: ["Minyak bumi = terbarukan, energi surya = tak terbarukan", "Batu bara = tak terbarukan, energi angin = terbarukan", "Gas alam = terbarukan, energi air = tak terbarukan", "Semua sumber energi termasuk tak terbarukan"]
     jawaban: 1
     penjelasan: "Batu bara terbentuk dari fosil selama jutaan tahun (tak terbarukan), sedangkan angin terus-menerus 'terbarukan' oleh proses alam di atmosfer."
+  - soal: "Kenapa energi surya tetap dianggap sumber energi terbarukan, meski cuma tersedia di siang hari?"
+    pilihan: ["Karena 'terbarukan' soal sumbernya terus terisi ulang secara alami, bukan soal ketersediaannya yang konstan tanpa henti", "Karena energi surya sebenarnya tidak terbatas jumlahnya kapan pun", "Karena matahari cuma bersinar sekali seumur hidup", "Karena energi surya termasuk sumber tak terbarukan yang disalahartikan"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan 'terbarukan' bukan berarti tersedia konstan tanpa henti -- yang membedakannya adalah sumbernya terus terisi ulang secara alami, meski ketersediaannya (siang/malam, cuaca) bisa berubah-ubah."
+  - soal: "Kenapa pernyataan 'sumber energi terbarukan pasti tersedia setiap saat, tanpa gangguan' dianggap tidak selalu benar?"
+    pilihan: ["Karena ketersediaannya bisa berubah-ubah, misalnya surya cuma siang hari dan angin tergantung cuaca", "Karena sumber terbarukan sebenarnya termasuk kategori tak terbarukan", "Karena sumber terbarukan tidak pernah bisa dimanfaatkan manusia", "Karena sumber terbarukan hanya ada satu jenis saja"]
+    jawaban: 0
+    penjelasan: "Ketersediaan sumber terbarukan bisa berubah-ubah (surya cuma siang hari, angin tergantung cuaca) -- 'terbarukan' soal sumbernya terus terisi ulang, bukan soal pasokannya konstan."
+  - soal: "Kenapa pernyataan 'sumber energi tak terbarukan pasti buruk dan harus segera ditinggalkan sepenuhnya' dianggap terlalu sederhana oleh materi ini?"
+    pilihan: ["Karena transisi energi adalah proses bertahap yang mempertimbangkan teknologi, biaya, dan infrastruktur, bukan keputusan yang bisa diambil dalam semalam", "Karena sumber tak terbarukan sebenarnya tidak akan pernah habis", "Karena sumber terbarukan justru lebih berbahaya bagi lingkungan", "Karena tidak ada bedanya antara sumber terbarukan dan tak terbarukan"]
+    jawaban: 0
+    penjelasan: "Materi menegaskan transisi energi adalah proses bertahap yang mempertimbangkan banyak faktor -- bukan keputusan yang bisa diambil dalam semalam."
+  - soal: "Kenapa banyak negara (termasuk Indonesia) mulai mendorong transisi ke energi terbarukan, menurut materi -- bukan karena energi fosil dianggap 'buruk'?"
+    pilihan: ["Karena keterbatasan sumber tak terbarukan perlu diantisipasi dari sekarang, bukan ditunda sampai benar-benar habis", "Karena energi fosil sudah sepenuhnya habis di seluruh dunia", "Karena energi terbarukan selalu lebih murah dalam kondisi apa pun", "Karena pemerintah dunia sepakat melarang energi fosil"]
+    jawaban: 0
+    penjelasan: "Transisi didorong bukan karena energi fosil 'buruk', tapi karena keterbatasannya perlu diantisipasi dari sekarang, bukan ditunda sampai benar-benar habis."
+  - soal: "Menurut bagian 'Coba Pikirkan', apa yang menentukan apakah kayu bakar termasuk sumber energi terbarukan atau tak terbarukan?"
+    pilihan: ["Seberapa cepat pohonnya ditanam kembali dibanding seberapa cepat kayunya ditebang", "Warna kayu yang dipakai sebagai bahan bakar", "Jenis pohon yang ditebang", "Kayu bakar selalu termasuk tak terbarukan, tanpa terkecuali"]
+    jawaban: 0
+    penjelasan: "Sesuai prinsip dasar materi, kategorinya tergantung kecepatan pembentukan ulang (penanaman) dibanding kecepatan pemakaian (penebangan) -- bukan soal jenis kayunya."
+  - soal: "Berdasarkan bagian Intinya, pertanyaan sederhana apa yang bisa dipakai untuk menentukan kategori suatu sumber energi, tanpa perlu menghafal daftar?"
+    pilihan: ["Mana yang lebih cepat -- alam membentuk ulang sumber itu, atau manusia memakainya", "Berapa harga sumber energi itu di pasaran", "Berapa banyak negara yang memakai sumber energi itu", "Apakah sumber energi itu berwarna hijau atau tidak"]
+    jawaban: 0
+    penjelasan: "Materi menyimpulkan cukup tanyakan satu pertanyaan: mana yang lebih cepat, kecepatan alam membentuk ulang sumber itu, atau kecepatan manusia memakainya."
+  - soal: "Kenapa mengandalkan satu jenis sumber energi saja berisiko dari sisi ketidakstabilan pasokan?"
+    pilihan: ["Karena misalnya energi surya bergantung cuaca -- kalau cuma mengandalkan satu sumber itu, pasokan energi bisa terganggu", "Karena satu sumber energi tidak pernah bisa menghasilkan energi sama sekali", "Karena sumber energi tunggal selalu lebih mahal", "Karena ketidakstabilan pasokan hanya terjadi pada sumber tak terbarukan"]
+    jawaban: 0
+    penjelasan: "Sumber seperti energi surya bergantung cuaca -- mengandalkan satu sumber saja membuat pasokan energi rawan terganggu kalau kondisinya tidak mendukung."
+  - soal: "Simulasi 'Energy Crisis Lab' yang dirujuk materi ini mengajak siswa merasakan langsung apa?"
+    pilihan: ["Kenapa mengandalkan satu sumber energi saja berisiko, lewat peran sebagai operator energi sebuah kota virtual", "Cara menanam pohon untuk kayu bakar", "Cara membaca skala alat ukur", "Cara menghitung usaha dan daya"]
+    jawaban: 0
+    penjelasan: "Energy Crisis Lab mengajak siswa jadi operator energi kota virtual, merasakan langsung kenapa mengandalkan satu sumber energi saja berisiko."
+  - soal: "Manakah contoh sumber energi tak terbarukan yang disebut materi ini?"
+    pilihan: ["Fosil dan nuklir", "Matahari dan angin", "Air dan angin", "Matahari dan air"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan fosil dan nuklir sebagai contoh sumber energi tak terbarukan, karena butuh waktu jutaan tahun untuk terbentuk."
+  - soal: "Manakah contoh sumber energi terbarukan yang disebut materi ini?"
+    pilihan: ["Matahari, angin, dan air", "Batu bara dan gas alam", "Minyak bumi dan nuklir", "Hanya batu bara saja"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan matahari, angin, dan air sebagai contoh sumber energi terbarukan yang bisa terbentuk/tersedia kembali secara alami dalam waktu relatif singkat."
+  - soal: "Bentuk energi dan sumber energi adalah dua hal yang berbeda. Bentuk energi menjawab pertanyaan apa?"
+    pilihan: ["Energinya berwujud seperti apa", "Energinya berasal dari mana", "Energinya berapa harganya", "Energinya dipakai oleh siapa"]
+    jawaban: 0
+    penjelasan: "Bentuk energi menjawab 'energinya berwujud seperti apa' (misalnya kinetik, potensial, listrik), sedangkan sumber energi menjawab 'energinya berasal dari mana'."
+  - soal: "Selain keterbatasan jumlah dan ketidakstabilan pasokan, alasan lain kenapa diversifikasi sumber energi penting, menurut materi, adalah..."
+    pilihan: ["Dampak lingkungan dari satu sumber energi tunggal bisa ditanggung seluruh sistem tanpa ada penyeimbang", "Diversifikasi tidak punya alasan lain selain harga", "Karena hukum mengharuskan setiap negara memakai minimal tiga sumber energi", "Karena sumber energi tunggal selalu ilegal"]
+    jawaban: 0
+    penjelasan: "Materi menyebutkan risiko dampak lingkungan sebagai salah satu alasan diversifikasi -- bergantung satu sumber saja membuat dampak lingkungannya ditanggung penuh tanpa alternatif penyeimbang."
+  - soal: "Dua materi lanjutan yang disebut akan membahas masing-masing kategori sumber energi secara mendalam adalah materi tentang apa?"
+    pilihan: ["Energi Tak Terbarukan dan Energi Terbarukan", "Usaha dan Daya", "Perubahan Energi dan Pemanfaatan Energi", "Vektor dan Pengukuran"]
+    jawaban: 0
+    penjelasan: "Materi ini menutup dengan menyebutkan dua materi selanjutnya akan membahas Energi Tak Terbarukan dan Energi Terbarukan secara mendalam."
+  - soal: "Kenapa sumber energi tak terbarukan disebut 'akan habis' kalau terus dipakai tanpa henti?"
+    pilihan: ["Karena kecepatan pembentukannya jauh lebih lambat dibanding kecepatan pemakaian manusia", "Karena sumber tak terbarukan sebenarnya jumlahnya sangat sedikit sejak awal", "Karena sumber tak terbarukan tidak bisa dipakai berulang kali", "Karena pemerintah membatasi jumlah pemakaiannya"]
+    jawaban: 0
+    penjelasan: "Sumber tak terbarukan akan habis karena kecepatan pembentukannya (jutaan tahun) jauh lebih lambat daripada kecepatan manusia memakainya."
+  - soal: "Manakah pasangan sumber energi dan kategorinya yang benar, menurut materi?"
+    pilihan: ["Gas alam = tak terbarukan, energi air (hidro) = terbarukan", "Gas alam = terbarukan, energi air = tak terbarukan", "Angin = tak terbarukan, minyak bumi = terbarukan", "Semua sumber energi termasuk kategori terbarukan"]
+    jawaban: 0
+    penjelasan: "Gas alam terbentuk dari fosil selama jutaan tahun (tak terbarukan), sedangkan energi air terus tersedia lewat siklus air alami (terbarukan)."
+  - soal: "Kenapa angin dianggap sumber energi terbarukan, menurut prinsip dasar materi ini?"
+    pilihan: ["Karena angin terus 'terbarukan' secara alami oleh proses atmosfer, tidak butuh waktu jutaan tahun untuk terbentuk", "Karena angin tidak pernah berhenti bertiup sepanjang waktu", "Karena angin bisa disimpan dalam tangki seperti bahan bakar", "Karena angin termasuk hasil pembakaran fosil"]
+    jawaban: 0
+    penjelasan: "Angin terus-menerus 'terbarukan' oleh proses alam di atmosfer, sehingga kecepatan 'pembentukannya kembali' jauh lebih cepat dibanding sumber fosil."
+  - soal: "Kenapa penting memahami perbedaan dasar terbarukan/tak terbarukan sebelum membahas Energi Terbarukan dan Energi Tak Terbarukan secara detail di materi selanjutnya?"
+    pilihan: ["Supaya ada kerangka pembeda dasar (kecepatan pembentukan vs pemakaian) sebagai bekal sebelum masuk ke detail masing-masing kategori", "Karena detail kedua kategori itu sebenarnya sama saja", "Karena materi selanjutnya tidak berhubungan dengan materi ini", "Karena urutan materi tidak memengaruhi pemahaman"]
+    jawaban: 0
+    penjelasan: "Memahami prinsip dasar pembeda dulu (kecepatan pembentukan vs pemakaian) memberi kerangka berpikir sebelum masuk ke detail tiap kategori sumber energi."
+  - soal: "Kenapa matahari digolongkan sebagai sumber energi terbarukan, meski cuma bisa dimanfaatkan siang hari?"
+    pilihan: ["Karena matahari terus memancarkan energinya secara alami tanpa henti -- soal terbarukan bukan soal jam berapa bisa dimanfaatkan", "Karena matahari akan padam dalam waktu dekat", "Karena panel surya bisa menyimpan sinar matahari untuk malam hari tanpa baterai", "Karena matahari termasuk hasil pembakaran fosil"]
+    jawaban: 0
+    penjelasan: "Matahari terus memancarkan energi secara alami tanpa henti -- kategorinya terbarukan karena soal sumbernya yang terus 'ada', bukan soal jam ketersediaannya bagi manusia."
+  - soal: "Kalau suatu sumber energi bisa terbentuk kembali secara alami, tapi butuh waktu ratusan tahun (jauh lebih lambat dari kecepatan pemakaian manusia), sumber itu lebih tepat digolongkan sebagai..."
+    pilihan: ["Tak terbarukan, karena kecepatan pembentukannya kalah jauh dari kecepatan pemakaian", "Terbarukan, karena bisa terbentuk kembali secara alami apa pun kecepatannya", "Bukan sumber energi sama sekali", "Sumber energi netral yang tidak masuk kategori mana pun"]
+    jawaban: 0
+    penjelasan: "Kategori terbarukan/tak terbarukan ditentukan oleh kecepatan pembentukan RELATIF terhadap kecepatan pemakaian, bukan sekadar 'bisa terbentuk ulang atau tidak' -- kalau pembentukannya jauh lebih lambat dari pemakaian, tetap tergolong tak terbarukan."
+  - soal: "Sebelum materi Sumber Energi ini, materi apa yang dibahas terlebih dahulu, menurut kalimat pembuka artikel?"
+    pilihan: ["Usaha dan Daya", "Vektor", "Pengukuran", "Perubahan Energi"]
+    jawaban: 0
+    penjelasan: "Artikel ini dibuka dengan kalimat mengingat kembali materi Usaha dan Daya sebelum 'mengambil jarak dari rumus-rumus' membahas sumber energi."
 draft: false
 ---
 
