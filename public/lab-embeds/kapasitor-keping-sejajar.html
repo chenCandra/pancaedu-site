@@ -186,9 +186,11 @@
       const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
       ctx.clearRect(0, 0, w, h);
 
-      // Jarak plat divisualisasikan proporsional (tapi dibatasi biar tetap kelihatan di layar kecil)
+      // Jarak & luas plat divisualisasikan proporsional (dibatasi biar tetap kelihatan
+      // di layar kecil). Lebar keping mengikuti akar luas (bukan linear) supaya skalanya
+      // terasa wajar -- luas 4x lipat = sisi 2x lipat, bukan lebar 4x lipat.
       const gapPx = Math.max(30, Math.min(160, d_mm * 14));
-      const plateW = Math.min(w * 0.6, 260);
+      const plateW = Math.max(70, Math.min(w * 0.65, 300, Math.sqrt(A_cm2) * 18));
       const plateH = 14;
       const cx = w / 2, cy = h / 2;
       const topY = cy - gapPx / 2, botY = cy + gapPx / 2;
