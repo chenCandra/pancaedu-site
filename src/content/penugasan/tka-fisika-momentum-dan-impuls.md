@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: momentum-impuls-dan-hukum-kekekalan-momentum
 pinHash: 7caf5839ca135c1b8f55b85e0d2a944c34ab6c9bc9b95090d7cd1a01a586ca35
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 82d7050aa397bc76a950c0ecb13dc776f2ce457668251caae1b72af0267babce
 soal:
   - tipe: pilihan-ganda
     id: soal-1

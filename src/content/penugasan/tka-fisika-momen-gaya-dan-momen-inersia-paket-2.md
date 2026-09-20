@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: dinamika-rotasi-dan-energi-kinetik-rotasi
 pinHash: b50455d993bc1d4322bdb6bfc95d113d30b3f300136f2934f124d9e3ea8e6117
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: b0e98b405b93c18069d3cfd1659c26e4fbb3cab0f3d42125cb88656a4da82ef9
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: gerak-lurus-berubah-beraturan
 pinHash: 34a9f91ea9446f32c7756a96b71f7d75a632633383abc73c25775c2c682012f3
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: fd51b8b3ac33aa559204bcaba81fa323e03ee0978f03411fb1fec6001766427d
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: asas-kontinuitas-dan-debit-aliran
 pinHash: a25e6071f43b34775c99da262033279c4ea998130ca638e28af027197a78ec34
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 8a0df489872270ffb486ff084e893ce175375d7c5a8ada416e2a4396ca8daa15
 soal:
   - tipe: pilihan-ganda
     id: soal-1

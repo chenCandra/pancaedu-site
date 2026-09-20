@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: intensitas-bunyi-dan-efek-doppler
 pinHash: d6654d5f49bfa098b1bfa701a87d62a8504151ace4a134550f97ac5fa652516b
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 92865de520a75751602784cc526467e78cd58c8cd586ed9e73338fc4d5d0ee6d
 soal:
   - tipe: pilihan-ganda
     id: soal-1

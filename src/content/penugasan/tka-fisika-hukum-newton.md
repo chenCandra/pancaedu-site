@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: hukum-newton-dan-penerapannya
 pinHash: f3dbd3bbbe64e9dcf075e0bbc5ddb9d6b73331dc3b7d4be175b9921f536716ae
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: a4d91f3ad36a0ee0207084ea67b812e42856d2761caedc1e67e0b77003530384
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: hukum-newton-dan-penerapannya
 pinHash: 69e4b8de50a1211b2c6d7f91826e48d3f3e6e40964c00a0084487dd2e3293ef2
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 17334467ed889b5801b331aab83235d968657e7030f01fd39ddbc1296d44d4ac
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: momen-gaya-torsi-dan-momen-inersia
 pinHash: 967fe0f9281d1ce17ba5dd06fdfc67c126b76d900e2bdcbfdc777d4fb2a5a5f8
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 9bc8acee227037617b4b0dadb6f603cd1a355784c950c3495c9018f3033407e8
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: momentum-impuls-dan-hukum-kekekalan-momentum
 pinHash: 1f8d31a91468d6a03e60b706415948003826d102ff9ec70ecbb54e6fc926cd2c
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 3504914535d7f13fb4a2f3d66f3cca1bb7f535f4414d6cf411bab28601cc158f
 soal:
   - tipe: pilihan-ganda
     id: soal-1

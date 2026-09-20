@@ -398,6 +398,18 @@ const penugasan = defineCollection({
     // Dicek server-side di src/pages/api/penugasan/leaderboard/[slug].ts --
     // PIN yang benar SEKALIPUN ditolak kalau sudah lewat tanggal ini.
     pinBerlakuHingga: z.coerce.date(),
+    // SHA-256 dari PIN untuk membuka halaman Pembahasan
+    // (/penugasan/<slug>/pembahasan) -- BEDA dari pinHash di atas (itu buat
+    // leaderboard, ini buat lihat kunci jawaban + penjelasan lengkap tiap
+    // soal). Sengaja PIN terpisah: guru mungkin mau bagikan PIN leaderboard
+    // duluan (murid lihat peringkat), tapi baru bagikan PIN pembahasan
+    // belakangan (setelah semua murid selesai mengerjakan), atau malah
+    // tidak pernah membagikannya ke murid sama sekali (cuma dipakai guru
+    // sendiri buat review). OPSIONAL -- kalau kosong, halaman Pembahasan
+    // menampilkan pesan "belum tersedia" untuk Penugasan ini. TIDAK ada
+    // tanggal kedaluwarsa terpisah (beda dari pinHash) -- guru cukup ganti
+    // isi field ini + deploy ulang kalau mau mencabut akses.
+    pembahasanPinHash: z.string().optional(),
     soal: z.array(soalSchema).min(1),
     draft: z.boolean().default(false),
   }),

@@ -139,9 +139,12 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
       <p class="pn-hasil-skor" data-pn-hasil-skor></p>
       <div class="pn-hasil-actions">
         <a href={`/penugasan/${entry.id}/leaderboard`} class="btn btn-ghost" data-pn-leaderboard-link>🏆 Lihat Papan Peringkat</a>
+        {entry.data.pembahasanPinHash && (
+          <a href={`/penugasan/${entry.id}/pembahasan`} class="btn btn-ghost">📖 Lihat Pembahasan</a>
+        )}
         <a href="/penugasan" class="btn btn-ghost">Penugasan Lain</a>
       </div>
-      <p class="pn-hasil-catatan">ℹ️ Untuk melihat Papan Peringkat, silakan minta kode PIN ke gurumu.</p>
+      <p class="pn-hasil-catatan">ℹ️ Untuk melihat Papan Peringkat{entry.data.pembahasanPinHash ? '/Pembahasan' : ''}, silakan minta kode PIN ke gurumu.</p>
     </section>
   </section>
 </BaseLayout>

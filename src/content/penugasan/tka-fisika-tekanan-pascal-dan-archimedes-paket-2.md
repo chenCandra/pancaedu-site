@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: hukum-pascal-dan-hukum-archimedes
 pinHash: f9170d544f6d92e314c6387961936b888d83304dc569d93727b7904ca9e48229
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: d4b810ec031bd2e8eab8fba0040877cd9ea00e189299dc3a2d442f533e622feb
 soal:
   - tipe: pilihan-ganda
     id: soal-1

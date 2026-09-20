@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: alat-ukur
 pinHash: 2d5628e7bc3d7a9f2fe4fda2afa9d99e40a279c7900d4bc272f0ff86ed5fdf9a
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 0cb6eb05ae9fb9b571d9b1e9401f21e79f1d8cb63f82ad639638d61a0ec45049
 soal:
   - tipe: pilihan-ganda
     id: soal-1

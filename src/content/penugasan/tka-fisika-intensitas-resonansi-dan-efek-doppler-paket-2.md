@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: intensitas-bunyi-dan-efek-doppler
 pinHash: 8d37f2e1f46472302f7e18af0fd91aeb6cf90fba3eb12859b7f5352d6eae5872
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 30626836bd6ef2ad5bdb44fca602a52b8147a1f73343f74a9dcc651bbc2d3172
 soal:
   - tipe: pilihan-ganda
     id: soal-1

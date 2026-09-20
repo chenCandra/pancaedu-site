@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: asas-bernoulli-dan-penerapannya
 pinHash: 792027694dd61dcb89aa70714fb7bead6670ab84b9ff4692e4ab2b60d21c477d
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 79717def7f9e3a9982774ebf5a10f7c8a6620be48cbe3baaf8b20bd8cc568d71
 soal:
   - tipe: pilihan-ganda
     id: soal-1

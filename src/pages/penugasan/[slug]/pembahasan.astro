@@ -1,0 +1,359 @@
+---
+// On-demand (bukan statis) -- route dinamis [slug] tanpa getStaticPaths
+// wajib prerender=false. Halaman ini sendiri TIDAK membawa kunci jawaban
+// apa pun di HTML awalnya, cuma form PIN + wadah kosong. Kunci jawaban baru
+// diambil lewat fetch ke /api/penugasan/pembahasan/[slug] SETELAH PIN
+// diverifikasi di server (lihat file API-nya) -- sama pola keamanannya
+// dengan /penugasan/[slug]/leaderboard.astro.
+export const prerender = false;
+
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
+
+const { slug } = Astro.params;
+const entry = slug ? await getEntry('penugasan', slug) : undefined;
+
+if (!entry || entry.data.draft) {
+  return new Response(null, { status: 404 });
+}
+
+const { judul, mapel, kelas } = entry.data;
+const pembahasanTersedia = Boolean(entry.data.pembahasanPinHash);
+---
+
+<BaseLayout
+  title={`Pembahasan — ${judul}`}
+  description={`Kunci jawaban dan pembahasan lengkap untuk penugasan ${judul}.`}
+  noindex
+>
+  <section class="container page-header">
+    <a href={`/penugasan/${entry.id}`} class="back-link">&larr; Kembali ke Penugasan</a>
+    <p class="eyebrow">📖 Pembahasan · {mapel} · {kelasLabel(kelas as Kelas)}</p>
+    <h1>{judul}</h1>
+  </section>
+
+  {pembahasanTersedia ? (
+    <section class="container gate-section" data-slug={entry.id}>
+      <form class="pin-form card" data-pin-form>
+        <label for="pin">Kode PIN Pembahasan</label>
+        <div class="pin-row">
+          <input
+            type="text"
+            id="pin"
+            name="pin"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="Minta kode ini ke guru"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Buka Pembahasan</button>
+        </div>
+        <p class="pin-error" data-pin-error hidden>Kode PIN salah. Coba lagi.</p>
+      </form>
+
+      <div class="pembahasan-wrap" data-pembahasan-wrap hidden>
+        <p class="pembahasan-loading" data-pembahasan-loading hidden>Memuat...</p>
+        <ol class="pembahasan-list" data-pembahasan-list></ol>
+      </div>
+    </section>
+  ) : (
+    <section class="container gate-section">
+      <p class="pembahasan-belum-ada">Pembahasan belum tersedia untuk penugasan ini.</p>
+    </section>
+  )}
+</BaseLayout>
+
+<script>
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  type SoalPembahasan =
+    | { tipe: 'pilihan-ganda'; id: string; soal: string; pilihan: { id: string; teks: string }[]; jawabanBenarId: string; penjelasan?: string; skor: number }
+    | { tipe: 'benar-salah'; id: string; soal: string; jawabanBenar: boolean; penjelasan?: string; skor: number }
+    | { tipe: 'isian-singkat'; id: string; soal: string; angka: boolean; jawabanBenar: string[]; penjelasan?: string; skor: number }
+    | { tipe: 'menjodohkan'; id: string; soal: string; pasangan: { id: string; kiri: string; kanan: string }[]; penjelasan?: string; skor: number }
+    | { tipe: 'menyusun-urutan'; id: string; soal: string; item: { id: string; teks: string }[]; penjelasan?: string; skor: number }
+    | {
+        tipe: 'drag-drop';
+        id: string;
+        soal: string;
+        kategori: { id: string; label: string }[];
+        item: { id: string; teks: string; kategoriBenarId: string }[];
+        penjelasan?: string;
+        skor: number;
+      };
+
+  // Bikin elemen teks sederhana lewat textContent (BUKAN innerHTML) -- soal
+  // memang konten tepercaya (ditulis guru lewat CMS/git, bukan input
+  // siswa), tapi tetap tidak ada alasan untuk pakai innerHTML kalau
+  // textContent sudah cukup.
+  function el(tag: string, kelas: string | undefined, teks: string): HTMLElement {
+    const e = document.createElement(tag);
+    if (kelas) e.className = kelas;
+    e.textContent = teks;
+    return e;
+  }
+
+  function renderSoal(soal: SoalPembahasan, nomor: number): HTMLElement {
+    const li = document.createElement('li');
+    li.className = 'pmb-soal';
+
+    const pertanyaan = document.createElement('p');
+    pertanyaan.className = 'pmb-pertanyaan';
+    pertanyaan.textContent = `${nomor}. ${soal.soal}`;
+    li.appendChild(pertanyaan);
+
+    const jawabanWrap = document.createElement('div');
+    jawabanWrap.className = 'pmb-jawaban';
+
+    switch (soal.tipe) {
+      case 'pilihan-ganda': {
+        const ul = document.createElement('ul');
+        ul.className = 'pmb-pilihan-list';
+        for (const p of soal.pilihan) {
+          const li2 = el('li', p.id === soal.jawabanBenarId ? 'pmb-pilihan-benar' : undefined, `${p.id.toUpperCase()}. ${p.teks}`);
+          ul.appendChild(li2);
+        }
+        jawabanWrap.appendChild(el('p', 'pmb-label', 'Jawaban benar:'));
+        jawabanWrap.appendChild(ul);
+        break;
+      }
+      case 'benar-salah': {
+        jawabanWrap.appendChild(el('p', 'pmb-jawaban-tunggal', `Jawaban benar: ${soal.jawabanBenar ? 'Benar' : 'Salah'}`));
+        break;
+      }
+      case 'isian-singkat': {
+        jawabanWrap.appendChild(el('p', 'pmb-jawaban-tunggal', `Jawaban benar: ${soal.jawabanBenar.join(' / ')}`));
+        break;
+      }
+      case 'menjodohkan': {
+        const ul = document.createElement('ul');
+        ul.className = 'pmb-pasangan-list';
+        for (const p of soal.pasangan) {
+          ul.appendChild(el('li', undefined, `${p.kiri} — ${p.kanan}`));
+        }
+        jawabanWrap.appendChild(el('p', 'pmb-label', 'Pasangan yang benar:'));
+        jawabanWrap.appendChild(ul);
+        break;
+      }
+      case 'menyusun-urutan': {
+        const ol = document.createElement('ol');
+        ol.className = 'pmb-urutan-list';
+        for (const it of soal.item) {
+          ol.appendChild(el('li', undefined, it.teks));
+        }
+        jawabanWrap.appendChild(el('p', 'pmb-label', 'Urutan yang benar:'));
+        jawabanWrap.appendChild(ol);
+        break;
+      }
+      case 'drag-drop': {
+        const labelById = new Map(soal.kategori.map((k) => [k.id, k.label]));
+        const ul = document.createElement('ul');
+        ul.className = 'pmb-dragdrop-list';
+        for (const it of soal.item) {
+          ul.appendChild(el('li', undefined, `${it.teks} → ${labelById.get(it.kategoriBenarId) ?? it.kategoriBenarId}`));
+        }
+        jawabanWrap.appendChild(el('p', 'pmb-label', 'Pengelompokan yang benar:'));
+        jawabanWrap.appendChild(ul);
+        break;
+      }
+    }
+
+    li.appendChild(jawabanWrap);
+
+    if (soal.penjelasan) {
+      li.appendChild(el('p', 'pmb-penjelasan', `💡 ${soal.penjelasan}`));
+    }
+
+    return li;
+  }
+
+  const section = document.querySelector<HTMLElement>('[data-slug]');
+  const form = document.querySelector<HTMLFormElement>('[data-pin-form]');
+  const errorEl = document.querySelector<HTMLElement>('[data-pin-error]');
+  const wrap = document.querySelector<HTMLElement>('[data-pembahasan-wrap]');
+  const loadingEl = document.querySelector<HTMLElement>('[data-pembahasan-loading]');
+  const listEl = document.querySelector<HTMLOListElement>('[data-pembahasan-list]');
+
+  if (section && form && errorEl && wrap && loadingEl && listEl) {
+    const slug = section.dataset.slug!;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('#pin')!;
+      const hash = await sha256Hex(input.value.trim());
+
+      form.hidden = true;
+      wrap.hidden = false;
+      loadingEl.hidden = false;
+      listEl.replaceChildren();
+
+      try {
+        const res = await fetch(`/api/penugasan/pembahasan/${slug}?pin=${hash}`);
+        if (!res.ok) {
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          wrap.hidden = true;
+          form.hidden = false;
+          errorEl.textContent = body?.error || 'Kode PIN salah. Coba lagi.';
+          errorEl.hidden = false;
+          input.select();
+          return;
+        }
+        const data = (await res.json()) as { soal: SoalPembahasan[] };
+        data.soal.forEach((soal, i) => listEl.appendChild(renderSoal(soal, i + 1)));
+      } catch {
+        wrap.hidden = true;
+        form.hidden = false;
+        errorEl.textContent = 'Gagal memuat pembahasan. Coba lagi.';
+        errorEl.hidden = false;
+      } finally {
+        loadingEl.hidden = true;
+      }
+    });
+  }
+</script>
+
+<style>
+  .page-header {
+    padding-block: 3rem 1rem;
+    max-width: var(--measure);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .gate-section {
+    padding-block: 1rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .pembahasan-belum-ada {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+
+  .pin-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pin-form[hidden] {
+    display: none;
+  }
+
+  .pin-form label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pin-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pin-row input {
+    flex: 1 1 12rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .pin-error {
+    color: #b3423f;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .pembahasan-wrap[hidden] {
+    display: none;
+  }
+
+  .pembahasan-loading {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+
+  .pembahasan-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pmb-soal {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .pmb-pertanyaan {
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+  }
+
+  .pmb-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin: 0 0 0.35rem;
+  }
+
+  .pmb-jawaban-tunggal {
+    font-weight: 600;
+    color: var(--teal);
+    margin: 0;
+  }
+
+  .pmb-pilihan-list,
+  .pmb-pasangan-list,
+  .pmb-dragdrop-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+
+  .pmb-urutan-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  .pmb-pilihan-benar {
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  .pmb-penjelasan {
+    margin: 0.85rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+</style>

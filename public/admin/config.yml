@@ -253,6 +253,11 @@ collections:
         date_format: "YYYY-MM-DD"
         time_format: false
         hint: "Wajib diisi -- kebijakan: maksimal 6 bulan dari kapan PIN ini dibuat/diperbarui. Halaman /penugasan/pin-generator otomatis mengisi tanggal 6 bulan ke depan begitu hash dibuat, tinggal disalin ke sini. Setelah lewat tanggal ini, PIN yang benar sekalipun akan ditolak."
+      - label: "PIN Pembahasan (hash, opsional)"
+        name: pembahasanPinHash
+        widget: string
+        required: false
+        hint: 'PIN TERPISAH dari PIN Leaderboard di atas -- buka halaman /penugasan/<slug>/pembahasan yang menampilkan kunci jawaban + penjelasan LENGKAP tiap soal. Buat hash-nya di /penugasan/pin-generator, lalu tempel di sini. KOSONGKAN kalau belum mau menyediakan halaman pembahasan untuk penugasan ini -- jangan diisi tanda "-".'
       - name: "soal"
         label: "Daftar Soal"
         widget: list

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan (Paket 2, soal baru) -- 6 tipe interaktif dengan por
 materiSlug: karakteristik-dan-cepat-rambat-bunyi
 pinHash: 440f63aeb51027b18f9eb629151316729251d401183597ec740c164677ca148c
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: b71449b11d46d2c95df743e34988fff09dd5941eee9bc0c849b95d79f873b386
 soal:
   - tipe: pilihan-ganda
     id: soal-1

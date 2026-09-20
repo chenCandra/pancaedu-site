@@ -6,6 +6,7 @@ deskripsi: "21 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: gerak-lurus-beraturan
 pinHash: 685b3c76a2a2b60d161d4109bc8f80a674ab84d9c97cdeb898ed78273e99c9f5
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: e4e65de56d04cdc5d1c6000ded4ce052c9dc7199fbe47ff5e46d08a254732cb3
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: karakteristik-dan-cepat-rambat-bunyi
 pinHash: ab2ec0a9c532cc3c9266344e180f6ac6913c3854e8f4bc6eb3a8670d6262bd7e
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 8956b1aadf769ee84547216a3c67540bde6424d04af812f0c161503f1ae98450
 soal:
   - tipe: pilihan-ganda
     id: soal-1

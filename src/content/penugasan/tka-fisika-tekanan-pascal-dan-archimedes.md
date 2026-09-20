@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: hukum-pascal-dan-hukum-archimedes
 pinHash: e0a796a7385ef6e7fd9e538fe910596e5c8ac5a32cff90c75cf0fe29541cf52a
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: cbee89b53e9fd67d7dc4933d8472e94d63d5d213af290b3e645f3fd7a149a186
 soal:
   - tipe: pilihan-ganda
     id: soal-1

@@ -6,6 +6,7 @@ deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, is
 materiSlug: alat-ukur
 pinHash: 8230b2a045b5c6ac48ad0634c36754bfe4a1060ab27e9c7e173933df9cc25239
 pinBerlakuHingga: 2027-03-20
+pembahasanPinHash: 1a37ea31dc3da99c9dcccf1434b360b6679e8a418ac833077f24dfc931b20f3b
 soal:
   - tipe: pilihan-ganda
     id: soal-1
