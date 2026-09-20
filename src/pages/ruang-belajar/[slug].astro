@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TkaDrillSession from '../../components/TkaDrillSession.astro';
 import { extractYoutubeId } from '../../lib/youtube';
 import { kelasToSlug, kelasLabel } from '../../lib/ruangBelajar';
 
@@ -18,6 +19,11 @@ const {
   youtubeId, latihanUrl, tugasUrl, refleksiUrl,
 } = entry.data;
 
+// TKA pakai layout drilling terpisah (lihat TkaDrillSession.astro) --
+// tidak ada Video/Eksperimen/Refleksi, jadi field-field itu tidak perlu
+// diambil sama sekali untuk kelas ini.
+const isTka = kelas === 'TKA';
+
 // Materi/lab TIDAK disimpan ulang di sini -- selalu dirujuk dari entri
 // "materi" yang sudah ada (prinsip: jangan duplikasi materi). Video BEDA
 // ceritanya -- lihat catatan youtubeId di content.config.ts.
@@ -26,8 +32,8 @@ const deskripsiTampil = deskripsi || materi?.data.description;
 
 // Link Refleksi GLOBAL (satu Form buat semua sesi) dipakai kalau sesi ini
 // tidak isi refleksiUrl sendiri -- lihat ruangBelajarPengaturan di
-// content.config.ts.
-const pengaturan = await getEntry('ruangBelajarPengaturan', 'index');
+// content.config.ts. TKA tidak punya step Refleksi, jadi skip fetch-nya.
+const pengaturan = isTka ? undefined : await getEntry('ruangBelajarPengaturan', 'index');
 const refleksiUrlTampil = refleksiUrl || pengaturan?.data.refleksiUrlGlobal;
 // Video punya Ruang Belajar sendiri diutamakan (mis. referensi eksternal
 // yang sengaja tidak ditampilkan di halaman Materi); fallback ke video
@@ -35,6 +41,13 @@ const refleksiUrlTampil = refleksiUrl || pengaturan?.data.refleksiUrlGlobal;
 // lengkap, bukan ID doang.
 const youtubeIdRawTampil = youtubeId || materi?.data.youtubeId;
 const youtubeIdTampil = youtubeIdRawTampil ? extractYoutubeId(youtubeIdRawTampil) : undefined;
+
+// TKA: tugasUrl SELALU mengarah ke /penugasan/<slug> milik sendiri (bukan
+// Google Form dkk seperti kelas lain) -- dipakai buat ambil jumlah soal,
+// ditampilkan di kartu drilling.
+const penugasanSlugTka = isTka && tugasUrl ? tugasUrl.split('/').filter(Boolean).pop() : undefined;
+const penugasanEntryTka = penugasanSlugTka ? await getEntry('penugasan', penugasanSlugTka) : undefined;
+const jumlahSoalTka = penugasanEntryTka?.data.soal.length;
 
 const formattedDate = tanggal.toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -83,6 +96,9 @@ if (bab) {
 
 // Learning Path -- 6 langkah tetap, status ("tersedia"/"belum tersedia")
 // murni dihitung dari ada-tidaknya data ini, BUKAN progress akun siswa.
+// TIDAK dipakai untuk kelas TKA (lihat TkaDrillSession.astro) -- tapi tetap
+// dihitung tanpa syarat di sini karena murah & supaya kode tidak bercabang
+// dua kali; yang membedakan cuma template mana yang dirender di bawah.
 const langkah = [
   {
     nomor: '01',
@@ -166,99 +182,119 @@ const langkah = [
   description={deskripsiTampil ?? `${mapel} ${kelasLabel(kelas)}: ${judul}`}
 >
   <article class="container pd-detail">
-    <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`} class="small-back">&larr; {kelasLabel(kelas)}</a>
+    {isTka ? (
+      <TkaDrillSession
+        judul={judul}
+        mapel={mapel}
+        deskripsi={deskripsi}
+        tujuanPembelajaran={tujuanPembelajaran}
+        materi={materi}
+        tugasUrl={tugasUrl}
+        jumlahSoal={jumlahSoalTka}
+        durasi={durasi}
+        babInfo={babInfo}
+        indexSekarang={indexSekarang}
+        totalSesi={urutanSekelas.length}
+        sesiSebelumnya={sesiSebelumnya}
+        sesiBerikutnya={sesiBerikutnya}
+      />
+    ) : (
+      <>
+        <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`} class="small-back">&larr; {kelasLabel(kelas)}</a>
 
-    <p class="eyebrow">{mapel} — {kelasLabel(kelas)}</p>
-    <h1>{judul}</h1>
+        <p class="eyebrow">{mapel} — {kelasLabel(kelas)}</p>
+        <h1>{judul}</h1>
 
-    <div class="pd-meta-row">
-      {babInfo ? (
-        <span class="pd-meta pd-meta-langkah">📘 Bab {babInfo.nomor} · {babInfo.nama} — Langkah {babInfo.posisi} dari {babInfo.total}</span>
-      ) : (
-        indexSekarang >= 0 && (
-          <span class="pd-meta pd-meta-langkah">📍 Langkah {indexSekarang + 1} dari {urutanSekelas.length}</span>
-        )
-      )}
-      {durasi && <span class="pd-meta">⏱ {durasi} menit</span>}
-    </div>
+        <div class="pd-meta-row">
+          {babInfo ? (
+            <span class="pd-meta pd-meta-langkah">📘 Bab {babInfo.nomor} · {babInfo.nama} — Langkah {babInfo.posisi} dari {babInfo.total}</span>
+          ) : (
+            indexSekarang >= 0 && (
+              <span class="pd-meta pd-meta-langkah">📍 Langkah {indexSekarang + 1} dari {urutanSekelas.length}</span>
+            )
+          )}
+          {durasi && <span class="pd-meta">⏱ {durasi} menit</span>}
+        </div>
 
-    {deskripsiTampil && <p class="pd-lede">{deskripsiTampil}</p>}
+        {deskripsiTampil && <p class="pd-lede">{deskripsiTampil}</p>}
 
-    <p class="pd-tanggal-kecil">
-      Sesi ini pertama kali diajarkan {formattedDate} -- tapi bisa dipelajari siapa saja, kapan saja, tidak terikat tanggal.
-    </p>
+        <p class="pd-tanggal-kecil">
+          Sesi ini pertama kali diajarkan {formattedDate} -- tapi bisa dipelajari siapa saja, kapan saja, tidak terikat tanggal.
+        </p>
 
-    {tujuanPembelajaran.length > 0 && (
-      <div class="pd-tujuan">
-        <p class="pd-tujuan-label">Tujuan Pembelajaran</p>
-        <ul>
-          {tujuanPembelajaran.map((t: string) => <li>{t}</li>)}
-        </ul>
-      </div>
-    )}
-
-    <div class="pd-path">
-      {langkah.map((l, i) => (
-        <div class={`pd-step ${l.tersedia ? '' : 'pd-step--kosong'}`}>
-          <div class="pd-step-line" aria-hidden="true">
-            <span class="pd-step-num">{l.nomor}</span>
-            {i < langkah.length - 1 && <span class="pd-step-connector"></span>}
+        {tujuanPembelajaran.length > 0 && (
+          <div class="pd-tujuan">
+            <p class="pd-tujuan-label">Tujuan Pembelajaran</p>
+            <ul>
+              {tujuanPembelajaran.map((t: string) => <li>{t}</li>)}
+            </ul>
           </div>
-          <div class="pd-step-body">
-            <h2>{l.ikon} {l.label}</h2>
-            <p>{l.keterangan}</p>
-            {l.tersedia ? (
-              <a
-                href={l.href}
-                class="btn btn-primary"
-                target={l.externalTarget ? '_blank' : undefined}
-                rel={l.externalTarget ? 'noopener noreferrer' : undefined}
-                data-force-chrome-android={l.forceChromeAndroid ? '' : undefined}
-              >
-                {l.cta} {l.externalTarget ? '↗' : '→'}
+        )}
+
+        <div class="pd-path">
+          {langkah.map((l, i) => (
+            <div class={`pd-step ${l.tersedia ? '' : 'pd-step--kosong'}`}>
+              <div class="pd-step-line" aria-hidden="true">
+                <span class="pd-step-num">{l.nomor}</span>
+                {i < langkah.length - 1 && <span class="pd-step-connector"></span>}
+              </div>
+              <div class="pd-step-body">
+                <h2>{l.ikon} {l.label}</h2>
+                <p>{l.keterangan}</p>
+                {l.tersedia ? (
+                  <a
+                    href={l.href}
+                    class="btn btn-primary"
+                    target={l.externalTarget ? '_blank' : undefined}
+                    rel={l.externalTarget ? 'noopener noreferrer' : undefined}
+                    data-force-chrome-android={l.forceChromeAndroid ? '' : undefined}
+                  >
+                    {l.cta} {l.externalTarget ? '↗' : '→'}
+                  </a>
+                ) : (
+                  <span class="pd-step-unavailable">— Belum tersedia</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="pd-nav-grid">
+          <div class="pd-nav-slot">
+            {sesiSebelumnya ? (
+              <a href={`/ruang-belajar/${sesiSebelumnya.id}`} class="pd-next-card">
+                <span class="pd-next-label">⬅️ Pembelajaran Sebelumnya</span>
+                <span class="pd-next-judul">{sesiSebelumnya.data.judul}</span>
+                <span class="pd-next-cta">&larr; Lihat lagi</span>
               </a>
             ) : (
-              <span class="pd-step-unavailable">— Belum tersedia</span>
+              <div class="pd-next-selesai">
+                <span class="pd-next-label">🏁 Sesi Pertama</span>
+                <p>Ini pembelajaran paling awal yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini.</p>
+              </div>
+            )}
+          </div>
+
+          <div class="pd-nav-slot">
+            {sesiBerikutnya ? (
+              <a href={`/ruang-belajar/${sesiBerikutnya.id}`} class="pd-next-card">
+                <span class="pd-next-label">➡️ Pembelajaran Berikutnya</span>
+                <span class="pd-next-judul">{sesiBerikutnya.data.judul}</span>
+                <span class="pd-next-cta">Lanjut &rarr;</span>
+              </a>
+            ) : (
+              <div class="pd-next-selesai">
+                <span class="pd-next-label">🎉 Sesi Terakhir</span>
+                <p>
+                  Ini pembelajaran terakhir yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini. Sesi berikutnya akan
+                  ditambahkan menyusul -- lihat <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`}>semua Bab {kelasLabel(kelas)}</a> sementara menunggu.
+                </p>
+              </div>
             )}
           </div>
         </div>
-      ))}
-    </div>
-
-    <div class="pd-nav-grid">
-      <div class="pd-nav-slot">
-        {sesiSebelumnya ? (
-          <a href={`/ruang-belajar/${sesiSebelumnya.id}`} class="pd-next-card">
-            <span class="pd-next-label">⬅️ Pembelajaran Sebelumnya</span>
-            <span class="pd-next-judul">{sesiSebelumnya.data.judul}</span>
-            <span class="pd-next-cta">&larr; Lihat lagi</span>
-          </a>
-        ) : (
-          <div class="pd-next-selesai">
-            <span class="pd-next-label">🏁 Sesi Pertama</span>
-            <p>Ini pembelajaran paling awal yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini.</p>
-          </div>
-        )}
-      </div>
-
-      <div class="pd-nav-slot">
-        {sesiBerikutnya ? (
-          <a href={`/ruang-belajar/${sesiBerikutnya.id}`} class="pd-next-card">
-            <span class="pd-next-label">➡️ Pembelajaran Berikutnya</span>
-            <span class="pd-next-judul">{sesiBerikutnya.data.judul}</span>
-            <span class="pd-next-cta">Lanjut &rarr;</span>
-          </a>
-        ) : (
-          <div class="pd-next-selesai">
-            <span class="pd-next-label">🎉 Sesi Terakhir</span>
-            <p>
-              Ini pembelajaran terakhir yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini. Sesi berikutnya akan
-              ditambahkan menyusul -- lihat <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`}>semua Bab {kelasLabel(kelas)}</a> sementara menunggu.
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
+      </>
+    )}
   </article>
 </BaseLayout>
 

@@ -2,6 +2,7 @@
 // Kartu satu sesi Ruang Belajar -- dipakai di grid Bab pada halaman
 // per-Kelas (lihat src/pages/ruang-belajar/kelas/[kelas].astro).
 import type { CollectionEntry } from 'astro:content';
+import { kelasLabel } from '../lib/ruangBelajar';
 
 interface Props {
   entry: CollectionEntry<'ruangBelajar'>;
@@ -9,17 +10,18 @@ interface Props {
 
 const { entry } = Astro.props;
 const { kelas, mapel, judul, deskripsi, durasi } = entry.data;
+const isTka = kelas === 'TKA';
 ---
 
 <a href={`/ruang-belajar/${entry.id}`} class="pd-card">
   <div class="pd-card-tag">
-    <span class="badge">{mapel.toUpperCase()} — KELAS {kelas}</span>
+    <span class="badge">{mapel.toUpperCase()} — {kelasLabel(kelas).toUpperCase()}</span>
   </div>
   <h3 class="pd-card-title">{judul}</h3>
   {deskripsi && <p class="pd-card-desc">{deskripsi}</p>}
   <div class="pd-card-footer">
     {durasi && <span class="pd-card-durasi">⏱ {durasi} menit</span>}
-    <span class="pd-card-cta">Mulai Belajar &rarr;</span>
+    <span class="pd-card-cta">{isTka ? 'Mulai Latihan' : 'Mulai Belajar'} &rarr;</span>
   </div>
 </a>
 

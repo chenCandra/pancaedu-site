@@ -69,9 +69,9 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
         <label>
           Kelas
           <select name="kelas" class="pn-select" data-pn-kelas-select required>
-            <option value="" disabled selected>Pilih kelas</option>
+            <option value="" disabled>Pilih kelas</option>
             {daftarKelas.map((k) => <option value={k.kelas}>{k.kelas}</option>)}
-            <option value={KELAS_UMUM}>{KELAS_UMUM}</option>
+            <option value={KELAS_UMUM} selected>{KELAS_UMUM}</option>
           </select>
         </label>
         <label data-pn-nama-select-wrap hidden>
@@ -271,6 +271,13 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
       } else if (namaManual) {
         namaManual.value = identitasTersimpan.nama;
       }
+    } else if (kelasSelect) {
+      // Belum pernah isi identitas sebelumnya -- <select> Kelas defaultnya
+      // sudah "Umum / Lainnya" (lihat atribut `selected` di HTML), jadi
+      // langsung panggil ini supaya field Nama manual langsung kelihatan
+      // tanpa siswa harus klik dropdown Kelas dulu. Siswa yang memang punya
+      // kelas di roster tetap bisa gonta-ganti pilihan seperti biasa.
+      perbaruiFieldNama(kelasSelect.value);
     }
 
     identitasForm?.addEventListener('submit', async (e) => {
