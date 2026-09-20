@@ -2,7 +2,7 @@
 judul: "Latihan TKA: Gerak Lurus & Gerak Lengkung"
 kelas: TKA
 mapel: Fisika
-deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Kinematika: GLB, GLBB (termasuk gerak jatuh bebas), dan gerak parabola."
+deskripsi: "21 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Kinematika: GLB, GLBB (termasuk gerak jatuh bebas), gerak parabola, dan gerak melingkar."
 materiSlug: gerak-lurus-beraturan
 pinHash: 685b3c76a2a2b60d161d4109bc8f80a674ab84d9c97cdeb898ed78273e99c9f5
 pinBerlakuHingga: 2027-03-20
@@ -154,5 +154,63 @@ soal:
       - { id: i4, teks: "Jika miring TURUN menuju nol, simpulkan gerak tersebut GLBB diperlambat" }
     penjelasan: "Grafik v-t adalah cara tercepat mengenali jenis gerak: kemiringan (gradien) garisnya langsung menunjukkan besar percepatan -- garis mendatar berarti percepatan nol (GLB), garis miring berarti ada percepatan tetap (GLBB)."
     skor: 1
+  - tipe: pilihan-ganda
+    id: soal-16
+    soal: "Rumus yang menghubungkan kecepatan linear (v) dengan kecepatan sudut (ω) pada gerak melingkar adalah..."
+    pilihan:
+      - { id: a, teks: "v = ω / r" }
+      - { id: b, teks: "v = ω × r" }
+      - { id: c, teks: "v = ω + r" }
+      - { id: d, teks: "v = ω × r²" }
+    jawabanBenarId: b
+    penjelasan: "v = ω × r -- kecepatan linear sebanding dengan kecepatan sudut DAN jari-jari lintasannya."
+    skor: 1
+  - tipe: pilihan-ganda
+    id: soal-17
+    soal: "Sebuah benda bergerak melingkar dengan kecepatan sudut 6 rad/s pada lintasan berjari-jari 2 m. Kecepatan linear benda tersebut adalah..."
+    pilihan:
+      - { id: a, teks: "3 m/s" }
+      - { id: b, teks: "4 m/s" }
+      - { id: c, teks: "8 m/s" }
+      - { id: d, teks: "12 m/s" }
+    jawabanBenarId: d
+    penjelasan: "v = ω × r = 6 rad/s × 2 m = 12 m/s."
+    skor: 1
+  - tipe: isian-singkat
+    id: soal-18
+    soal: "Sebuah benda bergerak melingkar dengan kelajuan 8 m/s pada lintasan berjari-jari 4 m. Besar percepatan sentripetal benda tersebut adalah ... m/s²."
+    angka: true
+    toleransi: 0
+    jawabanBenar: ["16"]
+    penjelasan: "a_s = v²/r = 8²/4 = 64/4 = 16 m/s²."
+    skor: 1
+  - tipe: benar-salah
+    id: soal-19
+    soal: "Pada Gerak Melingkar Beraturan (GMB), meskipun lajunya konstan, benda tetap memiliki percepatan karena arah kecepatannya terus berubah."
+    jawabanBenar: true
+    penjelasan: "Benar -- istilah 'beraturan' pada GMB merujuk pada LAJU yang konstan, bukan berarti tidak ada percepatan. Karena arah kecepatan terus berubah mengikuti lengkungan lintasan, tetap ada percepatan sentripetal yang mengarah ke pusat lingkaran."
+    skor: 2
+  - tipe: menjodohkan
+    id: soal-20
+    soal: "Jodohkan jenis hubungan roda-roda dengan besaran yang PASTI sama pada keduanya."
+    pasangan:
+      - { id: p1, kiri: "Roda Sepusat / Seporos", kanan: "Kecepatan sudut (ω) kedua roda sama besar" }
+      - { id: p2, kiri: "Roda Bersinggungan Langsung", kanan: "Kecepatan linear (v) kedua roda sama besar di titik singgung" }
+      - { id: p3, kiri: "Roda Dihubungkan Sabuk/Rantai", kanan: "Kecepatan linear (v) kedua roda sama besar (lewat sabuk/rantai yang sama)" }
+    penjelasan: "Roda sepusat berputar sebagai satu kesatuan (ω wajib sama), sedangkan roda yang bersinggungan/dihubungkan sabuk saling menggerakkan lewat kontak permukaan, sehingga kecepatan LINEAR-nya yang harus sama."
+    skor: 1
+  - tipe: drag-drop
+    id: soal-21
+    soal: "Kelompokkan pasangan roda berikut: apakah kecepatan SUDUT (ω) keduanya yang sama, atau kecepatan LINEAR (v) keduanya yang sama."
+    kategori:
+      - { id: sama-omega, label: "Kecepatan Sudut (ω) Sama" }
+      - { id: sama-v, label: "Kecepatan Linear (v) Sama" }
+    item:
+      - { id: t1, teks: "Dua roda gigi yang dipasang pada satu as/poros yang sama (co-axial)", kategoriBenarId: sama-omega }
+      - { id: t2, teks: "Roda depan dan roda belakang sepeda yang dihubungkan rantai", kategoriBenarId: sama-v }
+      - { id: t3, teks: "Dua gir yang giginya saling bertautan langsung (bersinggungan)", kategoriBenarId: sama-v }
+      - { id: t4, teks: "Kedua roda mobil yang terpasang pada satu as/gandar yang sama (co-axial)", kategoriBenarId: sama-omega }
+    penjelasan: "Kuncinya: roda yang menempel di POROS yang sama WAJIB berputar bersamaan (ω sama), sedangkan roda yang saling bersentuhan/terhubung sabuk-rantai saling 'menggerakkan' lewat permukaan yang bergerak sama cepat (v sama)."
+    skor: 2
 draft: false
 ---
