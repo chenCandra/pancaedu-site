@@ -3,7 +3,7 @@ tanggal: 2026-09-21
 kelas: TKA
 mapel: Fisika
 bab: "Kinematika"
-judul: Gerak Lurus & Gerak Lengkung
+judul: Gerak Lurus & Gerak Lengkung — Paket 1
 deskripsi: Sesi kedua persiapan TKA Fisika elemen Kinematika -- ringkasan GLB, GLBB (termasuk gerak jatuh bebas), gerak parabola sebagai gabungan GLB-GLBB dua dimensi, dan gerak melingkar (besaran sudut, percepatan sentripetal, hubungan roda-roda). Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 60
 tujuanPembelajaran:

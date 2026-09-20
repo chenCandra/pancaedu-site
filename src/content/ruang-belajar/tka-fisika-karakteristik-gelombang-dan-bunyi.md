@@ -3,7 +3,7 @@ tanggal: 2026-09-27
 kelas: TKA
 mapel: Fisika
 bab: "Gelombang"
-judul: Karakteristik Gelombang & Bunyi
+judul: Karakteristik Gelombang & Bunyi — Paket 1
 deskripsi: Sesi pertama Bab Gelombang -- ringkasan besaran gelombang (panjang gelombang, frekuensi, periode, cepat rambat), klasifikasi transversal-longitudinal, karakteristik bunyi, dan klasifikasi infrasonik-audiosonik-ultrasonik. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

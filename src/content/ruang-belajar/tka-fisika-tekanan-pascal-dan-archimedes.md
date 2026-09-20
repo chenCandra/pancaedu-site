@@ -3,7 +3,7 @@ tanggal: 2026-09-25
 kelas: TKA
 mapel: Fisika
 bab: "Fluida"
-judul: Tekanan, Pascal & Archimedes
+judul: Tekanan, Pascal & Archimedes — Paket 1
 deskripsi: Sesi pertama Bab Fluida -- ringkasan massa jenis, tekanan hidrostatis (P=ρgh), Hukum Pascal (dongkrak hidrolik), dan Hukum Archimedes (gaya apung, terapung-melayang-tenggelam). Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

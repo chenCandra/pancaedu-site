@@ -3,7 +3,7 @@ tanggal: 2026-09-22
 kelas: TKA
 mapel: Fisika
 bab: "Dinamika"
-judul: Hukum Newton
+judul: Hukum Newton — Paket 1
 deskripsi: Sesi pertama Bab Dinamika -- ringkasan Hukum I, II, III Newton, diagram bebas gaya, resultan gaya, dan miskonsepsi paling umum soal pasangan aksi-reaksi. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

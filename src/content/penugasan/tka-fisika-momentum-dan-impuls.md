@@ -1,5 +1,5 @@
 ---
-judul: "Latihan TKA: Momentum & Impuls"
+judul: "Latihan TKA: Momentum & Impuls (Paket 1)"
 kelas: TKA
 mapel: Fisika
 deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Dinamika (Momentum & Impuls): momentum, impuls, Hukum Kekekalan Momentum, dan jenis tumbukan."

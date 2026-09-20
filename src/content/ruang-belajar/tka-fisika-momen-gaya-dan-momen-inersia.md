@@ -3,7 +3,7 @@ tanggal: 2026-09-24
 kelas: TKA
 mapel: Fisika
 bab: "Dinamika"
-judul: Momen Gaya & Momen Inersia
+judul: Momen Gaya & Momen Inersia — Paket 1
 deskripsi: Sesi ketiga (terakhir) Bab Dinamika -- ringkasan momen gaya/torsi (τ=F×d), kesetimbangan rotasi (Στ=0), dan momen inersia (I=mr²) sebagai ukuran kelembaman rotasi. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

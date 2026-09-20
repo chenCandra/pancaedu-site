@@ -1,5 +1,5 @@
 ---
-judul: "Latihan TKA: Hukum Newton"
+judul: "Latihan TKA: Hukum Newton (Paket 1)"
 kelas: TKA
 mapel: Fisika
 deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Dinamika (Hukum Newton): Hukum I/II/III, diagram bebas gaya, dan pasangan aksi-reaksi."

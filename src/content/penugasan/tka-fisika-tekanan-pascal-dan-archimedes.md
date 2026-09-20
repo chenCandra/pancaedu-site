@@ -1,5 +1,5 @@
 ---
-judul: "Latihan TKA: Tekanan, Pascal & Archimedes"
+judul: "Latihan TKA: Tekanan, Pascal & Archimedes (Paket 1)"
 kelas: TKA
 mapel: Fisika
 deskripsi: "15 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Fluida: tekanan hidrostatis, Hukum Pascal, dan Hukum Archimedes."

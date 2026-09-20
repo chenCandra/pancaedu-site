@@ -3,7 +3,7 @@ tanggal: 2026-09-26
 kelas: TKA
 mapel: Fisika
 bab: "Fluida"
-judul: Bernoulli & Kontinuitas
+judul: Bernoulli & Kontinuitas — Paket 1
 deskripsi: Sesi kedua (terakhir) Bab Fluida -- ringkasan debit aliran, Asas Kontinuitas (A1v1=A2v2), dan Asas Bernoulli (P+½ρv²+ρgh=konstan), lengkap penerapannya di sayap pesawat, venturi, dan teorema Torricelli. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

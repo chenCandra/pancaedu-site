@@ -3,7 +3,7 @@ tanggal: 2026-09-28
 kelas: TKA
 mapel: Fisika
 bab: "Gelombang"
-judul: Intensitas, Resonansi & Efek Doppler
+judul: Intensitas, Resonansi & Efek Doppler — Paket 1
 deskripsi: Sesi kedua (terakhir) Bab Gelombang, sekaligus sesi penutup persiapan TKA -- ringkasan intensitas bunyi (I=P/A), taraf intensitas (desibel), Efek Doppler, resonansi, dan pelayangan bunyi. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:

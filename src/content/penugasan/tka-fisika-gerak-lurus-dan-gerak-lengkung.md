@@ -1,5 +1,5 @@
 ---
-judul: "Latihan TKA: Gerak Lurus & Gerak Lengkung"
+judul: "Latihan TKA: Gerak Lurus & Gerak Lengkung (Paket 1)"
 kelas: TKA
 mapel: Fisika
 deskripsi: "21 soal latihan -- 6 tipe interaktif (pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, drag & drop) dengan porsi soal HOTS, sesuai kisi-kisi resmi elemen Kinematika: GLB, GLBB (termasuk gerak jatuh bebas), gerak parabola, dan gerak melingkar."

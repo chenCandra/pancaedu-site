@@ -3,7 +3,7 @@ tanggal: 2026-09-20
 kelas: TKA
 mapel: Fisika
 bab: "Kinematika"
-judul: Pengukuran & Alat Ukur
+judul: Pengukuran & Alat Ukur — Paket 1
 deskripsi: Sesi pertama persiapan TKA Fisika elemen Kinematika -- ringkasan alat ukur panjang/massa/waktu, cara membaca skala jangka sorong & mikrometer sekrup, ketidakpastian pengukuran, sampai ketelitian vs ketepatan. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
 durasi: 45
 tujuanPembelajaran:
