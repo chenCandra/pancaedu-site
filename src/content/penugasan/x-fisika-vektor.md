@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pengertian vektor, komponen vektor, dan cara menjumlahkan vektor."
 materiSlug: vektor
-pinHash: 7f4797378f6ef8952a79e7b6149d47ce6f2fed8a5129a588f4c81b06a288abc9
+pinHash: 134db2dda770ad32364593d8337f551a3bcb814e83137fa37417cbf0ae4137b9
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar rumus usaha (W = F.s.cos theta), teorema usaha-energi, dan daya (P = W/t)."
 materiSlug: usaha-dan-daya
-pinHash: cf1f6e4776a08d4e266040cc6bdd5d4d8fb76e28496f691bb5151344fa460279
+pinHash: 66ba74feda8b40c53904b0c1adf06d47f7d4d763020d65394b7bac2a86eb2386
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

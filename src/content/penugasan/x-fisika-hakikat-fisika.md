@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar tiga hakikat Fisika (proses, sikap, produk) dan 6 langkah metode ilmiah."
 materiSlug: hakikat-fisika-dan-metode-ilmiah
-pinHash: 6b27efad12a1d676a778ee58c5234f2bbb4b09c730d0af3ff607e2c6596ce6c3
+pinHash: da64325c7b4724b26f2c7d1d947fc910b29515c4f377d3b951235ea503f8e331
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

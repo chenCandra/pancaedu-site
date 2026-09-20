@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar ciri-ciri rangkaian seri dan paralel, serta cara menghitung hambatan totalnya."
 materiSlug: rangkaian-seri-dan-paralel
-pinHash: 60327c2606282ef10a25dfbb12929d50c212eb75311f3e7957759ebbdb76e550
+pinHash: 078c484ab3f7747fe73c151ac51396af74502a77253e577afad435a3be9a073e
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

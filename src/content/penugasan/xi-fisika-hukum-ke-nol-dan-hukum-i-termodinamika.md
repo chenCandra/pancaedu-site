@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum ke-Nol dan Hukum I Termodinamika."
 materiSlug: hukum-ke-nol-dan-hukum-i-termodinamika
-pinHash: 7837bd013a440c0418b23408140ed2b84e54d3ffeb6b487c3f879d1f7cd444b8
+pinHash: 74f2a9979a41672dd5e3f7a7bbdeaa1c0ce0757b4968b4004df49738e9a151c8
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar konsep dan perhitungan kontraksi panjang."
 materiSlug: kontraksi-panjang
-pinHash: 0431defc28d8a2c1cdf922b61d0d6b90cd60bb50f63ef7530d814ccde1404e6a
+pinHash: 8373c5cee1e4ad89089683aed684c05999cd3c730168244dc57f3f22653784ea
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar struktur, rumus kapasitansi, dan energi kapasitor keping sejajar."
 materiSlug: kapasitor-keping-sejajar
-pinHash: 8ffe6a035a1a22014eafd66ed3fc4850d3510dd88286854dad15b61dbb401bf7
+pinHash: 6bb3eae0b4959d970422b9750231ed474f1e5b2821645d6b57fef1421a80cbe8
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar simbol dimensi besaran pokok, menurunkan dimensi besaran turunan, dan memeriksa konsistensi persamaan Fisika."
 materiSlug: dimensi
-pinHash: 42adbb601cfd837042b2dc906e28a5dbdd44f00e61f1e9cee4fd92ebc10666b4
+pinHash: 087a0ea70796303bfbb3316e2ac39770036ee9e03ca5513a259e516be6f45f37
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

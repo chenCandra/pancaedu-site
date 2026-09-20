@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar sistem bilangan biner dan konversi biner-desimal."
 materiSlug: bilangan-biner
-pinHash: 977ac96feb207c54d3bb289817af282bb6b69a33589a3f27e13bbc521e8268c6
+pinHash: c8b3610dbe835c7cd136c228f859069dc0482cfc82bf73cc662e266c5a3b7ea4
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

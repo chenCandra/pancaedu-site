@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum II Termodinamika dan efisiensi mesin kalor (Carnot)."
 materiSlug: hukum-ii-termodinamika-dan-mesin-kalor
-pinHash: b3f7b21448a9fff719e4581493d4cb927932a1b94d920f9f3d17c91ff3612167
+pinHash: 88455310cd04155b8fa474b82b09173c5572deefdd013ac40a17cff716110afa
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

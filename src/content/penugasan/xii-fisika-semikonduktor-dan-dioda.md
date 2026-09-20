@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar semikonduktor, doping, dan dioda sebagai penyearah."
 materiSlug: semikonduktor-dan-dioda
-pinHash: 83c56c421e5cdd5638e7354138057497d81034b83eaca7df67a00d4901f43e51
+pinHash: f851331fb304bf0b1aa0940d692e918afeb9a2bb35afe422b17cf534bf2096bd
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

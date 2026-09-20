@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar struktur transistor, fungsinya sebagai saklar dan penguat, serta konsep IC."
 materiSlug: transistor-saklar-dan-penguat
-pinHash: 90871d2a7744b4296b32a1817979bc452fae31b3817711f072921a9641f5f926
+pinHash: a7873088983ba500cfeef07e8eece3d1007f5a149344925dd5ef8cc447ebfb8a
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

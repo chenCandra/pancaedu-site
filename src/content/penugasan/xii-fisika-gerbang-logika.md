@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar gerbang logika AND, OR, NOT, NAND, NOR, dan XOR beserta tabel kebenarannya."
 materiSlug: gerbang-logika
-pinHash: 877797ce72751c1520a17902faa56c5944c252faa8e0e19ef951762def3564f9
+pinHash: 3930b9c4b575f8a89c393327e88b684734f8a52e76e6535f04099fc5b7e5a4c5
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

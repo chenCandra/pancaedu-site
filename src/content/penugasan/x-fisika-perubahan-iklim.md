@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar dampak pemanasan global dalam skala bumi: kenaikan suhu, es mencair, permukaan laut naik, cuaca ekstrem, dan ancaman keanekaragaman hayati."
 materiSlug: perubahan-iklim
-pinHash: aa95be69bee92ae3e92e7df0042e79a02f3e6409dc18f351adbfe617748a7e5a
+pinHash: d02e9a55b1703434476b713e1430652526e7e81f6e515fba0c6e7b4c4e421911
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

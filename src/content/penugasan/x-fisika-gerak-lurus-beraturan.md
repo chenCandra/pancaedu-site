@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar ciri-ciri GLB, rumus posisi, dan bentuk grafik x-t/v-t/a-t."
 materiSlug: gerak-lurus-beraturan
-pinHash: 69e34819bd531a6f5e09719f4b582bbeeecfd1480b31f6ed078d3ded8e0d2741
+pinHash: bee703d88db47c8d01b21d67dcd23325173efd07bd6660207a68a08ccbe069a0
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

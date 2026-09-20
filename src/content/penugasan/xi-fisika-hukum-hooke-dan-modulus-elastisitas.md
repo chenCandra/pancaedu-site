@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum Hooke, energi potensial elastis, dan modulus elastisitas."
 materiSlug: hukum-hooke-dan-modulus-elastisitas
-pinHash: 295bec6f3825b4b91aa759f5fa47874f734174ae03c0931e6bbe7263b4e2330d
+pinHash: abe68c3eba269c495ff5964cf17446167e0afbe7c8582c00a39603bf03ea8693
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum Pascal (dongkrak hidrolik) dan Hukum Archimedes (gaya apung)."
 materiSlug: hukum-pascal-dan-hukum-archimedes
-pinHash: d63ad83623f546d248b3b4f7716a4b1f2af9ca6471e75e90c967bc4a22af622d
+pinHash: e8e3aa0ed0000cdad71f050dde8fc9dfc7b6ed035b88ebe556b9a0ed06f3ac0c
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

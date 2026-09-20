@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar ciri-ciri GLBB, rumus kecepatan dan posisi, GLBB dipercepat/diperlambat, dan gerak jatuh bebas."
 materiSlug: gerak-lurus-berubah-beraturan
-pinHash: 06e783c78afe2c6a3b92d3f8b918a8eed9115bf974b5426952735b551e64a233
+pinHash: cd9545d568f4ea7d1525617026b1b770db43eca0e9bfbbefdc08e8042ca20f44
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar rumus Hukum Coulomb, sifat tarik/tolak antar muatan, dan perbandingannya dengan Hukum Gravitasi Newton."
 materiSlug: hukum-coulomb
-pinHash: dae0c8c1052d589b06ce8dcc9e35c1d5053837bfc2b018399b5226617d3ad641
+pinHash: 6ef879098a7b843e6907ddd33169c213cc24f751e14157e622bd7405904cd884
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar intensitas bunyi, taraf intensitas, dan Efek Doppler."
 materiSlug: intensitas-bunyi-dan-efek-doppler
-pinHash: 566002fe86768465b361c7b3c85c97bb3d554ed93a6d1aa37d6c5ebaa8403180
+pinHash: 4f3d020525b559ab7fd967be5f7b4f1b0afbe4aa79fc155b83d91228da038eb9
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar konduksi, konveksi, dan radiasi."
 materiSlug: perpindahan-kalor-konduksi-konveksi-radiasi
-pinHash: 49f78f4435223013c5e119913c06e640fd382652510c3b4847a1a87f96f56a44
+pinHash: dac3b9622359edf90e570f211fdd1ff8055aa6d119aee851a452c590a0fd017e
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

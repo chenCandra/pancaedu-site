@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar luas, volume, kecepatan, gaya, tekanan, usaha, dan daya sebagai besaran turunan."
 materiSlug: besaran-turunan
-pinHash: d328696ac3d2ceb5bfdcd1a86401be9b7dae4e4eef24380fcec41b46a5487928
+pinHash: bddac7e1ab8c9798a0a7beaf54f2f3b3d682dc7a48c2a2e47946355e520126b8
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

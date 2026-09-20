@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar konsep dan perhitungan dilatasi waktu."
 materiSlug: dilatasi-waktu
-pinHash: 21b284acd4678f5d11426ba5f644a0ab8a71f197427a3940a36faf651a0b9355
+pinHash: 0ffde6ee586500a21f1210a0d618837a2ff1bc699032124e2fcc9bf65b621bfd
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

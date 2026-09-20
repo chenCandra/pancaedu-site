@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- latihan sintesis dilatasi waktu, kontraksi panjang, massa relativistik, dan energi kinetik relativistik."
 materiSlug: latihan-soal-relativitas-khusus
-pinHash: 55ddcc4bc0046b4037edc1197af70b9ee9fe428e2807b406e286f155cfcd2229
+pinHash: 12a7fb6ac039b71e454f50d0f7482415d253f328b3dfea1b2efe0a59716ab0a5
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

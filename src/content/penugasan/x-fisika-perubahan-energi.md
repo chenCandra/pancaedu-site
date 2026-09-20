@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar rantai perubahan energi pada berbagai alat/peristiwa, dan konsep efisiensi energi."
 materiSlug: perubahan-energi
-pinHash: b6c423ac428e310c671ef109ff2b2902a81fda3fb34aed9741a0201b5784fafb
+pinHash: d529b34e7ef48f683263b982f6a7c3a0b2fed903931b85809182c2b4b7f865c0
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

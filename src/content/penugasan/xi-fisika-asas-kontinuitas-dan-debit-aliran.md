@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar fluida ideal, debit aliran, dan Asas Kontinuitas."
 materiSlug: asas-kontinuitas-dan-debit-aliran
-pinHash: 6fc6bc9a883d59b448cb10db3bc14300a211f94d6dbdd8963538ec6a795c75f3
+pinHash: 19b445ea0ca83adb8775c491f00c9caea361fa340f15063031f3ec477e2d8afe
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

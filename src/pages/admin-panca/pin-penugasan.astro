@@ -1,0 +1,141 @@
+---
+// Referensi PIN plaintext untuk Penugasan (leaderboard & pembahasan) --
+// BEDA dari /admin-panca/pin (itu PIN Rekap Nilai, disimpan plaintext di
+// D1). Daftar di sini murni CATATAN MANUAL (src/lib/adminPanca/pinReferensi.ts)
+// karena PIN Penugasan disimpan sebagai HASH di konten -- lihat komentar
+// panjang di file data-nya soal kenapa daftar ini bisa jadi usang.
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { env } from 'cloudflare:workers';
+import { daftarPinReferensi } from '../../lib/adminPanca/pinReferensi';
+
+export const prerender = false;
+
+const sesi = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesi) return Astro.redirect('/admin-panca/login');
+
+const tka = daftarPinReferensi.filter((p) => p.kelas === 'TKA');
+const lain = daftarPinReferensi.filter((p) => p.kelas !== 'TKA');
+---
+
+<AdminPancaLayout title="PIN Penugasan" username={sesi.username}>
+  <h1 class="panca-h1">Referensi PIN Penugasan</h1>
+  <p class="panca-lede">
+    Daftar PIN <strong>plaintext</strong> (leaderboard & pembahasan) yang diketahui untuk tiap Penugasan.
+    Beda dari <a href="/admin-panca/pin">Kelola PIN Rekap Nilai</a> -- itu untuk halaman
+    <code>/penugasan/rekap</code>, ini untuk PIN per-Penugasan yang tersimpan sebagai hash di konten.
+  </p>
+
+  <div class="panca-card panca-warning">
+    ⚠️ <strong>Daftar ini bisa usang.</strong> Situs cuma menyimpan HASH PIN di konten, bukan plaintext-nya --
+    daftar di bawah murni catatan manual dari saat PIN dibuat/digenerate ulang. Kalau ada PIN yang diganti
+    lewat <a href="/penugasan/pin-generator">/penugasan/pin-generator</a> tanpa update file
+    <code>src/lib/adminPanca/pinReferensi.ts</code>, baris terkait di sini tidak lagi akurat.
+  </div>
+
+  <section class="panca-card pin-list-card">
+    <h2 class="section-title">TKA ({tka.length} paket)</h2>
+    <div class="table-scroll">
+      <table class="pin-table">
+        <thead>
+          <tr>
+            <th>Topik</th>
+            <th>PIN Leaderboard</th>
+            <th>PIN Pembahasan</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {tka.map((p) => (
+            <tr>
+              <td>{p.judul}</td>
+              <td><code>{p.pinLeaderboard}</code></td>
+              <td>{p.pinPembahasan ? <code>{p.pinPembahasan}</code> : '—'}</td>
+              <td><a href={`/penugasan/${p.slug}`} class="pin-link">Buka &rarr;</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panca-card pin-list-card">
+    <h2 class="section-title">Kelas X/XI/XII ({lain.length} penugasan)</h2>
+    <div class="table-scroll">
+      <table class="pin-table">
+        <thead>
+          <tr>
+            <th>Kelas</th>
+            <th>Judul</th>
+            <th>PIN Leaderboard</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {lain.map((p) => (
+            <tr>
+              <td>{p.kelas}</td>
+              <td>{p.judul}</td>
+              <td><code>{p.pinLeaderboard}</code></td>
+              <td><a href={`/penugasan/${p.slug}`} class="pin-link">Buka &rarr;</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</AdminPancaLayout>
+
+<style>
+  .section-title {
+    font-size: 1.1rem;
+    margin: 0 0 1rem;
+  }
+
+  .panca-warning {
+    background: var(--gold-soft);
+    border-color: var(--gold);
+    font-size: 0.9375rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pin-list-card {
+    margin-top: 1.5rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .pin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .pin-table th,
+  .pin-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .pin-table code {
+    background: var(--surface);
+    border-radius: 0.35rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .pin-link {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .pin-link:hover {
+    text-decoration: underline;
+  }
+</style>

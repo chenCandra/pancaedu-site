@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar 7 besaran pokok SI, satuannya, dan miskonsepsi umum seperti massa vs berat."
 materiSlug: besaran-pokok
-pinHash: 29dd47e01b0a6b6752a8bb0c51e5e10aa4600be2a59197a77bf2da1440b63bae
+pinHash: 7f681063ed110ef5fefc2a9c1531d1b7718db5d0557c3b391332b50fd610e65e
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

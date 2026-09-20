@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Gaya Lorentz, rumus F=qvB, dan aplikasinya pada motor listrik."
 materiSlug: gaya-lorentz
-pinHash: 49df0a0a68913540d3cb7c039aee0d767e23b983c70b43f01aa4a192fde31cae
+pinHash: 11240e1c71cd6062e85bebd42a8e304f8f0d01ba17fc6b78386fc7c4e1c92a2c
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

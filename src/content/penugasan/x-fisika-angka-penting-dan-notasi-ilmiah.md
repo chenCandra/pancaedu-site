@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar aturan angka penting, notasi ilmiah, awalan satuan, dan aturan operasi hitung."
 materiSlug: angka-penting
-pinHash: dc9a6ad25af10a4c36876a26b19ea3a2c10a40d610018a46a350de5624322eeb
+pinHash: 6152df89004a2870147738b5c9c413c9d4fda57101caf3a6a54aad2c08d7cf80
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

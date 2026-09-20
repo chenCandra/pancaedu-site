@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum Ohm, pemasangan amperemeter/voltmeter, serta daya dan energi listrik."
 materiSlug: hukum-ohm-dan-rangkaian-sederhana
-pinHash: 73317bb2de212056528b3731139bbe4c1ffa1e255c0e24f5f387c2bbae17ecbb
+pinHash: 4cf0a8c1f2fbc9ab3ad508a0ca7df28945c4789d6acad6466c680ddc4bd7d9da
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

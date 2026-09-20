@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Asas Bernoulli dan penerapannya pada gaya angkat pesawat dan alat sehari-hari."
 materiSlug: asas-bernoulli-dan-penerapannya
-pinHash: 8aa5ab500efda4ed52ec92b07f96b27e7b896fdfde61f34cf3fccc5590f702ae
+pinHash: b730e6571dd7803419b57b1584456fe592e221c0aded1acbb7f392d1946253e7
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

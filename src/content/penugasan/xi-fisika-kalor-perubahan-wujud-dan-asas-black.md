@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar kalor, kalor laten, dan Asas Black."
 materiSlug: kalor-perubahan-wujud-dan-asas-black
-pinHash: d394d2ac9afe4a02ca1dcefc32111593ac65860447f75e0dbc12423f159d8c6d
+pinHash: 11d281ac17b05ad76e8e96c951816e6a2dd1bcdbc21497686d52f4fb8576a7cc
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar energi fosil (minyak bumi, batu bara, gas alam), energi nuklir, dan kekurangannya bagi lingkungan."
 materiSlug: energi-tak-terbarukan
-pinHash: 5b779a42c85f3e8c274626b7836e3630b68a687611a7edddc90bf77681519ad2
+pinHash: 4e0e010195ed6d324d4c162671da06bddf3ce476b8a99453059af4111ba70654
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

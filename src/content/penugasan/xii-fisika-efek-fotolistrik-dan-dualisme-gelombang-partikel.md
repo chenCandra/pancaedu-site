@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar efek fotolistrik, energi foton, dan dualisme gelombang-partikel cahaya."
 materiSlug: efek-fotolistrik-dan-dualisme-gelombang-partikel
-pinHash: 2ed9de1f317b5126b2ac5daac43561f882367f87f370ee6a3d2bd3afa76be84c
+pinHash: 572e5627c4fb39dcf75f9fa009ac9e399cc8eb7ab04c29721c04b8075ee85893
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

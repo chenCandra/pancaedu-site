@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar perbedaan sumber energi dan bentuk energi, serta sumber energi terbarukan dan tak terbarukan."
 materiSlug: sumber-energi
-pinHash: 9bfe5ea49c6311fcd1042853206fec340e4a7c9f9f5abec7ce50ee9c6911b6ba
+pinHash: 309ad857f13b3f924996da6ee774cfc70884446c9fda06451053f41746bb94f3
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

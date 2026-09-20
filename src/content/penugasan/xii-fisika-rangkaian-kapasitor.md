@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar kapasitansi total rangkaian kapasitor seri dan paralel."
 materiSlug: rangkaian-kapasitor
-pinHash: 227ab13ff89045896774aa9ffb1ff5f248e302b0e4daaa8f0a296a11c5600d19
+pinHash: 6f108791bfca73788363f4637824fcd76e2a84ccb9d12314943810c05fe8e1fc
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

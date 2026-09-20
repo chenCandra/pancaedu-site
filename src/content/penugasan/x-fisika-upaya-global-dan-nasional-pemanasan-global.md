@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Protokol Kyoto, Perjanjian Paris, kebijakan negara, serta mitigasi dan adaptasi."
 materiSlug: upaya-global-dan-nasional-pemanasan-global
-pinHash: f1435cbdf193c8854303352094c0c31df461eda9bd6ee88cecfa91a99248b61d
+pinHash: 8c9ce0e900dfc74cfd907d16a1045bafa302cede35bbad55467dceda18b2d106
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

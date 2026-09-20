@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar kutub magnet, garis gaya magnet, dan jenis-jenis bahan magnetik."
 materiSlug: medan-magnet-konsep-dasar
-pinHash: bbe096c916d94283d2c6178afcbf05e5ee4bf8662175774f0586be207466ff23
+pinHash: 61355de2e7a3847ad90545b3b4cb94546b3f3ac4614e1be31e219740a224a2f7
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

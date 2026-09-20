@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar lenting sempurna, sebagian, tidak lenting, dan koefisien restitusi."
 materiSlug: jenis-jenis-tumbukan
-pinHash: b9a58ac3925ada7222cf4ae45aeae388ac5fdd109d3f9e3189ede67c5dffb456
+pinHash: 84b634cf09542b3e0fa6398befa91eff570a5b88b81421fc84464ad96577a302
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

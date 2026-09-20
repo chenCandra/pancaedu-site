@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar gelombang berjalan, gelombang stasioner, simpul, dan perut."
 materiSlug: gelombang-berjalan-dan-gelombang-stasioner
-pinHash: fcbfb2a5fa7b11ebac4da07ce95c042c66cf7e01cba9095a8410fda86f927c52
+pinHash: 49f18d7d76095314f81fd14d89b0584e8844b1f542f48fb60cd6f2fbe9d82511
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar proses isobarik, isokhorik, isotermal, dan adiabatik."
 materiSlug: proses-proses-termodinamika-pada-gas
-pinHash: cc6dee183779696666c070531ee815c77fefe6452fe662c3ef0b10669e8e8117
+pinHash: 7ba0acdc863706f999146149bf3d547fd2c8e268629604af07ceedc63e121676
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

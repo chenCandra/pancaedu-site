@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar cara kerja generator dan transformator, serta transmisi listrik jarak jauh."
 materiSlug: generator-dan-transformator
-pinHash: aa66d35e49d82bec8c2ab4cad51ba41cca9c7a9d92fae7c2453f8975233e0d5d
+pinHash: 4200118fb44d7826d17174fb4f324dcf3cdc0f03c50f81b2b19571d87a28db52
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

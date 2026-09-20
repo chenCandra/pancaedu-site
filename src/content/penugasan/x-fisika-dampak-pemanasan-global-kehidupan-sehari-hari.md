@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar dampak pemanasan global terhadap cuaca, kesehatan, dan harga pangan dalam kehidupan sehari-hari."
 materiSlug: dampak-pemanasan-global-kehidupan-sehari-hari
-pinHash: f24882e5093f77281d760ab1f6de050e5aaf392a0a40a470b49d0d0a3c800040
+pinHash: e1d1036c3b688239784d376de9456fa6aeae5837691c146efd9575265cbe0384
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

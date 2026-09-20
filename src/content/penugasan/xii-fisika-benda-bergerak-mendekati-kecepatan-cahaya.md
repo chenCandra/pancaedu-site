@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- merangkum efek relativistik dari dua sudut pandang: pengamat diam dan benda itu sendiri."
 materiSlug: benda-bergerak-mendekati-kecepatan-cahaya
-pinHash: f45eb0c51face9e5a203e86e548504faedeac0d253937919f4a3c1cf82405cf4
+pinHash: 2f2088a1d0b5c2db878dacd72860b7552ac360d1f6bd76b197dded611f74aebc
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

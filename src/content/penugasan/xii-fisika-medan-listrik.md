@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar definisi medan listrik, rumus E=F/q dan E=kQ/r², arah medan, dan hubungannya dengan Hukum Coulomb."
 materiSlug: medan-listrik
-pinHash: eb37df2dff04af16cd408823dc76a441832fce9ce7c7e86899bc290726c6ab4e
+pinHash: 948a1d19e9b713d6e22b3bc7ff8835901b54c9d255660cc292783d81ce2ede58
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

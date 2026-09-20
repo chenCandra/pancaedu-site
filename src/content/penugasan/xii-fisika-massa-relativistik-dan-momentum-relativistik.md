@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar konsep dan perhitungan massa relativistik dan momentum relativistik."
 materiSlug: massa-relativistik-dan-momentum-relativistik
-pinHash: 9e3458a5d08bed17c9be149c1553a21fbeceae79903f7e52505d8ef0e6846b15
+pinHash: 8e3b40f860b84f5d6352b475365478d5c8a0564b85231635955133bb7cd3875e
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

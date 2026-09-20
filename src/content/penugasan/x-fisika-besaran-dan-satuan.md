@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pengertian besaran, satuan, satuan baku, Sistem Internasional, dan klasifikasi besaran skalar/vektor."
 materiSlug: besaran-dan-satuan
-pinHash: aab9218e9f6198ecb9bed3e9825839b5d94b166a3dd9a964e441d64dd65a2e8e
+pinHash: b1b9e75aebcb2c7087879712cc0d48f2a83e4aed799fb2d8da74cd5556a51dc8
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

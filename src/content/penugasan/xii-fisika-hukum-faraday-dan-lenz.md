@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar GGL induksi, Hukum Faraday, dan Hukum Lenz."
 materiSlug: hukum-faraday-dan-lenz
-pinHash: 018d6547e4027ab379506f7b5a1ff585b8803eed3aa5497910809ef48e3b1243
+pinHash: 8d8184bd6bcf731621927c209fe27e3d39153a530104fd27827380cd0584901c
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

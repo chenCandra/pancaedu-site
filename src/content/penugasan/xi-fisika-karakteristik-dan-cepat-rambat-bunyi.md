@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar karakteristik bunyi dan cepat rambatnya."
 materiSlug: karakteristik-dan-cepat-rambat-bunyi
-pinHash: 037de31c733a071a7ac20a4bd21d30a17b19b131fb859a8ebef97def3e83e41c
+pinHash: b5a67f2f58c65322683571b3f0ef7744cd3a6f13effbcc5a12269813fb7989ff
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

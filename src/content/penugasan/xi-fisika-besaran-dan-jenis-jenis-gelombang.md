@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar besaran gelombang dan klasifikasinya."
 materiSlug: besaran-dan-jenis-jenis-gelombang
-pinHash: 8eaedd6a98b0ee751ee883072e3e68618e1692b1d7805a64bfc92b088562006c
+pinHash: 8ef73f0d11be40876fe87f727ba17149fa1a10d38a1fa7fe6758c5e31004f4fd
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

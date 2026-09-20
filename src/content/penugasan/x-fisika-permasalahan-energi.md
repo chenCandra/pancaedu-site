@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar empat masalah energi utama (keterbatasan sumber, kenaikan permintaan, pemerataan akses, dampak lingkungan) dan upaya mengatasinya. Sesi penutup Bab Energi."
 materiSlug: permasalahan-dan-upaya-pemenuhan-kebutuhan-energi
-pinHash: 43ecb99766800314d73dc9aa5121644f18ab36aa2f9e65f06d5be777a3e6460c
+pinHash: 06c4664016f4a29fd8b73ba4eee1b434bb9e0d1505e784ebfa60b6d6f5f0318a
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

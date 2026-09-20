@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Hukum Gravitasi Newton dan medan gravitasi."
 materiSlug: hukum-gravitasi-newton-dan-medan-gravitasi
-pinHash: e5b1c0a4c191f1ff21b7138bad7e14ae41316bbbfb4b31370285de0ab0eeba04
+pinHash: fa883548cc8d493ae126282ffc9d145c150f0a9533fd1b8058d144d3725f7a59
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

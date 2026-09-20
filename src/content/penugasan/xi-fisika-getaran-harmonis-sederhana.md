@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar getaran harmonis pegas dan bandul."
 materiSlug: getaran-harmonis-sederhana
-pinHash: 34dc6edbf203b93f82b86494dfd94d8b70f7bcba6bdfe26f5c65a41e6ca7ad3f
+pinHash: 41a8f84fe0192369a6e27b40f615944ee55b41e6c9800abe340f4d77c49388b9
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

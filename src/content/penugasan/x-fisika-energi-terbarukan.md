@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar enam jenis energi terbarukan (surya, angin, air, panas bumi, biomassa, ombak/pasang surut) dan keunggulan geografis Indonesia."
 materiSlug: energi-terbarukan
-pinHash: b0a31af7541bcfbd3f4fcfc9a85c745d3a4e2455b65a1eb04c4ea3a2785c8518
+pinHash: 11f38df61f6db86a8cdcd41b5805a869938a09ed91a8eb9fddf1505faf70be2f
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar kesetimbangan benda tegar, titik berat, dan jenis-jenis kesetimbangan."
 materiSlug: kesetimbangan-benda-tegar-dan-titik-berat
-pinHash: 08c29fea609d72ab0d5ac925d5e7493b95d99b6d8f2c2c3e6e78452fae6f744c
+pinHash: 258644be3e0734ed2c1248516c747f462b53c558f20880b97a89902796f5c17f
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

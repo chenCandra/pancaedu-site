@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar skala suhu dan pemuaian panjang, luas, volume."
 materiSlug: suhu-dan-pemuaian
-pinHash: eba2b93ac3109ef88821640d98ab835de7a735a903c94ea3a123de6f02719dbb
+pinHash: dc218778cd5b73d5b5e853209f2074e1017b7165ebf8153ca208bc4c27d81df0
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

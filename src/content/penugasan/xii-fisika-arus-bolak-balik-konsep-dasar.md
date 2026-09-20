@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar perbedaan AC dan DC, nilai RMS, periode, dan frekuensi."
 materiSlug: arus-bolak-balik-konsep-dasar
-pinHash: 079530b67a92afb9c123ea8c2fa0cc96deb67028b25790613d3cc48c75f8951a
+pinHash: 3de1924b2483b731b71d4bec24402ef44aa1ee6f8ce6332b2e33929fe08d833c
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

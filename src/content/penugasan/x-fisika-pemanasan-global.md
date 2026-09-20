@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pengertian pemanasan global dan mekanisme efek rumah kaca."
 materiSlug: pemanasan-global
-pinHash: 6a3f375c056b7383cbf62e779030c7606d72bd74c7863097a25cbb0e8d6492fc
+pinHash: 73c22e366a74df579f9331c8764a3ad6b6aa1fdc6f0a6e6640206003a74997c7
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

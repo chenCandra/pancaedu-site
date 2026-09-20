@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar percobaan Michelson-Morley, konsep eter, dan cara kerja interferometer."
 materiSlug: percobaan-michelson-morley
-pinHash: 7329815f1a6b618816affabf4de4a6e7dee6bacfae0efc97212bcd012b32da8f
+pinHash: 468ac70e13fdcc9e1e1963e6d3791671f1f84594157cf94a0e5c0e2c206b04ca
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

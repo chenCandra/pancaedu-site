@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pemantulan, pembiasan, difraksi, dan interferensi gelombang."
 materiSlug: sifat-sifat-gelombang-pemantulan-pembiasan-difraksi-interferensi
-pinHash: 487c10affb7db000409698faf1814ef7c4e8cfbb4a422f91316e472376c51683
+pinHash: ad3820ac4ec6fdd371a4d9497a02049de7cb500344b1d380103e81e5808f364c
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar jenis alat ukur, cara membaca skalanya, ketelitian vs ketepatan, dan kesalahan paralaks."
 materiSlug: alat-ukur
-pinHash: 66322d7b27d8ecdefec5ba3b5ec7351eba93533507bb20639b4feaed4b9e2639
+pinHash: bfa8c08f1a913559526db8036592f1639fc265833e6d4c90c3b29cf2ea5f9fce
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

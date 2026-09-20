@@ -3,7 +3,7 @@ judul: "Tes Internal -- Semua Tipe Soal"
 kelas: X
 mapel: Fisika
 deskripsi: "Entri buat verifikasi lokal fitur Penugasan (6 tipe soal fase 1). BUKAN tugas sungguhan -- hapus/draft-kan sebelum situs ini dipakai murid."
-pinHash: ce4e4dd8af22f4d222522dbcd63c0cfa8bc6e099a7e2457424d0cb023eedf49f
+pinHash: 37cede0639130c2b9e9a5ebf2dcf55496592e454cde3849df7f45a5316e0c650
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

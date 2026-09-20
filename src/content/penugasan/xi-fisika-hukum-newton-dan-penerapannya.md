@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar diagram bebas gaya, resultan gaya, dan Hukum Newton."
 materiSlug: hukum-newton-dan-penerapannya
-pinHash: c94f2dae38cbfe21c0ab00eae7099b1318096a510c7c27981e87ce9d80b19edb
+pinHash: c0cf82873a1fcbfb11534a21f25c889681d20a45d21724f42e736f90a3e51b94
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

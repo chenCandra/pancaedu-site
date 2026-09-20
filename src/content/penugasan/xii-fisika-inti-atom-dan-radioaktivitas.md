@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar struktur inti atom, energi ikat, tiga jenis peluruhan radioaktif, dan waktu paruh."
 materiSlug: inti-atom-dan-radioaktivitas
-pinHash: d6d104b4944eb23db68501a365ab57934c4ff04674f2f8f6dfd644e99b633525
+pinHash: 7b49793cece54dcaf160b50ad3f91806006a3eac78e1189a87c43786b9ae3c55
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

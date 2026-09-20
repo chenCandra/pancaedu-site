@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar dinamika rotasi (τ=Iα) dan energi kinetik rotasi."
 materiSlug: dinamika-rotasi-dan-energi-kinetik-rotasi
-pinHash: 8b9ec53121e8f6a2aaec93160a5b838250f72cecc10b8f2ac3845cda261633ae
+pinHash: c755b07b7cdd29f2261892f771fa9b7d59eeb4e76ed02b1054edf0e3461b7b9a
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

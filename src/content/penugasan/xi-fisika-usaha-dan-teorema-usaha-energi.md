@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar usaha, energi kinetik, dan Teorema Usaha-Energi."
 materiSlug: usaha-dan-teorema-usaha-energi
-pinHash: 8a521f2f2aceb61e35eb168e7267352902d1b64b102fa5653d13bb1556b1d087
+pinHash: 0c13a79609457932b9c092b785b40824a372608253db6d90076c873101b21c60
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

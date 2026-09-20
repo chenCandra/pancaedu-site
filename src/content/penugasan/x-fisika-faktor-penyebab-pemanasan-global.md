@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar sektor-sektor kehidupan manusia yang jadi penyumbang terbesar pemanasan global."
 materiSlug: faktor-penyebab-pemanasan-global
-pinHash: 8ac462803b487ca611ca2374dd72414413864970303eb8b97eb83cda26179e6a
+pinHash: bcf51a2910a7a6d93dd307bbf7a7199cc931ce08d42f88519ee95e2ec4585009
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

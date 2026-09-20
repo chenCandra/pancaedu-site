@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar resonansi pipa organa dan pelayangan bunyi."
 materiSlug: resonansi-dan-pelayangan-bunyi
-pinHash: a5748b4b8c3353a9443e95cc70f57577e003a7f9be9ce6de605f8fcefb6174f1
+pinHash: cfd9a242610aab6f7f2861e41eedb99e90dfd4006fa8188324d86db324ae72d6
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

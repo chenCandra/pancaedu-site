@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar hubungan fase tegangan-arus pada resistor, induktor, kapasitor, serta reaktansi induktif dan kapasitif."
 materiSlug: rangkaian-ac-sederhana
-pinHash: 99da70271925eda9037d220e2e6004e03219eb1154c0ce96e6dd564fc072c47d
+pinHash: a1f3a414d452816c01e2ba16fd075b223950e98a014528bd704676510d337dc9
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

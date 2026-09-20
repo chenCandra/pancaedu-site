@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar Alat Pelindung Diri (APD), simbol bahaya bahan kimia, tata tertib lab, dan penanganan kecelakaan ringan."
 materiSlug: keselamatan-kerja-di-laboratorium
-pinHash: 17a51dad6e83e5a1fb19548da49cb37eeb65fb748ab8c0477d37dee43cc927a0
+pinHash: 0b7db296859013664ed2580e58b8cfbc74845afa959a48bec8332c3713c83d71
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

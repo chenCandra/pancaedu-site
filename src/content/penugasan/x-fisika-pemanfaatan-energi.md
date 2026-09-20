@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar pemanfaatan energi di sektor rumah tangga, transportasi, industri, dan pertanian."
 materiSlug: pemanfaatan-energi
-pinHash: 000ba26d01e40f5d6191524467e7ff87ee0370168248aa1ec0d2235f0918d64e
+pinHash: 9bd27931cc667d411d617df01573eb3453428aa32aab6a982865ce71f0122878
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

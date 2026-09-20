@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar massa jenis, terapung-melayang-tenggelam, dan tekanan hidrostatis."
 materiSlug: fluida-dan-massa-jenis
-pinHash: 4ebea2a7d6b13909a7f92e626479b16da9c66b6ba151b56bfcacbe88611c5f10
+pinHash: c2fc5f52c53980a80361cf9279df376fbe4c7a8ada56c6fe06263a75131f4c5c
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

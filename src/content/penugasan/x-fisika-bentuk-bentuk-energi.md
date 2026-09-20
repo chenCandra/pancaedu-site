@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar energi kinetik, potensial gravitasi, potensial elastis, dan berbagai bentuk energi lainnya."
 materiSlug: mengenal-ragam-energi
-pinHash: b580c194ba06ddb4806ca07eda41e391e6227218497cb39ae202784afed0c364
+pinHash: 65a6a1046284aea1411f3983a1c8a86a8d1769c321981e02381e027f54ca1b71
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

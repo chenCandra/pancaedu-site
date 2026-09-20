@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar gerak parabola sebagai gabungan GLB dan GLBB, tinggi maksimum, waktu di udara, dan jangkauan."
 materiSlug: gerak-parabola
-pinHash: b323fc3348b1c49d7d954003084e925312a64cf5574caa24c53c05ebcb048373
+pinHash: 27186643c08f5f383844e98298ae4fe5bec78889d2c957e9b6175de9b886ce53
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar penemuan Oersted, kaidah tangan kanan, dan solenoida."
 materiSlug: medan-magnet-oleh-arus-listrik
-pinHash: 1d46604c36949ecb6c11ba764b7df06a1e566213960bfefe1d8c07644131041e
+pinHash: 7d3ee461810bf79ea1b053892beddf92b483c16627be62e554e1141d334ac28b
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar dua postulat relativitas khusus, latar belakangnya, dan bedanya fisika klasik vs modern."
 materiSlug: teori-relativitas-khusus
-pinHash: 1c6a5e0ec0b6d93bd38455438b797de31f65248795105fe0d7b80fa41c9505b1
+pinHash: 7194f50b6eb4dcaa4a4a1146b5d06ddae11a8140f0bc7a05902d528fb845ad86
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

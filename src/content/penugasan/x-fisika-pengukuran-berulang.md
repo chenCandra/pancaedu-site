@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar format pelaporan pengukuran tunggal, cara menghitung rata-rata dan ketidakpastian pada pengukuran berulang."
 materiSlug: pengukuran-alat-ukur-dan-angka-penting
-pinHash: 278804c3932db10f35a8a403fba64a4dc57660f707a5f906b48b46aa02df6881
+pinHash: 2f94de6516419c1c04a086883fa3a46ab9945d58a37ad6aa2b1a0561ff53f9b8
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

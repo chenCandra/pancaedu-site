@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar momentum, impuls, dan Hukum Kekekalan Momentum."
 materiSlug: momentum-impuls-dan-hukum-kekekalan-momentum
-pinHash: 5fe66ef0fc6440f60cb98100ebe689f4ce93f30b0f05121571eff11a1fb6473d
+pinHash: cd9558e8ed103b76dabbcfd50f7e530d0b24d7f4e84057cfd30fe4133a95e42e
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

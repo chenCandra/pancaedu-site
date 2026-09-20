@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar enam jenis gas rumah kaca utama dan sumbernya masing-masing."
 materiSlug: gas-rumah-kaca-jenis-dan-sumbernya
-pinHash: b520cc334b17a120949c2209c4d889f980e08c9defc483454e09e47a09e717af
+pinHash: c61cf2dccf4d7ad7fe8d11e2921ce166fcc3642f109881addab2958c1a7f3810
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

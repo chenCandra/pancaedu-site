@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar konsep jejak karbon dan aksi nyata individu untuk menguranginya."
 materiSlug: jejak-karbon-dan-aksi-individu
-pinHash: 293ce225afee4b442909e3c7693c4740a75aa1ef748cf41d9ca0615032c70568
+pinHash: 4192b06585b30044c39c760196582673b151692870bc246ade139640492287cb
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

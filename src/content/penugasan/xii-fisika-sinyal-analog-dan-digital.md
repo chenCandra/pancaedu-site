@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar beda sinyal analog dan digital, sampling, dan kuantisasi."
 materiSlug: sinyal-analog-dan-digital
-pinHash: e087feb0ae96e56a91f9b6cc11db812e7cb116a50e11c276db358278192a1124
+pinHash: da189ad5ec58333e39f9be98dc01dc263e6fd613f5498b43a7975fca2bb430bb
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

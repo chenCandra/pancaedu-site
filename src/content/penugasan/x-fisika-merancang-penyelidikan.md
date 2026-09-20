@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar variabel bebas/terikat/kontrol, langkah merancang percobaan, dan struktur laporan penyelidikan ilmiah."
 materiSlug: merancang-dan-melakukan-penyelidikan-ilmiah
-pinHash: d3f949351d7472fcbd1df21fb98880590ea20c3460dec79af42e3f56ca3f9a52
+pinHash: 148f44abc61041bf06d6cac7eca1a565f8f9f339ec71adfd3284c7934fa6c3d7
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

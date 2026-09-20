@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar tegangan permukaan, kapilaritas, dan viskositas fluida."
 materiSlug: tegangan-permukaan-kapilaritas-dan-viskositas
-pinHash: ef5dd6ff058031f1f73dabf3630ce81073571afb0ab2c34d7b215b63512f422a
+pinHash: 95ae20063c6c87498d3edab6408cb887e248d95ff39db64283b54be64f3bfd02
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

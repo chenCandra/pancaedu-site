@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar energi potensial, energi mekanik, dan hukum kekekalannya."
 materiSlug: energi-potensial-dan-hukum-kekekalan-energi-mekanik
-pinHash: 3dc2f442ccdfd2fb70d37cfe917e6ae92cefeda2d140314199a364f78cdeb904
+pinHash: 0be30964ce9ef127d9a7c7e8defc5f1c6442d813ed68f60906a7177e494a195d
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

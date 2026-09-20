@@ -4,7 +4,7 @@ kelas: X
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar definisi energi, satuan joule, besaran skalar, dan Hukum Kekekalan Energi."
 materiSlug: konsep-energi
-pinHash: dcad7532980897b96f3ac3970f83fd391af4d310ff6ceb44a347293e9df81dc3
+pinHash: 8c910d553ca20d7aead537fce0f3eaeeabb70b11431b71416ab1cb6f40883143
 pinBerlakuHingga: 2027-03-11
 soal:
   - tipe: pilihan-ganda

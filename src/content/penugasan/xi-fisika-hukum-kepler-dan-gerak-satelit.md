@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar tiga Hukum Kepler dan gerak satelit."
 materiSlug: hukum-kepler-dan-gerak-satelit
-pinHash: 297aacbc405f68b3901b308ec9f227ec671f22dc9a8f812743d7609cbf9d1aed
+pinHash: 83c0872879b5b5854a226522e65faf44cef36515c1ecf33a2aeea27f4de02636
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

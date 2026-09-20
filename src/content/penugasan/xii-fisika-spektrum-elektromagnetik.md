@@ -4,7 +4,7 @@ kelas: XII
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar spektrum elektromagnetik: hubungan λ dan f, urutan daerah spektrum, serta pemanfaatannya."
 materiSlug: spektrum-elektromagnetik
-pinHash: 5393627b9e0c5d8ce1d0645747c75c890e2d835c324182a03e309dd15acbaa78
+pinHash: 7b7bc52731b001919d984f5898ee466eec2360c80eecf8b1f30210fb4493a33a
 pinBerlakuHingga: 2027-03-10
 soal:
   - tipe: pilihan-ganda

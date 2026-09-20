@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar momen gaya (torsi) dan momen inersia."
 materiSlug: momen-gaya-torsi-dan-momen-inersia
-pinHash: 9cca403f3d7938c86738f38838e836a1fa0181126632ec18bd549762368a6178
+pinHash: 6aa4284c2507731af1e587534562988a20e4ae71fcce047f06b565e8630a66b6
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

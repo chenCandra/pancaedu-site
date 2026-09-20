@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar kapasitas pegas total rangkaian seri dan paralel."
 materiSlug: susunan-pegas-seri-dan-paralel
-pinHash: 32d988d5e4c552f45450fdef9b53975492036dcc50598a0e2358db7c46edb454
+pinHash: c5ee0d7308ae3efc1d7d804879f484e8f52dfda589d2069624fe1fc85aabc1ee
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda

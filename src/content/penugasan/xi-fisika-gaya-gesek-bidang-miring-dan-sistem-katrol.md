@@ -4,7 +4,7 @@ kelas: XI
 mapel: Fisika
 deskripsi: "15 soal interaktif -- pilihan ganda, benar/salah, isian singkat, menjodohkan, menyusun urutan, dan drag & drop -- seputar gaya gesek, bidang miring, dan sistem katrol."
 materiSlug: gaya-gesek-bidang-miring-dan-sistem-katrol
-pinHash: 792e7cf564f54a0e3f7de5b177d17fac53d0efafc8db677c5593cee55a0ef212
+pinHash: 565405c9513af7f9baddfe299b4ca606dae3115124507a6f48af5307844a675e
 pinBerlakuHingga: 2027-03-12
 soal:
   - tipe: pilihan-ganda
