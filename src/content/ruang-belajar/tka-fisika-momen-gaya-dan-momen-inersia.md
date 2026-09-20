@@ -1,18 +1,18 @@
 ---
-tanggal: 2026-09-24T00:00:00.000Z
+tanggal: 2026-09-24
 kelas: TKA
 mapel: Fisika
-bab: Dinamika
-judul: Momen Gaya & Momen Inersia — Latihan Dasar
-deskripsi: Latihan dasar (pemahaman & aplikasi) untuk topik Momen Gaya & Momen Inersia -- 10 soal, dengan ringkasan materi sebagai rujukan singkat.
-durasi: 30
+bab: "Dinamika"
+judul: Momen Gaya & Momen Inersia
+deskripsi: Sesi ketiga (terakhir) Bab Dinamika -- ringkasan momen gaya/torsi (τ=F×d), kesetimbangan rotasi (Στ=0), dan momen inersia (I=mr²) sebagai ukuran kelembaman rotasi. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
+durasi: 45
 tujuanPembelajaran:
   - Peserta didik mampu menghitung besar torsi dari gaya dan lengan momennya, termasuk yang membentuk sudut terhadap lengan.
   - Peserta didik mampu menerapkan syarat kesetimbangan rotasi (Στ = 0) pada soal tuas/jungkat-jungkit.
   - Peserta didik mampu menjelaskan bahwa momen inersia bergantung pada distribusi massa terhadap sumbu putar, bukan cuma massa totalnya saja.
 materiSlug: momen-gaya-torsi-dan-momen-inersia
-latihanUrl: ""
-tugasUrl: https://pancaedu.web.id/penugasan/tka-fisika-momen-gaya-dan-momen-inersia-dasar
-refleksiUrl: ""
+latihanUrl: ''
+tugasUrl: https://pancaedu.web.id/penugasan/tka-fisika-momen-gaya-dan-momen-inersia
+refleksiUrl: ''
 draft: false
 ---
