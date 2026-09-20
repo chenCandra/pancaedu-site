@@ -12,6 +12,7 @@ import { env } from 'cloudflare:workers';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { KELAS_UMUM } from '../../lib/penugasan/kelas';
 import { adaSesiAktif } from '../../lib/penugasan/sesi';
+import { kelasLabel } from '../../lib/ruangBelajar';
 import { keSoalTampilan } from '../../lib/penugasan/tampilan';
 import PilihanGanda from '../../components/penugasan/PilihanGanda.astro';
 import BenarSalah from '../../components/penugasan/BenarSalah.astro';
@@ -56,7 +57,7 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
     ) : (
       <a href="/penugasan" class="back-link">&larr; Semua Penugasan</a>
     )}
-    <p class="eyebrow">📝 Penugasan · {mapel} · Kelas {kelas}</p>
+    <p class="eyebrow">📝 Penugasan · {mapel} · {kelasLabel(kelas)}</p>
     <h1>{judul}</h1>
     {deskripsi && <p class="pn-lede">{deskripsi}</p>}
     <p class="pn-meta">📝 {soalTampilan.length} soal · {skorMaksTotal} poin</p>

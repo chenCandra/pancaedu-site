@@ -16,7 +16,7 @@ const [featuredPost, ...restPosts] = posts;
 // lebih kecil (6) supaya tombol "Muat lebih banyak" tetap kerasa gunanya.
 const PAGE_SIZE = 6;
 
-const kelasList = ['X', 'XI', 'XII'].filter((k) => posts.some((p) => p.data.kelas === k));
+const kelasList = ['X', 'XI', 'XII', 'TKA'].filter((k) => posts.some((p) => p.data.kelas === k));
 const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] as string[];
 ---
 

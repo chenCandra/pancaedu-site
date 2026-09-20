@@ -2,11 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import RuangBelajarCard from '../../../components/RuangBelajarCard.astro';
-import { kelasToSlug, type Kelas } from '../../../lib/ruangBelajar';
+import { kelasToSlug, kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 
 export async function getStaticPaths() {
   const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
-  const kelasList = (['X', 'XI', 'XII'] as Kelas[]).filter((k) => semua.some((p) => p.data.kelas === k));
+  const kelasList = (['X', 'XI', 'XII', 'TKA'] as Kelas[]).filter((k) => semua.some((p) => p.data.kelas === k));
   return kelasList.map((kelas) => ({
     params: { kelas: kelasToSlug(kelas) },
     props: { kelas },
@@ -44,13 +44,13 @@ const mapelGroups = [...new Set(semua.filter((p) => p.data.kelas === kelas).map(
 ---
 
 <BaseLayout
-  title={`Kelas ${kelas} — Ruang Belajar`}
-  description={`Ruang Belajar Kelas ${kelas} PancaEdu -- bab demi bab tersusun berurutan, siap dipelajari kapan saja.`}
+  title={`${kelasLabel(kelas)} — Ruang Belajar`}
+  description={`Ruang Belajar ${kelasLabel(kelas)} PancaEdu -- bab demi bab tersusun berurutan, siap dipelajari kapan saja.`}
 >
   <section class="container pd-hero">
     <a href="/ruang-belajar" class="small-back">&larr; Semua Kelas</a>
     <p class="eyebrow">🎓 Ruang Belajar</p>
-    <h1>Kelas {kelas}</h1>
+    <h1>{kelasLabel(kelas)}</h1>
     <p class="pd-hero-lede">Ikuti bab-babnya berurutan dari atas ke bawah, dari sesi paling awal ke terbaru.</p>
   </section>
 
@@ -82,7 +82,7 @@ const mapelGroups = [...new Set(semua.filter((p) => p.data.kelas === kelas).map(
     </section>
   ) : (
     <section class="container pd-silabus">
-      <p class="pd-empty">Belum ada pembelajaran untuk Kelas {kelas}.</p>
+      <p class="pd-empty">Belum ada pembelajaran untuk {kelasLabel(kelas)}.</p>
     </section>
   )}
 </BaseLayout>

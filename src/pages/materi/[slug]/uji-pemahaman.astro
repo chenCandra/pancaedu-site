@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Kuis from '../../../components/Kuis.astro';
+import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 
 // Uji Pemahaman sengaja dipisah ke laman sendiri (bukan ditempel di
 // bawah materi) -- masukan dari murid: kuis yang nyatu di laman materi
@@ -34,7 +35,7 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
   <article class="container quiz-page">
     <a href={`/materi/${post.id}`} class="back-link">&larr; Kembali ke Materi: {title}</a>
     <p class="eyebrow">
-      Uji Pemahaman{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
+      Uji Pemahaman{kelas ? ` — ${kelasLabel(kelas as Kelas)}` : ''}{mapel ? ` — ${mapel}` : ''}
     </p>
     <h1>🧠 {title}</h1>
     <p class="quiz-lede">

@@ -1,10 +1,12 @@
 ---
+import { kelasLabel, type Kelas } from '../../lib/ruangBelajar';
+
 interface Props {
   title: string;
   description: string;
   href: string;
   mapel?: string;
-  kelas?: string;
+  kelas?: Kelas;
   hasLab?: boolean;
 }
 
@@ -21,7 +23,7 @@ const { title, description, href, mapel, kelas, hasLab } = Astro.props;
       </div>
       <div class="featured-body">
         <div class="featured-meta">
-          {kelas && <span class="chip">Kelas {kelas}</span>}
+          {kelas && <span class="chip">{kelasLabel(kelas)}</span>}
           {mapel && <span class="chip">{mapel}</span>}
           {hasLab && <span class="chip chip-accent">🧪 Lab Maya</span>}
         </div>

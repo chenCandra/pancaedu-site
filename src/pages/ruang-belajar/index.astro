@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { kelasToSlug, type Kelas } from '../../lib/ruangBelajar';
+import { kelasToSlug, kelasLabel, type Kelas } from '../../lib/ruangBelajar';
 
 // modeDaring cuma buat nampilin catatan darurat (mis. kabut asap) --
 // kalau ada. Ruang Belajar sendiri PERMANEN, tidak digerbangi field ini.
@@ -11,12 +11,13 @@ const keterangan = modeDaring?.data.keterangan;
 
 const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
 
-// Ruang Belajar ditata sebagai 3 kartu Kelas (X/XI/XII) -- bukan lagi
+// Ruang Belajar ditata sebagai kartu per Kelas (X/XI/XII, + TKA sebagai
+// ruang belajar khusus persiapan Tes Kompetensi Akademik) -- bukan lagi
 // jadwal "hari ini" yang butuh sesi dibuka tepat pas tanggalnya (fitur
 // "belajar daring" lama). Setiap kartu Kelas cuma perlu jumlah Bab &
 // sesi buat ditampilkan di sini -- daftar lengkap urutan Bab ada di
 // halaman /ruang-belajar/kelas/[kelas].
-const KELAS_URUT: Kelas[] = ['X', 'XI', 'XII'];
+const KELAS_URUT: Kelas[] = ['X', 'XI', 'XII', 'TKA'];
 const kelasCards = KELAS_URUT.map((kelas) => {
   const entries = semua.filter((p) => p.data.kelas === kelas);
   const babCount = new Set(entries.map((p) => p.data.bab).filter(Boolean)).size;
@@ -60,7 +61,7 @@ const kelasCards = KELAS_URUT.map((kelas) => {
             <div class="pd-kelas-card-tag">
               <span class="badge">{mapelList.join(', ').toUpperCase()}</span>
             </div>
-            <h3 class="pd-kelas-card-title">Kelas {kelas}</h3>
+            <h3 class="pd-kelas-card-title">{kelasLabel(kelas)}</h3>
             <p class="pd-kelas-card-desc">
               {babCount > 0 ? `${babCount} bab` : `${entries.length} sesi`} tersusun berurutan, siap dipelajari kapan saja.
             </p>

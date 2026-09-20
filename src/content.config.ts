@@ -28,7 +28,7 @@ const blog = defineCollection({
     // sudah punya mapel+kelas sendiri buat klasifikasi).
     topik: z.enum(['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka']).optional(),
     mapel: z.string().optional(),
-    kelas: z.enum(['X', 'XI', 'XII']).optional(), // jenjang kelas, dipakai khusus untuk materi
+    kelas: z.enum(['X', 'XI', 'XII', 'TKA']).optional(), // jenjang kelas (atau "TKA"), dipakai khusus untuk materi
     pubDate: z.coerce.date(),
     // preprocess: CMS (Sveltia) nyimpen field datetime opsional yang dikosongkan
     // sebagai string kosong ('') alih-alih beneran dihapus dari frontmatter —
@@ -204,7 +204,7 @@ const ruangBelajar = defineCollection({
     // urutan default di dalam tiap kelompok Kelas+Mapel (mirip urutan
     // silabus) di halaman daftar.
     tanggal: z.coerce.date(),
-    kelas: z.enum(['X', 'XI', 'XII']),
+    kelas: z.enum(['X', 'XI', 'XII', 'TKA']),
     mapel: z.string(),
     // Nama Bab/unit besar (mis. "Hakikat Fisika", "Energi Alternatif") --
     // OPSIONAL, dipakai buat mengelompokkan sesi jadi Bab 1/Bab 2/dst di
@@ -373,7 +373,7 @@ const penugasan = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/penugasan' }),
   schema: z.object({
     judul: z.string(),
-    kelas: z.enum(['X', 'XI', 'XII']),
+    kelas: z.enum(['X', 'XI', 'XII', 'TKA']),
     mapel: z.string(),
     deskripsi: z.string().optional(),
     // id entri collection "blog" (category:materi) yang relevan -- opsional,

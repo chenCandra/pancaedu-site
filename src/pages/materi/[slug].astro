@@ -8,6 +8,7 @@ import ReadingProgress from '../../components/ReadingProgress.astro';
 import BookmarkButton from '../../components/BookmarkButton.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import { extractYoutubeId } from '../../lib/youtube';
+import { kelasLabel, type Kelas } from '../../lib/ruangBelajar';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
@@ -87,7 +88,7 @@ const jsonLd = {
       <a href="/materi" class="back-link">&larr; Semua Materi</a>
     )}
     <p class="eyebrow">
-      Materi Pelajaran{kelas ? ` — Kelas ${kelas}` : ''}{mapel ? ` — ${mapel}` : ''}
+      Materi Pelajaran{kelas ? ` — ${kelasLabel(kelas as Kelas)}` : ''}{mapel ? ` — ${mapel}` : ''}
     </p>
     <h1>{title}</h1>
     <div class="post-meta-row">

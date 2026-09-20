@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { kelasLabel, type Kelas } from '../lib/ruangBelajar';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -27,11 +28,13 @@ const topikBadgeClass: Record<string, string> = {
   Pustaka: 'badge-gold',
 };
 
-// Warna badge Kelas (materi) — X polos (biru default), XI ungu, XII indigo.
+// Warna badge Kelas (materi) — X polos (biru default), XI ungu, XII indigo,
+// TKA rose (sengaja beda dari 3 jenjang lain, biar langsung kebedaan).
 const kelasBadgeClass: Record<string, string> = {
   X: '',
   XI: 'badge-purple',
   XII: 'badge-indigo',
+  TKA: 'badge-rose',
 };
 
 // Cover "buatan" (gradient + ikon garis tipis) buat kartu yang belum punya
@@ -94,7 +97,7 @@ const coverKey = isMateri ? kelas : topik;
         <span class:list={['badge', topik && topikBadgeClass[topik]]}>{topik ?? 'Artikel'}</span>
       )}
       {category === 'materi' && kelas && (
-        <span class:list={['badge', kelasBadgeClass[kelas]]}>Kelas {kelas}</span>
+        <span class:list={['badge', kelasBadgeClass[kelas]]}>{kelasLabel(kelas as Kelas)}</span>
       )}
       {simulasi && <span class="badge">🧪 Lab Maya</span>}
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
@@ -191,6 +194,10 @@ const coverKey = isMateri ? kelas : topik;
   .post-card-cover[data-category='materi'][data-cover='XII'] {
     --cv-a: var(--indigo);
     --cv-b: var(--accent-2);
+  }
+  .post-card-cover[data-category='materi'][data-cover='TKA'] {
+    --cv-a: var(--rose);
+    --cv-b: var(--gold);
   }
 
   .post-card-body {

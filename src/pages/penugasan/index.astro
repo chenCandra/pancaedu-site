@@ -4,9 +4,10 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PenugasanCard from '../../components/PenugasanCard.astro';
+import { kelasLabel, type Kelas } from '../../lib/ruangBelajar';
 
 const semua = await getCollection('penugasan', ({ data }) => !data.draft);
-const kelasList = ['X', 'XI', 'XII'].filter((k) => semua.some((p) => p.data.kelas === k));
+const kelasList = (['X', 'XI', 'XII', 'TKA'] as Kelas[]).filter((k) => semua.some((p) => p.data.kelas === k));
 
 const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
   .sort((a, b) => a.localeCompare(b, 'id'))
@@ -28,7 +29,7 @@ const mapelGroups = [...new Set(semua.map((p) => p.data.mapel))]
       <div class="pn-filter-row" role="group" aria-label="Filter kelas" data-pn-filters>
         <button type="button" class="filter-btn badge" data-filter-kelas="" aria-pressed="true">Semua</button>
         {kelasList.map((k) => (
-          <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">Kelas {k}</button>
+          <button type="button" class="filter-btn badge" data-filter-kelas={k} aria-pressed="false">{kelasLabel(k)}</button>
         ))}
       </div>
 

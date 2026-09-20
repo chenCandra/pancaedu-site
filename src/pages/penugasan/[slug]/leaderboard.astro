@@ -13,6 +13,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { ambilSesi } from '../../../lib/adminPanca/auth';
 import { daftarSesi } from '../../../lib/penugasan/sesi';
+import { kelasLabel } from '../../../lib/ruangBelajar';
 import { env } from 'cloudflare:workers';
 
 const { slug } = Astro.params;
@@ -36,10 +37,10 @@ const daftarSesiPenugasan = entry.id ? await daftarSesi(env.DB, entry.id) : [];
 const sesiParam = Astro.url.searchParams.get('sesi') ?? '';
 ---
 
-<BaseLayout title={`Papan Peringkat — ${judul}`} description={`Papan peringkat penugasan ${judul}, kelas ${kelas}.`} noindex>
+<BaseLayout title={`Papan Peringkat — ${judul}`} description={`Papan peringkat penugasan ${judul}, ${kelasLabel(kelas)}.`} noindex>
   <section class="container page-header">
     <a href={`/penugasan/${entry.id}`} class="back-link">&larr; Kembali ke Penugasan</a>
-    <p class="eyebrow">🏆 Papan Peringkat · {mapel} · Kelas {kelas}</p>
+    <p class="eyebrow">🏆 Papan Peringkat · {mapel} · {kelasLabel(kelas)}</p>
     <h1>{judul}</h1>
   </section>
 

@@ -2,7 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { extractYoutubeId } from '../../lib/youtube';
-import { kelasToSlug } from '../../lib/ruangBelajar';
+import { kelasToSlug, kelasLabel } from '../../lib/ruangBelajar';
 
 export async function getStaticPaths() {
   const entries = await getCollection('ruangBelajar', ({ data }) => !data.draft);
@@ -163,12 +163,12 @@ const langkah = [
 
 <BaseLayout
   title={`${judul} — Ruang Belajar`}
-  description={deskripsiTampil ?? `${mapel} Kelas ${kelas}: ${judul}`}
+  description={deskripsiTampil ?? `${mapel} ${kelasLabel(kelas)}: ${judul}`}
 >
   <article class="container pd-detail">
-    <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`} class="small-back">&larr; Kelas {kelas}</a>
+    <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`} class="small-back">&larr; {kelasLabel(kelas)}</a>
 
-    <p class="eyebrow">{mapel} — Kelas {kelas}</p>
+    <p class="eyebrow">{mapel} — {kelasLabel(kelas)}</p>
     <h1>{judul}</h1>
 
     <div class="pd-meta-row">
@@ -236,7 +236,7 @@ const langkah = [
         ) : (
           <div class="pd-next-selesai">
             <span class="pd-next-label">🏁 Sesi Pertama</span>
-            <p>Ini pembelajaran paling awal yang tersedia untuk {mapel} Kelas {kelas} saat ini.</p>
+            <p>Ini pembelajaran paling awal yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini.</p>
           </div>
         )}
       </div>
@@ -252,8 +252,8 @@ const langkah = [
           <div class="pd-next-selesai">
             <span class="pd-next-label">🎉 Sesi Terakhir</span>
             <p>
-              Ini pembelajaran terakhir yang tersedia untuk {mapel} Kelas {kelas} saat ini. Sesi berikutnya akan
-              ditambahkan menyusul -- lihat <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`}>semua Bab Kelas {kelas}</a> sementara menunggu.
+              Ini pembelajaran terakhir yang tersedia untuk {mapel} {kelasLabel(kelas)} saat ini. Sesi berikutnya akan
+              ditambahkan menyusul -- lihat <a href={`/ruang-belajar/kelas/${kelasToSlug(kelas)}`}>semua Bab {kelasLabel(kelas)}</a> sementara menunggu.
             </p>
           </div>
         )}
