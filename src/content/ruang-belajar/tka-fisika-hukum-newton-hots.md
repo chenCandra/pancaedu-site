@@ -1,18 +1,18 @@
 ---
-tanggal: 2026-09-22
+tanggal: 2026-09-22T00:00:00.000Z
 kelas: TKA
 mapel: Fisika
-bab: "Dinamika"
-judul: Hukum Newton
-deskripsi: Sesi pertama Bab Dinamika -- ringkasan Hukum I, II, III Newton, diagram bebas gaya, resultan gaya, dan miskonsepsi paling umum soal pasangan aksi-reaksi. Dilanjutkan latihan soal dengan variasi tipe interaktif dan porsi HOTS.
-durasi: 45
+bab: Dinamika
+judul: Hukum Newton — Latihan HOTS
+deskripsi: Latihan HOTS (penalaran tingkat tinggi) untuk topik Hukum Newton -- 4 soal analisis & penerapan lanjutan, lanjutan dari Latihan Dasar.
+durasi: 12
 tujuanPembelajaran:
   - Peserta didik mampu menjelaskan dan membedakan Hukum I, II, dan III Newton beserta penerapannya.
   - Peserta didik mampu menggambar diagram bebas gaya dan menghitung resultan gaya serta percepatan benda (ΣF = ma).
   - Peserta didik mampu mengidentifikasi pasangan gaya aksi-reaksi yang sebenarnya, dan tidak keliru dengan gaya-gaya yang kebetulan seimbang pada benda yang sama.
 materiSlug: hukum-newton-dan-penerapannya
-latihanUrl: ''
-tugasUrl: https://pancaedu.web.id/penugasan/tka-fisika-hukum-newton
-refleksiUrl: ''
+latihanUrl: ""
+tugasUrl: https://pancaedu.web.id/penugasan/tka-fisika-hukum-newton-hots
+refleksiUrl: ""
 draft: false
 ---
