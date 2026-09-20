@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const {
   kelas, mapel, bab, judul, deskripsi, durasi, tanggal, tujuanPembelajaran, materiSlug,
-  youtubeId, latihanUrl, tugasUrl, refleksiUrl,
+  youtubeId, latihanUrl, tugasUrl, tugasUrlPaket2, refleksiUrl,
 } = entry.data;
 
 // TKA pakai layout drilling terpisah (lihat TkaDrillSession.astro) --
@@ -42,12 +42,25 @@ const refleksiUrlTampil = refleksiUrl || pengaturan?.data.refleksiUrlGlobal;
 const youtubeIdRawTampil = youtubeId || materi?.data.youtubeId;
 const youtubeIdTampil = youtubeIdRawTampil ? extractYoutubeId(youtubeIdRawTampil) : undefined;
 
-// TKA: tugasUrl SELALU mengarah ke /penugasan/<slug> milik sendiri (bukan
-// Google Form dkk seperti kelas lain) -- dipakai buat ambil jumlah soal,
-// ditampilkan di kartu drilling.
-const penugasanSlugTka = isTka && tugasUrl ? tugasUrl.split('/').filter(Boolean).pop() : undefined;
-const penugasanEntryTka = penugasanSlugTka ? await getEntry('penugasan', penugasanSlugTka) : undefined;
-const jumlahSoalTka = penugasanEntryTka?.data.soal.length;
+// TKA: tugasUrl/tugasUrlPaket2 SELALU mengarah ke /penugasan/<slug> milik
+// sendiri (bukan Google Form dkk seperti kelas lain) -- dipakai buat ambil
+// jumlah soal tiap paket, ditampilkan sebagai kartu drilling terpisah
+// (lihat TkaDrillSession.astro -- satu topik TKA boleh punya lebih dari
+// satu paket soal penuh, ditampilkan berdampingan di halaman yang sama).
+async function ambilPaketTka(url: string | undefined, label: string) {
+  const slug = url ? url.split('/').filter(Boolean).pop() : undefined;
+  const entryPenugasan = slug ? await getEntry('penugasan', slug) : undefined;
+  return { label, tugasUrl: url, jumlahSoal: entryPenugasan?.data.soal.length };
+}
+
+const paketTka = isTka
+  ? (
+      await Promise.all([
+        ambilPaketTka(tugasUrl, tugasUrlPaket2 ? 'Paket 1' : 'Latihan Soal'),
+        ...(tugasUrlPaket2 ? [ambilPaketTka(tugasUrlPaket2, 'Paket 2')] : []),
+      ])
+    ).filter((p) => p.tugasUrl)
+  : [];
 
 const formattedDate = tanggal.toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -189,8 +202,7 @@ const langkah = [
         deskripsi={deskripsi}
         tujuanPembelajaran={tujuanPembelajaran}
         materi={materi}
-        tugasUrl={tugasUrl}
-        jumlahSoal={jumlahSoalTka}
+        paket={paketTka}
         durasi={durasi}
         babInfo={babInfo}
         indexSekarang={indexSekarang}

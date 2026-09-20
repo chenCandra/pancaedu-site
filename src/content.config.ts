@@ -236,6 +236,14 @@ const ruangBelajar = defineCollection({
     youtubeId: z.string().optional(),
     latihanUrl: optionalUrl(), // Google Form, Wayground, dll -- bebas platform
     tugasUrl: optionalUrl(), // Google Form / Drive / dll
+    // Paket latihan KEDUA (opsional) khusus kelas TKA -- satu topik TKA bisa
+    // punya 2 paket soal drilling penuh (Paket 1 & Paket 2, soal berbeda,
+    // supaya murid punya lebih banyak variasi buat berlatih di topik yang
+    // sama) yang ditampilkan BERSAMAAN di satu halaman sesi (lihat
+    // TkaDrillSession.astro), bukan sebagai sesi terpisah yang harus
+    // dinavigasi satu-satu. Field ini SELALU kosong untuk kelas X/XI/XII
+    // (mereka cuma pakai `tugasUrl` di atas seperti biasa).
+    tugasUrlPaket2: optionalUrl(),
     refleksiUrl: optionalUrl(), // biasanya Google Form
     draft: z.boolean().default(false),
   }),

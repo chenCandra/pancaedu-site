@@ -169,6 +169,12 @@ collections:
         required: false
         pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
         hint: "Tempat siswa mengumpulkan tugas -- Google Form, Google Drive, atau platform lain, bebas. Belum ada linknya? KOSONGKAN saja field ini -- jangan diisi tanda '-', itu bikin situs gagal update."
+      - label: "Link Tugas Paket 2 (khusus TKA, opsional)"
+        name: tugasUrlPaket2
+        widget: string
+        required: false
+        pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
+        hint: "KHUSUS kelas TKA -- kalau topik ini punya paket latihan kedua (soal berbeda dari 'Link Tugas' di atas), tempel link penugasannya di sini. Kelas X/XI/XII tidak perlu isi field ini. KOSONGKAN saja kalau belum ada -- jangan diisi tanda '-'."
       - label: "Link Refleksi Khusus Sesi Ini (opsional)"
         name: refleksiUrl
         widget: string

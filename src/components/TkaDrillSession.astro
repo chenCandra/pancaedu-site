@@ -8,14 +8,23 @@
 // sama dipakai kelas lain, boleh dikerjakan berkali-kali).
 import type { CollectionEntry } from 'astro:content';
 
+// Satu topik TKA bisa punya lebih dari satu PAKET latihan penuh (soal
+// berbeda per paket, bukan sekadar dipecah dasar/HOTS) -- semuanya
+// ditampilkan SEBAGAI KARTU BERDAMPINGAN di halaman yang SAMA, supaya murid
+// tinggal pilih mau mengerjakan paket yang mana tanpa perlu pindah halaman.
+interface Paket {
+  label: string;
+  tugasUrl?: string;
+  jumlahSoal?: number;
+}
+
 interface Props {
   judul: string;
   mapel: string;
   deskripsi?: string;
   tujuanPembelajaran: string[];
   materi?: CollectionEntry<'blog'>;
-  tugasUrl?: string;
-  jumlahSoal?: number;
+  paket: Paket[];
   durasi?: number;
   babInfo?: { nomor: number; nama: string; posisi: number; total: number };
   indexSekarang: number;
@@ -25,11 +34,12 @@ interface Props {
 }
 
 const {
-  judul, mapel, deskripsi, tujuanPembelajaran, materi, tugasUrl, jumlahSoal, durasi,
+  judul, mapel, deskripsi, tujuanPembelajaran, materi, paket, durasi,
   babInfo, indexSekarang, totalSesi, sesiSebelumnya, sesiBerikutnya,
 } = Astro.props;
 
 const deskripsiTampil = deskripsi || materi?.data.description;
+const totalSoalSemuaPaket = paket.reduce((total, p) => total + (p.jumlahSoal ?? 0), 0);
 ---
 
 <a href="/ruang-belajar/kelas/tka" class="small-back">&larr; TKA</a>
@@ -43,7 +53,7 @@ const deskripsiTampil = deskripsi || materi?.data.description;
   ) : (
     indexSekarang >= 0 && <span class="tka-meta tka-meta-bab">📍 Sesi {indexSekarang + 1} dari {totalSesi}</span>
   )}
-  {jumlahSoal !== undefined && <span class="tka-meta">📝 {jumlahSoal} soal</span>}
+  {totalSoalSemuaPaket > 0 && <span class="tka-meta">📝 {totalSoalSemuaPaket} soal ({paket.length} paket)</span>}
   {durasi && <span class="tka-meta">⏱ ~{durasi} menit</span>}
 </div>
 
@@ -67,19 +77,34 @@ const deskripsiTampil = deskripsi || materi?.data.description;
   </div>
 )}
 
-<div class="tka-drill-card">
-  <p class="tka-drill-eyebrow">🎯 Latihan Soal</p>
-  <h2>Siap drilling?</h2>
-  <p class="tka-drill-desc">
-    {jumlahSoal !== undefined
-      ? `${jumlahSoal} soal latihan gaya TKA (variasi tipe soal + HOTS) -- boleh dikerjakan berkali-kali buat mengasah pemahaman & ketepatan.`
-      : 'Latihan soal untuk sesi ini.'}
-  </p>
-  {tugasUrl ? (
-    <a href={tugasUrl} class="btn btn-primary tka-drill-cta">Mulai Latihan Soal &rarr;</a>
-  ) : (
-    <span class="pd-step-unavailable">— Latihan belum tersedia untuk sesi ini.</span>
-  )}
+{paket.length > 0 && (
+  <div class="tka-drill-heading">
+    <p class="tka-drill-eyebrow">🎯 Latihan Soal</p>
+    <h2>Siap drilling?</h2>
+    <p class="tka-drill-desc">
+      {paket.length > 1
+        ? `Pilih salah satu paket di bawah, atau kerjakan keduanya buat latihan lebih banyak -- soal antar paket berbeda, boleh dikerjakan berkali-kali.`
+        : 'Boleh dikerjakan berkali-kali buat mengasah pemahaman & ketepatan.'}
+    </p>
+  </div>
+)}
+
+<div class="tka-drill-grid" data-count={paket.length}>
+  {paket.map((p) => (
+    <div class="tka-drill-card">
+      <p class="tka-drill-paket-label">{p.label}</p>
+      <p class="tka-drill-desc">
+        {p.jumlahSoal !== undefined
+          ? `${p.jumlahSoal} soal latihan gaya TKA (variasi tipe soal + HOTS)`
+          : 'Latihan soal untuk paket ini.'}
+      </p>
+      {p.tugasUrl ? (
+        <a href={p.tugasUrl} class="btn btn-primary tka-drill-cta">Mulai {p.label} &rarr;</a>
+      ) : (
+        <span class="pd-step-unavailable">— Belum tersedia.</span>
+      )}
+    </div>
+  ))}
 </div>
 
 <div class="pd-nav-grid">
@@ -172,13 +197,9 @@ const deskripsiTampil = deskripsi || materi?.data.description;
     text-decoration: underline;
   }
 
-  .tka-drill-card {
-    background: linear-gradient(135deg, var(--rose-soft), var(--gold-soft));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: 2rem 2.25rem;
-    margin: 1.5rem 0 2.5rem;
+  .tka-drill-heading {
     text-align: center;
+    margin-top: 1.5rem;
   }
 
   .tka-drill-eyebrow {
@@ -191,7 +212,7 @@ const deskripsiTampil = deskripsi || materi?.data.description;
     margin: 0 0 0.5rem;
   }
 
-  .tka-drill-card h2 {
+  .tka-drill-heading h2 {
     font-size: 1.5rem;
     margin: 0 0 0.6rem;
   }
@@ -200,7 +221,43 @@ const deskripsiTampil = deskripsi || materi?.data.description;
     color: var(--ink-soft);
     font-size: 0.9375rem;
     max-width: 32rem;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto;
+  }
+
+  .tka-drill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  /* Satu paket saja -- kartu tunggal jangan melebar penuh, biar tetap
+     terasa seperti CTA fokus, bukan grid kosong separuh layar. */
+  .tka-drill-grid[data-count='1'] {
+    grid-template-columns: minmax(0, 28rem);
+    justify-content: center;
+  }
+
+  .tka-drill-card {
+    background: linear-gradient(135deg, var(--rose-soft), var(--gold-soft));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tka-drill-paket-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .tka-drill-card .tka-drill-desc {
+    margin-bottom: 1.25rem;
   }
 
   .tka-drill-cta {

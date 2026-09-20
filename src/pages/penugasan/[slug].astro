@@ -41,12 +41,15 @@ const daftarKelas = pengaturan?.data.daftarKelas ?? [];
 // tersembunyi buat mereka & murid mulai seperti biasa tanpa kode tambahan.
 const butuhSesiPin = await adaSesiAktif(env.DB, entry.id);
 
-// tugasUrl di ruang-belajar selalu berformat penuh
+// tugasUrl/tugasUrlPaket2 di ruang-belajar selalu berformat penuh
 // "https://pancaedu.web.id/penugasan/<slug>" -- dipakai buat cari sesi Ruang
 // Belajar mana yang nautkan ke Penugasan ini, supaya tombol kembali nggak
 // ke laman "Semua Penugasan" yang generik tapi balik langsung ke sesinya.
+// Cek KEDUA field -- topik TKA dengan 2 paket taut lewat tugasUrl (Paket 1)
+// ATAU tugasUrlPaket2 (Paket 2), keduanya harus mengarah balik ke sesi yang
+// sama.
 const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find((s) =>
-  s.data.tugasUrl?.endsWith(`/penugasan/${entry.id}`)
+  s.data.tugasUrl?.endsWith(`/penugasan/${entry.id}`) || s.data.tugasUrlPaket2?.endsWith(`/penugasan/${entry.id}`)
 );
 ---
 
