@@ -251,6 +251,7 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
     });
 
     let attemptId: number | null = null;
+    let identitasAktif: { nama: string; kelas: string } | null = null;
 
     const identitasTersimpan = ambilIdentitas();
     if (identitasTersimpan && kelasSelect) {
@@ -322,6 +323,7 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
         }
         const data = (await res.json()) as { attemptId: number; attemptKe: number; sesiId: number | null };
         attemptId = data.attemptId;
+        identitasAktif = { nama, kelas };
 
         // Arahkan link Papan Peringkat ke SESI yang sama dengan yang baru
         // dikerjakan siswa ini -- supaya dia lihat peringkat sesinya saja
@@ -353,7 +355,7 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
     });
 
     submitBtn?.addEventListener('click', async () => {
-      if (attemptId === null || !pengerjaanSection) return;
+      if (attemptId === null || !identitasAktif || !pengerjaanSection) return;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Menilai...';
 
@@ -362,9 +364,12 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
         const res = await fetch('/api/penugasan/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ attemptId, slug, jawaban }),
+          body: JSON.stringify({ attemptId, slug, jawaban, nama: identitasAktif.nama, kelas: identitasAktif.kelas }),
         });
-        if (!res.ok) throw new Error('gagal submit');
+        if (!res.ok) {
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(body?.error || 'gagal submit');
+        }
         const data = (await res.json()) as {
           skor: number;
           skorMaks: number;
@@ -378,10 +383,10 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
           hasilSection.hidden = false;
           hasilSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      } catch {
+      } catch (err) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Selesai & Lihat Hasil';
-        alert('Gagal mengirim jawaban. Coba lagi.');
+        alert(err instanceof Error && err.message ? err.message : 'Gagal mengirim jawaban. Coba lagi.');
       }
     });
   }

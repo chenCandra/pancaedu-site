@@ -98,17 +98,42 @@ export async function hapusAttemptKelas(
   return ids.length;
 }
 
+/**
+ * Simpan hasil penilaian ke `attempts` (+ baris `jawaban` per soal).
+ *
+ * KEAMANAN -- attemptId dikirim balik ke browser sebagai integer polos saat
+ * /mulai (bukan token rahasia), jadi TIDAK BOLEH dipercaya begitu saja buat
+ * menentukan attempt MANA yang di-update. Klausa WHERE di bawah WAJIB
+ * menyertakan nama+kelas (harus cocok dengan attempt yang bersangkutan,
+ * dicatat sendiri saat /mulai) DAN selesai_at IS NULL (attempt itu belum
+ * pernah dinilai) -- tanpa ini, siapa pun yang menebak/enumerasi attemptId
+ * kecil (1, 2, 3, ...) bisa menimpa skor attempt MILIK ORANG LAIN, bahkan
+ * yang sudah selesai sekalipun. Kalau UPDATE ini tidak kena baris apa pun
+ * (attemptId tidak ada / bukan milik nama+kelas ini / sudah pernah selesai),
+ * batalkan seluruhnya -- TIDAK insert baris `jawaban` apa pun -- dan
+ * lempar error supaya pemanggil (API route) bisa balas 409, bukan
+ * berpura-pura berhasil.
+ */
 export async function simpanHasil(
   db: D1Database,
-  params: { attemptId: number; hasil: HasilSoal[]; jawabanMentah: Record<string, unknown> }
+  params: {
+    attemptId: number;
+    nama: string;
+    kelas: string;
+    hasil: HasilSoal[];
+    jawabanMentah: Record<string, unknown>;
+  }
 ) {
   const skor = params.hasil.reduce((total, h) => total + h.skor, 0);
   const skorMaks = params.hasil.reduce((total, h) => total + h.skorMaks, 0);
 
   const statements = [
     db
-      .prepare('UPDATE attempts SET selesai_at = datetime(\'now\'), skor = ?1, skor_maks = ?2 WHERE id = ?3')
-      .bind(skor, skorMaks, params.attemptId),
+      .prepare(
+        `UPDATE attempts SET selesai_at = datetime('now'), skor = ?1, skor_maks = ?2
+         WHERE id = ?3 AND nama = ?4 AND kelas = ?5 AND selesai_at IS NULL`
+      )
+      .bind(skor, skorMaks, params.attemptId, params.nama, params.kelas),
     ...params.hasil.map((h) =>
       db
         .prepare('INSERT INTO jawaban (attempt_id, soal_id, jawaban_json, benar, skor) VALUES (?1, ?2, ?3, ?4, ?5)')
@@ -121,9 +146,33 @@ export async function simpanHasil(
         )
     ),
   ];
-  await db.batch(statements);
+  const results = await db.batch(statements);
+
+  // results[0] = hasil statement UPDATE di atas -- meta.changes = 0 berarti
+  // TIDAK ADA baris yang cocok (bukan attempt ini, atau sudah selesai
+  // sebelumnya). D1 tetap mengeksekusi seluruh batch meski UPDATE-nya nol
+  // baris (batch bukan transaksi atomik dgn rollback otomatis di sini),
+  // jadi baris `jawaban` di atas TERLANJUR ter-insert -- bersihkan lagi
+  // supaya tidak ada sampah `jawaban` yatim yang menempel ke attempt orang
+  // lain/attempt yang sudah final.
+  const updateBerhasil = (results[0]?.meta?.changes ?? 0) > 0;
+  if (!updateBerhasil) {
+    await db
+      .prepare('DELETE FROM jawaban WHERE attempt_id = ?1 AND soal_id IN (' + params.hasil.map((_, i) => `?${i + 2}`).join(',') + ')')
+      .bind(params.attemptId, ...params.hasil.map((h) => h.soalId))
+      .run();
+    throw new AttemptTidakValidError();
+  }
 
   return { skor, skorMaks };
+}
+
+/** Dilempar simpanHasil() kalau attemptId tidak ditemukan, bukan milik nama+kelas yang diklaim, atau sudah pernah dinilai sebelumnya. */
+export class AttemptTidakValidError extends Error {
+  constructor() {
+    super('Attempt tidak ditemukan, bukan milikmu, atau sudah pernah dinilai sebelumnya.');
+    this.name = 'AttemptTidakValidError';
+  }
 }
 
 export type BarisLeaderboard = {
