@@ -32,9 +32,9 @@ const quotesJson = JSON.stringify(heroQuotes);
   <div class="container hero-content">
     <p class="eyebrow hero-eyebrow" data-reveal>PancaEdu — Ruang Belajar Digital</p>
     <h1 class="hero-title" data-hero-title>
-      <span class="hero-line" data-hero-quote-text>&ldquo;{heroQuotes[0].quote}&rdquo;</span>
+      <span class="hero-line" data-hero-quote-text data-fade>&ldquo;{heroQuotes[0].quote}&rdquo;</span>
     </h1>
-    <p class="hero-quote-author" data-hero-quote-author data-reveal>{heroQuotes[0].author && `— ${heroQuotes[0].author}`}</p>
+    <p class="hero-quote-author" data-hero-quote-author data-fade data-reveal>{heroQuotes[0].author && `— ${heroQuotes[0].author}`}</p>
     <p class="hero-lede" data-reveal>
       {heroLede}
     </p>
@@ -66,11 +66,52 @@ const quotesJson = JSON.stringify(heroQuotes);
     }
     if (!Array.isArray(quotes) || quotes.length === 0) return;
 
-    var pilihan = quotes[Math.floor(Math.random() * quotes.length)];
-    textEl.textContent = '“' + pilihan.quote + '”';
-    if (authorEl) {
-      authorEl.textContent = pilihan.author ? '— ' + pilihan.author : '';
+    var kurangGerak = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var idxSekarang = -1;
+
+    function acakIndexBaru() {
+      if (quotes.length === 1) return 0;
+      // Jangan sampai quote yang sama muncul dua kali berturut-turut.
+      var i;
+      do {
+        i = Math.floor(Math.random() * quotes.length);
+      } while (i === idxSekarang);
+      return i;
     }
+
+    function tampilkan(i) {
+      idxSekarang = i;
+      var pilihan = quotes[i];
+      textEl.textContent = '“' + pilihan.quote + '”';
+      if (authorEl) {
+        authorEl.textContent = pilihan.author ? '— ' + pilihan.author : '';
+      }
+    }
+
+    tampilkan(acakIndexBaru());
+
+    // Ganti quote otomatis tiap 10 detik -- fade out singkat dulu (skip
+    // kalau prefers-reduced-motion) baru ganti teks & fade in, supaya
+    // pergantiannya tidak terasa "meloncat" mendadak. Berhenti berputar
+    // kalau tab sedang tidak aktif (document.hidden), biar tidak
+    // membuang siklus render pas user pindah tab.
+    setInterval(function () {
+      if (document.hidden) return;
+      var iBaru = acakIndexBaru();
+
+      if (kurangGerak) {
+        tampilkan(iBaru);
+        return;
+      }
+
+      textEl.classList.add('is-fading');
+      if (authorEl) authorEl.classList.add('is-fading');
+      setTimeout(function () {
+        tampilkan(iBaru);
+        textEl.classList.remove('is-fading');
+        if (authorEl) authorEl.classList.remove('is-fading');
+      }, 400);
+    }, 10000);
   })();
 </script>
 
@@ -295,6 +336,14 @@ const quotesJson = JSON.stringify(heroQuotes);
     display: block;
   }
 
+  [data-fade] {
+    transition: opacity 0.4s ease;
+  }
+
+  [data-fade].is-fading {
+    opacity: 0;
+  }
+
   .hero-quote-author {
     font-family: var(--font-body);
     font-size: 1rem;
@@ -374,6 +423,9 @@ const quotesJson = JSON.stringify(heroQuotes);
     }
     .sparkle {
       display: none;
+    }
+    [data-fade] {
+      transition: none !important;
     }
   }
 </style>
