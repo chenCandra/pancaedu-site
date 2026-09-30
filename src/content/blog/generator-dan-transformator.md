@@ -241,7 +241,3 @@ Charger HP-mu mengubah listrik 220V AC dari stopkontak menjadi sekitar 5V DC unt
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sampai di sini kita tuntas membahas Induksi Elektromagnetik (2.2). Selanjutnya kita bahas listrik yang mengalir di rumah kita sehari-hari secara lebih mendalam: Arus Bolak-Balik (AC).</p>
-<a href="/materi/arus-bolak-balik-konsep-dasar" class="btn btn-primary">📈 Lanjut ke Arus Bolak-Balik: Konsep Dasar →</a>
-</div>

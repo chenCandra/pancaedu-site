@@ -265,7 +265,3 @@ Sebuah rangkaian penyaring audio (*speaker crossover*) memakai kapasitor untuk m
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Dengan ini kita tuntas membahas Arus Bolak-Balik. Sesi terakhir Bab Fenomena Elektromagnetik akan membawa kita ke topik yang lebih luas: Gelombang Elektromagnetik, mulai dari gelombang radio sampai sinar gamma.</p>
-<a href="/materi/spektrum-elektromagnetik" class="btn btn-primary">🌈 Lanjut ke Spektrum Elektromagnetik →</a>
-</div>

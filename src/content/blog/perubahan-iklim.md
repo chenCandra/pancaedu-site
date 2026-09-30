@@ -260,7 +260,3 @@ Sebuah kota pesisir menghadapi ancaman kenaikan permukaan laut akibat perubahan 
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Dampaknya sudah jelas skalanya sangat besar. Untungnya, dunia tidak diam saja -- selanjutnya kita bahas upaya nyata yang sudah dilakukan di tingkat global dan negara untuk menghadapinya.</p>
-<a href="/materi/upaya-global-dan-nasional-pemanasan-global" class="btn btn-primary">🤝 Lanjut ke Upaya Global dan Nasional →</a>
-</div>

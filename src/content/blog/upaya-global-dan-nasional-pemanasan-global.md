@@ -229,7 +229,3 @@ Sebuah kota pesisir menyusun rencana lima tahun menghadapi pemanasan global.
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Kita sudah bahas upaya di tingkat besar (negara dan dunia). Sebagai penutup bab ini, sekarang giliran kita bicara soal peran INDIVIDU -- termasuk kamu sendiri.</p>
-<a href="/materi/jejak-karbon-dan-aksi-individu" class="btn btn-primary">👣 Lanjut ke Jejak Karbon dan Aksi Individu →</a>
-</div>

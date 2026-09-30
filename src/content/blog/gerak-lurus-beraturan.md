@@ -162,16 +162,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Setelah tuntas dengan [Besaran dan Satuan](/materi/besaran-dan-satuan) serta cara [mengukur dan melaporkan hasil pengukuran](/materi/pengukuran-alat-ukur-dan-angka-penting), sekarang kita mulai bab baru: **Gerak**. Kita mulai dari jenis gerak paling sederhana -- gerak pada lintasan lurus dengan kecepatan yang tidak berubah, disebut **Gerak Lurus Beraturan (GLB)**.
@@ -229,7 +219,3 @@ Dua mobil melaju GLB di jalan yang sama: Mobil A dengan kecepatan 15 m/s, Mobil 
 
 Coba buktikan jawabanmu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang setelah paham gerak dengan kecepatan konstan, saatnya belajar gerak yang kecepatannya berubah secara teratur.</p>
-<a href="/materi/gerak-lurus-berubah-beraturan" class="btn btn-primary">🏎️ Lanjut ke Gerak Lurus Berubah Beraturan (GLBB) →</a>
-</div>

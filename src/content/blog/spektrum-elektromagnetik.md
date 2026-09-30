@@ -267,7 +267,3 @@ Sinyal WiFi di rumahmu (gelombang mikro, ≈2,4 GHz) bisa menembus tembok kamar 
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu intuisimu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sampai di sini kita tuntas membahas seluruh Bab Fenomena Elektromagnetik -- dari medan magnet, induksi elektromagnetik, arus bolak-balik, sampai spektrum gelombang elektromagnetik. Bab berikutnya, Teori Dasar Fisika Modern, sedang disiapkan.</p>
-<a href="/ruang-belajar" class="btn btn-primary">📚 Lihat Semua Sesi Ruang Belajar →</a>
-</div>

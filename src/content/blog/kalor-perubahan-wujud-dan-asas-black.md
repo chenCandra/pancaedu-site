@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -212,7 +202,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- perbedaan kalor s
 * 🧊 Kalor laten (mengubah wujud, ΔT=0): **Q = mL** -- melebur/menguap menyerap kalor, membeku/mengembun melepaskan kalor.
 * ⚖️ Asas Black: **Q lepas = Q terima**, mencapai suhu akhir kesetimbangan (Tc).
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham kalor dan perubahan wujud. Selanjutnya kita bahas TIGA cara kalor berpindah: konduksi, konveksi, dan radiasi.</p>
-<a href="/materi/perpindahan-kalor-konduksi-konveksi-radiasi" class="btn btn-primary">🔗 Lanjut ke Perpindahan Kalor: Konduksi, Konveksi, Radiasi →</a>
-</div>

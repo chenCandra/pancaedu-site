@@ -236,7 +236,3 @@ Justru terbalik! <strong class="mtr-right">Tekanan RENDAH terjadi di tempat alir
 1. Kenapa tirai kamar mandi kadang "tersedot" ke dalam ke arah pancuran air saat shower menyala?
 2. Dua kapal yang berlayar sejajar dan berdekatan di laut bisa saling "tertarik" mendekat kalau jaraknya terlalu dekat. Bagaimana Asas Bernoulli menjelaskan ini? (Petunjuk: bagaimana aliran air di celah sempit antara dua kapal itu?)
 
-<div class="mtr-cta">
-<p>Sampai di sini, Bab Fluida (Statis dan Dinamis) sudah lengkap kita bahas. Lanjutkan belajar lewat halaman Ruang Belajar untuk melihat bab-bab Kelas XI berikutnya.</p>
-<a href="/ruang-belajar" class="btn btn-primary">📚 Kembali ke Ruang Belajar →</a>
-</div>

@@ -199,16 +199,6 @@ draft: false
   margin-block: 1rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Di materi [Konsep Energi](/materi/konsep-energi), kita sudah kenalan sama definisi energi dan Hukum Kekekalan Energi. Sekarang saatnya kenalan sama berbagai **bentuk** energi yang ada di sekitar kita -- ternyata jauh lebih banyak dari yang kalian kira.
@@ -359,7 +349,3 @@ Perhatikan sebuah senter yang menyala memakai baterai.
 
 Ini pertanyaan yang sama seperti di materi Konsep Energi sebelumnya -- coba jawab lagi sekarang, apakah jawabanmu berubah setelah tahu berbagai bentuk energi di atas?
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah kenal berbagai bentuk energi. Saatnya lihat bagaimana energi berpindah dan berubah dari satu bentuk ke bentuk lainnya dalam kehidupan sehari-hari.</p>
-<a href="/materi/perubahan-energi" class="btn btn-primary">🔄 Lanjut ke Perubahan Energi →</a>
-</div>

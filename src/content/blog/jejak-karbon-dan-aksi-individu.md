@@ -253,7 +253,3 @@ Coba renungkan aktivitasmu satu hari terakhir: bagaimana kamu berangkat ke sekol
 
 Coba diskusikan komitmenmu dengan teman sekelas -- saling mengingatkan biasanya lebih efektif daripada sendirian.
 
-<div class="mtr-cta">
-<p>Sampai di sini kita sudah tuntas membahas bab Pemanasan Global, dari mekanisme dasar sampai aksi individu. Sekarang kita masuk ke bab baru: Gerak Dua Dimensi -- dimulai dari dasar-dasar gerak lurus.</p>
-<a href="/materi/gerak-lurus-beraturan" class="btn btn-primary">🚗 Lanjut ke Gerak Lurus Beraturan (GLB) →</a>
-</div>

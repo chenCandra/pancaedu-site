@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -232,7 +222,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa kecepatan 
 
 Dengan ini, sub-bab Gravitasi selesai. Selanjutnya kita pindah ke topik momentum dan tumbukan.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham gravitasi dan gerak planet/satelit. Selanjutnya kita bahas besaran yang menentukan "kesulitan menghentikan" benda yang bergerak: momentum.</p>
-<a href="/materi/momentum-impuls-dan-hukum-kekekalan-momentum" class="btn btn-primary">🔗 Lanjut ke Momentum, Impuls, dan Hukum Kekekalan Momentum →</a>
-</div>

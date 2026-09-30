@@ -251,7 +251,3 @@ Kamu menarik magnet dengan kecepatan konstan mendekati sebuah kumparan, lalu tib
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham mekanisme dasarnya. Selanjutnya kita lihat bagaimana prinsip ini dimanfaatkan di dunia nyata -- lewat Generator dan Transformator.</p>
-<a href="/materi/generator-dan-transformator" class="btn btn-primary">🔋 Lanjut ke Aplikasi Induksi: Generator dan Transformator →</a>
-</div>

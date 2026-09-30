@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -244,7 +234,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- pengaruh sudut pa
 * 🔧 Momen inersia (I): "kelembaman rotasi", bergantung bentuk DAN sebaran massa, bukan cuma massa total.
 * 🔧 Cincin (I=MR²) &gt; Piringan Pejal (I=½MR²) &gt; Bola Pejal (I=⅖MR²) untuk massa dan jari-jari yang sama.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham momen gaya dan momen inersia. Selanjutnya kita gabungkan keduanya jadi "Hukum II Newton versi rotasi" -- dan lihat bagaimana benda berputar bisa punya energi kinetik juga.</p>
-<a href="/materi/dinamika-rotasi-dan-energi-kinetik-rotasi" class="btn btn-primary">🔗 Lanjut ke Dinamika Rotasi dan Energi Kinetik Rotasi →</a>
-</div>

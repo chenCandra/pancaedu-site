@@ -182,16 +182,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Di materi [Sumber Energi](/materi/sumber-energi), kita sudah kenalan sama klasifikasi terbarukan dan tak terbarukan. Sekarang kita bahas dulu kategori yang paling banyak dipakai dunia saat ini: **energi tak terbarukan**.
@@ -280,7 +270,3 @@ Sebuah kota kecil selama puluhan tahun mengandalkan PLTU batu bara sebagai satu-
 
 Coba diskusikan sebelum lanjut ke materi berikutnya.
 
-<div class="mtr-cta">
-<p>Sekarang saatnya kenalan sama alternatifnya -- sumber energi yang bisa terus "terisi ulang" secara alami.</p>
-<a href="/materi/energi-terbarukan" class="btn btn-primary">☀️ Lanjut ke Energi Terbarukan →</a>
-</div>

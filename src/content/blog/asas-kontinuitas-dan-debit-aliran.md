@@ -254,7 +254,3 @@ Justru terbalik. <strong class="mtr-right">Makin SEMPIT pipanya, makin CEPAT ali
 1. Kenapa perawat harus berhati-hati soal ukuran jarum suntik/selang infus -- apa hubungannya dengan debit dan kecepatan aliran?
 2. Kalau diameter pipa diperbesar 3 kali, berapa kali lipat kecepatan alirannya berubah (dengan debit tetap)?
 
-<div class="mtr-cta">
-<p>Kita sudah tahu bagaimana KECEPATAN aliran berubah saat pipa menyempit. Selanjutnya kita bahas apa yang terjadi pada TEKANAN-nya -- inilah rahasia di balik gaya angkat sayap pesawat.</p>
-<a href="/materi/asas-bernoulli-dan-penerapannya" class="btn btn-primary">✈️ Lanjut ke Asas Bernoulli dan Penerapannya →</a>
-</div>

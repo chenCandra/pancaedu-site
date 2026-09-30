@@ -212,7 +212,3 @@ Sebuah negara lain memakai frekuensi listrik 60 Hz, berbeda dari Indonesia yang 
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham konsep dasar AC. Selanjutnya kita lihat bagaimana AC berperilaku saat mengalir lewat komponen rangkaian seperti resistor, induktor, dan kapasitor.</p>
-<a href="/materi/rangkaian-ac-sederhana" class="btn btn-primary">🔧 Lanjut ke Rangkaian AC Sederhana →</a>
-</div>

@@ -293,7 +293,3 @@ Tidak tepat. <strong class="mtr-right">Dilatasi waktu adalah efek fisik yang NYA
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Selain waktu, benda yang bergerak sangat cepat juga "terlihat" berubah dari sisi panjangnya bagi pengamat yang diam.</p>
-<a href="/materi/kontraksi-panjang" class="btn btn-primary">📏 Lanjut ke Kontraksi Panjang →</a>
-</div>

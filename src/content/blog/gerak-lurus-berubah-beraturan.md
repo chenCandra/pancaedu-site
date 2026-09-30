@@ -162,16 +162,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Kalau di materi [Gerak Lurus Beraturan (GLB)](/materi/gerak-lurus-beraturan) kecepatannya konstan, sekarang kita bahas kebalikannya: gerak lurus yang kecepatannya **berubah secara teratur** -- disebut **Gerak Lurus Berubah Beraturan (GLBB)**.
@@ -248,7 +238,3 @@ Sebuah kereta mainan bergerak dengan kecepatan awal 6 m/s, lalu direm dengan per
 
 Coba buktikan jawabanmu lewat simulasi di atas (aktifkan mode GLBB dengan percepatan berlawanan arah kecepatan).
 
-<div class="mtr-cta">
-<p>Sekarang setelah paham dua jenis gerak lurus (GLB dan GLBB), saatnya belajar alat matematika penting untuk gerak dua dimensi: Vektor.</p>
-<a href="/materi/vektor" class="btn btn-primary">🧭 Lanjut ke Vektor →</a>
-</div>

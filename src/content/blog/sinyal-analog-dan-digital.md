@@ -251,7 +251,3 @@ Tidak sepenuhnya tepat. <strong class="mtr-right">Sinyal digital punya BATAS RES
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu intuisimu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham kenapa dunia digital cuma mengenal dua nilai (0 dan 1). Selanjutnya kita pelajari cara MEMBACA angka dalam sistem biner ini.</p>
-<a href="/materi/bilangan-biner" class="btn btn-primary">🔢 Lanjut ke Bilangan Biner →</a>
-</div>

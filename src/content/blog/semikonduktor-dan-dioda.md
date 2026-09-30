@@ -245,7 +245,3 @@ Tidak tepat. <strong class="mtr-right">Semikonduktor tipe-P tetap NETRAL secara 
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu pemahamanmu lewat tab Dioda di simulasi bawah.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham bahan dasarnya dan komponen pertama yang dibangun darinya. Selanjutnya kita bahas komponen yang jauh lebih canggih: transistor, yang jadi dasar semua chip komputer modern.</p>
-<a href="/materi/transistor-saklar-dan-penguat" class="btn btn-primary">🔀 Lanjut ke Transistor: Saklar dan Penguat →</a>
-</div>

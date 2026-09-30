@@ -231,7 +231,3 @@ Sebuah keluarga punya AC tua di rumah yang mulai bocor freon, sebuah sepeda moto
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sekarang kita tahu gas-gasnya. Selanjutnya kita lihat dari sisi AKTIVITAS manusia -- sektor kehidupan apa saja yang jadi penyumbang terbesar.</p>
-<a href="/materi/faktor-penyebab-pemanasan-global" class="btn btn-primary">🏭 Lanjut ke Faktor Penyebab Pemanasan Global →</a>
-</div>

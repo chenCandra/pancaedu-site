@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -246,7 +236,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konversi antar sk
 * 📏 Pemuaian luas: **ΔA = A0βΔT**, dengan β=2α. Pemuaian volume: **ΔV = V0γΔT**, dengan γ=3α.
 * 📏 Koefisien muai (α) berbeda-beda untuk tiap bahan.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham suhu dan pemuaian. Selanjutnya kita bahas kalor -- energi yang berpindah akibat perbedaan suhu, perubahan wujud zat, dan Asas Black.</p>
-<a href="/materi/kalor-perubahan-wujud-dan-asas-black" class="btn btn-primary">🔗 Lanjut ke Kalor, Perubahan Wujud, dan Asas Black →</a>
-</div>

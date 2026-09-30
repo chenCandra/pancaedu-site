@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -238,7 +228,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- rumus konduksi, a
 
 Dengan ini, sub-bab Kalor selesai. Selanjutnya kita masuk ke sub-bab Termodinamika.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham tiga cara kalor berpindah. Selanjutnya kita bahas bagaimana kalor dan usaha saling berhubungan lewat Hukum Termodinamika.</p>
-<a href="/materi/hukum-ke-nol-dan-hukum-i-termodinamika" class="btn btn-primary">🔗 Lanjut ke Hukum ke-Nol dan Hukum I Termodinamika →</a>
-</div>

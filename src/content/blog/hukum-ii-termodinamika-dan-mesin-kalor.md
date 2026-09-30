@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -211,7 +201,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa efisiensi 
 
 Dengan ini, Bab **Kalor dan Termodinamika** selesai -- kamu sudah menguasai suhu, pemuaian, kalor, perubahan wujud, Asas Black, perpindahan kalor, dan seluruh Hukum Termodinamika. Selamat!
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah menguasai kalor dan termodinamika. Bab terakhir Fisika Kelas XI membahas jenis gerak yang berbeda lagi: gelombang.</p>
-<a href="/ruang-belajar" class="btn btn-primary">🔗 Kembali ke Ruang Belajar →</a>
-</div>

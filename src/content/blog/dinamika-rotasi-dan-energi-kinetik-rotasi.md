@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -246,7 +236,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- analogi translasi
 * 🌀 Energi kinetik rotasi: **Ek = ½Iω²** -- ada meski benda tidak berpindah tempat.
 * 🌀 Benda yang menggelinding punya Ek translasi DAN Ek rotasi sekaligus.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham dinamika rotasi luar-dalam. Selanjutnya kita bahas kondisi khusus: kapan benda benar-benar SEIMBANG (tidak bergerak maupun berputar) -- dan di mana letak "titik berat"nya.</p>
-<a href="/materi/kesetimbangan-benda-tegar-dan-titik-berat" class="btn btn-primary">🔗 Lanjut ke Kesetimbangan Benda Tegar dan Titik Berat →</a>
-</div>

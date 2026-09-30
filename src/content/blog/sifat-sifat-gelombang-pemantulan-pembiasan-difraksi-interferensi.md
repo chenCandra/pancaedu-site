@@ -118,16 +118,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -217,7 +207,3 @@ Atau renungkan: sifat mana yang menurutmu paling mudah kamu amati dalam kehidupa
 * 〰️ Difraksi: gelombang melentur/menyebar di celah sempit/tepi penghalang.
 * 🔊 Interferensi: superposisi gelombang -- konstruktif (menguat) atau destruktif (melemah).
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham empat sifat universal gelombang. Selanjutnya kita fokus ke satu jenis gelombang mekanik yang paling sering kita alami sehari-hari: bunyi.</p>
-<a href="/materi/karakteristik-dan-cepat-rambat-bunyi" class="btn btn-primary">🔗 Lanjut ke Karakteristik dan Cepat Rambat Bunyi →</a>
-</div>

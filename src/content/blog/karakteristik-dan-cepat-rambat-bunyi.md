@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -236,7 +226,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- perbedaan nada da
 * 🔊 Klasifikasi: Infrasonik (&lt;20 Hz), Audiosonik (20-20.000 Hz), Ultrasonik (&gt;20.000 Hz).
 * 🔊 Cepat rambat di udara: **v = 331 + 0,6T** -- makin panas, makin cepat.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham karakteristik dasar bunyi. Selanjutnya kita bahas seberapa "kuat" bunyi itu terdengar dari jarak tertentu (intensitas), dan kenapa nada sirine ambulans berubah saat melintas di depanmu (efek Doppler).</p>
-<a href="/materi/intensitas-bunyi-dan-efek-doppler" class="btn btn-primary">🔗 Lanjut ke Intensitas Bunyi dan Efek Doppler →</a>
-</div>

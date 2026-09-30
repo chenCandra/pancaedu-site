@@ -181,16 +181,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -340,7 +330,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- struktur keping s
 * 🔋 C berbanding lurus dengan luas keping (A) dan konstanta dielektrik (εᵣ), tapi berbanding TERBALIK dengan jarak antar keping (d).
 * 🔋 Energi yang tersimpan: **W = ½QV = ½CV²**.
 
-<div class="mtr-cta">
-<p>Setelah paham satu kapasitor sendirian, materi berikutnya membahas apa yang terjadi kalau beberapa kapasitor dirangkai bersama, seri maupun paralel -- apakah kapasitansi totalnya bertambah atau berkurang?</p>
-<a href="/materi/rangkaian-kapasitor" class="btn btn-primary">🔗 Lanjut ke Rangkaian Kapasitor: Seri dan Paralel →</a>
-</div>

@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -242,7 +232,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa polanya sa
 
 Dengan ini, Bab **Gerak dan Gaya** selesai -- kamu sudah menguasai Hukum Newton, gaya gesek, bidang miring, sistem katrol, gravitasi, momentum, tumbukan, usaha-energi, dinamika rotasi, kesetimbangan, dan elastisitas. Selamat!
 
-<div class="mtr-cta">
-<p>Bab berikutnya membahas fluida yang sudah lebih dulu selesai sebelumnya, atau lanjutkan ke Ruang Belajar untuk melihat urutan lengkap Kelas XI.</p>
-<a href="/ruang-belajar" class="btn btn-primary">🔗 Kembali ke Ruang Belajar →</a>
-</div>

@@ -149,16 +149,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -278,7 +268,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- menguraikan gaya 
 * 📐 Percepatan meluncur turun (dengan gesekan): a = g sinθ − μg cosθ.
 * 🎣 Sistem katrol: kedua benda punya percepatan SAMA (a = (m2g−f)/(m1+m2)), dihubungkan tegangan tali T.
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah menguasai gaya kontak (gesekan, normal, tegangan tali). Selanjutnya kita bahas gaya yang bekerja dari JARAK JAUH tanpa sentuhan: gravitasi.</p>
-<a href="/materi/hukum-gravitasi-newton-dan-medan-gravitasi" class="btn btn-primary">🔗 Lanjut ke Hukum Gravitasi Newton dan Medan Gravitasi →</a>
-</div>

@@ -231,7 +231,3 @@ Energi kinetik roket itu sekitar **5,48×10²¹ Joule** -- angka yang luar biasa
 <strong>Kalau jawabanmu meleset,</strong> cek dulu dua hal yang paling sering jadi sumber kesalahan: (1) lupa mengkuadratkan v/c sebelum dikurangkan dari 1 (bukan cuma v/c biasa), dan (2) salah menempatkan mana yang L₀/m₀ (nilai "diam"/"sejati") dan mana yang L/m (nilai hasil pengukuran pengamat yang relatif bergerak) -- kesalahan menukar keduanya adalah kesalahan paling umum di soal-soal seperti ini.
 </div>
 
-<div class="mtr-cta">
-<p>Sudah menguasai relativitas khusus? Sekarang kita bahas topik lain di Bab Teori Dasar Fisika Modern yang sama anehnya: ternyata cahaya sendiri punya kepribadian ganda, kadang seperti gelombang, kadang seperti partikel.</p>
-<a href="/materi/efek-fotolistrik-dan-dualisme-gelombang-partikel" class="btn btn-primary">💡 Lanjut ke Efek Fotolistrik dan Dualisme Gelombang-Partikel →</a>
-</div>

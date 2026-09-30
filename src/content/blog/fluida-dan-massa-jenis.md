@@ -261,7 +261,3 @@ Tidak tepat. <strong class="mtr-right">Tekanan hidrostatis P = ρgh HANYA bergan
 
 Coba uji jawabanmu lewat simulasi di atas dengan mengganti-ganti jenis fluidanya.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham massa jenis dan tekanan hidrostatis. Selanjutnya kita pakai kedua konsep itu untuk memahami dua hukum fluida statis yang paling terkenal: Hukum Pascal (dongkrak hidrolik) dan Hukum Archimedes (gaya apung).</p>
-<a href="/materi/hukum-pascal-dan-hukum-archimedes" class="btn btn-primary">🔧 Lanjut ke Hukum Pascal dan Hukum Archimedes →</a>
-</div>

@@ -275,7 +275,3 @@ Bayangkan kamu menjelaskan pemanasan global ke adikmu yang masih SD, yang bertan
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sekarang kita sudah paham mekanisme dasarnya. Selanjutnya kita bahas lebih detail: gas rumah kaca apa saja yang berperan, dan dari mana asalnya.</p>
-<a href="/materi/gas-rumah-kaca-jenis-dan-sumbernya" class="btn btn-primary">💨 Lanjut ke Gas Rumah Kaca: Jenis dan Sumbernya →</a>
-</div>

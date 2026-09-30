@@ -201,16 +201,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Sekarang kita gabungkan dua hal yang sudah kita pelajari sebelumnya: gerak lurus ([GLB](/materi/gerak-lurus-beraturan) dan [GLBB](/materi/gerak-lurus-berubah-beraturan)) dengan [Vektor](/materi/vektor). Hasilnya: **gerak parabola** -- gerak dua dimensi yang lintasannya melengkung, seperti bola yang ditendang, peluru yang ditembakkan, atau bola basket yang dilempar ke ring.
@@ -317,7 +307,3 @@ Dua bola ditendang dari titik yang sama dengan kecepatan awal yang sama besar, t
 
 Coba buktikan jawabanmu lewat simulasi di atas, lalu diskusikan dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Bab Gerak Dua Dimensi sudah tuntas. Sekarang mari bahas isu global yang sangat relevan dengan materi Energi yang sudah kita pelajari: Perubahan Iklim.</p>
-<a href="/materi/perubahan-iklim" class="btn btn-primary">🌍 Lanjut ke Perubahan Iklim →</a>
-</div>

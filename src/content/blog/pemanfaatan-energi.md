@@ -182,16 +182,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Sejauh ini kita sudah belajar energi dari sisi bentuknya, perubahannya, sampai sumbernya -- termasuk [Energi Terbarukan](/materi/energi-terbarukan) dan [Energi Tak Terbarukan](/materi/energi-tak-terbarukan). Sekarang mari lihat dari sudut pandang yang berbeda: **bagaimana energi itu benar-benar dipakai** dalam kehidupan sehari-hari, per sektor kegiatan manusia.
@@ -261,7 +251,3 @@ Coba amati rumahmu sendiri selama satu hari penuh.
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sekarang setelah tahu bagaimana energi dipakai di berbagai sektor, saatnya bahas masalah nyata yang muncul dari situ -- dan apa upaya yang sedang dilakukan untuk mengatasinya.</p>
-<a href="/materi/permasalahan-dan-upaya-pemenuhan-kebutuhan-energi" class="btn btn-primary">⚠️ Lanjut ke Permasalahan & Upaya Pemenuhan Energi →</a>
-</div>

@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -207,7 +197,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konsep desibel lo
 * 📢 Taraf intensitas: **TI = 10log(I/I0)**, logaritmik -- 10x lipat I = +10 dB.
 * 🚑 Efek Doppler: **f' = f×v/(v∓vs)** -- mendekat (nada naik), menjauh (nada turun).
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham intensitas dan Efek Doppler. Sesi terakhir bab ini (dan seluruh Fisika Kelas XI!) membahas resonansi kolom udara dan pelayangan bunyi.</p>
-<a href="/materi/resonansi-dan-pelayangan-bunyi" class="btn btn-primary">🔗 Lanjut ke Resonansi dan Pelayangan Bunyi →</a>
-</div>

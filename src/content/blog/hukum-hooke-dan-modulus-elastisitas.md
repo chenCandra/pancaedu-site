@@ -109,16 +109,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -220,7 +210,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- perbedaan k dan M
 * 🧵 Modulus Young: **E = σ/e** (tegangan/regangan) -- sifat bahan, beda dari k (sifat pegas tertentu).
 * 🧵 Melewati batas elastis menyebabkan deformasi PERMANEN.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham satu pegas sendirian. Sesi terakhir Bab Gerak dan Gaya membahas apa yang terjadi kalau beberapa pegas dirangkai bersama, seri maupun paralel.</p>
-<a href="/materi/susunan-pegas-seri-dan-paralel" class="btn btn-primary">🔗 Lanjut ke Susunan Pegas Seri dan Paralel →</a>
-</div>

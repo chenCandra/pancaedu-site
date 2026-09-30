@@ -256,7 +256,3 @@ Sebuah keluarga di kota besar setiap hari menggunakan mobil pribadi ke mana-mana
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sekarang kita tahu penyebabnya secara global. Selanjutnya kita lihat lebih dekat: bagaimana pemanasan global ini terasa dalam kehidupan sehari-hari kita di Indonesia.</p>
-<a href="/materi/dampak-pemanasan-global-kehidupan-sehari-hari" class="btn btn-primary">🏘️ Lanjut ke Dampak Pemanasan Global dalam Kehidupan Sehari-hari →</a>
-</div>

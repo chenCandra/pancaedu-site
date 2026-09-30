@@ -110,16 +110,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -211,7 +201,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- perbedaan pipa te
 * 🎼 Pelayangan: **fb=|f1−f2|** -- dipakai musisi untuk menyetem alat musik.
 * ⚠️ Resonansi bisa bermanfaat (alat musik) maupun berbahaya (struktur bangunan/jembatan).
 
-<div class="mtr-cta">
-<p>Selamat! Kamu baru saja menyelesaikan seluruh materi Fisika Kelas XI di Ruang Belajar PancaEdu -- dari Gerak dan Gaya, Kalor dan Termodinamika, hingga Gelombang. Lanjutkan belajar dengan menjelajahi kelas lain atau mengulang topik yang masih terasa sulit.</p>
-<a href="/ruang-belajar" class="btn btn-primary">🔗 Kembali ke Ruang Belajar →</a>
-</div>

@@ -219,7 +219,3 @@ Sebuah pemercepat partikel (particle accelerator) menggunakan medan magnet kuat 
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sampai di sini kita tuntas membahas Medan Magnet (2.1). Sekarang kita masuk ke topik baru: Induksi Elektromagnetik -- bagaimana justru medan magnet bisa MENGHASILKAN listrik.</p>
-<a href="/materi/hukum-faraday-dan-lenz" class="btn btn-primary">⚡ Lanjut ke Hukum Faraday dan Hukum Lenz →</a>
-</div>

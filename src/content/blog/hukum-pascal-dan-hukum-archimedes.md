@@ -259,7 +259,3 @@ Tidak tepat. <strong class="mtr-right">Gaya apung Fa = ρ_fluida × g × V berga
 1. Sebuah kapal yang sama akan lebih mudah mengapung di air laut atau di air sungai (tawar)? Kenapa?
 2. Kalau kamu menimbang badanmu di darat, lalu "menimbang" lagi saat berendam di kolam renang (misalnya pakai timbangan bawah air), kenapa angkanya jauh lebih kecil?
 
-<div class="mtr-cta">
-<p>Fluida Statis belum selesai -- masih ada satu hal menarik: kenapa serangga bisa "berjalan" di atas air, dan kenapa air bisa naik sendiri lewat pipa yang sangat sempit?</p>
-<a href="/materi/tegangan-permukaan-kapilaritas-dan-viskositas" class="btn btn-primary">💧 Lanjut ke Tegangan Permukaan, Kapilaritas, dan Viskositas →</a>
-</div>

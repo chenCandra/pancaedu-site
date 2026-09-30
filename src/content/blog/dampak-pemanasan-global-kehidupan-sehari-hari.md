@@ -238,7 +238,3 @@ Bulan lalu, daerah tempat tinggalmu mengalami kemarau lebih panjang dari biasany
 
 Coba diskusikan jawabanmu dengan teman sekelas -- bandingkan pengalaman kalian masing-masing.
 
-<div class="mtr-cta">
-<p>Kita sudah lihat dampaknya dalam skala keseharian. Sekarang kita perbesar sudut pandang: bagaimana dampak ini terlihat dalam skala BUMI secara keseluruhan.</p>
-<a href="/materi/perubahan-iklim" class="btn btn-primary">🌍 Lanjut ke Perubahan Iklim →</a>
-</div>

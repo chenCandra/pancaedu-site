@@ -187,16 +187,6 @@ draft: false
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.875rem; color: var(--ink-soft); margin: 0 0 0.75rem; }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Setelah belajar cara [merancang penyelidikan ilmiah](/materi/merancang-dan-melakukan-penyelidikan-ilmiah), sekarang saatnya masuk ke apa yang sebenarnya "diselidiki" itu -- ada dua kata yang bakal terus muncul di hampir setiap materi selanjutnya: **besaran** dan **satuan**. Kedengarannya sepele, tapi keduanya adalah fondasi dari cara Fisika "berbicara" secara kuantitatif. Tanpa memahami ini dengan benar, materi-materi selanjutnya (besaran pokok, besaran turunan, dimensi, pengukuran) bakal terasa membingungkan.
@@ -346,7 +336,3 @@ Bayangkan kamu diminta mendeskripsikan sebuah pesawat kertas yang baru saja dile
 
 Coba diskusikan jawabanmu dengan teman sebangku sebelum melanjutkan ke materi Besaran Pokok.
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah paham fondasinya -- besaran, satuan, satuan baku, dan dua cara mengklasifikasikan besaran. Saatnya masuk lebih dalam ke tujuh besaran paling dasar dalam Fisika.</p>
-<a href="/materi/besaran-pokok" class="btn btn-primary">🧭 Lanjut ke Besaran Pokok →</a>
-</div>

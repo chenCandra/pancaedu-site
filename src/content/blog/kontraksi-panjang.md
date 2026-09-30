@@ -266,7 +266,3 @@ Tidak tepat. <strong class="mtr-right">Kontraksi panjang adalah hasil pengukuran
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Selain panjang dan waktu, ternyata massa benda yang bergerak sangat cepat juga ikut berubah.</p>
-<a href="/materi/massa-relativistik-dan-momentum-relativistik" class="btn btn-primary">⚖️ Lanjut ke Massa Relativistik dan Momentum Relativistik →</a>
-</div>

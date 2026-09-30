@@ -197,7 +197,3 @@ Tidak tepat. <strong class="mtr-right">Sama seperti dioda, transistor butuh tega
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu pemahamanmu lewat tab Transistor di simulasi bawah.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham komponen dasarnya. Selanjutnya kita lihat bagaimana kombinasi transistor-transistor ini disusun jadi "gerbang logika" -- fondasi cara kerja semua komputer digital.</p>
-<a href="/materi/gerbang-logika" class="btn btn-primary">🔢 Lanjut ke Gerbang Logika →</a>
-</div>

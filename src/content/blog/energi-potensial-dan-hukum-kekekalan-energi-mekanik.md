@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -211,7 +201,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konsep energi pot
 * ⚡ Hukum Kekekalan Energi Mekanik: Em TETAP SAMA kalau hanya gaya konservatif (gravitasi) yang bekerja, tanpa gesekan/hambatan udara.
 * ⚡ Saat benda jatuh: Ep berkurang, Ek bertambah, Em totalnya tetap -- keduanya "bertukar", bukan salah satunya hilang.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham bagaimana energi kinetik dan potensial saling bertukar pada gerak lurus/jatuh. Selanjutnya kita pindah ke jenis gerak yang berbeda sama sekali: rotasi/berputar.</p>
-<a href="/materi/momen-gaya-torsi-dan-momen-inersia" class="btn btn-primary">🔗 Lanjut ke Momen Gaya (Torsi) dan Momen Inersia →</a>
-</div>

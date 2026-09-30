@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -235,7 +225,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- rumus usaha tiap 
 * 💨 Adiabatik (Q=0): **ΔU = −W**, gas mendingin saat mengembang, memanas saat dikompresi.
 * 📊 Usaha gas secara grafis = luas daerah di bawah kurva P-V.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham berbagai proses termodinamika pada gas. Sesi terakhir bab ini membahas batasan mendasar: Hukum II Termodinamika, dan bagaimana mesin kalor bekerja dengan efisiensi yang selalu di bawah 100%.</p>
-<a href="/materi/hukum-ii-termodinamika-dan-mesin-kalor" class="btn btn-primary">🔗 Lanjut ke Hukum II Termodinamika dan Mesin Kalor →</a>
-</div>

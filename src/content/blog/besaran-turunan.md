@@ -177,16 +177,6 @@ draft: false
   margin-block: 1rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🔗 Apa Itu Besaran Turunan?
@@ -390,7 +380,3 @@ Cobalah tentukan: besaran apa yang dihasilkan? Besaran pokok apa saja yang menyu
 
 Jika kalian sudah bisa menjawab keempat pertanyaan tersebut, berarti kalian mulai memahami hubungan antara besaran pokok, besaran turunan, satuan, dan dimensi.
 
-<div class="mtr-cta">
-<p>Sudah paham besaran pokok, besaran turunan, dan dimensi -- yuk lihat semuanya dari sudut pandang alat yang benar-benar dipakai untuk mengukur.</p>
-<a href="/materi/alat-ukur" class="btn btn-primary">🔧 Lihat Materi Alat Ukur →</a>
-</div>

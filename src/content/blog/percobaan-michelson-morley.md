@@ -298,7 +298,3 @@ Tidak tepat. <strong class="mtr-right">Hasil "negatif" dalam sains justru bisa s
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Salah satu konsekuensi paling terkenal dari "ruang dan waktu yang relatif" ini adalah dilatasi waktu -- waktu yang bisa "melambat" bagi benda yang bergerak sangat cepat.</p>
-<a href="/materi/dilatasi-waktu" class="btn btn-primary">⏱️ Lanjut ke Dilatasi Waktu →</a>
-</div>

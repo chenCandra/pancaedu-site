@@ -249,7 +249,3 @@ Sebuah bel listrik sederhana menggunakan elektromagnet untuk memukul lonceng set
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Kita sudah tahu arus listrik menghasilkan medan magnet. Sekarang giliran sebaliknya: bagaimana medan magnet memberikan GAYA pada muatan yang bergerak.</p>
-<a href="/materi/gaya-lorentz" class="btn btn-primary">🌀 Lanjut ke Gaya Magnetik (Gaya Lorentz) →</a>
-</div>

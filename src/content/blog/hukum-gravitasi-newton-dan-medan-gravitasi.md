@@ -101,16 +101,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -205,7 +195,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa gravitasi 
 * 🪐 F dan g sama-sama berbanding terbalik dengan KUADRAT jarak (bukan jarak itu sendiri).
 * 🪐 Bulan tidak jatuh ke Bumi karena terus "meleset" dalam orbit, bukan karena gravitasi berhenti bekerja.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham gaya gravitasi antar dua benda. Selanjutnya kita terapkan konsep ini untuk menjelaskan gerak planet mengelilingi Matahari lewat tiga Hukum Kepler.</p>
-<a href="/materi/hukum-kepler-dan-gerak-satelit" class="btn btn-primary">🔗 Lanjut ke Hukum Kepler dan Gerak Satelit →</a>
-</div>

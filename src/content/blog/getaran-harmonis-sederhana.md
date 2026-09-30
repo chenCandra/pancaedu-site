@@ -114,16 +114,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -219,7 +209,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- perbedaan rumus p
 * 🧵 Pegas: **T = 2π√(m/k)** -- bergantung massa dan konstanta pegas.
 * 🪀 Bandul: **T = 2π√(L/g)** -- bergantung panjang tali dan gravitasi, TIDAK bergantung massa/simpangan.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham getaran sebagai dasar gelombang. Selanjutnya kita bahas gelombang itu sendiri -- besaran-besarannya dan berbagai jenisnya.</p>
-<a href="/materi/besaran-dan-jenis-jenis-gelombang" class="btn btn-primary">🔗 Lanjut ke Besaran dan Jenis-jenis Gelombang →</a>
-</div>

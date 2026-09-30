@@ -259,7 +259,3 @@ Tidak selalu. <strong class="mtr-right">Arahnya (naik atau turun) bergantung pad
 1. Kenapa serangga air strider bisa "berjalan" di atas air tanpa tenggelam, padahal massa jenis tubuhnya lebih besar dari air?
 2. Kalau kamu menjatuhkan kelereng ke dalam air dan ke dalam madu secara bersamaan dari ketinggian yang sama, mana yang lebih dulu mencapai dasar wadah? Kenapa?
 
-<div class="mtr-cta">
-<p>Fluida Statis sudah tuntas. Sekarang kita masuk ke Fluida Dinamis -- fluida yang MENGALIR. Kita mulai dari aturan paling dasar: kenapa aliran air menyembur lebih deras saat ujung selang ditekan.</p>
-<a href="/materi/asas-kontinuitas-dan-debit-aliran" class="btn btn-primary">🔀 Lanjut ke Asas Kontinuitas dan Debit Aliran →</a>
-</div>

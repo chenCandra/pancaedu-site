@@ -260,7 +260,3 @@ Tidak tepat. <strong class="mtr-right">Bilangan biner TIDAK dibaca seperti bilan
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang kita paham bagaimana angka direpresentasikan dalam sistem digital. Selanjutnya kita lihat bagaimana keadaan 0/1 ini benar-benar diwujudkan secara fisik lewat komponen elektronik.</p>
-<a href="/materi/semikonduktor-dan-dioda" class="btn btn-primary">🔌 Lanjut ke Semikonduktor dan Dioda →</a>
-</div>

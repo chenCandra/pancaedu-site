@@ -124,16 +124,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -237,7 +227,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- dua syarat keseti
 * 📍 Titik berat: titik tunggal tempat seluruh berat benda dianggap terpusat.
 * 📍 Tiga jenis kesetimbangan: **Stabil** (kembali ke posisi semula), **Labil** (menjauh), **Netral** (diam di posisi baru).
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah menguasai gaya, momentum, energi, dan rotasi. Sub-bab terakhir di Bab Gerak dan Gaya membahas sifat benda yang bisa "kembali ke bentuk semula" setelah diregangkan: elastisitas.</p>
-<a href="/materi/hukum-hooke-dan-modulus-elastisitas" class="btn btn-primary">🔗 Lanjut ke Hukum Hooke dan Modulus Elastisitas →</a>
-</div>

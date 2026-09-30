@@ -145,16 +145,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -273,7 +263,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa hasilnya k
 * 🔋 Pola ini KEBALIKAN dari resistor seri/paralel -- jangan tertukar.
 * 🔋 Analoginya lewat C=ε₀A/d: paralel = menambah luas efektif (A naik), seri = menambah jarak efektif (d naik).
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah paham kapasitor luar-dalam. Selanjutnya kita pindah dari Listrik Statis ke Listrik Dinamis -- listrik yang mengalir sebagai arus.</p>
-<a href="/materi/hukum-ohm-dan-rangkaian-sederhana" class="btn btn-primary">🔗 Lanjut ke Hukum Ohm dan Rangkaian Sederhana →</a>
-</div>

@@ -129,16 +129,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -246,7 +236,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa energi kin
 * 🔵 Tidak Lenting Sama Sekali (e=0): benda bersatu, energi kinetik berkurang paling banyak.
 * 🚗 Crumple zone mobil sengaja didesain "remuk" (mendekati tidak lenting) untuk menyerap energi kinetik dan mengurangi gaya pada penumpang.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham momentum, impuls, dan tumbukan luar-dalam. Selanjutnya kita pindah ke besaran yang berhubungan erat dengan gaya: usaha dan energi.</p>
-<a href="/materi/usaha-dan-teorema-usaha-energi" class="btn btn-primary">🔗 Lanjut ke Usaha dan Teorema Usaha-Energi →</a>
-</div>

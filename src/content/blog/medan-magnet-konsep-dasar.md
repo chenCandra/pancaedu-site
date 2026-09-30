@@ -228,7 +228,3 @@ Kamu punya sebuah magnet batang tapi label N/S-nya sudah pudar, dan sebuah kompa
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau uji dulu pemahamanmu lewat simulasi kompas di atas.
 
-<div class="mtr-cta">
-<p>Sekarang kita tahu sifat dasar magnet permanen. Selanjutnya kita bahas hal yang lebih menarik: magnet ternyata juga bisa dihasilkan dari ARUS LISTRIK.</p>
-<a href="/materi/medan-magnet-oleh-arus-listrik" class="btn btn-primary">🔌 Lanjut ke Medan Magnet oleh Arus Listrik →</a>
-</div>

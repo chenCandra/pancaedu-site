@@ -356,7 +356,3 @@ Sebelum lanjut ke materi berikutnya, coba renungkan dulu:
 
 Coba diskusikan jawabanmu dengan teman sekelas -- kamu akan menemukan jawaban lengkapnya sambil membaca materi-materi berikutnya di bab ini.
 
-<div class="mtr-cta">
-<p>Salah satu latar belakang lahirnya teori ini adalah percobaan yang gagal membuktikan keberadaan "eter" -- medium yang dulu dikira dibutuhkan cahaya untuk merambat.</p>
-<a href="/materi/percobaan-michelson-morley" class="btn btn-primary">🔬 Lanjut ke Percobaan Michelson-Morley →</a>
-</div>

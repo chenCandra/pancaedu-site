@@ -240,7 +240,3 @@ Sebuah pohon natal punya 2 mode lampu: mode A (semua lampu seri) dan mode B (sem
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Setelah tuntas membahas Rangkaian Listrik, sekarang kita masuk ke bab baru: Fenomena Elektromagnetik -- dimulai dari dasar-dasar medan magnet.</p>
-<a href="/materi/medan-magnet-konsep-dasar" class="btn btn-primary">🧲 Lanjut ke Medan Magnet: Konsep Dasar →</a>
-</div>

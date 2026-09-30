@@ -191,16 +191,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Setelah belajar [Usaha dan Daya](/materi/usaha-dan-daya), sekarang kita ambil jarak sedikit dari rumus-rumus, dan lihat energi dari sudut pandang yang lebih besar: **dari mana sebenarnya energi yang kita pakai sehari-hari itu berasal?**
@@ -275,7 +265,3 @@ Kayu bakar sering dianggap sebagai sumber energi "alami" yang bisa terus ditanam
 
 Coba diskusikan dengan teman sekelas sebelum lanjut membaca materi berikutnya.
 
-<div class="mtr-cta">
-<p>Sekarang saatnya bahas satu per satu -- mulai dari sumber energi yang paling banyak dipakai dunia saat ini, meski jumlahnya terbatas.</p>
-<a href="/materi/energi-tak-terbarukan" class="btn btn-primary">⛏️ Lanjut ke Energi Tak Terbarukan →</a>
-</div>

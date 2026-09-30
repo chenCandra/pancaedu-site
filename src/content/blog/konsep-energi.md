@@ -177,16 +177,6 @@ draft: false
   margin-block: 1rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Kalian mendorong meja, menyalakan lampu, atau berlari mengejar bus -- semuanya butuh sesuatu yang sama: **energi**. Kata ini dipakai hampir setiap hari, tapi coba tanyakan ke diri sendiri: sebenarnya, apa sih energi itu?
@@ -265,7 +255,3 @@ Sebuah mainan mobil-mobilan bertenaga baterai bergerak sampai baterainya "habis"
 
 Tuliskan dugaanmu dulu, baru cek lagi setelah membaca materi selanjutnya.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham fondasinya: energi, satuannya, dan Hukum Kekekalan Energi. Saatnya kenalan sama berbagai bentuk energi yang ada di sekitar kita.</p>
-<a href="/materi/mengenal-ragam-energi" class="btn btn-primary">⚡ Lanjut ke Bentuk-bentuk Energi →</a>
-</div>

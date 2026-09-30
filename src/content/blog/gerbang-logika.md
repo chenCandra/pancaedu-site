@@ -294,7 +294,3 @@ Tidak tepat. <strong class="mtr-right">NAND adalah kebalikan dari AND, dan NOR a
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan langsung lewat simulasi di atas -- coba semua kombinasi input di tiap gerbang dan bandingkan dengan tabel kebenarannya.
 
-<div class="mtr-cta">
-<p>Dengan ini kita tuntas membahas seluruh Bab Teori Dasar Digital, sekaligus menyelesaikan seluruh materi Fisika Kelas XII di situs ini. Jelajahi lagi materi-materi lain lewat halaman Materi.</p>
-<a href="/materi" class="btn btn-primary">📚 Lihat Semua Materi →</a>
-</div>

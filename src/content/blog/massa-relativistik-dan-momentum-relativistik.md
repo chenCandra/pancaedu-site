@@ -244,7 +244,3 @@ Tidak tepat. <strong class="mtr-right">Tidak ada materi baru yang muncul.</stron
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sekarang kita sudah kenal tiga efek utama relativitas khusus -- waktu, panjang, dan massa. Saatnya lihat rangkumannya sekaligus dalam satu gambaran utuh.</p>
-<a href="/materi/benda-bergerak-mendekati-kecepatan-cahaya" class="btn btn-primary">🌌 Lanjut ke: Apa yang Terjadi Jika Benda Bergerak Mendekati Kecepatan Cahaya? →</a>
-</div>

@@ -167,16 +167,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Di materi [Besaran dan Satuan](/materi/besaran-dan-satuan), kamu sudah kenalan sama definisi besaran, satuan, dan kenapa dunia butuh satuan baku. Sekarang kita masuk lebih dalam ke salah satu kelompok besaran yang jadi fondasi semuanya: **besaran pokok**.
@@ -357,7 +347,3 @@ Jika hari ini kamu hanya mengingat beberapa hal, pastikan kamu memahami ini: **b
 
 Dan satu hal yang tidak kalah penting: **besaran adalah apa yang diukur. Satuan adalah pembanding yang digunakan untuk menyatakan hasil pengukuran.**
 
-<div class="mtr-cta">
-<p>Kamu sudah mengenal 7 fondasi besaran dalam Fisika. Tapi dalam Fisika kita tidak cuma berurusan dengan panjang, massa, waktu, dan besaran pokok lainnya -- bagaimana dengan luas, volume, kecepatan, percepatan, gaya, energi, dan tekanan? Apakah semuanya besaran pokok? Cari tahu jawabannya di materi berikutnya.</p>
-<a href="/materi/besaran-turunan" class="btn btn-primary">🚀 Lanjut ke Besaran Turunan →</a>
-</div>

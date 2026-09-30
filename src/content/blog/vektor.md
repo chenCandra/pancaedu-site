@@ -221,16 +221,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Ingat materi [Besaran dan Satuan](/materi/besaran-dan-satuan)? Di sana kita sudah kenal pembagian besaran jadi dua jenis: **skalar** (cuma punya nilai, mis. massa, waktu, suhu) dan **vektor** (punya nilai DAN arah, mis. perpindahan, kecepatan, gaya). Sekarang saatnya kita bedah lebih dalam bagaimana vektor ini digambar, dituliskan, dan yang paling penting -- bagaimana cara menjumlahkannya.
@@ -346,7 +336,3 @@ Sebuah kapal berlayar dengan kecepatan 6 m/s ke arah timur, sementara arus air l
 
 Coba diskusikan jawabanmu dengan teman sekelas, atau buktikan sendiri lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang setelah paham cara menjumlahkan vektor, saatnya menerapkannya ke gerak dua dimensi yang sesungguhnya: gerak parabola.</p>
-<a href="/materi/gerak-parabola" class="btn btn-primary">🎯 Lanjut ke Gerak Parabola →</a>
-</div>

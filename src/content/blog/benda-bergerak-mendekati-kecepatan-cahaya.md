@@ -197,7 +197,3 @@ Tidak tepat. <strong class="mtr-right">Ini bukan soal "energinya belum cukup bes
 
 Coba diskusikan jawabanmu dengan teman sekelas.
 
-<div class="mtr-cta">
-<p>Sudah paham teorinya? Saatnya uji pemahamanmu lewat latihan soal yang menggabungkan ketiga rumus sekaligus.</p>
-<a href="/materi/latihan-soal-relativitas-khusus" class="btn btn-primary">📝 Lanjut ke Latihan Soal Relativitas Khusus →</a>
-</div>

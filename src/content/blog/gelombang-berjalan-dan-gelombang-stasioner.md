@@ -110,16 +110,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -215,7 +205,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konsep simpul dan
 * 📍 Gelombang stasioner: superposisi 2 gelombang berlawanan arah, amplitudo BERVARIASI (nol di simpul, 2A di perut).
 * 📍 Dawai kedua ujung terikat: **L = n×(λ/2)**, jumlah simpul = n+1.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham gelombang berjalan dan stasioner. Selanjutnya kita bahas apa yang terjadi kalau gelombang menabrak penghalang atau bertemu gelombang lain: pemantulan, pembiasan, difraksi, dan interferensi.</p>
-<a href="/materi/sifat-sifat-gelombang-pemantulan-pembiasan-difraksi-interferensi" class="btn btn-primary">🔗 Lanjut ke Sifat-sifat Gelombang →</a>
-</div>

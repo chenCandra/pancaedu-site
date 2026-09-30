@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -216,7 +206,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konsep momentum, 
 * 💥 Memperpanjang waktu tumbukan (Δt) mengurangi gaya (F) yang dialami, untuk perubahan momentum yang sama -- prinsip di balik airbag dan sarung tinju.
 * ⚖️ Hukum Kekekalan Momentum: pada sistem tertutup, total momentum SEBELUM = total momentum SESUDAH interaksi.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham dasar momentum dan kekekalannya. Selanjutnya kita bedah lebih detail apa yang terjadi saat dua benda BERTUMBUKAN -- ternyata ada beberapa jenis, dengan konsekuensi energi yang berbeda-beda.</p>
-<a href="/materi/jenis-jenis-tumbukan" class="btn btn-primary">🔗 Lanjut ke Jenis-jenis Tumbukan →</a>
-</div>

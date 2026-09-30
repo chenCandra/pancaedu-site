@@ -210,16 +210,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Di materi [Pemanfaatan Energi](/materi/pemanfaatan-energi), kita lihat betapa bergantungnya hampir semua sektor kehidupan manusia pada energi. Ketergantungan sebesar itu, ditambah keterbatasan sebagian sumbernya, memunculkan beberapa masalah nyata -- dan untungnya, juga upaya-upaya nyata buat mengatasinya.
@@ -298,7 +288,3 @@ Sebuah desa terpencil di pegunungan belum terjangkau jaringan listrik nasional k
 
 Coba diskusikan jawabanmu dengan teman sekelas -- ini merangkum hampir semua yang sudah kita pelajari sepanjang materi Energi.
 
-<div class="mtr-cta">
-<p>Setelah tuntas membahas Energi, sekarang kita masuk ke bab baru: Perubahan Iklim -- dimulai dari fenomena kenaikan suhu bumi itu sendiri, Pemanasan Global.</p>
-<a href="/materi/pemanasan-global" class="btn btn-primary">🌡️ Lanjut ke Pemanasan Global →</a>
-</div>

@@ -162,16 +162,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Setelah membahas [Listrik Statis](/materi/hukum-coulomb) (muatan diam), sekarang kita masuk ke **Listrik Dinamis** -- listrik yang bergerak sebagai arus, mengalir di dalam rangkaian. Kita mulai dari hubungan paling mendasar antara tegangan, arus, dan hambatan: **Hukum Ohm**.
@@ -262,7 +252,3 @@ Sebuah rangkaian sederhana memakai sumber tegangan 12 V dan resistor 50 Ω.
 
 Coba buktikan jawabanmu lewat simulasi di atas.
 
-<div class="mtr-cta">
-<p>Sekarang setelah paham dasar rangkaian sederhana, saatnya belajar bagaimana beberapa komponen dirangkai bersama: seri dan paralel.</p>
-<a href="/materi/rangkaian-seri-dan-paralel" class="btn btn-primary">🔗 Lanjut ke Rangkaian Seri dan Paralel →</a>
-</div>

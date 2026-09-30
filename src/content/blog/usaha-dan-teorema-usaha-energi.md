@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -212,7 +202,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- kenapa usaha bisa
 * ⚡ Teorema Usaha-Energi: W_total = ΔEk -- usaha total mengubah energi kinetik benda.
 * ⚡ Usaha bisa NEGATIF (mengurangi Ek) kalau gaya berlawanan arah gerak, seperti gesekan.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham hubungan usaha dan energi kinetik. Selanjutnya kita bahas jenis energi lain yang berhubungan dengan POSISI benda: energi potensial, dan bagaimana keduanya "bertukar" lewat Hukum Kekekalan Energi Mekanik.</p>
-<a href="/materi/energi-potensial-dan-hukum-kekekalan-energi-mekanik" class="btn btn-primary">🔗 Lanjut ke Energi Potensial dan Hukum Kekekalan Energi Mekanik →</a>
-</div>

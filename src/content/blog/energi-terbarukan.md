@@ -182,16 +182,6 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 Di materi [Energi Tak Terbarukan](/materi/energi-tak-terbarukan), kita sudah bahas sumber yang paling banyak dipakai dunia saat ini, lengkap keterbatasannya. Sekarang giliran alternatifnya: sumber energi yang bisa terus "terisi ulang" secara alami.
@@ -288,7 +278,3 @@ Indonesia punya banyak gunung berapi, garis pantai yang panjang, dan berada di d
 1. Berdasarkan kondisi geografis itu, sumber energi terbarukan apa yang menurutmu paling potensial dikembangkan di Indonesia?
 2. Coba bandingkan dengan negara yang punya empat musim dan wilayah pegunungan bersalju -- apakah pilihan sumber energi terbarukan terbaiknya akan sama dengan Indonesia? Kenapa?
 
-<div class="mtr-cta">
-<p>Sekarang setelah kenal semua sumber energinya, saatnya lihat bagaimana energi itu benar-benar dipakai sehari-hari, per sektor kehidupan manusia.</p>
-<a href="/materi/pemanfaatan-energi" class="btn btn-primary">🏠 Lanjut ke Pemanfaatan Energi →</a>
-</div>

@@ -105,16 +105,6 @@ draft: false
   font-size: 0.9375rem;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -207,7 +197,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- konsep kesetimban
 * ⚡ Hukum I Termodinamika: **ΔU = Q − W** -- bentuk Hukum Kekekalan Energi untuk sistem termodinamika.
 * ⚡ Q positif = kalor masuk sistem. W positif = usaha dilakukan OLEH sistem.
 
-<div class="mtr-cta">
-<p>Sekarang kamu paham dasar Hukum I Termodinamika. Selanjutnya kita terapkan pada gas secara lebih detail lewat berbagai jenis proses: isobarik, isokhorik, dan isotermal.</p>
-<a href="/materi/proses-proses-termodinamika-pada-gas" class="btn btn-primary">🔗 Lanjut ke Proses-proses Termodinamika pada Gas →</a>
-</div>

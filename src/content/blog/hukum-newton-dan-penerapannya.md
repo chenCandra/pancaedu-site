@@ -145,16 +145,6 @@ draft: false
   font-weight: 600;
 }
 
-.mtr-cta {
-  margin-block: 2.5rem 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.mtr-cta p { margin: 0 0 1rem; color: var(--ink-soft); }
 </style>
 
 ## 🌱 Apersepsi
@@ -265,7 +255,3 @@ Atau renungkan: bagian mana yang masih terasa membingungkan -- cara menggambar d
 * 📐 Hukum II Newton: ΣF = m × a.
 * 📐 Hukum III (aksi-reaksi) berlaku pada DUA benda berbeda -- jangan disamakan dengan w dan N yang bekerja pada benda yang sama.
 
-<div class="mtr-cta">
-<p>Sekarang kamu sudah bisa menganalisis sistem dengan beberapa gaya sekaligus. Selanjutnya kita bedah lebih dalam salah satu gaya yang paling sering muncul: gaya gesek -- plus dua sistem klasik, bidang miring dan katrol.</p>
-<a href="/materi/gaya-gesek-bidang-miring-dan-sistem-katrol" class="btn btn-primary">🔗 Lanjut ke Gaya Gesek, Bidang Miring, dan Sistem Katrol →</a>
-</div>
