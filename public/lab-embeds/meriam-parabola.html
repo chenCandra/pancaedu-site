@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Game Edukasi: Meriam Parabola</title>
+<style>
+  :root {
+    --bg-dark: #0f172a; --card-bg: #1e293b; --card-border: #334155;
+    --accent-cyan: #38bdf8; --accent-orange: #fb923c; --accent-green: #22c55e; --accent-red: #ef4444;
+    --text-main: #f8fafc; --text-muted: #94a3b8; --text-highlight: #facc15;
+    --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  body { background: var(--bg-dark); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title h1 { font-size: 1.2rem; font-weight: 700; }
+  .header-badge { background: rgba(56,189,248,0.1); color: var(--accent-cyan); border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+  .main-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .main-container { grid-template-columns: 320px 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 600; color: var(--accent-cyan); }
+
+  .control-group { display: flex; flex-direction: column; gap: 8px; background: rgba(15,23,42,0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .control-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .control-label { font-size: 0.875rem; font-weight: 500; }
+  .control-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent-cyan); }
+  input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #334155; accent-color: var(--accent-cyan); }
+  input[type="range"]:disabled { opacity: 0.5; }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { flex: 1; min-width: 120px; border: none; font-weight: 700; font-size: 0.85rem; padding: 12px; border-radius: 12px; cursor: pointer; color: #fff; }
+  .btn-fire { background: linear-gradient(90deg, var(--accent-red), var(--accent-orange)); box-shadow: 0 4px 14px rgba(239,68,68,0.35); }
+  .btn-fire:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .btn-target { background: rgba(56,189,248,0.15); color: var(--accent-cyan); border: 1.5px solid rgba(56,189,248,0.4); }
+
+  .theory-card { background: rgba(30,41,59,0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+  .theory-title { color: var(--text-main); font-weight: 600; margin-bottom: 4px; }
+
+  .canvas-wrapper { position: relative; width: 100%; height: 340px; background: linear-gradient(180deg, #1e293b 0%, #0f172a 70%); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; }
+  @media (max-width: 420px) { .canvas-wrapper { height: 280px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .score-badge { position: absolute; top: 10px; right: 10px; background: rgba(15,23,42,0.85); border: 1px solid rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--text-highlight); }
+
+  .feedback-banner { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; text-align: center; max-width: 88%; opacity: 0; transition: opacity 0.2s ease; }
+  .feedback-banner.is-visible { opacity: 1; }
+  .feedback-banner.is-win { color: var(--accent-green); }
+  .feedback-banner.is-lose { color: var(--accent-orange); }
+
+  .results-panel { background: rgba(15,23,42,0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .result-highlight { text-align: center; }
+  .result-highlight .k { font-size: 0.72rem; color: var(--text-muted); }
+  .result-highlight .v { font-size: 1.05rem; font-weight: 800; color: var(--text-highlight); font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-title">
+      <span style="font-size:1.5rem;">🎯</span>
+      <h1>Game Edukasi: Meriam Parabola</h1>
+    </div>
+    <span class="header-badge">SMA Kelas X · Gerak Parabola</span>
+  </header>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Panel Kontrol</span></div>
+      <div class="theory-card">
+        <div class="theory-title">💡 Cara Main</div>
+        Atur <strong>sudut elevasi</strong> & <strong>kecepatan awal</strong> meriam, lalu tekan <strong>Tembak!</strong> supaya peluru mengenai sasaran. Sasaran berpindah tempat setiap kali kamu tekan "Sasaran Baru".
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Sudut Elevasi (θ)</span><span class="control-value" id="angVal">45°</span></div>
+        <input type="range" id="angSlider" min="10" max="80" step="1" value="45">
+      </div>
+      <div class="control-group">
+        <div class="control-label-row"><span class="control-label">Kecepatan Awal (v₀)</span><span class="control-value" id="v0Val">25 m/s</span></div>
+        <input type="range" id="v0Slider" min="10" max="40" step="1" value="25">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-target" id="btnTarget">🎯 Sasaran Baru</button>
+        <button class="btn btn-fire" id="btnFire">🔥 Tembak!</button>
+      </div>
+      <div class="theory-card">
+        <div class="theory-title">📐 Rumus Gerak Parabola</div>
+        Jangkauan <strong>R = v₀² sin(2θ) / g</strong><br>
+        Waktu terbang <strong>T = 2v₀ sin(θ) / g</strong><br>
+        Tinggi maksimum <strong>H = (v₀ sin θ)² / (2g)</strong><br>
+        (g = 9,8 m/s², gesekan udara diabaikan)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Medan Tembak</span></div>
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas"></canvas>
+        <span class="score-badge" id="scoreBadge">Skor: 0 / 0</span>
+        <span class="feedback-banner" id="feedbackBanner"></span>
+      </div>
+      <div class="results-panel">
+        <div class="result-highlight"><div class="k">Jangkauan (R)</div><div class="v" id="rangeVal">0 m</div></div>
+        <div class="result-highlight"><div class="k">Waktu Terbang (T)</div><div class="v" id="timeVal">0 s</div></div>
+        <div class="result-highlight"><div class="k">Tinggi Maks (H)</div><div class="v" id="heightVal">0 m</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 9.8;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const angSlider = document.getElementById('angSlider');
+    const v0Slider = document.getElementById('v0Slider');
+    const angVal = document.getElementById('angVal');
+    const v0Val = document.getElementById('v0Val');
+    const btnFire = document.getElementById('btnFire');
+    const btnTarget = document.getElementById('btnTarget');
+    const scoreBadge = document.getElementById('scoreBadge');
+    const feedbackBanner = document.getElementById('feedbackBanner');
+    const rangeVal = document.getElementById('rangeVal');
+    const timeVal = document.getElementById('timeVal');
+    const heightVal = document.getElementById('heightVal');
+
+    // Jendela tampilan tetap 0-200 m secara horizontal -- v0 maks 40 m/s
+    // & sudut 45 derajat cuma menghasilkan R ~ 163 m, jadi selalu muat.
+    const VIEW_METERS_X = 200;
+    // Titik nol dunia-fisika (x = 0 m) digambar di piksel ini -- konstan,
+    // TIDAK dikonversi dari/ke meter, biar tidak tercampur dengan skala
+    // pxPerMeter yang berubah-ubah mengikuti lebar kanvas.
+    const CANNON_PX = 20;
+    let pxPerMeter = 1;
+    let ang = 45, v0 = 25;
+    let targetX = 60; // meter
+    const TARGET_HALF_WIDTH = 5; // meter -- toleransi "kena"
+
+    let score = 0, attempts = 0;
+    let flying = false;
+    let flightStart = 0;
+    let trail = [];
+    let lastLandingX = null;
+
+    function hitungJangkauan(v, a) { return (v * v * Math.sin((2 * a * Math.PI) / 180)) / G; }
+    function hitungWaktu(v, a) { return (2 * v * Math.sin((a * Math.PI) / 180)) / G; }
+    function hitungTinggiMaks(v, a) { return Math.pow(v * Math.sin((a * Math.PI) / 180), 2) / (2 * G); }
+
+    function perbaruiPreview() {
+      const R = hitungJangkauan(v0, ang);
+      const T = hitungWaktu(v0, ang);
+      const H = hitungTinggiMaks(v0, ang);
+      rangeVal.textContent = R.toFixed(1) + ' m';
+      timeVal.textContent = T.toFixed(2) + ' s';
+      heightVal.textContent = H.toFixed(1) + ' m';
+    }
+
+    angSlider.addEventListener('input', () => { ang = parseFloat(angSlider.value); angVal.textContent = ang + '°'; perbaruiPreview(); render(); });
+    v0Slider.addEventListener('input', () => { v0 = parseFloat(v0Slider.value); v0Val.textContent = v0 + ' m/s'; perbaruiPreview(); render(); });
+
+    function sasaranBaru() {
+      targetX = 25 + Math.random() * 145; // 25 - 170 m
+      lastLandingX = null;
+      feedbackBanner.className = 'feedback-banner';
+      feedbackBanner.textContent = '';
+      render();
+    }
+    btnTarget.addEventListener('click', sasaranBaru);
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+      pxPerMeter = rect.width / VIEW_METERS_X;
+      render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function groundY() {
+      return canvas.parentElement.clientHeight - 24;
+    }
+
+    function drawGround(w, gy) {
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, gy, w, canvas.parentElement.clientHeight - gy);
+      ctx.strokeStyle = 'rgba(148,163,184,0.3)';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+    }
+
+    function drawCannon(gy) {
+      ctx.save();
+      ctx.fillStyle = '#64748b';
+      ctx.beginPath(); ctx.arc(CANNON_PX, gy, 12, Math.PI, 0); ctx.fill();
+      const angRad = (ang * Math.PI) / 180;
+      const barrelLen = 34;
+      ctx.translate(CANNON_PX, gy);
+      ctx.rotate(-angRad);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillRect(0, -5, barrelLen, 10);
+      ctx.restore();
+    }
+
+    function drawTarget(gy, w) {
+      // Titik nol dunia-fisika (x = 0 meter, tempat peluru ditembakkan) ADA
+      // di piksel CANNON_PX -- sasaran & lintasan peluru WAJIB pakai titik
+      // nol yang sama, supaya angka "Jangkauan" yang ditampilkan (dihitung
+      // murni dari rumus R) PERSIS sama dengan posisi mendarat yang dipakai
+      // buat cek kena/meleset. Sebelumnya sasaran digambar dari piksel 0
+      // sementara peluru dari CANNON_PX -- beda sedikit tapi bikin angka di
+      // panel hasil tidak cocok dengan feedback kena/meleset.
+      const tx = CANNON_PX + targetX * pxPerMeter;
+      if (tx > w + 20) return; // di luar layar, tidak usah digambar
+      ctx.save();
+      ctx.translate(tx, gy);
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(-10, -22, 20, 22);
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-10, -22, 20, 22);
+      ctx.fillStyle = 'rgba(250,204,21,0.9)';
+      ctx.beginPath(); ctx.arc(0, -11, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+
+    function drawTrail() {
+      if (trail.length < 2) return;
+      ctx.strokeStyle = 'rgba(56,189,248,0.6)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      trail.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+      ctx.stroke();
+    }
+
+    function drawProjectile(x, y) {
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+    }
+
+    function render(projPos) {
+      const w = canvas.parentElement.clientWidth;
+      const gy = groundY();
+      ctx.clearRect(0, 0, w, canvas.parentElement.clientHeight);
+      drawGround(w, gy);
+      drawTarget(gy, w);
+      drawTrail();
+      if (!flying) drawCannon(gy);
+      if (projPos) drawProjectile(projPos.x, projPos.y);
+    }
+
+    function tampilkanFeedback(menang, jarak) {
+      feedbackBanner.textContent = menang
+        ? `🎯 Kena! Jangkauan = ${jarak.toFixed(1)} m`
+        : `💨 Meleset! Jangkauan = ${jarak.toFixed(1)} m (sasaran di ${targetX.toFixed(1)} m)`;
+      feedbackBanner.className = 'feedback-banner is-visible ' + (menang ? 'is-win' : 'is-lose');
+    }
+
+    btnFire.addEventListener('click', () => {
+      if (flying) return;
+      flying = true;
+      btnFire.disabled = true;
+      angSlider.disabled = true;
+      v0Slider.disabled = true;
+      trail = [];
+      feedbackBanner.className = 'feedback-banner';
+
+      const T = hitungWaktu(v0, ang);
+      const angRad = (ang * Math.PI) / 180;
+      const gy = groundY();
+      const startTime = performance.now();
+
+      function frame(now) {
+        const t = (now - startTime) / 1000;
+        if (t >= T) {
+          const landingX = hitungJangkauan(v0, ang);
+          lastLandingX = landingX;
+          attempts++;
+          const menang = Math.abs(landingX - targetX) <= TARGET_HALF_WIDTH;
+          if (menang) score++;
+          scoreBadge.textContent = `Skor: ${score} / ${attempts}`;
+          tampilkanFeedback(menang, landingX);
+          flying = false;
+          btnFire.disabled = false;
+          angSlider.disabled = false;
+          v0Slider.disabled = false;
+          render();
+          return;
+        }
+        const xMeter = v0 * Math.cos(angRad) * t;
+        const yMeter = v0 * Math.sin(angRad) * t - 0.5 * G * t * t;
+        const xPx = CANNON_PX + xMeter * pxPerMeter;
+        const yPx = gy - yMeter * pxPerMeter;
+        trail.push({ x: xPx, y: yPx });
+        render({ x: xPx, y: yPx });
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+
+    perbaruiPreview();
+    window.onload = () => { resizeCanvas(); sasaranBaru(); };
+  </script>
+</body>
+</html>
