@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Duel Meriam Parabola | Arena Game Edukasi</title>
+<meta name="description" content="Game fisika 2 pemain: atur sudut dan kecepatan meriam, hantam benteng lawan lewat lintasan gerak parabola.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/game/assets/style.css">
+<style>
+  body { padding-bottom: 3rem; }
+
+  .panggung {
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: 1rem 1.25rem 2rem;
+    padding-top: 4.5rem; /* ruang buat tombol kembali mengambang */
+  }
+
+  .judul-game {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .judul-game h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    background: linear-gradient(90deg, var(--biru), var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ---------- Layar (setup / permainan / pemenang) ---------- */
+  .layar { display: none; }
+  .layar.aktif { display: block; }
+
+  .kartu-panel {
+    background: #fff;
+    border: 3px solid var(--garis);
+    border-radius: var(--radius-besar);
+    padding: 1.5rem;
+    box-shadow: var(--bayangan);
+  }
+
+  /* ---------- Setup ---------- */
+  .grup-opsi { margin-bottom: 1.5rem; }
+  .grup-opsi h3 { font-size: 1rem; margin-bottom: 0.6rem; }
+  .baris-opsi { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+  .opsi-btn {
+    padding: 0.65rem 1.15rem;
+    border-radius: var(--radius-sedang);
+    border: 2px solid var(--garis);
+    background: #fff;
+    font-family: var(--font-teks);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--tinta-lembut);
+  }
+  .opsi-btn.aktif { border-color: var(--biru); color: var(--biru); background: var(--biru-lembut); }
+
+  .tombol-mulai { display: block; width: 100%; text-align: center; font-size: 1.125rem; padding: 1rem; margin-top: 0.5rem; }
+
+  /* ---------- Papan permainan ---------- */
+  .papan-pemain {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .panel-pemain {
+    border-radius: var(--radius-sedang);
+    padding: 0.85rem 1.1rem;
+    border: 3px solid var(--garis);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .panel-pemain.giliran { border-color: var(--kuning); box-shadow: 0 0 0 4px var(--kuning-lembut); }
+  .panel-pemain.biru .nama-pemain { color: var(--biru); }
+  .panel-pemain.merah .nama-pemain { color: var(--pink); }
+
+  .nama-pemain { font-family: var(--font-judul); font-weight: 700; font-size: 0.9rem; }
+  .nyawa-pemain { font-size: 1.1rem; letter-spacing: 0.1rem; }
+  .perisai-pemain { font-size: 0.8rem; color: var(--hijau); font-weight: 700; }
+
+  .info-strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--tinta-lembut);
+    font-weight: 700;
+  }
+  .info-strip span { background: var(--kertas-alt); padding: 0.3rem 0.75rem; border-radius: var(--radius-tombol); }
+
+  .kanvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    border-radius: var(--radius-sedang);
+    overflow: hidden;
+    border: 3px solid var(--garis);
+    background: linear-gradient(180deg, #cfe8ff 0%, #eaf6ff 70%, #eaf6ff 100%);
+  }
+  @media (max-width: 30rem) { .kanvas-wrap { height: 260px; } }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .banner-hasil {
+    position: absolute;
+    top: 0.6rem; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.95);
+    border: 2px solid var(--garis);
+    border-radius: var(--radius-tombol);
+    padding: 0.5rem 1.1rem;
+    font-family: var(--font-judul);
+    font-weight: 700;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    text-align: center;
+    max-width: 90%;
+  }
+  .banner-hasil.tampil { opacity: 1; }
+  .banner-hasil.kena { color: var(--hijau); border-color: var(--hijau); }
+  .banner-hasil.meleset { color: var(--oranye); border-color: var(--oranye); }
+
+  .panel-kontrol {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 40rem) { .panel-kontrol { grid-template-columns: 1fr 1fr; } }
+
+  .kendali-baris { display: flex; flex-direction: column; gap: 0.4rem; }
+  .kendali-label-baris { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.9rem; }
+  .kendali-label-baris input[type="number"] {
+    width: 4.5rem; text-align: center; font-family: 'Courier New', monospace; font-weight: 700;
+    border: 2px solid var(--garis); border-radius: 8px; padding: 0.2rem;
+  }
+  input[type="range"] { width: 100%; accent-color: var(--biru); }
+  input[type="range"]:disabled { opacity: 0.4; }
+
+  .baris-tombol-aksi { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; grid-column: 1 / -1; justify-content: center; }
+  .baris-tombol-aksi .tombol { flex: 1; min-width: 9rem; }
+
+  .kotak-tebak { display: flex; align-items: center; gap: 0.6rem; grid-column: 1 / -1; justify-content: center; flex-wrap: wrap; }
+  .kotak-tebak input { width: 6rem; text-align: center; font-weight: 700; padding: 0.6rem; border-radius: var(--radius-sedang); border: 2px solid var(--garis); }
+
+  .hasil-tembakan {
+    margin-top: 1rem;
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    text-align: center;
+  }
+  .hasil-tembakan.tampil { display: grid; }
+  @media (min-width: 30rem) { .hasil-tembakan { grid-template-columns: repeat(4, 1fr); } }
+  .hasil-tembakan .kotak { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 0.6rem; }
+  .hasil-tembakan .kotak .k { font-size: 0.7rem; color: var(--tinta-lembut); font-weight: 700; }
+  .hasil-tembakan .kotak .v { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1rem; }
+
+  /* ---------- Layar Pemenang ---------- */
+  .layar-menang { text-align: center; }
+  .layar-menang .ikon-piala { font-size: 4rem; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-block: 1.5rem; text-align: left; }
+  .stat-kartu { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem; }
+  .stat-kartu h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .stat-kartu p { margin: 0.15rem 0; font-size: 0.875rem; color: var(--tinta-lembut); }
+  .stat-kartu p strong { color: var(--tinta); }
+
+  /* ---------- Modal (Rumus / Pembahasan / Jeda) ---------- */
+  .overlay-modal {
+    position: fixed; inset: 0; background: rgba(38,36,59,0.45);
+    display: none; align-items: center; justify-content: center; z-index: 100; padding: 1.25rem;
+  }
+  .overlay-modal.tampil { display: flex; }
+  .kotak-modal {
+    background: #fff; border-radius: var(--radius-besar); padding: 1.75rem;
+    max-width: 30rem; width: 100%; max-height: 85vh; overflow-y: auto;
+    box-shadow: var(--bayangan-kuat);
+  }
+  .kotak-modal h2 { margin-bottom: 0.75rem; }
+  .kotak-modal p, .kotak-modal li { color: var(--tinta-lembut); font-size: 0.9375rem; line-height: 1.6; }
+  .kotak-modal .tombol-tutup { margin-top: 1rem; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/game/" class="tombol-kembali-mengambang">← Kembali ke Arena Game</a>
+
+  <div class="panggung">
+    <header class="judul-game">
+      <h1>🎯 Duel Meriam Parabola</h1>
+    </header>
+
+    <!-- ============ LAYAR 1: PENGATURAN ============ -->
+    <section class="layar aktif" id="layar-setup">
+      <div class="kartu-panel">
+        <div class="grup-opsi">
+          <h3>❤️ Nyawa Benteng</h3>
+          <div class="baris-opsi" data-grup="nyawa">
+            <button class="opsi-btn aktif" data-nilai="3">3 Nyawa</button>
+            <button class="opsi-btn" data-nilai="5">5 Nyawa</button>
+          </div>
+        </div>
+
+        <div class="grup-opsi">
+          <h3>🎚️ Tingkat Kesulitan</h3>
+          <div class="baris-opsi" data-grup="kesulitan">
+            <button class="opsi-btn aktif" data-nilai="mudah">Mudah (lintasan bantu)</button>
+            <button class="opsi-btn" data-nilai="sedang">Sedang (ada bukit)</button>
+            <button class="opsi-btn" data-nilai="sulit">Sulit / Mode Hitung</button>
+          </div>
+        </div>
+
+        <div class="grup-opsi">
+          <h3>🪐 Gravitasi</h3>
+          <div class="baris-opsi" data-grup="gravitasi">
+            <button class="opsi-btn aktif" data-nilai="10">Standar (g=10)</button>
+            <button class="opsi-btn" data-nilai="9.8">Bumi (g=9,8)</button>
+            <button class="opsi-btn" data-nilai="1.6">Bulan (g=1,6)</button>
+            <button class="opsi-btn" data-nilai="3.7">Mars (g=3,7)</button>
+          </div>
+        </div>
+
+        <div class="grup-opsi">
+          <h3>💨 Angin</h3>
+          <div class="baris-opsi" data-grup="angin">
+            <button class="opsi-btn aktif" data-nilai="mati">Mati</button>
+            <button class="opsi-btn" data-nilai="hidup">Hidup (acak tiap ronde)</button>
+          </div>
+        </div>
+
+        <button class="tombol tombol-mulai" id="btn-mulai">🚀 Mulai Duel!</button>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 2: PERMAINAN ============ -->
+    <section class="layar" id="layar-main">
+      <div class="papan-pemain">
+        <div class="panel-pemain biru" id="panel-biru">
+          <div>
+            <div class="nama-pemain">🔵 Pemain Biru</div>
+            <div class="nyawa-pemain" id="nyawa-biru"></div>
+          </div>
+          <div class="perisai-pemain" id="perisai-biru"></div>
+        </div>
+        <div class="panel-pemain merah" id="panel-merah">
+          <div>
+            <div class="nama-pemain">🔴 Pemain Merah</div>
+            <div class="nyawa-pemain" id="nyawa-merah"></div>
+          </div>
+          <div class="perisai-pemain" id="perisai-merah"></div>
+        </div>
+      </div>
+
+      <div class="info-strip" id="info-strip"></div>
+
+      <div class="kanvas-wrap">
+        <canvas id="kanvas-game"></canvas>
+        <div class="banner-hasil" id="banner-hasil"></div>
+      </div>
+
+      <div class="kartu-panel" style="margin-top: 1rem;">
+        <p style="text-align:center; font-weight:800; font-family: var(--font-judul);" id="label-giliran"></p>
+
+        <div class="panel-kontrol">
+          <div class="kendali-baris">
+            <div class="kendali-label-baris">
+              <span>Sudut Elevasi (θ)</span>
+              <input type="number" id="input-sudut" min="0" max="90" step="1" value="45">
+            </div>
+            <input type="range" id="slider-sudut" min="0" max="90" step="1" value="45">
+          </div>
+          <div class="kendali-baris">
+            <div class="kendali-label-baris">
+              <span>Kecepatan Awal (v₀)</span>
+              <input type="number" id="input-v0" min="5" max="50" step="1" value="25">
+            </div>
+            <input type="range" id="slider-v0" min="5" max="50" step="1" value="25">
+          </div>
+
+          <div class="kotak-tebak" id="blok-tebak" style="display:none;">
+            <label for="input-tebakan"><strong>Tebak jarak jatuh (m):</strong></label>
+            <input type="number" id="input-tebakan" min="0" step="0.1">
+            <button class="tombol" id="btn-kunci-tebakan">Kunci Tebakan</button>
+          </div>
+
+          <div class="baris-tombol-aksi">
+            <button class="tombol" id="btn-tembak">🔥 Tembak! (Spasi)</button>
+            <button class="tombol tombol-luar" id="btn-rumus">📐 Rumus</button>
+            <button class="tombol tombol-luar" id="btn-pembahasan">💡 Pembahasan</button>
+            <button class="tombol tombol-luar" id="btn-jeda">⏸️ Jeda</button>
+            <button class="tombol tombol-luar" id="btn-mute">🔊</button>
+          </div>
+
+          <div class="hasil-tembakan" id="hasil-tembakan">
+            <div class="kotak"><div class="k">Tinggi Maks</div><div class="v" id="hasil-tinggi">-</div></div>
+            <div class="kotak"><div class="k">Jarak Jatuh</div><div class="v" id="hasil-jarak">-</div></div>
+            <div class="kotak"><div class="k">Selisih ke Target</div><div class="v" id="hasil-selisih">-</div></div>
+            <div class="kotak"><div class="k">Hasil</div><div class="v" id="hasil-status">-</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 3: PEMENANG ============ -->
+    <section class="layar" id="layar-menang">
+      <div class="kartu-panel layar-menang">
+        <span class="ikon-piala">🏆</span>
+        <h2 id="teks-pemenang">Pemenang!</h2>
+        <div class="stat-grid">
+          <div class="stat-kartu">
+            <h3>🔵 Pemain Biru</h3>
+            <p>Tembakan: <strong id="stat-biru-tembakan">0</strong></p>
+            <p>Persentase Kena: <strong id="stat-biru-persen">0%</strong></p>
+            <p>Tembakan Terakurat: <strong id="stat-biru-akurat">-</strong></p>
+          </div>
+          <div class="stat-kartu">
+            <h3>🔴 Pemain Merah</h3>
+            <p>Tembakan: <strong id="stat-merah-tembakan">0</strong></p>
+            <p>Persentase Kena: <strong id="stat-merah-persen">0%</strong></p>
+            <p>Tembakan Terakurat: <strong id="stat-merah-akurat">-</strong></p>
+          </div>
+        </div>
+        <button class="tombol" id="btn-main-lagi">🔁 Main Lagi</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ MODAL: RUMUS ============ -->
+  <div class="overlay-modal" id="modal-rumus">
+    <div class="kotak-modal">
+      <h2>📐 Rumus Gerak Parabola</h2>
+      <p><strong>Jangkauan:</strong> R = v₀² · sin(2θ) / g</p>
+      <p><strong>Waktu terbang:</strong> T = 2v₀ · sin(θ) / g</p>
+      <p><strong>Tinggi maksimum:</strong> H = (v₀ · sin θ)² / (2g)</p>
+      <p><strong>Posisi horizontal:</strong> x(t) = x₀ + arah · v₀ · cos(θ) · t + ½ · a_angin · t²</p>
+      <p><strong>Posisi vertikal:</strong> y(t) = y₀ + v₀ · sin(θ) · t − ½ · g · t²</p>
+      <p>Sudut θ diukur dari tanah ke arah lawan. Kalau angin menyala, ada percepatan horizontal tambahan (a_angin).</p>
+      <button class="tombol tombol-luar tombol-tutup" data-tutup="modal-rumus">Tutup</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: PEMBAHASAN ============ -->
+  <div class="overlay-modal" id="modal-pembahasan">
+    <div class="kotak-modal">
+      <h2>💡 Pembahasan Tembakan Terakhir</h2>
+      <div id="isi-pembahasan"><p>Belum ada tembakan.</p></div>
+      <button class="tombol tombol-luar tombol-tutup" data-tutup="modal-pembahasan">Tutup</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: JEDA ============ -->
+  <div class="overlay-modal" id="modal-jeda">
+    <div class="kotak-modal" style="text-align:center;">
+      <h2>⏸️ Permainan Dijeda</h2>
+      <p>Ambil napas dulu! Tekan lanjut kalau sudah siap.</p>
+      <button class="tombol tombol-tutup" data-tutup="modal-jeda">▶️ Lanjutkan</button>
+    </div>
+  </div>
+
+  <script src="/game/duel-meriam/fisika.js"></script>
+  <script src="/game/duel-meriam/game.js"></script>
+</body>
+</html>

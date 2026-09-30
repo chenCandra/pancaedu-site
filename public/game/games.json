@@ -1,0 +1,30 @@
+[
+  {
+    "id": "duel-meriam",
+    "judul": "Duel Meriam Parabola",
+    "deskripsi": "Bidik sudut dan kecepatan meriammu, lalu hantam benteng lawan sebelum mereka menghantammu duluan -- semua pakai rumus gerak parabola sungguhan.",
+    "mapel": "Fisika",
+    "materi": "Gerak Parabola",
+    "kelas": "SMA Kelas X",
+    "mode": ["2 pemain (1 perangkat)"],
+    "durasi": "10-15 menit",
+    "warna": "biru",
+    "ikon": "🎯",
+    "status": "Baru",
+    "path": "/game/duel-meriam/"
+  },
+  {
+    "id": "kerajaan-kata",
+    "judul": "Kerajaan Kata",
+    "deskripsi": "Bangun kerajaanmu kata demi kata -- tantangan kosakata dan tata bahasa Indonesia yang seru buat dimainkan sendirian.",
+    "mapel": "Bahasa Indonesia",
+    "materi": "Kosakata & Tata Bahasa",
+    "kelas": "SMP - SMA",
+    "mode": ["1 pemain"],
+    "durasi": "10-15 menit",
+    "warna": "oranye",
+    "ikon": "📚",
+    "status": "",
+    "path": "/game/kerajaan-kata/"
+  }
+]

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arena Game Edukasi PancaEdu</title>
+<meta name="description" content="Kumpulan game edukasi PancaEdu -- belajar sambil menang, kalah, dan coba lagi.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/game/assets/style.css">
+<style>
+  .beranda-header {
+    padding-block: 3rem 1rem;
+    text-align: center;
+  }
+
+  .ilustrasi-ceria {
+    width: 100%;
+    max-width: 22rem;
+    margin-inline: auto;
+    display: block;
+  }
+
+  .beranda-header .eyebrow {
+    font-family: var(--font-judul);
+    font-weight: 700;
+    color: var(--biru);
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .beranda-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-block: 0.5rem 0.75rem;
+    background: linear-gradient(90deg, var(--biru), var(--ungu));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .beranda-header p {
+    max-width: 34rem;
+    margin-inline: auto;
+    color: var(--tinta-lembut);
+    font-size: 1.0625rem;
+  }
+
+  .panel-filter {
+    background: #fff;
+    border: 3px solid var(--garis);
+    border-radius: var(--radius-besar);
+    padding: 1.25rem 1.5rem;
+    margin-block: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-cari-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--kertas-alt);
+    border-radius: var(--radius-tombol);
+    padding: 0.75rem 1.25rem;
+  }
+
+  .input-cari-wrap svg { flex-shrink: 0; color: var(--tinta-lembut); }
+
+  #input-cari {
+    border: none;
+    background: transparent;
+    font-family: var(--font-teks);
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    color: var(--tinta);
+  }
+
+  .baris-chip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .baris-chip .label-chip {
+    font-family: var(--font-judul);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: var(--tinta-lembut);
+    margin-right: 0.25rem;
+  }
+
+  .grid-game {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.5rem;
+    padding-block: 0.5rem 3rem;
+  }
+
+  .pesan-kosong, .pesan-error {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: var(--kertas-alt);
+    border-radius: var(--radius-besar);
+    color: var(--tinta-lembut);
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .untuk-guru {
+    background: var(--kertas-alt);
+    border-radius: var(--radius-besar);
+    padding: 2rem;
+    margin-block: 2rem 4rem;
+  }
+
+  .untuk-guru h2 {
+    font-size: 1.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .untuk-guru ul {
+    margin: 0.75rem 0 1.25rem;
+    padding-left: 1.25rem;
+    color: var(--tinta-lembut);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 26rem) {
+    .panel-filter { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <main class="kontainer">
+    <header class="beranda-header">
+      <svg class="ilustrasi-ceria" viewBox="0 0 300 160" role="img" aria-label="Ilustrasi ceria roket dan bintang">
+        <circle cx="230" cy="35" r="26" fill="#fff3cf" stroke="#f5b301" stroke-width="3"/>
+        <g stroke="#f5b301" stroke-width="3" stroke-linecap="round">
+          <line x1="230" y1="0" x2="230" y2="8"/>
+          <line x1="264" y1="10" x2="258" y2="16"/>
+          <line x1="196" y1="10" x2="202" y2="16"/>
+        </g>
+        <circle cx="40" cy="30" r="4" fill="#db2f77"/>
+        <circle cx="70" cy="55" r="3" fill="#1d6fe0"/>
+        <circle cx="20" cy="70" r="3" fill="#16a34a"/>
+        <path d="M150 20 C165 60 165 95 150 150 C135 95 135 60 150 20 Z" fill="#d9e9ff" stroke="#1d6fe0" stroke-width="3"/>
+        <path d="M150 30 C158 60 158 90 150 130 C142 90 142 60 150 30 Z" fill="#fff" stroke="#1d6fe0" stroke-width="2"/>
+        <circle cx="150" cy="60" r="10" fill="#1d6fe0" opacity="0.25"/>
+        <path d="M126 95 L106 130 L134 118 Z" fill="#f2760a"/>
+        <path d="M174 95 L194 130 L166 118 Z" fill="#f2760a"/>
+        <path d="M138 140 L150 160 L162 140 Z" fill="#db2f77"/>
+        <path d="M0 150 Q75 130 150 150 T300 150 V160 H0 Z" fill="#ece0fb"/>
+      </svg>
+      <p class="eyebrow">🎮 Arena Game Edukasi</p>
+      <h1>Arena Game Edukasi PancaEdu</h1>
+      <p>Ayo main sambil belajar! Pilih game di bawah, tantang dirimu sendiri atau temanmu, dan lihat berapa banyak yang bisa kamu menangkan.</p>
+    </header>
+
+    <section class="panel-filter">
+      <div class="input-cari-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="input-cari" type="search" placeholder="Cari judul atau materi... (mis. 'parabola')" aria-label="Cari game">
+      </div>
+      <div class="baris-chip">
+        <span class="label-chip">Mapel:</span>
+        <div id="chip-mapel" class="baris-chip"></div>
+      </div>
+      <div class="baris-chip">
+        <span class="label-chip">Kelas:</span>
+        <div id="chip-kelas" class="baris-chip"></div>
+      </div>
+      <div class="baris-chip">
+        <span class="label-chip">Mode Pemain:</span>
+        <div id="chip-mode" class="baris-chip"></div>
+      </div>
+    </section>
+
+    <section class="grid-game" id="grid-game" aria-live="polite"></section>
+    <p class="pesan-kosong" id="pesan-kosong" hidden>😅 Belum ada game untuk pilihan ini. Coba filter lain ya!</p>
+
+    <section class="untuk-guru">
+      <h2>👩‍🏫 Untuk Guru</h2>
+      <p>Game-game ini dirancang buat dipakai langsung di kelas:</p>
+      <ul>
+        <li><strong>Lewat proyektor:</strong> tampilkan di depan kelas, minta dua murid maju bergantian mengatur sudut/kecepatan.</li>
+        <li><strong>Main berkelompok:</strong> bagi kelas jadi kelompok kecil, satu perangkat per kelompok, bergantian menembak.</li>
+        <li><strong>Sebagai selingan/penutup:</strong> 10-15 menit di akhir jam pelajaran buat menguatkan konsep yang baru diajarkan.</li>
+      </ul>
+      <a href="https://pancaedu.web.id" class="tombol tombol-luar">← Kembali ke Beranda PancaEdu</a>
+    </section>
+  </main>
+
+  <script src="/game/assets/katalog.js"></script>
+</body>
+</html>

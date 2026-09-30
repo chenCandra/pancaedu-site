@@ -10,7 +10,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && wrangler deploy"
+    "deploy": "astro build && wrangler deploy",
+    "test:duel-meriam": "node scripts/test-fisika-duel-meriam.mjs",
+    "test:games-json": "node scripts/validate-games-json.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

@@ -1,0 +1,279 @@
+/* Arena Game Edukasi PancaEdu -- tema bersama: ceria, berwarna, ramah anak.
+   Dipakai oleh katalog (/game/) dan semua game di dalamnya. File CSS polos
+   (bukan lewat build Astro) -- sengaja, biar Arena Game gampang ditempel
+   ulang/di-drag-drop kalau suatu saat dipindah host. */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --font-judul: 'Baloo 2', 'Segoe UI Rounded', system-ui, sans-serif;
+  --font-teks: 'Nunito', system-ui, -apple-system, sans-serif;
+
+  /* Palet cerah -- setiap warna punya versi "lembut" (background kartu) &
+     "kuat" (aksen/tombol/teks penting), supaya kontras tetap WCAG AA. */
+  --kuning: #f5b301; --kuning-lembut: #fff3cf;
+  --oranye: #f2760a; --oranye-lembut: #ffe4cc;
+  --biru: #1d6fe0; --biru-lembut: #d9e9ff;
+  --hijau: #16a34a; --hijau-lembut: #d8f5e3;
+  --ungu: #8b3ddb; --ungu-lembut: #ece0fb;
+  --pink: #db2f77; --pink-lembut: #fbdce9;
+
+  --tinta: #26243b;
+  --tinta-lembut: #5c5a75;
+  --kertas: #fffdf8;
+  --kertas-alt: #f6f3ff;
+  --garis: #e7e2f5;
+  --bayangan: 0 10px 24px rgba(38, 36, 59, 0.12);
+  --bayangan-kuat: 0 16px 34px rgba(38, 36, 59, 0.18);
+  --radius-besar: 28px;
+  --radius-sedang: 18px;
+  --radius-tombol: 999px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--kertas);
+  color: var(--tinta);
+  font-family: var(--font-teks);
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-judul {
+  font-family: var(--font-judul);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+}
+
+a { color: inherit; }
+
+.kontainer {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ---------- Bentuk dekoratif latar (SVG/CSS bikin sendiri, bukan gambar) ---------- */
+
+.bentuk-dekor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bentuk-dekor span {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.bentuk-dekor .b1 { width: 220px; height: 220px; background: var(--biru-lembut); top: -60px; left: -60px; }
+.bentuk-dekor .b2 { width: 160px; height: 160px; background: var(--kuning-lembut); top: 8%; right: -40px; }
+.bentuk-dekor .b3 { width: 260px; height: 260px; background: var(--pink-lembut); bottom: -80px; left: 12%; }
+.bentuk-dekor .b4 { width: 140px; height: 140px; background: var(--hijau-lembut); bottom: 10%; right: 8%; }
+.bentuk-dekor .b5 { width: 100px; height: 100px; background: var(--ungu-lembut); top: 40%; left: 4%; }
+
+/* ---------- Tombol & chip ---------- */
+
+.tombol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-judul);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-tombol);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+  background: var(--biru);
+  box-shadow: var(--bayangan);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tombol:hover { transform: translateY(-2px); box-shadow: var(--bayangan-kuat); }
+.tombol:active { transform: translateY(0); }
+
+.tombol-luar {
+  background: #fff;
+  color: var(--tinta);
+  border: 2px solid var(--garis);
+  box-shadow: none;
+}
+
+.tombol-luar:hover { border-color: var(--biru); color: var(--biru); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-teks);
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-tombol);
+  border: 2px solid var(--garis);
+  background: #fff;
+  color: var(--tinta-lembut);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:hover { border-color: var(--biru); color: var(--biru); }
+.chip.aktif { background: var(--biru); border-color: var(--biru); color: #fff; }
+
+/* Tombol mengambang "Kembali ke Arena Game" -- dipakai di semua halaman game. */
+.tombol-kembali-mengambang {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+  font-family: var(--font-judul);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-tombol);
+  background: #fff;
+  color: var(--tinta);
+  text-decoration: none;
+  box-shadow: var(--bayangan);
+  border: 2px solid var(--garis);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tombol-kembali-mengambang:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--bayangan-kuat);
+  border-color: var(--biru);
+  color: var(--biru);
+}
+
+/* ---------- Kartu game (dipakai katalog) ---------- */
+
+.kartu-game {
+  --kartu-aksen: var(--biru);
+  --kartu-lembut: var(--biru-lembut);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: #fff;
+  border: 3px solid var(--kartu-lembut);
+  border-radius: var(--radius-besar);
+  padding: 1.5rem;
+  box-shadow: var(--bayangan);
+  text-decoration: none;
+  color: var(--tinta);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.kartu-game:hover {
+  transform: translateY(-6px) rotate(-0.3deg);
+  box-shadow: var(--bayangan-kuat);
+  border-color: var(--kartu-aksen);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kartu-game:hover,
+  .tombol:hover,
+  .tombol-kembali-mengambang:hover {
+    transform: none;
+  }
+}
+
+.kartu-game.warna-kuning { --kartu-aksen: var(--kuning); --kartu-lembut: var(--kuning-lembut); }
+.kartu-game.warna-oranye { --kartu-aksen: var(--oranye); --kartu-lembut: var(--oranye-lembut); }
+.kartu-game.warna-biru { --kartu-aksen: var(--biru); --kartu-lembut: var(--biru-lembut); }
+.kartu-game.warna-hijau { --kartu-aksen: var(--hijau); --kartu-lembut: var(--hijau-lembut); }
+.kartu-game.warna-ungu { --kartu-aksen: var(--ungu); --kartu-lembut: var(--ungu-lembut); }
+.kartu-game.warna-pink { --kartu-aksen: var(--pink); --kartu-lembut: var(--pink-lembut); }
+
+.kartu-ikon {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border-radius: var(--radius-sedang);
+  background: var(--kartu-lembut);
+}
+
+.kartu-label {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  font-family: var(--font-judul);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-tombol);
+  background: var(--kartu-aksen);
+  color: #fff;
+}
+
+.kartu-game h2 {
+  font-size: 1.25rem;
+}
+
+.kartu-game p.kartu-deskripsi {
+  margin: 0;
+  color: var(--tinta-lembut);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.kartu-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.kartu-meta span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-tombol);
+  background: var(--kartu-lembut);
+  color: var(--kartu-aksen);
+}
+
+.kartu-cta {
+  margin-top: 0.25rem;
+  text-align: center;
+  font-family: var(--font-judul);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-tombol);
+  background: var(--kartu-aksen);
+  color: #fff;
+}
+
+.kartu-game.segera-hadir {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.kartu-game.segera-hadir .kartu-cta {
+  background: var(--tinta-lembut);
+}

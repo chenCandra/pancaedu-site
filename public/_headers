@@ -1,0 +1,11 @@
+# Arena Game Edukasi (/game/*) -- HTML jangan di-cache lama (biar update
+# konten/game baru langsung kelihatan), tapi aset bersama (CSS/JS) boleh
+# di-cache lebih lama karena jarang berubah. Astro/Cloudflare menambahkan
+# aturan cache /_astro/* miliknya sendiri di ATAS file ini secara otomatis
+# saat build -- lihat komentar di astro.config.mjs kalau perlu diubah.
+
+/game/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/game/assets/*
+  Cache-Control: public, max-age=604800, must-revalidate
