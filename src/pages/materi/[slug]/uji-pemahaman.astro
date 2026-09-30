@@ -9,11 +9,13 @@ import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 // bikin mereka harus pencet Back browser buat lanjut ke langkah
 // berikutnya di Ruang Belajar. Dipisah + dikasih tombol pemandu di sini
 // dan di materi/[slug].astro supaya alurnya jelas tanpa Back browser.
+//
+// SELALU dibuat untuk SETIAP materi (bukan cuma yang sudah ada kuis-nya)
+// -- urutan Materi -> Video -> Eksperimen -> Uji Pemahaman tidak boleh
+// melompati satu jenis langkah pun. Tampilkan placeholder "belum tersedia"
+// kalau kuisnya belum diisi guru lewat CMS.
 export async function getStaticPaths() {
-  const posts = await getCollection(
-    'blog',
-    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.kuis?.length)
-  );
+  const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -22,6 +24,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { title, mapel, kelas, kuis } = post.data;
+const hasKuis = Boolean(kuis && kuis.length > 0);
 
 const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find(
   (s) => s.data.materiSlug === post.id
@@ -38,12 +41,22 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
       Uji Pemahaman{kelas ? ` — ${kelasLabel(kelas as Kelas)}` : ''}{mapel ? ` — ${mapel}` : ''}
     </p>
     <h1>🧠 {title}</h1>
-    <p class="quiz-lede">
-      Jawab soal-soal di bawah buat menguji seberapa paham kamu sama materi ini. Setiap soal langsung
-      dikasih feedback -- kalau masih ragu, buka lagi halaman materinya lewat tombol di atas.
-    </p>
 
-    <Kuis soal={kuis} />
+    {hasKuis ? (
+      <>
+        <p class="quiz-lede">
+          Jawab soal-soal di bawah buat menguji seberapa paham kamu sama materi ini. Setiap soal langsung
+          dikasih feedback -- kalau masih ragu, buka lagi halaman materinya lewat tombol di atas.
+        </p>
+        <Kuis soal={kuis} />
+      </>
+    ) : (
+      <div class="placeholder-card">
+        <span class="placeholder-icon">🧠</span>
+        <p><strong>Uji pemahaman belum tersedia</strong> untuk materi ini.</p>
+        <p class="placeholder-sub">Guru akan menambahkannya lewat panel admin.</p>
+      </div>
+    )}
 
     <div class="next-step">
       {rbEntry ? (
@@ -81,6 +94,31 @@ const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft))
     color: var(--ink-soft);
     font-size: 1.0625rem;
     margin-top: 0.5rem;
+  }
+
+  .placeholder-card {
+    margin-block: 1.5rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 1rem;
+  }
+
+  .placeholder-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .placeholder-card p {
+    margin: 0.35rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .placeholder-sub {
+    font-size: 0.875rem;
+    color: var(--ink-faint) !important;
   }
 
   .next-step {

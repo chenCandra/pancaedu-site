@@ -8,11 +8,14 @@ import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 // -- ikut pola yang sama dengan uji-pemahaman.astro: satu laman fokus ke
 // satu bagian pembelajaran, dipandu tombol "Lanjut" biar alurnya runtut
 // tanpa perlu Back browser.
+//
+// Laman ini SELALU dibuat untuk SETIAP materi (bukan cuma yang sudah ada
+// youtubeId-nya) -- urutan Materi -> Video -> Eksperimen -> Uji Pemahaman
+// tidak boleh melompati satu jenis langkah pun. Kalau video belum diisi
+// guru lewat CMS, tampilkan placeholder "belum tersedia" di sini, tombol
+// Lanjut tetap ke Eksperimen seperti biasa.
 export async function getStaticPaths() {
-  const posts = await getCollection(
-    'blog',
-    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.youtubeId)
-  );
+  const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -20,19 +23,12 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, mapel, kelas, youtubeId: youtubeIdRaw, simulasi, kuis } = post.data;
-const youtubeId = extractYoutubeId(youtubeIdRaw!);
-const hasKuis = Boolean(kuis && kuis.length > 0);
+const { title, mapel, kelas, youtubeId: youtubeIdRaw } = post.data;
+const youtubeId = youtubeIdRaw ? extractYoutubeId(youtubeIdRaw) : undefined;
 
 const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find(
   (s) => s.data.materiSlug === post.id
 );
-
-const langkahBerikutnya = simulasi
-  ? { href: `/materi/${post.id}/eksperimen`, label: '🧪 Lanjut ke Eksperimen' }
-  : hasKuis
-    ? { href: `/materi/${post.id}/uji-pemahaman`, label: '🧠 Mulai Uji Pemahaman' }
-    : undefined;
 ---
 
 <BaseLayout title={`Video: ${title}`} description={`Video pembelajaran untuk ${title}.`}>
@@ -43,29 +39,29 @@ const langkahBerikutnya = simulasi
     </p>
     <h1>▶ {title}</h1>
 
-    <div class="video-embed">
-      <iframe
-        src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-        title={title}
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
+    {youtubeId ? (
+      <div class="video-embed">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+          title={title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    ) : (
+      <div class="placeholder-card">
+        <span class="placeholder-icon">🎬</span>
+        <p><strong>Video belum tersedia</strong> untuk materi ini.</p>
+        <p class="placeholder-sub">Guru akan menambahkannya lewat panel admin -- lanjutkan dulu ke langkah berikutnya.</p>
+      </div>
+    )}
 
     <div class="next-step">
-      {langkahBerikutnya ? (
-        <a href={langkahBerikutnya.href} class="btn btn-primary next-step-btn">
-          {langkahBerikutnya.label} &rarr;
-        </a>
-      ) : rbEntry ? (
-        <a href={`/ruang-belajar/${rbEntry.id}`} class="btn btn-primary next-step-btn">
-          &larr; Kembali ke Ruang Belajar
-        </a>
-      ) : (
-        <a href="/materi" class="btn btn-primary next-step-btn">&larr; Semua Materi</a>
-      )}
-      {langkahBerikutnya && rbEntry && (
+      <a href={`/materi/${post.id}/eksperimen`} class="btn btn-primary next-step-btn">
+        🧪 Lanjut ke Eksperimen &rarr;
+      </a>
+      {rbEntry && (
         <a href={`/ruang-belajar/${rbEntry.id}`} class="next-step-secondary">
           Lewati, kembali ke Ruang Belajar &rarr;
         </a>
@@ -104,6 +100,31 @@ const langkahBerikutnya = simulasi
     width: 100%;
     height: 100%;
     border: 0;
+  }
+
+  .placeholder-card {
+    margin-block: 1.5rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 1rem;
+  }
+
+  .placeholder-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .placeholder-card p {
+    margin: 0.35rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .placeholder-sub {
+    font-size: 0.875rem;
+    color: var(--ink-faint) !important;
   }
 
   .next-step {
