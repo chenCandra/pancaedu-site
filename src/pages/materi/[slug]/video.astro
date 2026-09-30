@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { extractYoutubeId } from '../../../lib/youtube';
+import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
+
+// Video sengaja dipisah ke laman sendiri (bukan ditempel di laman materi)
+// -- ikut pola yang sama dengan uji-pemahaman.astro: satu laman fokus ke
+// satu bagian pembelajaran, dipandu tombol "Lanjut" biar alurnya runtut
+// tanpa perlu Back browser.
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    'blog',
+    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.youtubeId)
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, mapel, kelas, youtubeId: youtubeIdRaw, simulasi, kuis } = post.data;
+const youtubeId = extractYoutubeId(youtubeIdRaw!);
+const hasKuis = Boolean(kuis && kuis.length > 0);
+
+const rbEntry = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).find(
+  (s) => s.data.materiSlug === post.id
+);
+
+const langkahBerikutnya = simulasi
+  ? { href: `/materi/${post.id}/eksperimen`, label: '🧪 Lanjut ke Eksperimen' }
+  : hasKuis
+    ? { href: `/materi/${post.id}/uji-pemahaman`, label: '🧠 Mulai Uji Pemahaman' }
+    : undefined;
+---
+
+<BaseLayout title={`Video: ${title}`} description={`Video pembelajaran untuk ${title}.`}>
+  <article class="container video-page">
+    <a href={`/materi/${post.id}`} class="back-link">&larr; Kembali ke Materi: {title}</a>
+    <p class="eyebrow">
+      Video Pembelajaran{kelas ? ` — ${kelasLabel(kelas as Kelas)}` : ''}{mapel ? ` — ${mapel}` : ''}
+    </p>
+    <h1>▶ {title}</h1>
+
+    <div class="video-embed">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="next-step">
+      {langkahBerikutnya ? (
+        <a href={langkahBerikutnya.href} class="btn btn-primary next-step-btn">
+          {langkahBerikutnya.label} &rarr;
+        </a>
+      ) : rbEntry ? (
+        <a href={`/ruang-belajar/${rbEntry.id}`} class="btn btn-primary next-step-btn">
+          &larr; Kembali ke Ruang Belajar
+        </a>
+      ) : (
+        <a href="/materi" class="btn btn-primary next-step-btn">&larr; Semua Materi</a>
+      )}
+      {langkahBerikutnya && rbEntry && (
+        <a href={`/ruang-belajar/${rbEntry.id}`} class="next-step-secondary">
+          Lewati, kembali ke Ruang Belajar &rarr;
+        </a>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .video-page {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .video-embed {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin-block: 1.5rem;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .video-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .next-step {
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .next-step-btn {
+    font-size: 1rem;
+    padding: 0.85rem 1.75rem;
+  }
+
+  .next-step-secondary {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+
+  .next-step-secondary:hover {
+    color: var(--ink-soft);
+    text-decoration: underline;
+  }
+</style>
