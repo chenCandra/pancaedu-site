@@ -110,6 +110,7 @@
         </div>
         <div class="results-panel">
           <div class="result-highlight"><div class="k">Arah Jarum Kompas</div><div class="v" id="compassAngleVal">0°</div></div>
+          <div class="result-highlight"><div class="k">Kekuatan Medan (relatif)</div><div class="v" id="magFieldVal">0</div></div>
           <div class="formula-box" id="magnetFormula"></div>
         </div>
       </div>
@@ -151,6 +152,7 @@
         </div>
         <div class="results-panel">
           <div class="result-highlight"><div class="k">Arah Jarum Kompas</div><div class="v" id="wireCompassVal">0°</div></div>
+          <div class="result-highlight"><div class="k">Kekuatan Medan (relatif)</div><div class="v" id="wireFieldVal">0</div></div>
           <div class="formula-box" id="wireFormula"></div>
         </div>
       </div>
@@ -222,8 +224,17 @@
     const magStrengthSlider = document.getElementById('magStrengthSlider');
     const magStrengthVal = document.getElementById('magStrengthVal');
     const compassAngleVal = document.getElementById('compassAngleVal');
+    const magFieldVal = document.getElementById('magFieldVal');
     const magnetFormula = document.getElementById('magnetFormula');
     const magBadge = document.getElementById('magBadge');
+
+    // Skala log biar panjang panah tetap enak dilihat walau kekuatan medan
+    // (mag) bisa dari <1 (jauh dari kutub) sampai ratusan (dekat kutub) --
+    // TANPA ini, menaikkan slider Kekuatan Magnet/Kuat Arus tidak kelihatan
+    // bedanya sama sekali (cuma angka yang berubah, panah tetap sama).
+    function fieldMagToLen(mag, minLen, maxLen) {
+      return Math.min(maxLen, minLen + Math.log10(mag + 1) * 7);
+    }
 
     let magStrength = 5;
     let magPxPerUnit = 10;
@@ -260,6 +271,11 @@
 
     function renderMagnet() {
       const w = magnetCanvas.parentElement.clientWidth, h = magnetCanvas.parentElement.clientHeight;
+      // Tab ini bisa dipanggil (lewat window.onload) saat panelnya masih
+      // disembunyikan (display:none) tab satunya lagi aktif -- lebar/tinggi
+      // kontainer 0 saat itu. Lewati render, nanti dipanggil ulang & benar
+      // begitu tab diklik (lihat listener tabBtnMagnet).
+      if (w <= 0 || h <= 0) return;
       magnetCtx.clearRect(0, 0, w, h);
       magPxPerUnit = w / 30;
       const cx = w / 2, cy = h / 2, half = 45 * (magPxPerUnit / 10);
@@ -286,8 +302,9 @@
           if (Math.hypot(gx - poleN.x, gy - poleN.y) < 30 || Math.hypot(gx - poleS.x, gy - poleS.y) < 30) continue;
           const f = fieldAtPointDipole(gx, gy);
           if (f.mag < 1e-6) continue;
-          const len = 12;
-          drawArrow(magnetCtx, gx - (f.bx / f.mag) * len * 0.5, gy - (f.by / f.mag) * len * 0.5, f.bx, f.by, len, 'rgba(148,163,184,0.4)', 1.2);
+          const len = fieldMagToLen(f.mag, 6, 20);
+          const alpha = Math.min(0.85, 0.25 + Math.log10(f.mag + 1) * 0.18);
+          drawArrow(magnetCtx, gx - (f.bx / f.mag) * len * 0.5, gy - (f.by / f.mag) * len * 0.5, f.bx, f.by, len, `rgba(148,163,184,${alpha.toFixed(2)})`, 1.2 + len / 20);
         }
       }
 
@@ -296,16 +313,21 @@
       const field = fieldAtPointDipole(compassPx.x, compassPx.y);
       const angleDeg = (Math.atan2(field.by, field.bx) * 180 / Math.PI + 360) % 360;
       compassAngleVal.textContent = angleDeg.toFixed(0) + '°';
+      magFieldVal.textContent = field.mag.toFixed(1);
 
       magnetCtx.save();
       magnetCtx.beginPath(); magnetCtx.arc(compassPx.x, compassPx.y, 22, 0, Math.PI * 2);
       magnetCtx.fillStyle = 'rgba(250,204,21,0.15)'; magnetCtx.fill();
       magnetCtx.strokeStyle = 'rgba(250,204,21,0.6)'; magnetCtx.lineWidth = 1.5; magnetCtx.stroke();
       magnetCtx.restore();
-      if (field.mag > 0) drawArrow(magnetCtx, compassPx.x, compassPx.y, field.bx, field.by, 24, '#facc15', 3.5);
+      if (field.mag > 0) {
+        const compassLen = fieldMagToLen(field.mag, 12, 30);
+        drawArrow(magnetCtx, compassPx.x, compassPx.y, field.bx, field.by, compassLen, '#facc15', 3.5);
+      }
 
       let formula = `Model: kutub N &amp; S dianggap dua "sumber titik" seperti muatan (analog medan listrik).<br>`;
-      formula += `Arah jarum kompas = arah <span class="math-var">B total</span> di titik itu = <span class="math-num">${angleDeg.toFixed(1)}°</span>`;
+      formula += `Arah jarum kompas = arah <span class="math-var">B total</span> di titik itu = <span class="math-num">${angleDeg.toFixed(1)}°</span><br>`;
+      formula += `Kekuatan medan (B) sebanding <span class="math-var">kekuatan magnet / jarak²</span> -- makin besar kekuatan magnet &amp; makin dekat ke kutub, makin kuat B (lihat panah makin panjang &amp; tebal).`;
       magnetFormula.innerHTML = formula;
 
       const nearPole = Math.min(Math.hypot(compassPx.x - poleN.x, compassPx.y - poleN.y), Math.hypot(compassPx.x - poleS.x, compassPx.y - poleS.y)) < 60;
@@ -385,6 +407,10 @@
 
     function renderWire() {
       const w = wireCanvas.parentElement.clientWidth, h = wireCanvas.parentElement.clientHeight;
+      // Sama seperti renderMagnet() -- lewati kalau kontainernya masih 0
+      // (panelnya belum aktif saat window.onload jalan), supaya maxR di
+      // bawah tidak jadi negatif dan bikin ctx.arc() melempar error.
+      if (w <= 0 || h <= 0) return;
       wireCtx.clearRect(0, 0, w, h);
       const cx = w / 2, cy = h / 2;
 
@@ -398,20 +424,28 @@
       drawArrow(wireCtx, cx, arrowY, 0, arrowDirY, 26, '#facc15', 4);
       wireCtx.restore();
 
-      // Lingkaran-lingkaran konsentris (medan melingkar)
+      // Lingkaran-lingkaran konsentris (medan melingkar) -- ketebalan garis,
+      // panjang & opasitas panah kecil semuanya ikut skala Kuat Arus (I),
+      // supaya slider Kuat Arus benar-benar kelihatan pengaruhnya (sebelumnya
+      // nilai `current` cuma dipakai hitung fieldStrength yang tidak pernah
+      // divisualisasikan sama sekali).
+      const currentFrac = current / 10; // 0.1 - 1
       const maxR = Math.min(w, h) / 2 - 10;
       const rings = 4;
       for (let i = 1; i <= rings; i++) {
         const rad = (maxR / rings) * i;
         wireCtx.beginPath(); wireCtx.arc(cx, cy, rad, 0, Math.PI * 2);
-        wireCtx.strokeStyle = 'rgba(56,189,248,0.25)'; wireCtx.lineWidth = 1.5; wireCtx.stroke();
+        wireCtx.strokeStyle = `rgba(56,189,248,${(0.15 + currentFrac * 0.3).toFixed(2)})`;
+        wireCtx.lineWidth = 1 + currentFrac * 2;
+        wireCtx.stroke();
         // panah kecil di lingkaran menunjukkan arah edar (kaidah tangan kanan)
+        const arrowLen = 8 + currentFrac * 10;
         for (let a = 0; a < 4; a++) {
           const ang = (a / 4) * Math.PI * 2 + (i * 0.3);
           const px = cx + rad * Math.cos(ang), py = cy + rad * Math.sin(ang);
           // arah tangensial: kalau arus ke atas (currentDir=1), medan berlawanan jarum jam (dilihat dari atas) -> pada tampilan 2D ini kita gambar searah jarum jam utk arus ke bawah
           const tangentAng = ang + (currentDir === 1 ? Math.PI / 2 : -Math.PI / 2);
-          drawArrow(wireCtx, px - Math.cos(tangentAng) * 6, py - Math.sin(tangentAng) * 6, Math.cos(tangentAng), Math.sin(tangentAng), 12, 'rgba(56,189,248,0.7)', 2);
+          drawArrow(wireCtx, px - Math.cos(tangentAng) * arrowLen * 0.5, py - Math.sin(tangentAng) * arrowLen * 0.5, Math.cos(tangentAng), Math.sin(tangentAng), arrowLen, `rgba(56,189,248,${(0.4 + currentFrac * 0.5).toFixed(2)})`, 1.5 + currentFrac * 1.5);
         }
       }
 
@@ -424,17 +458,19 @@
       const fieldStrength = (current * 3000) / distFromWire;
       const angleDeg = ((tangentAng * 180 / Math.PI) + 360) % 360;
       wireCompassVal.textContent = angleDeg.toFixed(0) + '°';
+      wireFieldVal.textContent = fieldStrength.toFixed(1);
 
       wireCtx.save();
       wireCtx.beginPath(); wireCtx.arc(compassPx.x, compassPx.y, 22, 0, Math.PI * 2);
       wireCtx.fillStyle = 'rgba(250,204,21,0.15)'; wireCtx.fill();
       wireCtx.strokeStyle = 'rgba(250,204,21,0.6)'; wireCtx.lineWidth = 1.5; wireCtx.stroke();
       wireCtx.restore();
-      drawArrow(wireCtx, compassPx.x, compassPx.y, Math.cos(tangentAng), Math.sin(tangentAng), 24, '#facc15', 3.5);
+      const compassLen = fieldMagToLen(fieldStrength, 12, 30);
+      drawArrow(wireCtx, compassPx.x, compassPx.y, Math.cos(tangentAng), Math.sin(tangentAng), compassLen, '#facc15', 3.5);
 
       let formula = `Arah arus: <span class="math-var">${currentDir === 1 ? 'ke atas ⬆️' : 'ke bawah ⬇️'}</span><br>`;
       formula += `Jarak kompas ke kawat: <span class="math-num">${(distFromWire / 10).toFixed(1)}</span> satuan<br>`;
-      formula += `Medan magnet (B) sebanding <span class="math-var">I/r</span> -- makin dekat kawat &amp; makin besar arus, makin kuat B.<br>`;
+      formula += `Medan magnet (B) sebanding <span class="math-var">I/r</span> = <span class="math-num">${fieldStrength.toFixed(1)}</span> -- makin dekat kawat &amp; makin besar arus, makin kuat B (lihat panah makin panjang &amp; tebal).<br>`;
       formula += `Arah B saat ini: <span class="math-num">${angleDeg.toFixed(1)}°</span> (tegak lurus terhadap jari-jari lingkaran)`;
       wireFormula.innerHTML = formula;
     }
