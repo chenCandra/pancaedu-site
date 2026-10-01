@@ -14,17 +14,17 @@
     "path": "/game/duel-meriam/"
   },
   {
-    "id": "kerajaan-kata",
-    "judul": "Kerajaan Kata",
-    "deskripsi": "Bangun kerajaanmu kata demi kata -- tantangan kosakata dan tata bahasa Indonesia yang seru buat dimainkan sendirian.",
-    "mapel": "Bahasa Indonesia",
-    "materi": "Kosakata & Tata Bahasa",
-    "kelas": "SMP - SMA",
-    "mode": ["1 pemain"],
+    "id": "balap-mobil",
+    "judul": "Balap Mobil Fisika",
+    "deskripsi": "Atur kecepatan, percepatan, dan gesekan supaya mobilmu menang balapan -- siapa cepat sampai duluan, GLB atau GLBB?",
+    "mapel": "Fisika",
+    "materi": "GLB, GLBB & Gaya Gesekan",
+    "kelas": "SMA Kelas X",
+    "mode": ["2 pemain (1 perangkat)"],
     "durasi": "10-15 menit",
-    "warna": "oranye",
-    "ikon": "📚",
-    "status": "",
-    "path": "/game/kerajaan-kata/"
+    "warna": "hijau",
+    "ikon": "🏎️",
+    "status": "Baru",
+    "path": "/game/balap-mobil/"
   }
 ]
