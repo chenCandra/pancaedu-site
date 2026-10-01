@@ -62,7 +62,7 @@ heroQuotes:
     author: "Leonardo da Vinci"
 heroLede: "Artikel, bahan ajar, dan laboratorium virtual interaktif — disusun oleh seorang guru, terbuka gratis untuk siapa saja."
 aboutTitle: "Seorang guru yang masih terus belajar."
-aboutText: "Saya Candra Pabakti — guru yang juga menjabat wali kelas dan operator Dana BOS di sekolah tempat saya mengajar. PancaEdu adalah ruang menulis pribadi saya: artikel seputar pendidikan, refleksi dari ruang kelas, dan materi pelajaran yang masih terus saya susun sedikit demi sedikit, dibagikan gratis untuk siapa saja yang butuh."
+aboutText: "Saya Candra Pabakti — guru yang juga menjabat wali kelas di sekolah tempat saya mengajar. PancaEdu adalah ruang menulis pribadi saya: artikel seputar pendidikan, refleksi dari ruang kelas, dan materi pelajaran yang masih terus saya susun sedikit demi sedikit, dibagikan gratis untuk siapa saja yang butuh."
 bentoItems:
   - icon: 🎓
     title: Wali Kelas
@@ -76,10 +76,6 @@ bentoItems:
     title: Lab Maya
     desc: Simulasi interaktif (PhET & lainnya) tertanam langsung di materi, bukan cuma teori.
     size: sm
-  - icon: 💰
-    title: Operator Dana BOS
-    desc: Mengelola administrasi keuangan sekolah di sela jam mengajar.
-    size: md
   - icon: 📚
     title: Pembelajar Sepanjang Hayat
     desc: Nggak berhenti belajar hal baru juga, di luar jam mengajar.

@@ -8,8 +8,8 @@ tags: ["manajemen waktu", "belajar mandiri"]
 ---
 
 Belajar hal baru sambil bekerja penuh waktu sebagai guru bukan hal mudah — apalagi ditambah tugas
-sebagai wali kelas dan operator Dana BOS. Berikut beberapa hal yang membantu saya tetap waras
-menjalani semuanya sekaligus.
+sebagai wali kelas dan urusan administrasi sekolah lainnya. Berikut beberapa hal yang membantu saya
+tetap waras menjalani semuanya sekaligus.
 
 ## 1. Blok waktu, bukan multitasking
 
