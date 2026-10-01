@@ -323,11 +323,6 @@
     gambarBenteng(keXpx(0), groundYpx, '#1d6fe0');
     gambarBenteng(keXpx(state.medan.jarak), groundYpx, '#db2f77');
 
-    // Lintasan bantu (Mudah, sebelum tembak)
-    if (state.kesulitan === 'mudah' && !state.sedangAnimasi) {
-      gambarLintasanBantu();
-    }
-
     // Jejak tembakan terakhir / sedang berlangsung
     if (state.trailAnimasi && state.trailAnimasi.length > 1) {
       ctx.strokeStyle = 'rgba(38,36,59,0.35)';
@@ -355,25 +350,6 @@
     ctx.fillRect(xp - 14, groundYpx - 30, 28, 30);
     ctx.fillRect(xp - 18, groundYpx - 36, 8, 8);
     ctx.fillRect(xp + 10, groundYpx - 36, 8, 8);
-  }
-
-  function gambarLintasanBantu() {
-    var v0 = parseFloat(sliderV0.value);
-    var sudut = parseFloat(sliderSudut.value);
-    var arah = state.pemainAktif === 'biru' ? 1 : -1;
-    var x0 = state.pemainAktif === 'biru' ? 0 : state.medan.jarak;
-    var titik = bangkitkanTitikLintasan(v0, sudut, arah, x0, state.g, state.angin);
-    if (titik.length < 2) return;
-    ctx.strokeStyle = 'rgba(29,111,224,0.55)';
-    ctx.setLineDash([6, 5]);
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    titik.forEach(function (p, i) {
-      var xp = keXpx(p.x), yp = keYpx(p.y);
-      if (i === 0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
-    });
-    ctx.stroke();
-    ctx.setLineDash([]);
   }
 
   function bangkitkanTitikLintasan(v0, sudut, arah, x0, g, aAngin) {
