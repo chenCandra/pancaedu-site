@@ -1,10 +1,20 @@
-// Balap Mobil Fisika -- logika game. Vanilla JS polos (tanpa build),
-// bergantung pada fisika.js (dimuat sebelum file ini) yang mengisi
-// window.BalapFisika.
+// Balap Mobil Fisika (real-time, disetir langsung) -- logika game.
+// Vanilla JS polos (tanpa build), bergantung pada fisika.js (dimuat
+// sebelum file ini) yang mengisi window.BalapFisika.
 (function () {
   'use strict';
   var F = window.BalapFisika;
   var $ = function (id) { return document.getElementById(id); };
+
+  var A_GAS = 6; // m/s^2, percepatan saat gas ditahan
+  var A_GESEK_ALAMI = 2.5; // m/s^2, perlambatan saat gas dilepas
+  var V_MAKS = 35; // m/s
+  var PERSEN_TABRAKAN = 0.5; // kecepatan dipotong 50% kalau kena rintangan
+  var LOOKAHEAD_M = 45; // jendela pandang di layar (meter)
+  var JEDA_SETIR_MS = 150; // debounce ganti lajur
+  var JUMLAH_LAJUR = 3;
+  var JARAK_PRESET = { pendek: 250, sedang: 400, panjang: 600 };
+  var BATAS_WAKTU_HEAT_MS = 60000;
 
   var layarSetup = $('layar-setup');
   var layarMain = $('layar-main');
@@ -15,33 +25,41 @@
   var skorBiruEl = $('skor-biru');
   var skorMerahEl = $('skor-merah');
   var infoStrip = $('info-strip');
-  var kanvas = $('kanvas-game');
-  var ctx = kanvas.getContext('2d');
-  var bannerHasil = $('banner-hasil');
 
-  var btnBalap = $('btn-balap');
+  var kanvasBiru = $('kanvas-biru');
+  var ctxBiru = kanvasBiru.getContext('2d');
+  var kanvasMerah = $('kanvas-merah');
+  var ctxMerah = kanvasMerah.getContext('2d');
+
+  var overlayBiru = $('overlay-biru');
+  var overlayMerah = $('overlay-merah');
+  var bannerBiru = $('banner-biru');
+  var bannerMerah = $('banner-merah');
+
+  var hudBiruV = $('hud-biru-v'), hudBiruS = $('hud-biru-s');
+  var hudMerahV = $('hud-merah-v'), hudMerahS = $('hud-merah-s');
+
   var btnRumus = $('btn-rumus');
   var btnPembahasan = $('btn-pembahasan');
-
-  var hasilRonde = $('hasil-ronde');
-  var hasilWaktuBiru = $('hasil-waktu-biru');
-  var hasilWaktuMerah = $('hasil-waktu-merah');
   var teksPemenang = $('teks-pemenang');
 
+  var tombolDitekan = {};
+  window.addEventListener('blur', function () { tombolDitekan = {}; });
+
   var state = {
-    targetMenang: 3,
-    gesekanAktif: false,
-    aGesek: 0,
-    jarak: 100,
+    targetMenang: 2,
+    jarakHeat: 400,
     skor: { biru: 0, merah: 0 },
-    modeMobil: { biru: 'glb', merah: 'glb' },
     statistik: {
       biru: { menang: 0, tercepat: null },
       merah: { menang: 0, tercepat: null },
     },
-    sedangAnimasi: false,
-    lastRound: null,
-    pxPerMeter: 1,
+    mobil: { biru: null, merah: null },
+    rintangan: [],
+    sedangBalapan: false,
+    waktuMulai: 0,
+    waktuTerakhirFrame: 0,
+    lastHeat: null,
   };
 
   // ---------- Layar ----------
@@ -67,66 +85,25 @@
 
   btnMulai.addEventListener('click', function () {
     state.targetMenang = parseInt(bacaOpsi('target'), 10);
-    state.gesekanAktif = bacaOpsi('gesekan') === 'hidup';
+    state.jarakHeat = JARAK_PRESET[bacaOpsi('jarak')];
     state.skor = { biru: 0, merah: 0 };
     state.statistik = {
       biru: { menang: 0, tercepat: null },
       merah: { menang: 0, tercepat: null },
     };
     perbaruiSkorUi();
+    perbaruiInfoStrip();
     gantiLayar('layar-main');
-    rondeBaru();
+    mulaiHeat();
   });
 
   btnMainLagi.addEventListener('click', function () {
+    state.sedangBalapan = false;
     gantiLayar('layar-setup');
   });
 
-  // ---------- Mode GLB/GLBB per mobil ----------
-  document.querySelectorAll('[data-mode-grup]').forEach(function (grup) {
-    var mobil = grup.dataset.modeGrup;
-    grup.querySelectorAll('.mode-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        grup.querySelectorAll('.mode-btn').forEach(function (b) { b.classList.remove('aktif'); });
-        btn.classList.add('aktif');
-        state.modeMobil[mobil] = btn.dataset.nilai;
-        document.querySelector('[data-panel="' + mobil + '-glb"]').style.display = btn.dataset.nilai === 'glb' ? '' : 'none';
-        document.querySelector('[data-panel="' + mobil + '-glbb"]').style.display = btn.dataset.nilai === 'glbb' ? '' : 'none';
-      });
-    });
-  });
-
-  // ---------- Slider <-> label ----------
-  function pasangSlider(id, suffix, satuDesimal) {
-    var el = $(id);
-    var val = $(id + '-val');
-    el.addEventListener('input', function () {
-      var angka = satuDesimal ? parseFloat(el.value).toFixed(1) : el.value;
-      val.textContent = angka + ' ' + suffix;
-    });
-  }
-  pasangSlider('biru-v', 'm/s');
-  pasangSlider('biru-v0', 'm/s');
-  pasangSlider('biru-a', 'm/s²', true);
-  pasangSlider('merah-v', 'm/s');
-  pasangSlider('merah-v0', 'm/s');
-  pasangSlider('merah-a', 'm/s²', true);
-
-  // ---------- Ronde ----------
-  function rondeBaru() {
-    state.jarak = Math.round(80 + Math.random() * 70); // 80-150 m
-    state.aGesek = state.gesekanAktif ? Math.round((0.5 + Math.random() * 2.5) * 10) / 10 : 0;
-    hasilRonde.classList.remove('tampil');
-    sembunyikanBanner();
-    perbaruiInfoStrip();
-    resizeKanvas();
-  }
-
   function perbaruiInfoStrip() {
-    var html = '<span>📏 Jarak Lintasan: ' + state.jarak + ' m</span>';
-    if (state.gesekanAktif) html += '<span>🛞 Gesekan: ' + state.aGesek.toFixed(1) + ' m/s²</span>';
-    html += '<span>🏆 Target: ' + state.targetMenang + ' Menang</span>';
-    infoStrip.innerHTML = html;
+    infoStrip.innerHTML = '<span>📏 Jarak Heat: ' + state.jarakHeat + ' m</span><span>🏆 Target: ' + state.targetMenang + ' Menang</span>';
   }
 
   function perbaruiSkorUi() {
@@ -134,179 +111,275 @@
     skorMerahEl.textContent = state.skor.merah;
   }
 
-  // ---------- Kanvas ----------
-  function lebarKanvasCss() { return kanvas.parentElement.clientWidth; }
-  function tinggiKanvasCss() { return kanvas.parentElement.clientHeight; }
+  // ---------- Kontrol ----------
+  window.addEventListener('keydown', function (e) {
+    tombolDitekan[e.key] = true;
+    if (!state.sedangBalapan) return;
+    if (e.key === 'a' || e.key === 'A') setirMobil('biru', -1);
+    else if (e.key === 'd' || e.key === 'D') setirMobil('biru', 1);
+    else if (e.key === 'ArrowLeft') { setirMobil('merah', -1); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { setirMobil('merah', 1); e.preventDefault(); }
+    else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') e.preventDefault();
+  });
+  window.addEventListener('keyup', function (e) { tombolDitekan[e.key] = false; });
 
-  function resizeKanvas() {
-    var rect = kanvas.parentElement.getBoundingClientRect();
-    var dpr = window.devicePixelRatio || 1;
-    kanvas.width = rect.width * dpr;
-    kanvas.height = rect.height * dpr;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
-    state.pxPerMeter = lebarKanvasCss() / (state.jarak + 20);
-    gambarUlang(0, 0);
-  }
-  window.addEventListener('resize', resizeKanvas);
-
-  function keXpx(xMeter) {
-    return 10 * state.pxPerMeter + xMeter * state.pxPerMeter;
-  }
-
-  function gambarUlang(posBiru, posMerah) {
-    posBiru = posBiru || 0;
-    posMerah = posMerah || 0;
-    var w = lebarKanvasCss(), h = tinggiKanvasCss();
-    ctx.clearRect(0, 0, w, h);
-
-    var laneBiruY = h * 0.35, laneMerahY = h * 0.72;
-
-    // Garis tengah putus-putus
-    ctx.strokeStyle = 'rgba(38,36,59,0.12)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([8, 6]);
-    ctx.beginPath(); ctx.moveTo(0, h * 0.53); ctx.lineTo(w, h * 0.53); ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Garis finish
-    var xFinish = keXpx(state.jarak);
-    ctx.strokeStyle = '#26243b';
-    ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(xFinish, 8); ctx.lineTo(xFinish, h - 8); ctx.stroke();
-    ctx.font = '16px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🏁', xFinish, 20);
-
-    gambarMobil(keXpx(posBiru), laneBiruY, '#1d6fe0');
-    gambarMobil(keXpx(posMerah), laneMerahY, '#db2f77');
+  function setirMobil(nama, arah) {
+    var mobil = state.mobil[nama];
+    if (!mobil) return;
+    var now = performance.now();
+    if (now - mobil.terakhirSetir < JEDA_SETIR_MS) return;
+    var laneBaru = mobil.lane + arah;
+    if (laneBaru < 0 || laneBaru >= JUMLAH_LAJUR) return;
+    mobil.lane = laneBaru;
+    mobil.terakhirSetir = now;
   }
 
-  function gambarMobil(xp, yp, warna) {
-    ctx.save();
-    ctx.translate(xp, yp);
-    ctx.fillStyle = warna;
-    if (ctx.roundRect) {
-      ctx.beginPath();
-      ctx.roundRect(-14, -8, 28, 16, 4);
-      ctx.fill();
-    } else {
-      ctx.fillRect(-14, -8, 28, 16);
+  // ---------- Rintangan ----------
+  function buatRintangan(jarak) {
+    var daftar = [];
+    var s = 40 + Math.random() * 15;
+    while (s < jarak - 30) {
+      daftar.push({ s: s, lane: Math.floor(Math.random() * JUMLAH_LAJUR) });
+      s += 25 + Math.random() * 20;
     }
-    ctx.fillStyle = '#334155';
-    ctx.beginPath(); ctx.arc(-8, 8, 4, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(8, 8, 4, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
+    return daftar;
   }
 
-  // ---------- Fisika per mobil ----------
-  function bacaParameter(nama) {
-    var mode = state.modeMobil[nama];
-    if (mode === 'glb') {
-      return { mode: 'glb', v: parseFloat($(nama + '-v').value) };
-    }
-    return { mode: 'glbb', v0: parseFloat($(nama + '-v0').value), a: parseFloat($(nama + '-a').value) };
+  function buatMobilBaru() {
+    return {
+      lane: 1, laneVisual: 1, v: 0, s: 0,
+      terakhirSetir: 0, rintanganTerlewati: {}, kenaFlash: 0,
+      selesai: false, waktuFinish: null,
+    };
   }
 
-  function hitungWaktu(param, jarak, aGesek) {
-    if (param.mode === 'glb') return F.waktuTempuhGLB(param.v, jarak);
-    var aEff = F.percepatanEfektif(param.a, aGesek);
-    return F.waktuTempuhGLBB(param.v0, aEff, jarak);
+  // ---------- Heat ----------
+  function mulaiHeat() {
+    state.rintangan = buatRintangan(state.jarakHeat);
+    state.mobil.biru = buatMobilBaru();
+    state.mobil.merah = buatMobilBaru();
+    bannerBiru.classList.remove('tampil');
+    bannerMerah.classList.remove('tampil');
+    resizeKanvas();
+    tampilkanCountdown(function () {
+      state.sedangBalapan = true;
+      state.waktuMulai = performance.now();
+      state.waktuTerakhirFrame = performance.now();
+      requestAnimationFrame(gameLoop);
+    });
   }
 
-  function hitungPosisi(param, t, aGesek) {
-    if (param.mode === 'glb') return Math.max(0, F.jarakGLB(param.v, t));
-    var aEff = F.percepatanEfektif(param.a, aGesek);
-    return Math.max(0, F.jarakGLBB(param.v0, aEff, t));
-  }
-
-  // ---------- Balapan ----------
-  btnBalap.addEventListener('click', balapan);
-
-  function balapan() {
-    if (state.sedangAnimasi) return;
-    var biru = bacaParameter('biru');
-    var merah = bacaParameter('merah');
-    var tBiru = hitungWaktu(biru, state.jarak, state.aGesek);
-    var tMerah = hitungWaktu(merah, state.jarak, state.aGesek);
-
-    if (tBiru === null && tMerah === null) {
-      tampilkanBanner('😅 Kedua mobil tidak sampai finish! Atur ulang parameternya.', '');
-      return;
-    }
-
-    state.sedangAnimasi = true;
-    btnBalap.disabled = true;
-    hasilRonde.classList.remove('tampil');
-    sembunyikanBanner();
-
-    var tTampil = Math.max(tBiru || 0, tMerah || 0, 1);
-    var durasiAnimasiMs = Math.min(9000, Math.max(2200, tTampil * 320));
-    var mulai = null;
-
-    function frame(now) {
-      if (!mulai) mulai = now;
-      var frac = Math.min(1, (now - mulai) / durasiAnimasiMs);
-      var tFisika = frac * tTampil;
-      var posBiru = Math.min(state.jarak, hitungPosisi(biru, tFisika, state.aGesek));
-      var posMerah = Math.min(state.jarak, hitungPosisi(merah, tFisika, state.aGesek));
-      gambarUlang(posBiru, posMerah);
-
-      if (frac < 1) {
-        requestAnimationFrame(frame);
+  function tampilkanCountdown(selesai) {
+    var n = 3;
+    overlayBiru.hidden = false;
+    overlayMerah.hidden = false;
+    function tick() {
+      if (n > 0) {
+        overlayBiru.textContent = String(n);
+        overlayMerah.textContent = String(n);
+        n--;
+        setTimeout(tick, 700);
       } else {
-        selesaiBalapan(tBiru, tMerah, biru, merah);
+        overlayBiru.textContent = 'GO!';
+        overlayMerah.textContent = 'GO!';
+        setTimeout(function () {
+          overlayBiru.hidden = true;
+          overlayMerah.hidden = true;
+          selesai();
+        }, 450);
       }
     }
-    requestAnimationFrame(frame);
+    tick();
   }
 
-  function selesaiBalapan(tBiru, tMerah, biru, merah) {
-    state.sedangAnimasi = false;
-    btnBalap.disabled = false;
+  function gameLoop(now) {
+    if (!state.sedangBalapan) return;
+    var dt = Math.min(0.05, (now - state.waktuTerakhirFrame) / 1000);
+    state.waktuTerakhirFrame = now;
 
+    ['biru', 'merah'].forEach(function (nama) {
+      var mobil = state.mobil[nama];
+      if (mobil.selesai) return;
+      var gas = nama === 'biru' ? (tombolDitekan['w'] || tombolDitekan['W']) : tombolDitekan['ArrowUp'];
+      var a = gas ? A_GAS : -A_GESEK_ALAMI;
+      mobil.v = F.langkahKecepatan(mobil.v, a, dt, V_MAKS);
+      mobil.s = F.langkahJarak(mobil.s, mobil.v, dt);
+      mobil.laneVisual += (mobil.lane - mobil.laneVisual) * Math.min(1, dt * 10);
+
+      state.rintangan.forEach(function (r, i) {
+        var kunci = nama + '-' + i;
+        if (mobil.rintanganTerlewati[kunci]) return;
+        if (r.lane === mobil.lane && mobil.s >= r.s) {
+          mobil.rintanganTerlewati[kunci] = true;
+          if (mobil.s - r.s < 3) {
+            mobil.v = F.terapkanTabrakan(mobil.v, PERSEN_TABRAKAN);
+            mobil.kenaFlash = 0.3;
+            kedipBanner(nama === 'biru' ? bannerBiru : bannerMerah, '💢 Kena Oli!');
+          }
+        }
+      });
+      if (mobil.kenaFlash > 0) mobil.kenaFlash -= dt;
+
+      if (!mobil.selesai && mobil.s >= state.jarakHeat) {
+        mobil.selesai = true;
+        mobil.waktuFinish = (now - state.waktuMulai) / 1000;
+      }
+    });
+
+    perbaruiHud();
+    gambarTrack('biru');
+    gambarTrack('merah');
+
+    var keduanyaSelesai = state.mobil.biru.selesai && state.mobil.merah.selesai;
+    var habisWaktu = now - state.waktuMulai > BATAS_WAKTU_HEAT_MS;
+    if (keduanyaSelesai || habisWaktu) {
+      selesaiHeat();
+      return;
+    }
+    requestAnimationFrame(gameLoop);
+  }
+
+  function kedipBanner(el, teks) {
+    el.textContent = teks;
+    el.classList.add('tampil');
+    setTimeout(function () { el.classList.remove('tampil'); }, 650);
+  }
+
+  function perbaruiHud() {
+    var b = state.mobil.biru, m = state.mobil.merah;
+    hudBiruV.textContent = b.v.toFixed(1) + ' m/s';
+    hudBiruS.textContent = Math.min(state.jarakHeat, b.s).toFixed(0) + ' / ' + state.jarakHeat + ' m';
+    hudMerahV.textContent = m.v.toFixed(1) + ' m/s';
+    hudMerahS.textContent = Math.min(state.jarakHeat, m.s).toFixed(0) + ' / ' + state.jarakHeat + ' m';
+  }
+
+  function selesaiHeat() {
+    state.sedangBalapan = false;
+    var tBiru = state.mobil.biru.waktuFinish;
+    var tMerah = state.mobil.merah.waktuFinish;
     var pemenang = null;
     if (tBiru !== null && (tMerah === null || tBiru < tMerah)) pemenang = 'biru';
     else if (tMerah !== null && (tBiru === null || tMerah < tBiru)) pemenang = 'merah';
 
-    hasilWaktuBiru.textContent = tBiru !== null ? tBiru.toFixed(2) + ' s' : 'Tidak sampai';
-    hasilWaktuMerah.textContent = tMerah !== null ? tMerah.toFixed(2) + ' s' : 'Tidak sampai';
-    hasilRonde.classList.add('tampil');
-
-    state.lastRound = {
-      biru: biru, merah: merah, tBiru: tBiru, tMerah: tMerah,
-      jarak: state.jarak, aGesek: state.aGesek, pemenang: pemenang,
-    };
+    state.lastHeat = { tBiru: tBiru, tMerah: tMerah, jarak: state.jarakHeat, pemenang: pemenang };
 
     if (pemenang) {
       state.skor[pemenang]++;
-      var tMenang = pemenang === 'biru' ? tBiru : tMerah;
+      var waktuMenang = pemenang === 'biru' ? tBiru : tMerah;
       var statP = state.statistik[pemenang];
       statP.menang++;
-      if (statP.tercepat === null || tMenang < statP.tercepat) statP.tercepat = tMenang;
+      if (statP.tercepat === null || waktuMenang < statP.tercepat) statP.tercepat = waktuMenang;
       perbaruiSkorUi();
-      tampilkanBanner((pemenang === 'biru' ? '🔵 Mobil Biru' : '🔴 Mobil Merah') + ' menang ronde ini!', pemenang);
+      kedipBannerFinish(pemenang === 'biru' ? bannerBiru : bannerMerah, '🏁 Finish Duluan!');
 
       if (state.skor[pemenang] >= state.targetMenang) {
-        setTimeout(function () { tampilkanLayarMenang(pemenang); }, 1300);
+        setTimeout(function () { tampilkanLayarMenang(pemenang); }, 1500);
         return;
       }
     } else {
-      tampilkanBanner('😅 Seri -- tidak ada yang sampai finish.', '');
+      kedipBannerFinish(bannerBiru, '⏱️ Waktu Habis');
+      kedipBannerFinish(bannerMerah, '⏱️ Waktu Habis');
+    }
+    setTimeout(mulaiHeat, 2200);
+  }
+
+  function kedipBannerFinish(el, teks) {
+    el.textContent = teks;
+    el.classList.add('tampil');
+  }
+
+  // ---------- Kanvas ----------
+  function resizeKanvasSatu(canvas) {
+    var ctx = canvas === kanvasBiru ? ctxBiru : ctxMerah;
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+  function resizeKanvas() {
+    resizeKanvasSatu(kanvasBiru);
+    resizeKanvasSatu(kanvasMerah);
+    if (state.mobil.biru) { gambarTrack('biru'); gambarTrack('merah'); }
+  }
+  window.addEventListener('resize', resizeKanvas);
+
+  function gambarTrack(nama) {
+    var canvas = nama === 'biru' ? kanvasBiru : kanvasMerah;
+    var ctx = nama === 'biru' ? ctxBiru : ctxMerah;
+    var mobil = state.mobil[nama];
+    var w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+    var pxPerMeter = h / LOOKAHEAD_M;
+    var laneWidth = w / JUMLAH_LAJUR;
+    var carScreenY = h - 50;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#52525b';
+    ctx.fillRect(0, 0, w, h);
+
+    // Garis tepi jalan
+    ctx.fillStyle = '#eab308';
+    ctx.fillRect(0, 0, 4, h);
+    ctx.fillRect(w - 4, 0, 4, h);
+
+    // Garis lajur putus-putus, scroll sesuai jarak tempuh
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+    ctx.lineWidth = 3;
+    var offset = (mobil.s * pxPerMeter) % 40;
+    for (var lane = 1; lane < JUMLAH_LAJUR; lane++) {
+      var x = lane * laneWidth;
+      ctx.setLineDash([18, 18]);
+      ctx.lineDashOffset = -offset;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Rintangan (tumpahan oli/kerikil)
+    state.rintangan.forEach(function (r) {
+      var jarakDepan = r.s - mobil.s;
+      if (jarakDepan < -5 || jarakDepan > LOOKAHEAD_M) return;
+      var y = carScreenY - jarakDepan * pxPerMeter;
+      var x = r.lane * laneWidth + laneWidth / 2;
+      ctx.fillStyle = 'rgba(66,42,16,0.8)';
+      ctx.beginPath();
+      ctx.ellipse(x, y, laneWidth * 0.3, 13, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(250,204,21,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    });
+
+    // Garis finish
+    var jarakFinishDepan = state.jarakHeat - mobil.s;
+    if (jarakFinishDepan <= LOOKAHEAD_M && jarakFinishDepan >= -8) {
+      var yFinish = carScreenY - jarakFinishDepan * pxPerMeter;
+      var kotak = 6;
+      for (var i = 0; i < kotak; i++) {
+        ctx.fillStyle = i % 2 === 0 ? '#1f2937' : '#fff';
+        ctx.fillRect((i * w) / kotak, yFinish - 4, w / kotak, 8);
+      }
     }
 
-    setTimeout(function () { rondeBaru(); }, 1900);
+    // Mobil sendiri
+    var carX = mobil.laneVisual * laneWidth + laneWidth / 2;
+    gambarMobilIkon(ctx, carX, carScreenY, nama === 'biru' ? '#1d6fe0' : '#db2f77', mobil.kenaFlash > 0);
   }
 
-  function tampilkanBanner(teks, kelas) {
-    bannerHasil.textContent = teks;
-    bannerHasil.className = 'banner-hasil tampil';
-    if (kelas === 'biru') bannerHasil.style.color = 'var(--biru)';
-    else if (kelas === 'merah') bannerHasil.style.color = 'var(--pink)';
-    else bannerHasil.style.color = 'var(--tinta)';
-  }
-  function sembunyikanBanner() {
-    bannerHasil.className = 'banner-hasil';
+  function gambarMobilIkon(ctx, x, y, warna, flash) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = flash ? '#fde68a' : warna;
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(-13, -20, 26, 40, 6);
+      ctx.fill();
+    } else {
+      ctx.fillRect(-13, -20, 26, 40);
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.fillRect(-9, -14, 18, 12);
+    ctx.restore();
   }
 
   // ---------- Layar pemenang ----------
@@ -331,21 +404,17 @@
 
   btnPembahasan.addEventListener('click', function () {
     var isi = $('isi-pembahasan');
-    var lr = state.lastRound;
-    if (!lr) {
+    var lh = state.lastHeat;
+    if (!lh) {
       isi.innerHTML = '<p>Belum ada balapan.</p>';
     } else {
-      var teksParam = function (p) {
-        if (p.mode === 'glb') return 'GLB, v = ' + p.v + ' m/s';
-        var aEff = F.percepatanEfektif(p.a, lr.aGesek);
-        var ket = lr.aGesek > 0 ? ' (percepatan efektif = ' + aEff.toFixed(1) + ' m/s² setelah gesekan)' : '';
-        return 'GLBB, v₀ = ' + p.v0 + ' m/s, a = ' + p.a + ' m/s²' + ket;
-      };
+      var waktuIdeal = F.waktuIdealOptimal(A_GAS, V_MAKS, lh.jarak).toFixed(2);
       isi.innerHTML =
-        '<p><strong>Jarak lintasan:</strong> ' + lr.jarak + ' m' + (lr.aGesek > 0 ? ', gesekan ' + lr.aGesek.toFixed(1) + ' m/s²' : '') + '</p>' +
-        '<p><strong>🔵 Biru:</strong> ' + teksParam(lr.biru) + ' → waktu tempuh ' + (lr.tBiru !== null ? lr.tBiru.toFixed(2) + ' s' : 'tidak sampai finish') + '</p>' +
-        '<p><strong>🔴 Merah:</strong> ' + teksParam(lr.merah) + ' → waktu tempuh ' + (lr.tMerah !== null ? lr.tMerah.toFixed(2) + ' s' : 'tidak sampai finish') + '</p>' +
-        '<p>' + (lr.pemenang ? ((lr.pemenang === 'biru' ? '🔵 Biru' : '🔴 Merah') + ' menang karena waktu tempuhnya lebih kecil.') : 'Ronde ini seri / tidak ada yang sampai finish.') + '</p>';
+        '<p><strong>Jarak heat:</strong> ' + lh.jarak + ' m</p>' +
+        '<p><strong>🔵 Biru:</strong> ' + (lh.tBiru !== null ? lh.tBiru.toFixed(2) + ' s' : 'tidak selesai dalam batas waktu') + '</p>' +
+        '<p><strong>🔴 Merah:</strong> ' + (lh.tMerah !== null ? lh.tMerah.toFixed(2) + ' s' : 'tidak selesai dalam batas waktu') + '</p>' +
+        '<p><strong>Waktu ideal teoretis</strong> (gas penuh tanpa kena rintangan sama sekali): ' + waktuIdeal + ' s. Makin dekat waktumu ke angka ini, makin efisien caramu menyetir!</p>' +
+        '<p>' + (lh.pemenang ? ((lh.pemenang === 'biru' ? '🔵 Biru' : '🔴 Merah') + ' menang karena waktunya lebih kecil.') : 'Heat ini tidak ada yang selesai dalam batas waktu -- coba lebih sering menggas.') + '</p>';
     }
     bukaModal('modal-pembahasan');
   });

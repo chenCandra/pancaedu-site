@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Balap Mobil Fisika | Arena Game Edukasi</title>
-<meta name="description" content="Game fisika 2 pemain: atur kecepatan, percepatan, dan gesekan supaya mobilmu menang balapan -- GLB, GLBB, dan gaya gesekan.">
+<meta name="description" content="Game balap mobil 2 pemain -- setir kiri-kanan, hindari tumpahan oli, dan tancap gas. Kecepatan & jarak dihitung pakai fisika GLBB sungguhan.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/game/assets/style.css">
 <style>
@@ -45,18 +45,15 @@
 
   .tombol-mulai { display: block; width: 100%; text-align: center; font-size: 1.125rem; padding: 1rem; margin-top: 0.5rem; }
 
-  .info-strip {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem;
-    font-size: 0.85rem; color: var(--tinta-lembut); font-weight: 700;
+  .cara-main-setup {
+    background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem 1.25rem;
+    font-size: 0.875rem; color: var(--tinta-lembut); line-height: 1.6; margin-bottom: 1.5rem;
   }
-  .info-strip span { background: var(--kertas-alt); padding: 0.3rem 0.75rem; border-radius: var(--radius-tombol); }
+  .cara-main-setup strong { color: var(--tinta); }
 
-  .skor-strip {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
-  }
+  .skor-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
   .skor-kartu {
-    border-radius: var(--radius-sedang); padding: 0.85rem 1.1rem; border: 3px solid var(--garis);
-    text-align: center;
+    border-radius: var(--radius-sedang); padding: 0.85rem 1.1rem; border: 3px solid var(--garis); text-align: center;
   }
   .skor-kartu.biru { border-color: var(--biru-lembut); }
   .skor-kartu.merah { border-color: var(--pink-lembut); }
@@ -65,53 +62,56 @@
   .skor-kartu.merah .nama { color: var(--pink); }
   .skor-kartu .angka { font-size: 1.5rem; font-weight: 800; font-family: 'Courier New', monospace; }
 
-  .kanvas-wrap {
-    position: relative; width: 100%; height: 220px; border-radius: var(--radius-sedang);
-    overflow: hidden; border: 3px solid var(--garis);
-    background: linear-gradient(180deg, #cfe8ff 0%, #eaf6ff 60%, #eaf6ff 100%);
+  .info-strip {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem;
+    font-size: 0.85rem; color: var(--tinta-lembut); font-weight: 700;
   }
+  .info-strip span { background: var(--kertas-alt); padding: 0.3rem 0.75rem; border-radius: var(--radius-tombol); }
+
+  .lintasan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+  @media (max-width: 36rem) { .lintasan-grid { grid-template-columns: 1fr; } }
+
+  .lintasan-kolom { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .hud-mobil {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Courier New', monospace; font-weight: 700; font-size: 0.8125rem;
+    padding: 0.4rem 0.75rem; border-radius: var(--radius-sedang);
+  }
+  .hud-mobil.biru { background: var(--biru-lembut); color: var(--biru); }
+  .hud-mobil.merah { background: var(--pink-lembut); color: var(--pink); }
+
+  .kanvas-wrap {
+    position: relative; width: 100%; height: 360px; border-radius: var(--radius-sedang);
+    overflow: hidden; border: 3px solid var(--garis); background: #6b7280;
+  }
+  @media (max-width: 36rem) { .kanvas-wrap { height: 300px; } }
   canvas { display: block; width: 100%; height: 100%; }
 
+  .overlay-start {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(38,36,59,0.55); color: #fff; font-family: var(--font-judul);
+    font-size: 2.5rem; font-weight: 800; pointer-events: none;
+  }
+  /* Atribut [hidden] kalah spesifisitas dari .overlay-start di atas (keduanya
+     selector tunggal, tapi punya kita datang belakangan) -- tanpa baris ini,
+     overlay "GO!" tidak pernah benar-benar hilang setelah hitung mundur. */
+  .overlay-start[hidden] { display: none; }
+
+  .kontrol-keterangan {
+    text-align: center; font-size: 0.75rem; color: var(--tinta-faint, var(--tinta-lembut));
+  }
+
   .banner-hasil {
-    position: absolute; top: 0.6rem; left: 50%; transform: translateX(-50%);
+    position: absolute; top: 0.5rem; left: 50%; transform: translateX(-50%);
     background: rgba(255,255,255,0.95); border: 2px solid var(--garis); border-radius: var(--radius-tombol);
-    padding: 0.5rem 1.1rem; font-family: var(--font-judul); font-weight: 700; font-size: 0.85rem;
-    opacity: 0; transition: opacity 0.2s ease; text-align: center; max-width: 92%;
+    padding: 0.4rem 1rem; font-family: var(--font-judul); font-weight: 700; font-size: 0.75rem;
+    opacity: 0; transition: opacity 0.2s ease; text-align: center; max-width: 92%; z-index: 5;
   }
   .banner-hasil.tampil { opacity: 1; }
 
-  .panel-mobil-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
-  @media (min-width: 42rem) { .panel-mobil-grid { grid-template-columns: 1fr 1fr; } }
-
-  .panel-mobil { border-radius: var(--radius-sedang); padding: 1.1rem; border: 3px solid var(--garis); }
-  .panel-mobil.biru { border-color: var(--biru-lembut); }
-  .panel-mobil.merah { border-color: var(--pink-lembut); }
-  .panel-mobil h3 { font-family: var(--font-judul); margin-bottom: 0.75rem; }
-  .panel-mobil.biru h3 { color: var(--biru); }
-  .panel-mobil.merah h3 { color: var(--pink); }
-
-  .mode-toggle { display: flex; gap: 0.5rem; margin-bottom: 0.85rem; }
-  .mode-btn {
-    flex: 1; padding: 0.55rem; border-radius: var(--radius-sedang); border: 2px solid var(--garis);
-    background: #fff; font-weight: 700; font-size: 0.8125rem; cursor: pointer; color: var(--tinta-lembut);
-  }
-  .mode-btn.aktif { background: var(--tinta); color: #fff; border-color: var(--tinta); }
-
-  .kendali-baris { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
-  .kendali-label-baris { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.8125rem; }
-  .kendali-label-baris span.nilai { font-family: 'Courier New', monospace; color: var(--tinta-lembut); }
-  input[type="range"] { width: 100%; accent-color: var(--hijau); }
-
   .baris-tombol-aksi { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; justify-content: center; }
   .baris-tombol-aksi .tombol { flex: 1; min-width: 9rem; }
-
-  .hasil-ronde {
-    margin-top: 1rem; display: none; grid-template-columns: 1fr 1fr; gap: 0.6rem; text-align: center;
-  }
-  .hasil-ronde.tampil { display: grid; }
-  .hasil-ronde .kotak { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 0.75rem; }
-  .hasil-ronde .kotak .k { font-size: 0.75rem; color: var(--tinta-lembut); font-weight: 700; }
-  .hasil-ronde .kotak .v { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.05rem; }
 
   .layar-menang { text-align: center; }
   .layar-menang .ikon-piala { font-size: 4rem; }
@@ -150,19 +150,27 @@
     <!-- ============ LAYAR 1: PENGATURAN ============ -->
     <section class="layar aktif" id="layar-setup">
       <div class="kartu-panel">
+        <div class="cara-main-setup">
+          🎮 <strong>Setir mobilmu sendiri!</strong> Mobil Biru pakai tombol <strong>A / D</strong> (setir) dan
+          tahan <strong>W</strong> (gas). Mobil Merah pakai tombol panah <strong>← / →</strong> (setir) dan
+          tahan panah <strong>↑</strong> (gas). Hindari tumpahan oli di lintasan -- kena oli bikin kecepatanmu
+          langsung berkurang banyak!
+        </div>
+
         <div class="grup-opsi">
           <h3>🏆 Target Kemenangan</h3>
           <div class="baris-opsi" data-grup="target">
-            <button class="opsi-btn aktif" data-nilai="3">Menang 3 Ronde</button>
-            <button class="opsi-btn" data-nilai="5">Menang 5 Ronde</button>
+            <button class="opsi-btn aktif" data-nilai="2">Menang 2 Heat</button>
+            <button class="opsi-btn" data-nilai="3">Menang 3 Heat</button>
           </div>
         </div>
 
         <div class="grup-opsi">
-          <h3>🛞 Gaya Gesekan</h3>
-          <div class="baris-opsi" data-grup="gesekan">
-            <button class="opsi-btn aktif" data-nilai="mati">Mati</button>
-            <button class="opsi-btn" data-nilai="hidup">Hidup (acak tiap ronde)</button>
+          <h3>📏 Jarak Lintasan</h3>
+          <div class="baris-opsi" data-grup="jarak">
+            <button class="opsi-btn" data-nilai="pendek">Pendek (~250 m)</button>
+            <button class="opsi-btn aktif" data-nilai="sedang">Sedang (~400 m)</button>
+            <button class="opsi-btn" data-nilai="panjang">Panjang (~600 m)</button>
           </div>
         </div>
 
@@ -179,72 +187,30 @@
 
       <div class="info-strip" id="info-strip"></div>
 
-      <div class="kanvas-wrap">
-        <canvas id="kanvas-game"></canvas>
-        <div class="banner-hasil" id="banner-hasil"></div>
+      <div class="lintasan-grid">
+        <div class="lintasan-kolom">
+          <div class="hud-mobil biru"><span id="hud-biru-v">0 m/s</span><span id="hud-biru-s">0 / 0 m</span></div>
+          <div class="kanvas-wrap">
+            <canvas id="kanvas-biru"></canvas>
+            <div class="overlay-start" id="overlay-biru" hidden></div>
+            <div class="banner-hasil" id="banner-biru"></div>
+          </div>
+          <p class="kontrol-keterangan">A / D setir -- tahan W buat gas</p>
+        </div>
+        <div class="lintasan-kolom">
+          <div class="hud-mobil merah"><span id="hud-merah-v">0 m/s</span><span id="hud-merah-s">0 / 0 m</span></div>
+          <div class="kanvas-wrap">
+            <canvas id="kanvas-merah"></canvas>
+            <div class="overlay-start" id="overlay-merah" hidden></div>
+            <div class="banner-hasil" id="banner-merah"></div>
+          </div>
+          <p class="kontrol-keterangan">← / → setir -- tahan ↑ buat gas</p>
+        </div>
       </div>
 
-      <div class="kartu-panel" style="margin-top: 1rem;">
-        <div class="panel-mobil-grid">
-          <div class="panel-mobil biru">
-            <h3>🔵 Mobil Biru</h3>
-            <div class="mode-toggle" data-mode-grup="biru">
-              <button class="mode-btn aktif" data-nilai="glb">GLB (tetap)</button>
-              <button class="mode-btn" data-nilai="glbb">GLBB (dipercepat)</button>
-            </div>
-            <div class="kendali-glb" data-panel="biru-glb">
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Kecepatan (v)</span><span class="nilai" id="biru-v-val">15 m/s</span></div>
-                <input type="range" id="biru-v" min="5" max="30" step="1" value="15">
-              </div>
-            </div>
-            <div class="kendali-glbb" data-panel="biru-glbb" style="display:none;">
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Kecepatan Awal (v₀)</span><span class="nilai" id="biru-v0-val">0 m/s</span></div>
-                <input type="range" id="biru-v0" min="0" max="20" step="1" value="0">
-              </div>
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Percepatan (a)</span><span class="nilai" id="biru-a-val">3 m/s²</span></div>
-                <input type="range" id="biru-a" min="0.5" max="6" step="0.5" value="3">
-              </div>
-            </div>
-          </div>
-
-          <div class="panel-mobil merah">
-            <h3>🔴 Mobil Merah</h3>
-            <div class="mode-toggle" data-mode-grup="merah">
-              <button class="mode-btn aktif" data-nilai="glb">GLB (tetap)</button>
-              <button class="mode-btn" data-nilai="glbb">GLBB (dipercepat)</button>
-            </div>
-            <div class="kendali-glb" data-panel="merah-glb">
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Kecepatan (v)</span><span class="nilai" id="merah-v-val">15 m/s</span></div>
-                <input type="range" id="merah-v" min="5" max="30" step="1" value="15">
-              </div>
-            </div>
-            <div class="kendali-glbb" data-panel="merah-glbb" style="display:none;">
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Kecepatan Awal (v₀)</span><span class="nilai" id="merah-v0-val">0 m/s</span></div>
-                <input type="range" id="merah-v0" min="0" max="20" step="1" value="0">
-              </div>
-              <div class="kendali-baris">
-                <div class="kendali-label-baris"><span>Percepatan (a)</span><span class="nilai" id="merah-a-val">3 m/s²</span></div>
-                <input type="range" id="merah-a" min="0.5" max="6" step="0.5" value="3">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="baris-tombol-aksi">
-          <button class="tombol" id="btn-balap">🏁 Balapan!</button>
-          <button class="tombol tombol-luar" id="btn-rumus">📐 Rumus</button>
-          <button class="tombol tombol-luar" id="btn-pembahasan">💡 Pembahasan</button>
-        </div>
-
-        <div class="hasil-ronde" id="hasil-ronde">
-          <div class="kotak"><div class="k">Waktu Mobil Biru</div><div class="v" id="hasil-waktu-biru">-</div></div>
-          <div class="kotak"><div class="k">Waktu Mobil Merah</div><div class="v" id="hasil-waktu-merah">-</div></div>
-        </div>
+      <div class="baris-tombol-aksi">
+        <button class="tombol tombol-luar" id="btn-rumus">📐 Rumus</button>
+        <button class="tombol tombol-luar" id="btn-pembahasan">💡 Pembahasan</button>
       </div>
     </section>
 
@@ -256,12 +222,12 @@
         <div class="stat-grid">
           <div class="stat-kartu">
             <h3>🔵 Mobil Biru</h3>
-            <p>Menang Ronde: <strong id="stat-biru-menang">0</strong></p>
+            <p>Menang Heat: <strong id="stat-biru-menang">0</strong></p>
             <p>Waktu Tercepat: <strong id="stat-biru-tercepat">-</strong></p>
           </div>
           <div class="stat-kartu">
             <h3>🔴 Mobil Merah</h3>
-            <p>Menang Ronde: <strong id="stat-merah-menang">0</strong></p>
+            <p>Menang Heat: <strong id="stat-merah-menang">0</strong></p>
             <p>Waktu Tercepat: <strong id="stat-merah-tercepat">-</strong></p>
           </div>
         </div>
@@ -273,11 +239,11 @@
   <!-- ============ MODAL: RUMUS ============ -->
   <div class="overlay-modal" id="modal-rumus">
     <div class="kotak-modal">
-      <h2>📐 Rumus Gerak Lurus</h2>
-      <p><strong>GLB (Gerak Lurus Beraturan):</strong> s = v · t -- kecepatan tetap, jarak berbanding lurus dengan waktu.</p>
-      <p><strong>GLBB (Gerak Lurus Berubah Beraturan):</strong> s = v₀ · t + ½ · a · t² -- ada percepatan tetap yang menambah kecepatan tiap detik.</p>
-      <p><strong>Gaya gesekan:</strong> mengurangi percepatan efektif mesin -- a_efektif = a_mesin − a_gesek (tidak pernah sampai membuat mobil mundur, minimal 0).</p>
-      <p>Mobil GLBB dengan v₀ rendah start lebih lambat, tapi bisa menyalip di akhir lintasan kalau percepatannya besar -- coba bandingkan dengan mobil GLB yang konstan!</p>
+      <h2>📐 Rumus di Balik Balapan Ini</h2>
+      <p><strong>Tahan gas:</strong> mobil mengalami percepatan tetap (GLBB) -- v = v₀ + a·t, dan jarak tempuh s = v₀t + ½at².</p>
+      <p><strong>Lepas gas:</strong> gesekan jalan memperlambat mobil secara tetap (GLBB juga, tapi a-nya negatif) sampai berhenti.</p>
+      <p><strong>Kena tumpahan oli/kerikil:</strong> gesekan mendadak membesar -- kecepatan langsung dipotong sebagian seketika.</p>
+      <p>Strategi terbaik: tahan gas selama mungkin, tapi tetap sempat menghindar ke jalur lain sebelum kena rintangan -- berhenti menggas sesaat buat menyetir biasanya lebih hemat waktu daripada menabrak oli.</p>
       <button class="tombol tombol-luar tombol-tutup" data-tutup="modal-rumus">Tutup</button>
     </div>
   </div>
@@ -285,7 +251,7 @@
   <!-- ============ MODAL: PEMBAHASAN ============ -->
   <div class="overlay-modal" id="modal-pembahasan">
     <div class="kotak-modal">
-      <h2>💡 Pembahasan Ronde Terakhir</h2>
+      <h2>💡 Pembahasan Heat Terakhir</h2>
       <div id="isi-pembahasan"><p>Belum ada balapan.</p></div>
       <button class="tombol tombol-luar tombol-tutup" data-tutup="modal-pembahasan">Tutup</button>
     </div>

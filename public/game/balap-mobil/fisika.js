@@ -1,81 +1,64 @@
 /**
- * Fisika Balap Mobil (GLB, GLBB, gaya gesekan) -- modul JS murni (bukan
+ * Fisika Balap Mobil (real-time, bisa disetir) -- modul JS murni (bukan
  * modul ES/tanpa build), dipakai LANGSUNG oleh game di browser dan oleh
  * test Node (scripts/test-fisika-balap-mobil.mjs). Sama seperti
  * duel-meriam/fisika.js -- satu sumber kebenaran.
  *
- * Konvensi:
- * - GLB (Gerak Lurus Beraturan): kecepatan v tetap sepanjang lintasan.
- * - GLBB (Gerak Lurus Berubah Beraturan): kecepatan awal v0 + percepatan
- *   tetap a. Gesekan direpresentasikan sebagai PERLAMBATAN tambahan
- *   (aGesek, m/s^2) yang mengurangi percepatan efektif mobil GLBB --
- *   langsung dalam satuan percepatan, bukan koefisien mu (lebih cocok
- *   buat murid yang baru belajar GLB/GLBB, belum tentu sudah sampai bab
- *   dinamika/Hukum Newton).
+ * Model gerak: dua keadaan sederhana selaras GLB/GLBB --
+ * - Pedal gas ditahan -> percepatan tetap +aGas (GLBB, mesin menang
+ *   melawan gesekan).
+ * - Pedal gas dilepas -> perlambatan tetap -aGesekAlami (GLBB juga,
+ *   tapi gesekan jalan yang menang, mobil melaju bebas lalu melambat).
+ * - Kena rintangan (tumpahan oli/kerikil) -> kecepatan langsung
+ *   dipotong sebagian (gesekan mendadak membesar), TIDAK PERNAH sampai
+ *   negatif.
+ * Posisi diintegrasikan step demi step (v & s) tiap frame -- fungsi di
+ * sini murni dipakai per-langkah (dt kecil), gampang dites secara
+ * numerik terhadap rumus GLBB analitik.
  */
 (function (root) {
   'use strict';
 
-  /** Jarak tempuh GLB pada waktu t. */
-  function jarakGLB(v, t) {
-    return v * t;
+  /** Satu langkah kecepatan: v baru setelah percepatan `a` selama `dt` detik, dijepit ke [0, vMaks]. */
+  function langkahKecepatan(v, a, dt, vMaks) {
+    var vBaru = v + a * dt;
+    if (vBaru < 0) vBaru = 0;
+    if (typeof vMaks === 'number' && vBaru > vMaks) vBaru = vMaks;
+    return vBaru;
   }
 
-  /** Jarak tempuh GLBB pada waktu t (a boleh negatif -- perlambatan). */
-  function jarakGLBB(v0, a, t) {
-    return v0 * t + 0.5 * a * t * t;
+  /** Satu langkah jarak: s baru setelah bergerak dengan kecepatan `v` selama `dt` detik. */
+  function langkahJarak(s, v, dt) {
+    return s + v * dt;
   }
 
-  /** Kecepatan sesaat GLBB pada waktu t. */
-  function kecepatanGLBB(v0, a, t) {
-    return v0 + a * t;
-  }
-
-  /**
-   * Waktu tempuh GLB buat menempuh jarak s. null kalau mobil tidak
-   * bergerak (v <= 0) -- tidak akan pernah sampai.
-   */
-  function waktuTempuhGLB(v, s) {
-    if (v <= 0) return null;
-    return s / v;
+  /** Efek kena rintangan gesekan tinggi (oli/kerikil) -- kecepatan dipotong sebagian, tidak pernah negatif. */
+  function terapkanTabrakan(v, persenPengurangan) {
+    return Math.max(0, v * (1 - persenPengurangan));
   }
 
   /**
-   * Waktu tempuh GLBB buat menempuh jarak s (akar positif dari
-   * s = v0*t + 1/2*a*t^2). null kalau mobil tidak mungkin sampai (a <= 0
-   * DAN v0 <= 0 -- tidak ada dorongan sama sekali).
+   * Estimasi waktu tercepat SECARA TEORITIS kalau pedal gas ditahan terus
+   * tanpa kena rintangan sama sekali (dipakai buat pembahasan, bukan
+   * dipakai jalannya animasi). Dua kasus: sempat capai vMaks sebelum
+   * finish, atau belum sempat (finish keburu sebelum vMaks tercapai).
    */
-  function waktuTempuhGLBB(v0, a, s) {
-    if (Math.abs(a) < 1e-9) {
-      return waktuTempuhGLB(v0, s);
+  function waktuIdealOptimal(aGas, vMaks, jarak) {
+    var tKeVMaks = vMaks / aGas;
+    var sSaatVMaks = 0.5 * aGas * tKeVMaks * tKeVMaks;
+    if (sSaatVMaks >= jarak) {
+      return Math.sqrt((2 * jarak) / aGas);
     }
-    if (a > 0) {
-      // Akar kuadratik positif: t = (-v0 + sqrt(v0^2 + 2as)) / a
-      var diskriminan = v0 * v0 + 2 * a * s;
-      if (diskriminan < 0) return null;
-      return (-v0 + Math.sqrt(diskriminan)) / a;
-    }
-    // a < 0 (perlambatan) -- mobil berhenti di jarak maksimum v0^2/(2|a|)
-    // sebelum sempat sampai s, kalau jaraknya tidak cukup.
-    var jarakMaksimum = (v0 * v0) / (2 * -a);
-    if (jarakMaksimum < s) return null;
-    var diskriminan2 = v0 * v0 + 2 * a * s;
-    if (diskriminan2 < 0) return null;
-    return (-v0 + Math.sqrt(diskriminan2)) / a;
-  }
-
-  /** Percepatan efektif mobil GLBB setelah dikurangi gesekan (tidak boleh negatif akibat gesekan -- gesekan cuma mengurangi, bukan membalik arah). */
-  function percepatanEfektif(aMesin, aGesek) {
-    return Math.max(0, aMesin - (aGesek || 0));
+    var sisaJarak = jarak - sSaatVMaks;
+    var tSisa = sisaJarak / vMaks;
+    return tKeVMaks + tSisa;
   }
 
   var BalapFisika = {
-    jarakGLB: jarakGLB,
-    jarakGLBB: jarakGLBB,
-    kecepatanGLBB: kecepatanGLBB,
-    waktuTempuhGLB: waktuTempuhGLB,
-    waktuTempuhGLBB: waktuTempuhGLBB,
-    percepatanEfektif: percepatanEfektif,
+    langkahKecepatan: langkahKecepatan,
+    langkahJarak: langkahJarak,
+    terapkanTabrakan: terapkanTabrakan,
+    waktuIdealOptimal: waktuIdealOptimal,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -1,8 +1,7 @@
-// Test fisika Balap Mobil -- jalankan: node scripts/test-fisika-balap-mobil.mjs
+// Test fisika Balap Mobil (real-time) -- jalankan: node scripts/test-fisika-balap-mobil.mjs
 // Menguji modul public/game/balap-mobil/fisika.js (dipakai LANGSUNG oleh
 // game di browser juga). Sama pola loading-nya seperti
-// test-fisika-duel-meriam.mjs -- lihat catatan di sana soal kenapa tidak
-// pakai require()/import biasa.
+// test-fisika-duel-meriam.mjs.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,46 +31,62 @@ function tes(nama, kondisi) {
   }
 }
 
-// --- GLB: v=10 m/s, s=100 m -> t=10 s ---
+// --- Integrasi numerik (dt kecil) mendekati rumus GLBB analitik: v=at, s=1/2 a t^2 ---
 {
-  const t = F.waktuTempuhGLB(10, 100);
-  tes(`waktuTempuhGLB(v=10, s=100) = 10 s (dapat ${t})`, dekat(t, 10, 0.001));
-  tes(`jarakGLB(v=10, t=10) = 100 m`, dekat(F.jarakGLB(10, 10), 100, 0.001));
+  const a = 6, dt = 0.01, durasi = 5;
+  let v = 0, s = 0;
+  for (let t = 0; t < durasi; t += dt) {
+    s = F.langkahJarak(s, v, dt);
+    v = F.langkahKecepatan(v, a, dt);
+  }
+  const vAnalitik = a * durasi;
+  const sAnalitik = 0.5 * a * durasi * durasi;
+  tes(`langkahKecepatan terintegrasi ~ v=at (${v.toFixed(2)} vs ${vAnalitik})`, dekat(v, vAnalitik, 0.1));
+  tes(`langkahJarak terintegrasi ~ s=1/2at^2 (${s.toFixed(2)} vs ${sAnalitik})`, dekat(s, sAnalitik, 1));
 }
 
-// --- GLBB dari diam: v0=0, a=2, s=100 -> t=10 s (s=1/2 a t^2) ---
+// --- vMaks menjepit kecepatan, tidak pernah terlampaui ---
 {
-  const t = F.waktuTempuhGLBB(0, 2, 100);
-  tes(`waktuTempuhGLBB(v0=0, a=2, s=100) = 10 s (dapat ${t})`, dekat(t, 10, 0.001));
-  tes(`jarakGLBB(v0=0, a=2, t=10) = 100 m`, dekat(F.jarakGLBB(0, 2, 10), 100, 0.001));
+  let v = 0;
+  for (let i = 0; i < 2000; i++) v = F.langkahKecepatan(v, 10, 0.05, 30);
+  tes(`vMaks menjepit kecepatan (dapat ${v}, batas 30)`, dekat(v, 30, 0.001));
 }
 
-// --- GLBB dengan v0 -- konsistensi waktuTempuhGLBB <-> jarakGLBB (round-trip) ---
+// --- Kecepatan tidak pernah negatif walau percepatan negatif terus-menerus ---
 {
-  const v0 = 5, a = 1.5, s = 80;
-  const t = F.waktuTempuhGLBB(v0, a, s);
-  const sHasil = F.jarakGLBB(v0, a, t);
-  tes(`round-trip GLBB: jarakGLBB(waktuTempuhGLBB(v0=5,a=1.5,s=80)) = 80 (dapat ${sHasil.toFixed(3)})`, dekat(sHasil, s, 0.01));
+  let v = 5;
+  for (let i = 0; i < 100; i++) v = F.langkahKecepatan(v, -3, 0.1);
+  tes(`kecepatan tidak pernah negatif (dapat ${v})`, v === 0);
 }
 
-// --- Gesekan mengurangi percepatan efektif, tidak sampai membalik arah ---
+// --- Tabrakan rintangan memotong kecepatan sesuai persentase, tidak pernah negatif ---
 {
-  tes('percepatanEfektif(3, 1) = 2', dekat(F.percepatanEfektif(3, 1), 2, 0.001));
-  tes('percepatanEfektif(3, 10) = 0 (gesekan besar TIDAK bikin mobil mundur)', dekat(F.percepatanEfektif(3, 10), 0, 0.001));
+  tes('terapkanTabrakan(20, 0.5) = 10', dekat(F.terapkanTabrakan(20, 0.5), 10, 0.001));
+  tes('terapkanTabrakan(4, 0.9) tidak negatif', F.terapkanTabrakan(4, 0.9) >= 0);
+  tes('terapkanTabrakan(0, 0.5) = 0 (mobil berhenti tetap 0, bukan negatif)', F.terapkanTabrakan(0, 0.5) === 0);
 }
 
-// --- Mobil diam (v0=0) + percepatan efektif 0 (gesekan menghabiskan semua percepatan) -- tidak pernah sampai (null) ---
+// --- waktuIdealOptimal konsisten dengan integrasi numerik tanpa rintangan (gas ditahan terus) ---
 {
-  const aEff = F.percepatanEfektif(2, 2);
-  const t = F.waktuTempuhGLBB(0, aEff, 100);
-  tes('mobil diam tanpa percepatan efektif tidak pernah sampai finish (null)', t === null);
+  const aGas = 6, vMaks = 35, jarak = 400;
+  const tIdeal = F.waktuIdealOptimal(aGas, vMaks, jarak);
+
+  let v = 0, s = 0, t = 0;
+  const dt = 0.005;
+  while (s < jarak && t < 60) {
+    v = F.langkahKecepatan(v, aGas, dt, vMaks);
+    s = F.langkahJarak(s, v, dt);
+    t += dt;
+  }
+  tes(`waktuIdealOptimal ~ simulasi numerik gas penuh (${tIdeal.toFixed(2)} vs ${t.toFixed(2)})`, dekat(tIdeal, t, 0.1));
 }
 
-// --- Mobil GLBB dengan perlambatan (a negatif) yang berhenti sebelum finish -- tidak sampai (null) ---
+// --- waktuIdealOptimal kasus jarak pendek (tidak sempat capai vMaks) ---
 {
-  // v0=5, a=-1 -> jarak maksimum = v0^2/(2*1) = 12.5 m, finish 100 m -> tidak akan sampai
-  const t = F.waktuTempuhGLBB(5, -1, 100);
-  tes('mobil melambat berhenti sebelum finish -> null (tidak sampai)', t === null);
+  const aGas = 6, vMaks = 100, jarak = 50; // vMaks sangat tinggi, tidak akan tercapai di jarak sependek ini
+  const tIdeal = F.waktuIdealOptimal(aGas, vMaks, jarak);
+  const tAnalitik = Math.sqrt((2 * jarak) / aGas);
+  tes(`waktuIdealOptimal (jarak pendek, tidak capai vMaks) = sqrt(2s/a) (${tIdeal.toFixed(3)} vs ${tAnalitik.toFixed(3)})`, dekat(tIdeal, tAnalitik, 0.001));
 }
 
 console.log('');
