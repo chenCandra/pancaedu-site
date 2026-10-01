@@ -125,6 +125,10 @@
     state.medan = F.buatMedanAcak();
     if (state.kesulitan === 'mudah') state.medan.tinggiBukit = 0;
     state.angin = state.anginAktif ? (Math.random() * 2 - 1) * 3 : 0;
+    // Acuan tinggi tetap SATU RONDE PENUH -- dasar dari tembakan "tinggi &
+    // jauh" yang masuk akal (v0=50, sudut=45) di gravitasi match ini, jadi
+    // skala Y tidak pernah berubah gara-gara slider digeser (lihat hitungSkalaY).
+    state.tinggiAcuan = Math.max(F.hitungTinggiMaksimum(50, 45, state.g), state.medan.tinggiBukit, 5);
     if (state.kesulitan === 'sulit') {
       state.acakSulit = {
         v0: Math.round(5 + Math.random() * 45),
@@ -254,18 +258,15 @@
     return (xWorld + MARGIN_KIRI_KANAN_M) * state.pxPerMeterX;
   }
 
-  function tinggiPerkiraanSaatIni() {
-    var v0 = parseFloat(sliderV0.value);
-    var sudut = parseFloat(sliderSudut.value);
-    var g = state.g;
-    var H = F.hitungTinggiMaksimum(v0, sudut, g);
-    return Math.max(H, state.medan ? state.medan.tinggiBukit : 0, 5);
-  }
-
+  // Skala vertikal dihitung SEKALI per ronde (lihat rondeBaru -> state.tinggiAcuan),
+  // BUKAN dari nilai slider yang sedang digeser -- sebelumnya skala Y ikut
+  // nilai v0/sudut slider SAAT ITU, jadi tiap slider digeser, tinggi bukit
+  // di layar ikut "bernapas" (padahal tinggi bukit sungguhan tidak berubah
+  // sama sekali). Sekarang tanah & bukit selalu stabil selama satu ronde.
   function hitungSkalaY() {
     var groundY = tinggiKanvasCss() - MARGIN_BAWAH_PX;
     var areaTinggi = groundY - MARGIN_ATAS_PX;
-    state.pxPerMeterY = areaTinggi / tinggiPerkiraanSaatIni();
+    state.pxPerMeterY = areaTinggi / state.tinggiAcuan;
   }
 
   function keYpx(yWorld) {
@@ -319,9 +320,12 @@
       ctx.stroke();
     }
 
-    // Benteng
-    gambarBenteng(keXpx(0), groundYpx, '#1d6fe0');
-    gambarBenteng(keXpx(state.medan.jarak), groundYpx, '#db2f77');
+    // Meriam -- punya giliran digambar dengan sudut slider saat ini (laras
+    // ikut berputar live sambil diatur), yang satunya diam di sudut netral.
+    var sudutBiru = state.pemainAktif === 'biru' ? parseFloat(sliderSudut.value) : 45;
+    var sudutMerah = state.pemainAktif === 'merah' ? parseFloat(sliderSudut.value) : 45;
+    gambarMeriam(keXpx(0), groundYpx, '#1d6fe0', sudutBiru, 1);
+    gambarMeriam(keXpx(state.medan.jarak), groundYpx, '#db2f77', sudutMerah, -1);
 
     // Jejak tembakan terakhir / sedang berlangsung
     if (state.trailAnimasi && state.trailAnimasi.length > 1) {
@@ -345,11 +349,37 @@
     }
   }
 
-  function gambarBenteng(xp, groundYpx, warna) {
+  function gambarMeriam(xp, groundYpx, warna, sudutDerajat, arahHadap) {
+    var sudutRad = (sudutDerajat * Math.PI) / 180;
+    ctx.save();
+    ctx.translate(xp, groundYpx);
+
+    // Roda
+    ctx.fillStyle = '#334155';
+    ctx.beginPath();
+    ctx.arc(0, -9, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Badan (warna tim), di atas roda
     ctx.fillStyle = warna;
-    ctx.fillRect(xp - 14, groundYpx - 30, 28, 30);
-    ctx.fillRect(xp - 18, groundYpx - 36, 8, 8);
-    ctx.fillRect(xp + 10, groundYpx - 36, 8, 8);
+    ctx.beginPath();
+    ctx.arc(0, -13, 8, Math.PI, 0);
+    ctx.fill();
+
+    // Laras -- berputar sesuai sudut elevasi & menghadap arah lawan
+    ctx.translate(0, -13);
+    ctx.scale(arahHadap, 1);
+    ctx.rotate(-sudutRad);
+    ctx.fillStyle = '#4b5563';
+    ctx.fillRect(2, -4, 30, 8);
+    ctx.beginPath();
+    ctx.arc(2, 0, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
   }
 
   function bangkitkanTitikLintasan(v0, sudut, arah, x0, g, aAngin) {
