@@ -11,6 +11,7 @@ tujuanPembelajaran:
   - Peserta didik mampu menjelaskan kenapa muatan bergerak di medan magnet seragam melintasi lintasan melingkar.
   - Peserta didik mampu menjelaskan prinsip kerja motor listrik sebagai aplikasi Gaya Lorentz.
 materiSlug: gaya-lorentz
+youtubeId: J9MKemP-6Qw
 latihanUrl: ''
 tugasUrl: https://pancaedu.web.id/penugasan/xii-fisika-gaya-lorentz
 refleksiUrl: ''
