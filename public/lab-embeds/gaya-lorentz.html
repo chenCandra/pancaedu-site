@@ -186,9 +186,11 @@
     function step(dt) {
       // Gaya Lorentz 2D: F = q(v x B), B = (0,0,bSign*bMag)
       // v x B = (vy*Bz, -vx*Bz, 0)
+      // Catatan: sumbu-y canvas mengarah ke BAWAH (kebalikan konvensi fisika y ke atas),
+      // jadi tanda Fx/Fy di-flip di sini supaya arah lintasan di layar sesuai kaidah tangan kanan yang sebenarnya.
       const Bz = bSign * bMag * 0.06;
-      const Fx = qSign * particle.vy * Bz;
-      const Fy = -qSign * particle.vx * Bz;
+      const Fx = -qSign * particle.vy * Bz;
+      const Fy = qSign * particle.vx * Bz;
       particle.vx += (Fx / m) * dt;
       particle.vy += (Fy / m) * dt;
       particle.x += particle.vx * dt;
