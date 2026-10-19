@@ -207,7 +207,27 @@ function buatPromptAI(): string {
     })
     .join('\n');
 
-  return `Tolong buatkan LAPORAN HASIL BELAJAR DARING yang lengkap, formal, dan siap diserahkan ke sekolah, dalam Bahasa Indonesia baku. Gunakan HANYA data di bawah ini sebagai dasar -- JANGAN mengarang angka yang tidak tercantum di sini.
+  // Halaman Ruang Belajar yang materinya sama dengan Penugasan ini (ambil yang
+  // tanggalnya paling baru) -- dipakai AI sebagai sumber penyusunan Modul Ajar.
+  const materiSlugTerkait = laporan.entry.data.materiSlug;
+  const ruangBelajarTerkait = materiSlugTerkait
+    ? semuaRuangBelajar
+        .filter((r) => r.data.materiSlug === materiSlugTerkait)
+        .sort((a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime())[0]
+    : undefined;
+  const urlRuangBelajar = ruangBelajarTerkait
+    ? `https://pancaedu.web.id/ruang-belajar/${ruangBelajarTerkait.id}`
+    : 'https://pancaedu.web.id/ruang-belajar';
+  const urlPenugasan = `https://pancaedu.web.id/penugasan/${laporan.entry.id}`;
+
+  return `Tolong kerjakan DUA TAHAP secara berurutan: (A) susun MODUL AJAR PEMBELAJARAN DARING berdasarkan materi di situs PancaEdu, lalu (B) buatkan LAPORAN HASIL BELAJAR DARING yang lengkap, formal, dan siap diserahkan ke sekolah, dalam Bahasa Indonesia baku. HASIL AKHIR HARUS BERUPA SATU FILE DOKUMEN WORD (.docx) yang bisa saya unduh (modul ajar + laporan + lampiran tabel dalam satu file). Untuk angka capaian di laporan, gunakan HANYA data di bawah ini -- JANGAN mengarang angka yang tidak tercantum di sini.
+
+=== SUMBER MATERI (WAJIB DICARI DULU) ===
+Situs: https://pancaedu.web.id
+Halaman Ruang Belajar yang dipakai (materi pembelajaran daring): ${urlRuangBelajar}
+Halaman Penugasan/Latihan yang dinilai: ${urlPenugasan}
+Daftar semua Ruang Belajar (cadangan kalau tautan di atas gagal dibuka): https://pancaedu.web.id/ruang-belajar
+Langkah wajib sebelum menulis apa pun: buka dan baca halaman Ruang Belajar di atas (cari lewat situs bila perlu). Jika kamu TIDAK bisa membuka situs (tidak ada akses browsing), katakan terus terang di awal dan minta saya menempelkan isi halamannya -- JANGAN mengarang isi materi.
 
 === DATA PELAKSANAAN ===
 Sekolah: ${namaSekolah || '(isi manual)'}
@@ -240,14 +260,36 @@ ${siswaText}
 === CATATAN GURU ===
 ${catatan.trim() || '(tidak ada catatan tambahan dari guru)'}
 
-=== INSTRUKSI PENYUSUNAN LAPORAN ===
-Susun laporan dengan struktur berikut:
-1. Identitas Pelaksanaan (sekolah, guru, kelas, mapel, topik, tanggal)
-2. Ringkasan Pelaksanaan Pembelajaran (1 paragraf, ceritakan apa yang dilakukan)
-3. Analisis Capaian & Ketuntasan Belajar (JELASKAN makna angka-angka di atas -- apa artinya bagi kelas ini, bukan cuma mengulang angkanya)
-4. Kendala/Catatan (kalau ada isi dari Catatan Guru di atas, kembangkan; kalau tidak ada, boleh dilewati)
-5. Tindak Lanjut / Rekomendasi (langkah konkret untuk siswa yang belum tuntas)
-Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap, dan JANGAN menambahkan data/angka yang tidak diberikan di atas.`;
+=== INSTRUKSI PENYUSUNAN ===
+TAHAP A -- MODUL AJAR PEMBELAJARAN DARING
+Setelah membaca halaman Ruang Belajar di atas, susun Modul Ajar Pembelajaran Daring yang ISINYA SESUAI materi, tujuan pembelajaran, urutan kegiatan, dan latihan yang tertera di situs PancaEdu (jangan menambah materi yang tidak ada di situs). Struktur modul:
+1. Informasi Umum (sekolah, guru, kelas, mapel, topik, alokasi waktu, moda daring)
+2. Tujuan Pembelajaran (ambil dari halaman Ruang Belajar; jika kosong pakai Tujuan Pembelajaran di atas)
+3. Sarana & Cara Akses Pembelajaran Daring (sebutkan alamat situs, langkah siswa masuk ke ruang belajar daring sampai mengerjakan latihan, sesuai yang tertera di situs)
+4. Kegiatan Pembelajaran (pendahuluan, inti, penutup -- sesuai alur materi di Ruang Belajar)
+5. Asesmen (penugasan/latihan PancaEdu yang dinilai, beserta KKM di atas)
+6. Refleksi Siswa dan Guru
+
+TAHAP B -- LAPORAN HASIL BELAJAR DARING
+Setelah modul ajar selesai, susun laporan dengan struktur berikut:
+1. Rencana Pembelajaran Daring (WAJIB di bagian paling awal, SEBELUM Identitas; ringkasan dari Modul Ajar di Tahap A, termasuk cara siswa mengakses ruang belajar daring)
+2. Identitas Pelaksanaan (sekolah, guru, kelas, mapel, topik, tanggal)
+3. Ringkasan Pelaksanaan Pembelajaran (1 paragraf, ceritakan apa yang dilakukan)
+4. Analisis Capaian & Ketuntasan Belajar (JELASKAN makna angka-angka di atas -- apa artinya bagi kelas ini, bukan cuma mengulang angkanya)
+5. Kendala/Catatan (kalau ada isi dari Catatan Guru di atas, kembangkan; kalau tidak ada, boleh dilewati)
+6. Tindak Lanjut / Rekomendasi (langkah konkret untuk siswa yang belum tuntas)
+LAMPIRAN TABEL (WAJIB, diletakkan setelah laporan, masing-masing diberi judul dan nomor):
+- Lampiran 1. Rekap Capaian Kelas -- tabel 2 kolom (Indikator | Nilai) berisi: jumlah siswa terdaftar, mengikuti, menyelesaikan, rata-rata skor, skor tertinggi, skor terendah, KKM, ketuntasan dari yang mengerjakan, ketuntasan dari total terdaftar.
+- Lampiran 2. Rekap Nilai dan Ketuntasan Per Siswa -- tabel dengan kolom: No | Nama Siswa | Status | Skor | Persentase | Keterangan (Tuntas/Belum Tuntas). Masukkan SEMUA siswa dari DETAIL PER SISWA di atas, urutan dan angkanya persis sama, jangan ada yang dilewati atau diubah.
+- Lampiran 3. Distribusi Skor -- tabel dengan kolom: Rentang Skor | Jumlah Siswa | Persentase dari Siswa yang Menyelesaikan (persentase boleh dihitung dari angka di atas, pastikan benar).
+- Lampiran 4. Daftar Siswa yang Perlu Tindak Lanjut -- tabel dengan kolom: No | Nama Siswa | Status/Skor | Rencana Tindak Lanjut (siswa yang belum mulai, belum selesai, atau belum tuntas; kalau semua tuntas, tulis keterangan bahwa tidak ada).
+Di dalam Modul Ajar, sajikan juga Kegiatan Pembelajaran dalam bentuk tabel (Tahap | Kegiatan | Waktu | Sumber di PancaEdu).
+
+FORMAT KELUARAN:
+- Buat SATU file Word (.docx) yang bisa saya unduh, dengan urutan: MODUL AJAR PEMBELAJARAN DARING, lalu LAPORAN HASIL BELAJAR DARING, lalu LAMPIRAN. Tiap bagian mulai di halaman baru.
+- Gunakan tabel Word sungguhan (bukan teks yang disejajarkan dengan spasi), dengan garis tabel, baris judul kolom ditebalkan, dan lebar kolom rapi. Kertas A4, huruf Times New Roman atau Arial ukuran 12, spasi 1,15.
+- Jika kamu tidak bisa membuat file .docx, tuliskan seluruh isinya dengan tabel Markdown yang rapi agar mudah disalin ke Word, dan katakan hal itu di awal.
+- Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap, dan JANGAN menambahkan data/angka capaian yang tidak diberikan di atas.`;
 }
 
 const promptAI = buatPromptAI();
@@ -493,8 +535,9 @@ const promptAI = buatPromptAI();
       <div class="panca-card no-print">
         <h3 class="section-title">🤖 Prompt untuk AI (ChatGPT / Claude / dll)</h3>
         <p class="prompt-desc">
-          Salin teks di bawah, tempel ke chat AI pilihanmu -- AI akan menyusun laporan naratif lengkap (identitas,
-          ringkasan, analisis, rekomendasi) dari data di atas. Data yang dikirim cuma yang ada di kotak ini, TIDAK ada
+          Salin teks di bawah, tempel ke chat AI pilihanmu (sebaiknya yang bisa membuka situs/browsing) -- AI akan
+          lebih dulu mencari materi Ruang Belajar di pancaedu.web.id dan menyusun Modul Ajar Pembelajaran Daring, lalu
+          membuat laporan naratif lengkap (rencana pembelajaran, identitas, ringkasan, analisis, rekomendasi) dari data di atas, lengkap dengan lampiran tabel, dalam bentuk file Word (.docx). Data yang dikirim cuma yang ada di kotak ini, TIDAK ada
           yang otomatis terkirim ke AI mana pun dari halaman ini -- kamu yang tempel manual.
         </p>
         <textarea class="prompt-box" readonly rows="10" data-prompt-text>{promptAI}</textarea>
