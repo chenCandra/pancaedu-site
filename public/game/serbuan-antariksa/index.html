@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Serbuan Antariksa | Arena Game Edukasi</title>
+<meta name="description" content="Game arcade tembak-menembak luar angkasa -- kendalikan pesawatmu, hindari dan hancurkan musuh, kumpulkan power-up, raih skor tertinggi.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/game/assets/style.css">
+<style>
+  html, body { overscroll-behavior: none; }
+  body { padding-bottom: 2rem; }
+
+  .panggung {
+    max-width: 30rem;
+    margin-inline: auto;
+    padding: 1rem 1.25rem 1.5rem;
+    padding-top: 4.5rem;
+  }
+
+  .judul-game { text-align: center; margin-bottom: 1rem; }
+  .judul-game h1 {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    background: linear-gradient(90deg, var(--ungu), var(--pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .layar { display: none; }
+  .layar.aktif { display: block; }
+
+  .kartu-panel {
+    background: #fff; border: 3px solid var(--garis); border-radius: var(--radius-besar);
+    padding: 1.5rem; box-shadow: var(--bayangan);
+  }
+
+  .cara-main {
+    background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem 1.25rem;
+    font-size: 0.875rem; color: var(--tinta-lembut); line-height: 1.6; margin-bottom: 1.25rem;
+  }
+  .cara-main strong { color: var(--tinta); }
+
+  .skor-tertinggi-setup {
+    text-align: center; font-weight: 700; color: var(--ungu); margin-bottom: 1rem; font-size: 0.9375rem;
+  }
+
+  .tombol-mulai { display: block; width: 100%; text-align: center; font-size: 1.125rem; padding: 1rem; }
+
+  /* ---------- Panggung bermain ---------- */
+  .hud-strip {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+    margin-bottom: 0.6rem; font-family: var(--font-judul); font-weight: 700; font-size: 0.9rem;
+  }
+  .hud-nyawa { display: flex; gap: 0.15rem; font-size: 1.1rem; }
+  .hud-skor { color: var(--ungu); }
+  .hud-gelombang { color: var(--tinta-lembut); font-size: 0.8125rem; }
+
+  .kanvas-wrap {
+    position: relative; width: 100%; max-width: 28rem; height: min(72vh, 680px);
+    margin-inline: auto; border-radius: var(--radius-sedang); overflow: hidden;
+    border: 3px solid var(--garis); background: #0b1022; touch-action: none;
+  }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  .tombol-jeda-mengambang {
+    position: absolute; top: 0.6rem; right: 0.6rem; z-index: 6;
+    width: 2.2rem; height: 2.2rem; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.15); color: #fff; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .overlay-layar {
+    position: absolute; inset: 0; z-index: 5; display: none;
+    flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;
+    background: rgba(11,16,34,0.88); color: #fff; text-align: center; padding: 1.5rem;
+  }
+  .overlay-layar.tampil { display: flex; }
+  .overlay-layar[hidden] { display: none; }
+  .overlay-layar h2 { font-family: var(--font-judul); font-size: 1.5rem; }
+  .overlay-layar p { color: rgba(255,255,255,0.75); font-size: 0.9375rem; }
+  .overlay-layar .skor-besar { font-size: 2.25rem; font-weight: 800; font-family: 'Courier New', monospace; color: var(--kuning); }
+
+  /* ---------- Kontrol sentuh ---------- */
+  .kontrol-sentuh { display: none; }
+  .punya-sentuh .kontrol-sentuh { display: block; }
+
+  .joystick-area {
+    position: absolute; left: 1rem; bottom: 1rem; z-index: 4;
+    width: 6.5rem; height: 6.5rem; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25);
+    touch-action: none;
+  }
+  .joystick-knob {
+    position: absolute; left: 50%; top: 50%; width: 2.75rem; height: 2.75rem;
+    margin-left: -1.375rem; margin-top: -1.375rem; border-radius: 50%;
+    background: rgba(255,255,255,0.55); pointer-events: none;
+  }
+
+  .tombol-tembak-sentuh {
+    position: absolute; right: 1rem; bottom: 1rem; z-index: 4;
+    width: 4.5rem; height: 4.5rem; border-radius: 50%; border: none;
+    background: rgba(219,47,119,0.55); color: #fff; font-family: var(--font-judul);
+    font-weight: 700; font-size: 0.8125rem; touch-action: none;
+  }
+  .tombol-tembak-sentuh:active { background: rgba(219,47,119,0.85); }
+
+  .kontrol-keterangan-desktop {
+    text-align: center; font-size: 0.8125rem; color: var(--tinta-lembut); margin-top: 0.6rem;
+  }
+  .punya-sentuh .kontrol-keterangan-desktop { display: none; }
+
+  .baris-tombol-aksi { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; justify-content: center; }
+  .baris-tombol-aksi .tombol { flex: 1; min-width: 9rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/game/" class="tombol-kembali-mengambang">← Kembali ke Arena Game</a>
+
+  <div class="panggung">
+    <header class="judul-game">
+      <h1>🚀 Serbuan Antariksa</h1>
+    </header>
+
+    <!-- ============ LAYAR 1: MENU ============ -->
+    <section class="layar aktif" id="layar-menu">
+      <div class="kartu-panel">
+        <div class="cara-main" id="cara-main-sentuh" hidden>
+          🕹️ <strong>Joystick kiri bawah</strong> buat gerak ke segala arah, <strong>tombol TEMBAK</strong> di kanan bawah
+          (tahan buat tembak terus). Hindari peluru musuh, kumpulkan power-up yang jatuh, dan bertahanlah selama mungkin!
+        </div>
+        <div class="cara-main" id="cara-main-keyboard" hidden>
+          ⌨️ <strong>Panah / WASD</strong> buat gerak, tahan <strong>Spasi</strong> buat tembak terus-menerus.
+          Hindari peluru musuh, kumpulkan power-up yang jatuh, dan bertahanlah selama mungkin!
+        </div>
+        <p class="skor-tertinggi-setup">🏆 Skor Tertinggi: <span id="skor-tertinggi-menu">0</span></p>
+        <button class="tombol tombol-mulai" id="btn-mulai">🚀 Mulai Main!</button>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 2: BERMAIN ============ -->
+    <section class="layar" id="layar-main">
+      <div class="hud-strip">
+        <span class="hud-nyawa" id="hud-nyawa"></span>
+        <span class="hud-skor" id="hud-skor">Skor: 0</span>
+        <span class="hud-gelombang" id="hud-gelombang">Gelombang 1</span>
+      </div>
+
+      <div class="kanvas-wrap" id="kanvas-wrap">
+        <canvas id="kanvas-game"></canvas>
+        <button class="tombol-jeda-mengambang" id="btn-jeda" aria-label="Jeda">⏸️</button>
+
+        <div class="overlay-layar" id="overlay-jeda">
+          <h2>⏸️ Dijeda</h2>
+          <button class="tombol" id="btn-lanjut">▶️ Lanjutkan</button>
+          <button class="tombol tombol-luar" id="btn-mute-jeda">🔊 Suara</button>
+        </div>
+
+        <div class="overlay-layar" id="overlay-gameover">
+          <h2>💥 Game Over</h2>
+          <p>Skor Akhir</p>
+          <div class="skor-besar" id="skor-akhir">0</div>
+          <p id="skor-tertinggi-baru" hidden>🎉 Rekor baru!</p>
+          <p id="skor-tertinggi-lama">🏆 Skor Tertinggi: <span id="skor-tertinggi-gameover">0</span></p>
+          <div class="baris-tombol-aksi">
+            <button class="tombol" id="btn-main-lagi">🔁 Main Lagi</button>
+            <a class="tombol tombol-luar" href="/game/">📋 Daftar Game</a>
+          </div>
+        </div>
+
+        <div class="kontrol-sentuh">
+          <div class="joystick-area" id="joystick-area">
+            <div class="joystick-knob" id="joystick-knob"></div>
+          </div>
+          <button class="tombol-tembak-sentuh" id="btn-tembak-sentuh">TEMBAK</button>
+        </div>
+      </div>
+
+      <p class="kontrol-keterangan-desktop">⌨️ Panah/WASD gerak -- tahan Spasi buat tembak</p>
+    </section>
+  </div>
+
+  <script src="/game/serbuan-antariksa/config.js"></script>
+  <script src="/game/serbuan-antariksa/audio.js"></script>
+  <script src="/game/serbuan-antariksa/game.js"></script>
+</body>
+</html>

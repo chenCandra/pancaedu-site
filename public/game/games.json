@@ -26,5 +26,19 @@
     "ikon": "🏎️",
     "status": "Baru",
     "path": "/game/balap-mobil/"
+  },
+  {
+    "id": "serbuan-antariksa",
+    "judul": "Serbuan Antariksa",
+    "deskripsi": "Kendalikan pesawatmu, tembak musuh yang berdatangan, hindari serangan balik, dan kumpulkan power-up -- bertahanlah selama mungkin dan kejar skor tertinggi!",
+    "mapel": "Umum",
+    "materi": "Arcade / Aksi",
+    "kelas": "Semua Umur",
+    "mode": ["1 pemain"],
+    "durasi": "5-15 menit",
+    "warna": "ungu",
+    "ikon": "🚀",
+    "status": "Baru",
+    "path": "/game/serbuan-antariksa/"
   }
 ]
