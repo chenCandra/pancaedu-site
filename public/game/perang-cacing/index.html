@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Perang Cacing | Arena Game Edukasi</title>
+<meta name="description" content="Game fisika 2-8 pemain gantian 1 perangkat: gerakkan karaktermu, lempar granat/dinamit, tembak bazoka, dan hancurkan medan lawan lewat gerak parabola & gravitasi sungguhan.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/game/assets/style.css">
+<style>
+  body { padding-bottom: 3rem; }
+
+  .panggung {
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: 1rem 1.25rem 2rem;
+    padding-top: 4.5rem;
+  }
+
+  .judul-game { text-align: center; margin-bottom: 1.25rem; }
+  .judul-game h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    background: linear-gradient(90deg, var(--oranye), var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .layar { display: none; }
+  .layar.aktif { display: block; }
+
+  .kartu-panel {
+    background: #fff;
+    border: 3px solid var(--garis);
+    border-radius: var(--radius-besar);
+    padding: 1.5rem;
+    box-shadow: var(--bayangan);
+  }
+
+  /* ---------- Setup ---------- */
+  .grup-opsi { margin-bottom: 1.5rem; }
+  .grup-opsi h3 { font-size: 1rem; margin-bottom: 0.6rem; }
+  .baris-opsi { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+  .opsi-btn {
+    padding: 0.65rem 1.15rem;
+    border-radius: var(--radius-sedang);
+    border: 2px solid var(--garis);
+    background: #fff;
+    font-family: var(--font-teks);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--tinta-lembut);
+  }
+  .opsi-btn.aktif { border-color: var(--oranye); color: var(--oranye); background: var(--oranye-lembut); }
+
+  .tombol-mulai { display: block; width: 100%; text-align: center; font-size: 1.125rem; padding: 1rem; margin-top: 0.5rem; }
+
+  /* ---------- HUD daftar pemain ---------- */
+  .daftar-pemain-hud { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; justify-content: center; }
+  .kartu-hud-pemain {
+    --warna-pemain: var(--biru);
+    display: flex; align-items: center; gap: 0.4rem;
+    background: #fff; border: 2px solid var(--garis); border-radius: var(--radius-tombol);
+    padding: 0.35rem 0.75rem 0.35rem 0.5rem; font-size: 0.75rem; font-weight: 700;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .kartu-hud-pemain.giliran { border-color: var(--warna-pemain); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warna-pemain) 25%, transparent); }
+  .kartu-hud-pemain.gugur { opacity: 0.45; }
+  .titik-pemain { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--warna-pemain); flex-shrink: 0; }
+  .nama-hud { white-space: nowrap; }
+  .bar-nyawa { width: 2.75rem; height: 5px; border-radius: 4px; background: var(--garis); overflow: hidden; }
+  .isi-nyawa { height: 100%; background: var(--warna-pemain); }
+
+  /* ---------- Kanvas ---------- */
+  .kanvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 960 / 540;
+    border-radius: var(--radius-sedang);
+    overflow: hidden;
+    border: 3px solid var(--garis);
+    background: linear-gradient(180deg, #8fd0f5 0%, #d7edfb 65%, #d7edfb 100%);
+    touch-action: none;
+  }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  .banner-hasil {
+    position: absolute;
+    top: 0.6rem; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.95);
+    border: 2px solid var(--garis);
+    border-radius: var(--radius-tombol);
+    padding: 0.5rem 1.1rem;
+    font-family: var(--font-judul);
+    font-weight: 700;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    text-align: center;
+    max-width: 90%;
+    pointer-events: none;
+  }
+  .banner-hasil.tampil { opacity: 1; }
+  .banner-hasil.kena { color: var(--hijau); border-color: var(--hijau); }
+  .banner-hasil.meleset { color: var(--tinta-lembut); }
+
+  /* ---------- Panel kontrol ---------- */
+  .baris-senjata { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1rem; }
+  .chip-senjata {
+    display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+    min-width: 4.5rem; padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sedang); border: 2px solid var(--garis);
+    background: #fff; font-family: var(--font-teks); font-weight: 700; font-size: 0.8rem;
+    cursor: pointer; color: var(--tinta-lembut);
+  }
+  .chip-senjata .chip-amunisi { font-size: 0.7rem; color: var(--tinta-lembut); font-weight: 800; }
+  .chip-senjata.aktif { border-color: var(--oranye); background: var(--oranye-lembut); color: var(--oranye); }
+  .chip-senjata.habis { opacity: 0.4; cursor: not-allowed; }
+  .chip-senjata > span:first-child { font-size: 1.4rem; }
+
+  .blok-kontrol { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; min-height: 3.5rem; }
+  .tombol-bulat {
+    width: 3.75rem; height: 3.75rem; border-radius: 50%;
+    border: 2px solid var(--garis); background: #fff; font-size: 1.5rem;
+    cursor: pointer; touch-action: none; user-select: none;
+    box-shadow: var(--bayangan);
+  }
+  .tombol-bulat:active { background: var(--oranye-lembut); border-color: var(--oranye); }
+
+  .baris-tombol-aksi { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+  .baris-tombol-aksi .tombol { flex: 1; min-width: 9rem; }
+  .baris-tombol-aksi .tombol:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  @media (min-width: 40rem) {
+    .blok-kontrol { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/game/" class="tombol-kembali-mengambang">← Kembali ke Arena Game</a>
+
+  <div class="panggung">
+    <header class="judul-game">
+      <h1>💥 Perang Cacing</h1>
+    </header>
+
+    <!-- ============ LAYAR 1: PENGATURAN ============ -->
+    <section class="layar aktif" id="layar-setup">
+      <div class="kartu-panel">
+        <div class="grup-opsi">
+          <h3>👥 Jumlah Pemain (gantian 1 perangkat)</h3>
+          <div class="baris-opsi" data-grup="jumlah">
+            <button class="opsi-btn" data-nilai="2">2</button>
+            <button class="opsi-btn" data-nilai="3">3</button>
+            <button class="opsi-btn aktif" data-nilai="4">4</button>
+            <button class="opsi-btn" data-nilai="5">5</button>
+            <button class="opsi-btn" data-nilai="6">6</button>
+            <button class="opsi-btn" data-nilai="7">7</button>
+            <button class="opsi-btn" data-nilai="8">8</button>
+          </div>
+        </div>
+
+        <div class="grup-opsi">
+          <h3>🗺️ Peta (medannya bisa hancur!)</h3>
+          <div class="baris-opsi" data-grup="peta">
+            <button class="opsi-btn aktif" data-nilai="perbukitan">⛰️ Perbukitan</button>
+            <button class="opsi-btn" data-nilai="lembah">🏞️ Lembah</button>
+            <button class="opsi-btn" data-nilai="pulauKembar">🏝️ Pulau Kembar</button>
+            <button class="opsi-btn" data-nilai="gua">🕳️ Gua</button>
+            <button class="opsi-btn" data-nilai="acak">🎲 Acak</button>
+          </div>
+        </div>
+
+        <div class="grup-opsi">
+          <h3>🎮 Cara Main</h3>
+          <p style="color:var(--tinta-lembut); font-size:0.9rem; line-height:1.6; margin:0;">
+            Perangkat digeser bergantian tiap giliran. Gerakkan karakter dengan tombol ◀ ▶ (atau panah
+            kiri-kanan), lompat dengan ⤴ (atau panah atas/Spasi). Pilih senjata, tekan "Mulai Bidik", lalu
+            TEKAN &amp; TARIK di atas medan seperti ketapel untuk atur sudut dan kekuatan tembakan -- lepas
+            untuk menembak. Ledakan menghancurkan medan sungguhan, jadi hati-hati berdiri di atas tanah yang
+            baru dihantam! Terakhir yang masih hidup menang.
+          </p>
+        </div>
+
+        <button class="tombol tombol-mulai" id="btn-mulai">🚀 Mulai Perang!</button>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 2: GANTI PEMAIN (handoff) ============ -->
+    <section class="layar" id="layar-gantiPemain">
+      <div class="kartu-panel" style="text-align:center;">
+        <p style="font-weight:700; color:var(--tinta-lembut); margin:0 0 0.25rem;">Giliran:</p>
+        <h2 id="teks-giliran" style="font-size:2rem; margin-bottom:1.25rem;"></h2>
+        <p style="color:var(--tinta-lembut); margin-bottom:1.25rem;">
+          Sembunyikan layar dari pemain lain, lalu serahkan perangkat ke pemain di atas!
+        </p>
+        <button class="tombol" id="btn-siap">✅ Siap, Giliranku!</button>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 3: PERMAINAN ============ -->
+    <section class="layar" id="layar-main">
+      <div class="daftar-pemain-hud" id="daftar-pemain-hud"></div>
+
+      <div class="kanvas-wrap">
+        <canvas id="kanvas-game"></canvas>
+        <div class="banner-hasil" id="banner-hasil"></div>
+      </div>
+
+      <div class="kartu-panel" style="margin-top: 1rem;">
+        <p id="label-giliran" style="text-align:center; font-weight:800; font-family:var(--font-judul); margin:0 0 0.9rem;"></p>
+
+        <div class="baris-senjata" id="baris-senjata">
+          <button class="chip-senjata aktif" data-senjata="bazoka"><span>🚀</span><span>Bazoka</span><span class="chip-amunisi">∞</span></button>
+          <button class="chip-senjata" data-senjata="granat"><span>💣</span><span>Granat</span><span class="chip-amunisi">5</span></button>
+          <button class="chip-senjata" data-senjata="dinamit"><span>🧨</span><span>Dinamit</span><span class="chip-amunisi">2</span></button>
+          <button class="chip-senjata" data-senjata="tendangan"><span>🥾</span><span>Tendangan</span><span class="chip-amunisi">∞</span></button>
+        </div>
+
+        <div class="blok-kontrol" id="blok-kontrol-gerak">
+          <button class="tombol-bulat" id="btn-kiri" aria-label="Jalan ke kiri">◀</button>
+          <button class="tombol-bulat" id="btn-lompat" aria-label="Lompat">⤴</button>
+          <button class="tombol-bulat" id="btn-kanan" aria-label="Jalan ke kanan">▶</button>
+        </div>
+        <div class="blok-kontrol" id="blok-kontrol-bidik" style="display:none;">
+          <p style="text-align:center; color:var(--tinta-lembut); font-size:0.85rem; width:100%; margin:0;">
+            🎯 Tekan &amp; tarik di atas medan (seperti ketapel), lepas untuk menembak.<br>
+            Atau: panah kiri/kanan atur arah, panah atas/bawah atur sudut, tahan Spasi lalu lepas buat menembak.
+          </p>
+        </div>
+
+        <div class="baris-tombol-aksi">
+          <button class="tombol" id="btn-aksi">🎯 Mulai Bidik</button>
+          <button class="tombol tombol-luar" id="btn-lewati">⏭️ Lewati Giliran</button>
+          <button class="tombol tombol-luar" id="btn-mute">🔊</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 4: PEMENANG ============ -->
+    <section class="layar" id="layar-menang">
+      <div class="kartu-panel" style="text-align:center;">
+        <span style="font-size:4rem;">🏆</span>
+        <h2 id="teks-pemenang" style="margin-block:0.5rem 1.25rem;">Pemenang!</h2>
+        <button class="tombol" id="btn-main-lagi">🔁 Main Lagi</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="/game/perang-cacing/fisika.js"></script>
+  <script src="/game/perang-cacing/medan.js"></script>
+  <script src="/game/perang-cacing/config.js"></script>
+  <script src="/game/perang-cacing/audio.js"></script>
+  <script src="/game/perang-cacing/game.js"></script>
+</body>
+</html>

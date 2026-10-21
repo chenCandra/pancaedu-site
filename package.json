@@ -13,6 +13,7 @@
     "deploy": "astro build && wrangler deploy",
     "test:duel-meriam": "node scripts/test-fisika-duel-meriam.mjs",
     "test:balap-mobil": "node scripts/test-fisika-balap-mobil.mjs",
+    "test:perang-cacing": "node scripts/test-fisika-perang-cacing.mjs",
     "test:games-json": "node scripts/validate-games-json.mjs"
   },
   "dependencies": {

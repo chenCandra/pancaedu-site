@@ -40,5 +40,19 @@
     "ikon": "🚀",
     "status": "Baru",
     "path": "/game/serbuan-antariksa/"
+  },
+  {
+    "id": "perang-cacing",
+    "judul": "Perang Cacing",
+    "deskripsi": "Gerakkan karaktermu, lempar granat dan dinamit, tembak bazoka, dan hancurkan medan lawan -- gerak parabola dan gravitasi beneran dipraktikkan tiap giliran. Sampai 8 pemain gantian 1 perangkat!",
+    "mapel": "Fisika",
+    "materi": "Gerak Parabola & Gravitasi",
+    "kelas": "SMA Kelas X",
+    "mode": ["2-8 pemain (1 perangkat)"],
+    "durasi": "15-25 menit",
+    "warna": "oranye",
+    "ikon": "💥",
+    "status": "Baru",
+    "path": "/game/perang-cacing/"
   }
 ]
