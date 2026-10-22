@@ -592,35 +592,91 @@
   // ============ RENDER ============
 
   function gambarKarakter(p, aktif) {
+    var r = p.radius;
+    var arah = p.menghadap; // 1 = hadap kanan, -1 = hadap kiri
+    var panjang = r * 1.5; // badan ulat memanjang searah hadap
+    var tengahX = p.x - arah * panjang * 0.15; // pusat badan sedikit ke belakang -- kepala menonjol di depan
+    var tengahY = p.y + 2;
+    var kepalaX = p.x + arah * panjang * 0.55;
+    var kepalaY = p.y - 2;
+
     ctx.save();
     if (aktif) {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius + 6, 0, Math.PI * 2);
+      ctx.ellipse(p.x, p.y - 1, r * 2.3, r * 1.6, 0, 0, Math.PI * 2);
       ctx.strokeStyle = '#fff59d';
       ctx.lineWidth = 3;
       ctx.stroke();
     }
+
+    // badan -- kapsul lonjong
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.ellipse(tengahX, tengahY, panjang, r * 0.85, 0, 0, Math.PI * 2);
     ctx.fillStyle = p.warna;
     ctx.fill();
     ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // mata (penanda arah hadap)
+    // kepala -- bulatan di ujung depan badan
     ctx.beginPath();
+    ctx.arc(kepalaX, kepalaY, r * 0.95, 0, Math.PI * 2);
+    ctx.fillStyle = p.warna;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // garis ruas badan (kesan segmen ulat)
+    ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+    ctx.lineWidth = 1.5;
+    for (var i = 1; i <= 2; i++) {
+      var rx = tengahX - arah * panjang * 0.38 * i + arah * panjang * 0.38;
+      ctx.beginPath();
+      ctx.moveTo(rx, tengahY - r * 0.6);
+      ctx.quadraticCurveTo(rx + arah * 2, tengahY, rx, tengahY + r * 0.6);
+      ctx.stroke();
+    }
+
+    // antena
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    ctx.lineWidth = 1.5;
+    [-1, 1].forEach(function (sisi) {
+      var ujungX = kepalaX + arah * r * 0.9 + sisi * r * 0.3;
+      var ujungY = kepalaY - r * 1.7;
+      ctx.beginPath();
+      ctx.moveTo(kepalaX + arah * r * 0.3, kepalaY - r * 0.75);
+      ctx.quadraticCurveTo(kepalaX + arah * r * 0.6, kepalaY - r * 1.5, ujungX, ujungY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(ujungX, ujungY, 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = p.warna;
+      ctx.fill();
+    });
+
+    // mata (satu, sisi hadap -- konvensi tampilan dari samping)
+    var ex = kepalaX + arah * r * 0.3;
+    var ey = kepalaY - r * 0.1;
+    ctx.beginPath();
+    ctx.arc(ex, ey, r * 0.38, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
-    ctx.arc(p.x + p.menghadap * 5, p.y - 3, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(ex + arah * r * 0.14, ey, r * 0.16, 0, Math.PI * 2);
+    ctx.fillStyle = '#1f2937';
     ctx.fill();
 
-    // bar nyawa kecil di atas kepala
-    var lebarBar = p.radius * 2.2;
+    // bar nyawa di atas kepala
+    var lebarBar = r * 2.4;
     var persen = Math.max(0, p.nyawa / p.nyawaMaks);
+    var yBar = kepalaY - r * 2.3;
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
-    ctx.fillRect(p.x - lebarBar / 2, p.y - p.radius - 14, lebarBar, 5);
+    ctx.fillRect(p.x - lebarBar / 2, yBar, lebarBar, 5);
     ctx.fillStyle = persen > 0.5 ? '#16a34a' : persen > 0.2 ? '#f5b301' : '#db2f77';
-    ctx.fillRect(p.x - lebarBar / 2, p.y - p.radius - 14, lebarBar * persen, 5);
+    ctx.fillRect(p.x - lebarBar / 2, yBar, lebarBar * persen, 5);
     ctx.restore();
   }
 
