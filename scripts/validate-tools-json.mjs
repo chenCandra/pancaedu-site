@@ -1,7 +1,7 @@
 // Validasi public/tools/tools.json -- jalankan: node scripts/validate-tools-json.mjs
-// Cek: semua field wajib ada & tidak kosong, "peran" berupa array berisi
-// nilai yang dikenal, dan path setiap alat (folder + index.html-nya) benar-
-// benar ada di public/tools/. Pola sama persis dengan validate-games-json.mjs.
+// Cek: semua field wajib ada & tidak kosong, dan path setiap alat (folder +
+// index.html-nya) benar-benar ada di public/tools/. Pola sama persis dengan
+// validate-games-json.mjs.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,8 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const toolsJsonPath = path.join(__dirname, '..', 'public', 'tools', 'tools.json');
 const publicDir = path.join(__dirname, '..', 'public');
 
-const FIELD_WAJIB = ['id', 'judul', 'deskripsi', 'peran', 'ikon', 'warna', 'path'];
-const PERAN_DIKENAL = ['guru', 'murid', 'kepsek', 'bendahara'];
+const FIELD_WAJIB = ['id', 'judul', 'deskripsi', 'ikon', 'warna', 'path'];
 
 let gagal = 0;
 function laporGagal(pesan) {
@@ -51,18 +50,6 @@ daftar.forEach((alat, i) => {
   if (alat && alat.id) {
     if (idTerpakai.has(alat.id)) laporGagal(`${label}: id "${alat.id}" dipakai lebih dari sekali.`);
     idTerpakai.add(alat.id);
-  }
-
-  if (alat && alat.peran) {
-    if (!Array.isArray(alat.peran)) {
-      laporGagal(`${label}: field "peran" harus berupa array (mis. ["guru"]).`);
-    } else {
-      alat.peran.forEach((p) => {
-        if (!PERAN_DIKENAL.includes(p)) {
-          laporGagal(`${label}: nilai "peran" tidak dikenal: "${p}" (harus salah satu dari ${PERAN_DIKENAL.join(', ')}).`);
-        }
-      });
-    }
   }
 
   if (alat && alat.path) {

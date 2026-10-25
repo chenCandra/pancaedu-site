@@ -1,9 +1,9 @@
-/* Kotak Alat PancaEdu -- tema bersama buat halaman kumpulan tools (guru,
-   murid, kepala sekolah, bendahara). Sama filosofinya dengan Arena Game
-   Edukasi (public/game/assets/style.css): file CSS polos tanpa build,
-   sengaja mandiri (bukan nge-link ke folder game/) biar folder tools/ ini
-   sendiri juga gampang ditempel ulang/dipindah kalau perlu. Palet warna &
-   token disamakan persis biar nuansa situs tetap konsisten. */
+/* Perkakas PancaEdu -- tema bersama buat halaman kumpulan tools sekolah.
+   Sama filosofinya dengan Arena Game Edukasi (public/game/assets/style.css):
+   file CSS polos tanpa build, sengaja mandiri (bukan nge-link ke folder
+   game/) biar folder tools/ ini sendiri juga gampang ditempel ulang/
+   dipindah kalau perlu. Palet warna & token disamakan persis biar nuansa
+   situs tetap konsisten. */
 
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
 
@@ -97,7 +97,7 @@ a { color: inherit; }
 }
 .tombol-kembali-mengambang:hover { transform: translateY(-2px); box-shadow: var(--bayangan-kuat); border-color: var(--biru); color: var(--biru); }
 
-/* ---------- Kartu alat (dipakai katalog Kotak Alat) ---------- */
+/* ---------- Kartu alat (dipakai katalog Perkakas) ---------- */
 
 .kartu-alat {
   --kartu-aksen: var(--biru);
