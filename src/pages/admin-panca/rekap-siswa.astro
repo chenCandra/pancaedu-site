@@ -1,0 +1,316 @@
+---
+// Rekap per Kelas -- matriks Siswa x Penugasan buat SATU kelas (rombel)
+// sekaligus, lintas semua Penugasan yang levelnya cocok (mis. kelas "XII F3"
+// dicocokkan ke Penugasan yang data.kelas = "XII"). Dibangun dari fungsi yang
+// SAMA (ambilLaporanSiswa) dengan /admin-panca/laporan -- cuma dipanggil
+// berkali-kali (satu kali per Penugasan terkait) lalu digabung jadi satu
+// tabel, bukan query baru. Tujuannya: guru bisa langsung lihat/unduh "siapa
+// belum ngerjain apa" tanpa buka Penugasan satu-satu.
+import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
+import { ambilSesi } from '../../lib/adminPanca/auth';
+import { ambilLaporanSiswa } from '../../lib/adminPanca/db';
+import { env } from 'cloudflare:workers';
+import { getCollection, getEntry } from 'astro:content';
+
+export const prerender = false;
+
+const sesiAdmin = await ambilSesi(Astro.cookies, env.ADMIN_SESSION_SECRET);
+if (!sesiAdmin) return Astro.redirect('/admin-panca/login');
+
+const qs = Astro.url.searchParams;
+const kelasDipilih = qs.get('kelas') ?? '';
+
+const [semuaPenugasan, pengaturan] = await Promise.all([
+  getCollection('penugasan', ({ data }) => !data.draft),
+  getEntry('penugasanPengaturan', 'index'),
+]);
+
+const daftarKelas = pengaturan?.data.daftarKelas ?? [];
+
+type PenugasanTerkait = { slug: string; judul: string; mapel: string };
+type Sel = { status: 'belum-mulai' | 'belum-selesai' | 'selesai'; skor: number | null; skorMaks: number | null; persentase: number | null };
+type BarisMatrix = { nama: string; sel: Record<string, Sel> };
+
+let penugasanTerkait: PenugasanTerkait[] = [];
+let matrix: BarisMatrix[] = [];
+
+if (kelasDipilih) {
+  const rosterEntry = daftarKelas.find((d) => d.kelas === kelasDipilih);
+  const rosterSiswa = rosterEntry?.siswa ?? [];
+  // "XII F3" -> "XII" -- dicocokkan PERSIS (bukan prefix mentah) ke enum
+  // data.kelas Penugasan (X/XI/XII/TKA), biar "XI" tidak ikut kena karena
+  // kebetulan substring dari "XII".
+  const tokenKelas = kelasDipilih.trim().split(/\s+/)[0];
+
+  penugasanTerkait = semuaPenugasan
+    .filter((p) => p.data.kelas === tokenKelas)
+    .map((p) => ({ slug: p.id, judul: p.data.judul, mapel: p.data.mapel }))
+    .sort((a, b) => a.judul.localeCompare(b.judul, 'id'));
+
+  const dataPerPenugasan = await Promise.all(
+    penugasanTerkait.map(async (p) => [p.slug, await ambilLaporanSiswa(env.DB, p.slug, kelasDipilih)] as const)
+  );
+  const petaPerSlug = new Map(dataPerPenugasan.map(([slug, rows]) => [slug, new Map(rows.map((b) => [b.nama, b]))]));
+
+  // Gabung roster (bisa "belum mulai" di semua Penugasan) + siapa pun yang
+  // tercatat attempt walau namanya tidak ada di roster (siswa baru/pindahan)
+  // -- pola sama persis seperti /admin-panca/laporan.
+  const semuaNama = new Set(rosterSiswa);
+  dataPerPenugasan.forEach(([, rows]) => rows.forEach((b) => semuaNama.add(b.nama)));
+
+  matrix = [...semuaNama].sort((a, b) => a.localeCompare(b, 'id')).map((nama) => {
+    const sel: Record<string, Sel> = {};
+    for (const p of penugasanTerkait) {
+      const a = petaPerSlug.get(p.slug)?.get(nama);
+      if (!a) {
+        sel[p.slug] = { status: 'belum-mulai', skor: null, skorMaks: null, persentase: null };
+      } else {
+        const persentase = a.pernahSelesai && a.skorMaks ? Math.round((a.skorTerbaik! / a.skorMaks) * 100) : null;
+        sel[p.slug] = { status: a.pernahSelesai ? 'selesai' : 'belum-selesai', skor: a.skorTerbaik, skorMaks: a.skorMaks, persentase };
+      }
+    }
+    return { nama, sel };
+  });
+}
+
+const STATUS_LABEL: Record<Sel['status'], string> = {
+  'belum-mulai': 'Belum Mulai',
+  'belum-selesai': 'Sedang Mengerjakan',
+  selesai: 'Selesai',
+};
+
+// Replace "</script" jaga-jaga supaya judul/nama yang kebetulan mengandung
+// teks itu tidak memutus tag <script> di HTML (defensif, bukan karena ada
+// input pengguna langsung di sini -- judul dari content Penugasan, nama
+// dari roster kelas, keduanya dikelola guru/admin).
+const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, matrix, statusLabel: STATUS_LABEL }).replace(
+  /<\/script/gi,
+  '<\\/script'
+);
+---
+
+<AdminPancaLayout title="Rekap per Kelas" username={sesiAdmin.username}>
+  <h1 class="panca-h1">Rekap per Kelas</h1>
+  <p class="panca-lede">
+    Pilih satu kelas -- lihat SEMUA Penugasan untuk level kelas itu sekaligus, per siswa, lalu unduh ke Excel/CSV
+    kalau perlu dibagikan atau dicek lebih lanjut. Dipakai buat jawab pertanyaan "tugas mana saja yang belum
+    saya kerjakan?" tanpa perlu buka Penugasan satu-satu.
+  </p>
+
+  <form class="filter-row" method="get">
+    <label>
+      Pilih Kelas
+      <select name="kelas" onchange="this.form.submit()">
+        <option value="">-- Pilih Kelas --</option>
+        {daftarKelas.map((d) => (
+          <option value={d.kelas} selected={d.kelas === kelasDipilih}>{d.kelas}</option>
+        ))}
+      </select>
+    </label>
+  </form>
+
+  {!kelasDipilih && <p class="panca-card pin-empty">Pilih kelas dulu di atas untuk melihat rekapnya.</p>}
+
+  {kelasDipilih && penugasanTerkait.length === 0 && (
+    <p class="panca-card pin-empty">Belum ada Penugasan untuk level kelas ini.</p>
+  )}
+
+  {kelasDipilih && penugasanTerkait.length > 0 && (
+    <>
+      <div class="baris-aksi">
+        <button type="button" id="btn-export" class="panca-btn">⬇️ Unduh ke Excel (CSV)</button>
+      </div>
+
+      <div class="panca-card table-scroll">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th class="kol-nama">Nama Siswa</th>
+              {penugasanTerkait.map((p) => <th>{p.judul}<span class="sub-mapel">{p.mapel}</span></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {matrix.map((baris) => (
+              <tr>
+                <td class="kol-nama">{baris.nama}</td>
+                {penugasanTerkait.map((p) => {
+                  const sel = baris.sel[p.slug];
+                  return (
+                    <td>
+                      <span class={`status-badge status-${sel.status}`}>{STATUS_LABEL[sel.status]}</span>
+                      {sel.status === 'selesai' && (
+                        <div class="skor-kecil">{sel.skor}/{sel.skorMaks} ({sel.persentase}%)</div>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )}
+
+  <script type="application/json" id="data-matrix" set:html={dataUntukExport} />
+</AdminPancaLayout>
+
+<script>
+  const btnExport = document.getElementById('btn-export');
+  btnExport?.addEventListener('click', () => {
+    const elData = document.getElementById('data-matrix');
+    if (!elData?.textContent) return;
+    const data = JSON.parse(elData.textContent);
+
+    function selCsv(nilai: unknown): string {
+      const s = String(nilai ?? '');
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+
+    const header = ['Nama Siswa', ...data.penugasanTerkait.map((p: { judul: string }) => p.judul)];
+    const rows = data.matrix.map((m: { nama: string; sel: Record<string, { status: string; skor: number | null; skorMaks: number | null; persentase: number | null }> }) => [
+      m.nama,
+      ...data.penugasanTerkait.map((p: { slug: string }) => {
+        const sel = m.sel[p.slug];
+        if (sel.status === 'selesai') return `Selesai (${sel.skor}/${sel.skorMaks} = ${sel.persentase}%)`;
+        return data.statusLabel[sel.status];
+      }),
+    ]);
+
+    const csvLines = [header, ...rows].map((r: unknown[]) => r.map(selCsv).join(','));
+    const csv = '﻿' + csvLines.join('\r\n'); // BOM -- biar Excel baca aksen/huruf Indonesia dengan benar
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rekap-${data.kelas.replace(/\s+/g, '-')}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+<style>
+  .filter-row {
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    max-width: 16rem;
+  }
+
+  .filter-row select {
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-solid);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+  }
+
+  .pin-empty {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .baris-aksi {
+    margin-bottom: 1rem;
+  }
+
+  .panca-btn {
+    padding: 0.65rem 1.25rem;
+    border-radius: 0.6rem;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .panca-btn:hover {
+    opacity: 0.92;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    padding: 0;
+  }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .matrix-table th,
+  .matrix-table td {
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .matrix-table thead th {
+    font-weight: 600;
+    color: var(--ink-soft);
+    background-color: var(--accent-soft);
+    vertical-align: top;
+  }
+
+  .sub-mapel {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+
+  .kol-nama {
+    position: sticky;
+    left: 0;
+    background: var(--surface-solid);
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .matrix-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.15rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .status-selesai {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .status-belum-selesai {
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+
+  .status-belum-mulai {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+
+  .skor-kecil {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    margin-top: 0.15rem;
+  }
+</style>
