@@ -4,43 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Generator Kwitansi | Perkakas PancaEdu</title>
-<meta name="description" content="Isi nama penerima, jumlah uang, dan keperluan -- jumlahnya otomatis dieja jadi terbilang, hasilnya kwitansi siap cetak.">
+<meta name="description" content="Isi nomor, sumber dana, penerima, dan jumlah uang -- jumlahnya otomatis dieja jadi terbilang, hasilnya kwitansi dinas siap cetak dengan 3 tanda tangan (Kepala Sekolah, Bendahara, Penerima).">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/tools/assets/style.css">
 <style>
-  .panggung { max-width: 56rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .panggung { max-width: 60rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
   .judul-alat { text-align: center; margin-bottom: 1.5rem; }
   .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--oranye), var(--kuning)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
 
   .tata-letak { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-  @media (min-width: 52rem) { .tata-letak { grid-template-columns: 1fr 1fr; align-items: start; } }
+  @media (min-width: 56rem) { .tata-letak { grid-template-columns: 1fr 1.15fr; align-items: start; } }
 
   .baris-2kol { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
   @media (max-width: 22rem) { .baris-2kol { grid-template-columns: 1fr; } }
 
+  .subjudul-form { font-family: var(--font-judul); font-weight: 700; font-size: 0.9rem; color: var(--tinta-lembut); margin: 1.25rem 0 0.5rem; padding-top: 1rem; border-top: 1px solid var(--garis); }
+  .subjudul-form:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+
   .kwitansi {
     position: sticky; top: 1.5rem;
     background: #fffdf2; border: 2px solid var(--tinta); box-shadow: var(--bayangan-kuat);
-    padding: 1.75rem; font-size: 0.9rem; line-height: 1.8;
+    padding: 1.75rem 2rem; font-size: 0.85rem; line-height: 1.7;
   }
-  .kwitansi .judul-kwitansi { text-align: center; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.1em; border-bottom: 2px solid var(--tinta); padding-bottom: 0.75rem; margin-bottom: 1rem; }
-  .kwitansi .baris-no { text-align: right; margin-bottom: 0.5rem; font-size: 0.85rem; }
-  .kwitansi table { width: 100%; border-collapse: collapse; }
-  .kwitansi table td { padding: 0.35rem 0; vertical-align: top; }
-  .kwitansi table td.label { width: 9rem; font-weight: 600; }
-  .kwitansi table td.titik-dua { width: 1rem; }
-  .kwitansi .jumlah-rupiah { font-weight: 800; font-size: 1.15rem; border: 2px solid var(--tinta); padding: 0.4rem 0.75rem; display: inline-block; margin-top: 0.25rem; }
+  .kwitansi .judul-kwitansi { text-align: center; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.1em; text-decoration: underline; margin-bottom: 1.1rem; }
+  .kwitansi table.data-atas { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+  .kwitansi table.data-atas td { padding: 0.15rem 0; vertical-align: top; }
+  .kwitansi table.data-atas td.label { width: 8.5rem; font-weight: 600; }
+  .kwitansi table.data-atas td.titik-dua { width: 0.8rem; }
+
+  .kwitansi table.data-bawah { width: 100%; border-collapse: collapse; }
+  .kwitansi table.data-bawah td { padding: 0.4rem 0; vertical-align: top; }
+  .kwitansi table.data-bawah td.label { width: 8.5rem; font-weight: 600; }
+  .kwitansi table.data-bawah td.titik-dua { width: 0.8rem; }
+  .kwitansi table.data-bawah tr.bergaris td { border-bottom: 1px solid #c9c4b8; }
+
+  .kwitansi .jumlah-rupiah { font-weight: 800; font-size: 1.1rem; border: 2px solid var(--tinta); padding: 0.3rem 0.75rem; display: inline-block; }
   .kwitansi .terbilang-box { font-style: italic; }
-  .kwitansi .baris-ttd { display: flex; justify-content: space-between; margin-top: 2rem; }
-  .kwitansi .kolom-ttd { text-align: center; width: 48%; }
-  .kwitansi .ruang-ttd { height: 3.5rem; }
+
+  .kwitansi .baris-tanggal { text-align: right; margin-top: 1.25rem; }
+
+  .kwitansi .baris-ttd { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 1.5rem; text-align: center; }
+  .kwitansi .kolom-ttd { flex: 1; min-width: 0; }
+  .kwitansi .kolom-ttd .prefix-ttd { font-size: 0.8rem; }
+  .kwitansi .kolom-ttd .peran-ttd { font-weight: 700; font-size: 0.8rem; }
+  .kwitansi .ruang-ttd { height: 3.2rem; }
+  .kwitansi .nama-ttd { font-weight: 700; text-decoration: underline; word-break: break-word; }
+  .kwitansi .nip-ttd { font-size: 0.78rem; }
 
   @media print {
     body { background: #fff; }
     .panggung { max-width: none; padding: 0; }
     .tata-letak { display: block; }
-    .kwitansi { box-shadow: none; position: static; max-width: 30rem; margin-inline: auto; }
+    .kwitansi { box-shadow: none; position: static; max-width: 34rem; margin-inline: auto; }
   }
 </style>
 </head>
@@ -54,23 +70,35 @@
   <div class="panggung">
     <header class="judul-alat no-print">
       <h1>🧾 Generator Kwitansi</h1>
-      <p>Isi form di sebelah kiri, jumlah uang otomatis dieja jadi terbilang di pratinjau kanan.</p>
+      <p>Isi form di sebelah kiri, pratinjau kwitansi dinas (3 tanda tangan) langsung tersusun di kanan.</p>
     </header>
 
     <div class="tata-letak">
       <div class="kartu-panel no-print" id="panel-form">
-        <div class="bidang"><label for="f-no">Nomor Kwitansi</label><input type="text" id="f-no" placeholder="mis. 001/KWT/2026"></div>
+        <p class="subjudul-form">Data Transaksi</p>
+        <div class="baris-2kol">
+          <div class="bidang"><label for="f-no">Nomor</label><input type="text" id="f-no" placeholder="mis. BPU 198"></div>
+          <div class="bidang"><label for="f-rekening">Nama Rekening</label><input type="text" id="f-rekening" placeholder="mis. Belanja Konsumsi"></div>
+        </div>
+        <div class="bidang"><label for="f-sumberdana">Sumber Dana</label><input type="text" id="f-sumberdana" placeholder="mis. BOS Kinerja 2026"></div>
         <div class="bidang"><label for="f-dari">Sudah Terima Dari</label><input type="text" id="f-dari" placeholder="mis. Bendahara BOS SMA Negeri 1 Contoh"></div>
-        <div class="bidang"><label for="f-jumlah">Jumlah Uang (Rp)</label><input type="number" id="f-jumlah" min="0" placeholder="mis. 1500000"></div>
-        <div class="bidang"><label for="f-untuk">Untuk Pembayaran</label><textarea id="f-untuk" rows="3" placeholder="mis. pembelian ATK semester genap tahun ajaran 2025/2026"></textarea></div>
+        <div class="bidang"><label for="f-jumlah">Banyaknya Uang (Rp)</label><input type="number" id="f-jumlah" min="0" placeholder="mis. 640000"></div>
+        <div class="bidang"><label for="f-untuk">Untuk Pembayaran</label><textarea id="f-untuk" rows="2" placeholder="mis. Nasi bungkus untuk rapat perencanaan BOSKIN"></textarea></div>
         <div class="baris-2kol">
           <div class="bidang"><label for="f-tempat">Tempat</label><input type="text" id="f-tempat" placeholder="mis. Muaro Jambi"></div>
           <div class="bidang"><label for="f-tanggal">Tanggal</label><input type="date" id="f-tanggal"></div>
         </div>
+
+        <p class="subjudul-form">Penanda Tangan</p>
         <div class="baris-2kol">
-          <div class="bidang"><label for="f-penerima">Nama Penerima (penandatangan)</label><input type="text" id="f-penerima" placeholder="mis. Rina Marlina"></div>
-          <div class="bidang"><label for="f-pemberi">Nama Pemberi (opsional)</label><input type="text" id="f-pemberi" placeholder="mis. Kepala Sekolah"></div>
+          <div class="bidang"><label for="f-kepsek-nama">Nama Kepala Sekolah</label><input type="text" id="f-kepsek-nama" placeholder="mis. Bambang Sugiharto, S.Pd"></div>
+          <div class="bidang"><label for="f-kepsek-nip">NIP Kepala Sekolah</label><input type="text" id="f-kepsek-nip" placeholder="mis. 196801142005011000"></div>
         </div>
+        <div class="baris-2kol">
+          <div class="bidang"><label for="f-bendahara-nama">Nama Bendahara Sekolah</label><input type="text" id="f-bendahara-nama" placeholder="mis. Rahmad Agus S.S, SE"></div>
+          <div class="bidang"><label for="f-bendahara-nip">NIP Bendahara Sekolah</label><input type="text" id="f-bendahara-nip" placeholder="mis. 198208012014081002"></div>
+        </div>
+        <div class="bidang"><label for="f-penerima-nama">Nama Penerima Uang</label><input type="text" id="f-penerima-nama" placeholder="mis. Dendeng Batokok"></div>
 
         <button class="tombol" id="btn-print" style="width:100%; margin-top:0.5rem;">🖨️ Cetak / Simpan PDF</button>
       </div>
@@ -130,17 +158,42 @@
       var jumlah = parseFloat(nilai('f-jumlah')) || 0;
       var el = document.getElementById('kwitansi-cetak');
       el.innerHTML =
-        '<div class="judul-kwitansi">KWITANSI</div>' +
-        '<div class="baris-no">No: ' + (escapeHtml(nilai('f-no')) || '......................') + '</div>' +
-        '<table>' +
-        '<tr><td class="label">Sudah terima dari</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-dari')) || '......................') + '</td></tr>' +
-        '<tr><td class="label">Banyaknya uang</td><td class="titik-dua">:</td><td class="terbilang-box">' + terbilang(jumlah) + ' rupiah</td></tr>' +
-        '<tr><td class="label">Untuk pembayaran</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-untuk')) || '......................') + '</td></tr>' +
+        '<div class="judul-kwitansi">KUITANSI</div>' +
+
+        '<table class="data-atas">' +
+        '<tr><td class="label">Nomor</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-no')) || '......................') + '</td></tr>' +
+        '<tr><td class="label">Nama Rekening</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-rekening')) || '......................') + '</td></tr>' +
+        '<tr><td class="label">Sumber Dana</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-sumberdana')) || '......................') + '</td></tr>' +
         '</table>' +
-        '<div style="text-align:right;" class="jumlah-rupiah">' + formatRupiah(jumlah) + '</div>' +
+
+        '<table class="data-bawah">' +
+        '<tr class="bergaris"><td class="label">Sudah terima dari</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-dari')) || '......................') + '</td></tr>' +
+        '<tr><td class="label">Banyaknya uang</td><td class="titik-dua">:</td><td><span class="jumlah-rupiah">' + formatRupiah(jumlah) + '</span></td></tr>' +
+        '<tr><td class="label">Terbilang</td><td class="titik-dua">:</td><td class="terbilang-box">' + terbilang(jumlah) + ' Rupiah</td></tr>' +
+        '<tr class="bergaris"><td class="label">Untuk pembayaran</td><td class="titik-dua">:</td><td>' + (escapeHtml(nilai('f-untuk')) || '......................') + '</td></tr>' +
+        '</table>' +
+
+        '<div class="baris-tanggal">' + formatTanggalIndo(nilai('f-tanggal'), nilai('f-tempat')) + '</div>' +
+
         '<div class="baris-ttd">' +
-        '<div class="kolom-ttd"><div>&nbsp;</div><div class="ruang-ttd"></div><div>(' + (escapeHtml(nilai('f-pemberi')) || '......................') + ')</div></div>' +
-        '<div class="kolom-ttd"><div>' + formatTanggalIndo(nilai('f-tanggal'), nilai('f-tempat')) + '</div><div class="ruang-ttd"></div><div><strong>' + (escapeHtml(nilai('f-penerima')) || '......................') + '</strong></div></div>' +
+        '<div class="kolom-ttd">' +
+        '<div class="prefix-ttd">Setuju Dibayar,</div><div class="peran-ttd">Kepala Sekolah</div>' +
+        '<div class="ruang-ttd"></div>' +
+        '<div class="nama-ttd">' + (escapeHtml(nilai('f-kepsek-nama')) || '......................') + '</div>' +
+        '<div class="nip-ttd">NIP. ' + (escapeHtml(nilai('f-kepsek-nip')) || '......................') + '</div>' +
+        '</div>' +
+        '<div class="kolom-ttd">' +
+        '<div class="prefix-ttd">Lunas Dibayar,</div><div class="peran-ttd">Bendahara Sekolah</div>' +
+        '<div class="ruang-ttd"></div>' +
+        '<div class="nama-ttd">' + (escapeHtml(nilai('f-bendahara-nama')) || '......................') + '</div>' +
+        '<div class="nip-ttd">NIP. ' + (escapeHtml(nilai('f-bendahara-nip')) || '......................') + '</div>' +
+        '</div>' +
+        '<div class="kolom-ttd">' +
+        '<div class="peran-ttd">&nbsp;</div><div class="peran-ttd">Penerima Uang</div>' +
+        '<div class="ruang-ttd"></div>' +
+        '<div class="nama-ttd">' + (escapeHtml(nilai('f-penerima-nama')) || '......................') + '</div>' +
+        '<div class="nip-ttd">&nbsp;</div>' +
+        '</div>' +
         '</div>';
     }
 
