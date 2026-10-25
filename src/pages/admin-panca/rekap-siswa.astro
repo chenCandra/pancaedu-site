@@ -162,9 +162,13 @@ const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, 
     if (!elData?.textContent) return;
     const data = JSON.parse(elData.textContent);
 
+    // Pemisah titik koma (BUKAN koma) -- Excel berbahasa/regional Indonesia
+    // (dan kebanyakan Eropa) pakai koma sebagai pemisah DESIMAL, jadi daftar
+    // pemisah kolom CSV defaultnya titik koma. Pakai koma di sini bikin
+    // Excel gagal memecah kolom sama sekali (satu baris jadi satu sel).
     function selCsv(nilai: unknown): string {
       const s = String(nilai ?? '');
-      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      return /[;",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
     }
 
     const header = ['Nama Siswa', ...data.penugasanTerkait.map((p: { judul: string }) => p.judul)];
@@ -177,7 +181,7 @@ const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, 
       }),
     ]);
 
-    const csvLines = [header, ...rows].map((r: unknown[]) => r.map(selCsv).join(','));
+    const csvLines = [header, ...rows].map((r: unknown[]) => r.map(selCsv).join(';'));
     const csv = '﻿' + csvLines.join('\r\n'); // BOM -- biar Excel baca aksen/huruf Indonesia dengan benar
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
