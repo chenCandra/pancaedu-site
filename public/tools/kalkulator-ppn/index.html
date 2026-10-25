@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Pajak/PPN | Kotak Alat PancaEdu</title>
+<meta name="description" content="Hitung PPN dari nominal belanja (termasuk atau belum termasuk pajak) -- bantu administrasi pembelian & laporan keuangan sekolah.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 34rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--hijau), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .baris-opsi { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+  .opsi-btn { padding: 0.65rem 1.15rem; border-radius: var(--radius-sedang); border: 2px solid var(--garis); background: #fff; font-family: var(--font-teks); font-weight: 700; font-size: 0.9rem; cursor: pointer; color: var(--tinta-lembut); flex: 1; min-width: 10rem; }
+  .opsi-btn.aktif { border-color: var(--hijau); color: var(--hijau); background: var(--hijau-lembut); }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 1.5rem; }
+  .stat-kotak { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+  .stat-kotak .k { font-weight: 700; color: var(--tinta-lembut); font-size: 0.9rem; }
+  .stat-kotak .v { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.15rem; }
+  .stat-kotak.utama { background: var(--hijau-lembut); }
+  .stat-kotak.utama .v { color: var(--hijau); font-size: 1.4rem; }
+
+  .catatan-pajak { font-size: 0.8rem; color: var(--tinta-lembut); margin-top: 1.25rem; line-height: 1.6; background: var(--kertas-alt); padding: 0.9rem 1.1rem; border-radius: var(--radius-sedang); }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>💰 Kalkulator Pajak/PPN</h1>
+      <p>Hitung cepat PPN dari nominal belanja.</p>
+    </header>
+
+    <div class="kartu-panel">
+      <div class="bidang">
+        <label for="input-nominal">Nominal (Rp)</label>
+        <input type="number" id="input-nominal" min="0" placeholder="mis. 1000000">
+      </div>
+
+      <div class="bidang">
+        <label>Nominal ini...</label>
+        <div class="baris-opsi" data-grup="jenis-nominal">
+          <button class="opsi-btn aktif" data-nilai="dpp">Belum Termasuk PPN (DPP)</button>
+          <button class="opsi-btn" data-nilai="total">Sudah Termasuk PPN (Total)</button>
+        </div>
+      </div>
+
+      <div class="bidang">
+        <label>Tarif PPN</label>
+        <div class="baris-opsi" data-grup="tarif">
+          <button class="opsi-btn aktif" data-nilai="11">11% (Umum)</button>
+          <button class="opsi-btn" data-nilai="12">12% (Barang Mewah)</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="stat-grid"></div>
+
+      <p class="catatan-pajak">
+        ⚠️ Tarif di atas mengikuti ketentuan PPN yang berlaku saat alat ini dibuat (PPN umum 11%, barang mewah 12%).
+        Aturan pajak bisa berubah -- untuk kepastian terbaru, cek <a href="https://pajak.go.id" target="_blank" rel="noopener">pajak.go.id</a>
+        atau konsultasikan dengan petugas pajak sebelum dipakai di laporan resmi.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    var elInputNominal = document.getElementById('input-nominal');
+    var elChipJenis = document.querySelectorAll('[data-grup="jenis-nominal"] .opsi-btn');
+    var elChipTarif = document.querySelectorAll('[data-grup="tarif"] .opsi-btn');
+    var elStatGrid = document.getElementById('stat-grid');
+
+    var jenisNominal = 'dpp';
+    var tarifPersen = 11;
+
+    function formatRupiah(n) {
+      if (!isFinite(n)) return 'Rp 0';
+      return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+    }
+
+    function hitung() {
+      var nominal = parseFloat(elInputNominal.value) || 0;
+      var rate = tarifPersen / 100;
+      var dpp, ppn, total;
+
+      if (jenisNominal === 'dpp') {
+        dpp = nominal;
+        ppn = dpp * rate;
+        total = dpp + ppn;
+      } else {
+        total = nominal;
+        dpp = total / (1 + rate);
+        ppn = total - dpp;
+      }
+
+      elStatGrid.innerHTML =
+        '<div class="stat-kotak"><span class="k">DPP (sebelum pajak)</span><span class="v">' + formatRupiah(dpp) + '</span></div>' +
+        '<div class="stat-kotak"><span class="k">PPN (' + tarifPersen + '%)</span><span class="v">' + formatRupiah(ppn) + '</span></div>' +
+        '<div class="stat-kotak utama"><span class="k">Total (termasuk PPN)</span><span class="v">' + formatRupiah(total) + '</span></div>';
+    }
+
+    elInputNominal.addEventListener('input', hitung);
+    elChipJenis.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        elChipJenis.forEach(function (b) { b.classList.remove('aktif'); });
+        btn.classList.add('aktif');
+        jenisNominal = btn.dataset.nilai;
+        hitung();
+      });
+    });
+    elChipTarif.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        elChipTarif.forEach(function (b) { b.classList.remove('aktif'); });
+        btn.classList.add('aktif');
+        tarifPersen = parseFloat(btn.dataset.nilai);
+        hitung();
+      });
+    });
+
+    hitung();
+  </script>
+</body>
+</html>

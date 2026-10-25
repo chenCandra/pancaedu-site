@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template Surat/SK Otomatis | Kotak Alat PancaEdu</title>
+<meta name="description" content="Isi form sederhana (nama, jabatan, tanggal, keperluan), langsung tersusun jadi draf surat siap cetak -- Surat Keterangan, Surat Tugas, atau Surat Undangan.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 56rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--biru), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .tata-letak { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 52rem) { .tata-letak { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+  .baris-2kol { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  @media (max-width: 22rem) { .baris-2kol { grid-template-columns: 1fr; } }
+
+  .panel-cetak {
+    position: sticky; top: 1.5rem;
+    background: #fff; border: 1px solid var(--garis); box-shadow: var(--bayangan-kuat);
+    padding: 2.5rem 2rem; min-height: 32rem; font-size: 0.875rem; line-height: 1.7;
+  }
+  .panel-cetak .kop { text-align: center; border-bottom: 3px double var(--tinta); padding-bottom: 0.75rem; margin-bottom: 1.5rem; }
+  .panel-cetak .kop .nama-sekolah { font-weight: 800; font-size: 1.1rem; text-transform: uppercase; }
+  .panel-cetak .judul-surat { text-align: center; font-weight: 800; text-decoration: underline; margin-bottom: 0.25rem; text-transform: uppercase; }
+  .panel-cetak .nomor-surat { text-align: center; margin-bottom: 1.25rem; }
+  .panel-cetak table.data-diri { border-collapse: collapse; margin: 0.75rem 0; }
+  .panel-cetak table.data-diri td { padding: 0.1rem 0.5rem 0.1rem 0; vertical-align: top; }
+  .panel-cetak .ttd-blok { margin-top: 2.5rem; text-align: right; }
+  .panel-cetak .ttd-blok .ruang-ttd { height: 4rem; }
+
+  .baris-tombol-print { display: flex; gap: 0.6rem; margin-top: 1rem; }
+
+  @media print {
+    body { background: #fff; }
+    .panggung { max-width: none; padding: 0; }
+    .tata-letak { display: block; }
+    .panel-cetak { box-shadow: none; border: none; position: static; padding: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor no-print" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang no-print">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat no-print">
+      <h1>📄 Template Surat/SK Otomatis</h1>
+      <p>Isi form di sebelah kiri, pratinjau surat langsung tersusun di kanan -- siap dicetak.</p>
+    </header>
+
+    <div class="tata-letak">
+      <div class="kartu-panel no-print" id="panel-form">
+        <div class="bidang">
+          <label for="select-jenis">Jenis Surat</label>
+          <select id="select-jenis">
+            <option value="keterangan">Surat Keterangan</option>
+            <option value="tugas">Surat Tugas</option>
+            <option value="undangan">Surat Undangan</option>
+          </select>
+        </div>
+
+        <div class="bidang"><label for="f-sekolah">Nama Sekolah</label><input type="text" id="f-sekolah" placeholder="mis. SMA Negeri 1 Contoh"></div>
+        <div class="baris-2kol">
+          <div class="bidang"><label for="f-nomor">Nomor Surat</label><input type="text" id="f-nomor" placeholder="mis. 421.3/045/2026"></div>
+          <div class="bidang"><label for="f-tanggal">Tanggal Surat</label><input type="date" id="f-tanggal"></div>
+        </div>
+
+        <div id="bidang-khusus"></div>
+
+        <hr style="border:none;border-top:1px solid var(--garis);margin:1.25rem 0;">
+        <div class="bidang"><label for="f-kepsek">Nama Kepala Sekolah</label><input type="text" id="f-kepsek" placeholder="mis. Drs. Contoh Nama, M.Pd."></div>
+        <div class="bidang"><label for="f-nip">NIP Kepala Sekolah</label><input type="text" id="f-nip" placeholder="mis. 19700101 199001 1 001"></div>
+
+        <div class="baris-tombol-print">
+          <button class="tombol" id="btn-print">🖨️ Cetak / Simpan PDF</button>
+        </div>
+      </div>
+
+      <div class="panel-cetak" id="panel-cetak"></div>
+    </div>
+  </div>
+
+  <script>
+    var elSelectJenis = document.getElementById('select-jenis');
+    var elBidangKhusus = document.getElementById('bidang-khusus');
+    var elPanelCetak = document.getElementById('panel-cetak');
+    var elBtnPrint = document.getElementById('btn-print');
+
+    var BIDANG_KHUSUS = {
+      keterangan: [
+        { id: 'k-nama', label: 'Nama yang Diterangkan', tipe: 'text', placeholder: 'mis. Siti Rahma' },
+        { id: 'k-nis', label: 'NIS / NIP', tipe: 'text', placeholder: 'mis. 2026.10.045' },
+        { id: 'k-status', label: 'Status', tipe: 'text', placeholder: 'mis. Siswa Kelas XII IPA 1' },
+        { id: 'k-keperluan', label: 'Isi Keterangan', tipe: 'textarea', placeholder: 'mis. benar telah menyelesaikan pendidikan dan dinyatakan LULUS pada tahun ajaran 2025/2026.' },
+      ],
+      tugas: [
+        { id: 't-nama', label: 'Nama yang Ditugaskan', tipe: 'text', placeholder: 'mis. Ahmad Fauzi, S.Pd.' },
+        { id: 't-jabatan', label: 'Jabatan', tipe: 'text', placeholder: 'mis. Guru Mata Pelajaran Fisika' },
+        { id: 't-tugas', label: 'Tugas yang Diberikan', tipe: 'textarea', placeholder: 'mis. menjadi pengawas ruang pada Penilaian Akhir Semester Ganjil.' },
+        { id: 't-tanggal', label: 'Tanggal Pelaksanaan', tipe: 'text', placeholder: 'mis. 1-5 Desember 2026' },
+        { id: 't-tempat', label: 'Tempat', tipe: 'text', placeholder: 'mis. Ruang Ujian SMA Negeri 1 Contoh' },
+      ],
+      undangan: [
+        { id: 'u-tujuan', label: 'Ditujukan Kepada', tipe: 'text', placeholder: 'mis. Seluruh Wali Kelas X, XI, dan XII' },
+        { id: 'u-acara', label: 'Acara', tipe: 'text', placeholder: 'mis. Rapat Koordinasi Persiapan Ujian Akhir Semester' },
+        { id: 'u-hari', label: 'Hari, Tanggal Acara', tipe: 'text', placeholder: 'mis. Senin, 1 Desember 2026' },
+        { id: 'u-waktu', label: 'Waktu', tipe: 'text', placeholder: 'mis. 09.00 WIB - selesai' },
+        { id: 'u-tempat', label: 'Tempat Acara', tipe: 'text', placeholder: 'mis. Ruang Guru' },
+      ],
+    };
+
+    function escapeHtml(teks) {
+      var div = document.createElement('div');
+      div.textContent = teks || '';
+      return div.innerHTML;
+    }
+
+    function nilai(id) {
+      var el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    function formatTanggalIndo(iso) {
+      if (!iso) return '......................';
+      var d = new Date(iso + 'T00:00:00');
+      if (isNaN(d.getTime())) return '......................';
+      var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      return d.getDate() + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function renderBidangKhusus() {
+      var jenis = elSelectJenis.value;
+      elBidangKhusus.innerHTML = '';
+      BIDANG_KHUSUS[jenis].forEach(function (b) {
+        var wrap = document.createElement('div');
+        wrap.className = 'bidang';
+        var inputHtml = b.tipe === 'textarea'
+          ? '<textarea id="' + b.id + '" placeholder="' + b.placeholder + '" rows="3"></textarea>'
+          : '<input type="text" id="' + b.id + '" placeholder="' + b.placeholder + '">';
+        wrap.innerHTML = '<label for="' + b.id + '">' + b.label + '</label>' + inputHtml;
+        elBidangKhusus.appendChild(wrap);
+      });
+      pasangListenerInput();
+      renderSurat();
+    }
+
+    function kopSurat() {
+      return '<div class="kop"><div class="nama-sekolah">' + (escapeHtml(nilai('f-sekolah')) || '[Nama Sekolah]') + '</div></div>';
+    }
+
+    function ttdBlok() {
+      return (
+        '<div class="ttd-blok">' +
+        '<div>' + (escapeHtml(nilai('f-sekolah') ? 'Kepala ' + escapeHtml(nilai('f-sekolah')) : 'Kepala Sekolah')) + ',</div>' +
+        '<div class="ruang-ttd"></div>' +
+        '<div><strong>' + (escapeHtml(nilai('f-kepsek')) || '......................') + '</strong></div>' +
+        '<div>NIP. ' + (escapeHtml(nilai('f-nip')) || '......................') + '</div>' +
+        '</div>'
+      );
+    }
+
+    function renderKeterangan() {
+      return (
+        kopSurat() +
+        '<div class="judul-surat">Surat Keterangan</div>' +
+        '<div class="nomor-surat">Nomor: ' + (escapeHtml(nilai('f-nomor')) || '......................') + '</div>' +
+        '<p>Yang bertanda tangan di bawah ini, Kepala ' + (escapeHtml(nilai('f-sekolah')) || '[Nama Sekolah]') + ', dengan ini menerangkan bahwa:</p>' +
+        '<table class="data-diri">' +
+        '<tr><td>Nama</td><td>:</td><td><strong>' + (escapeHtml(nilai('k-nama')) || '......................') + '</strong></td></tr>' +
+        '<tr><td>NIS/NIP</td><td>:</td><td>' + (escapeHtml(nilai('k-nis')) || '......................') + '</td></tr>' +
+        '<tr><td>Status</td><td>:</td><td>' + (escapeHtml(nilai('k-status')) || '......................') + '</td></tr>' +
+        '</table>' +
+        '<p>' + (escapeHtml(nilai('k-keperluan')) || '......................') + '</p>' +
+        '<p>Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>' +
+        '<p style="text-align:right;">' + formatTanggalIndo(nilai('f-tanggal')) + '</p>' +
+        ttdBlok()
+      );
+    }
+
+    function renderTugas() {
+      return (
+        kopSurat() +
+        '<div class="judul-surat">Surat Tugas</div>' +
+        '<div class="nomor-surat">Nomor: ' + (escapeHtml(nilai('f-nomor')) || '......................') + '</div>' +
+        '<p>Yang bertanda tangan di bawah ini, Kepala ' + (escapeHtml(nilai('f-sekolah')) || '[Nama Sekolah]') + ', dengan ini menugaskan:</p>' +
+        '<table class="data-diri">' +
+        '<tr><td>Nama</td><td>:</td><td><strong>' + (escapeHtml(nilai('t-nama')) || '......................') + '</strong></td></tr>' +
+        '<tr><td>Jabatan</td><td>:</td><td>' + (escapeHtml(nilai('t-jabatan')) || '......................') + '</td></tr>' +
+        '</table>' +
+        '<p>Untuk ' + (escapeHtml(nilai('t-tugas')) || '......................') + '</p>' +
+        '<table class="data-diri">' +
+        '<tr><td>Tanggal Pelaksanaan</td><td>:</td><td>' + (escapeHtml(nilai('t-tanggal')) || '......................') + '</td></tr>' +
+        '<tr><td>Tempat</td><td>:</td><td>' + (escapeHtml(nilai('t-tempat')) || '......................') + '</td></tr>' +
+        '</table>' +
+        '<p>Demikian surat tugas ini dibuat untuk dilaksanakan dengan penuh tanggung jawab.</p>' +
+        '<p style="text-align:right;">' + formatTanggalIndo(nilai('f-tanggal')) + '</p>' +
+        ttdBlok()
+      );
+    }
+
+    function renderUndangan() {
+      return (
+        kopSurat() +
+        '<div class="judul-surat">Surat Undangan</div>' +
+        '<div class="nomor-surat">Nomor: ' + (escapeHtml(nilai('f-nomor')) || '......................') + '</div>' +
+        '<p>Kepada Yth.<br><strong>' + (escapeHtml(nilai('u-tujuan')) || '......................') + '</strong><br>di tempat</p>' +
+        '<p>Dengan hormat, kami mengundang Bapak/Ibu untuk hadir pada:</p>' +
+        '<table class="data-diri">' +
+        '<tr><td>Acara</td><td>:</td><td>' + (escapeHtml(nilai('u-acara')) || '......................') + '</td></tr>' +
+        '<tr><td>Hari, Tanggal</td><td>:</td><td>' + (escapeHtml(nilai('u-hari')) || '......................') + '</td></tr>' +
+        '<tr><td>Waktu</td><td>:</td><td>' + (escapeHtml(nilai('u-waktu')) || '......................') + '</td></tr>' +
+        '<tr><td>Tempat</td><td>:</td><td>' + (escapeHtml(nilai('u-tempat')) || '......................') + '</td></tr>' +
+        '</table>' +
+        '<p>Demikian undangan ini kami sampaikan. Atas perhatian dan kehadiran Bapak/Ibu, kami ucapkan terima kasih.</p>' +
+        '<p style="text-align:right;">' + formatTanggalIndo(nilai('f-tanggal')) + '</p>' +
+        ttdBlok()
+      );
+    }
+
+    function renderSurat() {
+      var jenis = elSelectJenis.value;
+      if (jenis === 'keterangan') elPanelCetak.innerHTML = renderKeterangan();
+      else if (jenis === 'tugas') elPanelCetak.innerHTML = renderTugas();
+      else elPanelCetak.innerHTML = renderUndangan();
+    }
+
+    function pasangListenerInput() {
+      document.querySelectorAll('#panel-form input, #panel-form textarea').forEach(function (el) {
+        el.removeEventListener('input', renderSurat);
+        el.addEventListener('input', renderSurat);
+      });
+    }
+
+    elSelectJenis.addEventListener('change', renderBidangKhusus);
+    elBtnPrint.addEventListener('click', function () { window.print(); });
+
+    pasangListenerInput();
+    renderBidangKhusus();
+  </script>
+</body>
+</html>

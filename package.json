@@ -14,7 +14,8 @@
     "test:duel-meriam": "node scripts/test-fisika-duel-meriam.mjs",
     "test:balap-mobil": "node scripts/test-fisika-balap-mobil.mjs",
     "test:perang-cacing": "node scripts/test-fisika-perang-cacing.mjs",
-    "test:games-json": "node scripts/validate-games-json.mjs"
+    "test:games-json": "node scripts/validate-games-json.mjs",
+    "test:tools-json": "node scripts/validate-tools-json.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

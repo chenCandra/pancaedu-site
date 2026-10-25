@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer Ujian Layar Besar | Kotak Alat PancaEdu</title>
+<meta name="description" content="Hitung mundur waktu ujian dengan angka besar dan jelas -- cocok ditampilkan lewat proyektor di depan kelas.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  body { padding-bottom: 3rem; }
+  .panggung { max-width: 44rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--oranye), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .panel-setel { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; justify-content: center; }
+  .panel-setel .bidang { margin-bottom: 0; min-width: 7rem; }
+  .baris-cepat { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+
+  .layar-timer {
+    text-align: center;
+    padding: 3rem 1rem;
+    border-radius: var(--radius-besar);
+    background: var(--kertas-alt);
+    margin-top: 1.5rem;
+    transition: background 0.3s ease;
+  }
+  .layar-timer.waspada { background: var(--kuning-lembut); }
+  .layar-timer.kritis { background: var(--pink-lembut); animation: denyut 1s infinite; }
+  @keyframes denyut { 0%, 100% { opacity: 1; } 50% { opacity: 0.75; } }
+
+  .angka-timer {
+    font-family: 'Courier New', monospace;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 16vw, 8rem);
+    line-height: 1;
+    color: var(--tinta);
+    font-variant-numeric: tabular-nums;
+  }
+  .layar-timer.waspada .angka-timer { color: var(--oranye); }
+  .layar-timer.kritis .angka-timer { color: var(--pink); }
+
+  .label-timer { margin-top: 0.75rem; font-family: var(--font-judul); font-weight: 700; color: var(--tinta-lembut); font-size: 1.1rem; }
+
+  .baris-tombol-timer { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+  .baris-tombol-timer .tombol { min-width: 8rem; }
+
+  :fullscreen .panggung { padding-top: 1rem; }
+  :fullscreen .tombol-kembali-mengambang, :fullscreen .judul-alat, :fullscreen .kartu-panel.no-fullscreen { display: none; }
+  :fullscreen body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  :fullscreen .layar-timer { margin: 0; width: 100%; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>⏱️ Timer Ujian Layar Besar</h1>
+      <p>Atur waktu, tampilkan lewat proyektor, dan biarkan siswa memantau sendiri sisa waktunya.</p>
+    </header>
+
+    <div class="kartu-panel no-fullscreen">
+      <div class="panel-setel">
+        <div class="bidang">
+          <label for="input-menit">Menit</label>
+          <input type="number" id="input-menit" min="0" max="300" value="60">
+        </div>
+        <div class="bidang">
+          <label for="input-detik">Detik</label>
+          <input type="number" id="input-detik" min="0" max="59" value="0">
+        </div>
+        <div class="bidang">
+          <label for="input-label">Label (opsional)</label>
+          <input type="text" id="input-label" placeholder="mis. Ujian Fisika Bab 3">
+        </div>
+      </div>
+      <div class="baris-cepat">
+        <button class="opsi-btn tombol tombol-luar" data-menit="10">10 menit</button>
+        <button class="opsi-btn tombol tombol-luar" data-menit="30">30 menit</button>
+        <button class="opsi-btn tombol tombol-luar" data-menit="60">60 menit</button>
+        <button class="opsi-btn tombol tombol-luar" data-menit="90">90 menit</button>
+        <button class="opsi-btn tombol tombol-luar" data-menit="120">120 menit</button>
+      </div>
+    </div>
+
+    <div class="layar-timer" id="layar-timer">
+      <div class="angka-timer" id="angka-timer">60:00</div>
+      <div class="label-timer" id="label-timer-tampil"></div>
+    </div>
+
+    <div class="baris-tombol-timer">
+      <button class="tombol" id="btn-mulai">▶️ Mulai</button>
+      <button class="tombol tombol-luar" id="btn-jeda" disabled>⏸️ Jeda</button>
+      <button class="tombol tombol-luar" id="btn-reset">🔄 Reset</button>
+      <button class="tombol tombol-luar" id="btn-tambah">+1 Menit</button>
+      <button class="tombol tombol-luar" id="btn-layar-penuh">⛶ Layar Penuh</button>
+      <button class="tombol tombol-luar" id="btn-mute">🔊</button>
+    </div>
+  </div>
+
+  <script>
+    var elInputMenit = document.getElementById('input-menit');
+    var elInputDetik = document.getElementById('input-detik');
+    var elInputLabel = document.getElementById('input-label');
+    var elAngka = document.getElementById('angka-timer');
+    var elLabelTampil = document.getElementById('label-timer-tampil');
+    var elLayar = document.getElementById('layar-timer');
+    var elBtnMulai = document.getElementById('btn-mulai');
+    var elBtnJeda = document.getElementById('btn-jeda');
+    var elBtnReset = document.getElementById('btn-reset');
+    var elBtnTambah = document.getElementById('btn-tambah');
+    var elBtnLayarPenuh = document.getElementById('btn-layar-penuh');
+    var elBtnMute = document.getElementById('btn-mute');
+
+    var sisaDetik = 60 * 60;
+    var totalAwalDetik = sisaDetik;
+    var berjalan = false;
+    var waktuAkhirMs = null; // epoch ms kapan timer harus selesai -- dihitung dari waktu asli, bukan cuma ngurangi 1 tiap interval (biar tidak drift)
+    var intervalId = null;
+    var muted = false;
+    var audioCtx = null;
+
+    function formatWaktu(total) {
+      var m = Math.floor(total / 60);
+      var s = total % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function perbaruiTampilan() {
+      elAngka.textContent = formatWaktu(Math.max(0, sisaDetik));
+      elLabelTampil.textContent = elInputLabel.value.trim();
+      elLayar.classList.toggle('waspada', sisaDetik <= 300 && sisaDetik > 60);
+      elLayar.classList.toggle('kritis', sisaDetik <= 60 && sisaDetik > 0);
+    }
+
+    function bunyiSelesai() {
+      if (muted) return;
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new AC();
+        [0, 300, 600].forEach(function (delay) {
+          setTimeout(function () {
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+          }, delay);
+        });
+      } catch (e) { /* abaikan kalau Web Audio tidak tersedia */ }
+    }
+
+    function ambilInputDetik() {
+      var m = Math.max(0, parseInt(elInputMenit.value, 10) || 0);
+      var s = Math.max(0, Math.min(59, parseInt(elInputDetik.value, 10) || 0));
+      return m * 60 + s;
+    }
+
+    function tik() {
+      var sisaMs = waktuAkhirMs - Date.now();
+      sisaDetik = Math.max(0, Math.round(sisaMs / 1000));
+      perbaruiTampilan();
+      if (sisaDetik <= 0) {
+        hentikan();
+        bunyiSelesai();
+      }
+    }
+
+    function mulai() {
+      if (berjalan) return;
+      if (sisaDetik <= 0) sisaDetik = ambilInputDetik();
+      waktuAkhirMs = Date.now() + sisaDetik * 1000;
+      berjalan = true;
+      intervalId = setInterval(tik, 250);
+      elBtnMulai.disabled = true;
+      elBtnJeda.disabled = false;
+    }
+
+    function hentikan() {
+      berjalan = false;
+      clearInterval(intervalId);
+      elBtnMulai.disabled = false;
+      elBtnJeda.disabled = true;
+    }
+
+    function reset() {
+      hentikan();
+      sisaDetik = ambilInputDetik();
+      totalAwalDetik = sisaDetik;
+      perbaruiTampilan();
+    }
+
+    elBtnMulai.addEventListener('click', mulai);
+    elBtnJeda.addEventListener('click', hentikan);
+    elBtnReset.addEventListener('click', reset);
+    elBtnTambah.addEventListener('click', function () {
+      sisaDetik += 60;
+      if (berjalan) waktuAkhirMs += 60000;
+      perbaruiTampilan();
+    });
+
+    [elInputMenit, elInputDetik].forEach(function (el) {
+      el.addEventListener('change', function () { if (!berjalan) reset(); });
+    });
+
+    document.querySelectorAll('.baris-cepat .opsi-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        elInputMenit.value = btn.dataset.menit;
+        elInputDetik.value = 0;
+        reset();
+      });
+    });
+
+    elBtnLayarPenuh.addEventListener('click', function () {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(function () {});
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    elBtnMute.addEventListener('click', function () {
+      muted = !muted;
+      elBtnMute.textContent = muted ? '🔇' : '🔊';
+    });
+
+    reset();
+  </script>
+</body>
+</html>

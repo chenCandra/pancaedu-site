@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Nilai &amp; Rata-rata | Kotak Alat PancaEdu</title>
+<meta name="description" content="Tempel daftar nilai siswa, langsung dapat rata-rata, nilai tertinggi/terendah, dan jumlah yang tuntas/belum tuntas berdasarkan KKM.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 48rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--hijau), var(--biru)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .baris-2kol { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 28rem) { .baris-2kol { grid-template-columns: 2fr 1fr; } }
+
+  .tombol-aksi { display: block; width: 100%; text-align: center; font-size: 1.0625rem; padding: 1rem; margin-top: 0.5rem; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 1.5rem; }
+  @media (min-width: 32rem) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+  .stat-kotak { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem; text-align: center; }
+  .stat-kotak .k { font-size: 0.75rem; color: var(--tinta-lembut); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+  .stat-kotak .v { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.4rem; margin-top: 0.25rem; }
+  .stat-kotak .sub { font-size: 0.75rem; color: var(--tinta-lembut); margin-top: 0.2rem; }
+  .stat-hijau .v { color: var(--hijau); }
+  .stat-pink .v { color: var(--pink); }
+  .stat-biru .v { color: var(--biru); }
+
+  table.tabel-nilai { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+  table.tabel-nilai th, table.tabel-nilai td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--garis); }
+  table.tabel-nilai th { font-family: var(--font-judul); font-size: 0.8rem; color: var(--tinta-lembut); }
+  table.tabel-nilai td.kol-nilai { font-family: 'Courier New', monospace; font-weight: 700; }
+  .status-tuntas { color: var(--hijau); font-weight: 700; }
+  .status-belum { color: var(--pink); font-weight: 700; }
+
+  .pesan-kosong-hasil { text-align: center; color: var(--tinta-lembut); padding: 2rem 1rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>📊 Kalkulator Nilai &amp; Rata-rata</h1>
+      <p>Tempel daftar nilai siswa, langsung dapat ringkasan lengkapnya.</p>
+    </header>
+
+    <div class="kartu-panel">
+      <div class="baris-2kol">
+        <div class="bidang">
+          <label for="input-nilai">Daftar Nilai (satu siswa per baris)</label>
+          <textarea id="input-nilai" rows="10" placeholder="Format bebas, contoh:&#10;Budi, 85&#10;Siti, 92&#10;Andi, 60&#10;&#10;atau cukup angkanya saja:&#10;85&#10;92&#10;60"></textarea>
+          <span class="bidang-bantuan">Boleh format "Nama, Nilai" atau cukup angka saja (satu per baris).</span>
+        </div>
+        <div class="bidang">
+          <label for="input-kkm">KKM</label>
+          <input type="number" id="input-kkm" min="0" max="100" value="75">
+          <span class="bidang-bantuan">Batas nilai tuntas.</span>
+        </div>
+      </div>
+      <button class="tombol tombol-aksi" id="btn-hitung">📊 Hitung Sekarang!</button>
+    </div>
+
+    <div class="kartu-panel" id="kartu-hasil" style="display:none; margin-top: 1.25rem;">
+      <div id="hasil-isi"></div>
+    </div>
+  </div>
+
+  <script>
+    var elInputNilai = document.getElementById('input-nilai');
+    var elInputKkm = document.getElementById('input-kkm');
+    var elBtnHitung = document.getElementById('btn-hitung');
+    var elKartuHasil = document.getElementById('kartu-hasil');
+    var elHasilIsi = document.getElementById('hasil-isi');
+
+    function parseBaris(baris, nomor) {
+      baris = baris.trim();
+      if (!baris) return null;
+
+      var nama = null, nilaiTeks = null;
+      if (baris.indexOf(',') !== -1) {
+        var bagian = baris.split(',');
+        nilaiTeks = bagian.pop();
+        nama = bagian.join(',').trim();
+      } else {
+        var token = baris.split(/\s+/);
+        var kandidatAngka = token[token.length - 1];
+        if (!isNaN(parseFloat(kandidatAngka)) && token.length > 1) {
+          nilaiTeks = kandidatAngka;
+          nama = token.slice(0, -1).join(' ');
+        } else {
+          nilaiTeks = baris;
+        }
+      }
+
+      var nilai = parseFloat((nilaiTeks || '').replace(',', '.'));
+      if (isNaN(nilai)) return null;
+      return { nama: nama && nama.trim() ? nama.trim() : 'Siswa ' + nomor, nilai: nilai };
+    }
+
+    function hitungSekarang() {
+      var baris = elInputNilai.value.split('\n');
+      var data = [];
+      baris.forEach(function (b, i) {
+        var hasil = parseBaris(b, data.length + 1);
+        if (hasil) data.push(hasil);
+      });
+
+      elKartuHasil.style.display = 'block';
+
+      if (data.length === 0) {
+        elHasilIsi.innerHTML = '<p class="pesan-kosong-hasil">Belum ada data nilai yang terbaca. Cek lagi format isiannya ya.</p>';
+        return;
+      }
+
+      var kkm = parseFloat(elInputKkm.value) || 0;
+      var jumlah = data.reduce(function (a, d) { return a + d.nilai; }, 0);
+      var rata = jumlah / data.length;
+      var tertinggi = data.reduce(function (a, d) { return d.nilai > a.nilai ? d : a; }, data[0]);
+      var terendah = data.reduce(function (a, d) { return d.nilai < a.nilai ? d : a; }, data[0]);
+      var tuntas = data.filter(function (d) { return d.nilai >= kkm; });
+      var persenTuntas = (tuntas.length / data.length) * 100;
+
+      var html = '<div class="stat-grid">';
+      html += '<div class="stat-kotak stat-biru"><div class="k">Jumlah Siswa</div><div class="v">' + data.length + '</div></div>';
+      html += '<div class="stat-kotak stat-hijau"><div class="k">Rata-rata</div><div class="v">' + rata.toFixed(2) + '</div></div>';
+      html += '<div class="stat-kotak stat-biru"><div class="k">Nilai Tertinggi</div><div class="v">' + tertinggi.nilai + '</div><div class="sub">' + tertinggi.nama + '</div></div>';
+      html += '<div class="stat-kotak stat-pink"><div class="k">Nilai Terendah</div><div class="v">' + terendah.nilai + '</div><div class="sub">' + terendah.nama + '</div></div>';
+      html += '<div class="stat-kotak stat-hijau"><div class="k">Tuntas (≥ KKM ' + kkm + ')</div><div class="v">' + tuntas.length + '</div></div>';
+      html += '<div class="stat-kotak stat-pink"><div class="k">Belum Tuntas</div><div class="v">' + (data.length - tuntas.length) + '</div><div class="sub">' + persenTuntas.toFixed(1) + '% tuntas</div></div>';
+      html += '</div>';
+
+      html += '<table class="tabel-nilai"><thead><tr><th>#</th><th>Nama</th><th>Nilai</th><th>Status</th></tr></thead><tbody>';
+      data
+        .slice()
+        .sort(function (a, b) { return b.nilai - a.nilai; })
+        .forEach(function (d, i) {
+          var statusKelas = d.nilai >= kkm ? 'status-tuntas' : 'status-belum';
+          var statusTeks = d.nilai >= kkm ? 'Tuntas' : 'Belum Tuntas';
+          html += '<tr><td>' + (i + 1) + '</td><td>' + d.nama + '</td><td class="kol-nilai">' + d.nilai + '</td><td class="' + statusKelas + '">' + statusTeks + '</td></tr>';
+        });
+      html += '</tbody></table>';
+
+      elHasilIsi.innerHTML = html;
+    }
+
+    elBtnHitung.addEventListener('click', hitungSekarang);
+  </script>
+</body>
+</html>

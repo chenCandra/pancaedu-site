@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kotak Alat PancaEdu</title>
+<meta name="description" content="Kumpulan alat bantu praktis buat guru, murid, kepala sekolah, dan bendahara -- langsung dipakai di browser, tanpa install.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .beranda-header { padding-block: 3rem 1rem; text-align: center; }
+  .beranda-header .eyebrow {
+    font-family: var(--font-judul); font-weight: 700; color: var(--biru);
+    font-size: 0.9rem; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .beranda-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem); margin-block: 0.5rem 0.75rem;
+    background: linear-gradient(90deg, var(--biru), var(--hijau));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .beranda-header p { max-width: 36rem; margin-inline: auto; color: var(--tinta-lembut); font-size: 1.0625rem; }
+
+  .panel-filter {
+    background: #fff; border: 3px solid var(--garis); border-radius: var(--radius-besar);
+    padding: 1.25rem 1.5rem; margin-block: 2rem; display: flex; flex-direction: column; gap: 1rem;
+  }
+  .input-cari-wrap { display: flex; align-items: center; gap: 0.6rem; background: var(--kertas-alt); border-radius: var(--radius-tombol); padding: 0.75rem 1.25rem; }
+  .input-cari-wrap svg { flex-shrink: 0; color: var(--tinta-lembut); }
+  #input-cari { border: none; background: transparent; font-family: var(--font-teks); font-size: 1rem; width: 100%; outline: none; color: var(--tinta); }
+  .baris-chip { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .baris-chip .label-chip { font-family: var(--font-judul); font-weight: 700; font-size: 0.8125rem; color: var(--tinta-lembut); margin-right: 0.25rem; }
+
+  .grid-alat { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1.5rem; padding-block: 0.5rem 3rem; }
+  .pesan-kosong, .pesan-error {
+    grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem;
+    background: var(--kertas-alt); border-radius: var(--radius-besar); color: var(--tinta-lembut);
+    font-size: 1.0625rem; font-weight: 600;
+  }
+
+  .catatan-footer {
+    background: var(--kertas-alt); border-radius: var(--radius-besar); padding: 2rem; margin-block: 2rem 4rem;
+    text-align: center;
+  }
+  .catatan-footer p { color: var(--tinta-lembut); margin-bottom: 1.25rem; }
+
+  @media (max-width: 26rem) { .panel-filter { padding: 1rem; } }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <main class="kontainer">
+    <header class="beranda-header">
+      <p class="eyebrow">🧰 Kotak Alat</p>
+      <h1>Kotak Alat PancaEdu</h1>
+      <p>
+        Alat bantu praktis buat kegiatan sehari-hari di sekolah -- buat guru, murid, kepala sekolah,
+        maupun bendahara. Semua jalan langsung di browser, tanpa install dan tanpa perlu akun.
+      </p>
+    </header>
+
+    <section class="panel-filter">
+      <div class="input-cari-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="input-cari" type="search" placeholder="Cari nama alat... (mis. 'nilai', 'kwitansi')" aria-label="Cari alat">
+      </div>
+      <div class="baris-chip">
+        <span class="label-chip">Buat Siapa:</span>
+        <div id="chip-peran" class="baris-chip"></div>
+      </div>
+    </section>
+
+    <section class="grid-alat" id="grid-alat" aria-live="polite"></section>
+    <p class="pesan-kosong" id="pesan-kosong" hidden>😅 Belum ada alat untuk pilihan ini. Coba filter lain ya!</p>
+
+    <section class="catatan-footer">
+      <p>
+        Semua perhitungan jalan langsung di perangkatmu (browser) -- tidak ada data yang dikirim ke
+        server mana pun. Untuk alat yang menyimpan isian (mis. Checklist Tugas), datanya tersimpan di
+        browser perangkat ini saja.
+      </p>
+      <a href="https://pancaedu.web.id" class="tombol tombol-luar">← Kembali ke Beranda PancaEdu</a>
+    </section>
+  </main>
+
+  <script src="/tools/assets/katalog.js"></script>
+</body>
+</html>

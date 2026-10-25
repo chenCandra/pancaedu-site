@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pengundi Acak | Kotak Alat PancaEdu</title>
+<meta name="description" content="Masukkan daftar nama, langsung diacak jadi kelompok, urutan maju, atau jadwal piket -- adil dan cepat tanpa kertas undian.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 42rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--biru), var(--ungu)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .baris-opsi { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+  .opsi-btn {
+    padding: 0.65rem 1.15rem; border-radius: var(--radius-sedang); border: 2px solid var(--garis);
+    background: #fff; font-family: var(--font-teks); font-weight: 700; font-size: 0.9rem;
+    cursor: pointer; color: var(--tinta-lembut);
+  }
+  .opsi-btn.aktif { border-color: var(--biru); color: var(--biru); background: var(--biru-lembut); }
+
+  .baris-2kol { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 32rem) { .baris-2kol { grid-template-columns: 1fr 1fr; } }
+
+  .tombol-aksi { display: block; width: 100%; text-align: center; font-size: 1.0625rem; padding: 1rem; margin-top: 0.5rem; }
+
+  .hasil-wrap { margin-top: 1.5rem; }
+  .grid-kelompok { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 32rem) { .grid-kelompok { grid-template-columns: 1fr 1fr; } }
+  .kartu-kelompok { background: var(--kertas-alt); border-radius: var(--radius-sedang); padding: 1rem 1.25rem; }
+  .kartu-kelompok h3 { font-size: 1rem; color: var(--biru); margin-bottom: 0.5rem; }
+  .kartu-kelompok ol { margin: 0; padding-left: 1.25rem; }
+  .kartu-kelompok li { margin-bottom: 0.2rem; }
+
+  .daftar-urutan { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .daftar-urutan li {
+    display: flex; align-items: center; gap: 0.75rem; background: var(--kertas-alt);
+    border-radius: var(--radius-sedang); padding: 0.7rem 1rem;
+  }
+  .nomor-urut {
+    flex-shrink: 0; width: 1.75rem; height: 1.75rem; border-radius: 50%; background: var(--biru); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;
+  }
+
+  .baris-tombol-hasil { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  .baris-tombol-hasil .tombol { flex: 1; min-width: 9rem; }
+  .pesan-kosong-hasil { text-align: center; color: var(--tinta-lembut); padding: 2rem 1rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>🎲 Pengundi Acak</h1>
+      <p>Masukkan daftar nama, pilih mau diacak jadi apa, lalu klik acak.</p>
+    </header>
+
+    <div class="kartu-panel">
+      <div class="bidang">
+        <label for="input-nama">Daftar Nama (satu nama per baris)</label>
+        <textarea id="input-nama" rows="8" placeholder="Contoh:&#10;Budi&#10;Siti&#10;Andi&#10;Dewi&#10;..."></textarea>
+        <span class="bidang-bantuan" id="jumlah-nama-info">0 nama terdeteksi.</span>
+      </div>
+
+      <div class="bidang">
+        <label>Mau diacak jadi apa?</label>
+        <div class="baris-opsi" data-grup="jenis">
+          <button class="opsi-btn aktif" data-nilai="urutan">🔢 Urutan Maju/Giliran</button>
+          <button class="opsi-btn" data-nilai="kelompok">👥 Bagi Kelompok</button>
+        </div>
+      </div>
+
+      <div class="baris-2kol" id="blok-kelompok" style="display:none;">
+        <div class="bidang">
+          <label for="input-jumlah-kelompok">Jumlah Kelompok</label>
+          <input type="number" id="input-jumlah-kelompok" min="2" max="20" value="4">
+        </div>
+        <div class="bidang">
+          <label for="input-label-kelompok">Label Kelompok (opsional, pisah koma)</label>
+          <input type="text" id="input-label-kelompok" placeholder="mis. Senin, Selasa, Rabu, ...">
+        </div>
+      </div>
+
+      <button class="tombol tombol-aksi" id="btn-acak">🎲 Acak Sekarang!</button>
+    </div>
+
+    <div class="kartu-panel hasil-wrap" id="kartu-hasil" style="display:none;">
+      <div id="hasil-isi"></div>
+      <div class="baris-tombol-hasil">
+        <button class="tombol" id="btn-acak-ulang">🔁 Acak Ulang</button>
+        <button class="tombol tombol-luar" id="btn-salin">📋 Salin Hasil</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var elInputNama = document.getElementById('input-nama');
+    var elInfoJumlah = document.getElementById('jumlah-nama-info');
+    var elChipJenis = document.querySelectorAll('[data-grup="jenis"] .opsi-btn');
+    var elBlokKelompok = document.getElementById('blok-kelompok');
+    var elJumlahKelompok = document.getElementById('input-jumlah-kelompok');
+    var elLabelKelompok = document.getElementById('input-label-kelompok');
+    var elBtnAcak = document.getElementById('btn-acak');
+    var elBtnAcakUlang = document.getElementById('btn-acak-ulang');
+    var elBtnSalin = document.getElementById('btn-salin');
+    var elKartuHasil = document.getElementById('kartu-hasil');
+    var elHasilIsi = document.getElementById('hasil-isi');
+
+    var jenisAktif = 'urutan';
+    var teksHasilUntukSalin = '';
+
+    function ambilDaftarNama() {
+      return elInputNama.value
+        .split('\n')
+        .map(function (s) { return s.trim(); })
+        .filter(function (s) { return s.length > 0; });
+    }
+
+    elInputNama.addEventListener('input', function () {
+      var n = ambilDaftarNama().length;
+      elInfoJumlah.textContent = n + ' nama terdeteksi.';
+    });
+
+    elChipJenis.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        elChipJenis.forEach(function (b) { b.classList.remove('aktif'); });
+        btn.classList.add('aktif');
+        jenisAktif = btn.dataset.nilai;
+        elBlokKelompok.style.display = jenisAktif === 'kelompok' ? 'grid' : 'none';
+      });
+    });
+
+    function kocok(larik) {
+      var hasil = larik.slice();
+      for (var i = hasil.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var sementara = hasil[i]; hasil[i] = hasil[j]; hasil[j] = sementara;
+      }
+      return hasil;
+    }
+
+    function renderUrutan(namaAcak) {
+      var html = '<ol class="daftar-urutan" style="list-style:none;">';
+      namaAcak.forEach(function (nama, i) {
+        html += '<li><span class="nomor-urut">' + (i + 1) + '</span><span>' + nama + '</span></li>';
+      });
+      html += '</ol>';
+      elHasilIsi.innerHTML = html;
+
+      teksHasilUntukSalin = namaAcak.map(function (n, i) { return (i + 1) + '. ' + n; }).join('\n');
+    }
+
+    function renderKelompok(namaAcak, jumlahKelompok, labelKustom) {
+      var kelompok = [];
+      for (var i = 0; i < jumlahKelompok; i++) kelompok.push([]);
+      namaAcak.forEach(function (nama, i) { kelompok[i % jumlahKelompok].push(nama); });
+
+      var label = labelKustom && labelKustom.length === jumlahKelompok
+        ? labelKustom
+        : kelompok.map(function (_, i) { return 'Kelompok ' + (i + 1); });
+
+      var html = '<div class="grid-kelompok">';
+      var teks = [];
+      kelompok.forEach(function (anggota, i) {
+        html += '<div class="kartu-kelompok"><h3>' + label[i] + '</h3><ol>';
+        anggota.forEach(function (nama) { html += '<li>' + nama + '</li>'; });
+        html += '</ol></div>';
+        teks.push(label[i] + ':\n' + anggota.map(function (n) { return '- ' + n; }).join('\n'));
+      });
+      html += '</div>';
+      elHasilIsi.innerHTML = html;
+      teksHasilUntukSalin = teks.join('\n\n');
+    }
+
+    function jalankanAcak() {
+      var nama = ambilDaftarNama();
+      if (nama.length < 2) {
+        elHasilIsi.innerHTML = '<p class="pesan-kosong-hasil">Masukkan minimal 2 nama dulu ya.</p>';
+        elKartuHasil.style.display = 'block';
+        teksHasilUntukSalin = '';
+        return;
+      }
+      var namaAcak = kocok(nama);
+      elKartuHasil.style.display = 'block';
+
+      if (jenisAktif === 'urutan') {
+        renderUrutan(namaAcak);
+      } else {
+        var jumlahKelompok = Math.max(2, Math.min(nama.length, parseInt(elJumlahKelompok.value, 10) || 4));
+        var labelKustom = elLabelKelompok.value.trim()
+          ? elLabelKelompok.value.split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s; })
+          : null;
+        renderKelompok(namaAcak, jumlahKelompok, labelKustom);
+      }
+      elKartuHasil.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    elBtnAcak.addEventListener('click', jalankanAcak);
+    elBtnAcakUlang.addEventListener('click', jalankanAcak);
+
+    elBtnSalin.addEventListener('click', function () {
+      if (!teksHasilUntukSalin) return;
+      navigator.clipboard.writeText(teksHasilUntukSalin).then(function () {
+        elBtnSalin.textContent = '✅ Tersalin!';
+        setTimeout(function () { elBtnSalin.textContent = '📋 Salin Hasil'; }, 1500);
+      }).catch(function () {
+        elBtnSalin.textContent = '⚠️ Gagal menyalin';
+        setTimeout(function () { elBtnSalin.textContent = '📋 Salin Hasil'; }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Rumus Fisika Cepat | Kotak Alat PancaEdu</title>
+<meta name="description" content="Pilih rumus (GLBB, gerak parabola, gaya Lorentz, Hukum Newton, dll), isi angka yang diketahui, langsung dapat hasilnya -- buat mengecek jawaban sendiri.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 38rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--ungu), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .formula-box {
+    background: #090d16; color: #e2e8f0; padding: 0.9rem 1.1rem; border-radius: var(--radius-sedang);
+    font-family: 'Courier New', monospace; font-size: 1.05rem; text-align: center; margin-bottom: 1.25rem;
+  }
+
+  .grid-var { display: grid; grid-template-columns: 1fr; gap: 0.9rem; }
+  @media (min-width: 28rem) { .grid-var { grid-template-columns: 1fr 1fr; } }
+  .bidang-var label { display: flex; justify-content: space-between; }
+  .bidang-var .satuan-label { color: var(--tinta-lembut); font-weight: 400; }
+  .bidang-var input { width: 100%; }
+  .bidang-var.terisi-kosong input { border-color: var(--ungu); background: var(--ungu-lembut); }
+
+  .tombol-aksi { display: block; width: 100%; text-align: center; font-size: 1.0625rem; padding: 1rem; margin-top: 1.25rem; }
+
+  .kotak-hasil { margin-top: 1.5rem; background: var(--ungu-lembut); border-radius: var(--radius-sedang); padding: 1.25rem; text-align: center; display: none; }
+  .kotak-hasil.tampil { display: block; }
+  .kotak-hasil .nilai-hasil { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.75rem; color: var(--ungu); word-break: break-word; }
+  .kotak-hasil.error { background: var(--pink-lembut); }
+  .kotak-hasil.error .nilai-hasil { color: var(--pink); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>🧮 Kalkulator Rumus Fisika Cepat</h1>
+      <p>Pilih rumus, isi semua angka yang kamu tahu, KOSONGKAN satu kotak yang ingin dicari.</p>
+    </header>
+
+    <div class="kartu-panel">
+      <div class="bidang">
+        <label for="select-rumus">Pilih Rumus</label>
+        <select id="select-rumus"></select>
+      </div>
+
+      <div class="formula-box" id="formula-tampil"></div>
+
+      <div class="grid-var" id="grid-var"></div>
+
+      <button class="tombol tombol-aksi" id="btn-hitung">🧮 Hitung!</button>
+
+      <div class="kotak-hasil" id="kotak-hasil">
+        <div class="nilai-hasil" id="nilai-hasil"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function akar(x) { return Math.sqrt(x); }
+    function deg2rad(d) { return (d * Math.PI) / 180; }
+    function rad2deg(r) { return (r * 180) / Math.PI; }
+
+    // Solver kuadrat a·t^2 + b·t + c = 0, ambil akar POSITIF (waktu fisis
+    // tidak boleh negatif) yang terkecil non-negatif. Kalau a~0, jadi linear.
+    function solveKuadratPositif(a, b, c) {
+      if (Math.abs(a) < 1e-12) {
+        if (Math.abs(b) < 1e-12) return NaN;
+        var tLinear = -c / b;
+        return tLinear >= 0 ? tLinear : NaN;
+      }
+      var D = b * b - 4 * a * c;
+      if (D < 0) return NaN;
+      var akarD = Math.sqrt(D);
+      var t1 = (-b + akarD) / (2 * a);
+      var t2 = (-b - akarD) / (2 * a);
+      var kandidat = [t1, t2].filter(function (t) { return t >= 0; }).sort(function (x, y) { return x - y; });
+      return kandidat.length ? kandidat[0] : NaN;
+    }
+
+    var RUMUS = {
+      glbb_v: {
+        nama: 'GLBB -- Kecepatan Akhir',
+        formula: 'v = v₀ + a·t',
+        vars: [
+          { kunci: 'v', label: 'Kecepatan Akhir (v)', satuan: 'm/s' },
+          { kunci: 'v0', label: 'Kecepatan Awal (v₀)', satuan: 'm/s' },
+          { kunci: 'a', label: 'Percepatan (a)', satuan: 'm/s²' },
+          { kunci: 't', label: 'Waktu (t)', satuan: 's' },
+        ],
+        solve: function (n, target) {
+          if (target === 'v') return n.v0 + n.a * n.t;
+          if (target === 'v0') return n.v - n.a * n.t;
+          if (target === 'a') return (n.v - n.v0) / n.t;
+          if (target === 't') return (n.v - n.v0) / n.a;
+        },
+      },
+      glbb_s: {
+        nama: 'GLBB -- Jarak Tempuh',
+        formula: 's = v₀·t + ½·a·t²',
+        vars: [
+          { kunci: 's', label: 'Jarak (s)', satuan: 'm' },
+          { kunci: 'v0', label: 'Kecepatan Awal (v₀)', satuan: 'm/s' },
+          { kunci: 'a', label: 'Percepatan (a)', satuan: 'm/s²' },
+          { kunci: 't', label: 'Waktu (t)', satuan: 's' },
+        ],
+        solve: function (n, target) {
+          if (target === 's') return n.v0 * n.t + 0.5 * n.a * n.t * n.t;
+          if (target === 'v0') return (n.s - 0.5 * n.a * n.t * n.t) / n.t;
+          if (target === 'a') return (2 * (n.s - n.v0 * n.t)) / (n.t * n.t);
+          if (target === 't') return solveKuadratPositif(0.5 * n.a, n.v0, -n.s);
+        },
+      },
+      newton2: {
+        nama: 'Hukum Newton II',
+        formula: 'F = m·a',
+        vars: [
+          { kunci: 'F', label: 'Gaya (F)', satuan: 'N' },
+          { kunci: 'm', label: 'Massa (m)', satuan: 'kg' },
+          { kunci: 'a', label: 'Percepatan (a)', satuan: 'm/s²' },
+        ],
+        solve: function (n, target) {
+          if (target === 'F') return n.m * n.a;
+          if (target === 'm') return n.F / n.a;
+          if (target === 'a') return n.F / n.m;
+        },
+      },
+      usaha: {
+        nama: 'Usaha (Kerja)',
+        formula: 'W = F·s',
+        vars: [
+          { kunci: 'W', label: 'Usaha (W)', satuan: 'J' },
+          { kunci: 'F', label: 'Gaya (F)', satuan: 'N' },
+          { kunci: 's', label: 'Perpindahan (s)', satuan: 'm' },
+        ],
+        solve: function (n, target) {
+          if (target === 'W') return n.F * n.s;
+          if (target === 'F') return n.W / n.s;
+          if (target === 's') return n.W / n.F;
+        },
+      },
+      energi_kinetik: {
+        nama: 'Energi Kinetik',
+        formula: 'Ek = ½·m·v²',
+        vars: [
+          { kunci: 'Ek', label: 'Energi Kinetik (Ek)', satuan: 'J' },
+          { kunci: 'm', label: 'Massa (m)', satuan: 'kg' },
+          { kunci: 'v', label: 'Kecepatan (v)', satuan: 'm/s' },
+        ],
+        solve: function (n, target) {
+          if (target === 'Ek') return 0.5 * n.m * n.v * n.v;
+          if (target === 'm') return (2 * n.Ek) / (n.v * n.v);
+          if (target === 'v') return akar((2 * n.Ek) / n.m);
+        },
+      },
+      energi_potensial: {
+        nama: 'Energi Potensial Gravitasi',
+        formula: 'Ep = m·g·h',
+        vars: [
+          { kunci: 'Ep', label: 'Energi Potensial (Ep)', satuan: 'J' },
+          { kunci: 'm', label: 'Massa (m)', satuan: 'kg' },
+          { kunci: 'g', label: 'Percepatan Gravitasi (g)', satuan: 'm/s²', nilaiAwal: 10 },
+          { kunci: 'h', label: 'Ketinggian (h)', satuan: 'm' },
+        ],
+        solve: function (n, target) {
+          if (target === 'Ep') return n.m * n.g * n.h;
+          if (target === 'm') return n.Ep / (n.g * n.h);
+          if (target === 'g') return n.Ep / (n.m * n.h);
+          if (target === 'h') return n.Ep / (n.m * n.g);
+        },
+      },
+      gaya_lorentz: {
+        nama: 'Gaya Lorentz',
+        formula: 'F = q·v·B',
+        vars: [
+          { kunci: 'F', label: 'Gaya Lorentz (F)', satuan: 'N' },
+          { kunci: 'q', label: 'Muatan (q)', satuan: 'C' },
+          { kunci: 'v', label: 'Kecepatan (v)', satuan: 'm/s' },
+          { kunci: 'B', label: 'Medan Magnet (B)', satuan: 'T' },
+        ],
+        solve: function (n, target) {
+          if (target === 'F') return n.q * n.v * n.B;
+          if (target === 'q') return n.F / (n.v * n.B);
+          if (target === 'v') return n.F / (n.q * n.B);
+          if (target === 'B') return n.F / (n.q * n.v);
+        },
+      },
+      hukum_ohm: {
+        nama: 'Hukum Ohm',
+        formula: 'V = I·R',
+        vars: [
+          { kunci: 'V', label: 'Tegangan (V)', satuan: 'volt' },
+          { kunci: 'I', label: 'Arus (I)', satuan: 'ampere' },
+          { kunci: 'R', label: 'Hambatan (R)', satuan: 'ohm' },
+        ],
+        solve: function (n, target) {
+          if (target === 'V') return n.I * n.R;
+          if (target === 'I') return n.V / n.R;
+          if (target === 'R') return n.V / n.I;
+        },
+      },
+      gerak_parabola: {
+        nama: 'Gerak Parabola -- Jangkauan',
+        formula: 'R = v₀²·sin(2θ) / g',
+        vars: [
+          { kunci: 'R', label: 'Jangkauan (R)', satuan: 'm' },
+          { kunci: 'v0', label: 'Kecepatan Awal (v₀)', satuan: 'm/s' },
+          { kunci: 'sudut', label: 'Sudut Elevasi (θ)', satuan: 'derajat' },
+          { kunci: 'g', label: 'Percepatan Gravitasi (g)', satuan: 'm/s²', nilaiAwal: 10 },
+        ],
+        solve: function (n, target) {
+          if (target === 'R') return (n.v0 * n.v0 * Math.sin(deg2rad(2 * n.sudut))) / n.g;
+          if (target === 'v0') return akar((n.R * n.g) / Math.sin(deg2rad(2 * n.sudut)));
+          if (target === 'sudut') return rad2deg(Math.asin((n.R * n.g) / (n.v0 * n.v0))) / 2;
+          if (target === 'g') return (n.v0 * n.v0 * Math.sin(deg2rad(2 * n.sudut))) / n.R;
+        },
+      },
+      tekanan: {
+        nama: 'Tekanan',
+        formula: 'P = F / A',
+        vars: [
+          { kunci: 'P', label: 'Tekanan (P)', satuan: 'Pa' },
+          { kunci: 'F', label: 'Gaya (F)', satuan: 'N' },
+          { kunci: 'A', label: 'Luas Permukaan (A)', satuan: 'm²' },
+        ],
+        solve: function (n, target) {
+          if (target === 'P') return n.F / n.A;
+          if (target === 'F') return n.P * n.A;
+          if (target === 'A') return n.F / n.P;
+        },
+      },
+    };
+
+    var elSelectRumus = document.getElementById('select-rumus');
+    var elFormulaTampil = document.getElementById('formula-tampil');
+    var elGridVar = document.getElementById('grid-var');
+    var elBtnHitung = document.getElementById('btn-hitung');
+    var elKotakHasil = document.getElementById('kotak-hasil');
+    var elNilaiHasil = document.getElementById('nilai-hasil');
+
+    function isiDropdownRumus() {
+      Object.keys(RUMUS).forEach(function (kunci) {
+        var opt = document.createElement('option');
+        opt.value = kunci;
+        opt.textContent = RUMUS[kunci].nama;
+        elSelectRumus.appendChild(opt);
+      });
+    }
+
+    function renderFormulir(kunciRumus) {
+      var r = RUMUS[kunciRumus];
+      elFormulaTampil.textContent = r.formula;
+      elGridVar.innerHTML = '';
+      elKotakHasil.classList.remove('tampil', 'error');
+
+      r.vars.forEach(function (v) {
+        var wrap = document.createElement('div');
+        wrap.className = 'bidang bidang-var';
+        wrap.innerHTML =
+          '<label>' + v.label + ' <span class="satuan-label">(' + v.satuan + ')</span></label>' +
+          '<input type="number" step="any" data-kunci="' + v.kunci + '" ' + (v.nilaiAwal !== undefined ? 'value="' + v.nilaiAwal + '"' : '') + '>';
+        elGridVar.appendChild(wrap);
+      });
+    }
+
+    function hitungRumus() {
+      var kunciRumus = elSelectRumus.value;
+      var r = RUMUS[kunciRumus];
+      var input = elGridVar.querySelectorAll('input[data-kunci]');
+      var nilai = {};
+      var kosong = [];
+
+      input.forEach(function (el) {
+        var kunci = el.dataset.kunci;
+        if (el.value.trim() === '') { kosong.push(kunci); return; }
+        nilai[kunci] = parseFloat(el.value);
+      });
+
+      elKotakHasil.classList.add('tampil');
+
+      if (kosong.length !== 1) {
+        elKotakHasil.classList.add('error');
+        elNilaiHasil.textContent = kosong.length === 0
+          ? 'Kosongkan SATU kotak yang ingin dicari (jangan diisi semua).'
+          : 'Isi semua kotak kecuali SATU yang ingin dicari (ada ' + kosong.length + ' kotak kosong).';
+        return;
+      }
+
+      var target = kosong[0];
+      var hasil = r.solve(nilai, target);
+      var varTarget = r.vars.filter(function (v) { return v.kunci === target; })[0];
+
+      if (!isFinite(hasil) || isNaN(hasil)) {
+        elKotakHasil.classList.add('error');
+        elNilaiHasil.textContent = 'Tidak ada hasil yang masuk akal dari angka-angka ini -- coba cek lagi nilainya.';
+        return;
+      }
+
+      elKotakHasil.classList.remove('error');
+      var dibulatkan = Math.round(hasil * 1e6) / 1e6;
+      elNilaiHasil.textContent = varTarget.label + ' = ' + dibulatkan + ' ' + varTarget.satuan;
+    }
+
+    elSelectRumus.addEventListener('change', function () { renderFormulir(elSelectRumus.value); });
+    elBtnHitung.addEventListener('click', hitungRumus);
+
+    isiDropdownRumus();
+    renderFormulir(elSelectRumus.value);
+  </script>
+</body>
+</html>

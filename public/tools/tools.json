@@ -1,0 +1,92 @@
+[
+  {
+    "id": "pengundi-acak",
+    "judul": "Pengundi Acak",
+    "deskripsi": "Masukkan daftar nama, langsung diacak jadi kelompok, urutan maju presentasi, atau jadwal piket -- adil dan cepat tanpa kertas undian.",
+    "peran": ["guru"],
+    "ikon": "🎲",
+    "warna": "biru",
+    "path": "/tools/pengundi-acak/"
+  },
+  {
+    "id": "kalkulator-nilai",
+    "judul": "Kalkulator Nilai & Rata-rata",
+    "deskripsi": "Tempel daftar nilai siswa, langsung dapat rata-rata, nilai tertinggi/terendah, dan jumlah yang tuntas/belum tuntas berdasarkan KKM.",
+    "peran": ["guru"],
+    "ikon": "📊",
+    "warna": "hijau",
+    "path": "/tools/kalkulator-nilai/"
+  },
+  {
+    "id": "timer-ujian",
+    "judul": "Timer Ujian Layar Besar",
+    "deskripsi": "Hitung mundur waktu ujian dengan angka besar dan jelas -- cocok ditampilkan lewat proyektor di depan kelas.",
+    "peran": ["guru"],
+    "ikon": "⏱️",
+    "warna": "oranye",
+    "path": "/tools/timer-ujian/"
+  },
+  {
+    "id": "konverter-satuan",
+    "judul": "Konverter Satuan Fisika",
+    "deskripsi": "Konversi cepat satuan panjang, massa, waktu, suhu, energi, dan gaya -- bantu kerjakan soal fisika tanpa hitung manual.",
+    "peran": ["murid"],
+    "ikon": "📐",
+    "warna": "teal",
+    "path": "/tools/konverter-satuan/"
+  },
+  {
+    "id": "timer-belajar",
+    "judul": "Timer Belajar (Pomodoro)",
+    "deskripsi": "Timer fokus belajar dengan siklus kerja/istirahat (bisa diatur) dan notifikasi suara -- bantu belajar lebih teratur.",
+    "peran": ["murid"],
+    "ikon": "🍅",
+    "warna": "pink",
+    "path": "/tools/timer-belajar/"
+  },
+  {
+    "id": "rumus-fisika",
+    "judul": "Kalkulator Rumus Fisika Cepat",
+    "deskripsi": "Pilih rumus (GLBB, gerak parabola, gaya Lorentz, Hukum Newton, dll), isi angka yang diketahui, langsung dapat hasilnya -- buat mengecek jawaban sendiri.",
+    "peran": ["murid"],
+    "ikon": "🧮",
+    "warna": "ungu",
+    "path": "/tools/rumus-fisika/"
+  },
+  {
+    "id": "checklist-tugas",
+    "judul": "Checklist Tugas Pribadi",
+    "deskripsi": "Daftar tugas sederhana yang tersimpan di browser sendiri -- tambah tugas, centang kalau sudah selesai, tidak perlu akun.",
+    "peran": ["murid"],
+    "ikon": "✅",
+    "warna": "kuning",
+    "path": "/tools/checklist-tugas/"
+  },
+  {
+    "id": "surat-otomatis",
+    "judul": "Template Surat/SK Otomatis",
+    "deskripsi": "Isi form sederhana (nama, jabatan, tanggal, keperluan), langsung tersusun jadi draf surat siap cetak -- Surat Keterangan, Surat Tugas, atau Surat Undangan.",
+    "peran": ["kepsek"],
+    "ikon": "📄",
+    "warna": "biru",
+    "path": "/tools/surat-otomatis/"
+  },
+  {
+    "id": "kalkulator-ppn",
+    "judul": "Kalkulator Pajak/PPN",
+    "deskripsi": "Hitung PPN dari nominal belanja (termasuk atau belum termasuk pajak) -- bantu administrasi pembelian & laporan keuangan sekolah.",
+    "peran": ["bendahara"],
+    "ikon": "💰",
+    "warna": "hijau",
+    "path": "/tools/kalkulator-ppn/"
+  },
+  {
+    "id": "kwitansi",
+    "judul": "Generator Kwitansi",
+    "deskripsi": "Isi nama penerima, jumlah uang, dan keperluan -- jumlahnya otomatis dieja jadi terbilang, hasilnya kwitansi siap cetak.",
+    "peran": ["bendahara"],
+    "ikon": "🧾",
+    "warna": "oranye",
+    "path": "/tools/kwitansi/"
+  }
+]

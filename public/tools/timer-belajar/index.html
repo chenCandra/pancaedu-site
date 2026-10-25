@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer Belajar (Pomodoro) | Kotak Alat PancaEdu</title>
+<meta name="description" content="Timer fokus belajar dengan siklus kerja/istirahat dan notifikasi suara -- bantu belajar lebih teratur.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 32rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--pink), var(--oranye)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .baris-3kol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  @media (max-width: 24rem) { .baris-3kol { grid-template-columns: 1fr; } }
+
+  .layar-timer { text-align: center; padding: 2.5rem 1rem; border-radius: var(--radius-besar); background: var(--pink-lembut); margin-top: 1.5rem; transition: background 0.4s ease; }
+  .layar-timer.fase-istirahat { background: var(--hijau-lembut); }
+  .label-fase { font-family: var(--font-judul); font-weight: 800; font-size: 1.1rem; color: var(--pink); margin-bottom: 0.5rem; }
+  .fase-istirahat .label-fase { color: var(--hijau); }
+  .angka-timer { font-family: 'Courier New', monospace; font-weight: 800; font-size: clamp(3rem, 14vw, 5.5rem); line-height: 1; color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .info-siklus { margin-top: 0.6rem; color: var(--tinta-lembut); font-size: 0.9rem; font-weight: 700; }
+
+  .baris-tombol-timer { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+  .baris-tombol-timer .tombol { min-width: 8rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang">← Kembali ke Kotak Alat</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>🍅 Timer Belajar (Pomodoro)</h1>
+      <p>Fokus belajar beberapa menit, istirahat sebentar, ulangi -- lebih tahan lama daripada belajar maraton.</p>
+    </header>
+
+    <div class="kartu-panel">
+      <div class="baris-3kol">
+        <div class="bidang">
+          <label for="input-fokus">Fokus (menit)</label>
+          <input type="number" id="input-fokus" min="1" max="120" value="25">
+        </div>
+        <div class="bidang">
+          <label for="input-istirahat-pendek">Istirahat Pendek</label>
+          <input type="number" id="input-istirahat-pendek" min="1" max="60" value="5">
+        </div>
+        <div class="bidang">
+          <label for="input-istirahat-panjang">Istirahat Panjang</label>
+          <input type="number" id="input-istirahat-panjang" min="1" max="60" value="15">
+        </div>
+      </div>
+      <div class="bidang">
+        <label for="input-siklus">Jumlah sesi fokus sebelum istirahat panjang</label>
+        <input type="number" id="input-siklus" min="1" max="10" value="4">
+      </div>
+    </div>
+
+    <div class="layar-timer" id="layar-timer">
+      <div class="label-fase" id="label-fase">🎯 Fokus</div>
+      <div class="angka-timer" id="angka-timer">25:00</div>
+      <div class="info-siklus" id="info-siklus">Sesi 1 dari 4</div>
+    </div>
+
+    <div class="baris-tombol-timer">
+      <button class="tombol" id="btn-mulai">▶️ Mulai</button>
+      <button class="tombol tombol-luar" id="btn-jeda" disabled>⏸️ Jeda</button>
+      <button class="tombol tombol-luar" id="btn-lewati">⏭️ Lewati Fase</button>
+      <button class="tombol tombol-luar" id="btn-reset">🔄 Reset</button>
+      <button class="tombol tombol-luar" id="btn-mute">🔊</button>
+    </div>
+  </div>
+
+  <script>
+    var elInputFokus = document.getElementById('input-fokus');
+    var elInputIstirahatPendek = document.getElementById('input-istirahat-pendek');
+    var elInputIstirahatPanjang = document.getElementById('input-istirahat-panjang');
+    var elInputSiklus = document.getElementById('input-siklus');
+    var elLayar = document.getElementById('layar-timer');
+    var elLabelFase = document.getElementById('label-fase');
+    var elAngka = document.getElementById('angka-timer');
+    var elInfoSiklus = document.getElementById('info-siklus');
+    var elBtnMulai = document.getElementById('btn-mulai');
+    var elBtnJeda = document.getElementById('btn-jeda');
+    var elBtnLewati = document.getElementById('btn-lewati');
+    var elBtnReset = document.getElementById('btn-reset');
+    var elBtnMute = document.getElementById('btn-mute');
+
+    var FASE = { FOKUS: 'fokus', ISTIRAHAT_PENDEK: 'istirahat_pendek', ISTIRAHAT_PANJANG: 'istirahat_panjang' };
+    var LABEL_FASE = { fokus: '🎯 Fokus', istirahat_pendek: '☕ Istirahat Pendek', istirahat_panjang: '🌿 Istirahat Panjang' };
+
+    var faseAktif = FASE.FOKUS;
+    var sesiKe = 1;
+    var sisaDetik = 0;
+    var berjalan = false;
+    var waktuAkhirMs = null;
+    var intervalId = null;
+    var muted = false;
+    var audioCtx = null;
+
+    function durasiFase(fase) {
+      if (fase === FASE.FOKUS) return Math.max(1, parseInt(elInputFokus.value, 10) || 25) * 60;
+      if (fase === FASE.ISTIRAHAT_PENDEK) return Math.max(1, parseInt(elInputIstirahatPendek.value, 10) || 5) * 60;
+      return Math.max(1, parseInt(elInputIstirahatPanjang.value, 10) || 15) * 60;
+    }
+
+    function formatWaktu(total) {
+      var m = Math.floor(total / 60), s = total % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function perbaruiTampilan() {
+      elAngka.textContent = formatWaktu(Math.max(0, sisaDetik));
+      elLabelFase.textContent = LABEL_FASE[faseAktif];
+      elLayar.classList.toggle('fase-istirahat', faseAktif !== FASE.FOKUS);
+      var totalSiklus = Math.max(1, parseInt(elInputSiklus.value, 10) || 4);
+      elInfoSiklus.textContent = faseAktif === FASE.FOKUS
+        ? 'Sesi ' + sesiKe + ' dari ' + totalSiklus
+        : 'Habis sesi ' + sesiKe + ' dari ' + totalSiklus;
+    }
+
+    function bunyiTransisi() {
+      if (muted) return;
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new AC();
+        [660, 880].forEach(function (freq, i) {
+          setTimeout(function () {
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.35);
+          }, i * 180);
+        });
+      } catch (e) {}
+    }
+
+    function pindahFaseBerikutnya() {
+      var totalSiklus = Math.max(1, parseInt(elInputSiklus.value, 10) || 4);
+      if (faseAktif === FASE.FOKUS) {
+        faseAktif = sesiKe >= totalSiklus ? FASE.ISTIRAHAT_PANJANG : FASE.ISTIRAHAT_PENDEK;
+      } else {
+        if (faseAktif === FASE.ISTIRAHAT_PANJANG) sesiKe = 1; else sesiKe++;
+        faseAktif = FASE.FOKUS;
+      }
+      sisaDetik = durasiFase(faseAktif);
+      perbaruiTampilan();
+    }
+
+    function tik() {
+      var sisaMs = waktuAkhirMs - Date.now();
+      sisaDetik = Math.max(0, Math.round(sisaMs / 1000));
+      perbaruiTampilan();
+      if (sisaDetik <= 0) {
+        bunyiTransisi();
+        pindahFaseBerikutnya();
+        waktuAkhirMs = Date.now() + sisaDetik * 1000;
+      }
+    }
+
+    function mulai() {
+      if (berjalan) return;
+      if (sisaDetik <= 0) sisaDetik = durasiFase(faseAktif);
+      waktuAkhirMs = Date.now() + sisaDetik * 1000;
+      berjalan = true;
+      intervalId = setInterval(tik, 250);
+      elBtnMulai.disabled = true;
+      elBtnJeda.disabled = false;
+    }
+
+    function jeda() {
+      berjalan = false;
+      clearInterval(intervalId);
+      elBtnMulai.disabled = false;
+      elBtnJeda.disabled = true;
+    }
+
+    function reset() {
+      jeda();
+      faseAktif = FASE.FOKUS;
+      sesiKe = 1;
+      sisaDetik = durasiFase(faseAktif);
+      perbaruiTampilan();
+    }
+
+    elBtnMulai.addEventListener('click', mulai);
+    elBtnJeda.addEventListener('click', jeda);
+    elBtnReset.addEventListener('click', reset);
+    elBtnLewati.addEventListener('click', function () {
+      bunyiTransisi();
+      pindahFaseBerikutnya();
+      if (berjalan) waktuAkhirMs = Date.now() + sisaDetik * 1000;
+    });
+    elBtnMute.addEventListener('click', function () {
+      muted = !muted;
+      elBtnMute.textContent = muted ? '🔇' : '🔊';
+    });
+    [elInputFokus, elInputIstirahatPendek, elInputIstirahatPanjang, elInputSiklus].forEach(function (el) {
+      el.addEventListener('change', function () { if (!berjalan) reset(); });
+    });
+
+    reset();
+  </script>
+</body>
+</html>
