@@ -135,11 +135,17 @@ const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, 
                 <td class="kol-nama">{baris.nama}</td>
                 {penugasanTerkait.map((p) => {
                   const sel = baris.sel[p.slug];
+                  const judul = `${STATUS_LABEL[sel.status]}${sel.status === 'selesai' ? ` — ${sel.skor}/${sel.skorMaks} (${sel.persentase}%)` : ''}`;
                   return (
-                    <td>
-                      <span class={`status-badge status-${sel.status}`}>{STATUS_LABEL[sel.status]}</span>
+                    <td class="kol-status">
                       {sel.status === 'selesai' && (
-                        <div class="skor-kecil">{sel.skor}/{sel.skorMaks} ({sel.persentase}%)</div>
+                        <span class="simbol-status simbol-selesai" title={judul}>✅<span class="persen-kecil">{sel.persentase}%</span></span>
+                      )}
+                      {sel.status === 'belum-selesai' && (
+                        <span class="simbol-status simbol-proses" title={judul}>⏳</span>
+                      )}
+                      {sel.status === 'belum-mulai' && (
+                        <span class="simbol-status simbol-belum" title={judul}>–</span>
                       )}
                     </td>
                   );
@@ -149,6 +155,13 @@ const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, 
           </tbody>
         </table>
       </div>
+
+      <p class="legenda-status">
+        <strong>Keterangan:</strong>
+        <span class="legenda-item"><span class="simbol-status simbol-selesai">✅</span> Selesai (angka = persentase skor)</span>
+        <span class="legenda-item"><span class="simbol-status simbol-proses">⏳</span> Sedang Mengerjakan</span>
+        <span class="legenda-item"><span class="simbol-status simbol-belum">–</span> Belum Mulai</span>
+      </p>
     </>
   )}
 
@@ -288,33 +301,54 @@ const dataUntukExport = JSON.stringify({ kelas: kelasDipilih, penugasanTerkait, 
     border-bottom: none;
   }
 
-  .status-badge {
-    display: inline-block;
-    padding: 0.15rem 0.65rem;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    white-space: nowrap;
+  .kol-status {
+    text-align: center;
   }
 
-  .status-selesai {
-    background: var(--teal-soft);
+  .simbol-status {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+    font-size: 1.1rem;
+    cursor: default;
+  }
+
+  .simbol-selesai {
     color: var(--teal);
   }
 
-  .status-belum-selesai {
-    background: var(--gold-soft);
+  .simbol-proses {
     color: var(--gold);
   }
 
-  .status-belum-mulai {
-    background: var(--rose-soft);
-    color: var(--rose);
+  .simbol-belum {
+    color: var(--ink-faint);
+    font-weight: 700;
   }
 
-  .skor-kecil {
-    font-size: 0.75rem;
+  .persen-kecil {
+    font-size: 0.68rem;
+    font-weight: 600;
     color: var(--ink-faint);
-    margin-top: 0.15rem;
+  }
+
+  .legenda-status {
+    margin-top: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+  }
+
+  .legenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .legenda-item .simbol-status {
+    font-size: 1rem;
   }
 </style>
