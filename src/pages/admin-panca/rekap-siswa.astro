@@ -1,14 +1,18 @@
 ---
 // Rekap per Kelas -- matriks Siswa x Penugasan buat SATU kelas (rombel)
-// sekaligus, lintas semua Penugasan yang levelnya cocok (mis. kelas "XII F3"
-// dicocokkan ke Penugasan yang data.kelas = "XII"). Dibangun dari fungsi yang
-// SAMA (ambilLaporanSiswa) dengan /admin-panca/laporan -- cuma dipanggil
-// berkali-kali (satu kali per Penugasan terkait) lalu digabung jadi satu
-// tabel, bukan query baru. Tujuannya: guru bisa langsung lihat/unduh "siapa
-// belum ngerjain apa" tanpa buka Penugasan satu-satu.
+// sekaligus. Daftar Penugasan yang jadi KOLOM diambil dari Penugasan yang
+// MEMANG SUDAH PERNAH DIKERJAKAN oleh kelas itu (ada baris selesai di
+// attempts) -- SAMA PERSIS dengan sumber data /admin-panca/rekap -- BUKAN
+// dari seluruh materi Ruang Belajar jenjangnya (mis. semua "XII"). Satu
+// kelas rombel (mis. "XII F3") bisa saja belum sampai/dilewati sebagian
+// materi jenjangnya, jadi tidak semua Penugasan ber-kelas "XII" relevan
+// buat "XII F3" secara spesifik. Dibangun dari fungsi yang SAMA
+// (ambilLaporanSiswa, ambilRekapSemuaPenugasan) dengan /admin-panca/laporan
+// & /admin-panca/rekap -- cuma dipanggil berkali-kali lalu digabung jadi
+// satu tabel, bukan query baru.
 import AdminPancaLayout from '../../layouts/AdminPancaLayout.astro';
 import { ambilSesi } from '../../lib/adminPanca/auth';
-import { ambilLaporanSiswa } from '../../lib/adminPanca/db';
+import { ambilLaporanSiswa, ambilRekapSemuaPenugasan } from '../../lib/adminPanca/db';
 import { env } from 'cloudflare:workers';
 import { getCollection, getEntry } from 'astro:content';
 
@@ -37,13 +41,16 @@ let matrix: BarisMatrix[] = [];
 if (kelasDipilih) {
   const rosterEntry = daftarKelas.find((d) => d.kelas === kelasDipilih);
   const rosterSiswa = rosterEntry?.siswa ?? [];
-  // "XII F3" -> "XII" -- dicocokkan PERSIS (bukan prefix mentah) ke enum
-  // data.kelas Penugasan (X/XI/XII/TKA), biar "XI" tidak ikut kena karena
-  // kebetulan substring dari "XII".
-  const tokenKelas = kelasDipilih.trim().split(/\s+/)[0];
+
+  // Slug Penugasan yang MEMANG PERNAH dikerjakan (ada attempt selesai) oleh
+  // kelas ini -- persis sumber data tabel /admin-panca/rekap, difilter ke
+  // satu kelas. Ini yang jadi kolom, BUKAN seluruh Penugasan ber-"kelas"
+  // (jenjang) yang sama.
+  const semuaRekap = await ambilRekapSemuaPenugasan(env.DB);
+  const slugRelevan = new Set(semuaRekap.filter((r) => r.kelas === kelasDipilih).map((r) => r.penugasanSlug));
 
   penugasanTerkait = semuaPenugasan
-    .filter((p) => p.data.kelas === tokenKelas)
+    .filter((p) => slugRelevan.has(p.id))
     .map((p) => ({ slug: p.id, judul: p.data.judul, mapel: p.data.mapel }))
     .sort((a, b) => a.judul.localeCompare(b.judul, 'id'));
 
