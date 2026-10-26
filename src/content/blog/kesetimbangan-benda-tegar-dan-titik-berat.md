@@ -85,10 +85,10 @@ draft: false
   font-size: 1.0625rem;
   font-weight: 700;
   font-family: 'Courier New', monospace;
-  color: #831843;
-  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-  border: 1.5px solid #f9a8d4;
-  border-left: 5px solid #db2777;
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1.5px solid #93c5fd;
+  border-left: 5px solid #2563eb;
   border-radius: var(--radius-sm);
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
@@ -135,8 +135,8 @@ draft: false
   margin-block: 2rem;
   padding: 1.75rem 1.25rem 1.35rem;
   border-radius: 20px;
-  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
-  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  background: linear-gradient(150deg, #3b82f6 0%, #1d4ed8 100%);
+  box-shadow: 0 14px 30px rgba(29, 78, 216, 0.32);
   position: relative;
   clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
 }
@@ -185,7 +185,7 @@ draft: false
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.875rem;
-  color: #ffe0ee;
+  color: #dbeafe;
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 

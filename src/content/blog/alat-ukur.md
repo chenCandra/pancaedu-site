@@ -162,10 +162,10 @@ draft: false
   font-size: 1.0625rem;
   font-weight: 700;
   font-family: 'Courier New', monospace;
-  color: #831843;
-  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-  border: 1.5px solid #f9a8d4;
-  border-left: 5px solid #db2777;
+  color: #78350f;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1.5px solid #fcd34d;
+  border-left: 5px solid #d97706;
   border-radius: var(--radius-sm);
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;

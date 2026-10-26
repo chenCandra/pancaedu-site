@@ -133,9 +133,19 @@ const jsonLd = {
 </BaseLayout>
 
 <style>
+  /* Kartu latar solid -- sebelumnya teks materi langsung menimpa
+     gradient + blob warna-warni milik seluruh situs, jadi di sebagian
+     kondisi (HP dark-mode otomatis, dsb.) teks kurang kontras/terlihat.
+     Dibungkus kartu solid di sini biar keterbacaan teks panjang nggak
+     tergantung posisi blob yang ikut bergeser-geser. */
   .post {
     padding-block: 3rem 4rem;
     max-width: var(--measure);
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-md);
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1.25rem, 5vw, 3rem) 3rem;
   }
 
   .back-link {

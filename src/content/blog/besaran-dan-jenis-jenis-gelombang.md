@@ -95,10 +95,10 @@ draft: false
   font-size: 1.0625rem;
   font-weight: 700;
   font-family: 'Courier New', monospace;
-  color: #831843;
-  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-  border: 1.5px solid #f9a8d4;
-  border-left: 5px solid #db2777;
+  color: #581c87;
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border: 1.5px solid #d8b4fe;
+  border-left: 5px solid #9333ea;
   border-radius: var(--radius-sm);
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
