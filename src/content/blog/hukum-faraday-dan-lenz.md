@@ -200,6 +200,28 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 
 Pernah lihat lampu sepeda yang menyala sendiri saat rodanya diputar (padahal tidak ada baterai), charger HP tanpa kabel yang tinggal ditaruh di atas alasnya, atau kompor listrik yang panasnya langsung muncul begitu panci diletakkan? Semua itu kerja pakai trik yang sama: **mengubah medan magnet jadi listrik, tanpa baterai sama sekali.** Trik inilah yang akan kita bongkar di materi ini.
@@ -213,6 +235,61 @@ Kalau kamu menggerakkan magnet mendekati/menjauhi kumparan kawat, akan timbul **
 <div class="mtr-note">
 💡 <strong>Ibaratnya begini:</strong> bayangkan kamu berdiri diam di bawah hujan sambil memegang ember. Deras atau tidaknya hujan tidak langsung bikin ember kamu "berbunyi" -- yang bikin heboh adalah kalau kamu GERAKKAN embernya naik-turun dengan cepat, sehingga jumlah air yang masuk ke ember BERUBAH-UBAH terus. Nah, <strong>"jumlah garis gaya magnet yang menembus kumparan"</strong> itulah yang disebut <strong>fluks magnetik</strong> (ibarat air di ember) -- dan yang bikin listrik muncul bukan BANYAKNYA fluks, tapi PERUBAHANNYA.
 </div>
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Geser magnetnya -- lihat "garis gaya" (fluks) yang menembus kumparan berubah banyak-sedikitnya:</p>
+  <canvas id="fluksCanvas" width="640" height="190" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <input type="range" id="fluksSlider" min="0" max="100" value="15" style="width:100%;margin-top:10px;accent-color:#8b3ddb;">
+  <p class="mtr-mini-label">Jarak magnet: <strong id="fluksJarakLabel">dekat</strong> &middot; Fluks yang menembus kumparan: <strong id="fluksNilaiLabel">●●●●●●</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('fluksCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('fluksSlider');
+  var jarakLabel = document.getElementById('fluksJarakLabel');
+  var nilaiLabel = document.getElementById('fluksNilaiLabel');
+  function wajahKecil(cx, cy, skala) {
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(skala, skala);
+    ctx.fillStyle = '#26243b';
+    [-6, 6].forEach(function (dx) { ctx.beginPath(); ctx.arc(dx, 0, 2.4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, 3, 4.5, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  function render() {
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    var t = slider.value / 100; // 0 = dekat, 1 = jauh
+    var coilX = w * 0.2, coilY = h * 0.52;
+    var magnetX = coilX + 90 + t * (w * 0.62);
+    ctx.strokeStyle = '#f2760a'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    for (var i = -1; i <= 1; i++) { ctx.beginPath(); ctx.ellipse(coilX + i * 9, coilY, 16, 46, 0, 0, Math.PI * 2); ctx.stroke(); }
+    wajahKecil(coilX, coilY - 2, 1.2);
+    var jumlahGaris = Math.max(1, Math.round(6 * (1 - t)));
+    ctx.strokeStyle = 'rgba(139,61,219,0.55)'; ctx.lineWidth = 2.4;
+    for (var g = 0; g < jumlahGaris; g++) {
+      var spread = jumlahGaris > 1 ? -36 + (72 / (jumlahGaris - 1)) * g : 0;
+      ctx.beginPath();
+      ctx.moveTo(coilX, coilY + spread);
+      ctx.quadraticCurveTo((coilX + magnetX) / 2, coilY + spread * 1.3, magnetX - 24, coilY);
+      ctx.stroke();
+    }
+    ctx.save(); ctx.translate(magnetX, coilY);
+    ctx.fillStyle = '#ef4444'; ctx.fillRect(-20, -15, 20, 30);
+    ctx.fillStyle = '#3b82f6'; ctx.fillRect(0, -15, 20, 30);
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.strokeRect(-20, -15, 40, 30);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('N', -10, 0); ctx.fillText('S', 10, 0);
+    ctx.restore();
+    jarakLabel.textContent = t < 0.33 ? 'dekat' : t < 0.66 ? 'sedang' : 'jauh';
+    nilaiLabel.textContent = '●'.repeat(jumlahGaris) + '○'.repeat(6 - jumlahGaris);
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 Jadi yang penting BUKAN keberadaan medan magnetnya, tapi PERUBAHAN medan magnet itu (fluks magnetik) yang menembus kumparan. Medan magnet yang kuat tapi DIAM saja tidak akan menghasilkan listrik sedikit pun.
 
@@ -254,6 +331,77 @@ Hukum Faraday menjelaskan BESAR GGL induksi, tapi tidak menjelaskan ARAHNYA. Di 
 Coba rasakan sendiri di simulasi: saat kamu menarik magnet mendekati kumparan, terasa ada sedikit "tahanan", seperti ada yang menahan dari arah berlawanan. Itu bukan perasaanmu saja -- arus induksi yang baru muncul benar-benar menghasilkan medan magnetnya sendiri yang MENDORONG BALIK magnetmu, seolah kumparan itu "tidak mau" fluksnya diubah. Begitu juga sebaliknya: saat magnet dijauhkan, kumparan seolah "menarik-narik" magnetnya supaya tidak pergi.
 
 Kenapa alam "serewel" itu? Ini sebenarnya konsekuensi dari **Hukum Kekekalan Energi** -- kalau arus induksi justru MEMPERKUAT perubahan fluks (bukan melawannya), energi akan tercipta dari kehampaan (perpetual motion: mesin yang terus menghasilkan energi tanpa usaha dari luar), yang melanggar hukum fisika paling dasar. Jadi alam "memaksa" arus induksi untuk selalu melawan, itulah sebabnya kamu butuh usaha (energi) dari tanganmu sendiri untuk terus menggerakkan magnetnya -- usaha itulah yang berubah jadi energi listrik.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🧲 Klik salah satu tombol -- lihat arah arus induksinya berubah tergantung magnet didekatkan atau dijauhkan:</p>
+  <canvas id="lenzCanvas" width="640" height="210" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#fdf2ff,#eaf6ff);border-radius:14px;"></canvas>
+  <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+    <button type="button" class="mtr-mini-btn" id="lenzBtnDekat">⬅️ Dekatkan Magnet</button>
+    <button type="button" class="mtr-mini-btn" id="lenzBtnJauh">➡️ Jauhkan Magnet</button>
+  </div>
+  <p class="mtr-mini-label" id="lenzStatusLabel">Klik salah satu tombol buat mulai!</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('lenzCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var btnDekat = document.getElementById('lenzBtnDekat');
+  var btnJauh = document.getElementById('lenzBtnJauh');
+  var statusLabel = document.getElementById('lenzStatusLabel');
+  var w = canvas.width, h = canvas.height;
+  var coilX = w * 0.28, coilY = h * 0.52;
+  var posisiJauh = w * 0.82, posisiDekat = coilX + 85;
+  var magnetX = posisiJauh, targetX = posisiJauh;
+  var arah = null, arusHidupHingga = 0, fase = 0;
+  function wajahKecil(cx, cy, skala) {
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(skala, skala);
+    ctx.fillStyle = '#26243b';
+    [-6, 6].forEach(function (dx) { ctx.beginPath(); ctx.arc(dx, 0, 2.4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, 3, 4.5, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#f2760a'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    for (var i = -1; i <= 1; i++) { ctx.beginPath(); ctx.ellipse(coilX + i * 9, coilY, 16, 48, 0, 0, Math.PI * 2); ctx.stroke(); }
+    wajahKecil(coilX, coilY - 2, 1.2);
+    var arusAktif = performance.now() < arusHidupHingga;
+    if (arusAktif) {
+      fase += 0.11;
+      var dir = arah === 'dekat' ? 1 : -1;
+      for (var k = 0; k < 3; k++) {
+        var ang = fase * dir + (k * Math.PI * 2) / 3;
+        var px = coilX + Math.cos(ang) * 34, py = coilY + Math.sin(ang) * 34;
+        ctx.fillStyle = '#fbbf24'; ctx.shadowColor = '#fbbf24'; ctx.shadowBlur = 7;
+        ctx.beginPath(); ctx.arc(px, py, 4.5, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+    magnetX += (targetX - magnetX) * 0.07;
+    ctx.save(); ctx.translate(magnetX, coilY);
+    ctx.fillStyle = '#ef4444'; ctx.fillRect(-20, -15, 20, 30);
+    ctx.fillStyle = '#3b82f6'; ctx.fillRect(0, -15, 20, 30);
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.strokeRect(-20, -15, 40, 30);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('N', -10, 0); ctx.fillText('S', 10, 0);
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  function mulai(arahBaru) {
+    arah = arahBaru;
+    targetX = arahBaru === 'dekat' ? posisiDekat : posisiJauh;
+    arusHidupHingga = performance.now() + 1600;
+    statusLabel.innerHTML = arahBaru === 'dekat'
+      ? '🔵 Magnet didekatkan -- arus induksi melawan, seolah <strong>"menahan"</strong> magnet supaya tidak terlalu cepat mendekat!'
+      : '🔴 Magnet dijauhkan -- arus induksi melawan, seolah <strong>"menarik"</strong> magnet supaya tidak pergi!';
+  }
+  btnDekat.addEventListener('click', function () { mulai('dekat'); });
+  btnJauh.addEventListener('click', function () { mulai('jauh'); });
+  requestAnimationFrame(draw);
+})();
+</script>
 
 ## ⚠️ Kesalahan Umum
 
