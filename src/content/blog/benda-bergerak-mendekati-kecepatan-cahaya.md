@@ -150,11 +150,17 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
 
 Materi ini merangkum tiga hal yang sudah dibahas satu per satu di materi [Dilatasi Waktu](/materi/dilatasi-waktu), [Kontraksi Panjang](/materi/kontraksi-panjang), dan [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik) -- sekarang dilihat sekaligus dalam satu gambaran utuh, plus dua hal "bonus" yang belum sempat dibahas.
 
 Bayangkan sebuah benda (yang punya massa saat diam) dipacu bergerak semakin cepat, hampir mendekati kecepatan cahaya. Ada dua sudut pandang yang bisa kita ambil: sudut pandang KITA yang diam mengamatinya dari luar, dan sudut pandang benda itu SENDIRI (andai ia bisa "merasakan" dan "melihat").
+
+Kenapa, sih, nggak ada satu pun benda -- roket tercanggih, partikel di akselerator sekalipun -- yang bisa benar-benar "ngebut" melewati kecepatan cahaya? Jawabannya bukan soal mesinnya belum cukup kuat. Begitu kecepatan sudah sangat dekat dengan c, massanya membengkak drastis (bahasan materi [Massa Relativistik](/materi/massa-relativistik-dan-momentum-relativistik)), sehingga dibutuhkan energi yang juga membengkak tak terhingga cuma untuk menambah kecepatan sedikit saja. Inilah kenapa partikel-partikel yang dipercepat di akselerator seperti LHC bisa didorong sampai 99,9999% kecepatan cahaya, tapi tidak pernah bisa benar-benar menyentuh 100%-nya.
 
 ## 👀 Menurut Kita yang Diam Mengamatinya
 
@@ -165,6 +171,21 @@ Bayangkan sebuah benda (yang punya massa saat diam) dipacu bergerak semakin cepa
 <div class="mtr-card"><span class="mtr-card-icon">📏</span><h4>Panjang Menyusut</h4><p>Panjangnya menyusut searah geraknya (kontraksi panjang). Pada kecepatan cahaya, panjangnya jadi nol.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">🐌</span><h4>Waktunya Melambat</h4><p>Jam yang dibawanya tampak berjalan semakin lambat (dilatasi waktu). Pada kecepatan cahaya, jamnya tampak berhenti sama sekali bagi kita.</p></div>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 40 180 A 160 160 0 0 1 150 35" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round"/>
+    <path d="M 150 35 A 160 160 0 0 1 280 48" fill="none" stroke="#eab308" stroke-width="22" stroke-linecap="round"/>
+    <path d="M 280 48 A 160 160 0 0 1 360 180" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round"/>
+    <circle cx="200" cy="180" r="14" fill="#312e81"/>
+    <line x1="200" y1="180" x2="330" y2="90" stroke="#312e81" stroke-width="6" stroke-linecap="round"/>
+    <text x="48" y="205" font-size="13" font-weight="700" fill="#312e81">0</text>
+    <text x="352" y="178" font-size="16" font-weight="800" fill="#312e81">c</text>
+    <text x="298" y="58" font-size="13" font-weight="800" fill="#b91c1c">semakin SUSAH!</text>
+    <text x="200" y="30" text-anchor="middle" font-size="11" font-weight="700" fill="#312e81">butuh energi makin gede</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Makin dekat ke "c", jarumnya serasa makin macet -- padahal energi yang terus disuntikkan makin besar.</p>
 </div>
 
 ## 🚀 Menurut Benda Itu Sendiri

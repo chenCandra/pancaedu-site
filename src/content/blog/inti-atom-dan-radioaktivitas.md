@@ -266,6 +266,28 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 </style>
 
 Kita sudah membahas cahaya yang berkepribadian ganda ([Efek Fotolistrik](/materi/efek-fotolistrik-dan-dualisme-gelombang-partikel)) dan benda yang berperilaku aneh mendekati kecepatan cahaya ([Relativitas Khusus](/materi/teori-relativitas-khusus)). Sekarang kita masuk ke jantung materi itu sendiri: **inti atom** -- struktur mungil yang jadi sumber salah satu energi terbesar yang bisa dihasilkan manusia, sekaligus sumber sinar gamma yang sudah kita singgung di materi [Spektrum Elektromagnetik](/materi/spektrum-elektromagnetik).
@@ -358,6 +380,144 @@ Kamu tidak bisa memprediksi KAPAN PERSIS satu inti radioaktif tertentu akan melu
 </div>
 
 Setiap isotop punya waktu paruh sendiri-sendiri -- ada yang hanya beberapa detik, ada yang miliaran tahun -- tapi POLA peluruhannya selalu sama: setiap kali berlalu satu T½, sisa inti radioaktif selalu berkurang jadi setengahnya, TIDAK PEDULI berapa jumlah awalnya.
+
+Satu hal yang penting dipahami: rumus N=N₀×(1/2)^(t/T½) itu cuma berlaku rapi untuk SEKUMPULAN BESAR inti. Untuk satu inti radioaktif saja, kamu benar-benar tidak bisa menebak detik persis kapan dia akan meluruh -- ibarat melempar 100 dadu sekaligus: kamu tidak tahu dadu MANA yang akan keluar angka 6 duluan, tapi kalau dilempar berkali-kali, kamu bisa menebak dengan cukup akurat BERAPA BANYAK dadu yang sudah keluar angka 6 setelah sekian putaran. Coba lihat sendiri keacakan ini lewat simulasi mini di bawah -- 100 "inti atom" akan meluruh satu per satu secara acak, tapi grafiknya tetap mengikuti kurva eksponensial yang rapi.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">☢️ Geser slider waktu paruh -- amati titik oranye ("belum meluruh") berubah acak jadi abu-abu ("sudah meluruh"), dan bandingkan grafik hasil simulasi dengan kurva teori eksponensialnya:</p>
+  <canvas id="peluruhanCanvas" width="640" height="430" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#fef6e0,#eaf6ff);border-radius:14px;"></canvas>
+  <input type="range" id="peluruhanSlider" min="1" max="20" step="1" value="6" style="width:100%;margin-top:10px;accent-color:#4f46e5;">
+  <p class="mtr-mini-label">🎚️ Waktu paruh (T½): <strong id="peluruhanT12Label">6 detik</strong></p>
+  <p class="mtr-mini-label">⏱️ Waktu simulasi: <strong id="peluruhanWaktuLabel">0,0 detik</strong> &middot; Tersisa: <strong id="peluruhanNLabel">100/100 (100%)</strong></p>
+  <div style="display:flex;justify-content:center;margin-top:10px;">
+    <button type="button" class="mtr-mini-btn" id="peluruhanResetBtn">🔄 Ulangi</button>
+  </div>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('peluruhanCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('peluruhanSlider');
+  var t12Label = document.getElementById('peluruhanT12Label');
+  var waktuLabel = document.getElementById('peluruhanWaktuLabel');
+  var nLabel = document.getElementById('peluruhanNLabel');
+  var resetBtn = document.getElementById('peluruhanResetBtn');
+  var GRID = 10;
+  var TOTAL = GRID * GRID;
+  var TIME_SCALE = 10;
+  var gridX0 = 36, gridX1 = 604, gridY0 = 18, gridY1 = 232;
+  var graphX0 = 36, graphX1 = 604, graphY0 = 262, graphY1 = 410;
+  var atoms = [];
+  var halfLife = parseFloat(slider.value);
+  var simTime = 0;
+  var lastFrame = null;
+  var history = [];
+  var xMax = halfLife * 6;
+  function buatAtom(i) {
+    var col = i % GRID, row = Math.floor(i / GRID);
+    var x = gridX0 + (col + 0.5) * ((gridX1 - gridX0) / GRID);
+    var y = gridY0 + (row + 0.5) * ((gridY1 - gridY0) / GRID);
+    return { x: x, y: y, meluruh: false };
+  }
+  function reset() {
+    halfLife = parseFloat(slider.value);
+    t12Label.textContent = halfLife + ' detik';
+    atoms = [];
+    for (var i = 0; i < TOTAL; i++) atoms.push(buatAtom(i));
+    simTime = 0;
+    lastFrame = null;
+    history = [{ t: 0, n: TOTAL }];
+    xMax = halfLife * 6;
+  }
+  function gambarAtom(a) {
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, 9, 0, Math.PI * 2);
+    ctx.fillStyle = a.meluruh ? '#9ca3af' : '#f97316';
+    ctx.fill();
+    ctx.strokeStyle = a.meluruh ? '#6b7280' : '#c2410c';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(a.x - 2.5, a.y - 2.5, 2.4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    ctx.fill();
+  }
+  function gambarGrafik() {
+    ctx.strokeStyle = 'rgba(100,116,139,0.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(graphX0, graphY0);
+    ctx.lineTo(graphX0, graphY1);
+    ctx.lineTo(graphX1, graphY1);
+    ctx.stroke();
+    ctx.fillStyle = '#475569';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('N', graphX0 - 2, graphY0 - 4);
+    ctx.textAlign = 'right';
+    ctx.fillText('t', graphX1, graphY1 + 14);
+    ctx.strokeStyle = '#818cf8';
+    ctx.setLineDash([5, 4]);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var i = 0; i <= 60; i++) {
+      var tt = (xMax * i) / 60;
+      var nTeori = TOTAL * Math.pow(0.5, tt / halfLife);
+      var px = graphX0 + (tt / xMax) * (graphX1 - graphX0);
+      var py = graphY1 - (nTeori / TOTAL) * (graphY1 - graphY0);
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#ea580c';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    for (var j = 0; j < history.length; j++) {
+      var p = history[j];
+      var px2 = graphX0 + (Math.min(p.t, xMax) / xMax) * (graphX1 - graphX0);
+      var py2 = graphY1 - (p.n / TOTAL) * (graphY1 - graphY0);
+      if (j === 0) ctx.moveTo(px2, py2); else ctx.lineTo(px2, py2);
+    }
+    ctx.stroke();
+    ctx.textAlign = 'left';
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#818cf8';
+    ctx.fillText('- - - kurva teori', graphX1 - 150, graphY0 + 14);
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText('— hasil simulasi', graphX1 - 150, graphY0 + 28);
+  }
+  function frame(now) {
+    if (lastFrame === null) lastFrame = now;
+    var dtReal = (now - lastFrame) / 1000;
+    lastFrame = now;
+    if (dtReal > 0.25) dtReal = 0.25;
+    var dtSim = dtReal * TIME_SCALE;
+    simTime += dtSim;
+    var pBelumMeluruh = Math.pow(0.5, dtSim / halfLife);
+    var pMeluruhFrame = 1 - pBelumMeluruh;
+    var jumlahTersisa = 0;
+    for (var i = 0; i < atoms.length; i++) {
+      var a = atoms[i];
+      if (!a.meluruh && Math.random() < pMeluruhFrame) a.meluruh = true;
+      if (!a.meluruh) jumlahTersisa++;
+    }
+    history.push({ t: simTime, n: jumlahTersisa });
+    if (history.length > 2000) history.shift();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var k = 0; k < atoms.length; k++) gambarAtom(atoms[k]);
+    gambarGrafik();
+    var persen = ((jumlahTersisa / TOTAL) * 100).toFixed(1);
+    waktuLabel.textContent = simTime.toFixed(1) + ' detik';
+    nLabel.textContent = jumlahTersisa + '/' + TOTAL + ' (' + persen + '%)';
+    requestAnimationFrame(frame);
+  }
+  slider.addEventListener('input', reset);
+  resetBtn.addEventListener('click', reset);
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
 
 ## ✏️ Contoh Soal
 

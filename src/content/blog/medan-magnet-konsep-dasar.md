@@ -181,7 +181,13 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
+
+Pernah nempelin magnet kulkas, atau penasaran kenapa jarum kompas selalu nunjuk ke arah yang sama di mana pun kamu berada? Keduanya bekerja karena hal yang sama: **medan magnet**. Bahkan Bumi kita sendiri ternyata punya medan magnet raksasa (seolah ada magnet batang besar di dalam perut Bumi) -- itulah yang membuat jarum kompas selalu sejajar dan menunjuk ke utara-selatan, ke mana pun kamu membawanya.
 
 Setelah tuntas membahas [Rangkaian Seri dan Paralel](/materi/rangkaian-seri-dan-paralel), kita masuk bab baru: **Fenomena Elektromagnetik** -- gejala-gejala yang menghubungkan listrik dan magnet. Kita mulai dari dasar-dasarnya: apa itu medan magnet, dan bagaimana sifatnya.
 
@@ -199,6 +205,32 @@ Medan magnet di sekitar magnet digambarkan dengan **garis gaya magnet** -- garis
 - Di LUAR magnet, garis gaya keluar dari kutub **N** dan masuk ke kutub **S**.
 - Di DALAM magnet, garis gaya justru mengalir dari S kembali ke N, membentuk loop tertutup (garis gaya magnet SELALU tertutup, tidak pernah punya ujung).
 - Makin RAPAT garis gayanya, makin KUAT medan magnetnya di titik itu -- karena itu medan paling kuat ada di dekat kutub.
+
+Mau lihat garis gaya magnet secara langsung tanpa alat canggih? Taburkan **serbuk besi** di atas kertas yang diletakkan di atas magnet batang -- serbuk-serbuk kecil itu akan otomatis berbaris rapi mengikuti pola garis gaya magnet, melengkung dari kutub N ke kutub S. Ini salah satu percobaan klasik yang sering didemonstrasikan di kelas fisika.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="150" y="90" width="100" height="40" fill="#ef4444"/>
+    <rect x="200" y="90" width="50" height="40" fill="#3b82f6"/>
+    <rect x="150" y="90" width="100" height="40" fill="none" stroke="#26243b" stroke-width="3"/>
+    <text x="175" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">N</text>
+    <text x="225" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">S</text>
+    <path d="M150 95 C 90 80, 70 60, 95 40" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M150 110 C 70 100, 55 60, 95 25" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M150 125 C 60 135, 55 70, 95 10" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M250 95 C 310 80, 330 60, 305 40" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M250 110 C 330 100, 345 60, 305 25" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M250 125 C 340 135, 345 70, 305 10" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+    <path d="M93 42 L80 36 L90 28" fill="none" stroke="#9d174d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M307 42 L320 36 L310 28" fill="none" stroke="#9d174d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="200" cy="185" r="26" fill="#fdf0e0" stroke="#26243b" stroke-width="3"/>
+    <path d="M200 185 L200 164" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M200 185 L200 206" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="200" cy="185" r="2.5" fill="#26243b"/>
+    <text x="200" y="146" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">Kompas</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Garis gaya magnet melengkung dari kutub N ke S -- jarum kompas ikut sejajar dengan arahnya.</p>
+</div>
 
 Coba jelajahi sendiri di simulasi kompas virtual di bawah -- geser kompasnya ke berbagai posisi di sekitar magnet, dan lihat jarumnya otomatis mengikuti arah medan.
 

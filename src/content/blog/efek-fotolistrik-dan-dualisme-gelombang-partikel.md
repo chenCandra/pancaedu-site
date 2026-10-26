@@ -266,7 +266,13 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
+
 </style>
+
+Pernah mikir kenapa panel surya di atas atap rumah bisa mengubah sinar matahari langsung jadi listrik? Atau kenapa lampu jalan di dekat rumahmu bisa menyala SENDIRI begitu langit mulai gelap, tanpa ada yang menekan saklar? Kedua alat itu "merasakan" cahaya dan mengubahnya jadi sinyal listrik lewat fenomena yang sama persis yang akan kita bahas di materi ini.
 
 Sepanjang bab ini kita sudah membahas relativitas khusus -- konsekuensi aneh yang terjadi kalau BENDA bergerak sangat cepat. Sekarang kita pindah ke topik lain yang sama anehnya, tapi soal CAHAYA: ternyata cahaya sendiri punya kepribadian ganda, kadang berperilaku seperti gelombang, kadang seperti aliran partikel kecil. Fenomena yang membongkar rahasia ini disebut **efek fotolistrik**, dan penjelasannya oleh Einstein-lah (bukan teori relativitasnya!) yang justru mengantarkannya meraih Hadiah Nobel Fisika 1921 -- seperti sempat disinggung di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus).
 
@@ -277,6 +283,26 @@ Sebelum abad ke-20, fisikawan sudah cukup yakin cahaya adalah gelombang -- dibuk
 ## ⚡ Efek Fotolistrik: Fenomena yang Membingungkan
 
 Di tahun 1887, Heinrich Hertz (fisikawan yang sama yang membuktikan keberadaan gelombang radio -- baca lagi materi Spektrum Elektromagnetik) tanpa sengaja menemukan sesuatu yang aneh: kalau permukaan logam disinari cahaya dengan frekuensi cukup tinggi (biasanya ultraviolet), **elektron bisa terlepas keluar dari permukaan logam itu**. Fenomena inilah yang disebut **efek fotolistrik**.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="40" y="150" width="320" height="40" rx="8" fill="#94a3b8"/>
+    <text x="200" y="175" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b">LOGAM</text>
+    <circle cx="90" cy="55" r="10" fill="#fde047" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="90" y1="40" x2="90" y2="25" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="78" y1="48" x2="66" y2="38" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="102" y1="48" x2="114" y2="38" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="90" y1="65" x2="150" y2="140" stroke="#312e81" stroke-width="3" stroke-dasharray="6 5"/>
+    <path d="M 142 125 L 150 140 L 132 136 Z" fill="#312e81"/>
+    <text x="55" y="28" font-size="11" font-weight="700" fill="#312e81">foton</text>
+    <circle cx="150" cy="140" r="9" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="150" y="143" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">e-</text>
+    <line x1="160" y1="128" x2="230" y2="55" stroke="#1e3a8a" stroke-width="3"/>
+    <path d="M 218 62 L 230 55 L 222 70 Z" fill="#1e3a8a"/>
+    <text x="235" y="48" font-size="11" font-weight="700" fill="#1e3a8a">elektron terlepas!</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Satu foton menghantam logam, menyerahkan seluruh energinya ke satu elektron sekaligus -- elektron itu langsung terlepas.</p>
+</div>
 
 Masalahnya, ada tiga hal aneh yang SAMA SEKALI tidak bisa dijelaskan teori gelombang klasik:
 

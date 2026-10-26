@@ -200,6 +200,30 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. Skrip SENGAJA ditulis tanpa baris kosong
+   sama sekali di dalam <script> -- markdown parser situs ini tidak kebal
+   baris kosong di dalam tag itu. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 
 Di materi [Medan Magnet: Konsep Dasar](/materi/medan-magnet-konsep-dasar) kita bahas magnet permanen. Ternyata, medan magnet TIDAK CUMA dihasilkan magnet alami -- **arus listrik juga bisa menghasilkan medan magnet.** Penemuan ini jadi jembatan pertama antara dua topik yang tadinya dianggap terpisah: listrik dan magnet.
@@ -225,7 +249,119 @@ Untuk menentukan arah medan magnet di sekitar kawat lurus berarus, kita pakai **
   <div class="mtr-step-body"><p><strong>Lipatan jari-jari lain menunjukkan arah medan magnet (B).</strong> Medan ini berbentuk LINGKARAN yang mengelilingi kawat, bukan garis lurus seperti pada magnet batang.</p></div>
 </div>
 
-Kalau arah arusnya dibalik, arah lingkaran medannya ikut terbalik. Coba buktikan sendiri di simulasi bawah (tab "Kawat Berarus") -- geser kompas ke sekitar kawat dan ganti arah arusnya.
+Kalau arah arusnya dibalik, arah lingkaran medannya ikut terbalik. Coba rasakan dulu lewat animasi mini berikut, sebelum ke simulasi penuh di bawah (tab "Kawat Berarus") -- geser kompas ke sekitar kawat dan ganti arah arusnya di sana.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">⚡ Geser kuat arus, atau klik tombol untuk membalik arahnya -- lihat medan magnetnya melingkari kawat sesuai kaidah tangan kanan (titik-titik kecil menunjukkan arah putaran medannya):</p>
+  <canvas id="medanArusCanvas" width="640" height="300" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Kuat arus (I): <strong id="medanArusILabel">5</strong></label>
+  <input type="range" id="medanArusISlider" min="1" max="10" value="5" style="width:100%;accent-color:#8b3ddb;">
+  <div style="text-align:center;margin-top:10px;">
+    <button type="button" class="mtr-mini-btn" id="medanArusBtnBalik">🔄 Balik Arah Arus</button>
+  </div>
+  <p class="mtr-mini-label">Arah arus: <strong id="medanArusArahLabel">ke atas</strong> &middot; Medan magnet: <strong id="medanArusKuatLabel">sedang</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('medanArusCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('medanArusISlider');
+  var iLabel = document.getElementById('medanArusILabel');
+  var arahLabel = document.getElementById('medanArusArahLabel');
+  var kuatLabel = document.getElementById('medanArusKuatLabel');
+  var btnBalik = document.getElementById('medanArusBtnBalik');
+  var w = canvas.width, h = canvas.height;
+  var wireX = w * 0.5;
+  var wireTop = h * 0.1, wireBottom = h * 0.9;
+  var centerY = h * 0.5;
+  var arahAtas = true;
+  var fase = 0;
+  var radii = [40, 70, 100, 130];
+  function panah(x, y, dx, dy, ukuran) {
+    var ang = Math.atan2(dy, dx);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - ukuran * Math.cos(ang - Math.PI / 6), y - ukuran * Math.sin(ang - Math.PI / 6));
+    ctx.lineTo(x - ukuran * Math.cos(ang + Math.PI / 6), y - ukuran * Math.sin(ang + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+  }
+  function gambarKawat() {
+    ctx.save();
+    ctx.strokeStyle = '#26243b';
+    ctx.lineWidth = 9;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(wireX, wireTop);
+    ctx.lineTo(wireX, wireBottom);
+    ctx.stroke();
+    var arahTanda = arahAtas ? -1 : 1;
+    var y1 = centerY - arahTanda * 30, y2 = centerY + arahTanda * 30;
+    ctx.strokeStyle = '#f2760a';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(wireX, y1);
+    ctx.lineTo(wireX, y2);
+    ctx.stroke();
+    ctx.fillStyle = '#f2760a';
+    panah(wireX, y2, 0, arahTanda, 14);
+    ctx.restore();
+  }
+  function gambarMedan(I) {
+    var op = Math.min(1, 0.22 + I * 0.075);
+    var lw = 1.4 + I * 0.22;
+    var dir = arahAtas ? 1 : -1;
+    for (var k = 0; k < radii.length; k++) {
+      var rx = radii[k], ry = radii[k] * 0.4;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(139,61,219,' + op.toFixed(2) + ')';
+      ctx.lineWidth = lw;
+      ctx.setLineDash([7, 7]);
+      ctx.beginPath();
+      ctx.ellipse(wireX, centerY, rx, ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      var sudutPanah = -0.9;
+      var px = wireX + rx * Math.cos(sudutPanah);
+      var py = centerY + ry * Math.sin(sudutPanah);
+      var tdx = -rx * Math.sin(sudutPanah) * dir;
+      var tdy = ry * Math.cos(sudutPanah) * dir;
+      ctx.fillStyle = 'rgba(139,61,219,' + Math.min(1, op + 0.15).toFixed(2) + ')';
+      panah(px, py, tdx, tdy, 8 + I * 0.4);
+      var jumlahTitik = 2;
+      for (var t = 0; t < jumlahTitik; t++) {
+        var sudutTitik = fase * dir + (t * Math.PI * 2) / jumlahTitik + k * 0.5;
+        var tx = wireX + rx * Math.cos(sudutTitik);
+        var ty = centerY + ry * Math.sin(sudutTitik);
+        ctx.fillStyle = '#fbbf24';
+        ctx.shadowColor = '#fbbf24';
+        ctx.shadowBlur = 4 + I * 0.6;
+        ctx.beginPath();
+        ctx.arc(tx, ty, 3.2 + I * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      ctx.restore();
+    }
+  }
+  function render() {
+    var I = parseInt(slider.value, 10);
+    fase += 0.012 + I * 0.0025;
+    ctx.clearRect(0, 0, w, h);
+    gambarMedan(I);
+    gambarKawat();
+    iLabel.textContent = I;
+    arahLabel.textContent = arahAtas ? 'ke atas' : 'ke bawah';
+    kuatLabel.textContent = I <= 3 ? 'lemah' : I <= 7 ? 'sedang' : 'kuat';
+    requestAnimationFrame(render);
+  }
+  btnBalik.addEventListener('click', function () {
+    arahAtas = !arahAtas;
+  });
+  requestAnimationFrame(render);
+})();
+</script>
 
 ## 🌀 Dari Kawat Lurus ke Solenoida
 

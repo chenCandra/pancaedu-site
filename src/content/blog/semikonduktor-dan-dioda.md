@@ -190,9 +190,15 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #065f46; font-weight: 600; }
 </style>
 
 Di materi [Sinyal Analog dan Digital](/materi/sinyal-analog-dan-digital) dan [Bilangan Biner](/materi/bilangan-biner) kita sudah paham KENAPA dunia digital cuma butuh dua keadaan (0 dan 1), dan bagaimana angka direpresentasikan dalam sistem itu. Sekarang saatnya menjawab pertanyaan berikutnya: bagaimana caranya dua keadaan itu benar-benar DIWUJUDKAN secara fisik lewat komponen elektronik? Jawabannya dimulai dari bahan paling dasar: **semikonduktor**, dan komponen pertama yang dibangun darinya, **dioda**.
+
+Pernah kepikiran kenapa charger HP-mu bisa mengubah listrik dari stopkontak (yang arusnya bolak-balik/AC) jadi listrik yang bisa dipakai mengisi baterai (yang arusnya harus searah/DC)? Atau kenapa lampu hias LED warna-warni yang dipasang terbalik nggak mau nyala sama sekali? Jawaban keduanya ada di komponen kecil yang akan kita bahas di materi ini: **dioda**.
 
 ## 🔬 Semikonduktor: Bukan Konduktor, Bukan Isolator
 
@@ -229,7 +235,41 @@ Kalau semikonduktor tipe-P dan tipe-N disambung jadi satu, terciptalah **dioda**
 
 Sifat satu-arah inilah yang membuat dioda sangat berguna sebagai **penyearah (rectifier)** -- mengubah arus AC (bolak-balik) jadi DC (searah), dengan cara "memotong" bagian gelombang AC yang arahnya salah. Ingat kembali materi [Rangkaian AC Sederhana](/materi/rangkaian-ac-sederhana): waktu itu kita membahas contoh charger HP yang mengubah 220V AC dari stopkontak jadi tegangan DC untuk mengisi baterai, dan bertanya "komponen tambahan apa yang dibutuhkan selain trafo?" -- jawabannya adalah **dioda penyearah** inilah salah satu komponen kuncinya!
 
-Salah satu jenis dioda khusus yang sudah sangat familiar buatmu adalah **LED (Light Emitting Diode)** -- dioda yang memancarkan cahaya saat dialiri arus forward bias, dipakai di hampir semua lampu indikator, layar, dan penerangan hemat energi modern.
+Salah satu jenis dioda khusus yang sudah sangat familiar buatmu adalah **LED (Light Emitting Diode)** -- dioda yang memancarkan cahaya saat dialiri arus forward bias, dipakai di hampir semua lampu indikator, layar, dan penerangan hemat energi modern. Lampu hias LED warna-warni yang suka dipasang saat Lebaran atau Natal itu sebenarnya cuma tumpukan ratusan dioda kecil -- itulah kenapa kalau kamu pasang baterainya terbalik, lampunya nggak akan menyala sama sekali: dioda di dalamnya sedang "tertutup" (reverse bias).
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<text x="100" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#065f46">Forward Bias -- NYALA</text>
+<rect x="30" y="60" width="140" height="100" rx="10" fill="none" stroke="#374151" stroke-width="3"/>
+<rect x="30" y="100" width="16" height="20" fill="#ef4444"/>
+<rect x="46" y="104" width="8" height="12" fill="#fca5a5"/>
+<text x="38" y="178" text-anchor="middle" font-size="10" fill="#374151">Baterai</text>
+<polygon points="92,100 92,120 112,110" fill="#10b981" stroke="#065f46" stroke-width="2"/>
+<line x1="112" y1="100" x2="112" y2="120" stroke="#065f46" stroke-width="4"/>
+<text x="102" y="138" text-anchor="middle" font-size="10" fill="#374151">Dioda</text>
+<circle cx="150" cy="110" r="15" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+<line x1="150" y1="88" x2="150" y2="80" stroke="#ca8a04" stroke-width="2"/>
+<line x1="167" y1="97" x2="174" y2="91" stroke="#ca8a04" stroke-width="2"/>
+<line x1="167" y1="123" x2="174" y2="129" stroke="#ca8a04" stroke-width="2"/>
+<polygon points="65,60 76,55 76,65" fill="#059669"/>
+<text x="100" y="198" text-anchor="middle" font-size="11" fill="#065f46">Arus searah panah dioda -- lampu nyala</text>
+<line x1="200" y1="8" x2="200" y2="212" stroke="#6ee7b7" stroke-width="2" stroke-dasharray="5 5"/>
+<text x="300" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#065f46">Reverse Bias -- MATI</text>
+<rect x="230" y="60" width="140" height="100" rx="10" fill="none" stroke="#374151" stroke-width="3"/>
+<rect x="338" y="100" width="16" height="20" fill="#ef4444"/>
+<rect x="326" y="104" width="8" height="12" fill="#fca5a5"/>
+<text x="341" y="178" text-anchor="middle" font-size="10" fill="#374151">Baterai (dibalik)</text>
+<polygon points="288,100 288,120 308,110" fill="#9ca3af" stroke="#4b5563" stroke-width="2"/>
+<line x1="308" y1="100" x2="308" y2="120" stroke="#4b5563" stroke-width="4"/>
+<text x="298" y="138" text-anchor="middle" font-size="10" fill="#374151">Dioda</text>
+<circle cx="350" cy="110" r="15" fill="#e5e7eb" stroke="#9ca3af" stroke-width="3"/>
+<line x1="255" y1="107" x2="278" y2="107" stroke="#ef4444" stroke-width="3"/>
+<line x1="255" y1="113" x2="278" y2="113" stroke="#ef4444" stroke-width="3"/>
+<text x="266" y="94" text-anchor="middle" font-size="18" fill="#ef4444">✕</text>
+<text x="300" y="198" text-anchor="middle" font-size="11" fill="#065f46">Arus terbalik, dioda memblokir -- lampu padam</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Dioda cuma mengalirkan arus satu arah: searah panahnya (kiri, lampu nyala), terblokir kalau dibalik (kanan, lampu mati) -- persis prinsip yang dipakai dioda penyearah di charger HP buat mengubah AC jadi DC.</p>
+</div>
 
 ## ⚠️ Kesalahan Umum
 

@@ -150,6 +150,8 @@ draft: false
 }
 </style>
 
+Paham rumusnya di atas kertas itu satu hal, tapi bisa MEMAKAINYA dengan benar di soal nyata adalah hal lain -- di sinilah pentingnya latihan seperti ini: supaya kamu nggak cuma hafal rumus, tapi juga peka kapan rumus yang mana harus dipakai, dan nggak gampang tertukar antara nilai "sejati" (L₀, m₀, waktu yang dialami langsung) dengan nilai hasil pengukuran pengamat yang bergerak relatif (L, m, waktu yang terukur dari jauh).
+
 Latihan ini menguji tiga konsep yang sudah dibahas satu per satu: [Dilatasi Waktu](/materi/dilatasi-waktu), [Kontraksi Panjang](/materi/kontraksi-panjang), dan [Massa Relativistik dan Momentum Relativistik](/materi/massa-relativistik-dan-momentum-relativistik). Coba kerjakan dulu sendiri sebelum membaca pembahasannya -- kalau masih ragu sama rumusnya, buka lagi materi terkait.
 
 ## Soal 1: Paradoks Kembar

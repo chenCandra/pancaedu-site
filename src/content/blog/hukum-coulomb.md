@@ -267,13 +267,37 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
 
 ## ⚡ Apa Itu Hukum Coulomb?
 
-Dekatkan dua ujung sisir plastik yang habis dipakai menyisir rambut kering ke potongan kertas kecil -- kertasnya bisa "melompat" nempel ke sisir. Itu salah satu bukti sederhana kalau **muatan listrik saling memberi gaya** satu sama lain, walau tidak saling bersentuhan.
+Dekatkan dua ujung sisir plastik yang habis dipakai menyisir rambut kering ke potongan kertas kecil -- kertasnya bisa "melompat" nempel ke sisir. Itu salah satu bukti sederhana kalau **muatan listrik saling memberi gaya** satu sama lain, walau tidak saling bersentuhan. Contoh lain yang lebih dramatis: **petir**. Awan yang bermuatan sangat besar bisa membuat gaya listrik yang "menjangkau" sampai ke tanah -- begitu gayanya cukup kuat untuk mengionisasi udara, terjadilah pelepasan muatan besar-besaran yang kita lihat sebagai kilatan petir, lengkap dengan suara gledek yang menggelegar.
 
-Dua muatan yang sejenis (sama-sama positif, atau sama-sama negatif) akan **tolak-menolak**. Dua muatan yang berbeda jenis (satu positif, satu negatif) akan **tarik-menarik**. Tapi seberapa besar gaya itu? Itulah yang dijawab oleh **Hukum Coulomb**, dirumuskan oleh fisikawan Prancis Charles-Augustin de Coulomb tahun 1785.
+Dua muatan yang sejenis (sama-sama positif, atau sama-sama negatif) akan **tolak-menolak**. Dua muatan yang berbeda jenis (satu positif, satu negatif) akan **tarik-menarik**. Persis seperti rambut yang "berdiri" dan ikut mengejar balon karet yang baru digosok ke kain -- rambut dan balon jadi bermuatan berbeda jenis setelah gosokan itu, makanya saling tarik-menarik meski belum bersentuhan. Tapi seberapa besar gaya itu? Itulah yang dijawab oleh **Hukum Coulomb**, dirumuskan oleh fisikawan Prancis Charles-Augustin de Coulomb tahun 1785.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" fill="none"/>
+    <circle cx="110" cy="80" r="34" fill="#ef4444"/>
+    <text x="110" y="88" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">+</text>
+    <circle cx="290" cy="80" r="34" fill="#ef4444"/>
+    <text x="290" y="88" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">+</text>
+    <path d="M 160 68 L 185 68 L 178 62 M 185 68 L 178 74" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 240 68 L 215 68 L 222 62 M 215 68 L 222 74" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="200" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">tolak-menolak (sejenis)</text>
+    <circle cx="110" cy="175" r="34" fill="#ef4444"/>
+    <text x="110" y="183" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">+</text>
+    <circle cx="290" cy="175" r="34" fill="#3b82f6"/>
+    <text x="290" y="183" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">−</text>
+    <path d="M 225 175 L 198 175 L 205 169 M 198 175 L 205 181" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 175 175 L 202 175 L 195 169 M 202 175 L 195 181" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="200" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">tarik-menarik (beda jenis)</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Muatan sejenis saling mendorong, muatan beda jenis saling menarik -- besarnya dihitung dengan Hukum Coulomb.</p>
+</div>
 
 <div class="mtr-def">
 💡 <strong>Hukum Coulomb</strong> menyatakan bahwa gaya listrik antara dua muatan titik berbanding lurus dengan hasil kali besar kedua muatan, dan berbanding terbalik dengan kuadrat jarak antara keduanya.

@@ -181,7 +181,13 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
+
+Coba pikirkan: remote yang bisa menyalakan TV dari seberang ruangan tanpa kabel sama sekali, HP yang bisa mengirim pesan ke teman di kota lain lewat sinyal radio, dokter yang bisa "melihat" tulangmu lewat rontgen tanpa membedah apa pun, atau microwave yang bisa memasak makanan cuma dalam hitungan menit. Keempat alat itu kelihatannya nggak ada hubungannya sama sekali -- tapi sebenarnya, semuanya memakai JENIS GELOMBANG YANG SAMA, cuma beda "ukuran". Itulah yang mau kita bongkar di materi penutup bab ini.
 
 Sepanjang Bab Fenomena Elektromagnetik ini, kita sudah bertemu banyak "aktor": medan magnet, arus listrik, GGL induksi, sampai arus AC yang mengalir di rumahmu. Ternyata, semua gejala itu punya benang merah yang sama, dan benang merah itulah yang jadi topik penutup bab ini: **gelombang elektromagnetik**.
 
@@ -234,6 +240,48 @@ Dari panjang gelombang PALING BESAR sampai PALING KECIL, spektrum elektromagneti
 </div>
 
 Perhatikan betapa SEMPITNYA daerah **Cahaya Tampak** (400-700 nm) dibanding keseluruhan spektrum -- itulah satu-satunya "jendela" kecil yang bisa ditangkap mata manusia, di antara jangkauan spektrum yang jauh lebih luas dan tidak kasat mata di kedua sisinya.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="specGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#ef4444"/>
+        <stop offset="25%" stop-color="#f97316"/>
+        <stop offset="45%" stop-color="#eab308"/>
+        <stop offset="60%" stop-color="#22c55e"/>
+        <stop offset="75%" stop-color="#3b82f6"/>
+        <stop offset="90%" stop-color="#6366f1"/>
+        <stop offset="100%" stop-color="#a21caf"/>
+      </linearGradient>
+    </defs>
+    <rect x="20" y="95" width="360" height="30" rx="15" fill="url(#specGrad)"/>
+    <text x="28" y="82" font-size="11" font-weight="700" fill="#312e81">Radio</text>
+    <text x="340" y="82" font-size="11" font-weight="700" fill="#312e81">Gamma</text>
+    <g transform="translate(60,150)">
+      <line x1="0" y1="0" x2="0" y2="-22" stroke="#312e81" stroke-width="3"/>
+      <circle cx="0" cy="-25" r="4" fill="#312e81"/>
+      <line x1="-10" y1="-18" x2="-18" y2="-26" stroke="#312e81" stroke-width="2"/>
+      <line x1="10" y1="-18" x2="18" y2="-26" stroke="#312e81" stroke-width="2"/>
+      <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">antena HP</text>
+    </g>
+    <g transform="translate(150,150)">
+      <rect x="-8" y="-24" width="16" height="30" rx="4" fill="#312e81"/>
+      <circle cx="0" cy="-30" r="3" fill="#f97316"/>
+      <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">remote TV</text>
+    </g>
+    <g transform="translate(240,150)">
+      <circle cx="0" cy="-18" r="10" fill="#fde047" stroke="#312e81" stroke-width="2"/>
+      <rect x="-4" y="-8" width="8" height="8" fill="#312e81"/>
+      <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">lampu</text>
+    </g>
+    <g transform="translate(335,150)">
+      <rect x="-15" y="-30" width="30" height="38" rx="4" fill="#ffffff" stroke="#312e81" stroke-width="2"/>
+      <text x="0" y="-7" text-anchor="middle" font-size="13" font-weight="800" fill="#312e81">X</text>
+      <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">rontgen</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Satu keluarga gelombang yang sama -- cuma beda panjang gelombang, dari yang dipakai HP/remote sampai yang dipakai rontgen di rumah sakit.</p>
+</div>
 
 ## 🔧 Pemanfaatan Tiap Daerah Spektrum
 

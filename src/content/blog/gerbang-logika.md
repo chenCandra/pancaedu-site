@@ -190,9 +190,51 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.mtr-gate-selector { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.mtr-gate-btn.active { background: #10b981; border-color: #059669; color: #fff; }
+.mtr-gate-stage { display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+.mtr-gate-inputs { display: flex; flex-direction: column; gap: 0.6rem; }
+.mtr-gate-io-btn {
+  font-family: 'Courier New', monospace; font-weight: 800; font-size: 1rem;
+  padding: 0.6rem 1rem; border-radius: 0.6rem; border: 2px solid var(--border);
+  background: #e5e7eb; color: #374151; cursor: pointer; min-width: 4.5rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.mtr-gate-io-btn.on { background: #10b981; border-color: #059669; color: #fff; }
+.mtr-gate-io-btn.hidden-io { display: none; }
+.mtr-gate-symbol { background: var(--surface-solid); border-radius: 0.75rem; padding: 0.5rem; }
+.mtr-gate-output { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.mtr-gate-led {
+  width: 3.5rem; height: 3.5rem; border-radius: 50%; background: #9ca3af; border: 3px solid #6b7280;
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.mtr-gate-led.on { background: #22c55e; border-color: #16a34a; box-shadow: 0 0 20px 6px rgba(34,197,94,0.6); }
 </style>
 
 Di materi [Transistor: Saklar dan Penguat](/materi/transistor-saklar-dan-penguat) kita belajar transistor bisa berfungsi sebagai saklar digital: ON (1) atau OFF (0). Pertanyaannya sekarang: bagaimana caranya jutaan saklar sederhana seperti itu bisa disusun jadi sesuatu serumit prosesor HP-mu yang bisa menjalankan game, memutar musik, dan menghitung? Jawabannya dimulai dari unit paling dasar: **gerbang logika (logic gate)**.
+
+Kamu sebenarnya sudah sering mikir dengan "logika gerbang" tanpa sadar. Misalnya: HP kamu baru mau connect ke WiFi kampus KALAU password-nya benar DAN mode pesawat sedang OFF -- itu persis logika **AND** (dua syarat harus sama-sama terpenuhi). Atau alarm HP yang berbunyi kalau waktunya sudah tiba ATAU kamu menekan tombol snooze yang sudah habis waktunya -- itu logika **OR**. Nah, gerbang logika adalah versi elektronik dari cara "berpikir" sederhana seperti ini, dibangun dari transistor-transistor yang disusun rapi.
 
 ## 🔢 Sinyal Digital: Cuma Ada Dua Pilihan
 
@@ -265,6 +307,100 @@ Menggabungkan gerbang NOT dengan AND/OR/XOR menghasilkan tiga gerbang turunan ya
 <div class="mtr-def">
 💡 Fakta menarik: gerbang NAND dan NOR disebut <strong>"gerbang universal"</strong> -- SEMUA jenis gerbang logika lain (AND, OR, NOT, XOR, dst) bisa dibangun HANYA dari kombinasi NAND saja (atau HANYA dari NOR saja). Inilah salah satu alasan kenapa NAND/NOR jadi komponen favorit dalam desain chip komputer sungguhan.
 </div>
+
+Daripada cuma membaca tabel kebenarannya, coba langsung mainkan sendiri di widget bawah ini -- pilih salah satu dari 6 gerbang, klik input A (dan B), dan lihat "lampu" output-nya menyala atau mati sesuai logikanya. Simbol gerbangnya juga ikut berubah setiap kamu pilih gerbang yang berbeda.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🔌 Pilih gerbangnya, lalu klik A (dan B) buat ubah inputnya -- lihat simbol gerbang dan lampu output berubah live:</p>
+  <div class="mtr-gate-selector" id="gerbangSelector">
+    <button type="button" class="mtr-mini-btn mtr-gate-btn active" data-gate="AND">AND</button>
+    <button type="button" class="mtr-mini-btn mtr-gate-btn" data-gate="OR">OR</button>
+    <button type="button" class="mtr-mini-btn mtr-gate-btn" data-gate="NOT">NOT</button>
+    <button type="button" class="mtr-mini-btn mtr-gate-btn" data-gate="NAND">NAND</button>
+    <button type="button" class="mtr-mini-btn mtr-gate-btn" data-gate="NOR">NOR</button>
+    <button type="button" class="mtr-mini-btn mtr-gate-btn" data-gate="XOR">XOR</button>
+  </div>
+  <div class="mtr-gate-stage">
+    <div class="mtr-gate-inputs">
+      <button type="button" class="mtr-gate-io-btn" id="gerbangInputA">A = 0</button>
+      <button type="button" class="mtr-gate-io-btn" id="gerbangInputB">B = 0</button>
+    </div>
+    <div class="mtr-gate-symbol">
+      <svg id="gerbangSvg" viewBox="0 0 160 100" width="160" height="100"></svg>
+    </div>
+    <div class="mtr-gate-output">
+      <div class="mtr-gate-led" id="gerbangLed"></div>
+      <span class="mtr-mini-label">Output = <strong id="gerbangOutputLabel">0</strong></span>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var selector = document.getElementById('gerbangSelector');
+  if (!selector) return;
+  var btnA = document.getElementById('gerbangInputA');
+  var btnB = document.getElementById('gerbangInputB');
+  var led = document.getElementById('gerbangLed');
+  var outLabel = document.getElementById('gerbangOutputLabel');
+  var svg = document.getElementById('gerbangSvg');
+  var gateBtns = selector.querySelectorAll('.mtr-gate-btn');
+  var gateAktif = 'AND';
+  var a = 0;
+  var b = 0;
+  var simbol = {
+    AND: '<line x1="0" y1="35" x2="20" y2="35" stroke="#374151" stroke-width="3"/><line x1="0" y1="65" x2="20" y2="65" stroke="#374151" stroke-width="3"/><path d="M20,20 H65 A30,30 0 0 1 65,80 H20 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><line x1="95" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>',
+    OR: '<line x1="0" y1="35" x2="22" y2="35" stroke="#374151" stroke-width="3"/><line x1="0" y1="65" x2="22" y2="65" stroke="#374151" stroke-width="3"/><path d="M15,20 Q35,50 15,80 Q55,80 90,50 Q55,20 15,20 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><line x1="90" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>',
+    NOT: '<line x1="0" y1="50" x2="20" y2="50" stroke="#374151" stroke-width="3"/><path d="M20,20 L20,80 L90,50 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><circle cx="97" cy="50" r="7" fill="#fff" stroke="#059669" stroke-width="3"/><line x1="104" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>',
+    NAND: '<line x1="0" y1="35" x2="20" y2="35" stroke="#374151" stroke-width="3"/><line x1="0" y1="65" x2="20" y2="65" stroke="#374151" stroke-width="3"/><path d="M20,20 H65 A30,30 0 0 1 65,80 H20 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><circle cx="102" cy="50" r="7" fill="#fff" stroke="#059669" stroke-width="3"/><line x1="109" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>',
+    NOR: '<line x1="0" y1="35" x2="22" y2="35" stroke="#374151" stroke-width="3"/><line x1="0" y1="65" x2="22" y2="65" stroke="#374151" stroke-width="3"/><path d="M15,20 Q35,50 15,80 Q55,80 90,50 Q55,20 15,20 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><circle cx="97" cy="50" r="7" fill="#fff" stroke="#059669" stroke-width="3"/><line x1="104" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>',
+    XOR: '<path d="M8,20 Q28,50 8,80" fill="none" stroke="#059669" stroke-width="3"/><line x1="0" y1="35" x2="14" y2="35" stroke="#374151" stroke-width="3"/><line x1="0" y1="65" x2="14" y2="65" stroke="#374151" stroke-width="3"/><path d="M15,20 Q35,50 15,80 Q55,80 90,50 Q55,20 15,20 Z" fill="#a7f3d0" stroke="#059669" stroke-width="3"/><line x1="90" y1="50" x2="140" y2="50" stroke="#374151" stroke-width="3"/>'
+  };
+  function hitungOutput() {
+    switch (gateAktif) {
+      case 'AND': return (a && b) ? 1 : 0;
+      case 'OR': return (a || b) ? 1 : 0;
+      case 'NOT': return a ? 0 : 1;
+      case 'NAND': return (a && b) ? 0 : 1;
+      case 'NOR': return (!a && !b) ? 1 : 0;
+      case 'XOR': return (a !== b) ? 1 : 0;
+      default: return 0;
+    }
+  }
+  function render() {
+    svg.innerHTML = simbol[gateAktif];
+    btnA.textContent = 'A = ' + a;
+    btnA.classList.toggle('on', a === 1);
+    if (gateAktif === 'NOT') {
+      btnB.classList.add('hidden-io');
+    } else {
+      btnB.classList.remove('hidden-io');
+      btnB.textContent = 'B = ' + b;
+      btnB.classList.toggle('on', b === 1);
+    }
+    var hasil = hitungOutput();
+    outLabel.textContent = hasil;
+    led.classList.toggle('on', hasil === 1);
+    gateBtns.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-gate') === gateAktif);
+    });
+  }
+  gateBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      gateAktif = btn.getAttribute('data-gate');
+      render();
+    });
+  });
+  btnA.addEventListener('click', function () {
+    a = a ? 0 : 1;
+    render();
+  });
+  btnB.addEventListener('click', function () {
+    b = b ? 0 : 1;
+    render();
+  });
+  render();
+})();
+</script>
 
 ## ✏️ Contoh Soal
 

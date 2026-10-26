@@ -206,6 +206,28 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 
 Setelah kenalan sama [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) dan [Percobaan Michelson-Morley](/materi/percobaan-michelson-morley) yang melatarbelakanginya, sekarang saatnya bahas konsekuensi pertamanya yang paling terkenal: **dilatasi waktu** -- fenomena di mana waktu berjalan lebih lambat bagi sesuatu yang bergerak sangat cepat, dibanding bagi pengamat yang diam.
@@ -254,6 +276,101 @@ Perhatikan pola pentingnya lewat dua kondisi ekstrem:
 </div>
 
 Inilah kenapa dilatasi waktu SAMA SEKALI tidak terasa di kecepatan sehari-hari (mobil, pesawat komersial) -- v/c-nya terlalu kecil sampai γ nyaris persis 1. Efeknya baru jadi signifikan pada kecepatan yang benar-benar mendekati kecepatan cahaya.
+
+Daripada cuma membayangkan, coba lihat sendiri dua jam di bawah ini "berlomba" berputar:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Geser kecepatan roketnya -- lihat jam di roket mulai "ngadat" dibanding jam di Bumi (animasi ini DIPERCEPAT biar bedanya kelihatan jelas -- di dunia nyata efek ini baru terasa di atas ~0,1c):</p>
+  <canvas id="dilatasiCanvas" width="640" height="260" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eef2ff,#fdf4ff);border-radius:14px;"></canvas>
+  <input type="range" id="dilatasiSlider" min="0" max="99" value="0" style="width:100%;margin-top:10px;accent-color:#4f46e5;">
+  <p class="mtr-mini-label">Kecepatan roket (v): <strong id="dilatasiVLabel">0% c</strong> &middot; Faktor Lorentz γ = <strong id="dilatasiGammaLabel">1.00</strong></p>
+  <p class="mtr-mini-label" id="dilatasiKalimatLabel"><strong>1 detik di roket = 1.00 detik di Bumi</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('dilatasiCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('dilatasiSlider');
+  var gammaLabel = document.getElementById('dilatasiGammaLabel');
+  var vLabel = document.getElementById('dilatasiVLabel');
+  var kalimatLabel = document.getElementById('dilatasiKalimatLabel');
+  var w = canvas.width, h = canvas.height;
+  var basePeriod = 2.2;
+  var startTime = null;
+  function hitungGamma(persenV) {
+    var v = persenV / 100;
+    var bawahAkar = 1 - v * v;
+    if (bawahAkar <= 0) bawahAkar = 0.0001;
+    return 1 / Math.sqrt(bawahAkar);
+  }
+  function gambarJam(cx, cy, r, angle, judul, warna, lap) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = warna;
+    ctx.stroke();
+    for (var i = 0; i < 12; i++) {
+      var a = (Math.PI * 2 / 12) * i;
+      var x1 = cx + Math.cos(a) * (r - 6);
+      var y1 = cy + Math.sin(a) * (r - 6);
+      var x2 = cx + Math.cos(a) * (r - 14);
+      var y2 = cy + Math.sin(a) * (r - 14);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    var hx = cx + Math.cos(angle) * (r * 0.7);
+    var hy = cy + Math.sin(angle) * (r * 0.7);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(hx, hy);
+    ctx.strokeStyle = warna;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(hx, hy, 5, 0, Math.PI * 2);
+    ctx.fillStyle = warna;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#26243b';
+    ctx.fill();
+    ctx.fillStyle = '#26243b';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(judul, cx, cy - r - 14);
+    ctx.font = '12px sans-serif';
+    ctx.fillStyle = warna;
+    ctx.fillText('Putaran: ' + lap, cx, cy + r + 22);
+  }
+  function render(now) {
+    if (startTime === null) startTime = now;
+    var t = (now - startTime) / 1000;
+    var persenV = parseFloat(slider.value);
+    var gamma = hitungGamma(persenV);
+    var earthPeriod = basePeriod;
+    var rocketPeriod = basePeriod * gamma;
+    var earthAngle = -Math.PI / 2 + (Math.PI * 2) * ((t / earthPeriod) % 1);
+    var rocketAngle = -Math.PI / 2 + (Math.PI * 2) * ((t / rocketPeriod) % 1);
+    var earthLap = Math.floor(t / earthPeriod);
+    var rocketLap = Math.floor(t / rocketPeriod);
+    ctx.clearRect(0, 0, w, h);
+    gambarJam(170, 125, 72, earthAngle, 'Jam di Bumi (diam)', '#2563eb', earthLap);
+    gambarJam(470, 125, 72, rocketAngle, 'Jam di Roket (bergerak)', '#dc2626', rocketLap);
+    gammaLabel.textContent = gamma.toFixed(2);
+    vLabel.textContent = persenV.toFixed(0) + '% c';
+    kalimatLabel.innerHTML = '<strong>1 detik di roket = ' + gamma.toFixed(2) + ' detik di Bumi</strong>';
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
+</script>
 
 ## 🛰️ Aplikasi Nyata Dilatasi Waktu
 

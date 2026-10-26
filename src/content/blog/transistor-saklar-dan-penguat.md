@@ -158,9 +158,15 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #065f46; font-weight: 600; }
 </style>
 
 Di materi [Semikonduktor dan Dioda](/materi/semikonduktor-dan-dioda) kita kenalan dengan komponen elektronika paling dasar: dioda, sambungan 2 lapis semikonduktor yang cuma bisa mengalirkan arus satu arah. Sekarang kita naik satu tingkat ke komponen yang jauh lebih canggih -- yang tanpanya, HP dan komputer di sekitarmu tidak akan pernah bisa "berpikir": **transistor**.
+
+Coba bayangkan ini: di dalam HP yang kamu pegang sekarang, ada LEBIH DARI SATU MILIAR transistor mini yang nyala-mati triliunan kali per detik, cuma untuk mengolah data -- saklar super kecil dan super cepat. Di sisi lain, speaker aktif yang bisa "menggedein" suara pelan dari HP-mu jadi kencang memenuhi ruangan juga kerja transistor, tapi dengan fungsi yang berbeda sama sekali: bukan sebagai saklar, melainkan sebagai PENGUAT (amplifier). Dua fungsi inilah yang akan kita bahas di materi ini.
 
 ## 🔀 Tiga Lapis, Tiga Kaki
 
@@ -177,6 +183,26 @@ Kemampuan "arus kecil mengendalikan arus besar" inilah yang membuat transistor p
 <div class="mtr-card"><span class="mtr-card-icon">🔘</span><h4>Sebagai Saklar</h4><p>Transistor cuma punya 2 keadaan: ON (menghantar penuh) atau OFF (tidak menghantar sama sekali) -- persis seperti saklar digital "1" dan "0". Inilah dasar SEMUA chip komputer modern, yang berisi miliaran transistor mini yang menyala-mati super cepat.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">📢</span><h4>Sebagai Penguat (Amplifier)</h4><p>Sinyal lemah (mis. dari mikrofon) di basis bisa "diperbesar" jadi sinyal kuat di kolektor-emitor -- prinsip ini dipakai di amplifier audio, radio, dan berbagai alat elektronik lainnya.</p></div>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="40" y="110" width="320" height="50" rx="10" fill="#a7f3d0" stroke="#059669" stroke-width="3"/>
+    <text x="55" y="100" font-size="12" font-weight="700" fill="#065f46">arus BESAR (kolektor → emitor)</text>
+    <circle cx="90" cy="135" r="8" fill="#10b981"/>
+    <circle cx="130" cy="135" r="8" fill="#10b981"/>
+    <circle cx="300" cy="135" r="8" fill="#10b981"/>
+    <circle cx="330" cy="135" r="8" fill="#10b981"/>
+    <path d="M 340 135 L 358 128 L 358 142 Z" fill="#065f46"/>
+    <rect x="185" y="55" width="30" height="55" rx="6" fill="#6ee7b7" stroke="#059669" stroke-width="3"/>
+    <circle cx="200" cy="50" r="10" fill="#34d399" stroke="#065f46" stroke-width="2"/>
+    <line x1="200" y1="30" x2="200" y2="15" stroke="#065f46" stroke-width="3"/>
+    <path d="M 192 22 L 200 10 L 208 22 Z" fill="#065f46"/>
+    <text x="200" y="8" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">arus kecil (basis)</text>
+    <rect x="193" y="112" width="14" height="46" fill="#059669"/>
+    <text x="200" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">keran mini mengatur keran besar</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Arus kecil di basis seperti keran mini yang mengatur aliran air jauh lebih besar -- persis cara transistor mengendalikan arus kolektor-emitor.</p>
 </div>
 
 ## 🔬 Dari Komponen ke IC (Integrated Circuit)

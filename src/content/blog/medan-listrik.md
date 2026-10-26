@@ -221,11 +221,16 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
 
 ## 🌱 Apersepsi
 
 Pernahkah kamu mendekatkan balon yang habis digosokkan ke rambut, lalu melihat rambutmu ikut "berdiri" mengejarnya -- padahal balonnya belum menyentuh rambutmu sama sekali? Ada sesuatu yang tak terlihat di sekitar balon itu, yang bisa "menjangkau" dan memengaruhi benda lain dari jarak jauh.
+
+Contoh lain yang mungkin lebih sering kamu rasakan: baju-baju di jemuran atau yang baru keluar dari mesin cuci/pengering kadang saling "nempel-nempel" dan bikin sedikit kesetrum pas dipisahkan. Itu juga akibat medan listrik -- gesekan antar kain membuat sebagian permukaannya jadi bermuatan, dan medan listrik di sekitar muatan itulah yang membuat baju-baju saling tarik-menarik. Bahkan di dekat kabel tegangan tinggi (SUTET), medan listriknya cukup kuat sampai kadang terasa efeknya pada rambut atau benda logam kecil di sekitarnya -- makanya ada jarak aman yang wajib dijaga dari kabel semacam itu.
 
 ## 🤔 Coba Pikirkan
 
@@ -288,6 +293,30 @@ Arah medan listrik selalu didefinisikan sebagai arah gaya yang dialami muatan uj
 </div>
 
 Kalau digambar sebagai garis medan, garis-garisnya **keluar** dari muatan positif dan **masuk** ke muatan negatif. Makin rapat garisnya, makin kuat medannya di situ.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="150" cy="110" r="26" fill="#ef4444"/>
+    <text x="150" y="118" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">+</text>
+    <g stroke="#9d174d" stroke-width="2.2" fill="none">
+      <path d="M 150 110 L 230 40"/>
+      <path d="M 150 110 L 250 110"/>
+      <path d="M 150 110 L 230 180"/>
+      <path d="M 150 110 L 150 30"/>
+      <path d="M 150 110 L 150 190"/>
+      <path d="M 150 110 L 70 40"/>
+      <path d="M 150 110 L 70 180"/>
+    </g>
+    <path d="M 222 46 L 230 40 L 226 50" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 240 104 L 250 110 L 240 116" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 222 174 L 230 180 L 222 186" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="300" cy="150" r="12" fill="#3b82f6"/>
+    <text x="300" y="154" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">q</text>
+    <text x="300" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">muatan uji</text>
+    <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">muatan sumber</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Garis medan listrik memancar keluar dari muatan positif -- muatan uji di sekitarnya ikut merasakan gayanya.</p>
+</div>
 
 ### Kalau Ada Muatan di Dalam Medan
 

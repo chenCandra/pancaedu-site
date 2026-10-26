@@ -181,6 +181,10 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
 
 Di materi [Arus Bolak-Balik: Konsep Dasar](/materi/arus-bolak-balik-konsep-dasar) kita sudah paham bentuk gelombang AC dan kenapa PLN memakainya. Tapi ada satu hal yang belum kita bahas: apa yang sebenarnya terjadi kalau AC itu mengalir lewat komponen-komponen yang sudah kamu kenal dari Rangkaian Listrik dulu -- **resistor**, dan dua komponen baru yang belum pernah kita bahas perilakunya dalam rangkaian: **induktor** dan **kapasitor**?
@@ -237,6 +241,8 @@ Reaktansi kapasitif (XC) dihitung dengan rumus:
 
 Kali ini XC **berbanding TERBALIK** dengan frekuensi -- makin tinggi frekuensi, makin KECIL reaktansi kapasitornya, makin BESAR arus yang bisa lewat. Kapasitor jadinya seperti "penyaring" kebalikan dari induktor: meloloskan sinyal frekuensi TINGGI, menghalangi sinyal frekuensi RENDAH (bahkan menghalangi total arus DC yang frekuensinya dianggap 0 Hz -- makanya kapasitor sering dipakai untuk memblokir komponen DC dari sebuah sinyal).
 
+Kombinasi induktor dan kapasitor ini juga dipakai di dalam **charger HP**-mu. Setelah trafo menurunkan tegangan dan komponen penyearah mengubahnya jadi DC, arus yang keluar masih "kotor" -- masih ada sisa riak/gelombang AC kecil menumpang di dalamnya. Pasangan L dan C di tahap akhir charger berfungsi sebagai penyaring (filter) yang meredam sisa riak itu, supaya arus DC yang akhirnya masuk ke baterai HP-mu benar-benar bersih dan rata.
+
 ## 📊 Rangkuman Perbandingan
 
 <div class="mtr-cards">
@@ -245,6 +251,23 @@ Kali ini XC **berbanding TERBALIK** dengan frekuensi -- makin tinggi frekuensi, 
 <div class="mtr-card"><span class="mtr-card-icon">🌀</span><h4>Induktor</h4><p>Arus tertinggal 90° (ELI). XL = 2πfL, membesar seiring frekuensi naik.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">🔋</span><h4>Kapasitor</h4><p>Arus mendahului 90° (ICE). XC = 1/(2πfC), mengecil seiring frekuensi naik.</p></div>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="16" font-size="12" font-weight="700" fill="#831843">Tegangan &amp; arus AC yang terus bergelombang...</text>
+    <path d="M20,55 C50,20 70,20 100,55 C130,90 150,90 180,55 C210,20 230,20 260,55 C290,90 310,90 340,55 C355,40 365,40 380,55" fill="none" stroke="#9d174d" stroke-width="3"/>
+    <text x="20" y="108" font-size="12" font-weight="700" fill="#831843">...mengalir lewat tiga komponen ini:</text>
+    <line x1="20" y1="150" x2="380" y2="150" stroke="#26243b" stroke-width="4"/>
+    <polyline points="55,150 65,150 70,135 80,165 90,135 100,165 105,150 115,150" fill="none" stroke="#ec4899" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="85" y="188" text-anchor="middle" font-size="16" font-weight="800" fill="#831843">R</text>
+    <path d="M160,150 a8,12 0 0 1 16,0 a8,12 0 0 1 16,0 a8,12 0 0 1 16,0 a8,12 0 0 1 16,0" fill="none" stroke="#ec4899" stroke-width="4"/>
+    <text x="208" y="188" text-anchor="middle" font-size="16" font-weight="800" fill="#831843">L</text>
+    <line x1="290" y1="128" x2="290" y2="172" stroke="#ec4899" stroke-width="5"/>
+    <line x1="305" y1="128" x2="305" y2="172" stroke="#ec4899" stroke-width="5"/>
+    <text x="297" y="188" text-anchor="middle" font-size="16" font-weight="800" fill="#831843">C</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">R, L, dan C bereaksi berbeda-beda terhadap arus AC yang terus bergelombang.</p>
 </div>
 
 Coba jelajahi ketiganya langsung di simulasi bawah -- pindah-pindah tab, geser slider Frekuensi dan nilai komponennya, lalu amati bagaimana bentuk gelombang arus (garis biru) bergeser maju/mundur relatif terhadap tegangan (garis kuning), dan bagaimana angka reaktansinya berubah.

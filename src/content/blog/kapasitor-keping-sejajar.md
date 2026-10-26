@@ -246,11 +246,16 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
 
 ## 🌱 Apersepsi
 
 Pernah lihat lampu kilat (flash) kamera menyala sangat terang, padahal cuma sekejap dan sumber tenaganya cuma baterai kecil? Baterai itu sendiri sebenarnya tidak sanggup mendorong arus sebesar itu secara langsung -- ada komponen lain di dalam kamera yang "mengisi" energi pelan-pelan dari baterai, lalu melepaskannya sekaligus dalam waktu sangat singkat. Komponen itu bernama **kapasitor**.
+
+Kapasitor juga ada di dalam **charger HP** dan **power bank** -- membantu menghaluskan tegangan yang masuk/keluar supaya arusnya lebih stabil, tidak "berisik" naik-turun tiba-tiba. Tanpa kapasitor, perangkat elektronik yang kamu pakai sehari-hari bisa gampang rusak akibat lonjakan tegangan yang tidak terkendali.
 
 ## 🤔 Coba Pikirkan
 
@@ -282,6 +287,31 @@ Bentuk kapasitor paling sederhana adalah dua keping konduktor identik yang disus
 </div>
 
 Di antara kedua keping itu muncul medan listrik yang (hampir) seragam, mengarah dari keping positif ke keping negatif -- inilah tempat energinya "disimpan".
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect x="110" y="30" width="18" height="140" fill="#ef4444"/>
+    <text x="119" y="22" text-anchor="middle" font-size="14" font-weight="800" fill="#831843">+Q</text>
+    <rect x="272" y="30" width="18" height="140" fill="#3b82f6"/>
+    <text x="281" y="22" text-anchor="middle" font-size="14" font-weight="800" fill="#831843">−Q</text>
+    <g stroke="#9d174d" stroke-width="2.2">
+      <line x1="128" y1="55" x2="272" y2="55"/>
+      <line x1="128" y1="85" x2="272" y2="85"/>
+      <line x1="128" y1="115" x2="272" y2="115"/>
+      <line x1="128" y1="145" x2="272" y2="145"/>
+    </g>
+    <g fill="#9d174d">
+      <path d="M 260 50 L 272 55 L 260 60 Z"/>
+      <path d="M 260 80 L 272 85 L 260 90 Z"/>
+      <path d="M 260 110 L 272 115 L 260 120 Z"/>
+      <path d="M 260 140 L 272 145 L 260 150 Z"/>
+    </g>
+    <text x="200" y="185" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">medan listrik (E) dari + ke −</text>
+    <path d="M 128 15 L 118 15 M 128 15 L 272 15 M 272 15 L 262 15" stroke="#26243b" stroke-width="1.5" fill="none"/>
+    <text x="200" y="12" text-anchor="middle" font-size="11" fill="#26243b">d</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Dua keping sejajar bermuatan berlawanan, dengan medan listrik seragam di antaranya.</p>
+</div>
 
 ### Kapasitansi (C)
 

@@ -224,7 +224,12 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
+
+Pernah perhatikan senter yang nyalanya makin lama makin redup, padahal belum benar-benar mati? Itu bukan lampunya yang rusak -- itu baterainya yang mulai "lemah", tegangannya (V) turun sedikit-sedikit. Begitu juga kabel charger atau kabel ekstensi yang tiba-tiba kerasa panas saat dipakai buat alat listrik yang menyedot arus besar. Dua kejadian sehari-hari ini sebenarnya cuma soal satu hubungan sederhana antara tegangan, arus, dan hambatan -- dan itulah yang akan kita bahas di materi ini.
 
 Setelah membahas [Listrik Statis](/materi/hukum-coulomb) (muatan diam), sekarang kita masuk ke **Listrik Dinamis** -- listrik yang bergerak sebagai arus, mengalir di dalam rangkaian. Kita mulai dari hubungan paling mendasar antara tegangan, arus, dan hambatan: **Hukum Ohm**.
 
@@ -269,6 +274,33 @@ Sebuah resistor 20 Ω dihubungkan ke sumber tegangan 6 V. Berapa arus yang menga
 
 I = V/R = 6/20 = **0,3 A**
 
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ohmArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#ec4899"/>
+      </marker>
+    </defs>
+    <rect x="60" y="40" width="280" height="140" rx="14" fill="none" stroke="#26243b" stroke-width="6"/>
+    <rect x="168" y="34" width="64" height="12" fill="#fdf2f8"/>
+    <polyline points="168,40 180,40 185,22 195,58 205,22 215,58 220,40 232,40" fill="none" stroke="#9d174d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="200" y="18" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">R (Hambatan)</text>
+    <rect x="334" y="94" width="12" height="32" fill="#fdf2f8"/>
+    <circle cx="340" cy="110" r="26" fill="#fef3c7" stroke="#26243b" stroke-width="4"/>
+    <path d="M330 100 L350 120 M350 100 L330 120" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+    <text x="340" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">Lampu</text>
+    <rect x="170" y="174" width="60" height="12" fill="#fdf2f8"/>
+    <line x1="185" y1="160" x2="185" y2="200" stroke="#26243b" stroke-width="7" stroke-linecap="round"/>
+    <line x1="207" y1="150" x2="207" y2="210" stroke="#26243b" stroke-width="4" stroke-linecap="round"/>
+    <text x="178" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">−</text>
+    <text x="215" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">+</text>
+    <text x="200" y="214" text-anchor="middle" font-size="13" font-weight="700" fill="#9d174d">Sumber Tegangan (V)</text>
+    <path d="M60 130 L60 90" stroke="#ec4899" stroke-width="4" marker-end="url(#ohmArrow)"/>
+    <text x="38" y="110" text-anchor="middle" font-size="16" font-weight="700" fill="#9d174d">I</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Rangkaian sederhana: tegangan (V) "mendorong" arus (I) mengalir lewat hambatan (R) dan lampu.</p>
+</div>
+
 ## 📟 Memasang Amperemeter dan Voltmeter dengan Benar
 
 Ini bagian yang paling sering keliru -- perhatikan baik-baik:
@@ -304,6 +336,10 @@ Sebuah lampu menyala dengan tegangan 6 V dan arus 0,3 A. Berapa dayanya, dan ber
 - E = P × t = 1,8 × 2 = **3,6 Wh**
 
 Coba jelajahi tab "🏠 Home Electricity" di simulasi bawah untuk melihat langsung bagaimana perangkat rumah tangga memakai energi listrik dari waktu ke waktu.
+
+<div class="mtr-note">
+💡 <strong>Kenapa kabel bisa kepanasan?</strong> Kabel juga punya hambatan kecil (R), walau biasanya diabaikan. Kalau arus (I) yang mengalir lewatnya terlalu besar untuk ukuran kabel itu (misalnya kabel kecil dipaksa mengalirkan arus alat yang berat seperti AC atau setrika), energi yang hilang jadi panas di kabel itu (P = I² × R) bisa jadi sangat besar -- itulah kenapa kabel yang "kekecilan" bisa terasa panas, bahkan berisiko terbakar kalau dipakai terus-menerus.
+</div>
 
 ## ⚠️ Kesalahan Umum
 

@@ -229,6 +229,10 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
 
 Di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus) sempat disinggung soal eksperimen yang jadi salah satu pemicu lahirnya teori itu. Kali ini kita bahas tuntas: **Percobaan Michelson-Morley** tahun 1887, salah satu eksperimen paling terkenal dalam sejarah fisika -- bukan karena berhasil membuktikan sesuatu, tapi justru karena "gagal total" membuktikan apa yang seharusnya ia buktikan.
@@ -274,9 +278,34 @@ Alat yang mereka pakai disebut **interferometer** -- mampu mendeteksi perbedaan 
   </div>
 </div>
 
-## 😲 Hasilnya: Nihil
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="45" cy="130" r="12" fill="#fbbf24" stroke="#b45309" stroke-width="2"/>
+  <line x1="28" y1="118" x2="18" y2="108" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+  <line x1="24" y1="130" x2="12" y2="130" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+  <line x1="28" y1="142" x2="18" y2="152" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+  <line x1="57" y1="130" x2="190" y2="130" stroke="#f59e0b" stroke-width="3"/>
+  <line x1="178" y1="112" x2="202" y2="148" stroke="#312e81" stroke-width="4"/>
+  <line x1="202" y1="130" x2="330" y2="130" stroke="#f59e0b" stroke-width="3"/>
+  <line x1="202" y1="134" x2="330" y2="134" stroke="#fde68a" stroke-width="2" stroke-dasharray="4 3"/>
+  <rect x="330" y="112" width="10" height="36" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+  <line x1="190" y1="118" x2="190" y2="30" stroke="#f59e0b" stroke-width="3"/>
+  <line x1="194" y1="118" x2="194" y2="30" stroke="#fde68a" stroke-width="2" stroke-dasharray="4 3"/>
+  <rect x="172" y="20" width="36" height="10" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+  <line x1="190" y1="148" x2="190" y2="195" stroke="#f59e0b" stroke-width="3"/>
+  <circle cx="190" cy="206" r="13" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2.5"/>
+  <circle cx="190" cy="206" r="5" fill="#312e81"/>
+  <text x="45" y="158" font-size="11" font-weight="700" fill="#312e81" text-anchor="middle" font-family="sans-serif">sumber</text>
+  <text x="335" y="98" font-size="11" font-weight="700" fill="#312e81" text-anchor="middle" font-family="sans-serif">cermin</text>
+  <text x="190" y="14" font-size="11" font-weight="700" fill="#312e81" text-anchor="middle" font-family="sans-serif">cermin</text>
+  <text x="190" y="229" font-size="11" font-weight="700" fill="#312e81" text-anchor="middle" font-family="sans-serif">teleskop</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Interferometer Michelson: cahaya dibagi dua oleh cermin setengah perak, dipantulkan balik dari dua cermin di ujung lengan yang saling tegak lurus, lalu digabung kembali dan diamati lewat teleskop -- mencari jejak "angin eter" lewat pergeseran pola interferensinya.</p>
+</div>
 
-Michelson dan Morley mengulang percobaan ini dengan sangat teliti, memutar interferometernya ke berbagai arah dan waktu berbeda sepanjang tahun (supaya menangkap variasi arah gerak Bumi mengelilingi Matahari). Hasilnya?
+## 😲 Hasilnya: Nihil -- Seperti Berburu Hantu yang Ternyata Tidak Ada
+
+Michelson dan Morley mengulang percobaan ini dengan sangat teliti, memutar interferometernya ke berbagai arah dan waktu berbeda sepanjang tahun (supaya menangkap variasi arah gerak Bumi mengelilingi Matahari). Bayangkan situasinya seperti tim pemburu hantu yang datang ke rumah yang "katanya" berhantu, membawa alat ukur paling canggih, memeriksa setiap sudut ruangan dengan teliti selama berbulan-bulan -- dan hasilnya? Tidak ada hantu sama sekali. Itulah persis yang dialami Michelson dan Morley dengan eter. Hasilnya?
 
 <div class="mtr-note">
 <strong class="mtr-right">TIDAK ADA pergeseran pola interferensi yang berarti.</strong> Kecepatan cahaya terukur SAMA PERSIS di kedua lengan, berapa pun arahnya. Tidak ada jejak "angin eter" sama sekali -- persis kebalikan dari yang diprediksi.

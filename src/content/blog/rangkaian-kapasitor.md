@@ -148,11 +148,16 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
 
 ## 🌱 Apersepsi
 
 Di materi [Kapasitor Keping Sejajar](/materi/kapasitor-keping-sejajar), kamu sudah belajar satu kapasitor sendirian. Tapi kalau kamu bongkar rangkaian elektronik sungguhan (radio tua, power supply, dsb.), kapasitor jarang berdiri sendiri -- biasanya dirangkai bersama beberapa kapasitor lain, entah seri atau paralel, supaya dapat kapasitansi total yang pas dengan kebutuhan rangkaian.
+
+Materinya mirip dengan [Rangkaian Seri dan Paralel](/materi/rangkaian-seri-dan-paralel) pada resistor yang sudah kamu pelajari -- tapi hati-hati, rumusnya justru KEBALIK! Supaya lebih kebayang, coba pakai analogi **tangki air**: kapasitansi itu ibarat "kapasitas tampung" tangki. Menyusun beberapa tangki **berdampingan (paralel)** jelas menambah total kapasitas tampung airnya -- tinggal dijumlah langsung. Tapi menyusun tangki **berurutan memanjang (seri)**, dengan pipa sempit menghubungkan satu ke yang lain, sebenarnya membuat "kapasitas efektif" air yang bisa mengalir lewat jalur itu malah mengecil, dibatasi oleh tangki yang paling kecil. Itulah kenapa pola kapasitor seri/paralel kebalikan dari resistor.
 
 ## 🤔 Coba Pikirkan
 
@@ -190,6 +195,35 @@ Pada rangkaian **seri**, kapasitor disusun berurutan dalam satu jalur, ujung ke 
 </div>
 
 Pada rangkaian seri, muatan (Q) yang tersimpan di SETIAP kapasitor justru SAMA besar (proses pengisiannya berantai lewat induksi), sedangkan tegangan (V) di tiap kapasitor berbeda-beda sesuai V = Q/C masing-masing. Jumlah tegangan semua kapasitor sama dengan tegangan sumber: V_total = V1 + V2 + ...
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <text x="200" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#831843">Seri</text>
+    <line x1="40" y1="60" x2="150" y2="60" stroke="#26243b" stroke-width="3"/>
+    <line x1="150" y1="40" x2="150" y2="80" stroke="#ef4444" stroke-width="5"/>
+    <line x1="165" y1="40" x2="165" y2="80" stroke="#3b82f6" stroke-width="5"/>
+    <line x1="165" y1="60" x2="235" y2="60" stroke="#26243b" stroke-width="3"/>
+    <line x1="235" y1="40" x2="235" y2="80" stroke="#ef4444" stroke-width="5"/>
+    <line x1="250" y1="40" x2="250" y2="80" stroke="#3b82f6" stroke-width="5"/>
+    <line x1="250" y1="60" x2="360" y2="60" stroke="#26243b" stroke-width="3"/>
+    <text x="157" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">C1</text>
+    <text x="242" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">C2</text>
+    <text x="200" y="135" text-anchor="middle" font-size="14" font-weight="700" fill="#831843">Paralel</text>
+    <line x1="40" y1="175" x2="90" y2="175" stroke="#26243b" stroke-width="3"/>
+    <line x1="90" y1="150" x2="90" y2="200" stroke="#26243b" stroke-width="3"/>
+    <line x1="310" y1="150" x2="310" y2="200" stroke="#26243b" stroke-width="3"/>
+    <line x1="310" y1="175" x2="360" y2="175" stroke="#26243b" stroke-width="3"/>
+    <line x1="90" y1="155" x2="200" y2="155" stroke="#26243b" stroke-width="3"/>
+    <line x1="195" y1="140" x2="195" y2="170" stroke="#ef4444" stroke-width="5"/>
+    <line x1="210" y1="140" x2="210" y2="170" stroke="#3b82f6" stroke-width="5"/>
+    <line x1="210" y1="155" x2="310" y2="155" stroke="#26243b" stroke-width="3"/>
+    <line x1="90" y1="195" x2="200" y2="195" stroke="#26243b" stroke-width="3"/>
+    <line x1="195" y1="180" x2="195" y2="210" stroke="#ef4444" stroke-width="5"/>
+    <line x1="210" y1="180" x2="210" y2="210" stroke="#3b82f6" stroke-width="5"/>
+    <line x1="210" y1="195" x2="310" y2="195" stroke="#26243b" stroke-width="3"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Simbol kapasitor dirangkai seri (satu jalur) dan paralel (berdampingan) -- rumus kapasitansi totalnya kebalikan satu sama lain.</p>
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Kebalikan dari resistor!</strong> Kalau nanti kamu belajar rangkaian resistor, kamu akan lihat pola yang justru TERBALIK: resistor seri dijumlah langsung (R_total = R1+R2, makin besar), sementara resistor paralel yang pakai resiprokal (makin kecil). Kapasitor persis kebalikannya. Jangan sampai tertukar!

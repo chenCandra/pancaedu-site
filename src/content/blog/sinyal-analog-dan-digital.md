@@ -190,9 +190,15 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #065f46; font-weight: 600; }
 </style>
 
 Selamat datang di bab baru: **Teori Dasar Digital**. Sepanjang tiga bab sebelumnya kita membahas rangkaian listrik, medan magnet, sampai fisika modern yang aneh-aneh. Sekarang saatnya membahas fondasi teknologi yang mungkin paling sering kamu pakai setiap hari tanpa sadar: dunia **digital**. Sebelum masuk ke komponennya (semikonduktor, dioda, transistor) atau cara kerjanya (gerbang logika), kita jawab dulu pertanyaan paling mendasar: apa sebenarnya bedanya "analog" dan "digital", dan kenapa dunia modern beralih ke digital?
+
+Coba bandingkan: kaset/piringan hitam jaman orang tuamu dulu vs lagu yang kamu putar sekarang di Spotify/YouTube Music. Atau siaran TV analog jaman dulu yang gambarnya sering "bersemut" kalau antena kurang pas, dibanding siaran TV digital sekarang yang gambarnya tetap jernih selama sinyalnya ada. Dua perbandingan ini sebenarnya contoh langsung dari topik yang akan kita bahas: **sinyal analog vs digital**.
 
 ## 🌊 Sinyal Analog: Kontinu, Halus, Tanpa Batas
 
@@ -235,7 +241,30 @@ Coba jelajahi sendiri di simulasi bawah: geser laju sampling dan kedalaman bit-n
 </div>
 </div>
 
-Keunggulan "tahan gangguan" inilah yang paling krusial: bayangkan sinyal digital mengalami sedikit gangguan tegangan -- selama gangguannya tidak terlalu besar, penerima sinyal masih bisa membedakan dengan pasti "ini HIGH" atau "ini LOW". Sinyal analog tidak seberuntung itu -- begitu ada gangguan, gangguan itu ikut terbaca sebagai bagian dari sinyalnya sendiri, dan akan makin menumpuk tiap kali sinyal itu diperkuat atau disalin ulang.
+Keunggulan "tahan gangguan" inilah yang paling krusial: bayangkan sinyal digital mengalami sedikit gangguan tegangan -- selama gangguannya tidak terlalu besar, penerima sinyal masih bisa membedakan dengan pasti "ini HIGH" atau "ini LOW". Sinyal analog tidak seberuntung itu -- begitu ada gangguan, gangguan itu ikut terbaca sebagai bagian dari sinyalnya sendiri, dan akan makin menumpuk tiap kali sinyal itu diperkuat atau disalin ulang. Itulah sebabnya siaran TV analog dulu gambarnya bisa "bersemut" (noise ikut tercampur ke sinyal), sementara TV digital sekarang gambarnya tetap bersih selama sinyalnya masih bisa dibedakan HIGH/LOW dengan pasti.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<text x="100" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#065f46">Analog -- Halus &amp; Kontinu</text>
+<rect x="20" y="36" width="160" height="134" rx="10" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+<path d="M30,103 C48,58 62,58 80,103 C98,148 112,148 130,103 C145,70 158,70 170,103" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+<circle cx="30" cy="103" r="4" fill="#f59e0b"/>
+<circle cx="80" cy="103" r="4" fill="#f59e0b"/>
+<circle cx="130" cy="103" r="4" fill="#f59e0b"/>
+<circle cx="170" cy="103" r="4" fill="#f59e0b"/>
+<text x="100" y="192" text-anchor="middle" font-size="11" fill="#065f46">Piringan hitam, radio AM/FM klasik</text>
+<line x1="200" y1="8" x2="200" y2="212" stroke="#6ee7b7" stroke-width="2" stroke-dasharray="5 5"/>
+<text x="300" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#065f46">Digital -- Bertangga &amp; Diskrit</text>
+<rect x="220" y="36" width="160" height="134" rx="10" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+<path d="M230,140 H250 V95 H268 V130 H286 V75 H304 V112 H322 V150 H340 V100 H358 V122 H370" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="250" cy="95" r="4" fill="#3b82f6"/>
+<circle cx="286" cy="75" r="4" fill="#3b82f6"/>
+<circle cx="322" cy="150" r="4" fill="#3b82f6"/>
+<circle cx="358" cy="100" r="4" fill="#3b82f6"/>
+<text x="300" y="192" text-anchor="middle" font-size="11" fill="#065f46">MP3/streaming musik, TV digital</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Sinyal analog berubah halus tanpa loncatan (kiri), sedangkan sinyal digital berupa tangga nilai diskrit hasil sampling dan kuantisasi (kanan).</p>
+</div>
 
 ## ⚠️ Kesalahan Umum
 

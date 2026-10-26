@@ -278,9 +278,50 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
 
 Selamat datang di bab baru: **Teori Dasar Fisika Modern**. Kalau di bab-bab sebelumnya kamu belajar rangkaian listrik dan medan magnet -- fenomena yang bisa kamu lihat dan sentuh langsung -- bab ini justru membawa kamu ke wilayah yang jauh lebih ekstrem: apa yang terjadi kalau sesuatu bergerak **mendekati kecepatan cahaya**. Di situlah aturan main fisika yang selama ini kamu percaya (Hukum Newton, dkk) mulai kehilangan taringnya, dan digantikan oleh **Teori Relativitas Khusus** yang dicetuskan Albert Einstein tahun 1905.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="90" cy="150" r="3" fill="#818cf8"></circle>
+    <circle cx="340" cy="40" r="2.5" fill="#818cf8"></circle>
+    <circle cx="365" cy="170" r="3" fill="#818cf8"></circle>
+    <circle cx="60" cy="50" r="2" fill="#818cf8"></circle>
+    <path d="M80,78 C65,55 70,25 95,15" fill="none" stroke="#94a3b8" stroke-width="7" stroke-linecap="round"></path>
+    <path d="M95,72 C100,48 95,22 110,12" fill="none" stroke="#94a3b8" stroke-width="7" stroke-linecap="round"></path>
+    <path d="M118,74 C128,52 135,28 125,10" fill="none" stroke="#94a3b8" stroke-width="7" stroke-linecap="round"></path>
+    <circle cx="105" cy="100" r="40" fill="#fde8cf" stroke="#78350f" stroke-width="2"></circle>
+    <circle cx="92" cy="98" r="3.4" fill="#312e81"></circle>
+    <circle cx="118" cy="98" r="3.4" fill="#312e81"></circle>
+    <path d="M85,120 C95,130 115,130 125,120" fill="none" stroke="#78350f" stroke-width="5" stroke-linecap="round"></path>
+    <path d="M60,165 C70,135 140,135 150,165 L150,180 L60,180 Z" fill="#334155"></path>
+    <rect x="94" y="130" width="22" height="18" fill="#fde8cf"></rect>
+    <line x1="140" y1="55" x2="155" y2="40" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="3 3"></line>
+    <circle cx="168" cy="30" r="17" fill="#fde047" stroke="#b45309" stroke-width="2"></circle>
+    <rect x="162" y="45" width="12" height="7" rx="2" fill="#94a3b8"></rect>
+    <line x1="168" y1="5" x2="168" y2="-2" stroke="#fde047" stroke-width="3" stroke-linecap="round" transform="translate(0,8)"></line>
+    <line x1="150" y1="14" x2="144" y2="8" stroke="#fde047" stroke-width="3" stroke-linecap="round"></line>
+    <line x1="186" y1="14" x2="192" y2="8" stroke="#fde047" stroke-width="3" stroke-linecap="round"></line>
+    <text x="168" y="12" font-size="13" text-anchor="middle" fill="#4338ca" font-weight="700">!</text>
+    <g transform="translate(265,95) rotate(28)">
+      <path d="M0,-28 C14,-28 18,0 18,22 L-18,22 C-18,0 -14,-28 0,-28 Z" fill="#f1f5f9" stroke="#4338ca" stroke-width="2.5"></path>
+      <circle cx="0" cy="-2" r="7" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1.5"></circle>
+      <path d="M-18,10 L-32,22 L-18,24 Z" fill="#ef4444"></path>
+      <path d="M18,10 L32,22 L18,24 Z" fill="#ef4444"></path>
+      <path d="M-10,22 L-14,42 L0,32 Z" fill="#fb923c"></path>
+      <path d="M10,22 L14,42 L0,32 Z" fill="#fb923c"></path>
+    </g>
+    <line x1="150" y1="118" x2="205" y2="110" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="7 6"></line>
+    <line x1="150" y1="150" x2="200" y2="158" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="7 6"></line>
+    <text x="290" y="200" font-size="15" text-anchor="middle" fill="#4338ca" font-weight="800" font-family="'Courier New', monospace">E = mc²</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Einstein, pegawai kantor paten yang idenya mengubah cara kita memandang ruang dan waktu -- dicetuskan tahun 1905.</p>
+</div>
 
 ## 🧑‍🔬 Siapa Einstein, dan Kenapa 1905 Begitu Penting?
 

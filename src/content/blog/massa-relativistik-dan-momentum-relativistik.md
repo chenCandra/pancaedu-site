@@ -184,7 +184,13 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
+
+Pernah dengar soal LHC (Large Hadron Collider), akselerator partikel raksasa di Swiss yang dipakai buat mempercepat proton sampai mendekati kecepatan cahaya? Para ilmuwan di sana harus menyuntikkan energi dalam jumlah RAKSASA, cuma untuk menambah kecepatan proton itu SEDIKIT saja, begitu kecepatannya sudah dekat dengan kecepatan cahaya. Bukan karena mesinnya kurang canggih -- tapi karena, dari sudut pandang energi yang dibutuhkan, partikel itu seolah jadi makin "berat" untuk didorong lebih cepat lagi. Fenomena "makin berat" inilah yang mau kita bongkar di materi ini: **massa relativistik**.
 
 Setelah kenalan sama [dilatasi waktu](/materi/dilatasi-waktu) dan [kontraksi panjang](/materi/kontraksi-panjang), sekarang giliran besaran ketiga yang ikut berubah kalau benda bergerak sangat cepat: **massa**.
 
@@ -207,6 +213,23 @@ Perhatikan pola yang sama dengan dua materi sebelumnya: kalau v=0, rumus ini oto
 
 <div class="mtr-note">
 🚀 Inilah salah satu alasan paling mendasar kenapa TIDAK ADA benda bermassa yang bisa mencapai kecepatan cahaya persis: semakin cepat sebuah roket dipacu mendekati c, massanya makin besar, sehingga makin besar pula gaya (dan energi) yang dibutuhkan untuk mempercepatnya lebih jauh lagi. Untuk benar-benar mencapai v=c, dibutuhkan energi TAK TERHINGGA -- sesuatu yang mustahil disediakan.
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="115" r="82" fill="none" stroke="#a5b4fc" stroke-width="18"/>
+    <circle cx="200" cy="115" r="82" fill="none" stroke="#4f46e5" stroke-width="3" stroke-dasharray="5 9"/>
+    <text x="200" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#312e81">AKSELERATOR</text>
+    <circle cx="200" cy="33" r="11" fill="#fbbf24" stroke="#312e81" stroke-width="2"/>
+    <text x="200" y="37" text-anchor="middle" font-size="11" font-weight="800" fill="#312e81">p</text>
+    <path d="M 88 70 L 108 56 L 102 76 Z" fill="#818cf8"/>
+    <text x="55" y="52" font-size="11" font-weight="700" fill="#312e81">+energi</text>
+    <path d="M 296 158 L 326 140 L 314 172 Z" fill="#6366f1"/>
+    <text x="292" y="190" font-size="11" font-weight="700" fill="#312e81">+energi lagi</text>
+    <path d="M 150 196 L 212 164 L 192 212 Z" fill="#312e81"/>
+    <text x="118" y="216" font-size="12" font-weight="800" fill="#312e81">+ENERGI MAKIN GEDE!</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Setiap putaran di akselerator, partikel disuntik energi lagi -- tapi makin dekat ke kecepatan cahaya, suntikan energinya harus makin gede cuma untuk nambah kecepatan sedikit saja.</p>
 </div>
 
 ## 🏃 Momentum Relativistik

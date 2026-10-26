@@ -161,6 +161,31 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. Skrip SENGAJA ditulis tanpa baris kosong
+   sama sekali di dalam <script> -- markdown parser situs ini tidak kebal
+   baris kosong di dalam tag itu. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -278,11 +303,111 @@ Karena Gaya Lorentz berperan sebagai gaya sentripetal (gaya yang menjaga benda t
   </ul>
 </div>
 
-Artinya: makin CEPAT muatannya atau makin LEMAH medannya, makin BESAR lingkarannya. Coba buktikan sendiri di simulasi bawah -- geser slider kecepatan dan kuat medan, amati bagaimana ukuran lingkaran lintasannya berubah.
+Artinya: makin CEPAT muatannya atau makin LEMAH medannya, makin BESAR lingkarannya. Bayangkan seperti motor yang nikung di tikungan: makin kencang (v besar) larinya makin sulit berbelok tajam, jadi lingkarannya makin besar -- sedangkan medan yang lebih kuat (B besar) ibarat "cengkeraman" yang lebih kuat untuk menikung lebih tajam, jadi lingkarannya makin kecil.
+
+Coba buktikan sendiri lewat animasi mini berikut -- geser slider kecepatan dan kuat medan, amati partikelnya masuk ke zona medan magnet (ditandai simbol ×) lalu membelok mengikuti lintasan melingkar:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🧲 Geser kecepatan dan kuat medan, lalu klik tombol untuk membalik jenis muatannya -- simbol × menandakan medan magnet (B) masuk ke dalam bidang gambar, konvensi standar di buku fisika:</p>
+  <canvas id="lorentzCanvas" width="640" height="280" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Kecepatan (v): <strong id="lorentzVLabel">6</strong></label>
+  <input type="range" id="lorentzVSlider" min="2" max="10" value="6" style="width:100%;accent-color:#f2760a;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Medan magnet (B): <strong id="lorentzBLabel">6</strong></label>
+  <input type="range" id="lorentzBSlider" min="2" max="10" value="6" style="width:100%;accent-color:#8b3ddb;">
+  <div style="text-align:center;margin-top:10px;">
+    <button type="button" class="mtr-mini-btn" id="lorentzBtnMuatan">🔴 Muatan: Positif</button>
+  </div>
+  <p class="mtr-mini-label">Jari-jari lintasan (r = mv/qB, dengan m=q=1 satuan): <strong id="lorentzRLabel">-</strong> &middot; Arah belokan: <strong id="lorentzArahLabel">-</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('lorentzCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var vSlider = document.getElementById('lorentzVSlider');
+  var bSlider = document.getElementById('lorentzBSlider');
+  var vLabel = document.getElementById('lorentzVLabel');
+  var bLabel = document.getElementById('lorentzBLabel');
+  var rLabel = document.getElementById('lorentzRLabel');
+  var arahLabel = document.getElementById('lorentzArahLabel');
+  var btnMuatan = document.getElementById('lorentzBtnMuatan');
+  var w = canvas.width, h = canvas.height;
+  var fieldX = w * 0.17;
+  var positif = true;
+  var px, py, angle, phase, trail;
+  function resetPartikel() {
+    px = 14; py = h * 0.5; angle = 0; phase = 'lurus'; trail = [];
+  }
+  function gambarMedan() {
+    ctx.fillStyle = 'rgba(139,61,219,0.4)'; ctx.font = 'bold 15px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (var gx = fieldX + 30; gx < w - 10; gx += 48) {
+      for (var gy = 24; gy < h - 10; gy += 44) { ctx.fillText('×', gx, gy); }
+    }
+    ctx.strokeStyle = 'rgba(38,36,59,0.35)'; ctx.lineWidth = 2; ctx.setLineDash([6, 6]);
+    ctx.beginPath(); ctx.moveTo(fieldX, 6); ctx.lineTo(fieldX, h - 6); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#26243b'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('zona B masuk kertas', fieldX + 10, 16);
+  }
+  function hitung() {
+    var v = parseInt(vSlider.value, 10);
+    var b = parseInt(bSlider.value, 10);
+    var rSim = v / b;
+    var rPx = Math.max(16, Math.min(230, rSim * 42));
+    var speedPx = 1.6 + v * 0.34;
+    var omega = speedPx / rPx;
+    return { v: v, b: b, rSim: rSim, rPx: rPx, speedPx: speedPx, omega: omega };
+  }
+  function langkah(info) {
+    if (phase === 'lurus') {
+      px += info.speedPx;
+      if (px >= fieldX) { phase = 'lingkar'; angle = 0; }
+    } else {
+      var arah = positif ? -1 : 1;
+      angle += info.omega * arah;
+      px += info.speedPx * Math.cos(angle);
+      py += info.speedPx * Math.sin(angle);
+    }
+    trail.push({ x: px, y: py });
+    if (trail.length > 70) { trail.shift(); }
+    if (px > w + 24 || px < -24 || py > h + 24 || py < -24) { resetPartikel(); }
+  }
+  function gambarPartikel() {
+    var warna = positif ? '#ef4444' : '#3b82f6';
+    var warnaTrail = positif ? 'rgba(239,68,68,0.35)' : 'rgba(59,130,246,0.35)';
+    ctx.strokeStyle = warnaTrail; ctx.lineWidth = 3; ctx.beginPath();
+    for (var i = 0; i < trail.length; i++) { var p = trail[i]; if (i === 0) { ctx.moveTo(p.x, p.y); } else { ctx.lineTo(p.x, p.y); } }
+    ctx.stroke();
+    ctx.fillStyle = warna; ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(positif ? '+' : '−', px, py);
+  }
+  function render() {
+    var info = hitung();
+    langkah(info);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#eaf6ff'; ctx.fillRect(0, 0, fieldX, h);
+    gambarMedan();
+    gambarPartikel();
+    rLabel.textContent = info.rSim.toFixed(2) + ' satuan';
+    arahLabel.textContent = positif ? 'berlawanan jarum jam' : 'searah jarum jam';
+    requestAnimationFrame(render);
+  }
+  vSlider.addEventListener('input', function () { vLabel.textContent = vSlider.value; });
+  bSlider.addEventListener('input', function () { bLabel.textContent = bSlider.value; });
+  btnMuatan.addEventListener('click', function () {
+    positif = !positif;
+    btnMuatan.textContent = positif ? '🔴 Muatan: Positif' : '🔵 Muatan: Negatif';
+    resetPartikel();
+  });
+  resetPartikel();
+  requestAnimationFrame(render);
+})();
+</script>
 
 ## 🔄 Arah Belokan: Bergantung Tanda Muatan
 
-Arah Gaya Lorentz ditentukan kaidah tangan kanan (untuk muatan POSITIF) -- kalau muatannya NEGATIF, arah gayanya justru terbalik. Jadi dua partikel dengan v dan B yang sama tapi tanda muatan berbeda akan membelok ke arah yang BERLAWANAN, meski jari-jari lingkarannya sama besar (karena besar muatan |q| yang menentukan jari-jari, bukan tandanya).
+Arah Gaya Lorentz ditentukan kaidah tangan kanan (untuk muatan POSITIF) -- kalau muatannya NEGATIF, arah gayanya justru terbalik. Jadi dua partikel dengan v dan B yang sama tapi tanda muatan berbeda akan membelok ke arah yang BERLAWANAN, meski jari-jari lingkarannya sama besar (karena besar muatan |q| yang menentukan jari-jari, bukan tandanya). Coba klik tombol muatan pada simulasi di atas -- lihat sendiri bagaimana arah belokannya langsung berbalik begitu muatannya dibalik dari positif ke negatif, meski ukuran lingkarannya tetap sama.
 
 ## ⚙️ Aplikasi: Motor Listrik
 

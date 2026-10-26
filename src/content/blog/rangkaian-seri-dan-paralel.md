@@ -161,7 +161,13 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #831843; font-weight: 600; }
 </style>
+
+Pernah kesal gara-gara lampu hias Natal yang satu bohlamnya putus, tapi akibatnya SELURUH untaian lampu itu ikut mati semua? Bandingkan dengan lampu-lampu di rumahmu -- kalau lampu kamar mandi mati, lampu kamar tidur dan ruang tamu tetap menyala normal, tidak ikut-ikutan. Bedanya cuma satu: cara merangkainya. Itulah dua topik kita kali ini -- **seri** dan **paralel**.
 
 Setelah paham [Hukum Ohm dan Rangkaian Sederhana](/materi/hukum-ohm-dan-rangkaian-sederhana) dengan satu komponen, sekarang kita bahas bagaimana beberapa komponen dirangkai bersama -- ada dua cara dasar: **seri** dan **paralel**, masing-masing punya ciri khas yang sangat berbeda.
 
@@ -215,6 +221,38 @@ Perhatikan: hambatan total paralel (5 Ω) justru **lebih kecil** dari salah satu
 </tbody>
 </table>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">
+    <text x="100" y="16" text-anchor="middle" font-size="15" font-weight="700" fill="#831843">SERI</text>
+    <rect x="20" y="28" width="160" height="150" rx="12" fill="none" stroke="#26243b" stroke-width="5"/>
+    <circle cx="55" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle cx="100" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle cx="145" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <path d="M47 21 L63 35 M63 21 L47 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M92 21 L108 35 M108 21 L92 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M137 21 L153 35 M153 21 L137 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="90" y1="178" x2="90" y2="196" stroke="#26243b" stroke-width="6" stroke-linecap="round"/>
+    <line x1="110" y1="172" x2="110" y2="202" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="100" y="216" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">satu jalur -- satu putus, semua mati</text>
+    <line x1="200" y1="10" x2="200" y2="220" stroke="#f9a8d4" stroke-width="2" stroke-dasharray="6,6"/>
+    <text x="300" y="16" text-anchor="middle" font-size="15" font-weight="700" fill="#831843">PARALEL</text>
+    <rect x="220" y="28" width="160" height="150" rx="12" fill="none" stroke="#26243b" stroke-width="5"/>
+    <line x1="255" y1="28" x2="255" y2="178" stroke="#26243b" stroke-width="5"/>
+    <line x1="300" y1="28" x2="300" y2="178" stroke="#26243b" stroke-width="5"/>
+    <line x1="345" y1="28" x2="345" y2="178" stroke="#26243b" stroke-width="5"/>
+    <circle cx="255" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle cx="300" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle cx="345" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <path d="M247 96 L263 110 M263 96 L247 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M292 96 L308 110 M308 96 L292 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M337 96 L353 110 M353 96 L337 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="230" y1="178" x2="230" y2="196" stroke="#26243b" stroke-width="6" stroke-linecap="round"/>
+    <line x1="250" y1="172" x2="250" y2="202" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="300" y="216" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">banyak jalur -- satu putus, lain tetap nyala</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Rangkaian seri (satu jalur, seperti lampu Natal) vs paralel (banyak cabang, seperti lampu rumah).</p>
 </div>
 
 Inilah sebabnya **lampu-lampu di rumah dirangkai paralel, bukan seri** -- kalau satu lampu putus atau dicabut, lampu lain di ruangan lain tetap menyala normal. Coba sendiri di simulasi di bawah -- bandingkan tab "Seri Lab" dan "Paralel Lab", lihat langsung bedanya lewat animasi arus dan data.

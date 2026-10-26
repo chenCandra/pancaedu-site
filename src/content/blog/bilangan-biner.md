@@ -184,9 +184,51 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.mtr-bit-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin: 0.75rem 0; }
+.mtr-bit-col { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+.mtr-bit-tempat { font-size: 0.75rem; color: var(--ink-soft); font-weight: 700; }
+.mtr-bit {
+  width: 2.75rem; height: 2.75rem; border-radius: 0.6rem; border: 2px solid var(--border);
+  background: #e5e7eb; color: #374151; font-family: 'Courier New', monospace;
+  font-weight: 800; font-size: 1.25rem; cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.mtr-bit.on { background: #10b981; border-color: #059669; color: #fff; }
+.mtr-bit-decimal { text-align: center; font-size: 1.1rem; font-weight: 700; margin: 0.9rem 0 0.3rem; color: #065f46; }
+.mtr-bit-decimal strong { font-family: 'Courier New', monospace; font-size: 1.75rem; }
+.mtr-bit-input-row { display: flex; flex-direction: column; gap: 0.4rem; align-items: center; margin-top: 0.75rem; }
+.mtr-bit-input-row label { font-size: 0.8125rem; color: var(--ink-soft); font-weight: 600; text-align: center; }
+.mtr-bit-input-row input[type="range"] { width: 100%; accent-color: #10b981; }
+.mtr-bit-input-row input[type="number"] {
+  width: 6rem; padding: 0.4rem 0.6rem; border-radius: 0.5rem; border: 1px solid var(--border);
+  font-family: 'Courier New', monospace; font-weight: 700; text-align: center;
+}
 </style>
 
 Di materi [Sinyal Analog dan Digital](/materi/sinyal-analog-dan-digital) kita sudah paham kenapa dunia digital cuma mengenal dua nilai: 0 dan 1. Sekarang kita belajar cara MEMBACA angka dalam sistem yang cuma pakai dua digit ini -- disebut **bilangan biner**.
+
+Coba pikirkan: foto selfie yang baru kamu upload ke Instagram, chat WhatsApp yang kamu kirim, lagu yang sedang kamu dengarkan di Spotify -- semuanya, di dalam chip HP-mu, cuma berupa DERETAN PANJANG angka 0 dan 1. Nggak ada huruf, nggak ada warna, nggak ada nada -- semuanya "diterjemahkan" jadi kombinasi 0 dan 1 ini. Nah, materi ini yang akan mengajarimu cara "membaca" deretan angka itu.
 
 ## 🔟 Review Kilat: Bilangan Desimal (Basis-10)
 
@@ -227,7 +269,66 @@ Caranya sama seperti bilangan desimal: kalikan tiap digit dengan nilai tempatnya
 <div class="mtr-formula">1011 = (1×2³) + (0×2²) + (1×2¹) + (1×2⁰)</div>
 <div class="mtr-formula">1011 = (1×8) + (0×4) + (1×2) + (1×1) = 8 + 0 + 2 + 1 = 11</div>
 
-Jadi 1011 (biner) = 11 (desimal). Coba jelajahi sendiri di simulasi bawah -- nyalakan/matikan bit-nya dan lihat nilai desimalnya berubah live.
+Jadi 1011 (biner) = 11 (desimal). Coba otak-atik langsung widget di bawah ini: klik kotak bit buat menyalakan/mematikannya (0 ↔ 1) dan lihat nilai desimalnya berubah live, atau coba arah sebaliknya -- geser/masukkan angka desimal dan lihat sendiri bit-bit mana yang otomatis menyala.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🔢 Klik kotak bit buat nyala/mati (0 atau 1), atau geser/isi angka desimalnya -- dua arah konversi sekaligus, langsung kelihatan hasilnya:</p>
+  <div class="mtr-bit-row" id="binerBitRow">
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">128</span><button type="button" class="mtr-bit" data-nilai="128">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">64</span><button type="button" class="mtr-bit" data-nilai="64">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">32</span><button type="button" class="mtr-bit" data-nilai="32">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">16</span><button type="button" class="mtr-bit" data-nilai="16">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">8</span><button type="button" class="mtr-bit" data-nilai="8">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">4</span><button type="button" class="mtr-bit" data-nilai="4">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">2</span><button type="button" class="mtr-bit" data-nilai="2">0</button></div>
+    <div class="mtr-bit-col"><span class="mtr-bit-tempat">1</span><button type="button" class="mtr-bit" data-nilai="1">0</button></div>
+  </div>
+  <p class="mtr-bit-decimal">Nilai Desimal: <strong id="binerDesimalHasil">0</strong></p>
+  <div class="mtr-bit-input-row">
+    <label for="binerInputDesimalNum">Atau masukkan/geser angka desimal (0-255) buat lihat biner-nya:</label>
+    <input type="range" id="binerInputDesimal" min="0" max="255" value="0">
+    <input type="number" id="binerInputDesimalNum" min="0" max="255" value="0">
+  </div>
+</div>
+<script>
+(function () {
+  var row = document.getElementById('binerBitRow');
+  if (!row) return;
+  var hasil = document.getElementById('binerDesimalHasil');
+  var range = document.getElementById('binerInputDesimal');
+  var num = document.getElementById('binerInputDesimalNum');
+  var tombolBit = row.querySelectorAll('.mtr-bit');
+  function hitungDariBit() {
+    var total = 0;
+    tombolBit.forEach(function (btn) {
+      if (btn.classList.contains('on')) total += parseInt(btn.getAttribute('data-nilai'), 10);
+    });
+    hasil.textContent = total;
+    range.value = total;
+    num.value = total;
+  }
+  function aturDariDesimal(nilai) {
+    nilai = Math.max(0, Math.min(255, parseInt(nilai, 10) || 0));
+    tombolBit.forEach(function (btn) {
+      var v = parseInt(btn.getAttribute('data-nilai'), 10);
+      if (nilai & v) { btn.classList.add('on'); btn.textContent = '1'; } else { btn.classList.remove('on'); btn.textContent = '0'; }
+    });
+    hasil.textContent = nilai;
+    range.value = nilai;
+    num.value = nilai;
+  }
+  tombolBit.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('on');
+      btn.textContent = btn.classList.contains('on') ? '1' : '0';
+      hitungDariBit();
+    });
+  });
+  range.addEventListener('input', function () { aturDariDesimal(range.value); });
+  num.addEventListener('input', function () { aturDariDesimal(num.value); });
+  aturDariDesimal(0);
+})();
+</script>
 
 ## 🔁 Konversi Desimal ke Biner
 

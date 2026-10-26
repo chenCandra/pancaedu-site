@@ -204,6 +204,10 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #a5b4fc; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #312e81; font-weight: 600; }
 </style>
 
 Di materi [Dilatasi Waktu](/materi/dilatasi-waktu) kita sudah lihat bagaimana waktu "melambat" bagi benda yang bergerak sangat cepat. Ternyata bukan cuma waktu -- ruang (panjang) juga ikut berubah. Fenomena ini disebut **kontraksi panjang**: panjang suatu benda yang bergerak relatif terhadap pengamat akan terukur lebih PENDEK dibanding panjang benda itu saat diam.
@@ -215,6 +219,43 @@ Di materi [Dilatasi Waktu](/materi/dilatasi-waktu) kita sudah lihat bagaimana wa
 </div>
 
 Penting juga dicatat: kontraksi panjang tidak mengubah massa atau volume benda secara "nyata" -- ini murni soal panjang yang TERUKUR oleh pengamat yang berbeda kerangka acuannya. Bagi orang yang ikut bergerak bersama roket itu (misalnya sang astronot di dalamnya), roketnya tetap terasa dan terukur dengan panjang aslinya, tidak memendek sama sekali.
+
+Analogi sederhana (bukan analogi persis, tapi membantu membayangkan): mirip foto mobil yang difoto dari sudut tertentu saat melintas cepat di depan kamera -- hasilnya bisa tampak "gepeng". Bedanya, kontraksi panjang bukan trik sudut kamera atau ilusi optik -- ini perubahan panjang yang BENAR-BENAR terukur oleh pengamat diam, dengan alat ukur apa pun, bukan cuma soal "kelihatannya".
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="kpArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#312e81"></path>
+      </marker>
+    </defs>
+    <text x="185" y="18" font-size="13" text-anchor="middle" fill="#312e81" font-weight="700">Diam (L₀)</text>
+    <rect x="70" y="30" width="200" height="34" rx="6" fill="#c7d2fe" stroke="#4338ca" stroke-width="2"></rect>
+    <path d="M70,30 L50,20 L70,40 Z" fill="#4338ca"></path>
+    <path d="M70,64 L50,74 L70,54 Z" fill="#4338ca"></path>
+    <path d="M270,30 L300,47 L270,64 Z" fill="#818cf8" stroke="#4338ca" stroke-width="2"></path>
+    <line x1="70" y1="90" x2="296" y2="90" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <line x1="296" y1="90" x2="70" y2="90" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <text x="183" y="106" font-size="12" text-anchor="middle" fill="#312e81" font-weight="700">L₀ (panjang sejati)</text>
+    <text x="175" y="128" font-size="13" text-anchor="middle" fill="#312e81" font-weight="700">Bergerak mendekati c (L)</text>
+    <line x1="18" y1="138" x2="55" y2="138" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
+    <line x1="18" y1="152" x2="55" y2="152" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
+    <line x1="18" y1="166" x2="55" y2="166" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
+    <rect x="120" y="140" width="90" height="34" rx="6" fill="#c7d2fe" stroke="#4338ca" stroke-width="2"></rect>
+    <path d="M120,140 L105,131 L120,147 Z" fill="#4338ca"></path>
+    <path d="M120,174 L105,183 L120,167 Z" fill="#4338ca"></path>
+    <path d="M210,140 L232,157 L210,174 Z" fill="#818cf8" stroke="#4338ca" stroke-width="2"></path>
+    <line x1="120" y1="200" x2="228" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <line x1="228" y1="200" x2="120" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <text x="174" y="214" font-size="12" text-anchor="middle" fill="#312e81" font-weight="700">L (lebih pendek!)</text>
+    <circle cx="355" cy="160" r="16" fill="#fde8cf" stroke="#78350f" stroke-width="2"></circle>
+    <circle cx="350" cy="157" r="2" fill="#312e81"></circle>
+    <circle cx="360" cy="157" r="2" fill="#312e81"></circle>
+    <path d="M349,165 C353,169 357,169 361,165" fill="none" stroke="#78350f" stroke-width="2" stroke-linecap="round"></path>
+    <text x="355" y="196" font-size="10" text-anchor="middle" fill="#312e81" font-weight="700">pengamat diam</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Roket yang sama -- diukur sepanjang L₀ saat diam, tapi terukur lebih pendek (L) oleh pengamat diam saat ia melesat mendekati kecepatan cahaya.</p>
+</div>
 
 ## 🧩 Kenapa Kontraksi Panjang Terjadi?
 
