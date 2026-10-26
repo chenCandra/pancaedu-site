@@ -8,9 +8,9 @@ pubDate: 2026-09-14
 tags: ["Induksi Elektromagnetik", "Hukum Faraday", "Hukum Lenz", "Fisika Kelas XII"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/induksi-elektromagnetik.html"
-  judul: "Faraday Electromagnetic Induction Lab"
+  judul: "Lab Magnet Ajaib -- Induksi Elektromagnetik"
   sumber: "Lab Maya PancaEdu"
-  tinggi: 1600
+  tinggi: 1900
 kuis:
   - soal: "Induksi elektromagnetik adalah fenomena..."
     pilihan: ["Timbulnya GGL (tegangan) akibat perubahan medan magnet pada kumparan", "Timbulnya medan magnet akibat arus listrik", "Hilangnya medan magnet karena panas", "Perubahan warna kumparan akibat listrik"]
