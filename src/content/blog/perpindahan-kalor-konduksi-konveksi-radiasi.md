@@ -108,6 +108,17 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 .mtr-table-scroll {
   overflow-x: auto;
   margin-block: 1.25rem;
@@ -198,7 +209,48 @@ draft: false
 
 ## 🌱 Apersepsi
 
-Gagang panci logam terasa cepat panas. Air yang direbus bergerak berputar sendiri. Kita bisa merasakan hangatnya Matahari meski jaraknya 150 juta km, lewat ruang hampa tanpa medium apa pun. Tiga fenomena ini adalah tiga cara BERBEDA kalor berpindah -- materi penutup sub-bab Kalor.
+Gagang panci logam terasa cepat panas, makanya banyak panci sengaja dibuat dengan gagang kayu atau plastik -- coba perhatikan, hampir nggak pernah ada gagang panci yang full logam! Air yang direbus bergerak berputar sendiri, bahkan daun teh atau ampas kopi ikut "menari" di dalamnya. Di pesisir pantai, kamu bisa rasakan angin yang bertiup dari laut ke darat siang hari, lalu berbalik arah dari darat ke laut malam harinya. Dan kita bisa merasakan hangatnya Matahari meski jaraknya 150 juta km, lewat ruang hampa tanpa medium apa pun. Empat fenomena ini sebenarnya cuma tiga cara BERBEDA kalor berpindah -- materi penutup sub-bab Kalor.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
+    <rect x="146" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
+    <rect x="288" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
+    <g>
+      <rect x="35" y="140" width="70" height="40" rx="8" fill="#94a3b8"/>
+      <rect x="55" y="80" width="12" height="70" rx="6" fill="#78350f"/>
+      <circle cx="61" cy="78" r="7" fill="#78350f"/>
+      <path d="M45 140 q15 -16 30 0" stroke="#ea580c" stroke-width="3" fill="none"/>
+      <circle cx="58" cy="60" r="2.4" fill="#ea580c"/>
+      <circle cx="64" cy="48" r="2.4" fill="#ea580c"/>
+      <text x="68" y="205" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">Konduksi</text>
+    </g>
+    <g>
+      <rect x="180" y="150" width="60" height="35" rx="6" fill="#64748b"/>
+      <path d="M182 150 q30 -70 56 0 Z" fill="#7dd3fc" opacity="0.7"/>
+      <path d="M200 140 q10 -10 0 -20 q-10 -10 0 -20" stroke="#1d4ed8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M220 130 q10 -10 0 -20 q-10 -10 0 -20" stroke="#1d4ed8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="210" y="205" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">Konveksi</text>
+    </g>
+    <g>
+      <circle cx="352" cy="70" r="26" fill="#fbbf24"/>
+      <circle cx="345" cy="66" r="2.6" fill="#7c2d12"/>
+      <circle cx="359" cy="66" r="2.6" fill="#7c2d12"/>
+      <path d="M344 76 q8 7 16 0" stroke="#7c2d12" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <g stroke="#fbbf24" stroke-width="4" stroke-linecap="round">
+        <line x1="352" y1="110" x2="352" y2="130"/>
+        <line x1="330" y1="120" x2="318" y2="138"/>
+        <line x1="374" y1="120" x2="386" y2="138"/>
+      </g>
+      <circle cx="345" cy="175" r="22" fill="#fcd9b6"/>
+      <circle cx="338" cy="170" r="2.2" fill="#7c2d12"/>
+      <circle cx="352" cy="170" r="2.2" fill="#7c2d12"/>
+      <path d="M337 180 q8 5 16 0" stroke="#b45309" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="352" y="205" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">Radiasi</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Tiga cara kalor berpindah: konduksi lewat sendok di sup panas, konveksi lewat air yang mendidih, radiasi lewat sinar Matahari ke kulit.</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -235,7 +287,7 @@ Laju perpindahan kalor konduksi bergantung konduktivitas termal (**k**, khas tia
 
 ### Konveksi
 
-Terjadi karena fluida yang dipanaskan memuai, massa jenisnya berkurang, sehingga NAIK -- digantikan fluida dingin yang turun. Siklus ini menciptakan **arus konveksi**.
+Terjadi karena fluida yang dipanaskan memuai, massa jenisnya berkurang, sehingga NAIK -- digantikan fluida dingin yang turun. Siklus ini menciptakan **arus konveksi**. Angin laut dan angin darat adalah contoh konveksi dalam skala besar: siang hari, daratan lebih cepat panas daripada laut, sehingga udara di atas daratan naik dan digantikan udara dingin dari laut (angin laut, bertiup ke darat). Malam hari, daratan lebih cepat dingin daripada laut, jadi arahnya berbalik (angin darat, bertiup ke laut).
 
 ### Radiasi
 
@@ -243,8 +295,14 @@ Terjadi karena fluida yang dipanaskan memuai, massa jenisnya berkurang, sehingga
 ☀️ Radiasi adalah SATU-SATUNYA cara perpindahan kalor yang TIDAK butuh medium -- bisa merambat lewat ruang hampa. Inilah cara kalor Matahari sampai ke Bumi, melewati ruang angkasa yang vakum.
 </div>
 
+Ini juga kenapa baju warna hitam/gelap terasa lebih panas dijemur di bawah terik matahari dibanding baju warna putih/terang: permukaan gelap menyerap hampir semua radiasi Matahari yang mengenainya, sementara permukaan terang memantulkan sebagian besarnya kembali.
+
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>ruang vakum (tanpa udara) menghentikan SEMUA jenis perpindahan kalor</del>. Yang benar: vakum hanya menghalangi konduksi dan konveksi (yang butuh medium) -- radiasi tetap bisa terjadi lewat ruang hampa, itulah kenapa termos masih bisa sedikit kehilangan kalor lewat radiasi meski dindingnya vakum.
+</div>
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Gagang panci atau setrika yang sengaja dibuat dari kayu/plastik bukan kebetulan -- itu PILIHAN DESAIN supaya kamu tidak kepanasan saat memegangnya. Kayu dan plastik punya konduktivitas termal yang jauh lebih kecil dari logam, jadi berfungsi sebagai "isolator" yang memperlambat kalor merambat ke tanganmu.
 </div>
 
 ## 🧠 Mari Kita Analisis

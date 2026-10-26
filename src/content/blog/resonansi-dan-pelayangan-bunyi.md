@@ -113,6 +113,28 @@ draft: false
   font-size: 0.9375rem;
 }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -228,7 +250,98 @@ Lalu frekuensinya dihitung dengan **f = v/λ** seperti biasa.
   </ul>
 </div>
 
-Ketika dua gelombang bunyi berfrekuensi HAMPIR SAMA berinterferensi, hasilnya adalah bunyi yang kuat-lemahnya berubah secara periodik -- fenomena inilah yang dimanfaatkan musisi untuk menyetem alat musik.
+Ketika dua gelombang bunyi berfrekuensi HAMPIR SAMA berinterferensi, hasilnya adalah bunyi yang kuat-lemahnya berubah secara periodik -- fenomena inilah yang dimanfaatkan musisi untuk menyetem alat musik. Coba perhatikan dua gitar yang dipetik bersamaan dengan nada yang hampir (tapi belum persis) sama -- akan terdengar bunyi "wow-wow-wow" yang berdenyut, bukan bunyi yang stabil.
+
+Coba lihat sendiri bagaimana dua gelombang membentuk pola "berdenyut" itu -- geser kedua frekuensinya, lalu amati gelombang jumlahnya (yang tebal di bawah):
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎧 Geser frekuensi gelombang 1 dan 2 -- perhatikan gelombang jumlahnya (tebal, di bawah) yang "menggembung-mengecil" secara berkala:</p>
+  <canvas id="beatCanvas" width="640" height="260" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#faf5ff,#eaf6ff);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Frekuensi gelombang 1 (biru): <strong id="beatF1Label">5,0</strong> Hz</label>
+  <input type="range" id="beatF1Slider" min="1" max="10" step="0.5" value="5" style="width:100%;accent-color:#2563eb;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Frekuensi gelombang 2 (oranye): <strong id="beatF2Label">6,0</strong> Hz</label>
+  <input type="range" id="beatF2Slider" min="1" max="10" step="0.5" value="6" style="width:100%;accent-color:#f97316;">
+  <p class="mtr-mini-label">Frekuensi pelayangan: <strong id="beatFbLabel">fb = |5,0 − 6,0| = 1,0 Hz</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('beatCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var f1Slider = document.getElementById('beatF1Slider');
+  var f2Slider = document.getElementById('beatF2Slider');
+  var f1Label = document.getElementById('beatF1Label');
+  var f2Label = document.getElementById('beatF2Label');
+  var fbLabel = document.getElementById('beatFbLabel');
+  var w = canvas.width, h = canvas.height;
+  var atasY = h * 0.27;
+  var bawahY = h * 0.72;
+  var ampAtas = h * 0.16;
+  var ampBawah = h * 0.2;
+  var waktuMulai = performance.now();
+  function gambarGaris(y) {
+    ctx.strokeStyle = 'rgba(88,28,135,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function render(tSekarang) {
+    var f1 = parseFloat(f1Slider.value);
+    var f2 = parseFloat(f2Slider.value);
+    var t = (tSekarang - waktuMulai) / 1000;
+    var fase = t * 2.4;
+    ctx.clearRect(0, 0, w, h);
+    gambarGaris(atasY);
+    gambarGaris(bawahY);
+    ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (var px = 0; px <= w; px += 3) {
+      var y1 = ampAtas * Math.sin((2 * Math.PI * f1 * px) / w - fase);
+      var py = atasY - y1;
+      if (px === 0) { ctx.moveTo(px, py); } else { ctx.lineTo(px, py); }
+    }
+    ctx.stroke();
+    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (var qx = 0; qx <= w; qx += 3) {
+      var y2 = ampAtas * Math.sin((2 * Math.PI * f2 * qx) / w - fase);
+      var qy = atasY - y2;
+      if (qx === 0) { ctx.moveTo(qx, qy); } else { ctx.lineTo(qx, qy); }
+    }
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(126,34,206,0.35)'; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    for (var ex = 0; ex <= w; ex += 3) {
+      var env = Math.abs(2 * Math.cos((Math.PI * (f1 - f2) * ex) / w));
+      var ey = bawahY - env * ampBawah;
+      if (ex === 0) { ctx.moveTo(ex, ey); } else { ctx.lineTo(ex, ey); }
+    }
+    ctx.stroke();
+    ctx.beginPath();
+    for (var fx = 0; fx <= w; fx += 3) {
+      var env2 = Math.abs(2 * Math.cos((Math.PI * (f1 - f2) * fx) / w));
+      var fy2 = bawahY + env2 * ampBawah;
+      if (fx === 0) { ctx.moveTo(fx, fy2); } else { ctx.lineTo(fx, fy2); }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#7e22ce'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (var sx = 0; sx <= w; sx += 3) {
+      var sum = Math.sin((2 * Math.PI * f1 * sx) / w - fase) + Math.sin((2 * Math.PI * f2 * sx) / w - fase);
+      var sy = bawahY - sum * ampBawah;
+      if (sx === 0) { ctx.moveTo(sx, sy); } else { ctx.lineTo(sx, sy); }
+    }
+    ctx.stroke();
+    var fb = Math.abs(f1 - f2);
+    f1Label.textContent = f1.toFixed(1).replace('.', ',');
+    f2Label.textContent = f2.toFixed(1).replace('.', ',');
+    fbLabel.textContent = 'fb = |' + f1.toFixed(1).replace('.', ',') + ' − ' + f2.toFixed(1).replace('.', ',') + '| = ' + fb.toFixed(1).replace('.', ',') + ' Hz';
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
+</script>
+
+Perhatikan garis ungu putus-putus (envelope/sampul) yang membungkus gelombang jumlah (tebal) di bagian bawah -- itulah yang menyebabkan bunyi terdengar "menguat lalu melemah" berulang. Coba geser kedua frekuensi sampai hampir sama (misalnya 5 Hz dan 5,5 Hz): envelope-nya akan melebar, berarti pelayangannya melambat. Kalau kedua frekuensinya dibuat SAMA PERSIS, envelope-nya datar -- pelayangan menghilang, tandanya kedua sumber sudah selaras.
 
 ## 🧠 Mari Kita Analisis
 

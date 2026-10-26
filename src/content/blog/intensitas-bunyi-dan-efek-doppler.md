@@ -108,6 +108,10 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid #d8b4fe; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #581c87; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -197,7 +201,7 @@ Menurutmu, apakah frekuensi bunyi yang TERDENGAR pendengar selalu SAMA dengan fr
   </ul>
 </div>
 
-Daya bunyi (P) dari sumber tersebar merata ke permukaan bola yang makin besar seiring jarak (r) bertambah -- makanya intensitas (I) berbanding TERBALIK dengan KUADRAT jarak.
+Daya bunyi (P) dari sumber tersebar merata ke permukaan bola yang makin besar seiring jarak (r) bertambah -- makanya intensitas (I) berbanding TERBALIK dengan KUADRAT jarak. Ini sebabnya penonton konser yang berdiri PERSIS DI DEPAN panggung (dekat dengan speaker) merasakan bunyi yang jauh lebih "menghantam", sementara penonton di bagian paling belakang lapangan sudah merasakan bunyinya jauh lebih lemah -- meski speakernya sama, daya bunyi yang sama itu "terbagi" ke area yang jauh lebih luas pada jarak yang lebih besar.
 
 ### Taraf Intensitas (Desibel)
 
@@ -233,7 +237,30 @@ Daya bunyi (P) dari sumber tersebar merata ke permukaan bola yang makin besar se
   </ul>
 </div>
 
-Ketika sumber bunyi **mendekati** pendengar, gelombang "termampatkan" di depannya -- frekuensi terdengar LEBIH TINGGI. Ketika **menjauh**, gelombang "teregangkan" -- frekuensi terdengar LEBIH RENDAH.
+Ketika sumber bunyi **mendekati** pendengar, gelombang "termampatkan" di depannya -- frekuensi terdengar LEBIH TINGGI. Ketika **menjauh**, gelombang "teregangkan" -- frekuensi terdengar LEBIH RENDAH. Inilah kenapa nada sirine ambulans atau mobil polisi yang sedang melintas terdengar jelas berbeda: melengking saat mendekat, lalu langsung "turun" nadanya begitu melewati dan mulai menjauh darimu -- padahal sirinenya sendiri tidak pernah diubah frekuensinya oleh pengemudi.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="165" x2="390" y2="165" stroke="#a1a1aa" stroke-width="2" />
+    <circle cx="210" cy="110" r="20" fill="none" stroke="#9333ea" stroke-width="2.2" />
+    <circle cx="190" cy="110" r="45" fill="none" stroke="#9333ea" stroke-width="2" opacity="0.75" />
+    <circle cx="160" cy="110" r="75" fill="none" stroke="#9333ea" stroke-width="1.6" opacity="0.55" />
+    <circle cx="120" cy="110" r="110" fill="none" stroke="#9333ea" stroke-width="1.3" opacity="0.4" />
+    <rect x="280" y="90" width="60" height="32" rx="6" fill="#f8fafc" stroke="#26243b" stroke-width="2" />
+    <path d="M280,110 L280,100 L300,90 L305,100 L280,100" fill="#f8fafc" stroke="#26243b" stroke-width="2" />
+    <rect x="296" y="78" width="16" height="10" rx="2" fill="#ef4444" />
+    <line x1="300" y1="80" x2="308" y2="86" stroke="#fff" stroke-width="1.6" />
+    <line x1="308" y1="80" x2="300" y2="86" stroke="#fff" stroke-width="1.6" />
+    <circle cx="292" cy="124" r="8" fill="#26243b" />
+    <circle cx="328" cy="124" r="8" fill="#26243b" />
+    <line x1="345" y1="106" x2="365" y2="106" stroke="#581c87" stroke-width="2.5" />
+    <path d="M365,106 l-10,-5 l0,10 z" fill="#581c87" />
+    <text x="355" y="95" text-anchor="middle" font-size="11" fill="#581c87">arah gerak</text>
+    <text x="235" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#581c87">rapat → nada tinggi</text>
+    <text x="110" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#581c87">renggang → nada rendah</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Gelombang bunyi ambulans termampatkan di depan (nada tinggi) dan teregang di belakang (nada rendah).</p>
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>Efek Doppler berarti sumber bunyi benar-benar mengubah frekuensi aslinya</del>. Yang benar: frekuensi ASLI sumber TIDAK berubah -- yang berubah adalah frekuensi yang TERDENGAR pendengar, akibat gerak relatif keduanya.

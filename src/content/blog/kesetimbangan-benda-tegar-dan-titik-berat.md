@@ -127,6 +127,28 @@ draft: false
   font-weight: 600;
 }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -220,6 +242,99 @@ Benda tegar (rigid body, bentuknya tidak berubah) dikatakan SETIMBANG kalau meme
 <div class="mtr-def">
 ⚖️ Pada jungkat-jungkit yang seimbang, torsi di kedua sisi titik tumpu harus SAMA BESAR (berlawanan arah putar): <strong>F1×r1 = F2×r2</strong>. Inilah kenapa anak yang lebih ringan bisa mengimbangi anak yang lebih berat -- asal duduk LEBIH JAUH dari titik tumpu.
 </div>
+
+Coba mainkan sendiri papan jungkat-jungkit virtual ini -- geser berat dan jarak di kedua sisi, lihat papannya miring ke mana, dan cari sendiri kombinasi yang membuatnya persis seimbang:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">⚖️ Atur berat dan jarak kedua sisi dari pivot -- lihat papannya miring atau seimbang:</p>
+  <canvas id="jungkatCanvas" width="640" height="260" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Berat kiri (w1): <strong id="jungkatW1Label">40</strong> N</label>
+  <input type="range" id="jungkatW1Slider" min="10" max="100" value="40" step="5" style="width:100%;accent-color:#ef4444;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Jarak kiri dari pivot (d1): <strong id="jungkatD1Label">3</strong> m</label>
+  <input type="range" id="jungkatD1Slider" min="1" max="6" value="3" step="0.5" style="width:100%;accent-color:#ef4444;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Berat kanan (w2): <strong id="jungkatW2Label">40</strong> N</label>
+  <input type="range" id="jungkatW2Slider" min="10" max="100" value="40" step="5" style="width:100%;accent-color:#3b82f6;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Jarak kanan dari pivot (d2): <strong id="jungkatD2Label">3</strong> m</label>
+  <input type="range" id="jungkatD2Slider" min="1" max="6" value="3" step="0.5" style="width:100%;accent-color:#3b82f6;">
+  <p class="mtr-mini-label">τ kiri: <strong id="jungkatTauKiriLabel">-</strong> &middot; τ kanan: <strong id="jungkatTauKananLabel">-</strong></p>
+  <p class="mtr-mini-label" id="jungkatStatusLabel">-</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('jungkatCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var w1Slider = document.getElementById('jungkatW1Slider');
+  var d1Slider = document.getElementById('jungkatD1Slider');
+  var w2Slider = document.getElementById('jungkatW2Slider');
+  var d2Slider = document.getElementById('jungkatD2Slider');
+  var w1Label = document.getElementById('jungkatW1Label');
+  var d1Label = document.getElementById('jungkatD1Label');
+  var w2Label = document.getElementById('jungkatW2Label');
+  var d2Label = document.getElementById('jungkatD2Label');
+  var tauKiriLabel = document.getElementById('jungkatTauKiriLabel');
+  var tauKananLabel = document.getElementById('jungkatTauKananLabel');
+  var statusLabel = document.getElementById('jungkatStatusLabel');
+  var w = canvas.width, h = canvas.height;
+  var pivotX = w * 0.5, pivotY = h * 0.62;
+  var skalaPx = 32;
+  function wajahKecil(cx, cy) {
+    ctx.fillStyle = '#26243b';
+    [-4, 4].forEach(function (dx) { ctx.beginPath(); ctx.arc(cx + dx, cy - 1, 1.8, 0, Math.PI * 2); ctx.fill(); });
+  }
+  function render() {
+    var w1 = parseFloat(w1Slider.value), d1 = parseFloat(d1Slider.value);
+    var w2 = parseFloat(w2Slider.value), d2 = parseFloat(d2Slider.value);
+    w1Label.textContent = w1;
+    d1Label.textContent = d1.toFixed(1).replace('.', ',');
+    w2Label.textContent = w2;
+    d2Label.textContent = d2.toFixed(1).replace('.', ',');
+    var tauKiri = w1 * d1, tauKanan = w2 * d2;
+    tauKiriLabel.textContent = tauKiri.toFixed(1).replace('.', ',') + ' N·m';
+    tauKananLabel.textContent = tauKanan.toFixed(1).replace('.', ',') + ' N·m';
+    var beda = tauKanan - tauKiri;
+    if (Math.abs(beda) < Math.max(2, (tauKiri + tauKanan) * 0.015)) {
+      statusLabel.innerHTML = '⚖️ <strong>Seimbang!</strong> Torsi kedua sisi sama besar.';
+    } else if (beda > 0) {
+      statusLabel.innerHTML = '↘️ <strong>Miring ke kanan</strong> -- torsi kanan lebih besar.';
+    } else {
+      statusLabel.innerHTML = '↙️ <strong>Miring ke kiri</strong> -- torsi kiri lebih besar.';
+    }
+    var maxAngle = 22 * Math.PI / 180;
+    var theta = Math.max(-1, Math.min(1, beda / 320)) * maxAngle;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#9d8468';
+    ctx.beginPath();
+    ctx.moveTo(pivotX - 34, pivotY + 60);
+    ctx.lineTo(pivotX + 34, pivotY + 60);
+    ctx.lineTo(pivotX, pivotY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.save();
+    ctx.translate(pivotX, pivotY);
+    ctx.rotate(theta);
+    ctx.fillStyle = '#7c6f64';
+    ctx.fillRect(-230, -9, 460, 18);
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.strokeRect(-230, -9, 460, 18);
+    var r1 = Math.min(28, Math.max(12, 10 + (w1 / 100) * 18));
+    var r2 = Math.min(28, Math.max(12, 10 + (w2 / 100) * 18));
+    var xKiri = -Math.min(220, d1 * skalaPx);
+    var xKanan = Math.min(220, d2 * skalaPx);
+    ctx.beginPath(); ctx.arc(xKiri, -9 - r1, r1, 0, Math.PI * 2);
+    ctx.fillStyle = '#ef4444'; ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    wajahKecil(xKiri, -9 - r1);
+    ctx.beginPath(); ctx.arc(xKanan, -9 - r2, r2, 0, Math.PI * 2);
+    ctx.fillStyle = '#3b82f6'; ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    wajahKecil(xKanan, -9 - r2);
+    ctx.restore();
+  }
+  [w1Slider, d1Slider, w2Slider, d2Slider].forEach(function (s) { s.addEventListener('input', render); });
+  render();
+})();
+</script>
 
 ### Titik Berat
 

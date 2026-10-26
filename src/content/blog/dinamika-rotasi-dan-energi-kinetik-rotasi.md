@@ -194,11 +194,15 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Di materi sebelumnya kamu belajar momen gaya (torsi) dan momen inersia secara terpisah. Sekarang kita gabungkan keduanya jadi "Hukum II Newton versi rotasi" -- dan buktikan kalau benda yang berputar ternyata juga punya energi kinetik, persis seperti benda yang bergerak lurus.
+Coba perhatikan roda sepeda yang kamu putar dengan tangan di udara (sepedanya dibalik, rodanya menggantung bebas). Begitu kamu kasih sedikit dorongan (torsi) di pinggir roda, ia makin lama makin cepat berputar. Sebaliknya, begitu kamu pegang rem cakramnya, roda itu melambat dan berhenti -- padahal tidak ada yang "menyentuhnya" untuk memperlambat selain gesekan rem. Di materi sebelumnya kamu belajar momen gaya (torsi) dan momen inersia secara terpisah. Sekarang kita gabungkan keduanya jadi "Hukum II Newton versi rotasi" -- dan buktikan kalau benda yang berputar (seperti roda sepeda itu) ternyata juga punya energi kinetik, persis seperti benda yang bergerak lurus.
 
 ## 🤔 Coba Pikirkan
 
@@ -223,7 +227,28 @@ Ingat Hukum II Newton: F=ma. Untuk gerak ROTASI, ada rumus analognya:
   </ul>
 </div>
 
-Sama seperti a=F/m, rumus kedua di atas dipakai kalau kita ingin mencari percepatan sudutnya langsung.
+Sama seperti a=F/m, rumus kedua di atas dipakai kalau kita ingin mencari percepatan sudutnya langsung. Inilah yang terjadi pada roda sepeda tadi: dorongan tangan di pinggir roda itu torsi (τ), dan momen inersia roda (I, bergantung bagaimana massa pelek dan ban tersebar) menentukan seberapa besar percepatan sudut (α) yang dihasilkan -- roda yang lebih "berat di pinggir" (I besar) lebih lambat berakselerasi untuk torsi yang sama.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<circle cx="150" cy="110" r="75" fill="#dbeafe" stroke="#3b82f6" stroke-width="6"/>
+<circle cx="150" cy="110" r="52" fill="none" stroke="#60a5fa" stroke-width="3" stroke-dasharray="6,6"/>
+<circle cx="150" cy="110" r="9" fill="#1d4ed8"/>
+<line x1="150" y1="110" x2="150" y2="42" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+<line x1="150" y1="110" x2="150" y2="178" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+<line x1="150" y1="110" x2="90" y2="110" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+<line x1="150" y1="110" x2="210" y2="110" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+<path d="M190,55 A90,90 0 0 1 225,110" fill="none" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+<polygon points="225,110 214,98 212,113" fill="#ef4444"/>
+<text x="230" y="80" font-size="16" fill="#ef4444" font-weight="700">τ</text>
+<text x="255" y="100" font-size="13" fill="#1e3a8a">(torsi dorongan)</text>
+<path d="M60,165 A90,90 0 0 1 60,55" fill="none" stroke="#94a3b8" stroke-width="3" stroke-dasharray="5,5"/>
+<polygon points="60,55 50,65 65,68" fill="#94a3b8"/>
+<text x="20" y="200" font-size="13" fill="#475569">ω (kecepatan sudut)</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Torsi (τ) di pinggir roda mengubah kecepatan sudutnya (ω) -- besarnya percepatan sudut (α) bergantung momen inersia (I) roda itu.</p>
+</div>
 
 ### Analogi Translasi vs Rotasi
 

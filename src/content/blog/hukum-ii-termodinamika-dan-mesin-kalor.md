@@ -108,11 +108,45 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Mobil, pembangkit listrik, dan mesin lainnya selalu punya sisa panas yang "terbuang" (misalnya lewat knalpot atau menara pendingin). Kenapa tidak ada satu pun mesin yang bisa mengubah SEMUA kalor jadi usaha berguna, tanpa ada yang terbuang sama sekali? Jawabannya adalah batasan fundamental alam semesta: Hukum II Termodinamika.
+Coba pegang knalpot motor yang baru dipakai jalan -- panas banget, kan? Itu adalah energi kalor yang sengaja "dibuang" begitu saja, padahal bahan bakar yang dibakar di mesin sudah susah-susah menghasilkan energi itu. Mobil, pembangkit listrik, dan mesin lainnya selalu punya sisa panas yang "terbuang" (misalnya lewat knalpot atau menara pendingin). Kenapa tidak ada satu pun mesin yang bisa mengubah SEMUA kalor jadi usaha berguna, tanpa ada yang terbuang sama sekali? Mesin motor atau mobil manapun -- secanggih apapun teknologinya -- nggak akan pernah bisa 100% efisien. Jawabannya adalah batasan fundamental alam semesta: Hukum II Termodinamika.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="70" y="90" width="180" height="70" rx="14" fill="#94a3b8"/>
+    <rect x="90" y="70" width="60" height="26" rx="6" fill="#64748b"/>
+    <circle cx="100" cy="190" r="20" fill="#334155"/>
+    <circle cx="200" cy="190" r="20" fill="#334155"/>
+    <circle cx="100" cy="190" r="8" fill="#94a3b8"/>
+    <circle cx="200" cy="190" r="8" fill="#94a3b8"/>
+    <path d="M78 100 l14 -18 l10 14 l10 -14 l10 14" stroke="#f97316" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="84" cy="78" r="5" fill="#f97316"/>
+    <text x="110" y="60" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">bahan bakar</text>
+    <path d="M250 115 L285 115" stroke="#16a34a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M278 108 L292 115 L278 122 Z" fill="#16a34a"/>
+    <rect x="292" y="100" width="40" height="30" rx="6" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+    <text x="312" y="140" font-size="12" font-weight="700" fill="#166534" text-anchor="middle">usaha</text>
+    <rect x="252" y="150" width="14" height="40" rx="6" fill="#78716c"/>
+    <path d="M259 150 q-6 -16 4 -26 q10 -10 0 -24" stroke="#cbd5e1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>
+    <text x="259" y="205" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">knalpot</text>
+    <text x="340" y="205" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">kalor terbuang</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Mesin mengubah sebagian kalor bahan bakar jadi usaha -- sisanya selalu terbuang lewat knalpot, tidak pernah 100% efisien.</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -140,6 +174,10 @@ Efisiensi MAKSIMUM yang secara teori mungkin dicapai (mesin Carnot, ideal tanpa 
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>efisiensi Carnot adalah efisiensi yang bisa dicapai mesin sungguhan</del>. Yang benar: efisiensi Carnot adalah BATAS ATAS teoritis (mesin ideal, tanpa gesekan) -- mesin sungguhan SELALU punya efisiensi lebih rendah dari batas ini, karena ada ketidaksempurnaan tambahan (gesekan, dll).
+</div>
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Mesin motor/mobil berbahan bakar bensin pada umumnya hanya punya efisiensi sekitar 20-35% saja -- sebagian besar energi dari bahan bakarnya "hilang" sebagai kalor lewat knalpot dan sistem pendingin, bukan jadi tenaga yang memutar roda. Inilah kenapa mobil listrik (yang mengubah energi listrik jadi gerak lewat motor elektrik, bukan membakar bahan bakar) bisa jauh lebih efisien, karena tidak terikat batasan siklus mesin kalor seperti ini.
 </div>
 
 ## 🧠 Mari Kita Analisis

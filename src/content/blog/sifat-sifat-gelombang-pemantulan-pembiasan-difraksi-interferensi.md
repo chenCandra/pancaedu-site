@@ -118,6 +118,10 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid #d8b4fe; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #581c87; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -138,6 +142,40 @@ Kenapa menurutmu kamu bisa mendengar suara seseorang yang berbicara dari balik s
 <tr><td>Difraksi (Lenturan)</td><td>Gelombang melewati celah sempit/tepi penghalang, menyebar</td><td>Suara terdengar dari balik tembok</td></tr>
 <tr><td>Interferensi</td><td>Dua gelombang atau lebih bersuperposisi</td><td>Titik senyap di antara dua speaker</td></tr>
 </table>
+</div>
+
+Empat sifat ini juga mudah ditemukan dalam kehidupan sehari-hari: teriakan di gua atau aula kosong yang menghasilkan GEMA (pemantulan), sedotan yang terlihat "patah" saat dicelupkan ke gelas berisi air (pembiasan), suara teman yang kedengaran "belok" dari balik tikungan tembok meski dia tidak terlihat (difraksi), dan headphone **noise-cancelling** yang justru membuat suasana jadi lebih SENYAP dengan cara memancarkan gelombang bunyi tandingan yang persis berlawanan fase dengan bunyi bising di sekitarnya, sehingga keduanya saling meniadakan (interferensi destruktif yang disengaja!).
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="15" width="170" height="85" rx="12" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2" />
+    <line x1="35" y1="80" x2="190" y2="80" stroke="#26243b" stroke-width="2" />
+    <path d="M55,45 L80,80" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" />
+    <path d="M80,80 L110,45" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" />
+    <path d="M110,45 l-12,2 l5,-11 z" fill="#0ea5e9" />
+    <text x="105" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#581c87">Pemantulan</text>
+    <rect x="210" y="15" width="170" height="85" rx="12" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2" />
+    <line x1="225" y1="60" x2="375" y2="60" stroke="#a1a1aa" stroke-width="2" stroke-dasharray="4 4" />
+    <path d="M245,35 L285,60" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" />
+    <path d="M285,60 L335,80" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" />
+    <path d="M335,80 l-14,-4 l9,-9 z" fill="#f97316" />
+    <text x="295" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#581c87">Pembiasan</text>
+    <rect x="20" y="115" width="170" height="85" rx="12" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2" />
+    <rect x="95" y="135" width="10" height="45" fill="#26243b" />
+    <path d="M60,140 Q78,150 60,165" fill="none" stroke="#14b8a6" stroke-width="2.5" />
+    <path d="M70,135 Q95,150 70,175" fill="none" stroke="#14b8a6" stroke-width="2.5" />
+    <path d="M80,130 Q115,150 80,185" fill="none" stroke="#14b8a6" stroke-width="2.5" />
+    <text x="105" y="195" text-anchor="middle" font-size="12" font-weight="700" fill="#581c87">Difraksi</text>
+    <rect x="210" y="115" width="170" height="85" rx="12" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2" />
+    <circle cx="265" cy="155" r="10" fill="none" stroke="#9333ea" stroke-width="1.6" />
+    <circle cx="265" cy="155" r="20" fill="none" stroke="#9333ea" stroke-width="1.6" />
+    <circle cx="265" cy="155" r="30" fill="none" stroke="#9333ea" stroke-width="1.6" />
+    <circle cx="325" cy="155" r="10" fill="none" stroke="#ec4899" stroke-width="1.6" />
+    <circle cx="325" cy="155" r="20" fill="none" stroke="#ec4899" stroke-width="1.6" />
+    <circle cx="325" cy="155" r="30" fill="none" stroke="#ec4899" stroke-width="1.6" />
+    <text x="295" y="195" text-anchor="middle" font-size="12" font-weight="700" fill="#581c87">Interferensi</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Empat sifat universal gelombang: pemantulan, pembiasan, difraksi, dan interferensi.</p>
 </div>
 
 ### Interferensi Konstruktif dan Destruktif

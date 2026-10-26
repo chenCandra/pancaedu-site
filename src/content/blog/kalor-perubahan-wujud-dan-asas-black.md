@@ -108,6 +108,17 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -174,7 +185,35 @@ draft: false
 
 ## 🌱 Apersepsi
 
-Kalau kamu merebus air, suhunya naik terus sampai 100°C, lalu berhenti naik meski airnya masih terus dipanaskan dan mendidih dengan gencar. Ke mana perginya kalor yang terus masuk itu kalau bukan untuk menaikkan suhu?
+Kalau kamu merebus air, suhunya naik terus sampai 100°C, lalu berhenti naik meski airnya masih terus dipanaskan dan mendidih dengan gencar. Ke mana perginya kalor yang terus masuk itu kalau bukan untuk menaikkan suhu? Pernah juga kan nyemplungin paku atau sendok besi yang baru selesai dibakar ke dalam air -- langsung mendesis "cesss" dan airnya jadi hangat, sementara besinya jadi dingin? Atau kenapa es batu di dalam termos bisa tahan berjam-jam tanpa cepat mencair, padahal di gelas biasa sudah mencair semua dalam hitungan menit? Semua ini soal bagaimana **kalor berpindah dan berubah bentuk** saat suatu zat berubah suhu atau berubah wujud.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M110 30 L290 30 L275 200 Q270 212 258 212 L142 212 Q130 212 125 200 Z" fill="#bae6fd" stroke="#38bdf8" stroke-width="3"/>
+    <path d="M118 48 L282 48 L270 195 Q266 206 256 206 L144 206 Q134 206 130 195 Z" fill="#7dd3fc" opacity="0.6"/>
+    <ellipse cx="200" cy="48" rx="82" ry="8" fill="#e0f2fe"/>
+    <g fill="#ffffff" stroke="#bae6fd" stroke-width="2">
+      <rect x="150" y="70" width="46" height="46" rx="8"/>
+      <rect x="205" y="90" width="38" height="38" rx="7"/>
+    </g>
+    <g stroke="#f97316" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M170 60 q4 -14 -2 -24"/>
+      <path d="M190 58 q4 -14 -2 -24"/>
+      <path d="M220 80 q4 -12 -2 -20"/>
+    </g>
+    <g stroke="#1d4ed8" stroke-width="3" fill="none" stroke-linecap="round">
+      <path d="M130 150 q10 -8 0 -16 q-10 -8 0 -16"/>
+      <path d="M270 150 q-10 -8 0 -16 q10 -8 0 -16"/>
+    </g>
+    <path d="M98 100 L70 100" stroke="#ea580c" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow1)"/>
+    <path d="M302 100 L330 100" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+    <path d="M94 93 L70 100 L94 107 Z" fill="#ea580c"/>
+    <path d="M306 93 L330 100 L306 107 Z" fill="#ea580c"/>
+    <text x="55" y="88" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">kalor</text>
+    <text x="345" y="88" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">kalor</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Es batu menyerap kalor dari air hangat di sekitarnya, melebur jadi air, sampai suhunya setimbang -- persis Asas Black.</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -236,7 +275,11 @@ Ketika dua zat bersuhu berbeda dicampur (sistem tertutup, tanpa kalor yang "boco
   </ul>
 </div>
 
-Zat yang lebih panas (T1) MELEPAS kalor, zat yang lebih dingin (T2) MENERIMA kalor, sampai keduanya mencapai suhu akhir yang sama (Tc) -- kesetimbangan termal.
+Zat yang lebih panas (T1) MELEPAS kalor, zat yang lebih dingin (T2) MENERIMA kalor, sampai keduanya mencapai suhu akhir yang sama (Tc) -- kesetimbangan termal. Inilah yang terjadi saat paku panas dicelupkan ke air: paku (suhu tinggi) melepas kalornya, air (suhu rendah) menyerapnya, sampai keduanya "ketemu" di satu suhu akhir yang sama -- makanya air jadi sedikit lebih hangat dan paku jadi dingin.
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Termos menjaga es tetap dingin (atau air tetap panas) bukan dengan "menciptakan dingin/panas", tapi dengan MEMPERLAMBAT perpindahan kalor ke luar lewat dinding berlapis dan ruang vakum di antaranya -- akan dibahas detailnya di materi Perpindahan Kalor setelah ini.
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>suhu akhir campuran selalu sama dengan rata-rata sederhana kedua suhu awal</del>. Yang benar: suhu akhir (Tc) adalah rata-rata TERTIMBANG oleh massa DAN kalor jenis (mc) masing-masing zat -- kalau massanya berbeda, Tc TIDAK sama dengan rata-rata sederhana.

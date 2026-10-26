@@ -170,6 +170,10 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -222,6 +226,29 @@ Sebuah mobil sedan dan sebuah truk bergerak dengan kecepatan yang SAMA. Menurutm
 </div>
 
 Inilah kunci kenapa airbag dan sarung tinju bekerja: untuk perubahan momentum (Δp) yang SAMA, memperpanjang selang waktu (Δt) tumbukan akan MENGURANGI gaya (F) yang dialami tubuh -- karena I = FΔt tetap sama, tapi Δt lebih besar berarti F lebih kecil.
+
+Prinsip yang sama dipakai pemain kiper atau penangkap bola baseball: saat bola keras datang, mereka menarik tangan ke belakang sedikit mengikuti arah bola, bukan menahannya kaku di tempat. Gerakan "mengulur" itu memperpanjang Δt kontak, sehingga gaya yang dirasakan tangan jauh lebih kecil -- padahal impuls (perubahan momentum bola dari cepat jadi diam) besarnya tetap sama saja.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="170" y="10" width="60" height="14" rx="3" fill="#475569"></rect>
+    <line x1="200" y1="24" x2="200" y2="60" stroke="#475569" stroke-width="4"></line>
+    <rect x="150" y="60" width="100" height="140" rx="40" fill="#b45309" stroke="#78350f" stroke-width="3"></rect>
+    <line x1="180" y1="75" x2="180" y2="185" stroke="#92400e" stroke-width="3"></line>
+    <line x1="220" y1="75" x2="220" y2="185" stroke="#92400e" stroke-width="3"></line>
+    <line x1="18" y1="118" x2="55" y2="118" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"></line>
+    <line x1="14" y1="134" x2="52" y2="134" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"></line>
+    <line x1="22" y1="150" x2="58" y2="150" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"></line>
+    <ellipse cx="120" cy="134" rx="34" ry="27" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"></ellipse>
+    <ellipse cx="100" cy="112" rx="11" ry="9" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"></ellipse>
+    <line x1="148" y1="118" x2="168" y2="104" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
+    <line x1="152" y1="134" x2="174" y2="134" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
+    <line x1="148" y1="150" x2="168" y2="164" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
+    <text x="10" y="100" font-size="11" fill="#1e3a8a" font-weight="700">pukulan cepat</text>
+    <text x="255" y="100" font-size="11" fill="#1e3a8a" font-weight="700">sarung tinju empuk</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Makin empuk/lama kontaknya (Δt besar), makin kecil gaya (F) yang dirasakan untuk impuls (perubahan momentum) yang sama -- itulah kenapa sarung tinju empuk mengurangi dampak pukulan.</p>
+</div>
 
 ### Hukum Kekekalan Momentum
 

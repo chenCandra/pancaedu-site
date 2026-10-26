@@ -214,11 +214,15 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Pernah merasa motor/mobil butuh gas lebih besar saat menanjak dibanding di jalan datar? Atau pernah lihat ban mobil selip di jalan basah? Keduanya berhubungan dengan dua konsep dalam materi ini: bidang miring dan gaya gesek. Sekalian juga kita bahas sistem katrol -- kenapa dua benda yang dihubungkan tali lewat katrol selalu "kompak" bergerak bersamaan.
+Pernah naik motor di jalan berbukit? Saat jalannya kering, motor masih kuat menanjak dengan gas yang wajar. Tapi begitu hujan turun dan aspalnya basah/licin, tanjakan yang sama bisa bikin ban motor berdecit, selip, bahkan susah naik sama sekali -- padahal sudut tanjakannya tidak berubah sedikit pun! Kenapa bisa beda jauh begitu? Jawabannya ada di dua konsep dalam materi ini: **bidang miring** (yang menentukan seberapa berat beban "menarik" motor turun) dan **gaya gesek** (yang menentukan seberapa kuat ban "mencengkeram" aspal). Sekalian juga kita bahas sistem katrol -- kenapa dua benda yang dihubungkan tali lewat katrol selalu "kompak" bergerak bersamaan.
 
 ## 🤔 Coba Pikirkan
 
@@ -269,6 +273,37 @@ Komponen **mg sinθ** (sejajar bidang) inilah yang menarik benda meluncur turun.
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>gaya normal (N) pada bidang miring selalu sama dengan mg (berat penuh)</del>. Yang benar: N = mg cosθ, LEBIH KECIL dari mg (kecuali θ=0°, bidang datar). Sebagian gaya berat "dialihkan" jadi komponen sejajar bidang (mg sinθ).
+</div>
+
+Nah, balik ke motor yang menanjak di awal: komponen **mg sinθ** itulah beban yang harus dilawan mesin motor supaya tetap naik. Sudut tanjakannya sama, jadi mg sinθ-nya juga sama -- yang berubah drastis saat hujan adalah **koefisien gesek (μ)** antara ban dan aspal basah, yang jauh lebih kecil dari aspal kering. Gaya gesek maksimum (f = μN) yang bisa "mencengkeram" jadi lebih kecil, sehingga ban lebih mudah selip meski tenaga motornya sama.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<polygon points="30,200 300,200 300,55" fill="#93c5fd"/>
+<line x1="30" y1="200" x2="370" y2="200" stroke="#1e3a8a" stroke-width="4" stroke-linecap="round"/>
+<g transform="rotate(-27.5 160 128)">
+<rect x="130" y="100" width="56" height="56" rx="8" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="148" cy="120" r="3.5" fill="#fff"/>
+<circle cx="168" cy="120" r="3.5" fill="#fff"/>
+<path d="M148,138 Q158,146 168,138" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g>
+<line x1="158" y1="128" x2="158" y2="188" stroke="#1e3a8a" stroke-width="4"/>
+<polygon points="158,188 151,174 165,174" fill="#1e3a8a"/>
+<text x="166" y="185" font-size="14" fill="#1e3a8a" font-weight="700">mg</text>
+<line x1="158" y1="128" x2="120" y2="78" stroke="#059669" stroke-width="4"/>
+<polygon points="120,78 123,93 135,83" fill="#059669"/>
+<text x="90" y="72" font-size="14" fill="#059669" font-weight="700">N</text>
+<line x1="150" y1="148" x2="196" y2="108" stroke="#ef4444" stroke-width="4"/>
+<polygon points="196,108 182,106 190,119" fill="#ef4444"/>
+<text x="198" y="100" font-size="14" fill="#ef4444" font-weight="700">f</text>
+<text x="55" y="185" font-size="13" fill="#1e3a8a">θ</text>
+<path d="M320,55 Q340,40 360,55" stroke="#1e3a8a" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+<ellipse cx="335" cy="30" rx="26" ry="14" fill="#cbd5e1"/>
+<line x1="325" y1="48" x2="320" y2="60" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
+<line x1="340" y1="48" x2="335" y2="60" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
+</svg>
+<p class="mtr-ilustrasi-caption">Kotak di bidang miring: gaya berat (mg) terurai jadi komponen sejajar bidang (ditahan gesekan f) dan tegak lurus bidang (ditahan N) -- hujan membuat μ mengecil, f maksimum ikut mengecil.</p>
 </div>
 
 ### Sistem Katrol

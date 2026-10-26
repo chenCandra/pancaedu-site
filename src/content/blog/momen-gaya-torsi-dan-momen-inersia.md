@@ -194,11 +194,15 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Semua materi sebelumnya di bab ini membahas gerak LURUS (translasi). Sekarang kita masuk ke jenis gerak yang berbeda: ROTASI (berputar). Kenapa kunci pas bertangkai panjang lebih gampang memutar baut yang keras dibanding tangkai pendek? Jawabannya ada di konsep **momen gaya (torsi)**.
+Semua materi sebelumnya di bab ini membahas gerak LURUS (translasi). Sekarang kita masuk ke jenis gerak yang berbeda: ROTASI (berputar). Pernah coba buka pintu dengan mendorong di bagian yang dekat engsel? Rasanya jauh lebih berat dibanding mendorong di tepi pintu (dekat pegangan/kenop), padahal gaya dorongmu sama saja. Hal yang sama terjadi saat membuka baut: kunci pas bertangkai panjang lebih gampang memutar baut yang keras dibanding tangkai pendek. Jawabannya ada di konsep **momen gaya (torsi)**.
 
 ## 🤔 Coba Pikirkan
 
@@ -225,6 +229,30 @@ Torsi adalah "versi rotasi" dari gaya -- ia menentukan seberapa efektif suatu ga
 
 <div class="mtr-def">
 🔧 Torsi maksimum dicapai saat gaya diberikan TEGAK LURUS terhadap lengan (θ=90°, sinθ=1). Kalau gaya SEJAJAR lengan (θ=0° atau 180°), torsinya NOL -- tidak ada efek memutar sama sekali.
+</div>
+
+Inilah sebabnya pintu terasa berat didorong dekat engsel: lengan gaya (r) jadi kecil, sehingga torsinya kecil meski gaya dorongmu sama. Mendorong di tepi pintu (jauh dari engsel) memberi lengan (r) yang jauh lebih besar, menghasilkan torsi yang jauh lebih besar untuk gaya dorong yang sama persis.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<circle cx="50" cy="170" r="10" fill="#1e3a8a"/>
+<text x="30" y="200" font-size="13" fill="#1e3a8a" font-weight="700">Engsel</text>
+<line x1="50" y1="170" x2="340" y2="60" stroke="#3b82f6" stroke-width="10" stroke-linecap="round"/>
+<circle cx="170" cy="129" r="7" fill="#1e3a8a"/>
+<line x1="170" y1="129" x2="170" y2="80" stroke="#ef4444" stroke-width="5"/>
+<polygon points="170,80 162,94 178,94" fill="#ef4444"/>
+<text x="178" y="92" font-size="13" fill="#ef4444" font-weight="700">F (dekat engsel)</text>
+<circle cx="320" cy="68" r="7" fill="#1e3a8a"/>
+<line x1="320" y1="68" x2="320" y2="19" stroke="#059669" stroke-width="5"/>
+<polygon points="320,19 312,33 328,33" fill="#059669"/>
+<text x="246" y="17" font-size="13" fill="#059669" font-weight="700">F (jauh dari engsel)</text>
+<line x1="50" y1="178" x2="170" y2="178" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4"/>
+<text x="90" y="194" font-size="12" fill="#64748b">r kecil</text>
+<line x1="50" y1="185" x2="320" y2="185" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4"/>
+<text x="220" y="212" font-size="12" fill="#64748b">r besar</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Gaya dorong yang sama (F) menghasilkan torsi lebih besar kalau diberikan pada lengan (r) yang lebih panjang -- seperti mendorong pintu di tepinya, bukan dekat engsel.</p>
 </div>
 
 ### Momen Inersia

@@ -210,11 +210,15 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Waktu di Kelas X, kamu belajar Hukum Newton lewat contoh sederhana: satu gaya dorong, satu benda, hitung percepatannya. Tapi dunia nyata jarang sesederhana itu -- sebuah benda biasanya dikenai BEBERAPA gaya sekaligus: gaya dorong, gaya gesek yang melawan, gaya berat yang menariknya ke bawah, dan gaya normal dari lantai yang menahannya. Materi ini mengajakmu naik level: menganalisis SEMUA gaya itu sekaligus, bukan cuma satu.
+Pernah merasa badanmu terasa lebih "berat" saat lift baru mulai naik, dan terasa lebih "ringan" sesaat saat lift baru mulai turun -- padahal massamu jelas tidak berubah sama sekali? Itu bukan perasaanmu saja. Waktu di Kelas X, kamu belajar Hukum Newton lewat contoh sederhana: satu gaya dorong, satu benda, hitung percepatannya. Tapi dunia nyata jarang sesederhana itu -- sebuah benda biasanya dikenai BEBERAPA gaya sekaligus, seperti orang di dalam lift yang dikenai gaya berat (w) ke bawah dan gaya normal lantai lift (N) ke atas sekaligus. Materi ini mengajakmu naik level: menganalisis SEMUA gaya itu sekaligus, bukan cuma satu.
 
 ## 🤔 Coba Pikirkan
 
@@ -244,6 +248,37 @@ Untuk benda yang bergerak HORIZONTAL di atas lantai datar (tidak bergerak naik-t
 
 * **Sumbu vertikal**: gaya berat (w = mg) dan gaya normal (N) saling meniadakan -- **N = w** (karena benda tidak bergerak naik/turun, resultan vertikalnya nol).
 * **Sumbu horizontal**: gaya dorong (F) dan gaya gesek (f) yang menentukan gerak -- **ΣF = F − f** (kalau berlawanan arah).
+
+Ini juga kenapa lift jadi contoh menarik: N = w HANYA berlaku kalau lift diam atau bergerak dengan kecepatan tetap. Begitu lift **mulai bergerak naik** (berakselerasi ke atas), harus ada resultan gaya ke atas, sehingga N &gt; w -- lantai lift "menekan" badanmu lebih kuat dari beratmu sendiri, terasa lebih berat. Sebaliknya, saat lift **mulai bergerak turun**, resultan gayanya ke bawah, sehingga N &lt; w -- terasa lebih ringan sesaat.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<rect x="40" y="20" width="110" height="180" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="4"/>
+<rect x="55" y="150" width="80" height="12" fill="#1e3a8a"/>
+<circle cx="95" cy="110" r="14" fill="#f2760a"/>
+<rect x="82" y="124" width="26" height="26" rx="6" fill="#3b82f6"/>
+<line x1="95" y1="150" x2="95" y2="190" stroke="#1e3a8a" stroke-width="4"/>
+<polygon points="95,190 88,176 102,176" fill="#1e3a8a"/>
+<text x="102" y="188" font-size="13" fill="#1e3a8a" font-weight="700">w</text>
+<line x1="95" y1="124" x2="95" y2="84" stroke="#059669" stroke-width="4"/>
+<polygon points="95,84 88,98 102,98" fill="#059669"/>
+<text x="102" y="88" font-size="13" fill="#059669" font-weight="700">N</text>
+<text x="48" y="12" font-size="12" fill="#1e3a8a">Lift bergerak naik: N &gt; w</text>
+<rect x="250" y="20" width="110" height="180" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="4"/>
+<rect x="265" y="30" width="80" height="12" fill="#1e3a8a"/>
+<circle cx="305" cy="90" r="14" fill="#f2760a"/>
+<rect x="292" y="104" width="26" height="26" rx="6" fill="#3b82f6"/>
+<line x1="305" y1="130" x2="305" y2="178" stroke="#1e3a8a" stroke-width="4"/>
+<polygon points="305,178 298,164 312,164" fill="#1e3a8a"/>
+<text x="312" y="176" font-size="13" fill="#1e3a8a" font-weight="700">w</text>
+<line x1="305" y1="104" x2="305" y2="74" stroke="#059669" stroke-width="4"/>
+<polygon points="305,74 298,88 312,88" fill="#059669"/>
+<text x="312" y="80" font-size="13" fill="#059669" font-weight="700">N</text>
+<text x="252" y="12" font-size="12" fill="#1e3a8a">Lift bergerak turun: N &lt; w</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Gaya normal (N) dan berat (w) pada orang di dalam lift -- besarnya N berubah tergantung arah percepatan lift, meski beratnya (w) tidak berubah.</p>
+</div>
 
 Pada sumbu yang bergerak, resultan gaya itulah yang menentukan percepatan benda lewat Hukum II Newton:
 

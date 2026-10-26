@@ -137,6 +137,10 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid #d8b4fe; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #581c87; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -170,9 +174,45 @@ Gelombang tali yang digetarkan naik-turun dan gelombang bunyi di udara sama-sama
 🌊 <strong>Transversal</strong>: arah getar TEGAK LURUS arah rambat (contoh: gelombang tali, cahaya). <strong>Longitudinal</strong>: arah getar SEJAJAR arah rambat (contoh: bunyi, pegas slinky yang ditekan-tarik).
 </div>
 
+Coba bandingkan dua mainan yang mungkin pernah kamu pegang: **tali/slinki yang digetarkan naik-turun** (ini transversal -- tangan bergerak ke atas-bawah, tapi gelombangnya merambat ke SAMPING) dan **pegas/slinki yang didorong-tarik maju-mundur** (ini longitudinal -- bagian pegas merapat dan merenggang SEARAH dengan arah dorongan).
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="35" width="10" height="50" rx="2" fill="#26243b" />
+    <ellipse cx="25" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="41" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="49" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="65" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="73" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="89" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="97" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="113" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <ellipse cx="121" cy="60" rx="6" ry="18" fill="none" stroke="#f97316" stroke-width="3" />
+    <line x1="25" y1="110" x2="121" y2="110" stroke="#0ea5e9" stroke-width="2" />
+    <path d="M25,110 l8,-5 l0,10 z" fill="#0ea5e9" />
+    <path d="M121,110 l-8,-5 l0,10 z" fill="#0ea5e9" />
+    <text x="73" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#581c87">Longitudinal (pegas)</text>
+    <text x="73" y="182" text-anchor="middle" font-size="11" fill="#581c87">rapat-renggang SEARAH dorongan</text>
+    <line x1="195" y1="20" x2="195" y2="140" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="4 4" />
+    <rect x="197" y="35" width="10" height="50" rx="2" fill="#26243b" />
+    <path d="M207,60 Q228,20 249,60 Q270,100 291,60 Q312,20 333,60 Q354,100 375,60" fill="none" stroke="#9333ea" stroke-width="4" stroke-linecap="round" />
+    <line x1="249" y1="20" x2="249" y2="100" stroke="#0ea5e9" stroke-width="2" />
+    <path d="M249,20 l-5,8 l10,0 z" fill="#0ea5e9" />
+    <path d="M249,100 l-5,-8 l10,0 z" fill="#0ea5e9" />
+    <text x="249" y="15" text-anchor="middle" font-size="10" fill="#0ea5e9">getar ↕</text>
+    <line x1="207" y1="110" x2="375" y2="110" stroke="#f97316" stroke-width="2" />
+    <path d="M375,110 l-8,-5 l0,10 z" fill="#f97316" />
+    <text x="291" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#581c87">Transversal (tali)</text>
+    <text x="291" y="182" text-anchor="middle" font-size="11" fill="#581c87">getar TEGAK LURUS arah rambat →</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Pegas yang didorong-tarik (longitudinal) vs tali yang digetarkan naik-turun (transversal).</p>
+</div>
+
 ### Klasifikasi Berdasarkan Medium
 
 **Gelombang mekanik** (bunyi, gelombang tali/air) BUTUH medium untuk merambat -- tidak bisa merambat di ruang hampa. **Gelombang elektromagnetik** (cahaya, radio, sinar-X) TIDAK butuh medium -- bisa merambat lewat ruang hampa (itulah kenapa cahaya Matahari bisa sampai ke Bumi).
+
+Contoh lain yang gampang diamati: lempar batu ke kolam yang tenang, lalu perhatikan riak airnya menyebar melingkar -- itu gelombang mekanik (butuh medium air). Kalau kamu sedang naik perahu kecil di laut, badan perahu akan ikut naik-turun setiap kali gelombang laut melewatinya -- itu bukti bahwa gelombang membawa ENERGI yang membuat benda di permukaan ikut bergerak, meski air itu sendiri (sebagai materi) tidak benar-benar berpindah jauh mengikuti gelombangnya.
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>gelombang memindahkan MATERI dari satu tempat ke tempat lain</del>. Yang benar: gelombang memindahkan ENERGI dan POLA getaran -- partikel medium (misalnya molekul udara atau air) hanya bergetar di sekitar posisi setimbangnya, tidak ikut berpindah jauh bersama gelombang.

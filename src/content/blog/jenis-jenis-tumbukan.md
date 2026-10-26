@@ -132,6 +132,28 @@ draft: false
   font-weight: 600;
 }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -160,6 +182,143 @@ Jawabannya: momentum SELALU kekal, tapi **energi kinetik BELUM TENTU**. Berdasar
 <div class="mtr-def">
 ⚖️ Pada SEMUA jenis tumbukan, <strong>momentum total sistem SELALU kekal</strong> (selama sistem tertutup). Yang membedakan ketiganya adalah apa yang terjadi pada ENERGI KINETIK total sistem.
 </div>
+
+Daripada cuma membayangkan, coba mainkan sendiri simulasi tumbukan satu dimensi ini -- geser koefisien restitusinya pelan-pelan dari 1 ke 0, dan perhatikan bagaimana bola kedua (biru, awalnya diam) mendapat kecepatan yang makin kecil, sementara energi kinetik total yang "hilang" makin banyak:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">💥 Atur massa, kecepatan awal bola 1, dan koefisien restitusi (e) -- lalu klik "Tumbukan!":</p>
+  <canvas id="tumbukanCanvas" width="640" height="200" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Massa bola 1 (merah): <strong id="tumbukanM1Label">2</strong> kg</label>
+  <input type="range" id="tumbukanM1Slider" min="1" max="10" value="2" step="1" style="width:100%;accent-color:#ef4444;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Massa bola 2 (biru, awalnya diam): <strong id="tumbukanM2Label">4</strong> kg</label>
+  <input type="range" id="tumbukanM2Slider" min="1" max="10" value="4" step="1" style="width:100%;accent-color:#3b82f6;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Kecepatan awal bola 1: <strong id="tumbukanV1Label">6</strong> m/s</label>
+  <input type="range" id="tumbukanV1Slider" min="2" max="10" value="6" step="1" style="width:100%;accent-color:#f2760a;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Koefisien restitusi (e): <strong id="tumbukanELabel">1,0</strong> &middot; <span id="tumbukanEJenisLabel">Lenting Sempurna</span></label>
+  <input type="range" id="tumbukanESlider" min="0" max="1" value="1" step="0.1" style="width:100%;accent-color:#8b3ddb;">
+  <div style="text-align:center;margin-top:10px;">
+    <button type="button" class="mtr-mini-btn" id="tumbukanBtn">💥 Tumbukan!</button>
+  </div>
+  <p class="mtr-mini-label">Momentum sebelum: <strong id="tumbukanPSebelumLabel">-</strong> &middot; sesudah: <strong id="tumbukanPSesudahLabel">-</strong></p>
+  <p class="mtr-mini-label">Energi kinetik sebelum: <strong id="tumbukanEkSebelumLabel">-</strong> &middot; sesudah: <strong id="tumbukanEkSesudahLabel">-</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('tumbukanCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var m1Slider = document.getElementById('tumbukanM1Slider');
+  var m2Slider = document.getElementById('tumbukanM2Slider');
+  var v1Slider = document.getElementById('tumbukanV1Slider');
+  var eSlider = document.getElementById('tumbukanESlider');
+  var m1Label = document.getElementById('tumbukanM1Label');
+  var m2Label = document.getElementById('tumbukanM2Label');
+  var v1Label = document.getElementById('tumbukanV1Label');
+  var eLabel = document.getElementById('tumbukanELabel');
+  var eJenisLabel = document.getElementById('tumbukanEJenisLabel');
+  var pSebelumLabel = document.getElementById('tumbukanPSebelumLabel');
+  var pSesudahLabel = document.getElementById('tumbukanPSesudahLabel');
+  var ekSebelumLabel = document.getElementById('tumbukanEkSebelumLabel');
+  var ekSesudahLabel = document.getElementById('tumbukanEkSesudahLabel');
+  var btn = document.getElementById('tumbukanBtn');
+  var w = canvas.width, h = canvas.height;
+  var groundY = h * 0.72;
+  var x2Diam = w * 0.66;
+  var startX1 = w * 0.1;
+  var sedangAnimasi = false, mulaiWaktu = 0;
+  var m1 = 2, m2 = 4, v1 = 6, e = 1;
+  var v1Akhir = 0, v2Akhir = 0;
+  function radiusDari(massa) { return Math.min(34, Math.max(14, 12 + Math.sqrt(massa) * 5)); }
+  function jenisDari(eNilai) {
+    if (eNilai >= 0.95) return 'Lenting Sempurna';
+    if (eNilai <= 0.05) return 'Tidak Lenting Sama Sekali';
+    return 'Lenting Sebagian';
+  }
+  function wajahKecil(cx, cy) {
+    ctx.fillStyle = '#26243b';
+    [-5, 5].forEach(function (dx) { ctx.beginPath(); ctx.arc(cx + dx, cy - 2, 2, 0, Math.PI * 2); ctx.fill(); });
+  }
+  function gambarBola(x, warna, radius) {
+    ctx.beginPath(); ctx.arc(x, groundY, radius, 0, Math.PI * 2);
+    ctx.fillStyle = warna; ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    wajahKecil(x, groundY);
+  }
+  function hitungHasil() {
+    m1 = parseFloat(m1Slider.value);
+    m2 = parseFloat(m2Slider.value);
+    v1 = parseFloat(v1Slider.value);
+    e = parseFloat(eSlider.value);
+    m1Label.textContent = m1;
+    m2Label.textContent = m2;
+    v1Label.textContent = v1;
+    eLabel.textContent = e.toFixed(1).replace('.', ',');
+    eJenisLabel.textContent = jenisDari(e);
+    v1Akhir = ((m1 - e * m2) * v1) / (m1 + m2);
+    v2Akhir = ((1 + e) * m1 * v1) / (m1 + m2);
+    var pSebelum = m1 * v1;
+    var pSesudah = m1 * v1Akhir + m2 * v2Akhir;
+    var ekSebelum = 0.5 * m1 * v1 * v1;
+    var ekSesudah = 0.5 * m1 * v1Akhir * v1Akhir + 0.5 * m2 * v2Akhir * v2Akhir;
+    pSebelumLabel.textContent = pSebelum.toFixed(1).replace('.', ',') + ' kg·m/s';
+    pSesudahLabel.textContent = pSesudah.toFixed(1).replace('.', ',') + ' kg·m/s';
+    ekSebelumLabel.textContent = ekSebelum.toFixed(1).replace('.', ',') + ' J';
+    ekSesudahLabel.textContent = ekSesudah.toFixed(1).replace('.', ',') + ' J';
+  }
+  function gambarStatis() {
+    var r1 = radiusDari(m1), r2 = radiusDari(m2);
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#86efac'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, groundY + r2 + 6); ctx.lineTo(w, groundY + r2 + 6); ctx.stroke();
+    gambarBola(startX1, '#ef4444', r1);
+    gambarBola(x2Diam, '#3b82f6', r2);
+  }
+  function render(tSekarang) {
+    var r1 = radiusDari(m1), r2 = radiusDari(m2);
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#86efac'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, groundY + r2 + 6); ctx.lineTo(w, groundY + r2 + 6); ctx.stroke();
+    var tDetik = (tSekarang - mulaiWaktu) / 1000;
+    var skala = 26;
+    var x1 = startX1 + v1 * skala * tDetik;
+    var x2 = x2Diam;
+    var jarakTumbuk = r1 + r2;
+    if (x1 + jarakTumbuk < x2) {
+      gambarBola(x1, '#ef4444', r1);
+      gambarBola(x2, '#3b82f6', r2);
+      requestAnimationFrame(render);
+      return;
+    }
+    var tTumbuk = (x2 - jarakTumbuk - startX1) / (v1 * skala);
+    var sisaT = tDetik - tTumbuk;
+    var xTumbuk = x2 - jarakTumbuk;
+    if (e <= 0.05) {
+      var xGabung = xTumbuk + v1Akhir * skala * sisaT;
+      gambarBola(xGabung, '#ef4444', r1);
+      gambarBola(xGabung + jarakTumbuk, '#3b82f6', r2);
+    } else {
+      var x1Baru = xTumbuk + v1Akhir * skala * sisaT;
+      var x2Baru = x2 + v2Akhir * skala * sisaT;
+      gambarBola(x1Baru, '#ef4444', r1);
+      gambarBola(x2Baru, '#3b82f6', r2);
+    }
+    if (tDetik < tTumbuk + 1.4) { requestAnimationFrame(render); } else { sedangAnimasi = false; }
+  }
+  function mulaiTumbukan() {
+    hitungHasil();
+    sedangAnimasi = true;
+    mulaiWaktu = performance.now();
+    requestAnimationFrame(render);
+  }
+  m1Slider.addEventListener('input', function () { hitungHasil(); if (!sedangAnimasi) gambarStatis(); });
+  m2Slider.addEventListener('input', function () { hitungHasil(); if (!sedangAnimasi) gambarStatis(); });
+  v1Slider.addEventListener('input', function () { hitungHasil(); if (!sedangAnimasi) gambarStatis(); });
+  eSlider.addEventListener('input', function () { hitungHasil(); if (!sedangAnimasi) gambarStatis(); });
+  btn.addEventListener('click', mulaiTumbukan);
+  hitungHasil();
+  gambarStatis();
+})();
+</script>
 
 ### Tumbukan Tidak Lenting Sama Sekali
 

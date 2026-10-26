@@ -132,6 +132,10 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid #d8b4fe; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #581c87; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -200,6 +204,27 @@ draft: false
 
 Setelah membahas gelombang secara umum, sekarang kita fokus ke satu jenis gelombang yang paling sering kita alami sehari-hari: bunyi. Bunyi adalah gelombang mekanik longitudinal -- butuh medium, dan bergetar sejajar arah rambatnya.
 
+Pernah perhatikan saat badai: kilat selalu terlihat DULUAN, baru beberapa saat kemudian gemuruh gunturnya terdengar -- padahal keduanya sebenarnya terjadi BERSAMAAN di langit. Kenapa telinga kita "terlambat" mendengarnya dibanding mata kita melihatnya?
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="75,20 55,75 72,75 60,120 110,60 88,60 100,20" fill="#fbbf24" stroke="#26243b" stroke-width="2" />
+    <line x1="85" y1="90" x2="330" y2="110" stroke="#fde047" stroke-width="2" stroke-dasharray="6 4" />
+    <path d="M330,110 l-14,-4 l2,10 z" fill="#fde047" />
+    <text x="190" y="85" text-anchor="middle" font-size="12" fill="#92661a" font-weight="700">cahaya: sampai ~seketika</text>
+    <path d="M100,95 A30,30 0 0 1 100,155" fill="none" stroke="#9333ea" stroke-width="2.5" />
+    <path d="M100,80 A55,55 0 0 1 100,170" fill="none" stroke="#9333ea" stroke-width="2.2" opacity="0.75" />
+    <path d="M100,65 A80,80 0 0 1 100,185" fill="none" stroke="#9333ea" stroke-width="1.8" opacity="0.5" />
+    <text x="190" y="195" text-anchor="middle" font-size="12" fill="#581c87" font-weight="700">bunyi: beberapa detik kemudian</text>
+    <path d="M345,100 Q335,110 345,125 Q355,135 348,145" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" />
+    <line x1="230" y1="150" x2="330" y2="150" stroke="#581c87" stroke-width="1.5" />
+    <path d="M230,150 l8,-4 l0,8 z" fill="#581c87" />
+    <path d="M330,150 l-8,-4 l0,8 z" fill="#581c87" />
+    <text x="280" y="143" text-anchor="middle" font-size="11" fill="#581c87">jeda waktu (Δt)</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Cahaya kilat sampai ke mata hampir seketika, bunyi guntur baru sampai ke telinga beberapa detik kemudian.</p>
+</div>
+
 ## 🤔 Coba Pikirkan
 
 Menurutmu, apakah bunyi bisa merambat sama cepatnya di udara panas dan udara dingin?
@@ -237,7 +262,9 @@ Menurutmu, apakah bunyi bisa merambat sama cepatnya di udara panas dan udara din
   </ul>
 </div>
 
-Cepat rambat bunyi BERGANTUNG suhu -- makin panas, makin cepat (molekul udara bergerak lebih cepat, meneruskan getaran lebih cepat). Bunyi juga umumnya merambat LEBIH CEPAT di zat padat dibanding cair, dan lebih cepat di cair dibanding gas.
+Cepat rambat bunyi BERGANTUNG suhu -- makin panas, makin cepat (molekul udara bergerak lebih cepat, meneruskan getaran lebih cepat). Bunyi juga umumnya merambat LEBIH CEPAT di zat padat dibanding cair, dan lebih cepat di cair dibanding gas -- partikel yang lebih rapat lebih cepat "menyenggol" tetangganya untuk meneruskan getaran.
+
+Fakta menarik: di dalam air, bunyi merambat sekitar EMPAT KALI lebih cepat dibanding di udara (sekitar 1.480 m/s di air laut, dibanding ~340 m/s di udara). Inilah salah satu alasan paus dan lumba-lumba bisa "mengobrol" dengan sesamanya dari jarak puluhan kilometer di lautan -- air yang jauh lebih rapat partikelnya dibanding udara membuat bunyi merambat jauh lebih cepat dan efisien di dalamnya.
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>bunyi bisa merambat di ruang hampa seperti cahaya</del>. Yang benar: bunyi adalah gelombang MEKANIK -- WAJIB butuh medium (padat/cair/gas). Di luar angkasa yang hampa udara, bunyi TIDAK bisa merambat sama sekali.

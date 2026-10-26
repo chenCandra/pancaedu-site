@@ -132,6 +132,17 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -198,7 +209,43 @@ draft: false
 
 ## 🌱 Apersepsi
 
-Pernah perhatikan sambungan rel kereta api? Ada celah kecil di antaranya, bukan disambung rapat. Kenapa sengaja dibuat begitu? Jawabannya ada di materi ini: pemuaian -- benda padat (dan zat lain) berubah ukuran seiring perubahan suhunya.
+Pernah perhatikan sambungan rel kereta api? Ada celah kecil di antaranya, bukan disambung rapat. Kenapa sengaja dibuat begitu? Pernah juga kan ngerasa kabel listrik di tepi jalan kelihatan lebih "kendur" dan melengkung turun siang hari yang terik, tapi malamnya jadi lebih kencang lagi? Atau tutup botol kaca selai yang keras banget dibuka, tapi begitu disiram air hangat sebentar, jadi gampang diputar? Ketiganya dijelaskan oleh konsep yang sama: **pemuaian** -- benda padat (dan zat lain) berubah ukuran seiring perubahan suhunya.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="340" cy="46" r="26" fill="#fbbf24"/>
+    <g stroke="#fbbf24" stroke-width="5" stroke-linecap="round">
+      <line x1="340" y1="6" x2="340" y2="16"/>
+      <line x1="340" y1="76" x2="340" y2="86"/>
+      <line x1="300" y1="46" x2="310" y2="46"/>
+      <line x1="370" y1="46" x2="380" y2="46"/>
+      <line x1="312" y1="18" x2="319" y2="25"/>
+      <line x1="361" y1="67" x2="368" y2="74"/>
+      <line x1="312" y1="74" x2="319" y2="67"/>
+      <line x1="361" y1="25" x2="368" y2="18"/>
+    </g>
+    <circle cx="332" cy="42" r="2.6" fill="#7c2d12"/>
+    <circle cx="348" cy="42" r="2.6" fill="#7c2d12"/>
+    <path d="M330 53 Q340 60 350 53" stroke="#7c2d12" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <rect x="0" y="168" width="400" height="44" rx="10" fill="#b45309"/>
+    <g fill="#78350f">
+      <rect x="20" y="150" width="14" height="30" rx="3"/>
+      <rect x="80" y="150" width="14" height="30" rx="3"/>
+      <rect x="130" y="150" width="14" height="30" rx="3"/>
+      <rect x="230" y="150" width="14" height="30" rx="3"/>
+      <rect x="280" y="150" width="14" height="30" rx="3"/>
+      <rect x="340" y="150" width="14" height="30" rx="3"/>
+    </g>
+    <rect x="14" y="140" width="148" height="14" rx="7" fill="#94a3b8"/>
+    <rect x="186" y="140" width="178" height="14" rx="7" fill="#94a3b8"/>
+    <rect x="14" y="140" width="148" height="5" rx="2.5" fill="#cbd5e1"/>
+    <rect x="186" y="140" width="178" height="5" rx="2.5" fill="#cbd5e1"/>
+    <path d="M168 132 l6 10 l-6 10 M178 132 l-6 10 l6 10" stroke="#ea580c" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="173" y="200" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">celah muai</text>
+    <path d="M60 196 q112 -10 224 0" stroke="#fde68a" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Celah kecil di sambungan rel kereta api memberi ruang bagi rel untuk memuai saat suhu naik.</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -225,7 +272,7 @@ Ada tiga skala suhu yang umum dipakai:
 
 ### Pemuaian Panjang, Luas, dan Volume
 
-Untuk benda 1 dimensi (panjang), 2 dimensi (luas), dan 3 dimensi (volume), pemuaiannya terjadi di lebih banyak arah sekaligus:
+Untuk benda 1 dimensi (panjang), 2 dimensi (luas), dan 3 dimensi (volume), pemuaiannya terjadi di lebih banyak arah sekaligus. Kabel listrik yang kamu lihat kendur siang hari itu sebenarnya memuai (bertambah panjang sedikit) karena suhunya naik akibat terik matahari dan arus listrik yang mengalir -- makanya PLN sengaja memasangnya agak longgar, bukan tegang kencang, supaya kabelnya tidak putus saat memuai. Tutup botol kaca yang disiram air hangat juga jadi lebih mudah dibuka karena logam tutupnya memuai lebih cepat dan lebih besar daripada kaca di bawahnya, sehingga longgar sedikit dari mulut botol.
 
 <div class="mtr-formula-utama">
   <div class="mtr-formula-card">
@@ -244,6 +291,10 @@ Untuk benda 1 dimensi (panjang), 2 dimensi (luas), dan 3 dimensi (volume), pemua
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>semua bahan memuai dengan besar yang sama untuk kenaikan suhu yang sama</del>. Yang benar: setiap bahan punya koefisien muai (α) yang BERBEDA -- itulah kenapa dua batang berbeda bahan dengan panjang awal dan kenaikan suhu yang sama bisa memuai dengan panjang berbeda.
+</div>
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Termostat setrika dan rice cooker lama sering memakai "bimetal strip" -- dua lempeng logam berbeda jenis (misalnya tembaga dan baja) yang direkatkan jadi satu. Karena koefisien muainya berbeda, lempeng ini akan MELENGKUNG saat dipanaskan, dan lengkungan itu dipakai untuk memutus aliran listrik secara otomatis begitu suhu terlalu tinggi!
 </div>
 
 ## 🧠 Mari Kita Analisis

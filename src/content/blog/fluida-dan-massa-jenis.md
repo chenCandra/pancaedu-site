@@ -182,6 +182,10 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfeff, #cffafe); border: 1px solid #67e8f9; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #164e63; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -245,6 +249,8 @@ draft: false
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 </style>
 
+Pernah bingung kenapa kapal tanker raksasa dari BESI bisa mengapung tenang di laut, sementara sebutir kerikil kecil yang kamu lempar langsung tenggelam ke dasar sungai? Padahal besi jelas lebih "berat" dari batu kerikil. Rahasianya bukan soal berat totalnya, tapi soal **massa jenis** -- seberapa rapat massa itu dikemas dalam volumenya. Itulah yang akan kita bongkar di materi pembuka bab **Fluida** ini.
+
 Kita mulai bab baru: **Fluida** -- ilmu yang mempelajari zat yang bisa mengalir (cairan dan gas). Sesi pertama ini membahas dua konsep dasar Fluida Statis (fluida yang diam): massa jenis, dan tekanan yang ditimbulkan oleh fluida diam itu sendiri -- tekanan hidrostatis.
 
 ## ⚖️ Rumus Massa Jenis
@@ -268,6 +274,34 @@ Massa jenis (densitas) menyatakan seberapa rapat massa suatu benda terhadap volu
 - **Terapung**: massa jenis benda lebih kecil dari massa jenis fluida
 - **Melayang**: massa jenis benda sama dengan massa jenis fluida
 - **Tenggelam**: massa jenis benda lebih besar dari massa jenis fluida
+
+Nah, kembali ke misteri kapal besi tadi: badan kapal dibuat BERONGGA, penuh ruang kosong berisi udara. Rongga itu membuat VOLUME total kapal jadi jauh lebih besar dibanding kalau besinya dipadatkan jadi balok solid. Karena ρ = m/V, volume yang membesar membuat massa jenis RATA-RATA kapal jadi lebih kecil dari massa jenis air -- walau bahannya besi, "kerapatan keseluruhannya" tetap lebih ringan dari air. Kerikil kecil tidak punya rongga seperti itu, jadi massa jenisnya tetap besar dan ia tenggelam. Jadi yang menentukan terapung-tenggelam bukan "berat" atau "jenis bahannya", tapi perbandingan massa jenis RATA-RATA benda dengan massa jenis fluidanya.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="110" width="400" height="110" fill="#67e8f9" />
+    <path d="M0 110 Q 20 104, 40 110 T 80 110 T 120 110 T 160 110 T 200 110 T 240 110 T 280 110 T 320 110 T 360 110 T 400 110" fill="none" stroke="#0e7490" stroke-width="3" />
+    <polygon points="40,108 180,108 165,138 55,138" fill="#78716c" stroke="#164e63" stroke-width="2" />
+    <rect x="95" y="78" width="40" height="32" fill="#e2e8f0" stroke="#164e63" stroke-width="2" />
+    <rect x="105" y="86" width="10" height="10" fill="#0e7490" />
+    <rect x="118" y="86" width="10" height="10" fill="#0e7490" />
+    <line x1="150" y1="78" x2="150" y2="50" stroke="#164e63" stroke-width="3" />
+    <polygon points="150,50 150,64 172,57" fill="#f97316" />
+    <text x="110" y="162" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#164e63">Kapal besi (berongga)</text>
+    <text x="110" y="178" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">ρ rata-rata &lt; ρ air &rarr; terapung</text>
+    <circle cx="300" cy="150" r="16" fill="#78716c" stroke="#164e63" stroke-width="2" />
+    <circle cx="296" cy="145" r="3" fill="#57534e" />
+    <circle cx="306" cy="155" r="2.5" fill="#57534e" />
+    <path d="M300 120 L300 134" stroke="#164e63" stroke-width="2" stroke-dasharray="4,3" />
+    <polygon points="296,132 304,132 300,140" fill="#164e63" />
+    <circle cx="282" cy="118" r="3" fill="#cffafe" opacity="0.8" />
+    <circle cx="312" cy="112" r="2.5" fill="#cffafe" opacity="0.8" />
+    <circle cx="294" cy="100" r="2" fill="#cffafe" opacity="0.7" />
+    <text x="300" y="196" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#164e63">Kerikil kecil (padat)</text>
+    <text x="300" y="211" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">ρ &gt; ρ air &rarr; tenggelam</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Kapal besi raksasa mengapung karena bentuknya berongga (ρ rata-rata kecil), sementara kerikil padat kecil tenggelam karena ρ-nya lebih besar dari air.</p>
+</div>
 
 ## 🔵 Tekanan Hidrostatis
 

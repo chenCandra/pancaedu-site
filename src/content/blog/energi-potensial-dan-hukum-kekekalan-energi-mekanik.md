@@ -170,6 +170,10 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -222,6 +226,32 @@ Sebuah bola dijatuhkan dari ketinggian tertentu. Menurutmu, ke mana "perginya" e
 </div>
 
 Inilah jawaban teka-teki roller coaster: energi yang "ditabung" jadi Ep besar di tanjakan pertama terus BERTUKAR jadi Ek (dan kembali lagi jadi Ep) sepanjang lintasan naik-turun berikutnya -- totalnya (Em) tetap sama, jadi tidak perlu mesin tambahan (di dunia nyata, ada sedikit gesekan yang membuatnya pelan-pelan melambat, tapi konsep dasarnya tetap ini).
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="190" x2="390" y2="190" stroke="#1e3a8a" stroke-width="2"></line>
+    <path d="M20,180 C70,180 90,40 120,40 C150,40 170,160 220,160 C260,160 280,90 320,90 C350,90 370,140 390,150" fill="none" stroke="#475569" stroke-width="6" stroke-linecap="round"></path>
+    <line x1="120" y1="40" x2="120" y2="188" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="4 4"></line>
+    <line x1="220" y1="160" x2="220" y2="188" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="4 4"></line>
+    <text x="126" y="115" font-size="10" fill="#1e3a8a" font-weight="700">h tinggi</text>
+    <text x="226" y="178" font-size="10" fill="#1e3a8a" font-weight="700">h rendah</text>
+    <g transform="translate(120,32)">
+      <rect x="-18" y="-14" width="36" height="16" rx="4" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"></rect>
+      <circle cx="-10" cy="4" r="6" fill="#1e293b"></circle>
+      <circle cx="10" cy="4" r="6" fill="#1e293b"></circle>
+    </g>
+    <text x="80" y="10" font-size="11" fill="#1e3a8a" font-weight="700">Ep besar, Ek kecil</text>
+    <g transform="translate(220,150)">
+      <rect x="-18" y="-14" width="36" height="16" rx="4" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"></rect>
+      <circle cx="-10" cy="4" r="6" fill="#1e293b"></circle>
+      <circle cx="10" cy="4" r="6" fill="#1e293b"></circle>
+    </g>
+    <text x="233" y="146" font-size="11" fill="#1e3a8a" font-weight="700">Ep kecil, Ek besar</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Di puncak, energi potensial (Ep) besar dan energi kinetik (Ek) kecil. Di lembah, Ep kecil tapi Ek besar -- energi mekanik totalnya (Em=Ek+Ep) tetap sama.</p>
+</div>
+
+Prinsip yang sama berlaku saat kamu meluncur di perosotan atau kolam seluncuran di waterpark: di titik tertinggi (sebelum meluncur, hampir diam) Ep besar dan Ek kecil. Begitu meluncur turun, Ep berkurang drastis sementara Ek bertambah drastis -- itulah kenapa makin tinggi titik awal seluncurannya, makin kencang pula kecepatanmu saat tiba di dasar.
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>Hukum Kekekalan Energi Mekanik berlaku untuk semua kondisi, termasuk yang ada gesekannya</del>. Yang benar: hukum ini HANYA berlaku kalau TIDAK ada gaya non-konservatif (gesekan, hambatan udara) -- kalau ada, sebagian energi mekanik "bocor" jadi panas, dan Em tidak lagi tetap.

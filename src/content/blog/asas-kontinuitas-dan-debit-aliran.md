@@ -182,6 +182,10 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfeff, #cffafe); border: 1px solid #67e8f9; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #164e63; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -245,6 +249,8 @@ draft: false
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 </style>
 
+Coba ingat-ingat waktu nyiram tanaman atau nyuci motor pakai selang air: begitu ujung selangnya ditekan separuh dengan ibu jari, semburan airnya langsung berubah jadi deras dan jauh -- padahal air yang keluar dari keran di pangkal selang jumlahnya sama saja. Kok bisa? Jawabannya ada di **Asas Kontinuitas**, yang akan kita bahas di materi ini.
+
 Setelah tuntas dengan Fluida Statis, sekarang kita masuk ke **Fluida Dinamis** -- fluida yang MENGALIR. Kita mulai dari aturan paling mendasar: hukum kekekalan untuk fluida yang mengalir di pipa.
 
 ## 🌀 Fluida Ideal
@@ -295,6 +301,28 @@ Karena fluida ideal tak termampatkan (massa jenisnya tetap) dan tidak ada fluida
 </div>
 
 Konsekuensinya: begitu pipa MENYEMPIT (A mengecil), kecepatan alirannya HARUS membesar supaya debitnya tetap sama. Inilah yang terjadi saat kamu menutup sebagian ujung selang taman dengan ibu jari -- air menyembur jauh lebih deras dan lebih jauh.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30 90 L30 130 L230 130 Q 255 130, 255 110 Q 255 90, 275 90 L275 102 Q 265 102, 265 110 Q 265 118, 255 118 L230 118 L30 118 Z" fill="#16a34a" stroke="#14532d" stroke-width="2" />
+    <path d="M30 90 L30 130" stroke="#14532d" stroke-width="2" />
+    <ellipse cx="275" cy="96" rx="9" ry="8" fill="#9ca3af" stroke="#4b5563" stroke-width="2" />
+    <circle cx="20" cy="110" r="14" fill="#60a5fa" opacity="0.6" />
+    <circle cx="10" cy="100" r="8" fill="#60a5fa" opacity="0.4" />
+    <circle cx="245" cy="110" r="4" fill="#38bdf8" />
+    <circle cx="252" cy="108" r="3.5" fill="#38bdf8" />
+    <line x1="284" y1="97" x2="330" y2="88" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+    <line x1="284" y1="99" x2="340" y2="99" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round" />
+    <line x1="284" y1="101" x2="332" y2="112" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+    <circle cx="300" cy="80" r="2.5" fill="#38bdf8" />
+    <circle cx="315" cy="76" r="2" fill="#38bdf8" />
+    <circle cx="300" cy="122" r="2.5" fill="#38bdf8" />
+    <text x="80" y="155" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#164e63">Pipa lebar: v lambat</text>
+    <text x="300" y="150" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#164e63">Ujung dipencet: v cepat!</text>
+    <text x="200" y="195" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#164e63">A besar &times; v kecil = A kecil &times; v besar (debit tetap sama)</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Ujung selang yang dipencet jadi sempit membuat air menyembur lebih deras -- debit (Q) tetap sama, hanya kecepatannya yang berubah.</p>
+</div>
 
 ## 🏞️ Fenomena Sehari-hari
 

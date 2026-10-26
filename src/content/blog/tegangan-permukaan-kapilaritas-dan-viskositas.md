@@ -176,9 +176,13 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfeff, #cffafe); border: 1px solid #67e8f9; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #164e63; font-weight: 600; }
 </style>
 
-Menutup Fluida Statis, kita bahas tiga sifat fluida yang jarang disadari tapi menjelaskan banyak fenomena sehari-hari: kenapa serangga bisa "berjalan" di air, kenapa air naik sendiri lewat pipa sempit, dan kenapa madu mengalir jauh lebih lambat dari air.
+Pernah perhatikan nyamuk atau serangga kecil yang hinggap dan "berdiri" di atas permukaan air kolam tanpa tenggelam? Atau sumbu lilin/kompor minyak yang bisa "menyedot" cairan ke atas padahal tidak ada yang memompanya? Atau kenapa kalau kamu menuang madu dan air dari ketinggian yang sama, airnya sudah habis duluan sementara madunya masih merembes pelan-pelan? Menutup Fluida Statis, kita bahas tiga sifat fluida yang jarang disadari tapi menjelaskan semua fenomena nyeleneh di atas: **tegangan permukaan**, **kapilaritas**, dan **viskositas**.
 
 ## 💧 Tegangan Permukaan
 
@@ -196,6 +200,32 @@ $$\gamma = \frac{F}{d}$$
 <div class="mtr-card"><span class="mtr-card-icon">💧</span><h4>Tetesan Air Berbentuk Bulat</h4><p>Tegangan permukaan menarik permukaan tetesan sekecil mungkin -- dan bentuk dengan luas permukaan terkecil untuk volume tertentu adalah BOLA.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">📌</span><h4>Jarum Mengapung di Air</h4><p>Jarum baja (lebih rapat dari air) bisa "mengapung" kalau diletakkan hati-hati mendatar, ditopang oleh tegangan permukaan, bukan gaya apung.</p></div>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="120" width="400" height="100" fill="#67e8f9" />
+    <line x1="0" y1="120" x2="400" y2="120" stroke="#0e7490" stroke-width="2" />
+    <ellipse cx="135" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <ellipse cx="195" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <ellipse cx="255" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <line x1="135" y1="113" x2="135" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <line x1="195" y1="110" x2="195" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <line x1="255" y1="113" x2="255" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <ellipse cx="195" cy="100" rx="38" ry="9" fill="#166534" />
+    <circle cx="150" cy="96" r="5" fill="#166534" />
+    <circle cx="240" cy="96" r="5" fill="#166534" />
+    <circle cx="178" cy="92" r="6" fill="#166534" />
+    <circle cx="178" cy="92" r="2" fill="#0f172a" />
+    <line x1="150" y1="96" x2="135" y2="113" stroke="#166534" stroke-width="2" />
+    <line x1="175" y1="100" x2="195" y2="110" stroke="#166534" stroke-width="2" />
+    <line x1="215" y1="100" x2="255" y2="113" stroke="#166534" stroke-width="2" />
+    <line x1="150" y1="96" x2="140" y2="80" stroke="#166534" stroke-width="2" />
+    <line x1="178" y1="92" x2="170" y2="72" stroke="#166534" stroke-width="2" />
+    <text x="200" y="165" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#164e63">Serangga air "berjalan" di permukaan</text>
+    <text x="200" y="183" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">Beratnya disebar ke kaki-kaki lebar, membuat lekukan tapi tidak memecah permukaan</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Kaki serangga air menekan permukaan air hingga melekuk (seperti membran elastis), tapi tidak sampai memecahnya -- itulah tegangan permukaan.</p>
 </div>
 
 ## 📈 Kapilaritas
@@ -222,11 +252,11 @@ $$h = \frac{2\gamma\cos\theta}{\rho \cdot g \cdot r}$$
 </div>
 </div>
 
-Contoh nyata: air merambat naik lewat sumbu kompor minyak, air merembes naik dari akar ke daun tanaman lewat pembuluh kapiler yang sangat sempit, dan tinta merambat naik di kertas tisu.
+Contoh nyata: sumbu kompor minyak atau lilin punya serat-serat yang sangat sempit, berfungsi seperti ratusan pipa kapiler mini -- itulah kenapa minyak/lilin cair bisa "ditarik naik" dari bawah ke ujung sumbu yang terbakar, tanpa perlu dipompa sama sekali. Prinsip yang sama bikin air merembes naik dari akar ke daun tanaman lewat pembuluh kapiler yang sangat sempit, dan tinta merambat naik di kertas tisu.
 
 ## 🍯 Viskositas
 
-**Viskositas** adalah ukuran kekentalan fluida -- gesekan internal antar-lapisan fluida saat mengalir. Madu dan oli punya viskositas tinggi (mengalir lambat, "kental"), sementara air dan bensin punya viskositas rendah (mengalir cepat, "encer").
+**Viskositas** adalah ukuran kekentalan fluida -- gesekan internal antar-lapisan fluida saat mengalir. Coba tuang air dan oli dari botol yang sama tingginya secara bersamaan: airnya langsung ngocor cepat dan licin, sementara olinya merembes lebih pelan dan "berat", seperti ada gesekan yang menahannya dari dalam. Itulah viskositas -- madu dan oli punya viskositas tinggi (mengalir lambat, "kental"), sementara air dan bensin punya viskositas rendah (mengalir cepat, "encer").
 
 Untuk benda kecil (bola) yang bergerak dalam fluida kental, gaya gesek yang dialaminya dirumuskan lewat **Hukum Stokes**:
 

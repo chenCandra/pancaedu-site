@@ -108,6 +108,17 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 .mtr-table-scroll {
   overflow-x: auto;
   margin-block: 1.25rem;
@@ -198,7 +209,34 @@ draft: false
 
 ## 🌱 Apersepsi
 
-Gas bisa dipanaskan, dimampatkan, atau dibiarkan mengembang dengan berbagai "aturan main" yang berbeda -- kadang tekanannya dijaga tetap, kadang volumenya, kadang suhunya. Tiap aturan main ini disebut PROSES termodinamika, dan masing-masing punya cara berbeda menghitung usaha gasnya.
+Pernah mompa ban sepeda dengan cepat dan merasa badan pompanya jadi hangat, bahkan agak panas? Padahal kamu cuma memompa udara, bukan menyalakan apinya. Atau pernah dengar cerita ban motor/mobil yang bisa "meletus" kalau dipakai jalan jauh dengan tekanan angin yang kurang pas dan suhu aspal yang sangat panas? Keduanya berkaitan dengan bagaimana gas berkelakuan ketika dipanaskan, dimampatkan, atau dibiarkan mengembang dengan berbagai "aturan main" yang berbeda -- kadang tekanannya dijaga tetap, kadang volumenya, kadang suhunya. Tiap aturan main ini disebut PROSES termodinamika, dan masing-masing punya cara berbeda menghitung usaha gasnya.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="60" y="40" width="180" height="120" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="4"/>
+    <rect x="68" y="150" width="164" height="10" fill="#94a3b8"/>
+    <rect x="60" y="20" width="180" height="22" rx="6" fill="#cbd5e1" stroke="#64748b" stroke-width="3"/>
+    <rect x="140" y="0" width="20" height="24" fill="#94a3b8"/>
+    <circle cx="110" cy="100" r="9" fill="#38bdf8"/>
+    <circle cx="150" cy="120" r="9" fill="#38bdf8"/>
+    <circle cx="180" cy="90" r="9" fill="#38bdf8"/>
+    <circle cx="200" cy="130" r="9" fill="#38bdf8"/>
+    <circle cx="130" cy="70" r="9" fill="#38bdf8"/>
+    <circle cx="210" cy="75" r="9" fill="#38bdf8"/>
+    <g stroke="#1d4ed8" stroke-width="2" fill="none" opacity="0.6">
+      <path d="M110 100 l8 6"/>
+      <path d="M150 120 l-6 -8"/>
+      <path d="M180 90 l7 7"/>
+    </g>
+    <circle cx="320" cy="100" r="46" fill="#fef3c7" stroke="#f97316" stroke-width="5"/>
+    <path d="M320 70 L320 92 L336 100" stroke="#7c2d12" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle cx="320" cy="100" r="4" fill="#7c2d12"/>
+    <text x="320" y="160" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">pengukur tekanan</text>
+    <path d="M244 100 L296 100" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 4"/>
+    <text x="150" y="190" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">gas dalam silinder + piston</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Molekul gas dalam silinder berpiston -- dimampatkan atau dibiarkan mengembang, tekanannya terbaca di pengukur.</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -236,7 +274,11 @@ Pada proses adiabatik, TIDAK ADA kalor yang masuk/keluar (Q=0). Hukum I Termodin
   </ul>
 </div>
 
-Usaha yang dilakukan gas sepenuhnya "diambil" dari energi dalamnya sendiri -- inilah kenapa gas yang berekspansi secara adiabatik (cepat, tanpa sempat bertukar kalor) akan MENDINGIN, dan gas yang dikompresi secara adiabatik akan MEMANAS.
+Usaha yang dilakukan gas sepenuhnya "diambil" dari energi dalamnya sendiri -- inilah kenapa gas yang berekspansi secara adiabatik (cepat, tanpa sempat bertukar kalor) akan MENDINGIN, dan gas yang dikompresi secara adiabatik akan MEMANAS. Inilah jawaban teka-teki pompa ban sepeda di awal: saat kamu memompa dengan cepat, udara di dalam tabung pompa dimampatkan terlalu cepat untuk bertukar kalor dengan lingkungan sekitarnya (mendekati adiabatik) -- seluruh usaha yang kamu berikan lewat dorongan tangan langsung menambah energi dalam udara itu, sehingga suhunya naik dan badan pompa jadi hangat.
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Ini juga sebagian alasan kenapa ban motor/mobil disarankan tidak terlalu keras (overinflated) dan diperiksa tekanannya secara rutin -- perjalanan jauh membuat ban terus-menerus mengalami tekanan dan gesekan, menaikkan suhu udara di dalamnya. Kalau tekanan awalnya sudah terlalu tinggi, kenaikan suhu itu bisa membuat tekanan gas melebihi batas kekuatan ban, dan dalam kasus ekstrem bisa menyebabkan ban meletus.
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>usaha gas selalu bisa dihitung dengan W=PΔV untuk SEMUA jenis proses</del>. Yang benar: W=PΔV HANYA berlaku untuk proses ISOBARIK (P tetap). Proses lain (isotermal, adiabatik) punya rumus usahanya sendiri, karena tekanannya ikut berubah sepanjang proses.

@@ -179,6 +179,28 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -212,6 +234,91 @@ Kalau kamu mengayunkan bandul dengan simpangan KECIL, lalu mencobanya lagi denga
 </div>
 
 Periode getaran pegas bergantung massa beban (**m**) dan konstanta pegas (**k**) -- makin berat beban, makin lambat getarannya; makin kaku pegas, makin cepat getarannya.
+
+Coba rasakan sendiri lewat animasi mini ini -- geser konstanta pegas (k) dan massa beban (m), lalu lihat bagaimana periodenya (T) berubah secara langsung:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🧵 Atur konstanta pegas (k) dan massa beban (m), amati periode getarannya:</p>
+  <canvas id="shmCanvas" width="640" height="320" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Konstanta pegas (k): <strong id="shmKLabel">20</strong> N/m</label>
+  <input type="range" id="shmKSlider" min="5" max="50" value="20" style="width:100%;accent-color:#2563eb;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Massa beban (m): <strong id="shmMLabel">1,0</strong> kg</label>
+  <input type="range" id="shmMSlider" min="2" max="50" value="10" style="width:100%;accent-color:#f2760a;">
+  <p class="mtr-mini-label">Periode (T): <strong id="shmTLabel">-</strong> &middot; Frekuensi (f): <strong id="shmFLabel">-</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('shmCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var kSlider = document.getElementById('shmKSlider');
+  var mSlider = document.getElementById('shmMSlider');
+  var kLabel = document.getElementById('shmKLabel');
+  var mLabel = document.getElementById('shmMLabel');
+  var tLabel = document.getElementById('shmTLabel');
+  var fLabel = document.getElementById('shmFLabel');
+  var w = canvas.width, h = canvas.height;
+  var ceilingY = 28;
+  var cx = w * 0.5;
+  var restY = h * 0.52;
+  var amplitude = h * 0.22;
+  var blockSize = 56;
+  var k = 20, m = 1.0;
+  var mulai = performance.now();
+  function wajahKecil(cy) {
+    ctx.save(); ctx.translate(cx, cy);
+    ctx.fillStyle = '#eef2ff';
+    [-9, 9].forEach(function (dx) { ctx.beginPath(); ctx.arc(dx, -4, 3, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = '#eef2ff'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, 4, 6, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  function gambarPegas(yAtas) {
+    var segmen = 10, lebar = 22;
+    ctx.strokeStyle = '#64748b'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(cx, ceilingY);
+    var panjang = yAtas - ceilingY;
+    for (var i = 1; i < segmen; i++) {
+      var yy = ceilingY + (panjang * i) / segmen;
+      var xx = cx + (i % 2 === 0 ? lebar : -lebar);
+      ctx.lineTo(xx, yy);
+    }
+    ctx.lineTo(cx, yAtas);
+    ctx.stroke();
+  }
+  function render() {
+    var t = (performance.now() - mulai) / 1000;
+    var omega = Math.sqrt(k / m);
+    var y = restY + amplitude * Math.cos(omega * t);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#7c6f64'; ctx.fillRect(cx - 50, 10, 100, 14);
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.strokeRect(cx - 50, 10, 100, 14);
+    gambarPegas(y - blockSize / 2);
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(cx - blockSize / 2, y - blockSize / 2, blockSize, blockSize);
+    ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2; ctx.strokeRect(cx - blockSize / 2, y - blockSize / 2, blockSize, blockSize);
+    wajahKecil(y);
+    ctx.strokeStyle = 'rgba(37,99,235,0.35)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(cx - 110, restY); ctx.lineTo(cx + 110, restY); ctx.stroke();
+    ctx.setLineDash([]);
+    requestAnimationFrame(render);
+  }
+  function perbarui() {
+    k = parseInt(kSlider.value, 10);
+    m = parseInt(mSlider.value, 10) / 10;
+    kLabel.textContent = k;
+    mLabel.textContent = m.toFixed(1).replace('.', ',');
+    var T = 2 * Math.PI * Math.sqrt(m / k);
+    tLabel.textContent = T.toFixed(2).replace('.', ',') + ' s';
+    fLabel.textContent = (1 / T).toFixed(2).replace('.', ',') + ' Hz';
+    mulai = performance.now();
+  }
+  kSlider.addEventListener('input', perbarui);
+  mSlider.addEventListener('input', perbarui);
+  perbarui();
+  requestAnimationFrame(render);
+})();
+</script>
 
 ### Getaran Bandul
 

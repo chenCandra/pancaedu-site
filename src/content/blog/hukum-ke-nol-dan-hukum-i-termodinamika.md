@@ -108,6 +108,17 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1px solid #fdba74;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #7c2d12; font-weight: 600; }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -174,7 +185,32 @@ draft: false
 
 ## 🌱 Apersepsi
 
-Setelah membahas kalor secara umum, sekarang kita masuk ke sub-bab Termodinamika -- ilmu tentang hubungan kalor, usaha, dan energi. Kita mulai dari dua hukum dasarnya: Hukum ke-Nol (yang menjelaskan kenapa termometer bekerja) dan Hukum I (bentuk Hukum Kekekalan Energi untuk sistem termodinamika).
+Setelah membahas kalor secara umum, sekarang kita masuk ke sub-bab Termodinamika -- ilmu tentang hubungan kalor, usaha, dan energi. Pernah kepikiran kenapa termometer yang ditempelkan ke dahi atau dijepit di ketiak butuh waktu beberapa detik sebelum bisa dibaca? Termometer itu sebenarnya "menyesuaikan diri" dulu dengan suhu badanmu. Atau bandingkan kulkas dan AC di rumah -- keduanya sama-sama "mengambil" kalor dari tempat yang sudah dingin (kabinet kulkas, ruangan berAC) dan "membuang"-nya ke tempat yang lebih panas (dapur, luar ruangan), padahal kalor seharusnya mengalir sendiri dari panas ke dingin, bukan sebaliknya -- makanya keduanya butuh listrik untuk "memaksa" kalor mengalir melawan arah alaminya. Kita mulai dari dua hukum dasarnya: Hukum ke-Nol (yang menjelaskan kenapa termometer bekerja) dan Hukum I (bentuk Hukum Kekekalan Energi untuk sistem termodinamika).
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="90" r="44" fill="#fca5a5"/>
+    <circle cx="86" cy="80" r="3.4" fill="#7c2d12"/>
+    <circle cx="112" cy="80" r="3.4" fill="#7c2d12"/>
+    <path d="M86 102 q14 10 28 0" stroke="#7c2d12" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <text x="100" y="150" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">panas</text>
+    <circle cx="300" cy="90" r="44" fill="#93c5fd"/>
+    <circle cx="286" cy="80" r="3.4" fill="#1e3a8a"/>
+    <circle cx="312" cy="80" r="3.4" fill="#1e3a8a"/>
+    <path d="M286 104 q14 -8 28 0" stroke="#1e3a8a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <text x="300" y="150" font-size="13" font-weight="700" fill="#1e3a8a" text-anchor="middle">dingin</text>
+    <rect x="178" y="55" width="44" height="90" rx="20" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+    <rect x="193" y="70" width="14" height="60" rx="7" fill="#f97316"/>
+    <circle cx="200" cy="140" r="16" fill="#f97316"/>
+    <circle cx="200" cy="140" r="16" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <text x="200" y="178" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">termometer</text>
+    <path d="M148 90 L170 90" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+    <path d="M166 83 L178 90 L166 97 Z" fill="#ea580c"/>
+    <path d="M252 90 L230 90" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+    <path d="M234 83 L222 90 L234 97 Z" fill="#ea580c"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Termometer mencapai kesetimbangan termal dengan tubuh -- begitu suhunya sama, itulah yang dibaca sebagai "suhu badan".</p>
+</div>
 
 ## 🤔 Coba Pikirkan
 
@@ -210,6 +246,10 @@ Inilah dasar cara kerja termometer: termometer (berperan sebagai "benda C") dise
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>energi dalam (U) sama dengan kalor (Q)</del>. Yang benar: kalor (Q) adalah energi yang BERPINDAH akibat perbedaan suhu, sedangkan energi dalam (U) adalah energi yang TERSIMPAN dalam gas itu sendiri (terkait energi kinetik partikel-partikelnya). Keduanya berhubungan lewat ΔU=Q−W, tapi bukan hal yang sama.
+</div>
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Kulkas dan AC sebenarnya "melawan" arah alami kalor -- memindahkan kalor dari ruang dingin ke ruang yang lebih panas, padahal kalor seharusnya mengalir sendiri dari panas ke dingin. Itulah kenapa keduanya butuh listrik untuk kompresor; tanpa usaha dari luar, perpindahan kalor seperti itu tidak akan terjadi sendiri (ini sekilas bocoran Hukum II Termodinamika yang akan kamu pelajari nanti).
 </div>
 
 ## 🧠 Mari Kita Analisis

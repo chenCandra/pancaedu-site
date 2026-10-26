@@ -194,6 +194,10 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -210,6 +214,30 @@ Menurutmu, apakah semua planet bergerak dengan KECEPATAN YANG SAMA sepanjang orb
 
 <div class="mtr-def">
 🛰️ Orbit setiap planet mengelilingi Matahari berbentuk ELIPS, dengan Matahari berada di salah satu FOKUS elips itu -- bukan lingkaran sempurna, dan bukan di pusat elips.
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="orbitArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1e3a8a"></path>
+      </marker>
+    </defs>
+    <ellipse cx="200" cy="110" rx="165" ry="75" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 5"></ellipse>
+    <line x1="106" y1="110" x2="96" y2="94" stroke="#f59e0b" stroke-width="3"></line>
+    <line x1="106" y1="110" x2="118" y2="90" stroke="#f59e0b" stroke-width="3"></line>
+    <line x1="106" y1="110" x2="130" y2="100" stroke="#f59e0b" stroke-width="3"></line>
+    <circle cx="106" cy="110" r="24" fill="#f59e0b"></circle>
+    <circle cx="38" cy="110" r="12" fill="#2563eb"></circle>
+    <line x1="38" y1="95" x2="38" y2="55" stroke="#1e3a8a" stroke-width="2.5" marker-end="url(#orbitArrow)"></line>
+    <circle cx="362" cy="110" r="9" fill="#93c5fd"></circle>
+    <line x1="362" y1="98" x2="362" y2="80" stroke="#1e3a8a" stroke-width="2" marker-end="url(#orbitArrow)"></line>
+    <text x="10" y="45" font-size="11" fill="#1e3a8a" font-weight="700">lebih cepat</text>
+    <text x="320" y="70" font-size="11" fill="#1e3a8a" font-weight="700">lebih lambat</text>
+    <text x="18" y="135" font-size="10" fill="#1e3a8a">perihelion</text>
+    <text x="330" y="135" font-size="10" fill="#1e3a8a">aphelion</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Orbit planet berbentuk elips dengan Matahari di salah satu fokus -- planet melaju lebih cepat saat dekat Matahari (perihelion) dan lebih lambat saat jauh (aphelion).</p>
 </div>
 
 ### Hukum Kepler II — Hukum Luas Sama
@@ -267,6 +295,8 @@ Bumi (r=1 SA) punya periode 1 tahun. Planet lain berjarak 9 SA dari Matahari. Be
 Dua satelit mengorbit Bumi: satelit A lebih dekat, satelit B lebih jauh. Menurut Hukum Kepler III, satelit mana yang periode orbitnya lebih PENDEK?
 
 Satelit A (lebih dekat) -- karena T²∝r³, jarak orbit yang lebih kecil menghasilkan periode yang lebih pendek. Inilah kenapa satelit komunikasi geostasioner (yang periodenya harus tepat 24 jam, sama dengan rotasi Bumi) harus ditempatkan pada jarak orbit yang SANGAT SPESIFIK dari Bumi.
+
+Satelit-satelit seperti BRIsat atau Telkom-4 yang dipakai untuk siaran TV dan internet di Indonesia sengaja ditempatkan di orbit geostasioner setinggi sekitar 35.786 km, supaya periode orbitnya pas 24 jam -- sama dengan waktu Bumi berotasi sekali. Akibatnya, satelit itu tampak "diam" terus di satu titik yang sama di langit, makanya antena parabola di rumah tidak perlu digerak-gerakkan lagi setelah diarahkan sekali. Bandingkan dengan Bulan, yang orbitnya jauh lebih tinggi (sekitar 384.000 km) dan periodenya sekitar 27 hari -- itulah sebabnya posisi Bulan di langit malam terlihat "berpindah-pindah" dari hari ke hari, sementara satelit geostasioner selalu terlihat di tempat yang sama.
 
 ## 💡 Coba Pikirkan Lagi
 

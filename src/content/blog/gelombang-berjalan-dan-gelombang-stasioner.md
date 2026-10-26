@@ -113,6 +113,28 @@ draft: false
   font-size: 0.9375rem;
 }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -189,13 +211,101 @@ Menurutmu, apakah SEMUA titik pada gelombang stasioner (seperti senar gitar yang
 
 ### Gelombang Berjalan
 
-Gelombang yang kita bahas di materi sebelumnya adalah **gelombang berjalan** -- amplitudonya SAMA di semua titik, dan polanya terus MERAMBAT MAJU membawa energi.
+Gelombang yang kita bahas di materi sebelumnya adalah **gelombang berjalan** -- amplitudonya SAMA di semua titik, dan polanya terus MERAMBAT MAJU membawa energi. Bayangkan ombak di laut lepas: pola naik-turunnya terus bergerak maju menuju pantai, dan setiap titik air yang dilewatinya ikut naik-turun dengan besar simpangan yang kurang lebih sama.
 
 ### Gelombang Stasioner
+
+Sekarang bandingkan dengan permainan tali lompat (skipping rope) yang dipegang dua anak di kedua ujungnya lalu digoyang. Kalau digoyang dengan ritme yang tepat, akan terbentuk pola gelombang yang terlihat "diam di tempat" -- ada bagian yang melambai hebat, tapi ada juga titik-titik yang nyaris tidak bergerak sama sekali. Itulah **gelombang stasioner**.
 
 <div class="mtr-def">
 📍 Gelombang stasioner terbentuk dari SUPERPOSISI (penjumlahan) dua gelombang identik yang merambat BERLAWANAN ARAH -- misalnya gelombang datang dan gelombang pantulannya pada senar yang terikat di ujungnya.
 </div>
+
+Coba bandingkan langsung kedua jenis gelombang ini -- klik tombol modenya, lalu geser frekuensinya dan perhatikan bedanya:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🌊 Klik salah satu mode, lalu geser frekuensinya -- amati bedanya gelombang yang "berjalan" dan yang "diam di tempat":</p>
+  <canvas id="gelCanvas" width="640" height="220" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#faf5ff,#eaf6ff);border-radius:14px;"></canvas>
+  <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+    <button type="button" class="mtr-mini-btn" id="gelBtnJalan">🏃 Gelombang Berjalan</button>
+    <button type="button" class="mtr-mini-btn" id="gelBtnDiam">📍 Gelombang Stasioner</button>
+  </div>
+  <input type="range" id="gelFreqSlider" min="1" max="10" step="0.5" value="4" style="width:100%;margin-top:10px;accent-color:#9333ea;">
+  <p class="mtr-mini-label">Frekuensi: <strong id="gelFreqLabel">4,0</strong> Hz &middot; Simpul yang terlihat: <strong id="gelSimpulLabel">-</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('gelCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var btnJalan = document.getElementById('gelBtnJalan');
+  var btnDiam = document.getElementById('gelBtnDiam');
+  var freqSlider = document.getElementById('gelFreqSlider');
+  var freqLabel = document.getElementById('gelFreqLabel');
+  var simpulLabel = document.getElementById('gelSimpulLabel');
+  var w = canvas.width, h = canvas.height;
+  var centerY = h * 0.52;
+  var amplitudo = h * 0.3;
+  var numGelombang = 2;
+  var k = (2 * Math.PI * numGelombang) / w;
+  var mode = 'jalan';
+  var waktuMulai = performance.now();
+  function setModeAktif(btn, aktif) {
+    btn.style.background = aktif ? '#9333ea' : 'var(--surface-solid)';
+    btn.style.color = aktif ? '#fff' : 'var(--ink)';
+    btn.style.borderColor = aktif ? '#9333ea' : 'var(--border)';
+  }
+  function perbaruiTombol() {
+    setModeAktif(btnJalan, mode === 'jalan');
+    setModeAktif(btnDiam, mode === 'diam');
+  }
+  function gambarSimpul() {
+    var jumlahSimpul = numGelombang * 2 + 1;
+    ctx.fillStyle = '#581c87';
+    for (var n = 0; n < jumlahSimpul; n++) {
+      var x = (n * w) / (jumlahSimpul - 1);
+      ctx.beginPath();
+      ctx.arc(x, centerY, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    return jumlahSimpul;
+  }
+  function render(tSekarang) {
+    var freq = parseFloat(freqSlider.value);
+    var omega = freq * 1.3;
+    var t = (tSekarang - waktuMulai) / 1000;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(88,28,135,0.35)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(w, centerY); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = '#9333ea'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (var px = 0; px <= w; px += 4) {
+      var y;
+      if (mode === 'jalan') {
+        y = amplitudo * Math.sin(k * px - omega * t);
+      } else {
+        y = amplitudo * Math.sin(k * px) * Math.cos(omega * t);
+      }
+      var py = centerY - y;
+      if (px === 0) { ctx.moveTo(px, py); } else { ctx.lineTo(px, py); }
+    }
+    ctx.stroke();
+    freqLabel.textContent = freq.toFixed(1).replace('.', ',');
+    if (mode === 'diam') {
+      simpulLabel.textContent = gambarSimpul();
+    } else {
+      simpulLabel.textContent = '-';
+    }
+    requestAnimationFrame(render);
+  }
+  btnJalan.addEventListener('click', function () { mode = 'jalan'; perbaruiTombol(); });
+  btnDiam.addEventListener('click', function () { mode = 'diam'; perbaruiTombol(); });
+  perbaruiTombol();
+  requestAnimationFrame(render);
+})();
+</script>
+
+Perhatikan: di mode "Gelombang Berjalan", seluruh pola bergerak maju terus-menerus. Di mode "Gelombang Stasioner", posisi gelombangnya tidak berpindah sama sekali -- yang berubah hanya besar amplitudonya naik-turun seiring waktu, dan titik-titik bertitik ungu (simpul) selalu diam di tempat yang sama, berapa pun frekuensinya.
 
 Berbeda dari gelombang berjalan, gelombang stasioner punya amplitudo yang BERBEDA-BEDA di tiap titik:
 

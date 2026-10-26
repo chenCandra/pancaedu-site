@@ -283,6 +283,121 @@ Untuk pipa MENDATAR (ketinggian sama di semua titik, h1 = h2), suku ρgh saling 
 
 Konsekuensinya: di bagian yang alirannya lebih CEPAT, tekanannya harus lebih KECIL, supaya jumlah keduanya tetap konstan. Inilah **Asas Bernoulli** -- sering diringkas: "aliran cepat, tekanan rendah."
 
+## 🎛️ Coba Rasakan Sendiri: Pipa Venturi
+
+Pipa di bawah ini bentuknya seperti jam pasir yang dibaringkan -- lebar di kiri, menyempit di tengah, lalu lebar lagi di kanan (disebut **pipa venturi**). Perhatikan titik-titik air yang mengalir: di bagian sempit mereka melaju jauh lebih cepat (sesuai Asas Kontinuitas yang sudah kita pelajari), dan gauge tekanan kecil di atasnya langsung menunjukkan akibatnya -- kolom yang lebih pendek berarti tekanan yang lebih rendah.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🌀 Perhatikan kecepatan titik air dan gauge tekanan di atas pipa lebar vs pipa sempit. Geser slider untuk mengubah laju aliran dasarnya:</p>
+  <canvas id="bernoulliCanvas" width="640" height="260" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Laju aliran dasar: <strong id="bernoulliSpeedLabel">5</strong></label>
+  <input type="range" id="bernoulliSpeedSlider" min="1" max="10" value="5" style="width:100%;accent-color:#06b6d4;">
+  <p class="mtr-mini-label" id="bernoulliReadout">Di pipa sempit: <strong>v tinggi, P rendah</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('bernoulliCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('bernoulliSpeedSlider');
+  var speedLabel = document.getElementById('bernoulliSpeedLabel');
+  var readout = document.getElementById('bernoulliReadout');
+  var w = canvas.width, h = canvas.height;
+  var y0 = h * 0.62;
+  var pipeLeft = 20, pipeRight = w - 20;
+  var hwWide = 50, hwNarrow = 18;
+  var zA = 150, zB = 230, zC = 410, zD = 490;
+  function halfWidth(x) {
+    if (x < zA) return hwWide;
+    if (x < zB) { var t = (x - zA) / (zB - zA); return hwWide + (hwNarrow - hwWide) * (1 - Math.cos(t * Math.PI)) / 2; }
+    if (x < zC) return hwNarrow;
+    if (x < zD) { var t2 = (x - zC) / (zD - zC); return hwNarrow + (hwWide - hwNarrow) * (1 - Math.cos(t2 * Math.PI)) / 2; }
+    return hwWide;
+  }
+  var partikel = [];
+  var jumlahLane = 5;
+  var jumlahKolom = 7;
+  for (var c = 0; c < jumlahKolom; c++) {
+    for (var l = 0; l < jumlahLane; l++) {
+      var frac = (l - (jumlahLane - 1) / 2) / ((jumlahLane - 1) / 2) * 0.72;
+      partikel.push({ x: pipeLeft + 10 + c * ((pipeRight - pipeLeft) / jumlahKolom), frac: frac });
+    }
+  }
+  function gambarPipa() {
+    ctx.beginPath();
+    for (var x = pipeLeft; x <= pipeRight; x += 4) {
+      var yTop = y0 - halfWidth(x);
+      if (x === pipeLeft) ctx.moveTo(x, yTop); else ctx.lineTo(x, yTop);
+    }
+    for (var x2 = pipeRight; x2 >= pipeLeft; x2 -= 4) {
+      var yBot = y0 + halfWidth(x2);
+      ctx.lineTo(x2, yBot);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(6,182,212,0.18)';
+    ctx.fill();
+    ctx.strokeStyle = '#0e7490';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (var x3 = pipeLeft; x3 <= pipeRight; x3 += 4) {
+      var yT = y0 - halfWidth(x3);
+      if (x3 === pipeLeft) ctx.moveTo(x3, yT); else ctx.lineTo(x3, yT);
+    }
+    ctx.stroke();
+    ctx.beginPath();
+    for (var x4 = pipeLeft; x4 <= pipeRight; x4 += 4) {
+      var yB = y0 + halfWidth(x4);
+      if (x4 === pipeLeft) ctx.moveTo(x4, yB); else ctx.lineTo(x4, yB);
+    }
+    ctx.stroke();
+  }
+  function gambarGauge(cx, label, isiFrac, warna) {
+    var gaugeY = 14, gaugeH = 64, gaugeW = 18;
+    ctx.strokeStyle = '#26243b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cx - gaugeW / 2, gaugeY, gaugeW, gaugeH);
+    var fillH = gaugeH * isiFrac;
+    ctx.fillStyle = warna;
+    var tinggiIsi = fillH - 4 > 0 ? fillH - 4 : 0;
+    ctx.fillRect(cx - gaugeW / 2 + 2, gaugeY + (gaugeH - fillH) + 2, gaugeW - 4, tinggiIsi);
+    ctx.fillStyle = '#26243b';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, cx, gaugeY + gaugeH + 16);
+  }
+  function render() {
+    ctx.clearRect(0, 0, w, h);
+    gambarPipa();
+    var speedUnit = parseFloat(slider.value);
+    for (var i = 0; i < partikel.length; i++) {
+      var p = partikel[i];
+      var hwLocal = halfWidth(p.x);
+      var v = speedUnit * 0.8 * (hwWide / hwLocal);
+      p.x += v;
+      if (p.x > pipeRight) p.x = pipeLeft + (p.x - pipeRight);
+      var y = y0 + p.frac * hwLocal;
+      ctx.fillStyle = '#0369a1';
+      ctx.beginPath();
+      ctx.arc(p.x, y, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    var rasio = hwWide / hwNarrow;
+    var isiSempit = Math.max(0.1, 0.78 - (speedUnit / 10) * 0.55);
+    gambarGauge(85, 'P lebar', 0.8, '#0ea5e9');
+    gambarGauge(320, 'P sempit', isiSempit, '#f97316');
+    gambarGauge(555, 'P lebar', 0.8, '#0ea5e9');
+    readout.innerHTML = 'Di pipa <strong>sempit</strong>: v &asymp; ' + rasio.toFixed(1) + '&times; lebih cepat, tekanan jadi <strong>lebih rendah</strong>. Di pipa <strong>lebar</strong>: v rendah, tekanan lebih <strong>tinggi</strong>.';
+    requestAnimationFrame(render);
+  }
+  function perbarui() {
+    speedLabel.textContent = slider.value;
+  }
+  slider.addEventListener('input', perbarui);
+  perbarui();
+  requestAnimationFrame(render);
+})();
+</script>
+
 ## 🔬 Coba Sendiri di Lab Maya
 
 Buka tab **Asas Bernoulli** di simulasi bawah. Perhatikan dua "kolom" tekanan (manometer) di atas pipa lebar dan pipa sempit -- kolom di bagian sempit (aliran cepat) akan selalu lebih PENDEK, menunjukkan tekanan yang lebih rendah di sana.

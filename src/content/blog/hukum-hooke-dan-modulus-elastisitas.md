@@ -174,11 +174,15 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Karet gelang bisa diregangkan lalu kembali ke bentuk semula begitu dilepas -- tapi kalau diregangkan TERLALU jauh, ia bisa melar permanen atau bahkan putus. Materi ini menutup sub-bab elastisitas: Hukum Hooke, energi yang tersimpan saat benda elastis diregangkan, dan modulus elastisitas.
+Karet gelang bisa diregangkan lalu kembali ke bentuk semula begitu dilepas -- tapi kalau diregangkan TERLALU jauh (misalnya buat main ketapel sekuat tenaga), ia bisa melar permanen atau bahkan putus. Shock depan motor juga bekerja dengan prinsip yang sama: pegas di dalamnya menekan dan meregang berulang kali setiap kali melewati jalan berlubang, lalu kembali ke posisi semula -- selama bebannya masih wajar. Materi ini menutup sub-bab elastisitas: Hukum Hooke, energi yang tersimpan saat benda elastis diregangkan, dan modulus elastisitas.
 
 ## 🤔 Coba Pikirkan
 
@@ -204,6 +208,30 @@ Gaya yang meregangkan pegas berbanding LURUS dengan pertambahan panjangnya (Δx)
 
 <div class="mtr-def">
 ⚠️ <strong>Daerah elastis</strong> adalah daerah di mana bahan kembali ke ukuran semula setelah gaya dihilangkan. Kalau diregangkan MELEWATI batas elastis, bahan mengalami DEFORMASI PERMANEN -- F=kΔx tidak lagi berlaku, dan bahan tidak kembali 100% ke ukuran semula.
+</div>
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<text x="70" y="40" font-size="14" fill="#1e3a8a" font-weight="700">Sebelum (L₀)</text>
+<rect x="30" y="55" width="16" height="40" fill="#1e3a8a"/>
+<path d="M46,75 L62,65 L78,85 L94,65 L110,85 L126,65 L142,75" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+<rect x="142" y="60" width="30" height="30" rx="5" fill="#3b82f6"/>
+<line x1="46" y1="105" x2="172" y2="105" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="90" y="118" font-size="12" fill="#64748b">L₀</text>
+<text x="250" y="40" font-size="14" fill="#1e3a8a" font-weight="700">Sesudah ditarik gaya F</text>
+<rect x="230" y="55" width="16" height="40" fill="#1e3a8a"/>
+<path d="M246,75 L258,65 L270,85 L282,65 L294,85 L306,65 L318,85 L330,65 L342,75" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+<rect x="342" y="60" width="30" height="30" rx="5" fill="#3b82f6"/>
+<line x1="246" y1="105" x2="372" y2="105" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="295" y="118" font-size="12" fill="#64748b">L₀ + Δx</text>
+<line x1="372" y1="75" x2="400" y2="75" stroke="#ef4444" stroke-width="4"/>
+<polygon points="400,75 390,69 390,81" fill="#ef4444"/>
+<text x="372" y="60" font-size="13" fill="#ef4444" font-weight="700">F</text>
+<text x="40" y="155" font-size="12" fill="#1e3a8a">Masih di daerah elastis: lepas gaya → kembali ke L₀.</text>
+<text x="40" y="175" font-size="12" fill="#1e3a8a">Melewati batas elastis: Δx menetap meski gaya dilepas.</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Pegas bertambah panjang sejauh Δx saat ditarik gaya F -- F = kΔx berlaku selama masih di daerah elastis.</p>
 </div>
 
 ### Energi Potensial Elastis

@@ -108,6 +108,10 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -144,6 +148,33 @@ Ini menjelaskan KENAPA usaha dilakukan pada suatu benda: usaha positif menambah 
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>usaha selalu bernilai positif</del>. Yang benar: usaha bisa NEGATIF kalau gaya punya komponen yang BERLAWANAN dengan arah gerak (misalnya gaya gesek atau gaya rem) -- ini yang mengurangi energi kinetik benda.
+</div>
+
+Teorema Usaha-Energi ini juga menjelaskan kenapa jarak pengereman mobil tidak bertambah sebanding dengan kecepatan, tapi melonjak jauh lebih curam. Kalau gaya rem (F) dianggap konstan, usaha oleh rem W=−F×s harus sama dengan perubahan energi kinetik (0−½mv²) sampai mobil berhenti total. Karena Ek berbanding lurus dengan KUADRAT kecepatan, mobil yang ngebut 2 kali lebih cepat (misalnya dari 40 km/jam jadi 80 km/jam) butuh jarak pengereman 4 KALI LEBIH JAUH untuk benar-benar berhenti, bukan cuma 2 kali lipat -- itulah kenapa menambah sedikit saja kecepatan bisa sangat berbahaya saat harus mengerem mendadak.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="brakeArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1e3a8a"></path>
+      </marker>
+    </defs>
+    <rect x="10" y="32" width="64" height="26" rx="8" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"></rect>
+    <polygon points="30,32 46,18 58,18 58,32" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"></polygon>
+    <circle cx="26" cy="60" r="8" fill="#1e293b"></circle>
+    <circle cx="60" cy="60" r="8" fill="#1e293b"></circle>
+    <line x1="90" y1="45" x2="148" y2="45" stroke="#1e3a8a" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#brakeArrow)"></line>
+    <text x="90" y="25" font-size="11" fill="#1e3a8a" font-weight="700">40 km/jam</text>
+    <text x="155" y="48" font-size="11" fill="#1e3a8a" font-weight="700">jarak pengereman</text>
+    <rect x="10" y="128" width="64" height="26" rx="8" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"></rect>
+    <polygon points="30,128 46,114 58,114 58,128" fill="#fecaca" stroke="#7f1d1d" stroke-width="1.5"></polygon>
+    <circle cx="26" cy="156" r="8" fill="#1e293b"></circle>
+    <circle cx="60" cy="156" r="8" fill="#1e293b"></circle>
+    <line x1="90" y1="141" x2="330" y2="141" stroke="#7f1d1d" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#brakeArrow)"></line>
+    <text x="90" y="121" font-size="11" fill="#7f1d1d" font-weight="700">80 km/jam (2×)</text>
+    <text x="150" y="160" font-size="11" fill="#7f1d1d" font-weight="700">jarak pengereman 4× lebih jauh!</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Mobil yang melaju 2× lebih cepat butuh jarak pengereman 4× lebih jauh untuk berhenti total -- karena Ek=½mv² berbanding lurus dengan KUADRAT kecepatan.</p>
 </div>
 
 ## 🧠 Mari Kita Analisis

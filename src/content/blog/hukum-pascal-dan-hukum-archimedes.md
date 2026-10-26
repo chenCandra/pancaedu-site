@@ -181,6 +181,10 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #ecfeff, #cffafe); border: 1px solid #67e8f9; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #164e63; font-weight: 600; }
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -247,6 +251,8 @@ draft: false
 
 Setelah tuntas dengan [Massa Jenis dan Tekanan Hidrostatis](/materi/fluida-dan-massa-jenis), kita bahas dua hukum fluida statis paling terkenal -- yang satu bikin dongkrak bisa mengangkat mobil, yang satu bikin kapal besi bisa mengapung.
 
+Pernah lihat tempat cuci motor/mobil yang bisa mengangkat seluruh badan mobil cuma dengan menekan pedal atau tuas kecil? Atau pernah coba masukkan telur mentah ke segelas air garam yang kental, dan telur itu malah MENGAPUNG -- padahal telur yang sama tenggelam kalau dimasukkan ke air biasa? Dua fenomena yang kelihatannya tidak nyambung ini sebenarnya dijelaskan oleh dua hukum fluida statis yang akan kita bahas sekarang.
+
 ## 🔧 Hukum Pascal
 
 > "Tekanan yang diberikan pada fluida tertutup diteruskan sama besar ke segala arah."
@@ -273,6 +279,27 @@ Karena itu, piston yang lebih LUAS akan menghasilkan gaya yang jauh lebih BESAR.
 <div class="mtr-card"><span class="mtr-card-icon">🛑</span><h4>Rem Hidrolik Mobil</h4><p>Tekanan dari pedal rem diteruskan ke seluruh sistem, mengunci keempat roda serentak.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">💈</span><h4>Kursi Hidrolik Salon/Bengkel</h4><p>Pompa kaki kecil bisa menaikkan kursi berikut orang yang duduk di atasnya.</p></div>
 </div>
+</div>
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="170" width="360" height="14" fill="#94a3b8" stroke="#334155" stroke-width="2" />
+    <rect x="60" y="150" width="60" height="20" fill="#0e7490" stroke="#164e63" stroke-width="2" />
+    <rect x="80" y="100" width="20" height="50" fill="#94a3b8" stroke="#334155" stroke-width="2" />
+    <polygon points="70,100 110,100 102,86 78,86" fill="#475569" stroke="#164e63" stroke-width="2" />
+    <path d="M60 170 Q90 184, 120 170" fill="none" stroke="#164e63" stroke-width="2" />
+    <text x="90" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#164e63">Piston kecil (A1)</text>
+    <text x="90" y="213" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">ditekan tangan</text>
+    <line x1="140" y1="176" x2="260" y2="176" stroke="#0e7490" stroke-width="8" />
+    <rect x="230" y="110" width="110" height="40" fill="#0e7490" stroke="#164e63" stroke-width="2" />
+    <rect x="245" y="60" width="80" height="50" fill="#64748b" stroke="#164e63" stroke-width="2" rx="6" />
+    <circle cx="265" cy="112" r="10" fill="#1f2937" />
+    <circle cx="305" cy="112" r="10" fill="#1f2937" />
+    <rect x="255" y="45" width="60" height="18" fill="#bae6fd" stroke="#164e63" stroke-width="2" rx="3" />
+    <text x="285" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#164e63">Piston besar (A2)</text>
+    <text x="285" y="213" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">mengangkat mobil</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Gaya kecil di piston sempit diteruskan fluida ke piston lebar, menghasilkan gaya raksasa yang mengangkat mobil -- prinsip dongkrak hidrolik.</p>
 </div>
 
 ### ✏️ Contoh Soal Pascal
@@ -324,7 +351,9 @@ Wsemu = W − Fa = 150 − 20 = **130 N**
 
 ## 🚢 Kenapa Kapal Besi Bisa Mengapung?
 
-Ini pertanyaan klasik: besi (ρ ≈ 7.870 kg/m³) jauh lebih rapat dari air (ρ = 1.000 kg/m³), tapi kapal besi bisa mengapung. Rahasianya ada di BENTUK, bukan bahan. Badan kapal dibuat BERONGGA (banyak ruang kosong berisi udara), sehingga volume totalnya jadi jauh lebih besar dari volume besi solidnya. Massa jenis RATA-RATA kapal (massa total ÷ volume total termasuk rongga) jadi jauh lebih kecil dari massa jenis air -- itulah kenapa kapal bisa terapung, bahkan kapal selam bisa mengatur naik-turunnya dengan mengisi/mengosongkan tangki ballast dengan air.
+Ini pertanyaan klasik: besi (ρ ≈ 7.870 kg/m³) jauh lebih rapat dari air (ρ = 1.000 kg/m³), tapi kapal besi bisa mengapung. Rahasianya ada di BENTUK, bukan bahan. Badan kapal dibuat BERONGGA (banyak ruang kosong berisi udara), sehingga volume totalnya jadi jauh lebih besar dari volume besi solidnya. Massa jenis RATA-RATA kapal (massa total ÷ volume total termasuk rongga) jadi jauh lebih kecil dari massa jenis air -- itulah kenapa kapal bisa terapung, bahkan kapal selam bisa mengatur naik-turunnya dengan mengisi/mengosongkan tangki ballast dengan air: tangki diisi air → massa jenis rata-rata kapal selam membesar → tenggelam; tangki dikosongkan (diisi udara lagi) → massa jenis rata-rata mengecil → naik ke permukaan.
+
+Prinsip yang sama juga menjelaskan kenapa telur mentah bisa MENGAPUNG di air garam kental, padahal telur yang sama TENGGELAM di air biasa. Air garam yang kental punya massa jenis lebih besar dari air tawar biasa (garamnya menambah massa tanpa menambah volume terlalu banyak) -- begitu massa jenis air garam itu dibuat lebih besar dari massa jenis telur, gaya apungnya jadi cukup kuat untuk menahan telur mengapung, padahal bentuk dan berat telurnya sama sekali tidak berubah.
 
 ## 🔬 Coba Sendiri di Lab Maya
 

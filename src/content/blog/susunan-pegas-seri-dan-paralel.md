@@ -132,11 +132,15 @@ draft: false
   font-weight: 600;
 }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
 
-Di materi sebelumnya kamu belajar satu pegas sendirian. Tapi kasur pegas (spring bed), suspensi motor, dan banyak alat lain sebenarnya memakai BEBERAPA pegas sekaligus, dirangkai seri atau paralel. Materi ini menutup Bab Gerak dan Gaya dengan konsep itu.
+Di materi sebelumnya kamu belajar satu pegas sendirian. Tapi coba perhatikan shock depan motor: biasanya ada DUA shock yang bekerja berdampingan, kiri dan kanan, menopang beban yang sama-sama ditanggung bersama -- itu contoh rangkaian paralel. Bandingkan dengan kursi atau sofa yang pegas-pegasnya disusun bertumpuk, ujung ke ujung -- itu lebih mendekati rangkaian seri. Kasur pegas (spring bed) dan banyak alat lain sebenarnya memakai BEBERAPA pegas sekaligus, dirangkai seri atau paralel. Materi ini menutup Bab Gerak dan Gaya dengan konsep itu.
 
 ## 🤔 Coba Pikirkan
 
@@ -170,6 +174,30 @@ Pada rangkaian seri, gaya (F) yang diteruskan SAMA di setiap pegas, sedangkan Δ
 <tr><td>Paralel</td><td>k_total = k1+k2+... (membesar)</td><td>Sama di tiap pegas</td><td>Berbeda-beda (F=kΔx)</td></tr>
 <tr><td>Seri</td><td>1/k_total = 1/k1+1/k2+... (mengecil)</td><td>Berbeda-beda (Δx=F/k)</td><td>Sama di tiap pegas</td></tr>
 </table>
+</div>
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<text x="25" y="25" font-size="14" fill="#1e3a8a" font-weight="700">Paralel (shock kiri-kanan)</text>
+<rect x="20" y="40" width="14" height="20" fill="#1e3a8a"/>
+<rect x="150" y="40" width="14" height="20" fill="#1e3a8a"/>
+<path d="M27,60 L20,70 L34,80 L20,90 L34,100 L20,110 L27,120" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+<path d="M157,60 L150,70 L164,80 L150,90 L164,100 L150,110 L157,120" fill="none" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+<rect x="10" y="120" width="160" height="16" rx="4" fill="#64748b"/>
+<line x1="90" y1="136" x2="90" y2="155" stroke="#64748b" stroke-width="4"/>
+<rect x="60" y="155" width="60" height="26" rx="6" fill="#f2760a"/>
+<text x="55" y="200" font-size="12" fill="#1e3a8a">Δx sama, gaya beda</text>
+<line x1="200" y1="0" x2="200" y2="220" stroke="#93c5fd" stroke-width="2" stroke-dasharray="5,5"/>
+<text x="225" y="25" font-size="14" fill="#1e3a8a" font-weight="700">Seri (pegas kursi)</text>
+<rect x="280" y="20" width="16" height="20" fill="#1e3a8a"/>
+<path d="M288,40 L280,48 L296,56 L280,64 L296,72 L280,80 L288,88" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+<rect x="280" y="88" width="16" height="12" fill="#64748b"/>
+<path d="M288,100 L280,108 L296,116 L280,124 L296,132 L280,140 L288,148" fill="none" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+<rect x="263" y="148" width="50" height="26" rx="6" fill="#f2760a"/>
+<text x="235" y="200" font-size="12" fill="#1e3a8a">Gaya sama, Δx beda</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Paralel: beban ditopang bersama, pertambahan panjang sama. Seri: pegas tersambung ujung ke ujung, gaya yang diteruskan sama.</p>
 </div>
 
 <div class="mtr-note">

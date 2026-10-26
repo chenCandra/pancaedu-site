@@ -166,6 +166,10 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -197,6 +201,8 @@ Menurutmu, apakah gaya gravitasi HANYA bekerja antara benda langit seperti plane
 🪐 Hukum ini bersifat UNIVERSAL -- berlaku untuk SEMUA pasangan benda bermassa di alam semesta, bukan cuma planet/bintang. Efeknya baru terasa signifikan kalau salah satu massanya sangat besar (seperti Bumi), karena G sendiri adalah angka yang sangat kecil.
 </div>
 
+Coba bayangkan kamu duduk berdekatan dengan teman di angkot atau bioskop -- menurut Hukum Gravitasi Newton, ADA gaya gravitasi yang menarik kalian berdua, sekecil apa pun itu. Cuma karena massa tubuh manusia jauh lebih kecil dari massa planet (dan G sendiri sangat kecil), gaya itu jauh di bawah ambang yang bisa kita rasakan -- bandingkan dengan gravitasi Bumi yang terus-menerus "menekan" badan kita ke kursi atau ke tanah, yang jelas terasa karena massa Bumi sangat besar.
+
 ### Medan Gravitasi
 
 <div class="mtr-formula-utama">
@@ -216,6 +222,37 @@ Medan gravitasi (g) adalah efek yang ditimbulkan SATU massa (M) di suatu titik r
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>gaya gravitasi (F) dan medan gravitasi (g) adalah hal yang sama</del>. Yang benar: F=Gm1m2/r² adalah gaya INTERAKSI antara DUA massa, sedangkan g=GM/r² adalah medan yang ditimbulkan SATU massa di suatu titik -- baru menjadi gaya (F=mg) kalau ada benda lain bermassa m yang berada di titik itu.
+</div>
+
+Konsep medan gravitasi ini juga menjelaskan kenapa astronot di ISS (stasiun luar angkasa yang mengorbit Bumi di ketinggian sekitar 400 km) terlihat "melayang" tanpa bobot di video-video yang sering kamu lihat. Bukan karena gravitasi Bumi berhenti bekerja di sana -- medan gravitasi di ketinggian itu masih sekitar 90% dari nilainya di permukaan Bumi! Yang sebenarnya terjadi: ISS dan astronotnya sama-sama dalam keadaan jatuh bebas, terus "jatuh" ke arah Bumi akibat gravitasi, tapi dengan kecepatan horizontal yang pas sehingga lintasan jatuhnya melengkung mengikuti kelengkungan Bumi -- hasilnya mereka mengorbit terus-menerus, bukan menghantam permukaan. Prinsip yang sama berlaku untuk Bulan.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="gravArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1e3a8a"></path>
+      </marker>
+    </defs>
+    <ellipse cx="150" cy="140" rx="120" ry="70" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 5"></ellipse>
+    <circle cx="150" cy="140" r="55" fill="#3b82f6"></circle>
+    <ellipse cx="130" cy="125" rx="18" ry="10" fill="#22c55e"></ellipse>
+    <ellipse cx="170" cy="155" rx="14" ry="8" fill="#22c55e"></ellipse>
+    <ellipse cx="145" cy="168" rx="10" ry="6" fill="#22c55e"></ellipse>
+    <circle cx="340" cy="45" r="20" fill="#cbd5e1"></circle>
+    <circle cx="333" cy="38" r="3" fill="#94a3b8"></circle>
+    <circle cx="348" cy="50" r="4" fill="#94a3b8"></circle>
+    <circle cx="344" cy="35" r="2.5" fill="#94a3b8"></circle>
+    <g transform="translate(255,55)">
+      <rect x="-8" y="-6" width="16" height="12" fill="#f59e0b" stroke="#1e3a8a" stroke-width="1.5"></rect>
+      <rect x="-22" y="-3" width="12" height="6" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1"></rect>
+      <rect x="10" y="-3" width="12" height="6" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1"></rect>
+    </g>
+    <line x1="255" y1="55" x2="178" y2="113" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#gravArrow)"></line>
+    <text x="198" y="78" font-size="11" fill="#1e3a8a" font-weight="700">gravitasi</text>
+    <text x="318" y="78" font-size="11" fill="#1e3a8a" font-weight="700">Bulan</text>
+    <text x="236" y="35" font-size="11" fill="#1e3a8a" font-weight="700">Satelit/ISS</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Gravitasi Bumi menarik satelit dan Bulan terus-menerus -- tapi kecepatan orbitnya membuat mereka terus "meleset", mengorbit bukan jatuh ke permukaan.</p>
 </div>
 
 ## 🧠 Mari Kita Analisis
