@@ -181,13 +181,35 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil). Pola sama
+   seperti di materi Hukum Faraday & Lenz -- IIFE + id unik, dan skrip
+   SENGAJA ditulis tanpa baris kosong sama sekali: markdown parser situs
+   ini ternyata tidak kebal baris kosong di dalam <script> (beda dari
+   aturan CommonMark semestinya), baris kosong bikin parser balik ke mode
+   markdown di tengah kode JS dan merusaknya. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
 </style>
 
-Di materi [Hukum Faraday dan Hukum Lenz](/materi/hukum-faraday-dan-lenz) kita paham mekanisme dasar induksi elektromagnetik. Sekarang kita lihat bagaimana prinsip itu dimanfaatkan lewat dua alat yang kita pakai setiap hari tanpa sadar: **Generator** dan **Transformator**.
+Setiap kali kamu nge-charge HP, menyalakan lampu rumah, atau lewat jalan raya dan melihat menara besi tinggi berkabel tebal dengan tanda "AWAS TEGANGAN TINGGI" -- semuanya terhubung ke materi ini. Listrik yang sampai ke rumahmu itu perjalanannya panjang, dan dua alat inilah yang membuatnya mungkin: **Generator** (pembuat listriknya) dan **Transformator** (pengatur "tekanan" listriknya supaya aman dikirim jauh lalu dipakai di rumah).
+
+Keduanya sama-sama memanfaatkan prinsip yang sudah kita pelajari di materi [Hukum Faraday dan Hukum Lenz](/materi/hukum-faraday-dan-lenz) -- kalau belum baca, baca dulu ya, soalnya generator dan trafo ini cuma "penerapan" dari prinsip itu.
 
 ## ⚙️ Generator: Gerak Menjadi Listrik
 
-**Generator** mengubah energi GERAK (mekanik) menjadi energi LISTRIK, lewat prinsip induksi elektromagnetik. Caranya: sebuah kumparan diputar terus-menerus di dalam medan magnet (atau sebaliknya, magnet yang diputar mengelilingi kumparan diam) -- perputaran ini membuat fluks magnetik yang menembus kumparan TERUS BERUBAH, sehingga GGL induksi timbul secara berkelanjutan, bukan cuma sesaat.
+Inget dynamo sepeda yang kita bahas di materi sebelumnya -- roda muter, lampu nyala? **Generator itu ibaratnya dynamo versi RAKSASA.** Bedanya, kalau dynamo sepeda diputar oleh kayuhan kakimu, generator di pembangkit listrik diputar oleh tenaga yang JAUH lebih besar: air terjun, uap panas, atau angin kencang.
+
+**Generator** mengubah energi GERAK (mekanik) menjadi energi LISTRIK, lewat prinsip induksi elektromagnetik. Caranya: sebuah kumparan diputar terus-menerus di dalam medan magnet (atau sebaliknya, magnet yang diputar mengelilingi kumparan diam) -- perputaran ini membuat fluks magnetik yang menembus kumparan TERUS BERUBAH, sehingga GGL induksi timbul secara berkelanjutan, bukan cuma sesaat seperti saat kamu menggerakkan magnet dengan tangan di simulasi materi sebelumnya.
 
 <div class="mtr-cards">
 <div class="mtr-cards-grid">
@@ -201,7 +223,7 @@ Perhatikan pola pentingnya: apa pun sumber energinya (air, uap, angin), yang ter
 
 ## 🔌 Transformator: Menaikkan/Menurunkan Tegangan
 
-**Transformator (trafo)** memanfaatkan induksi elektromagnetik dengan cara berbeda: dua kumparan (primer dan sekunder) dililitkan pada inti besi yang sama, TIDAK saling bersentuhan secara listrik. Ketika arus AC (bolak-balik) mengalir di kumparan primer, medan magnetnya terus berubah -- perubahan inilah yang menginduksi GGL pada kumparan sekunder, meski keduanya tidak terhubung kabel langsung.
+**Transformator (trafo)** memanfaatkan induksi elektromagnetik dengan cara berbeda: dua kumparan (primer dan sekunder) dililitkan pada inti besi yang sama, TIDAK saling bersentuhan secara listrik. Ketika arus AC (bolak-balik) mengalir di kumparan primer, medan magnetnya terus berubah -- perubahan inilah yang menginduksi GGL pada kumparan sekunder, meski keduanya tidak terhubung kabel langsung. Dua kumparan itu "ngobrol" lewat medan magnet, bukan lewat kabel.
 
 **Kenapa harus arus AC?** Karena trafo butuh fluks yang TERUS BERUBAH untuk bisa menginduksi -- arus DC yang konstan tidak menghasilkan perubahan fluks, sehingga trafo tidak akan bekerja dengan sumber DC.
 
@@ -217,13 +239,69 @@ Perhatikan pola pentingnya: apa pun sumber energinya (air, uap, angin), yang ter
 </div>
 </div>
 
-Perbandingan tegangan sebanding dengan perbandingan jumlah lilitan: **Vp/Vs = Np/Ns** (p = primer, s = sekunder).
+Perbandingan tegangan sebanding dengan perbandingan jumlah lilitan: **Vp/Vs = Np/Ns** (p = primer, s = sekunder). Coba main-main sendiri di bawah ini -- geser jumlah lilitan sekundernya, lihat tegangan keluarannya berubah:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Geser lilitan sekunder (Ns) -- lilitan primer (Np) tetap 10, tegangan masuk tetap 100V:</p>
+  <canvas id="trafoCanvas" width="640" height="190" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <input type="range" id="trafoSlider" min="2" max="30" value="10" style="width:100%;margin-top:10px;accent-color:#8b3ddb;">
+  <p class="mtr-mini-label">Ns = <strong id="trafoNsLabel">10</strong> lilitan &middot; Vs = <strong id="trafoVsLabel">100,0 V</strong> &middot; Jenis: <strong id="trafoJenisLabel">1:1 (tidak berubah)</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('trafoCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('trafoSlider');
+  var nsLabel = document.getElementById('trafoNsLabel');
+  var vsLabel = document.getElementById('trafoVsLabel');
+  var jenisLabel = document.getElementById('trafoJenisLabel');
+  var Np = 10, Vp = 100;
+  function gambarKumparan(cx, cy, jumlahLilitan, warna) {
+    var lebarTiap = 6, tinggi = 60;
+    var mulaiX = cx - (jumlahLilitan * lebarTiap) / 2;
+    ctx.strokeStyle = warna; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    for (var i = 0; i < jumlahLilitan; i++) {
+      ctx.beginPath();
+      ctx.ellipse(mulaiX + i * lebarTiap, cy, 7, tinggi / 2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+  function render() {
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    var Ns = parseInt(slider.value, 10);
+    var Vs = Vp * (Ns / Np);
+    ctx.strokeStyle = '#cbb892'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(w * 0.5 - 2, h * 0.18); ctx.lineTo(w * 0.5 - 2, h * 0.82); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w * 0.5 + 2, h * 0.18); ctx.lineTo(w * 0.5 + 2, h * 0.82); ctx.stroke();
+    gambarKumparan(w * 0.28, h * 0.5, Math.min(Np, 18), '#f2760a');
+    gambarKumparan(w * 0.72, h * 0.5, Math.min(Ns, 18), '#8b3ddb');
+    ctx.fillStyle = '#26243b'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Primer (Np=' + Np + ')', w * 0.28, h * 0.14);
+    ctx.fillText('Sekunder (Ns=' + Ns + ')', w * 0.72, h * 0.14);
+    ctx.fillStyle = '#16a34a'; ctx.font = 'bold 15px sans-serif';
+    ctx.fillText('Vp = ' + Vp.toFixed(0) + ' V', w * 0.28, h * 0.92);
+    ctx.fillStyle = '#db2777';
+    ctx.fillText('Vs = ' + Vs.toFixed(1) + ' V', w * 0.72, h * 0.92);
+    nsLabel.textContent = Ns;
+    vsLabel.textContent = Vs.toFixed(1) + ' V';
+    jenisLabel.textContent = Ns > Np ? 'Step-Up (menaikkan)' : Ns < Np ? 'Step-Down (menurunkan)' : '1:1 (tidak berubah)';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 ## 🗼 Kenapa Transmisi Listrik Pakai Tegangan Sangat Tinggi?
 
-Ini yang sering bikin bingung: kenapa listrik ditransmisikan dari PLTA/PLTU ke kota dengan tegangan SANGAT TINGGI (ratusan ribu volt), padahal di rumah kita cuma butuh 220V? Jawabannya soal EFISIENSI:
+Ini yang sering bikin bingung: kenapa listrik ditransmisikan dari PLTA/PLTU ke kota dengan tegangan SANGAT TINGGI (ratusan ribu volt) lewat menara-menara besi tinggi (SUTET) yang mungkin pernah kamu lihat di pinggir jalan raya atau sawah, padahal di rumah kita cuma butuh 220V? Jawabannya soal EFISIENSI.
 
-Untuk daya listrik yang sama, kalau TEGANGAN dinaikkan (pakai trafo step-up), ARUS yang mengalir jadi lebih KECIL. Kerugian energi akibat panas di kabel (P=I²R) sangat bergantung pada besar arus (dikuadratkan!) -- jadi arus kecil = kerugian energi jauh lebih kecil sepanjang kabel transmisi yang panjang. Setelah sampai dekat kota, trafo step-down menurunkan tegangannya lagi ke level aman untuk dipakai di rumah.
+<div class="mtr-note">
+💡 <strong>Ibaratnya begini:</strong> bayangkan kamu mau mengalirkan air dalam jumlah tertentu lewat selang. Kalau pakai selang KECIL, kamu butuh TEKANAN tinggi supaya air tetap mengalir deras. Kalau pakai selang BESAR, air bisa mengalir banyak walau tekanannya rendah. Nah, <strong>tegangan listrik itu seperti tekanan air, dan arus listrik itu seperti derasnya aliran air</strong> -- buat mengirim daya listrik yang sama lewat kabel yang jauh, lebih untung pakai "tekanan" (tegangan) tinggi dengan "aliran" (arus) kecil, daripada sebaliknya.
+</div>
+
+Untuk daya listrik yang sama, kalau TEGANGAN dinaikkan (pakai trafo step-up), ARUS yang mengalir jadi lebih KECIL. Kerugian energi akibat panas di kabel (P=I²R) sangat bergantung pada besar arus (dikuadratkan!) -- jadi arus kecil = kerugian energi jauh lebih kecil sepanjang kabel transmisi yang panjang. Setelah sampai dekat kota, trafo step-down menurunkan tegangannya lagi ke level aman untuk dipakai di rumah -- kamu mungkin pernah lihat kotak abu-abu "Gardu PLN" di pinggir jalan dekat rumah/sekolahmu, itu salah satu tempat trafo step-down ini bekerja.
 
 ## ⚠️ Kesalahan Umum
 
