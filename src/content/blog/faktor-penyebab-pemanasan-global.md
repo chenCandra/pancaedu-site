@@ -197,9 +197,54 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Di materi [Gas Rumah Kaca: Jenis dan Sumbernya](/materi/gas-rumah-kaca-jenis-dan-sumbernya) kita sudah bahas gas-gasnya. Sekarang kita lihat dari sudut pandang lain: **sektor kehidupan manusia apa saja yang jadi penyumbang terbesar?** Memahami ini penting supaya upaya pencegahan nanti bisa menyasar sektor yang paling berpengaruh, bukan asal-asalan.
+Coba perhatikan jalanan di depan rumahmu pas jam pulang sekolah atau jam pulang kantor -- macet, penuh motor dan mobil yang asapnya ngebul dari knalpot. Itu baru satu dari sekian banyak sumber gas rumah kaca di sekitar kita. Di materi [Gas Rumah Kaca: Jenis dan Sumbernya](/materi/gas-rumah-kaca-jenis-dan-sumbernya) kita sudah bahas gas-gasnya. Sekarang kita lihat dari sudut pandang lain: **sektor kehidupan manusia apa saja yang jadi penyumbang terbesar?** Memahami ini penting supaya upaya pencegahan nanti bisa menyasar sektor yang paling berpengaruh, bukan asal-asalan.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <ellipse cx="200" cy="55" rx="95" ry="38" fill="#e2e8f0"/>
+    <circle cx="150" cy="40" r="26" fill="#f1f5f9"/>
+    <circle cx="250" cy="40" r="30" fill="#f1f5f9"/>
+    <circle cx="200" cy="30" r="24" fill="#f8fafc"/>
+    <g>
+      <rect x="40" y="150" width="34" height="22" rx="3" fill="#ef4444"/>
+      <circle cx="50" cy="175" r="8" fill="#1f2937"/>
+      <circle cx="68" cy="175" r="8" fill="#1f2937"/>
+      <path d="M38 160 q-10 -4 -14 6 q-3 8 6 10" fill="#cbd5e1" opacity="0.8"/>
+    </g>
+    <path d="M28 150 Q40 110 60 105" stroke="#94a3b8" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <g>
+      <rect x="150" y="120" width="40" height="55" fill="#94a3b8"/>
+      <rect x="158" y="100" width="8" height="24" fill="#64748b"/>
+      <rect x="174" y="92" width="8" height="32" fill="#64748b"/>
+    </g>
+    <path d="M162 98 Q168 80 158 68" stroke="#cbd5e1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>
+    <path d="M178 88 Q185 68 174 55" stroke="#cbd5e1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>
+    <g>
+      <rect x="280" y="150" width="10" height="35" fill="#92400e"/>
+      <path d="M260 150 L285 110 L310 150 Z" fill="#fca5a5" opacity="0.5"/>
+      <path d="M255 150 L285 95 L315 150 Z" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="6 5"/>
+    </g>
+    <g stroke="#dc2626" stroke-width="3">
+      <line x1="270" y1="130" x2="300" y2="160"/>
+      <line x1="300" y1="130" x2="270" y2="160"/>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Tiga sumber utama: asap kendaraan, cerobong pabrik, dan penebangan hutan -- semuanya menambah gas rumah kaca ke langit yang sama.</p>
+</div>
 
 ## 🏭 Lima Sektor Penyumbang Terbesar
 
@@ -207,7 +252,7 @@ Di materi [Gas Rumah Kaca: Jenis dan Sumbernya](/materi/gas-rumah-kaca-jenis-dan
   <div class="mtr-step">
     <span class="mtr-step-num">1</span>
     <div class="mtr-step-body">
-      <p><strong>Transportasi.</strong> Kendaraan bermotor (mobil, motor, pesawat, kapal) yang membakar bensin/solar melepaskan CO2 dalam jumlah besar. Makin banyak kendaraan pribadi, makin besar kontribusinya.</p>
+      <p><strong>Transportasi.</strong> Kendaraan bermotor (mobil, motor, pesawat, kapal) yang membakar bensin/solar melepaskan CO2 dalam jumlah besar. Makin banyak kendaraan pribadi, makin besar kontribusinya -- jumlah sepeda motor di Indonesia saja sudah ratusan juta unit, dan hampir semuanya masih berbahan bakar bensin.</p>
     </div>
   </div>
   <div class="mtr-step">
@@ -225,7 +270,7 @@ Di materi [Gas Rumah Kaca: Jenis dan Sumbernya](/materi/gas-rumah-kaca-jenis-dan
   <div class="mtr-step">
     <span class="mtr-step-num">4</span>
     <div class="mtr-step-body">
-      <p><strong>Deforestasi.</strong> Penebangan hutan (untuk lahan sawit, tambang, atau permukiman) mengurangi jumlah pohon yang menyerap CO2 lewat fotosintesis -- makin sedikit hutan, makin banyak CO2 yang tertinggal di atmosfer.</p>
+      <p><strong>Deforestasi.</strong> Penebangan hutan (untuk lahan sawit, tambang, atau permukiman) mengurangi jumlah pohon yang menyerap CO2 lewat fotosintesis -- makin sedikit hutan, makin banyak CO2 yang tertinggal di atmosfer. Hutan Sumatra dan Kalimantan, yang sering disebut salah satu "paru-paru dunia", termasuk area yang paling cepat berkurang luasnya di dunia akibat ini.</p>
     </div>
   </div>
   <div class="mtr-step">

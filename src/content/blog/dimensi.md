@@ -210,7 +210,20 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
+
+Bayangkan dua anak menyebut benda yang sama dengan nama berbeda: satu bilang "newton", satu lagi bilang "kg·m/s²" -- padahal keduanya ngomongin gaya yang sama persis! Nama satuan bisa macam-macam dan kadang menipu (kelihatannya beda, padahal sama), tapi ada satu "bahasa rahasia" di balik semua besaran Fisika yang nggak peduli nama satuannya apa -- itu namanya **dimensi**, cara menunjukkan dari besaran pokok apa saja sebuah besaran itu sebenarnya "disusun".
 
 ## 🔎 Apa Itu Dimensi?
 
@@ -322,6 +335,34 @@ Massa memiliki dimensi [m] = M, percepatan memiliki dimensi [a] = LT⁻². Maka:
 <div class="mtr-formula">[F] = M × LT⁻² = MLT⁻²</div>
 
 Menariknya, dari sini kita juga dapat melihat asal satuan newton. Satuan gaya adalah N = kg·m/s², sedangkan dimensinya [F] = MLT⁻². Jadi, **newton adalah satuan, sedangkan MLT⁻² adalah dimensi.**
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="20" y="60" width="60" height="60" rx="10" fill="#60a5fa" stroke="#1e3a8a" stroke-width="3"/>
+    <text x="50" y="98" font-size="24" font-weight="800" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">M</text>
+    <text x="50" y="135" font-size="10" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">massa</text>
+  </g>
+  <text x="105" y="100" font-size="22" font-weight="800" fill="#92400e" text-anchor="middle">×</text>
+  <g>
+    <rect x="125" y="60" width="60" height="60" rx="10" fill="#fbbf24" stroke="#78350f" stroke-width="3"/>
+    <text x="155" y="98" font-size="20" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">L</text>
+    <text x="155" y="135" font-size="10" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">panjang</text>
+  </g>
+  <text x="200" y="100" font-size="20" font-weight="800" fill="#92400e" text-anchor="middle">T⁻²</text>
+  <text x="235" y="100" font-size="22" font-weight="800" fill="#92400e" text-anchor="middle">=</text>
+  <g>
+    <rect x="255" y="48" width="130" height="84" rx="12" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <text x="320" y="88" font-size="19" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif">MLT⁻²</text>
+    <text x="320" y="108" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Dimensi Gaya</text>
+    <text x="320" y="121" font-size="9" fill="#065f46" text-anchor="middle" font-family="sans-serif">(satuannya: newton)</text>
+  </g>
+  <circle cx="45" cy="52" r="3" fill="#1e3a8a"/>
+  <circle cx="55" cy="52" r="3" fill="#1e3a8a"/>
+  <path d="M40 44 Q50 38 60 44" stroke="#1e3a8a" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
+<p class="mtr-ilustrasi-caption">Balok dimensi massa dan panjang digabung (dengan waktu di penyebutnya) menjadi dimensi gaya MLT⁻².</p>
+</div>
 
 ### Tekanan
 

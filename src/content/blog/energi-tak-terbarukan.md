@@ -182,13 +182,51 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
-Di materi [Sumber Energi](/materi/sumber-energi), kita sudah kenalan sama klasifikasi terbarukan dan tak terbarukan. Sekarang kita bahas dulu kategori yang paling banyak dipakai dunia saat ini: **energi tak terbarukan**.
+Di materi [Sumber Energi](/materi/sumber-energi), kita sudah kenalan sama klasifikasi terbarukan dan tak terbarukan. Sekarang kita bahas dulu kategori yang paling banyak dipakai dunia saat ini: **energi tak terbarukan**. Setiap kali kalian naik motor dan mengisi bensin di pom bensin, atau tiap kali PLTU batu bara di suatu daerah menyalakan listrik buat jutaan rumah, kalian sedang memakai sumber energi dalam kategori ini -- sumber yang terbentuknya butuh waktu sangat lama, jauh lebih lama dari umur manusia.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(20,20)">
+      <ellipse cx="45" cy="95" rx="40" ry="12" fill="#1f2937"/>
+      <path d="M8 95 Q8 30 45 30 Q82 30 82 95 Z" fill="#374151"/>
+      <ellipse cx="45" cy="30" rx="37" ry="10" fill="#4b5563"/>
+      <rect x="30" y="45" width="30" height="8" rx="2" fill="#f59e0b"/>
+      <text x="45" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Batu Bara</text>
+    </g>
+    <g transform="translate(150,15)">
+      <path d="M20 10 H60 V28 H48 V95 Q48 105 38 105 H42 Q32 105 32 95 V28 H20 Z" fill="#6b7280"/>
+      <rect x="18" y="0" width="44" height="12" rx="3" fill="#374151"/>
+      <rect x="30" y="45" width="20" height="10" fill="#ef4444"/>
+      <text x="40" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Minyak Bumi</text>
+    </g>
+    <g transform="translate(260,25)">
+      <path d="M20 10 Q45 10 45 35 Q45 55 20 75 Q-5 55 -5 35 Q-5 10 20 10 Z" fill="#9ca3af" opacity="0.5" transform="rotate(90 20 42)"/>
+      <path d="M20 0 L45 32 L20 42 L-5 32 Z" fill="#60a5fa"/>
+      <path d="M20 42 L45 32 L20 85 L-5 32 Z" fill="#93c5fd"/>
+      <rect x="4" y="38" width="4" height="22" fill="#78350f"/>
+      <rect x="4" y="38" width="4" height="10" fill="#f59e0b"/>
+      <text x="20" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Pasir Waktu</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Batu bara dan minyak bumi terbentuk dalam jutaan tahun, sementara manusia bisa menghabiskannya jauh lebih cepat -- seperti pasir waktu yang terus berkurang.</p>
+</div>
 
 ## ⛏️ Bahan Bakar Fosil
 
-Tiga jenis bahan bakar fosil yang paling umum sama-sama berasal dari sisa makhluk hidup purba yang terkubur, mengalami tekanan dan panas selama jutaan tahun.
+Tiga jenis bahan bakar fosil yang paling umum sama-sama berasal dari sisa makhluk hidup purba yang terkubur, mengalami tekanan dan panas selama jutaan tahun. Tabung gas LPG 3 kg warna hijau yang biasa dipakai ibu kalian masak di rumah, bensin yang diisi ke motor di pom bensin, sampai listrik dari PLTU yang menyalakan rumah -- ketiganya berakar dari proses yang sama ini, cuma hasil olahannya beda-beda.
 
 <div class="mtr-cards">
 <div class="mtr-cards-grid">
@@ -216,7 +254,11 @@ Tiga jenis bahan bakar fosil yang paling umum sama-sama berasal dari sisa makhlu
 
 ## ☢️ Energi Nuklir
 
-Berbeda dari bahan bakar fosil, energi nuklir tidak "dibakar" -- energi nuklir dilepas lewat reaksi **fisi** (pembelahan inti atom), biasanya memakai uranium sebagai bahan bakarnya. Reaktor nuklir memanfaatkan panas dari reaksi ini untuk menggerakkan turbin dan menghasilkan listrik, mirip prinsip PLTU tapi sumber panasnya berbeda.
+Berbeda dari bahan bakar fosil, energi nuklir tidak "dibakar" -- energi nuklir dilepas lewat reaksi **fisi** (pembelahan inti atom), biasanya memakai uranium sebagai bahan bakarnya. Reaktor nuklir memanfaatkan panas dari reaksi ini untuk menggerakkan turbin dan menghasilkan listrik, mirip prinsip PLTU tapi sumber panasnya berbeda -- cuma beda "apa yang dipanaskan", batu bara dibakar langsung, uranium dibelah intinya.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Energinya jauh lebih padat -- segenggam uranium bisa menghasilkan energi listrik setara ribuan ton batu bara. Itu sebabnya satu PLTN bisa menyuplai listrik untuk sebuah kota besar hanya dengan bahan bakar dalam jumlah yang relatif kecil.</p>
+</div>
 
 <div class="mtr-note">
 ⚠️ Energi nuklir digolongkan tak terbarukan karena bahan bakarnya (uranium) tetap sumber daya tambang yang terbatas jumlahnya di alam -- meskipun energi yang dilepas per kilogram bahan bakarnya jauh lebih besar dibanding fosil.

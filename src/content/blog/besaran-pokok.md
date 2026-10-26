@@ -167,6 +167,17 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
 Di materi [Besaran dan Satuan](/materi/besaran-dan-satuan), kamu sudah kenalan sama definisi besaran, satuan, dan kenapa dunia butuh satuan baku. Sekarang kita masuk lebih dalam ke salah satu kelompok besaran yang jadi fondasi semuanya: **besaran pokok**.
@@ -200,6 +211,51 @@ Nah, dari berbagai besaran yang ada dalam Fisika, terdapat beberapa besaran yang
 </div>
 
 Ada **7 besaran pokok dalam SI**. Mari kita kenalan satu per satu.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="10" y="60" width="38" height="10" rx="3" fill="#fbbf24" stroke="#78350f" stroke-width="2"/>
+    <text x="29" y="90" font-size="18" text-anchor="middle">📏</text>
+    <text x="29" y="112" font-size="9" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panjang</text>
+  </g>
+  <g>
+    <circle cx="80" cy="65" r="18" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="80" y="72" font-size="16" text-anchor="middle">⚖️</text>
+    <text x="80" y="112" font-size="9" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">Massa</text>
+  </g>
+  <g>
+    <circle cx="140" cy="65" r="18" fill="#f87171" stroke="#991b1b" stroke-width="2"/>
+    <text x="140" y="72" font-size="16" text-anchor="middle">⏱️</text>
+    <text x="140" y="112" font-size="9" font-weight="700" fill="#991b1b" text-anchor="middle" font-family="sans-serif">Waktu</text>
+  </g>
+  <g>
+    <rect x="182" y="47" width="36" height="36" rx="8" fill="#c4b5fd" stroke="#4c1d95" stroke-width="2"/>
+    <text x="200" y="72" font-size="16" text-anchor="middle">🔌</text>
+    <text x="200" y="112" font-size="8.5" font-weight="700" fill="#4c1d95" text-anchor="middle" font-family="sans-serif">Kuat Arus</text>
+  </g>
+  <g>
+    <rect x="242" y="47" width="36" height="36" rx="18" fill="#6ee7b7" stroke="#065f46" stroke-width="2"/>
+    <text x="260" y="72" font-size="16" text-anchor="middle">🌡️</text>
+    <text x="260" y="112" font-size="9" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Suhu</text>
+  </g>
+  <g>
+    <circle cx="320" cy="65" r="18" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="320" y="72" font-size="16" text-anchor="middle">🧪</text>
+    <text x="320" y="112" font-size="8" font-weight="700" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">Jumlah Zat</text>
+  </g>
+  <g>
+    <circle cx="372" cy="65" r="18" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+    <text x="372" y="72" font-size="16" text-anchor="middle">💡</text>
+    <text x="372" y="112" font-size="8" font-weight="700" fill="#92400e" text-anchor="middle" font-family="sans-serif">Intensitas</text>
+    <text x="372" y="123" font-size="8" font-weight="700" fill="#92400e" text-anchor="middle" font-family="sans-serif">Cahaya</text>
+  </g>
+  <text x="200" y="22" font-size="13" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">7 Besaran Pokok -- "Alfabet" Fisika</text>
+  <path d="M10 140 H390" stroke="#fcd34d" stroke-width="2" stroke-dasharray="3 3"/>
+  <text x="200" y="160" font-size="10" fill="#92400e" text-anchor="middle" font-family="sans-serif">Dari 7 ini, semua besaran turunan lain bisa dibentuk</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Tujuh besaran pokok SI, "bahan dasar" penyusun seluruh besaran Fisika lainnya.</p>
+</div>
 
 ## 📏 Tujuh Besaran Pokok, Satu per Satu
 

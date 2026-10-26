@@ -209,6 +209,17 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
 Materi sebelumnya kita sudah kenalan dengan besaran pokok dan besaran turunan. Sekarang kita masuk ke bagian yang lebih praktis: bagaimana besaran-besaran itu benar-benar diukur, dan yang lebih penting lagi -- bagaimana cara **melaporkan** hasil pengukurannya dengan jujur soal seberapa teliti hasil itu.
@@ -248,6 +259,34 @@ Kalau cuma diukur sekali, hasilnya rawan dipengaruhi **kesalahan acak (random er
 Solusinya: ukur besaran yang sama **beberapa kali**, lalu olah datanya. Dengan begitu, kesalahan acak yang kadang bikin hasil lebih besar dan kadang lebih kecil akan saling menutupi, dan kita dapat gambaran yang lebih dapat dipercaya soal nilai sebenarnya.
 
 ~~Kalau sudah diulang 5 kali, hasil yang dipakai adalah yang paling sering muncul~~ → bukan begitu caranya. Yang dihitung adalah **rata-rata** dari semua data, bukan modus (nilai yang paling sering muncul).
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+  <line x1="30" y1="90" x2="370" y2="90" stroke="#92400e" stroke-width="3"/>
+  <g stroke="#92400e" stroke-width="2">
+    <line x1="170" y1="83" x2="170" y2="97"/>
+    <line x1="200" y1="83" x2="200" y2="97"/>
+    <line x1="230" y1="83" x2="230" y2="97"/>
+  </g>
+  <circle cx="178" cy="55" r="9" fill="#f87171" stroke="#7f1d1d" stroke-width="2"/>
+  <line x1="178" y1="64" x2="178" y2="90" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="178" y="42" font-size="10" font-weight="700" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">120,2</text>
+  <circle cx="208" cy="55" r="9" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
+  <line x1="208" y1="64" x2="208" y2="90" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="208" y="42" font-size="10" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">120,4</text>
+  <circle cx="190" cy="55" r="9" fill="#fbbf24" stroke="#78350f" stroke-width="2"/>
+  <line x1="190" y1="64" x2="190" y2="90" stroke="#78350f" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="190" y="25" font-size="10" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">120,1</text>
+  <path d="M30 120 H370" stroke="#fcd34d" stroke-width="2" stroke-dasharray="2 3"/>
+  <g>
+    <rect x="140" y="128" width="120" height="34" rx="8" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <text x="200" y="150" font-size="14" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif">x̄ = (120,3 ± 0,1) cm</text>
+  </g>
+  <path d="M200 97 L200 126" stroke="#065f46" stroke-width="2.5" stroke-dasharray="2 2"/>
+  <text x="200" y="12" font-size="12" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">3 kali ukur, hasilnya sedikit beda-beda</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Tiga kali pengukuran yang sedikit berbeda dirata-ratakan jadi satu hasil akhir yang lebih bisa dipercaya.</p>
+</div>
 
 ## 🧮 Cara Melaporkan Pengukuran Berulang
 

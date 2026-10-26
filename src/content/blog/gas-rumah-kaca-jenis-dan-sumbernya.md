@@ -176,9 +176,52 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Di materi [Pemanasan Global](/materi/pemanasan-global) kita sudah paham mekanisme efek rumah kaca secara umum. Sekarang kita bedah lebih detail: **gas rumah kaca itu ada berapa jenis, dan dari mana masing-masing berasal?** Ternyata tidak semua sama -- ada yang jumlahnya banyak tapi "kekuatannya" biasa saja, ada yang jumlahnya sedikit tapi daya rusaknya luar biasa.
+Di materi [Pemanasan Global](/materi/pemanasan-global) kita sudah paham mekanisme efek rumah kaca secara umum -- ingat analogi mobil yang dijemur dengan kaca tertutup? Panas matahari masuk gampang, tapi susah keluar lagi. Sekarang kita bedah lebih detail: **gas rumah kaca itu ada berapa jenis, dan dari mana masing-masing berasal?** Ternyata tidak semua sama -- ada yang jumlahnya banyak tapi "kekuatannya" biasa saja, ada yang jumlahnya sedikit tapi daya rusaknya luar biasa, mirip bedanya antara banyak orang teriak pelan vs segelintir orang teriak lewat toa.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <circle cx="50" cy="40" r="22" fill="#fbbf24"/>
+    <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <line x1="50" y1="10" x2="50" y2="4"/>
+      <line x1="22" y1="40" x2="16" y2="40"/>
+      <line x1="30" y1="20" x2="25" y2="15"/>
+    </g>
+    <g stroke="#fde68a" stroke-width="3" stroke-linecap="round">
+      <line x1="75" y1="50" x2="130" y2="90"/>
+      <line x1="70" y1="65" x2="125" y2="100"/>
+      <line x1="65" y1="80" x2="120" y2="112"/>
+    </g>
+    <polygon points="20,190 20,100 380,100 380,190" fill="#dbeafe" opacity="0.5"/>
+    <rect x="20" y="95" width="360" height="8" fill="#93c5fd"/>
+    <path d="M30 190 L30 115 L370 115 L370 190" fill="none" stroke="#3b82f6" stroke-width="3"/>
+    <rect x="130" y="190" width="30" height="20" fill="#fde68a"/>
+    <polygon points="125,190 165,190 145,172" fill="#b45309"/>
+    <circle cx="200" cy="140" r="16" fill="#fca5a5" stroke="#dc2626" stroke-width="2"/>
+    <text x="200" y="145" font-size="12" font-weight="700" text-anchor="middle" fill="#7f1d1d" font-family="sans-serif">CO2</text>
+    <circle cx="260" cy="165" r="14" fill="#a7f3d0" stroke="#059669" stroke-width="2"/>
+    <text x="260" y="169" font-size="11" font-weight="700" text-anchor="middle" fill="#064e3b" font-family="sans-serif">CH4</text>
+    <circle cx="300" cy="130" r="10" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+    <g stroke="#f97316" stroke-width="3" stroke-linecap="round">
+      <path d="M150 95 q6 -10 12 0" transform="translate(0,-6)"/>
+      <path d="M250 95 q6 -10 12 0" transform="translate(0,-6)"/>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Rumah kaca mini: sinar matahari masuk dengan mudah, tapi molekul CO2 dan CH4 di "atap" menahan sebagian panasnya supaya tidak lolos keluar.</p>
+</div>
 
 ## 💨 Enam Jenis Gas Rumah Kaca Utama
 
@@ -213,7 +256,7 @@ Poin penting yang sering terlewat: kekuatan gas rumah kaca tidak diukur dari JUM
 </div>
 </div>
 
-Inilah kenapa mengurangi gas fluorinasi (misalnya lewat penanganan freon AC/kulkas bekas yang benar) bisa berdampak besar meski jumlahnya kecil dibanding CO2.
+Inilah kenapa mengurangi gas fluorinasi (misalnya lewat penanganan freon AC/kulkas bekas yang benar) bisa berdampak besar meski jumlahnya kecil dibanding CO2. Makanya kalau AC atau kulkas di rumahmu rusak dan mau dibuang, usahakan jangan asal dibongkar sendiri -- minta tolong teknisi yang bisa menangani freonnya dengan benar, bukan dilepas begitu saja ke udara.
 
 ## ⚠️ Kesalahan Umum
 

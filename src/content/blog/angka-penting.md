@@ -210,9 +210,55 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
+Pernah pakai kalkulator buat bagi dua angka, dan hasilnya keluar sepanjang "2,3333333333333"? Kalau itu kamu tulis semua di jawaban ulangan, gurumu mungkin malah mencoret sebagian besar digitnya -- bukan karena kalkulatornya salah, tapi karena menulis angka SEBANYAK itu justru dianggap "bohong" soal ketelitian hasil ukur aslinya. Nah, aturan yang menentukan "sampai angka ke berapa yang boleh jujur dituliskan" itulah yang disebut **angka penting**.
+
 Setiap kali kita mengukur sesuatu -- panjang meja, massa benda, suhu ruangan -- hasilnya tidak pernah 100% pasti sampai tak terhingga angka di belakang koma. Ada batas ketelitian yang ditentukan oleh alat ukurnya. Nah, angka penting adalah cara kita menuliskan hasil pengukuran itu supaya jujur soal seberapa teliti alat yang dipakai -- tidak kurang, tidak juga dilebih-lebihkan.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="20" width="140" height="150" rx="14" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+  <rect x="55" y="35" width="110" height="34" rx="6" fill="#0f172a"/>
+  <text x="110" y="58" font-size="20" font-weight="700" font-family="'Courier New', monospace" text-anchor="middle">
+    <tspan fill="#86efac">2,3</tspan><tspan fill="#f87171">333333</tspan>
+  </text>
+  <g fill="#e2e8f0">
+    <rect x="58" y="80" width="24" height="18" rx="3"/>
+    <rect x="88" y="80" width="24" height="18" rx="3"/>
+    <rect x="118" y="80" width="24" height="18" rx="3"/>
+    <rect x="148" y="80" width="24" height="18" rx="3"/>
+    <rect x="58" y="104" width="24" height="18" rx="3"/>
+    <rect x="88" y="104" width="24" height="18" rx="3"/>
+    <rect x="118" y="104" width="24" height="18" rx="3"/>
+    <rect x="148" y="104" width="24" height="18" rx="3"/>
+    <rect x="58" y="128" width="114" height="18" rx="3" fill="#fbbf24"/>
+  </g>
+  <circle cx="70" cy="22" r="3" fill="#0f172a"/>
+  <circle cx="150" cy="22" r="3" fill="#0f172a"/>
+  <path d="M90 14 Q110 6 130 14" stroke="#0f172a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g>
+    <path d="M220 60 Q260 40 260 85 Q260 120 230 120 Q200 120 200 90 Q200 65 220 60 Z" fill="none" stroke="#78350f" stroke-width="5"/>
+    <circle cx="228" cy="88" r="32" fill="none" stroke="#78350f" stroke-width="5"/>
+    <line x1="250" y1="110" x2="275" y2="135" stroke="#78350f" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="330" y="80" font-size="30" font-weight="800" fill="#16a34a" text-anchor="middle" font-family="sans-serif">2,3</text>
+  <text x="330" y="110" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">dipertahankan</text>
+  <text x="330" y="145" font-size="11" fill="#b91c1c" text-anchor="middle" font-family="sans-serif">sisanya dibuang</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Kalkulator jujur menghitung semua digit, tapi angka penting menentukan mana yang boleh "dipercaya".</p>
+</div>
 
 ## 🔎 Apa Itu Angka Penting?
 

@@ -180,9 +180,20 @@ draft: false
   margin-block: 1rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
-Kalian mendorong meja, menyalakan lampu, atau berlari mengejar bus -- semuanya butuh sesuatu yang sama: **energi**. Kata ini dipakai hampir setiap hari, tapi coba tanyakan ke diri sendiri: sebenarnya, apa sih energi itu?
+Kenapa kamu laper berat abis main futsal 2 jam, padahal cuma lari-lari ngejar bola? Kenapa HP yang baterainya 100% pagi-pagi bisa "kosong" sorenya gara-gara dipakai nonton video terus? Kenapa motor matic berhenti kalau tangki bensinnya kering, meski mesinnya masih utuh dan sehat? Semua pertanyaan itu jawabannya sama: **energi**. Kalian sudah pakai kata ini hampir tiap hari -- "aku lagi nggak ada energi", "hemat energi dong lampunya" -- tapi coba tanyakan ke diri sendiri: sebenarnya, apa sih energi itu, secara fisika?
 
 ## 🔎 Apa Itu Energi?
 
@@ -190,9 +201,41 @@ Kalian mendorong meja, menyalakan lampu, atau berlari mengejar bus -- semuanya b
 💡 <strong>Energi</strong> adalah kemampuan untuk melakukan usaha (kerja).
 </div>
 
-Kalau sesuatu punya energi, artinya ia *berpotensi* menggerakkan, memanaskan, menerangi, atau mengubah sesuatu yang lain. Air yang mengalir punya energi karena bisa memutar turbin. Baterai punya energi karena bisa menyalakan lampu. Makanan punya energi karena bisa "diubah" tubuh kalian jadi tenaga buat bergerak.
+Kalau sesuatu punya energi, artinya ia *berpotensi* menggerakkan, memanaskan, menerangi, atau mengubah sesuatu yang lain. Air yang mengalir di sungai punya energi karena bisa memutar turbin PLTA. Baterai power bank punya energi karena bisa mengisi ulang HP kalian yang hampir mati. Semangkuk nasi dan lauk yang kalian makan siang punya energi karena bisa "diubah" tubuh kalian jadi tenaga buat lari, mikir, bahkan sekadar bernapas.
 
-~~Energi cuma soal benda yang bergerak cepat~~ → tidak selalu. Batu yang diam di atas tebing juga punya energi (tersimpan, siap "dipakai" kalau jatuh) -- kita akan bahas ini lebih detail di materi [Bentuk-bentuk Energi](/materi/mengenal-ragam-energi).
+~~Energi cuma soal benda yang bergerak cepat~~ → tidak selalu. Batu yang diam di tepi tebing juga punya energi (tersimpan, siap "dipakai" kalau jatuh), begitu juga power bank yang tergeletak diam di laci kamar kalian -- energinya tetap ada, cuma belum dipakai. Kita akan bahas ini lebih detail di materi [Bentuk-bentuk Energi](/materi/mengenal-ragam-energi).
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="70" cy="70" r="38" fill="#fbbf24"/>
+    <g stroke="#f59e0b" stroke-width="5" stroke-linecap="round">
+      <line x1="70" y1="18" x2="70" y2="4"/>
+      <line x1="70" y1="122" x2="70" y2="136"/>
+      <line x1="18" y1="70" x2="4" y2="70"/>
+      <line x1="122" y1="70" x2="136" y2="70"/>
+      <line x1="32" y1="32" x2="22" y2="22"/>
+      <line x1="108" y1="32" x2="118" y2="22"/>
+      <line x1="32" y1="108" x2="22" y2="118"/>
+      <line x1="108" y1="108" x2="118" y2="118"/>
+    </g>
+    <circle cx="58" cy="62" r="4" fill="#78350f"/>
+    <circle cx="82" cy="62" r="4" fill="#78350f"/>
+    <path d="M55 82 Q70 94 85 82" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="170" y="40" width="55" height="90" rx="8" fill="#22c55e"/>
+    <rect x="188" y="28" width="19" height="14" rx="3" fill="#16a34a"/>
+    <rect x="180" y="58" width="39" height="16" rx="3" fill="#fff"/>
+    <rect x="180" y="82" width="25" height="16" rx="3" fill="#fff"/>
+    <text x="197" y="125" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" font-family="sans-serif">⚡</text>
+    <circle cx="320" cy="60" r="20" fill="#fde68a"/>
+    <circle cx="320" cy="60" r="15" fill="#f8a65d"/>
+    <path d="M300 100 Q320 85 340 100 L336 150 Q320 160 304 150 Z" fill="#3b82f6"/>
+    <path d="M290 115 L300 100 L304 150 Z" fill="#60a5fa"/>
+    <path d="M350 115 L340 100 L336 150 Z" fill="#60a5fa"/>
+    <path d="M300 102 Q288 140 282 155" stroke="#1e3a8a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M340 102 Q354 130 362 150" stroke="#1e3a8a" stroke-width="6" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Energi hadir dalam banyak wujud: matahari (cahaya &amp; panas), power bank (kimia), dan orang berlari (gerak).</p>
+</div>
 
 ## ⚖️ Satuan Energi
 
@@ -200,10 +243,14 @@ Satuan SI untuk energi adalah **joule (J)**, diambil dari nama fisikawan James P
 
 <div class="mtr-formula">1 J = 1 kg·m²/s²</div>
 
-Di kehidupan sehari-hari, kalian mungkin lebih sering dengar satuan lain seperti **kalori** (buat energi makanan) atau **kWh** (buat energi listrik) -- keduanya sebenarnya cuma satuan alternatif untuk besaran yang sama, bisa dikonversi ke joule.
+Di kehidupan sehari-hari, kalian mungkin lebih sering dengar satuan lain seperti **kalori** (buat energi makanan) atau **kWh** (buat energi listrik) -- keduanya sebenarnya cuma satuan alternatif untuk besaran yang sama, bisa dikonversi ke joule. Coba cek bungkus biskuit atau mi instan di rumah, pasti ada tulisan "XXX kkal" di label gizinya -- itu energi yang bakal kalian dapat kalau memakannya. Begitu juga tagihan listrik PLN di rumah, satuannya kWh, bukan joule, meski pada dasarnya sama-sama energi.
 
 <div class="mtr-note">
 🔗 Ingat lagi materi <a href="/materi/besaran-turunan">Besaran Turunan</a>? Energi adalah salah satu contohnya -- terbentuk dari kombinasi besaran pokok massa, panjang, dan waktu.
+</div>
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> 1 kWh (satuan di tagihan listrik PLN) itu setara 3.600.000 J! Angka di joule kelihatan sangat besar karena joule memang satuan yang "kecil" -- itu kenapa buat energi listrik rumahan, orang lebih suka pakai kWh yang angkanya lebih masuk akal.</p>
 </div>
 
 ## 📐 Energi Itu Besaran Skalar
@@ -220,7 +267,7 @@ Ini salah satu hukum paling fundamental dalam Fisika, bahkan berlaku di semua ca
 ♻️ <strong>Hukum Kekekalan Energi:</strong> energi tidak dapat diciptakan atau dimusnahkan -- energi cuma bisa berubah dari satu bentuk ke bentuk lain, atau berpindah dari satu benda/sistem ke benda/sistem lain.
 </div>
 
-Artinya, energi total di alam semesta ini jumlahnya **tetap**. Yang berubah cuma bentuknya -- energi kimia dalam makanan berubah jadi energi gerak saat kalian berlari, energi listrik berubah jadi energi cahaya dan panas di lampu, dan seterusnya. Perubahan bentuk energi ini akan kita bahas tuntas di materi [Perubahan Energi](/materi/perubahan-energi).
+Artinya, energi total di alam semesta ini jumlahnya **tetap**. Yang berubah cuma bentuknya -- energi kimia dalam makanan berubah jadi energi gerak saat kalian berlari, energi listrik PLN berubah jadi energi cahaya dan panas begitu lampu kamar kalian dinyalakan, energi kimia dalam bensin berubah jadi energi gerak begitu motor matic digas. Perubahan bentuk energi ini akan kita bahas tuntas di materi [Perubahan Energi](/materi/perubahan-energi).
 
 <div class="mtr-note">
 ⚠️ <strong>Ini bukan berarti energi tidak pernah "hilang" dalam artian sehari-hari.</strong> Kalau bola menggelinding lalu berhenti karena gesekan, energi geraknya tidak lenyap -- ia berubah jadi energi panas (kalor) akibat gesekan, cuma bentuknya jadi kurang "berguna" buat kita.

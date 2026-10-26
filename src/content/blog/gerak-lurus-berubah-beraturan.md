@@ -162,16 +162,121 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. Skrip SENGAJA ditulis tanpa baris kosong
+   sama sekali: markdown parser situs ini tidak kebal baris kosong di dalam
+   <script>, baris kosong bikin parser balik ke mode markdown di tengah
+   kode JS dan merusaknya. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+
 </style>
 
 Kalau di materi [Gerak Lurus Beraturan (GLB)](/materi/gerak-lurus-beraturan) kecepatannya konstan, sekarang kita bahas kebalikannya: gerak lurus yang kecepatannya **berubah secara teratur** -- disebut **Gerak Lurus Berubah Beraturan (GLBB)**.
 
 ## 🏎️ Apa itu GLBB?
 
+Bayangin kamu naik motor, berhenti di lampu merah. Begitu lampu hijau, kamu putar gas -- motor nggak langsung ngebut 40 km/jam dalam sekejap, tapi kecepatannya NAIK SEDIKIT-SEDIKIT secara teratur: dari 0, ke 5, ke 10, ke 15 km/jam, dan seterusnya. Begitu juga kebalikannya: saat kamu lihat lampu merah dari jauh dan mulai mengerem, kecepatan motor TURUN sedikit-sedikit secara teratur sampai berhenti. Kedua situasi itu contoh **Gerak Lurus Berubah Beraturan (GLBB)**.
+
 GLBB adalah gerak pada lintasan lurus dengan **percepatan konstan** (tetap) -- artinya kecepatan benda berubah dengan laju yang sama setiap detiknya. GLBB ada dua jenis:
 
-- **GLBB dipercepat**: percepatan (a) SEARAH dengan kecepatan (v), sehingga kelajuan benda makin lama makin besar. Contoh: mobil yang menginjak gas dari posisi diam.
-- **GLBB diperlambat**: percepatan (a) BERLAWANAN ARAH dengan kecepatan (v), sehingga kelajuan benda makin lama makin kecil (bisa sampai berhenti). Contoh: mobil yang mengerem.
+- **GLBB dipercepat**: percepatan (a) SEARAH dengan kecepatan (v), sehingga kelajuan benda makin lama makin besar. Contoh: motor yang digas dari posisi diam di lampu merah.
+- **GLBB diperlambat**: percepatan (a) BERLAWANAN ARAH dengan kecepatan (v), sehingga kelajuan benda makin lama makin kecil (bisa sampai berhenti). Contoh: mobil yang mengerem mendekati lampu merah.
+
+Coba sendiri lewat widget di bawah -- atur kecepatan awal dan percepatannya, lihat mobilnya makin cepat atau makin lambat, dan perhatikan grafik kecepatan-waktu (v-t) yang ikut berubah kemiringannya:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Atur kecepatan awal dan percepatannya -- lihat mobil makin cepat/lambat, dan grafik kecepatan-waktu (v-t) berubah kemiringannya:</p>
+  <canvas id="glbbCanvas" width="640" height="300" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <input type="range" id="glbbV0Slider" min="0" max="15" step="1" value="5" style="width:100%;margin-top:10px;accent-color:#3b82f6;">
+  <p class="mtr-mini-label" style="margin-top:2px;">Kecepatan awal (v&#8320;): <strong id="glbbV0Label">5</strong> m/s</p>
+  <input type="range" id="glbbASlider" min="-5" max="5" step="0.5" value="2" style="width:100%;margin-top:6px;accent-color:#f2760a;">
+  <p class="mtr-mini-label">Percepatan (a): <strong id="glbbALabel">2</strong> m/s&sup2; &middot; Kecepatan saat ini: <strong id="glbbVLabel">5,0</strong> m/s</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('glbbCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var v0Slider = document.getElementById('glbbV0Slider');
+  var aSlider = document.getElementById('glbbASlider');
+  var v0Label = document.getElementById('glbbV0Label');
+  var aLabel = document.getElementById('glbbALabel');
+  var vLabel = document.getElementById('glbbVLabel');
+  var w = canvas.width, h = canvas.height;
+  var roadY = 95, roadX1 = 40, roadX2 = 600;
+  var gx = 60, gy = 190, gw = 520, gh = 85;
+  var elapsed = 0, jarak = 0, stopTime = 0, lastTime = null;
+  function gambarMobil(cx, cy) {
+    ctx.save(); ctx.translate(cx, cy);
+    ctx.fillStyle = '#16a34a';
+    ctx.beginPath(); ctx.moveTo(-22, 10); ctx.lineTo(-16, -8); ctx.lineTo(10, -8); ctx.lineTo(22, 2); ctx.lineTo(22, 10); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#eaf6ff'; ctx.beginPath(); ctx.moveTo(-12, -8); ctx.lineTo(-6, -17); ctx.lineTo(8, -17); ctx.lineTo(10, -8); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.stroke();
+    ctx.fillStyle = '#26243b';
+    ctx.beginPath(); ctx.arc(-13, 11, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(14, 11, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function draw(now) {
+    if (lastTime === null) lastTime = now;
+    var dt = (now - lastTime) / 1000;
+    lastTime = now;
+    var v0 = parseFloat(v0Slider.value);
+    var a = parseFloat(aSlider.value);
+    elapsed += dt;
+    var v = v0 + a * elapsed;
+    if (v < 0) v = 0;
+    jarak += v * dt;
+    if (v <= 0.05) stopTime += dt; else stopTime = 0;
+    if (jarak >= 100 || stopTime > 1.2) { elapsed = 0; jarak = 0; stopTime = 0; v = v0; }
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#cbb892'; ctx.lineWidth = 3; ctx.setLineDash([14, 10]);
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 22); ctx.lineTo(roadX2, roadY + 22); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 36); ctx.lineTo(roadX2, roadY + 36); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 8); ctx.lineTo(roadX2, roadY + 8); ctx.stroke();
+    var carX = roadX1 + (jarak / 100) * (roadX2 - roadX1);
+    gambarMobil(carX, roadY);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy + gh); ctx.lineTo(gx + gw, gy + gh); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('v (m/s)', gx - 6, gy + 6);
+    ctx.textAlign = 'center';
+    ctx.fillText('t (s)', gx + gw, gy + gh + 16);
+    var vAwal = v0, vAkhir = v0 + a * 5;
+    var yMax = Math.max(vAwal, vAkhir, 0) + 5;
+    var yMin = Math.min(vAwal, vAkhir, 0) - 5;
+    var skalaY = gh / (yMax - yMin);
+    var yNol = gy + gh - (0 - yMin) * skalaY;
+    ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(gx, yNol); ctx.lineTo(gx + gw, yNol); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#f2760a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(gx, gy + gh - (vAwal - yMin) * skalaY);
+    ctx.lineTo(gx + gw, gy + gh - (vAkhir - yMin) * skalaY);
+    ctx.stroke();
+    v0Label.textContent = v0;
+    aLabel.textContent = a;
+    vLabel.textContent = v.toFixed(1);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
 
 ## 📐 Rumus GLBB
 
@@ -219,6 +324,8 @@ Gerak jatuh bebas (benda dijatuhkan tanpa kecepatan awal, cuma dipengaruhi gravi
 </table>
 </div>
 </div>
+
+Perhatikan lagi widget di atas: kalau percepatannya positif, garis v-t-nya naik ke kanan atas; kalau negatif (mengerem), garisnya justru turun -- dan begitu kecepatannya mencapai nol, mobilnya langsung berhenti bergerak.
 
 Coba sendiri di simulasi di bawah -- pilih mode GLBB, atur kecepatan awal dan percepatannya, lalu bandingkan bentuk ketiga grafiknya dengan GLB.
 

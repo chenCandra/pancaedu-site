@@ -239,6 +239,17 @@ draft: false
 
 .mtr-report h4:first-child { margin-top: 0; }
 .mtr-report p, .mtr-report li { color: var(--ink-soft); font-size: 0.9375rem; }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
 Di materi [Hakikat Fisika & Metode Ilmiah](/materi/hakikat-fisika-dan-metode-ilmiah), kalian sudah kenalan sama 6 langkah metode ilmiah -- dari identifikasi masalah sampai kesimpulan. Kalian juga sudah kenalan sama [Keselamatan Kerja di Laboratorium](/materi/keselamatan-kerja-di-laboratorium) sebelum praktikum. Sekarang kita masuk lebih dalam ke satu langkah yang sering dianggap paling ribet: **merancang dan melakukan penyelidikan (penelitian) itu sendiri**. Ternyata ada bagian-bagian pentingnya yang harus disiapkan matang-matang sebelum eksperimen dimulai.
@@ -248,6 +259,39 @@ Di materi [Hakikat Fisika & Metode Ilmiah](/materi/hakikat-fisika-dan-metode-ilm
 ~~Penyelidikan ilmiah itu ya tinggal coba-coba aja sampai ketemu hasilnya~~ → kalau begitu, hasilnya susah dipercaya dan susah diulang orang lain. Penyelidikan yang baik itu **dirancang dulu** sebelum dilakukan -- supaya jelas apa yang mau diubah, apa yang mau diukur, dan apa yang harus dijaga tetap sama.
 
 Itulah bedanya eksperimen ilmiah dengan sekadar "coba-coba lihat hasilnya" -- ada rancangan yang membuat hasilnya bisa dipertanggungjawabkan.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="10" y="40" width="100" height="80" rx="14" fill="#93c5fd" stroke="#1e3a8a" stroke-width="3"/>
+    <text x="60" y="75" font-size="26" text-anchor="middle">💭</text>
+    <text x="60" y="100" font-size="11" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">Hipotesis</text>
+    <text x="60" y="112" font-size="8" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">(dugaan awal)</text>
+  </g>
+  <path d="M118 80 L148 80" stroke="#92400e" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow1)"/>
+  <g>
+    <rect x="150" y="40" width="100" height="80" rx="14" fill="#fca5a5" stroke="#7f1d1d" stroke-width="3"/>
+    <text x="200" y="75" font-size="26" text-anchor="middle">🧪</text>
+    <text x="200" y="100" font-size="11" font-weight="700" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">Eksperimen</text>
+    <text x="200" y="112" font-size="8" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">(coba & ukur)</text>
+  </g>
+  <path d="M258 80 L288 80" stroke="#92400e" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow1)"/>
+  <g>
+    <rect x="290" y="40" width="100" height="80" rx="14" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <text x="340" y="75" font-size="26" text-anchor="middle">✅</text>
+    <text x="340" y="100" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Kesimpulan</text>
+    <text x="340" y="112" font-size="8" fill="#065f46" text-anchor="middle" font-family="sans-serif">(jawaban final)</text>
+  </g>
+  <defs>
+    <marker id="arrow1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#92400e"/>
+    </marker>
+  </defs>
+  <text x="200" y="20" font-size="12" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">Dirancang dulu, baru dijalankan berurutan</text>
+  <text x="200" y="150" font-size="9" fill="#92400e" text-anchor="middle" font-family="sans-serif">Bukan sekadar coba-coba tanpa arah!</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Penyelidikan ilmiah berjalan terarah: dugaan dulu, dibuktikan lewat eksperimen, baru ditarik kesimpulan.</p>
+</div>
 
 ## 🔀 Variabel dalam Penyelidikan Ilmiah
 

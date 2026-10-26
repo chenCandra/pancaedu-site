@@ -161,9 +161,58 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Setelah melihat betapa besarnya dampak pemanasan global -- dari keseharian kita sampai skala bumi -- kabar baiknya: **dunia tidak diam saja.** Sudah ada upaya nyata bertahun-tahun, dari perjanjian antarnegara sampai kebijakan dalam negeri.
+Setelah melihat betapa besarnya dampak pemanasan global -- dari keseharian kita sampai skala bumi -- kabar baiknya: **dunia tidak diam saja.** Bayangkan ratusan perwakilan negara, dari yang kaya sampai yang masih berkembang seperti Indonesia, duduk satu meja dan sepakat soal target yang sama. Itu bukan hal mudah, tapi sudah terjadi bertahun-tahun -- dari perjanjian antarnegara sampai kebijakan dalam negeri.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <circle cx="70" cy="60" r="24" fill="#fde68a"/>
+    <g stroke="#f59e0b" stroke-width="4" stroke-linecap="round">
+      <line x1="70" y1="24" x2="70" y2="33"/>
+      <line x1="34" y1="60" x2="43" y2="60"/>
+      <line x1="97" y1="60" x2="106" y2="60"/>
+    </g>
+    <rect x="35" y="130" width="70" height="48" rx="4" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
+    <line x1="35" y1="142" x2="105" y2="142" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="35" y1="154" x2="105" y2="154" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="35" y1="166" x2="105" y2="166" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="58" y1="130" x2="58" y2="178" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="82" y1="130" x2="82" y2="178" stroke="#1d4ed8" stroke-width="1.5"/>
+    <circle cx="200" cy="80" r="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="200" y1="80" x2="200" y2="178" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+    <g stroke="#38bdf8" stroke-width="6" stroke-linecap="round">
+      <line x1="200" y1="80" x2="243" y2="60"/>
+      <line x1="200" y1="80" x2="167" y2="47"/>
+      <line x1="200" y1="80" x2="180" y2="112"/>
+    </g>
+    <path d="M300 130 Q300 98 332 98 Q342 75 370 90 Q393 94 388 118 Q392 140 364 142 L308 142 Q296 140 300 130 Z" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+    <rect x="322" y="140" width="10" height="35" fill="#92400e"/>
+    <g transform="translate(330,175)">
+      <path d="M-14 15 Q-14 0 0 -4 Q14 0 14 15 Z" fill="#fcd9b4" stroke="#b45309" stroke-width="2"/>
+      <rect x="-5" y="-16" width="4" height="14" rx="2" fill="#fcd9b4"/>
+      <rect x="1" y="-18" width="4" height="16" rx="2" fill="#fcd9b4"/>
+      <rect x="7" y="-15" width="4" height="13" rx="2" fill="#fcd9b4"/>
+    </g>
+    <g transform="translate(150,150)">
+      <circle r="14" fill="none" stroke="#94a3b8" stroke-width="3"/>
+      <path d="M-14 0 A14 14 0 0 1 14 0" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Tiga pilar upaya nyata: energi terbarukan (surya & angin), penghijauan, dan kerja sama antarnegara -- semua bergerak ke arah yang sama.</p>
+</div>
 
 ## 🌐 Perjanjian Internasional: Dari Kyoto ke Paris
 
@@ -209,7 +258,7 @@ Ada dua jenis upaya menghadapi pemanasan global dan perubahan iklim, dan keduany
 </div>
 </div>
 
-Kenapa harus dua-duanya? Karena meski mitigasi berhasil MENGURANGI laju pemanasan mulai sekarang, sebagian dampak (seperti es yang sudah mencair) tidak bisa langsung dibalik -- karena itu adaptasi tetap dibutuhkan untuk melindungi masyarakat dari dampak yang sudah terlanjur terjadi.
+Kenapa harus dua-duanya? Karena meski mitigasi berhasil MENGURANGI laju pemanasan mulai sekarang, sebagian dampak (seperti es yang sudah mencair) tidak bisa langsung dibalik -- karena itu adaptasi tetap dibutuhkan untuk melindungi masyarakat dari dampak yang sudah terlanjur terjadi. Contoh nyatanya ada di Jakarta: pembangunan tanggul raksasa di pesisir utara (adaptasi) berjalan bersamaan dengan target pemerintah menambah pembangkit energi terbarukan (mitigasi) -- dua upaya berbeda, tapi saling melengkapi untuk masalah yang sama.
 
 Coba jadi "pembuat kebijakan iklim" sendiri di simulasi bawah ini -- atur upaya pengurangan emisi, energi terbarukan, dan reboisasi, lalu lihat proyeksi kenaikan suhunya. Bisakah kamu mencapai target 1,5°C?
 

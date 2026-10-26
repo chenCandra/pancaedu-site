@@ -176,9 +176,49 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Setelah tiga materi sebelumnya membahas mekanisme, gas, dan penyebab pemanasan global, mungkin muncul pertanyaan: "Terus, apa hubungannya dengan hidupku sehari-hari?" Ternyata **dampaknya sudah terasa, bukan cuma isu jauh di kutub atau di negara lain.**
+Setelah tiga materi sebelumnya membahas mekanisme, gas, dan penyebab pemanasan global, mungkin muncul pertanyaan: "Terus, apa hubungannya dengan hidupku sehari-hari?" Coba tanya ke orang tua atau tetangga yang tinggal di Jakarta Utara, Semarang, atau Pekalongan -- mereka bisa cerita soal banjir rob yang makin sering "naik" ke jalanan dan rumah, bahkan di hari yang nggak hujan sama sekali. Atau tanya petani di kampung -- banyak yang bingung karena pola tanam yang dulunya bisa diandalkan sekarang jadi tidak menentu. Ternyata **dampaknya sudah terasa, bukan cuma isu jauh di kutub atau di negara lain.**
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <text x="100" y="28" font-size="14" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Dulu</text>
+    <text x="300" y="28" font-size="14" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Sekarang</text>
+    <line x1="200" y1="15" x2="200" y2="200" stroke="#fcd34d" stroke-width="2" stroke-dasharray="5 5"/>
+    <rect x="30" y="140" width="140" height="35" fill="#a16207"/>
+    <rect x="50" y="110" width="40" height="40" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+    <polygon points="45,110 95,110 70,88" fill="#b45309"/>
+    <rect x="63" y="128" width="12" height="18" fill="#92400e"/>
+    <path d="M30 140 Q100 132 170 140 L170 145 Q100 138 30 145 Z" fill="#60a5fa"/>
+    <g stroke="#1d4ed8" stroke-width="2" fill="none" opacity="0.6">
+      <path d="M40 142 q6 -3 12 0 q6 3 12 0"/>
+      <path d="M120 142 q6 -3 12 0 q6 3 12 0"/>
+    </g>
+    <rect x="230" y="140" width="140" height="35" fill="#a16207"/>
+    <rect x="250" y="110" width="40" height="40" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+    <polygon points="245,110 295,110 270,88" fill="#b45309"/>
+    <rect x="263" y="128" width="12" height="18" fill="#92400e"/>
+    <path d="M230 158 Q300 150 370 158 L370 175 Q300 167 230 175 Z" fill="#3b82f6"/>
+    <g stroke="#1d4ed8" stroke-width="2" fill="none" opacity="0.7">
+      <path d="M245 160 q6 -3 12 0 q6 3 12 0"/>
+      <path d="M320 162 q6 -3 12 0 q6 3 12 0"/>
+    </g>
+    <path d="M260 148 L260 140 L268 140 L268 148" stroke="#1d4ed8" stroke-width="2" fill="none"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Permukaan air yang naik sedikit demi sedikit di kawasan pesisir -- perubahan kecil yang terasa besar bagi warga sekitar.</p>
+</div>
 
 ## 🌦️ Cuaca yang Makin Sulit Diprediksi
 
@@ -220,7 +260,7 @@ Ini bagian yang sering terasa langsung di dompet keluarga:
 </div>
 </div>
 
-**Petani dan nelayan adalah kelompok yang PALING RENTAN** -- mata pencaharian mereka bergantung langsung pada pola cuaca dan musim yang stabil. Saat pola itu terganggu, dampaknya langsung terasa di penghasilan, dan akhirnya di harga yang kita bayar di pasar.
+**Petani dan nelayan adalah kelompok yang PALING RENTAN** -- mata pencaharian mereka bergantung langsung pada pola cuaca dan musim yang stabil. Saat pola itu terganggu, dampaknya langsung terasa di penghasilan, dan akhirnya di harga yang kita bayar di pasar. Pernah dengar harga cabai atau bawang tiba-tiba melonjak drastis di warung dekat rumah? Besar kemungkinan ada rantai sebab-akibat seperti ini yang bermula jauh di sawah atau ladang petani.
 
 ## ⚠️ Kesalahan Umum
 

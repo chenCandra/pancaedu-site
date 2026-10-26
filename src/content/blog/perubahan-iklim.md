@@ -197,9 +197,60 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Di materi [Dampak Pemanasan Global dalam Kehidupan Sehari-hari](/materi/dampak-pemanasan-global-kehidupan-sehari-hari), kita sudah lihat dampaknya dalam skala keseharian di sekitar kita. Sekarang kita perbesar sudut pandang ke skala yang JAUH LEBIH BESAR: **Perubahan Iklim** -- bagaimana pemanasan global mengubah kondisi bumi secara keseluruhan.
+Di materi [Dampak Pemanasan Global dalam Kehidupan Sehari-hari](/materi/dampak-pemanasan-global-kehidupan-sehari-hari), kita sudah lihat dampaknya dalam skala keseharian di sekitar kita -- banjir rob, DBD, harga cabai naik. Sekarang kita perbesar sudut pandang ke skala yang JAUH LEBIH BESAR: **Perubahan Iklim** -- bagaimana pemanasan global mengubah kondisi bumi secara keseluruhan, dari es di kutub yang jauh dari Indonesia, sampai cuaca yang kita rasakan sendiri di kota kita.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="200" rx="16" fill="#fef9ec"/>
+    <rect x="10" y="20" width="85" height="160" rx="10" fill="#dbeafe"/>
+    <rect x="105" y="20" width="85" height="160" rx="10" fill="#bbf7d0"/>
+    <rect x="200" y="20" width="85" height="160" rx="10" fill="#fef08a"/>
+    <rect x="295" y="20" width="95" height="160" rx="10" fill="#fed7aa"/>
+    <g transform="translate(52,65)">
+      <circle cx="0" cy="0" r="18" fill="#fff"/>
+      <path d="M-14 4 Q0 -14 14 4" fill="#f1f5f9"/>
+      <circle cx="-6" cy="10" r="3" fill="#60a5fa"/>
+      <circle cx="6" cy="12" r="3" fill="#60a5fa"/>
+    </g>
+    <text x="52" y="110" font-size="12" font-weight="700" text-anchor="middle" fill="#1e3a8a" font-family="sans-serif">Hujan</text>
+    <g transform="translate(147,65)">
+      <ellipse cx="0" cy="5" rx="16" ry="10" fill="#4ade80"/>
+      <rect x="-3" y="5" width="6" height="18" fill="#92400e"/>
+    </g>
+    <text x="147" y="110" font-size="12" font-weight="700" text-anchor="middle" fill="#166534" font-family="sans-serif">Semi</text>
+    <g transform="translate(242,60)">
+      <circle cx="0" cy="0" r="16" fill="#fbbf24"/>
+      <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+        <line x1="0" y1="-24" x2="0" y2="-30"/>
+        <line x1="22" y1="0" x2="28" y2="0"/>
+        <line x1="-22" y1="0" x2="-28" y2="0"/>
+      </g>
+    </g>
+    <text x="242" y="110" font-size="12" font-weight="700" text-anchor="middle" fill="#92400e" font-family="sans-serif">Panas</text>
+    <g transform="translate(342,65)">
+      <path d="M-14 10 Q0 -14 14 10 Z" fill="#fb923c"/>
+      <rect x="-3" y="10" width="6" height="15" fill="#92400e"/>
+    </g>
+    <text x="342" y="110" font-size="12" font-weight="700" text-anchor="middle" fill="#9a3412" font-family="sans-serif">Gugur</text>
+    <path d="M20 150 Q200 130 380 155" stroke="#dc2626" stroke-width="3" fill="none" stroke-dasharray="7 5"/>
+    <polygon points="372,148 384,155 372,162" fill="#dc2626"/>
+    <text x="200" y="185" font-size="11" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">Pola musim bergeser dan makin sulit ditebak</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Empat musim yang dulu polanya teratur, kini pergeserannya makin sulit ditebak akibat perubahan iklim. Di Indonesia sendiri pola ini terasa lewat musim hujan dan kemarau yang jadi makin sulit diprediksi.</p>
+</div>
 
 ## 🌍 Dari Pemanasan Global ke Perubahan Iklim
 
@@ -242,7 +293,7 @@ Di materi [Dampak Pemanasan Global dalam Kehidupan Sehari-hari](/materi/dampak-p
 
 ## 🧊 Kenapa Pulau Kecil dan Daerah Pesisir Paling Terancam?
 
-Kenaikan permukaan laut tidak terasa sama di semua tempat. Negara kepulauan dan kota-kota pesisir (termasuk banyak wilayah di Indonesia) menghadapi risiko lebih besar karena sebagian daratannya hanya sedikit di atas permukaan laut -- kenaikan beberapa sentimeter saja bisa berarti banjir rob yang lebih sering dan lebih parah.
+Kenaikan permukaan laut tidak terasa sama di semua tempat. Negara kepulauan dan kota-kota pesisir (termasuk banyak wilayah di Indonesia) menghadapi risiko lebih besar karena sebagian daratannya hanya sedikit di atas permukaan laut -- kenaikan beberapa sentimeter saja bisa berarti banjir rob yang lebih sering dan lebih parah. Jakarta Utara, Semarang, dan Demak sudah lama jadi contoh nyata -- sebagian wilayahnya bahkan sudah lebih rendah dari permukaan laut rata-rata, dan beberapa pulau kecil di Indonesia dikabarkan mulai terendam permanen.
 
 ## ⚠️ Kesalahan Umum
 

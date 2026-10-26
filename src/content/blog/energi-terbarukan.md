@@ -182,9 +182,52 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
-Di materi [Energi Tak Terbarukan](/materi/energi-tak-terbarukan), kita sudah bahas sumber yang paling banyak dipakai dunia saat ini, lengkap keterbatasannya. Sekarang giliran alternatifnya: sumber energi yang bisa terus "terisi ulang" secara alami.
+Di materi [Energi Tak Terbarukan](/materi/energi-tak-terbarukan), kita sudah bahas sumber yang paling banyak dipakai dunia saat ini, lengkap keterbatasannya. Sekarang giliran alternatifnya: sumber energi yang bisa terus "terisi ulang" secara alami. Semakin banyak kalian lihat panel-panel biru mengilap terpasang di atap rumah atau ruko sekitar rumah -- itu PLTS (Pembangkit Listrik Tenaga Surya) skala kecil, bukti energi terbarukan bukan cuma proyek pemerintah berskala raksasa, tapi mulai masuk ke rumah tangga biasa.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="65" cy="55" r="26" fill="#fde68a"/>
+    <circle cx="65" cy="55" r="19" fill="#f59e0b"/>
+    <g stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round">
+      <line x1="65" y1="18" x2="65" y2="9"/>
+      <line x1="65" y1="92" x2="65" y2="101"/>
+      <line x1="28" y1="55" x2="19" y2="55"/>
+      <line x1="102" y1="55" x2="111" y2="55"/>
+      <line x1="39" y1="29" x2="32" y2="22"/>
+      <line x1="91" y1="29" x2="98" y2="22"/>
+      <line x1="39" y1="81" x2="32" y2="88"/>
+      <line x1="91" y1="81" x2="98" y2="88"/>
+    </g>
+    <g transform="translate(165,10)">
+      <circle cx="30" cy="30" r="5" fill="#374151"/>
+      <rect x="27" y="30" width="3" height="95" fill="#9ca3af"/>
+      <path d="M30 30 L68 20 L36 36 Z" fill="#60a5fa"/>
+      <path d="M30 30 L8 55 L28 38 Z" fill="#93c5fd"/>
+      <path d="M30 30 L22 -3 L36 32 Z" fill="#3b82f6"/>
+    </g>
+    <g transform="translate(290,40)">
+      <path d="M35 5 Q60 40 55 65 Q55 90 35 90 Q15 90 15 65 Q10 40 35 5 Z" fill="#38bdf8"/>
+      <ellipse cx="26" cy="48" rx="7" ry="11" fill="#7dd3fc" opacity="0.7"/>
+    </g>
+    <text x="65" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Surya</text>
+    <text x="195" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Angin</text>
+    <text x="325" y="135" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Air</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Trio energi terbarukan yang sering kita temui: matahari, angin, dan air.</p>
+</div>
 
 ## ☀️ Jenis-jenis Energi Terbarukan
 
@@ -225,6 +268,10 @@ Di materi [Energi Tak Terbarukan](/materi/energi-tak-terbarukan), kita sudah bah
 
 <div class="mtr-note">
 🔗 Perhatikan bahwa PLTA sebenarnya memakai prinsip perubahan energi yang sama persis seperti dibahas di materi <a href="/materi/perubahan-energi">Perubahan Energi</a> -- potensial ke kinetik, lalu ke listrik.
+</div>
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Indonesia punya PLTB (Pembangkit Listrik Tenaga Bayu/angin) di Sidrap, Sulawesi Selatan -- salah satu yang pertama dan terbesar di Asia Tenggara, dengan puluhan turbin raksasa berdiri di perbukitan yang memang terkenal berangin kencang sepanjang tahun.</p>
 </div>
 
 ## ⚖️ Kelebihan dan Tantangan

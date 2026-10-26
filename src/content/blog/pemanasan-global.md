@@ -215,17 +215,65 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Di materi [Permasalahan dan Upaya Pemenuhan Kebutuhan Energi](/materi/permasalahan-dan-upaya-pemenuhan-kebutuhan-energi), dampak lingkungan sempat disinggung sebagai salah satu masalah energi. Mulai sekarang kita masuk bab baru yang membahas dampak itu secara tuntas: **Pemanasan Global** -- dari pengertian dasarnya, sampai nanti bab ini akan berakhir di langkah-langkah nyata yang bisa kamu lakukan sendiri.
+Pernah merhatiin nggak, kok belakangan ini kipas angin atau AC di kamar rasanya makin sering dinyalain, padahal dulu nggak segitunya? Atau musim hujan jadi susah ditebak -- kadang kemarau kepanjangan, kadang begitu hujan datang langsung deras banget sampai jalanan kebanjiran? Itu bukan cuma perasaanmu doang. Di materi [Permasalahan dan Upaya Pemenuhan Kebutuhan Energi](/materi/permasalahan-dan-upaya-pemenuhan-kebutuhan-energi), dampak lingkungan sempat disinggung sebagai salah satu masalah energi. Mulai sekarang kita masuk bab baru yang membahas dampak itu secara tuntas: **Pemanasan Global** -- dari pengertian dasarnya, sampai nanti bab ini akan berakhir di langkah-langkah nyata yang bisa kamu lakukan sendiri.
 
 ## 🌡️ Apa Itu Pemanasan Global?
 
-**Pemanasan global** adalah kenaikan suhu rata-rata permukaan bumi secara terus-menerus dalam jangka panjang. Ini beda dari sekadar "hari yang panas" -- pemanasan global bicara soal tren suhu bertahun-tahun bahkan puluhan tahun, bukan cuaca panas sesaat di satu daerah.
+**Pemanasan global** adalah kenaikan suhu rata-rata permukaan bumi secara terus-menerus dalam jangka panjang. Ini beda dari sekadar "hari yang panas" -- pemanasan global bicara soal tren suhu bertahun-tahun bahkan puluhan tahun, bukan cuaca panas sesaat di satu daerah. Satu hari yang terik di kotamu itu cuaca, bukan pemanasan global -- tapi kalau rata-rata suhu tahunan di banyak kota, termasuk di Indonesia, pelan-pelan terus naik selama puluhan tahun, itulah yang disebut tren pemanasan global.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef3c7"/>
+    <circle cx="150" cy="110" r="70" fill="#60a5fa"/>
+    <path d="M90 90 Q120 75 150 90 Q180 100 210 85" stroke="#bfdbfe" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <ellipse cx="120" cy="130" rx="28" ry="14" fill="#4ade80"/>
+    <ellipse cx="175" cy="145" rx="22" ry="11" fill="#86efac"/>
+    <ellipse cx="135" cy="160" rx="18" ry="9" fill="#4ade80"/>
+    <g>
+      <rect x="275" y="40" width="22" height="110" rx="11" fill="#fef2f2" stroke="#ef4444" stroke-width="3"/>
+      <circle cx="286" cy="155" r="18" fill="#ef4444"/>
+      <rect x="280" y="60" width="12" height="80" rx="6" fill="#ef4444"/>
+      <line x1="305" y1="55" x2="315" y2="55" stroke="#78350f" stroke-width="2"/>
+      <line x1="305" y1="75" x2="312" y2="75" stroke="#78350f" stroke-width="2"/>
+      <line x1="305" y1="95" x2="315" y2="95" stroke="#78350f" stroke-width="2"/>
+      <line x1="305" y1="115" x2="312" y2="115" stroke="#78350f" stroke-width="2"/>
+    </g>
+    <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M335 90 q6 -8 12 0"/>
+      <path d="M345 100 q6 -8 12 0"/>
+      <path d="M330 110 q6 -8 12 0"/>
+    </g>
+    <circle cx="340" cy="45" r="16" fill="#fbbf24"/>
+    <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <line x1="340" y1="20" x2="340" y2="12"/>
+      <line x1="362" y1="45" x2="370" y2="45"/>
+      <line x1="356" y1="29" x2="362" y2="23"/>
+      <line x1="356" y1="61" x2="362" y2="67"/>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Bumi kita, dengan termometer yang pelan-pelan naik -- itulah inti dari pemanasan global.</p>
+</div>
 
 ## 🏠 Mekanisme di Baliknya: Efek Rumah Kaca
 
 Penyebab pemanasan global adalah **efek rumah kaca yang diperkuat berlebihan**. Begini cara kerjanya:
+
+<div class="mtr-note">
+<strong>Tahu nggak?</strong> Efek rumah kaca itu mirip banget sama mobil yang diparkir di bawah terik matahari siang-siang dengan kaca jendela tertutup. Sinar matahari masuk lewat kaca, memanaskan jok dan dashboard, tapi panas itu susah keluar lagi lewat kaca yang sama -- makanya begitu kamu masuk mobil, rasanya jauh lebih panas dari udara di luar. Atmosfer bumi dengan gas rumah kacanya bekerja dengan logika yang sama: panas matahari masuk dengan mudah, tapi sebagian panas pantulannya "terjebak" di dalam.
+</div>
 
 <div class="mtr-steps">
   <div class="mtr-step">

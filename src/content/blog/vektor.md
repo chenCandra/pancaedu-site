@@ -283,7 +283,25 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+
 </style>
+
+Pernah main tarik tambang, atau lihat perahu yang melaju miring karena didorong arus sungai sekaligus dikayuh pendayungnya? Itulah kenapa kita butuh vektor -- buat benda yang dipengaruhi beberapa "dorongan" sekaligus dari arah berbeda, kita butuh cara menghitung hasil gabungannya.
 
 Ingat materi [Besaran dan Satuan](/materi/besaran-dan-satuan)? Di sana kita sudah kenal pembagian besaran jadi dua jenis: **skalar** (cuma punya nilai, mis. massa, waktu, suhu) dan **vektor** (punya nilai DAN arah, mis. perpindahan, kecepatan, gaya). Sekarang saatnya kita bedah lebih dalam bagaimana vektor ini digambar, dituliskan, dan yang paling penting -- bagaimana cara menjumlahkannya.
 
@@ -386,7 +404,97 @@ Ini adalah pola segitiga 3-4-5 yang gampang diingat -- perhatikan hasilnya BUKAN
 </div>
 </div>
 
-Coba sendiri di simulasi di bawah ini -- atur besar dan arah dua vektor, lalu bandingkan hasil metode grafis dan metode analitis. Keduanya akan selalu memberi resultan yang sama.
+Coba sendiri di animasi mini ini dulu -- geser besar dan arah dua vektor, lihat resultannya berubah otomatis:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Atur besar dan arah dua vektor di bawah -- lihat resultannya (R) berubah otomatis:</p>
+  <canvas id="vektorCanvas" width="640" height="340" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#f8fafc,#eef2ff);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:#f2760a;font-weight:700;margin-top:10px;">Vektor A -- besar: <strong id="vekAMagLabel">6</strong></label>
+  <input type="range" id="vekAMagSlider" min="1" max="10" value="6" style="width:100%;accent-color:#f2760a;">
+  <label style="display:block;font-size:0.8125rem;color:#f2760a;font-weight:700;margin-top:8px;">Vektor A -- arah: <strong id="vekASudutLabel">0</strong>&deg;</label>
+  <input type="range" id="vekASudutSlider" min="0" max="355" step="5" value="0" style="width:100%;accent-color:#f2760a;">
+  <label style="display:block;font-size:0.8125rem;color:#8b3ddb;font-weight:700;margin-top:12px;">Vektor B -- besar: <strong id="vekBMagLabel">5</strong></label>
+  <input type="range" id="vekBMagSlider" min="1" max="10" value="5" style="width:100%;accent-color:#8b3ddb;">
+  <label style="display:block;font-size:0.8125rem;color:#8b3ddb;font-weight:700;margin-top:8px;">Vektor B -- arah: <strong id="vekBSudutLabel">90</strong>&deg;</label>
+  <input type="range" id="vekBSudutSlider" min="0" max="355" step="5" value="90" style="width:100%;accent-color:#8b3ddb;">
+  <p class="mtr-mini-label">Resultan R: <strong id="vekRMagLabel">-</strong> &middot; arah: <strong id="vekRSudutLabel">-</strong> &middot; <span style="color:#f2760a;">■</span> A &middot; <span style="color:#8b3ddb;">■</span> B &middot; <span style="color:#16a34a;">■</span> R</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('vektorCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var magASlider = document.getElementById('vekAMagSlider');
+  var sudutASlider = document.getElementById('vekASudutSlider');
+  var magBSlider = document.getElementById('vekBMagSlider');
+  var sudutBSlider = document.getElementById('vekBSudutSlider');
+  var magALabel = document.getElementById('vekAMagLabel');
+  var sudutALabel = document.getElementById('vekASudutLabel');
+  var magBLabel = document.getElementById('vekBMagLabel');
+  var sudutBLabel = document.getElementById('vekBSudutLabel');
+  var rMagLabel = document.getElementById('vekRMagLabel');
+  var rSudutLabel = document.getElementById('vekRSudutLabel');
+  var w = canvas.width, h = canvas.height;
+  var originX = w * 0.5, originY = h * 0.55;
+  function gambarGrid() {
+    ctx.strokeStyle = 'rgba(100,116,139,0.18)'; ctx.lineWidth = 1;
+    for (var gx = 0; gx <= w; gx += 32) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke(); }
+    for (var gy = 0; gy <= h; gy += 32) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(100,116,139,0.45)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(w, originY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, h); ctx.stroke();
+  }
+  function gambarPanah(x1, y1, x2, y2, warna, lebar) {
+    ctx.strokeStyle = warna; ctx.fillStyle = warna; ctx.lineWidth = lebar; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var sudut = Math.atan2(y2 - y1, x2 - x1);
+    var ukuran = 10;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - ukuran * Math.cos(sudut - 0.4), y2 - ukuran * Math.sin(sudut - 0.4));
+    ctx.lineTo(x2 - ukuran * Math.cos(sudut + 0.4), y2 - ukuran * Math.sin(sudut + 0.4));
+    ctx.closePath(); ctx.fill();
+  }
+  function render() {
+    var magA = parseFloat(magASlider.value), sudutA = parseFloat(sudutASlider.value);
+    var magB = parseFloat(magBSlider.value), sudutB = parseFloat(sudutBSlider.value);
+    var radA = (sudutA * Math.PI) / 180, radB = (sudutB * Math.PI) / 180;
+    var Ax = magA * Math.cos(radA), Ay = magA * Math.sin(radA);
+    var Bx = magB * Math.cos(radB), By = magB * Math.sin(radB);
+    var Rx = Ax + Bx, Ry = Ay + By;
+    var magR = Math.sqrt(Rx * Rx + Ry * Ry);
+    var sudutR = (Math.atan2(Ry, Rx) * 180) / Math.PI;
+    if (sudutR < 0) sudutR += 360;
+    var terbesar = Math.max(magA, magB, magR, 1);
+    var skala = (Math.min(w, h) * 0.42) / terbesar;
+    ctx.clearRect(0, 0, w, h);
+    gambarGrid();
+    gambarPanah(originX, originY, originX + Ax * skala, originY - Ay * skala, '#f2760a', 4);
+    gambarPanah(originX, originY, originX + Bx * skala, originY - By * skala, '#8b3ddb', 4);
+    ctx.setLineDash([5, 5]);
+    gambarPanah(originX + Ax * skala, originY - Ay * skala, originX + Rx * skala, originY - Ry * skala, 'rgba(139,61,219,0.55)', 2);
+    ctx.setLineDash([]);
+    gambarPanah(originX, originY, originX + Rx * skala, originY - Ry * skala, '#16a34a', 5);
+    ctx.fillStyle = '#26243b'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('A', originX + Ax * skala + 6, originY - Ay * skala - 6);
+    ctx.fillText('B', originX + Bx * skala + 6, originY - By * skala - 6);
+    ctx.fillText('R', originX + Rx * skala + 6, originY - Ry * skala - 6);
+    magALabel.textContent = magA.toFixed(0);
+    sudutALabel.textContent = sudutA.toFixed(0);
+    magBLabel.textContent = magB.toFixed(0);
+    sudutBLabel.textContent = sudutB.toFixed(0);
+    rMagLabel.textContent = magR.toFixed(1).replace('.', ',');
+    rSudutLabel.textContent = sudutR.toFixed(0) + '°';
+  }
+  magASlider.addEventListener('input', render);
+  sudutASlider.addEventListener('input', render);
+  magBSlider.addEventListener('input', render);
+  sudutBSlider.addEventListener('input', render);
+  render();
+})();
+</script>
+
+Garis putus-putus ungu di atas menunjukkan metode tip-to-tail (ujung ke pangkal): resultan R adalah anak panah dari pangkal A sampai ujung B yang disambung di ujung A -- persis seperti metode segitiga yang baru kita pelajari.
 
 ## ⚠️ Kesalahan Umum
 

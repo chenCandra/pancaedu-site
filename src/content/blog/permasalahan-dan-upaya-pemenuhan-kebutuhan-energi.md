@@ -210,9 +210,20 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
-Di materi [Pemanfaatan Energi](/materi/pemanfaatan-energi), kita lihat betapa bergantungnya hampir semua sektor kehidupan manusia pada energi. Ketergantungan sebesar itu, ditambah keterbatasan sebagian sumbernya, memunculkan beberapa masalah nyata -- dan untungnya, juga upaya-upaya nyata buat mengatasinya.
+Pernah ngalamin lampu di rumah tiba-tiba mati pas lagi pemadaman bergilir, padahal bukan musim hujan dan nggak ada kabel putus? Atau dengar berita harga Pertalite/Pertamax naik lagi? Itu bukan kebetulan -- itu gejala dari masalah yang lebih besar soal bagaimana dunia (termasuk Indonesia) memenuhi kebutuhan energinya. Di materi [Pemanfaatan Energi](/materi/pemanfaatan-energi), kita lihat betapa bergantungnya hampir semua sektor kehidupan manusia pada energi -- dari nge-charge HP sampai pabrik tekstil beroperasi 24 jam. Ketergantungan sebesar itu, ditambah keterbatasan sebagian sumbernya, memunculkan beberapa masalah nyata -- dan untungnya, juga upaya-upaya nyata buat mengatasinya.
 
 <div class="mtr-note">
 🌍 Pengin rasakan langsung jadi pengelola energi sebuah kota? Coba simulasi <strong><a href="/lab-maya/energy-crisis-lab">Energy Crisis Lab</a></strong> -- atur kombinasi pembangkit surya, angin, air, gas, dan batu bara buat memenuhi kebutuhan listrik Kota Panca, sambil menyeimbangkan emisi, biaya, dan keandalan pasokan. Semua konsep di materi ini digabung jadi satu tantangan pengambilan keputusan.
@@ -228,36 +239,72 @@ Di materi [Pemanfaatan Energi](/materi/pemanfaatan-energi), kita lihat betapa be
   <div class="mtr-step">
     <span class="mtr-step-num">1</span>
     <div class="mtr-step-body">
-      <p><strong>Keterbatasan Sumber Energi Tak Terbarukan.</strong> Cadangan fosil terus berkurang, sementara pembentukannya butuh jutaan tahun (lihat detail di materi <a href="/materi/energi-tak-terbarukan">Energi Tak Terbarukan</a>).</p>
+      <p><strong>Keterbatasan Sumber Energi Tak Terbarukan.</strong> Cadangan fosil terus berkurang, sementara pembentukannya butuh jutaan tahun (lihat detail di materi <a href="/materi/energi-tak-terbarukan">Energi Tak Terbarukan</a>). Indonesia sendiri pernah jadi pengekspor minyak, tapi sekarang justru jadi pengimpor karena cadangan minyaknya menua -- itu contoh nyata keterbatasan ini bukan isapan jempol.</p>
       <div class="mtr-solusi">✅ <strong>Upaya:</strong> diversifikasi sumber energi dan transisi bertahap ke energi terbarukan (lihat <a href="/materi/sumber-energi">Sumber Energi</a> dan <a href="/materi/energi-terbarukan">Energi Terbarukan</a>).</div>
     </div>
   </div>
   <div class="mtr-step">
     <span class="mtr-step-num">2</span>
     <div class="mtr-step-body">
-      <p><strong>Kenaikan Permintaan Energi.</strong> Populasi dan aktivitas ekonomi manusia terus bertambah -- otomatis kebutuhan energi ikut naik dari waktu ke waktu, di semua sektor yang sudah dibahas di materi sebelumnya.</p>
+      <p><strong>Kenaikan Permintaan Energi.</strong> Populasi dan aktivitas ekonomi manusia terus bertambah -- otomatis kebutuhan energi ikut naik dari waktu ke waktu, di semua sektor yang sudah dibahas di materi sebelumnya. Coba bayangkan satu komplek perumahan baru dibangun: setiap rumah pasang AC, kulkas, mesin cuci -- permintaan listrik ke PLN langsung melonjak, belum lagi kalau semua warganya juga beli motor/mobil baru.</p>
       <div class="mtr-solusi">✅ <strong>Upaya:</strong> konservasi dan efisiensi energi -- memakai energi seperlunya dan mengurangi pemborosan (lihat kembali konsep efisiensi di materi <a href="/materi/perubahan-energi">Perubahan Energi</a>). Coba sendiri lewat simulasi <strong>Energy Efficiency Lab</strong> di bawah -- atur ruangan virtual dan cari strategi paling hemat energi.</div>
     </div>
   </div>
   <div class="mtr-step">
     <span class="mtr-step-num">3</span>
     <div class="mtr-step-body">
-      <p><strong>Pemerataan Akses Energi.</strong> Daerah terpencil atau kepulauan sering kesulitan mendapat akses listrik yang stabil, karena tantangan geografis dan biaya infrastruktur jaringan konvensional.</p>
+      <p><strong>Pemerataan Akses Energi.</strong> Daerah terpencil atau kepulauan sering kesulitan mendapat akses listrik yang stabil, karena tantangan geografis dan biaya infrastruktur jaringan konvensional. Bukan cerita rekaan -- sampai sekarang masih ada desa-desa di pedalaman Papua atau pulau-pulau kecil di NTT yang baru menikmati listrik 24 jam beberapa tahun terakhir, sementara anak-anak di kota besar sudah dari lahir dikelilingi listrik tanpa henti.</p>
       <div class="mtr-solusi">✅ <strong>Upaya:</strong> pembangunan infrastruktur energi terdesentralisasi -- misalnya panel surya skala kecil di daerah terpencil, yang tidak butuh jaringan kabel panjang dari pembangkit besar.</div>
     </div>
   </div>
   <div class="mtr-step">
     <span class="mtr-step-num">4</span>
     <div class="mtr-step-body">
-      <p><strong>Dampak Lingkungan.</strong> Pembakaran bahan bakar fosil menghasilkan emisi gas rumah kaca, berkontribusi pada pemanasan global dan pencemaran udara.</p>
+      <p><strong>Dampak Lingkungan.</strong> Pembakaran bahan bakar fosil menghasilkan emisi gas rumah kaca, berkontribusi pada pemanasan global dan pencemaran udara. Udara Jakarta yang kadang terasa "berat" dan berkabut di pagi hari, atau langit yang jarang terlihat biru cerah -- itu salah satu wajah nyata dari dampak ini, belum lagi kontribusinya ke pemanasan global yang akan kita bahas tuntas di bab selanjutnya.</p>
       <div class="mtr-solusi">✅ <strong>Upaya:</strong> pengembangan teknologi energi bersih, kebijakan pemerintah (mis. insentif energi terbarukan, standar emisi kendaraan), dan edukasi masyarakat soal gaya hidup hemat energi.</div>
     </div>
   </div>
 </div>
 
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <circle cx="70" cy="50" r="26" fill="#fde68a"/>
+    <g stroke="#f59e0b" stroke-width="4" stroke-linecap="round">
+      <line x1="70" y1="10" x2="70" y2="20"/>
+      <line x1="70" y1="80" x2="70" y2="90"/>
+      <line x1="30" y1="50" x2="40" y2="50"/>
+      <line x1="100" y1="50" x2="110" y2="50"/>
+      <line x1="42" y1="22" x2="49" y2="29"/>
+      <line x1="91" y1="71" x2="98" y2="78"/>
+      <line x1="42" y1="78" x2="49" y2="71"/>
+      <line x1="91" y1="29" x2="98" y2="22"/>
+    </g>
+    <rect x="30" y="120" width="80" height="55" rx="4" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
+    <line x1="30" y1="134" x2="110" y2="134" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="30" y1="148" x2="110" y2="148" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="30" y1="162" x2="110" y2="162" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="56" y1="120" x2="56" y2="175" stroke="#1d4ed8" stroke-width="1.5"/>
+    <line x1="83" y1="120" x2="83" y2="175" stroke="#1d4ed8" stroke-width="1.5"/>
+    <rect x="60" y="175" width="20" height="18" fill="#94a3b8"/>
+    <circle cx="200" cy="90" r="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="200" y1="90" x2="200" y2="185" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+    <g stroke="#38bdf8" stroke-width="6" stroke-linecap="round">
+      <line x1="200" y1="90" x2="245" y2="70"/>
+      <line x1="200" y1="90" x2="165" y2="55"/>
+      <line x1="200" y1="90" x2="178" y2="125"/>
+    </g>
+    <path d="M300 130 Q300 95 335 95 Q345 70 375 85 Q400 90 395 115 Q400 140 370 142 L310 142 Q296 140 300 130 Z" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+    <rect x="325" y="140" width="10" height="35" fill="#92400e"/>
+    <circle cx="330" cy="130" r="22" fill="#4ade80" stroke="#16a34a" stroke-width="2"/>
+    <path d="M60 193 Q62 183 72 183 Q74 176 84 180 Q92 182 90 190 Q92 198 80 199 L66 199 Q58 198 60 193 Z" fill="#bbf7d0" opacity="0.9"/>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Tiga arah solusi energi: panel surya, turbin angin, dan reboisasi -- jalan keluar dari empat masalah energi di atas.</p>
+</div>
+
 ## 🙋 Peran Individu
 
-~~Masalah energi cuma urusan pemerintah dan perusahaan besar, bukan urusan individu~~ → tidak sepenuhnya benar. Meski kebijakan besar memang perlu peran pemerintah, kebiasaan kecil tiap individu -- kalau dilakukan jutaan orang sekaligus -- bisa berdampak besar juga.
+~~Masalah energi cuma urusan pemerintah dan perusahaan besar, bukan urusan individu~~ → tidak sepenuhnya benar. Meski kebijakan besar memang perlu peran pemerintah, kebiasaan kecil tiap individu -- kalau dilakukan jutaan orang sekaligus -- bisa berdampak besar juga. Coba bayangkan: kalau setiap siswa di satu sekolah mencabut charger HP yang nggak lagi dipakai, itu kelihatannya receh. Tapi kalikan dengan jutaan siswa di seluruh Indonesia yang melakukan hal yang sama setiap hari -- totalnya bisa menghemat energi setara satu kota kecil.
 
 <div class="mtr-note">
 💡 Contoh sederhana: mematikan lampu dan elektronik yang tidak dipakai, memilih alat elektronik hemat energi, mengurangi pemakaian kendaraan pribadi untuk jarak dekat. Kecil secara individu, tapi signifikan kalau dilakukan secara luas.

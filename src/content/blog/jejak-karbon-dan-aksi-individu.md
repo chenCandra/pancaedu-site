@@ -183,19 +183,67 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Sepanjang bab ini kita sudah bahas pemanasan global dari skala gas, sektor, dampak keseharian, dampak skala bumi, sampai upaya negara dan dunia. Sebagai PENUTUP, mari kita bicara soal peran yang paling dekat dengan kita: **peranmu sendiri**, lewat konsep jejak karbon.
+Sepanjang bab ini kita sudah bahas pemanasan global dari skala gas, sektor, dampak keseharian, dampak skala bumi, sampai upaya negara dan dunia. Sebagai PENUTUP, mari kita bicara soal peran yang paling dekat dengan kita: **peranmu sendiri**, lewat konsep jejak karbon. Coba bandingkan: kamu naik motor sendirian ke sekolah yang jaraknya 5 km setiap hari, versus naik angkutan umum yang membawa puluhan penumpang sekaligus, versus naik sepeda yang nggak membakar bahan bakar sama sekali. Ketiganya sama-sama "nyampe sekolah", tapi "jejak" gas rumah kaca yang ditinggalkan di belakangnya jauh berbeda -- itulah yang disebut jejak karbon.
 
 ## 👣 Apa Itu Jejak Karbon?
 
 **Jejak karbon (carbon footprint)** adalah total emisi gas rumah kaca (biasanya dihitung dalam setara CO2) yang dihasilkan dari aktivitas seseorang, keluarga, atau kelompok. Setiap pilihan sehari-hari -- naik apa ke sekolah, makan apa, berapa lama nyalakan lampu -- punya "jejak" gas rumah kacanya masing-masing, meski besarnya berbeda-beda.
 
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
+    <path d="M140 40 Q180 30 190 70 Q200 95 175 110 Q190 125 175 150 Q180 175 145 180 Q100 185 90 150 Q75 140 85 115 Q70 95 95 75 Q90 45 140 40 Z" fill="#fde68a" stroke="#b45309" stroke-width="3"/>
+    <g>
+      <rect x="115" y="60" width="24" height="16" rx="2" fill="#ef4444"/>
+      <circle cx="120" cy="80" r="5" fill="#1f2937"/>
+      <circle cx="134" cy="80" r="5" fill="#1f2937"/>
+    </g>
+    <g>
+      <circle cx="150" cy="100" r="9" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
+      <line x1="150" y1="109" x2="150" y2="120" stroke="#92400e" stroke-width="2"/>
+    </g>
+    <g>
+      <path d="M110 130 Q100 120 112 112 Q122 108 128 118 L118 140 Z" fill="#60a5fa" opacity="0.8"/>
+    </g>
+    <g>
+      <rect x="128" y="145" width="20" height="24" rx="3" fill="#9ca3af"/>
+    </g>
+    <g transform="translate(265,70)">
+      <circle cx="30" cy="55" r="22" fill="#fff" stroke="#16a34a" stroke-width="4"/>
+      <path d="M30 40 L30 70 M18 50 L42 50" stroke="#16a34a" stroke-width="3"/>
+      <circle cx="30" cy="20" r="10" fill="#16a34a"/>
+    </g>
+    <g transform="translate(250,135)">
+      <circle cx="10" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
+      <circle cx="55" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
+      <line x1="10" y1="22" x2="30" y2="5" stroke="#1f2937" stroke-width="3"/>
+      <line x1="30" y1="5" x2="40" y2="22" stroke="#1f2937" stroke-width="3"/>
+      <line x1="30" y1="5" x2="22" y2="22" stroke="#1f2937" stroke-width="3"/>
+      <line x1="40" y1="22" x2="55" y2="22" stroke="#1f2937" stroke-width="3"/>
+      <line x1="30" y1="5" x2="30" y2="-3" stroke="#1f2937" stroke-width="3"/>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Jejak karbon kita terbentuk dari banyak kebiasaan kecil (motor, listrik, plastik) -- tapi bisa diperkecil dengan aksi positif seperti bersepeda dan membawa tumbler sendiri.</p>
+</div>
+
 ## 📊 Sumber Jejak Karbon Pribadi
 
 <div class="mtr-cards">
 <div class="mtr-cards-grid">
-<div class="mtr-card"><span class="mtr-card-icon">🚗</span><h4>Transportasi</h4><p>Pesawat dan mobil pribadi (apalagi sendirian) punya jejak karbon jauh lebih besar per orang dibanding transportasi umum, apalagi sepeda atau jalan kaki.</p></div>
+<div class="mtr-card"><span class="mtr-card-icon">🚗</span><h4>Transportasi</h4><p>Pesawat dan mobil pribadi (apalagi sendirian) punya jejak karbon jauh lebih besar per orang dibanding transportasi umum, apalagi sepeda atau jalan kaki. Bus kota yang membawa 40 penumpang membagi emisinya ke 40 orang, sementara motor yang dipakai sendirian menanggung semua emisinya ke satu orang itu saja.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">💡</span><h4>Konsumsi Listrik</h4><p>Sebagian besar listrik masih dihasilkan dari bahan bakar fosil -- makin boros listrik, makin besar jejak karbonnya.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">🍖</span><h4>Pola Makan</h4><p>Daging (terutama sapi) punya jejak karbon jauh lebih besar dari sayur/buah, karena peternakan menghasilkan metana dalam jumlah besar.</p></div>
 <div class="mtr-card"><span class="mtr-card-icon">🗑️</span><h4>Sampah</h4><p>Sampah organik yang dibuang begitu saja (bukan dikompos) membusuk di TPA dan menghasilkan gas metana.</p></div>

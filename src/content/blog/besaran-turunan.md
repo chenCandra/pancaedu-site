@@ -242,7 +242,19 @@ draft: false
 }
 .mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
+
+Coba pikirkan: kenapa pembalap motor GP bisa dibilang "ngebut 300 km/jam", padahal "panjang" dan "waktu" sendiri sudah punya satuannya masing-masing (meter dan jam)? Soalnya "kecepatan" bukan besaran yang berdiri sendiri -- ia dibentuk dari GABUNGAN dua besaran lain yang lebih dasar. Besaran hasil gabungan seperti inilah yang disebut **besaran turunan**, dan ternyata hampir semua besaran yang sering kita dengar di Fisika (gaya, tekanan, energi, daya) dibentuk dengan cara yang sama.
 
 ## 🔗 Apa Itu Besaran Turunan?
 
@@ -267,6 +279,33 @@ Contohnya, kecepatan diperoleh dari panjang dibagi waktu. Secara matematis, ditu
 </div>
 
 Karena panjang dan waktu merupakan besaran pokok, maka kecepatan termasuk besaran turunan.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="30" y="60" width="70" height="60" rx="10" fill="#fbbf24" stroke="#78350f" stroke-width="3"/>
+    <text x="65" y="98" font-size="26" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">L</text>
+    <text x="65" y="138" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panjang</text>
+  </g>
+  <text x="130" y="100" font-size="26" font-weight="800" fill="#92400e" text-anchor="middle">÷</text>
+  <g>
+    <rect x="160" y="60" width="70" height="60" rx="10" fill="#f87171" stroke="#7f1d1d" stroke-width="3"/>
+    <text x="195" y="98" font-size="26" font-weight="800" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">T</text>
+    <text x="195" y="138" font-size="11" font-weight="700" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">Waktu</text>
+  </g>
+  <text x="258" y="100" font-size="26" font-weight="800" fill="#92400e" text-anchor="middle">=</text>
+  <g>
+    <rect x="285" y="50" width="95" height="80" rx="12" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <text x="332" y="92" font-size="20" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif">v = L/T</text>
+    <text x="332" y="112" font-size="10" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Kecepatan</text>
+    <text x="332" y="124" font-size="9" fill="#065f46" text-anchor="middle" font-family="sans-serif">(besaran turunan)</text>
+  </g>
+  <circle cx="65" cy="50" r="3" fill="#78350f"/>
+  <circle cx="75" cy="50" r="3" fill="#78350f"/>
+  <path d="M60 42 Q70 36 80 42" stroke="#78350f" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
+<p class="mtr-ilustrasi-caption">Dua balok besaran pokok (panjang & waktu) digabung jadi satu balok besaran turunan baru (kecepatan).</p>
+</div>
 
 Kata "turunan" di sini **tidak berarti turunan dalam matematika seperti kalkulus** -- disebut besaran turunan karena besaran tersebut diturunkan atau dibentuk dari besaran pokok. Misalnya kecepatan = panjang ÷ waktu (keduanya besaran pokok), atau luas = panjang × panjang (dibentuk dari besaran panjang).
 

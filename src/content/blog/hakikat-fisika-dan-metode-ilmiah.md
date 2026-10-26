@@ -283,9 +283,56 @@ draft: false
 .mtr-card-icon { font-size: 1.375rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
 Oke, kelas X, materi pertama. Sebelum lompat ke rumus-rumus dan angka-angka, kita ngobrol dulu soal satu hal yang sering dilewatin gitu aja: **sebenarnya fisika itu apa, sih?**
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="120" width="400" height="60" fill="#86efac"/>
+  <circle cx="340" cy="35" r="24" fill="#fde68a" stroke="#d97706" stroke-width="3"/>
+  <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+    <line x1="340" y1="2" x2="340" y2="12"/>
+    <line x1="372" y1="35" x2="382" y2="35"/>
+    <line x1="363" y1="12" x2="370" y2="5"/>
+  </g>
+  <path d="M30 120 Q30 70 55 70 Q60 50 85 60 Q100 45 115 65 Q140 60 140 90 Q150 100 140 120 Z" fill="#60a5fa" opacity="0.8"/>
+  <g>
+    <rect x="80" y="95" width="10" height="35" fill="#78350f"/>
+    <circle cx="85" cy="85" r="26" fill="#16a34a"/>
+    <circle cx="68" cy="95" r="18" fill="#22c55e"/>
+    <circle cx="102" cy="95" r="18" fill="#22c55e"/>
+  </g>
+  <g>
+    <rect x="195" y="105" width="8" height="25" fill="#78350f"/>
+    <circle cx="199" cy="95" r="20" fill="#4ade80"/>
+  </g>
+  <g>
+    <circle cx="260" cy="150" r="14" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <circle cx="255" cy="147" r="2" fill="#7f1d1d"/>
+    <circle cx="265" cy="147" r="2" fill="#7f1d1d"/>
+    <path d="M254 154 Q260 158 266 154" stroke="#7f1d1d" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  <g>
+    <circle cx="245" cy="95" r="34" fill="none" stroke="#1e293b" stroke-width="6"/>
+    <circle cx="245" cy="95" r="34" fill="#dbeafe" opacity="0.35"/>
+    <line x1="268" y1="118" x2="300" y2="150" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <text x="200" y="20" font-size="13" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">Fisika: mengamati alam di sekitar kita</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Fisika dimulai dari rasa penasaran -- mengamati hal-hal biasa di alam dengan lebih teliti.</p>
+</div>
 
 Banyak yang ngira fisika itu ya isinya cuma rumus, angka, sama hafalan doang. ~~Fisika = hafalan rumus~~ → padahal itu cuma salah satu ujungnya aja. Fisika itu sebenarnya punya tiga "wajah" sekaligus, dan ketiganya jalan bareng.
 

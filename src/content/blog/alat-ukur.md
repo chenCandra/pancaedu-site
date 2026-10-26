@@ -179,13 +179,69 @@ draft: false
   margin-block: 1.25rem;
   font-size: 0.9375rem;
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
+
+Pernah lihat tukang bangunan di dekat rumahmu mengukur tembok pakai meteran gulung, sementara penjahit di pasar mengukur badan pelanggan pakai pita ukur lentur yang beda bentuknya? Keduanya sama-sama "mengukur panjang" -- tapi kenapa alatnya nggak ditukar saja? Jawabannya sederhana: setiap alat ukur dirancang khusus untuk jenis pengukuran tertentu, dan memilih alat yang salah bisa bikin hasil ukurmu meleset jauh atau malah nggak bisa diukur sama sekali.
 
 ## 🔧 Mengenal Alat Ukur
 
 Setelah belajar besaran pokok, besaran turunan, dan [dimensi](/materi/dimensi), sekarang saatnya masuk ke sisi paling praktis: bagaimana besaran-besaran itu benar-benar diukur. Coba lihat benda-benda di sekitar kalian. Bagaimana cara mengetahui panjang meja, massa sebuah benda, waktu yang diperlukan untuk berlari, atau suhu air?
 
-Kita tidak bisa hanya mengandalkan perkiraan. Dalam Fisika, kita membutuhkan pengukuran agar hasilnya dapat dinyatakan dengan angka dan satuan yang jelas. Untuk melakukan pengukuran, kita menggunakan **alat ukur**.
+Kita tidak bisa hanya mengandalkan perkiraan. Kalau kamu bilang "kayaknya meja ini sekitar sepelukan deh", temanmu bisa punya bayangan "sepelukan" yang beda jauh. Dalam Fisika, kita membutuhkan pengukuran agar hasilnya dapat dinyatakan dengan angka dan satuan yang jelas, supaya semua orang -- di mana pun -- membayangkan ukuran yang sama persis. Untuk melakukan pengukuran, kita menggunakan **alat ukur**.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="150" width="380" height="6" fill="#fde68a"/>
+  <g>
+    <rect x="30" y="110" width="110" height="26" rx="6" fill="#fbbf24" stroke="#92400e" stroke-width="3"/>
+    <g stroke="#92400e" stroke-width="2">
+      <line x1="45" y1="110" x2="45" y2="122"/>
+      <line x1="60" y1="110" x2="60" y2="122"/>
+      <line x1="75" y1="110" x2="75" y2="128"/>
+      <line x1="90" y1="110" x2="90" y2="122"/>
+      <line x1="105" y1="110" x2="105" y2="122"/>
+      <line x1="120" y1="110" x2="120" y2="128"/>
+    </g>
+    <circle cx="48" cy="150" r="3" fill="#78350f"/>
+    <circle cx="56" cy="150" r="3" fill="#78350f"/>
+    <path d="M44 158 Q52 165 60 158" stroke="#78350f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="85" y="185" font-size="13" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Penggaris</text>
+  </g>
+  <g>
+    <rect x="165" y="95" width="18" height="60" rx="4" fill="#60a5fa" stroke="#1e3a8a" stroke-width="3"/>
+    <rect x="215" y="95" width="18" height="60" rx="4" fill="#60a5fa" stroke="#1e3a8a" stroke-width="3"/>
+    <rect x="165" y="95" width="68" height="14" rx="4" fill="#93c5fd" stroke="#1e3a8a" stroke-width="3"/>
+    <rect x="178" y="130" width="40" height="10" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"/>
+    <circle cx="190" cy="165" r="3" fill="#1e3a8a"/>
+    <circle cx="200" cy="165" r="3" fill="#1e3a8a"/>
+    <path d="M186 172 Q195 178 204 172" stroke="#1e3a8a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="198" y="190" font-size="12" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">Jangka Sorong</text>
+  </g>
+  <g>
+    <rect x="280" y="120" width="90" height="16" rx="8" fill="#a78bfa" stroke="#4c1d95" stroke-width="3"/>
+    <circle cx="350" cy="128" r="22" fill="#c4b5fd" stroke="#4c1d95" stroke-width="3"/>
+    <line x1="350" y1="110" x2="350" y2="118" stroke="#4c1d95" stroke-width="2"/>
+    <line x1="350" y1="138" x2="350" y2="146" stroke="#4c1d95" stroke-width="2"/>
+    <circle cx="295" cy="128" r="6" fill="#4c1d95"/>
+    <circle cx="332" cy="121" r="3" fill="#4c1d95"/>
+    <circle cx="340" cy="121" r="3" fill="#4c1d95"/>
+    <path d="M330 128 Q336 133 342 128" stroke="#4c1d95" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <text x="325" y="170" font-size="12" font-weight="700" fill="#4c1d95" text-anchor="middle" font-family="sans-serif">Mikrometer Sekrup</text>
+  </g>
+</svg>
+<p class="mtr-ilustrasi-caption">Tiga sahabat alat ukur panjang -- dari yang paling umum sampai yang paling teliti untuk benda kecil.</p>
+</div>
 
 <div class="mtr-def">
 📏 <strong>Alat ukur</strong> adalah alat yang digunakan untuk membandingkan suatu besaran dengan satuan tertentu sehingga diperoleh nilai hasil pengukuran.
@@ -252,6 +308,10 @@ Mikrometer sekrup memiliki bagian seperti landasan, poros gerak, sleeve, thimble
 <div class="mtr-formula">Hasil pengukuran = skala utama + skala putar</div>
 
 Besarnya skala terkecil harus diperhatikan dari spesifikasi alat yang digunakan.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Ketelitian mikrometer sekrup bisa sampai 0,01 mm -- itu kira-kira sepersepuluh dari ketebalan sehelai rambut manusia! Makanya alat ini sering dipakai di bengkel otomotif buat mengecek ketebalan kampas rem atau komponen mesin kecil yang butuh presisi tinggi.</p>
+</div>
 
 ## ⚖️ Alat Ukur Massa, Waktu, dan Suhu
 

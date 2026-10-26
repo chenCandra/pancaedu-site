@@ -187,9 +187,21 @@ draft: false
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.875rem; color: var(--ink-soft); margin: 0 0 0.75rem; }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
-Setelah belajar cara [merancang penyelidikan ilmiah](/materi/merancang-dan-melakukan-penyelidikan-ilmiah), sekarang saatnya masuk ke apa yang sebenarnya "diselidiki" itu -- ada dua kata yang bakal terus muncul di hampir setiap materi selanjutnya: **besaran** dan **satuan**. Kedengarannya sepele, tapi keduanya adalah fondasi dari cara Fisika "berbicara" secara kuantitatif. Tanpa memahami ini dengan benar, materi-materi selanjutnya (besaran pokok, besaran turunan, dimensi, pengukuran) bakal terasa membingungkan.
+Bayangkan kamu dan temanmu yang badannya jauh lebih tinggi sama-sama diminta "ukur panjang kain ini pakai jengkal tangan masing-masing". Hasilnya pasti beda -- jengkal tanganmu lebih kecil, jadi kainnya "terasa" lebih panjang buatmu. Padahal kain yang diukur sama persis! Masalah seperti ini yang bikin dunia akhirnya sepakat butuh cara mengukur yang hasilnya SAMA, siapa pun dan di mana pun yang mengukur. Di sinilah dua kata paling dasar dalam Fisika mulai berperan: **besaran** dan **satuan**.
+
+Setelah belajar cara [merancang penyelidikan ilmiah](/materi/merancang-dan-melakukan-penyelidikan-ilmiah), sekarang saatnya masuk ke apa yang sebenarnya "diselidiki" itu. Kedengarannya sepele, tapi keduanya adalah fondasi dari cara Fisika "berbicara" secara kuantitatif. Tanpa memahami ini dengan benar, materi-materi selanjutnya (besaran pokok, besaran turunan, dimensi, pengukuran) bakal terasa membingungkan.
 
 ## 🔎 Apa Itu Besaran?
 
@@ -218,6 +230,32 @@ Kalau kita bilang "panjang meja 2 meter", artinya panjang meja itu **2 kali lipa
 Dulu, sebelum ada satuan seperti yang kita kenal sekarang, orang mengukur panjang pakai bagian tubuhnya sendiri -- **jengkal** (rentang jari tangan), **hasta** (dari siku ke ujung jari), atau **depa** (rentang kedua tangan).
 
 Masalahnya: jengkal orang dewasa jelas beda dengan jengkal anak kecil. Kalau dua orang mengukur panjang kain yang sama pakai jengkal masing-masing, hasilnya bisa beda-beda.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="110" width="320" height="14" rx="4" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+  <g>
+    <circle cx="70" cy="55" r="20" fill="#fca5a5" stroke="#991b1b" stroke-width="3"/>
+    <circle cx="63" cy="52" r="2.5" fill="#991b1b"/>
+    <circle cx="77" cy="52" r="2.5" fill="#991b1b"/>
+    <path d="M62 60 Q70 65 78 60" stroke="#991b1b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M70 75 L70 100 M50 110 L70 95 L95 110" stroke="#991b1b" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M50 110 L130 110" stroke="#dc2626" stroke-width="4" stroke-dasharray="4 4"/>
+    <text x="90" y="145" font-size="12" font-weight="700" fill="#991b1b" text-anchor="middle" font-family="sans-serif">1 jengkal kecil</text>
+  </g>
+  <g>
+    <circle cx="300" cy="45" r="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="3"/>
+    <circle cx="291" cy="42" r="3" fill="#1e3a8a"/>
+    <circle cx="309" cy="42" r="3" fill="#1e3a8a"/>
+    <path d="M289 51 Q300 58 311 51" stroke="#1e3a8a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M300 71 L300 100 M250 110 L300 92 L350 110" stroke="#1e3a8a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M250 110 L350 110" stroke="#2563eb" stroke-width="4" stroke-dasharray="4 4"/>
+    <text x="300" y="145" font-size="12" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">1 jengkal besar</text>
+  </g>
+  <text x="200" y="30" font-size="14" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">Kain yang sama, hasil "ukur" beda!</text>
+</svg>
+<p class="mtr-ilustrasi-caption">Jengkal tangan beda ukuran untuk tiap orang -- itulah kenapa satuan tidak baku tidak bisa dipakai buat Fisika.</p>
+</div>
 
 <div class="mtr-table-wrap">
 <div class="mtr-table-scroll">

@@ -187,9 +187,57 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
+Coba perhatikan panel surya di atap rumah tetangga kalian yang lagi nge-tren itu. Pagi-pagi, dia cuma menerima cahaya matahari yang jatuh ke permukaannya. Tapi begitu dicek, listriknya sudah bisa menyalakan lampu dan kulkas di dalam rumah. Di antara "cahaya matahari masuk" dan "lampu menyala", ada sesuatu yang terjadi -- energi nggak cuma pindah tempat, dia **berubah bentuk**.
+
 Di materi [Bentuk-bentuk Energi](/materi/mengenal-ragam-energi), kita sudah kenalan sama sembilan bentuk energi yang berbeda. Tapi energi jarang sekali "diam" di satu bentuk saja -- yang lebih sering terjadi adalah energi **berubah dari satu bentuk ke bentuk lain**. Itulah yang kita bahas sekarang.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="35" cy="45" r="22" fill="#fde68a"/>
+    <circle cx="35" cy="45" r="16" fill="#f59e0b"/>
+    <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+      <line x1="35" y1="12" x2="35" y2="4"/>
+      <line x1="8" y1="45" x2="0" y2="45"/>
+      <line x1="14" y1="24" x2="8" y2="18"/>
+      <line x1="14" y1="66" x2="8" y2="72"/>
+    </g>
+    <path d="M55 48 L85 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
+    <defs><marker id="arrmtr1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#78350f"/></marker></defs>
+    <rect x="90" y="30" width="55" height="35" rx="4" fill="#3b82f6" transform="skewX(-8)"/>
+    <line x1="100" y1="30" x2="100" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+    <line x1="115" y1="30" x2="115" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+    <line x1="130" y1="30" x2="130" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+    <text x="118" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panel Surya</text>
+    <path d="M160 48 L190 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
+    <path d="M198 30 L213 30 L206 45 L220 45 L200 68 L205 50 L192 50 Z" fill="#fbbf24"/>
+    <text x="208" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Listrik</text>
+    <path d="M232 48 L262 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
+    <circle cx="300" cy="42" r="22" fill="#fff7d6" stroke="#fcd34d" stroke-width="3"/>
+    <rect x="293" y="62" width="14" height="10" fill="#9ca3af"/>
+    <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+      <line x1="300" y1="12" x2="300" y2="4"/>
+      <line x1="270" y1="42" x2="262" y2="42"/>
+      <line x1="330" y1="42" x2="338" y2="42"/>
+      <line x1="280" y1="22" x2="274" y2="16"/>
+      <line x1="320" y1="22" x2="326" y2="16"/>
+    </g>
+    <text x="300" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Lampu Menyala</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Rantai perubahan energi: cahaya matahari → panel surya → energi listrik → lampu menyala.</p>
+</div>
 
 ## 🔄 Prinsip Dasar Perubahan Energi
 
@@ -216,6 +264,8 @@ Langkah pertama rantai ini -- energi potensial berubah jadi energi kinetik -- bi
 <div class="mtr-diagram">
 Energi Kimia (bahan bakar) → Energi Panas (pembakaran) → Energi Kinetik (kendaraan bergerak)
 </div>
+
+Coba pegang knalpot motor matic yang baru dipakai jauh -- panas banget, kan? Itu bukti nyata energi kimia bensin nggak langsung jadi gerak, tapi lewat tahap panas pembakaran dulu di ruang mesin.
 
 ### Panel Surya
 
@@ -245,7 +295,11 @@ Dalam praktiknya, tidak semua energi input berhasil berubah jadi bentuk energi y
 
 <div class="mtr-formula">Efisiensi (η) = (Energi Berguna / Energi Total) × 100%</div>
 
-Contohnya, lampu pijar lama cuma punya efisiensi sekitar 5-10% -- sebagian besar energi listriknya berubah jadi panas, bukan cahaya. Itu sebabnya lampu LED (efisiensi jauh lebih tinggi, sekitar 80-90%) lebih hemat energi buat menghasilkan tingkat terang yang sama.
+Contohnya, lampu pijar lama cuma punya efisiensi sekitar 5-10% -- sebagian besar energi listriknya berubah jadi panas, bukan cahaya (makanya lampu pijar lama kalau dipegang setelah nyala lama berasa panas). Itu sebabnya lampu LED (efisiensi jauh lebih tinggi, sekitar 80-90%) lebih hemat energi buat menghasilkan tingkat terang yang sama -- ini juga alasan kenapa rumah-rumah sekarang pelan-pelan beralih total ke lampu LED.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Kompor gas konvensional efisiensinya cuma sekitar 40-50% (banyak panas yang "lari" ke udara sekitar panci), sedangkan kompor induksi bisa mencapai 85-90% karena panasnya muncul langsung di dasar panci lewat prinsip induksi elektromagnetik, bukan dari nyala api yang menyebar ke mana-mana.</p>
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Tidak ada mesin yang efisiensinya 100%.</strong> Ini bukan soal teknologi belum cukup canggih -- selalu ada gesekan, hambatan, atau faktor lain yang membuat sebagian energi berubah jadi panas yang tidak berguna untuk tujuan utama mesin tersebut.

@@ -162,6 +162,25 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. Skrip SENGAJA ditulis tanpa baris kosong
+   sama sekali: markdown parser situs ini tidak kebal baris kosong di dalam
+   <script>, baris kosong bikin parser balik ke mode markdown di tengah
+   kode JS dan merusaknya. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+
 /* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
    miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
    dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
@@ -230,7 +249,75 @@ Setelah tuntas dengan [Besaran dan Satuan](/materi/besaran-dan-satuan) serta car
 
 ## 🚗 Apa itu GLB?
 
-GLB adalah gerak suatu benda pada lintasan lurus dengan **kecepatan konstan** -- besarnya tidak berubah, dan arahnya juga tidak berubah. Karena kecepatan tidak berubah, otomatis **percepatan pada GLB selalu nol** (a = 0). Contoh yang mendekati GLB dalam kehidupan sehari-hari: mobil yang melaju di jalan tol lurus dengan cruise control, atau kereta yang melaju stabil di rel lurus.
+Mobil di jalan tol yang pakai *cruise control* itu contoh paling gampang dari GLB -- coba deh perhatikan speedometer-nya baik-baik, jarumnya nggak goyang sama sekali selama fitur itu aktif. Kecepatannya benar-benar tetap, nggak nambah dan nggak berkurang, selama jalannya lurus.
+
+GLB adalah gerak suatu benda pada lintasan lurus dengan **kecepatan konstan** -- besarnya tidak berubah, dan arahnya juga tidak berubah. Karena kecepatan tidak berubah, otomatis **percepatan pada GLB selalu nol** (a = 0). Contoh lain yang mendekati GLB: travelator (lantai berjalan) di mal atau bandara yang bergerak dengan kecepatan tetap, atau kereta yang melaju stabil di rel lurus tanpa pengereman maupun tambahan gas.
+
+Coba geser slider di bawah ini buat lihat mobilnya bergerak dengan kecepatan konstan, dan perhatikan grafik posisi-waktu (x-t) di bawahnya -- makin besar kecepatannya, makin tegak garisnya:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Geser kecepatan mobilnya -- perhatikan grafik posisi-waktu (x-t) yang ikut berubah kemiringannya:</p>
+  <canvas id="glbCanvas" width="640" height="300" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <input type="range" id="glbSlider" min="2" max="20" step="1" value="10" style="width:100%;margin-top:10px;accent-color:#3b82f6;">
+  <p class="mtr-mini-label">Kecepatan: <strong id="glbSpeedLabel">10</strong> m/s &middot; Jarak tempuh dalam 5 s: <strong id="glbJarakLabel">50</strong> m</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('glbCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('glbSlider');
+  var speedLabel = document.getElementById('glbSpeedLabel');
+  var jarakLabel = document.getElementById('glbJarakLabel');
+  var w = canvas.width, h = canvas.height;
+  var roadY = 95, roadX1 = 40, roadX2 = 600;
+  var gx = 60, gy = 190, gw = 520, gh = 85;
+  var jarak = 0, lastTime = null;
+  function gambarMobil(cx, cy) {
+    ctx.save(); ctx.translate(cx, cy);
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath(); ctx.moveTo(-22, 10); ctx.lineTo(-16, -8); ctx.lineTo(10, -8); ctx.lineTo(22, 2); ctx.lineTo(22, 10); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#eaf6ff'; ctx.beginPath(); ctx.moveTo(-12, -8); ctx.lineTo(-6, -17); ctx.lineTo(8, -17); ctx.lineTo(10, -8); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.stroke();
+    ctx.fillStyle = '#26243b';
+    ctx.beginPath(); ctx.arc(-13, 11, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(14, 11, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function draw(now) {
+    if (lastTime === null) lastTime = now;
+    var dt = (now - lastTime) / 1000;
+    lastTime = now;
+    var speed = parseFloat(slider.value);
+    jarak = (jarak + speed * dt) % 100;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#cbb892'; ctx.lineWidth = 3; ctx.setLineDash([14, 10]);
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 22); ctx.lineTo(roadX2, roadY + 22); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 36); ctx.lineTo(roadX2, roadY + 36); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(roadX1, roadY + 8); ctx.lineTo(roadX2, roadY + 8); ctx.stroke();
+    var carX = roadX1 + (jarak / 100) * (roadX2 - roadX1);
+    gambarMobil(carX, roadY);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy + gh); ctx.lineTo(gx + gw, gy + gh); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('x (m)', gx - 6, gy + 6);
+    ctx.textAlign = 'center';
+    ctx.fillText('t (s)', gx + gw, gy + gh + 16);
+    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(gx, gy + gh);
+    var xAkhir = Math.min(speed * 5, 100);
+    ctx.lineTo(gx + gw, gy + gh - (xAkhir / 100) * gh);
+    ctx.stroke();
+    speedLabel.textContent = speed;
+    jarakLabel.textContent = xAkhir.toFixed(0);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
 
 ## 📐 Rumus GLB
 
@@ -271,6 +358,8 @@ x = x₀ + v·t = 0 + 20 × 5 = **100 m**
 </table>
 </div>
 </div>
+
+Perhatikan lagi widget di atas: garis x-t-nya selalu lurus, nggak pernah melengkung, karena jarak yang ditambah setiap detiknya selalu sama persis -- itulah inti dari "beraturan" pada GLB.
 
 Coba sendiri di simulasi di bawah -- pilih mode GLB, atur kecepatannya, jalankan eksperimen, lalu perhatikan ketiga grafik itu terbentuk secara real-time, tersinkron dengan animasi keretanya.
 

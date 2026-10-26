@@ -202,7 +202,20 @@ draft: false
   margin-block: 1rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
+
+Bandingkan tiga benda ini: baterai HP yang diam di laci, karet gelang yang ditarik kencang siap "ditembakkan", dan motor matic yang sedang melaju 60 km/jam. Ketiganya sama-sama punya energi -- tapi coba rasakan bedanya. Baterai menyimpan energinya dalam reaksi kimia di dalam selnya. Karet gelang menyimpannya dalam regangan bentuknya sendiri. Motor matic punya energinya justru karena ia BERGERAK. Tiga "wujud" energi yang beda, meski sama-sama disebut energi.
 
 Di materi [Konsep Energi](/materi/konsep-energi), kita sudah kenalan sama definisi energi dan Hukum Kekekalan Energi. Sekarang saatnya kenalan sama berbagai **bentuk** energi yang ada di sekitar kita -- ternyata jauh lebih banyak dari yang kalian kira.
 
@@ -216,13 +229,52 @@ Sebelum masuk ke daftarnya, ada satu kekeliruan yang sering terjadi: mencampurad
 
 Contohnya, "energi angin" dan "energi air" sebenarnya bukan bentuk energi tersendiri -- angin dan air yang bergerak itu punya **energi kinetik** (karena geraknya), cuma sumbernya beda-beda. Pembangkit listrik tenaga angin dan tenaga air sama-sama pada akhirnya memanfaatkan energi kinetik buat memutar turbin. Sisi "sumber"-nya ini dibahas tuntas di materi [Sumber Energi](/materi/sumber-energi), lengkap klasifikasi terbarukan dan tak terbarukan.
 
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(10,20)">
+      <rect x="10" y="20" width="40" height="70" rx="8" fill="#22c55e"/>
+      <rect x="22" y="10" width="16" height="12" rx="3" fill="#16a34a"/>
+      <rect x="18" y="38" width="24" height="12" rx="2" fill="#fff"/>
+      <text x="30" y="115" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Kimia</text>
+    </g>
+    <g transform="translate(85,20)">
+      <circle cx="30" cy="20" r="10" fill="#ef4444"/>
+      <line x1="30" y1="30" x2="30" y2="75" stroke="#78350f" stroke-width="2" stroke-dasharray="3,3"/>
+      <text x="30" y="115" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Potensial</text>
+    </g>
+    <g transform="translate(155,30)">
+      <rect x="4" y="25" width="55" height="25" rx="10" fill="#3b82f6"/>
+      <rect x="14" y="10" width="30" height="20" rx="8" fill="#60a5fa"/>
+      <circle cx="18" cy="52" r="8" fill="#26243b"/>
+      <circle cx="48" cy="52" r="8" fill="#26243b"/>
+      <text x="30" y="95" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Kinetik</text>
+    </g>
+    <g transform="translate(240,20)">
+      <circle cx="30" cy="35" r="22" fill="#fde68a"/>
+      <rect x="22" y="55" width="16" height="10" fill="#9ca3af"/>
+      <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+        <line x1="30" y1="5" x2="30" y2="-3"/>
+        <line x1="8" y1="35" x2="0" y2="35"/>
+        <line x1="52" y1="35" x2="60" y2="35"/>
+      </g>
+      <text x="30" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Listrik</text>
+    </g>
+    <g transform="translate(315,25)">
+      <path d="M30 10 Q45 35 32 50 Q38 55 30 65 Q12 55 15 38 Q18 48 22 42 Q10 25 30 10 Z" fill="#f97316"/>
+      <path d="M30 25 Q38 40 30 52 Q25 48 26 40 Q22 44 23 36 Q24 30 30 25 Z" fill="#fde68a"/>
+      <text x="30" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panas</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Lima bentuk energi: baterai (kimia), bola di ketinggian (potensial), motor melaju (kinetik), lampu (listrik), dan api (panas/termal).</p>
+</div>
+
 ## 🏃 Energi Mekanik: Kinetik dan Potensial
 
 Dua bentuk energi ini paling sering ditemui di awal belajar Fisika, karena keduanya berkaitan langsung dengan gerak dan posisi benda.
 
 ### Energi Kinetik
 
-Energi yang dimiliki benda karena **bergerak**. Semakin besar massa dan semakin cepat geraknya, semakin besar energi kinetiknya.
+Energi yang dimiliki benda karena **bergerak**. Semakin besar massa dan semakin cepat geraknya, semakin besar energi kinetiknya. Motor matic yang melaju 60 km/jam punya energi kinetik jauh lebih besar dibanding sepeda kalian yang dikayuh santai 10 km/jam -- itu juga kenapa kecelakaan di kecepatan tinggi jauh lebih fatal, energi kinetiknya berlipat-lipat.
 
 <div class="mtr-formula">Eₖ = ½mv²</div>
 
@@ -243,7 +295,11 @@ Energi yang dimiliki benda karena **posisi/ketinggiannya** dalam medan gravitasi
 
 ### Energi Potensial Elastis
 
-Energi yang tersimpan pada benda elastis (pegas, karet gelang) saat **diregangkan atau ditekan** dari bentuk normalnya.
+Energi yang tersimpan pada benda elastis (pegas, karet gelang) saat **diregangkan atau ditekan** dari bentuk normalnya. Karet gelang yang kalian tarik buat nembak kertas, atau trampolin yang kalian lompati di taman bermain, keduanya menyimpan energi lewat regangan elastisnya -- begitu dilepas, energi itu langsung berubah jadi energi kinetik.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Shock depan motor atau sepeda kalian itu sebenarnya pegas (atau sejenisnya) yang bekerja pakai prinsip energi potensial elastis -- menyerap energi kejut dari jalan berlubang, lalu melepaskannya pelan-pelan supaya nggak langsung "mantul" ke badan kalian.</p>
+</div>
 
 <div class="mtr-formula">Eₚ = ½kx²</div>
 
@@ -259,6 +315,8 @@ Energi yang tersimpan pada benda elastis (pegas, karet gelang) saat **diregangka
 </div>
 
 ## ⚡ Bentuk-bentuk Energi Lainnya
+
+Selain kinetik dan potensial, ada enam bentuk energi lain yang nggak kalah sering kalian temui -- dari rice cooker yang mempertahankan nasi tetap hangat (termal), sampai speaker HP yang mengubah file musik jadi suara yang bisa kalian dengar (bunyi).
 
 <div class="mtr-cards">
 <div class="mtr-cards-grid">

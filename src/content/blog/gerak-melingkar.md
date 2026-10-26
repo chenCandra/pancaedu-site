@@ -113,6 +113,25 @@ draft: false
   margin-block: 1.25rem;
   font-size: 0.9375rem;
 }
+
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. Skrip SENGAJA ditulis tanpa baris kosong
+   sama sekali: markdown parser situs ini tidak kebal baris kosong di dalam
+   <script>, baris kosong bikin parser balik ke mode markdown di tengah
+   kode JS dan merusaknya. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
 </style>
 
 Setelah mempelajari gerak lurus ([GLB](/materi/gerak-lurus-beraturan) dan [GLBB](/materi/gerak-lurus-berubah-beraturan)) serta [gerak parabola](/materi/gerak-parabola), sekarang kita bahas jenis gerak lengkung lainnya: **gerak melingkar** -- gerak benda yang lintasannya berbentuk lingkaran, seperti roda yang berputar, jarum jam, atau bianglala.
@@ -148,6 +167,68 @@ Perhatikan rumus <em>v = ω × r</em> -- ini artinya untuk kecepatan sudut (ω) 
 <div class="mtr-note">
 🎯 <strong>Coba pikirkan:</strong> di komidi putar (carousel), penumpang yang duduk paling PINGGIR bergerak lebih cepat (kecepatan linear lebih besar) dibanding penumpang yang duduk lebih DEKAT pusat -- padahal keduanya berputar mengelilingi pusat yang sama dalam waktu yang sama (ω sama)!
 </div>
+
+Coba geser slider di bawah ini buat lihat sendiri -- makin besar kecepatan sudutnya (ω), makin cepat bola berputar mengelilingi pusat, dan makin pendek pula periodenya (T):
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎚️ Geser kecepatan sudutnya (ω) -- perhatikan bola berputar makin cepat/lambat, dan arah kecepatan liniernya (panah hijau) yang selalu menyinggung lintasan:</p>
+  <canvas id="gmCanvas" width="640" height="320" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <input type="range" id="gmSlider" min="0.5" max="8" step="0.1" value="2" style="width:100%;margin-top:10px;accent-color:#8b3ddb;">
+  <p class="mtr-mini-label">ω = <strong id="gmOmegaLabel">2,0</strong> rad/s &middot; T = <strong id="gmTLabel">3,14</strong> s &middot; f = <strong id="gmFLabel">0,32</strong> Hz</p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('gmCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var slider = document.getElementById('gmSlider');
+  var omegaLabel = document.getElementById('gmOmegaLabel');
+  var tLabel = document.getElementById('gmTLabel');
+  var fLabel = document.getElementById('gmFLabel');
+  var w = canvas.width, h = canvas.height;
+  var cx = w * 0.5, cy = h * 0.52, r = 120;
+  var theta = 0, lastTime = null;
+  function draw(now) {
+    if (lastTime === null) lastTime = now;
+    var dt = (now - lastTime) / 1000;
+    lastTime = now;
+    var omega = parseFloat(slider.value);
+    theta = (theta + omega * dt) % (Math.PI * 2);
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2; ctx.setLineDash([6, 8]);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#26243b';
+    ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
+    var bx = cx + Math.cos(theta) * r, by = cy + Math.sin(theta) * r;
+    ctx.strokeStyle = '#cbb892'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(bx, by); ctx.stroke();
+    var tx = -Math.sin(theta), ty = Math.cos(theta);
+    var panjangPanah = 36 + omega * 3;
+    var ax = bx + tx * panjangPanah, ay = by + ty * panjangPanah;
+    ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.stroke();
+    var sudutPanah = Math.atan2(ay - by, ax - bx);
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.lineTo(ax - 8 * Math.cos(sudutPanah - 0.4), ay - 8 * Math.sin(sudutPanah - 0.4));
+    ctx.lineTo(ax - 8 * Math.cos(sudutPanah + 0.4), ay - 8 * Math.sin(sudutPanah + 0.4));
+    ctx.closePath(); ctx.fillStyle = '#16a34a'; ctx.fill();
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath(); ctx.arc(bx, by, 11, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    var T = (2 * Math.PI) / omega;
+    var f = omega / (2 * Math.PI);
+    omegaLabel.textContent = omega.toFixed(1);
+    tLabel.textContent = T.toFixed(2);
+    fLabel.textContent = f.toFixed(2);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+
+Perhatikan panah hijau di widget di atas -- itulah **kecepatan linear**, yang arahnya selalu menyinggung (tangensial) lingkaran, tegak lurus terhadap garis dari pusat ke bola. Arah panah itu TERUS BERUBAH mengikuti posisi bola, meski besarnya (laju) tetap sama -- ini yang akan menjelaskan kenapa GMB tetap punya percepatan, dibahas di bagian berikutnya.
 
 ## 🌀 Percepatan Sentripetal: Kenapa GMB Tetap Punya Percepatan?
 

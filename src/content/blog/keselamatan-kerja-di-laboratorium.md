@@ -226,6 +226,17 @@ draft: false
   border-left: 3px solid var(--rose);
   background: color-mix(in srgb, var(--rose) 12%, var(--surface));
 }
+
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
 </style>
 
 Di materi [Hakikat Fisika & Metode Ilmiah](/materi/hakikat-fisika-dan-metode-ilmiah), kalian sudah kenalan sama proses penelitian ilmiah. Tapi sebelum tangan kalian menyentuh tabung reaksi, bunsen, atau bahan kimia apa pun di laboratorium, ada satu materi yang wajib dikuasai lebih dulu -- bukan rumus, tapi cara menjaga diri sendiri dan teman-teman tetap aman. Materi ini sering dianggap formalitas basa-basi sebelum praktikum, padahal justru inilah yang menentukan apakah eksperimen kalian berjalan lancar atau berakhir di UKS.
@@ -239,6 +250,34 @@ Laboratorium bukan ruang kelas biasa. Ada bahan kimia yang bisa mengiritasi kuli
 ## 🥽 Alat Pelindung Diri (APD)
 
 APD adalah perlengkapan yang dipakai **sebelum** praktikum dimulai, bukan disiapkan setelah ada yang terluka.
+
+<div class="mtr-ilustrasi">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="55" r="30" fill="#fde0c4" stroke="#92400e" stroke-width="3"/>
+  <circle cx="190" cy="52" r="3" fill="#78350f"/>
+  <circle cx="210" cy="52" r="3" fill="#78350f"/>
+  <path d="M188 64 Q200 72 212 64" stroke="#78350f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M172 48 Q172 20 200 20 Q228 20 228 48" fill="none" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="183" cy="48" rx="10" ry="12" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="3"/>
+  <ellipse cx="217" cy="48" rx="10" ry="12" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="3"/>
+  <line x1="193" y1="48" x2="207" y2="48" stroke="#1e3a8a" stroke-width="3"/>
+  <path d="M150 90 L250 90 L260 190 L140 190 Z" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/>
+  <rect x="190" y="90" width="20" height="30" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="200" cy="130" r="3" fill="#94a3b8"/>
+  <circle cx="200" cy="150" r="3" fill="#94a3b8"/>
+  <circle cx="200" cy="170" r="3" fill="#94a3b8"/>
+  <g>
+    <ellipse cx="130" cy="150" rx="22" ry="28" fill="#fbbf24" stroke="#92400e" stroke-width="3"/>
+    <path d="M118 135 L142 165 M142 135 L118 165" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g>
+    <ellipse cx="270" cy="150" rx="22" ry="28" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <path d="M260 145 L270 155 L282 138" stroke="#065f46" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="200" y="12" font-size="12" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">Siap praktikum: kacamata + jas lab + sarung tangan</text>
+</svg>
+<p class="mtr-ilustrasi-caption">APD lengkap dipakai SEBELUM praktikum dimulai, bukan setelah ada yang kejadian.</p>
+</div>
 
 <div class="mtr-cards">
 <div class="mtr-cards-grid">

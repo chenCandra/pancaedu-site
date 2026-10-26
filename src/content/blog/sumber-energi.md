@@ -191,9 +191,59 @@ draft: false
   font-size: 0.9375rem;
 }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
 
-Setelah belajar [Usaha dan Daya](/materi/usaha-dan-daya), sekarang kita ambil jarak sedikit dari rumus-rumus, dan lihat energi dari sudut pandang yang lebih besar: **dari mana sebenarnya energi yang kita pakai sehari-hari itu berasal?**
+Setelah belajar [Usaha dan Daya](/materi/usaha-dan-daya), sekarang kita ambil jarak sedikit dari rumus-rumus, dan lihat energi dari sudut pandang yang lebih besar: **dari mana sebenarnya energi yang kita pakai sehari-hari itu berasal?** Listrik yang menyalakan lampu di rumah kalian itu, sebelum jadi listrik, awalnya berasal dari sesuatu -- bisa dari batu bara yang dibakar di PLTU, air terjun yang memutar turbin PLTA, atau panel surya yang menangkap cahaya matahari. Nah, "sesuatu" itulah yang disebut sumber energi.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(10,15)">
+      <circle cx="35" cy="35" r="24" fill="#fde68a"/>
+      <circle cx="35" cy="35" r="17" fill="#f59e0b"/>
+      <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+        <line x1="35" y1="4" x2="35" y2="-3"/>
+        <line x1="4" y1="35" x2="-3" y2="35"/>
+        <line x1="13" y1="13" x2="7" y2="7"/>
+        <line x1="57" y1="13" x2="63" y2="7"/>
+      </g>
+      <text x="35" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Matahari</text>
+    </g>
+    <g transform="translate(95,15)">
+      <circle cx="40" cy="45" r="4" fill="#78350f"/>
+      <rect x="37" y="15" width="3" height="30" fill="#78350f"/>
+      <path d="M40 18 L65 25 L40 30 Z" fill="#60a5fa"/>
+      <path d="M40 18 L18 35 L35 32 Z" fill="#93c5fd"/>
+      <path d="M40 18 L30 -2 L45 20 Z" fill="#3b82f6"/>
+      <text x="40" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Angin</text>
+    </g>
+    <g transform="translate(180,5)">
+      <rect x="25" y="0" width="12" height="45" fill="#60a5fa"/>
+      <path d="M31 45 Q10 60 20 75 Q31 65 31 45 Z" fill="#93c5fd"/>
+      <ellipse cx="31" cy="78" rx="18" ry="7" fill="#3b82f6"/>
+      <text x="31" y="110" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Air Terjun</text>
+    </g>
+    <g transform="translate(260,20)">
+      <ellipse cx="35" cy="55" rx="34" ry="12" fill="#26243b"/>
+      <path d="M8 55 Q15 25 35 25 Q55 25 62 55 Z" fill="#374151"/>
+      <circle cx="22" cy="45" r="4" fill="#1f2937"/>
+      <circle cx="40" cy="38" r="5" fill="#1f2937"/>
+      <circle cx="48" cy="48" r="4" fill="#1f2937"/>
+      <text x="35" y="95" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Batu Bara</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Beberapa sumber energi di sekitar kita: matahari, angin, air terjun, dan batu bara.</p>
+</div>
 
 ## 🔎 Apa Itu Sumber Energi?
 
@@ -232,7 +282,11 @@ Dua materi selanjutnya akan membahas masing-masing kategori ini secara mendalam 
 
 ## 🌍 Kenapa Perbedaan Ini Penting?
 
-~~Selama masih ada energi yang bisa dipakai, tidak masalah dari sumber mana pun~~ → sayangnya tidak sesederhana itu. Sumber energi tak terbarukan, seperti namanya, **akan habis** kalau terus dipakai tanpa henti, karena kecepatan pembentukannya jauh lebih lambat daripada kecepatan pemakaian manusia. Sementara itu, sumber terbarukan menawarkan pilihan yang lebih berkelanjutan untuk jangka panjang.
+~~Selama masih ada energi yang bisa dipakai, tidak masalah dari sumber mana pun~~ → sayangnya tidak sesederhana itu. Sumber energi tak terbarukan, seperti namanya, **akan habis** kalau terus dipakai tanpa henti, karena kecepatan pembentukannya jauh lebih lambat daripada kecepatan pemakaian manusia -- batu bara yang dibakar PLTU hari ini butuh jutaan tahun lagi buat terbentuk ulang, sementara PLTS di atap rumah bisa terus menangkap sinar matahari setiap hari tanpa pernah "habis" sumbernya. Sementara itu, sumber terbarukan menawarkan pilihan yang lebih berkelanjutan untuk jangka panjang.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> Indonesia sebenarnya salah satu negara dengan potensi panas bumi (geothermal) terbesar di dunia, karena berada di jalur "Cincin Api Pasifik" yang penuh gunung berapi -- tapi listrik rumahmu sekarang mungkin masih lebih banyak berasal dari PLTU batu bara, karena infrastrukturnya sudah lama dibangun duluan.</p>
+</div>
 
 Karena itu, banyak negara (termasuk Indonesia) mulai mendorong transisi ke sumber energi terbarukan -- bukan karena sumber tak terbarukan "buruk", tapi karena keterbatasannya perlu diantisipasi dari sekarang, bukan ditunda sampai benar-benar habis.
 

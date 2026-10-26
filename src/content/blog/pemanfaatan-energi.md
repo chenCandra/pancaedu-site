@@ -182,13 +182,62 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+.mtr-ilustrasi {
+  margin-block: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fcd34d;
+  text-align: center;
+}
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
 </style>
+
+Coba lacak perjalanan energi dari charger HP kalian sampai layarnya menyala terang. Listrik dari stop kontak rumah masuk ke charger, diubah jadi arus yang pas buat ngisi baterai HP, tersimpan sebentar di dalam sel baterai, lalu dipakai lagi buat menyalakan layar, speaker, dan prosesor begitu kalian scroll media sosial. Energi itu sudah menempuh perjalanan panjang -- dan ini baru dari charger ke HP, belum dari pembangkit listrik ke rumah kalian!
 
 Sejauh ini kita sudah belajar energi dari sisi bentuknya, perubahannya, sampai sumbernya -- termasuk [Energi Terbarukan](/materi/energi-terbarukan) dan [Energi Tak Terbarukan](/materi/energi-tak-terbarukan). Sekarang mari lihat dari sudut pandang yang berbeda: **bagaimana energi itu benar-benar dipakai** dalam kehidupan sehari-hari, per sektor kegiatan manusia.
 
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(15,30)">
+      <rect x="0" y="30" width="80" height="55" rx="4" fill="#6b7280"/>
+      <rect x="15" y="5" width="14" height="30" fill="#4b5563"/>
+      <rect x="40" y="0" width="14" height="35" fill="#4b5563"/>
+      <rect x="12" y="45" width="56" height="20" fill="#9ca3af"/>
+      <circle cx="25" cy="55" r="5" fill="#fbbf24"/>
+      <circle cx="45" cy="55" r="5" fill="#fbbf24"/>
+      <text x="40" y="100" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Pembangkit</text>
+    </g>
+    <path d="M105 65 L155 65" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr2)"/>
+    <defs><marker id="arrmtr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#78350f"/></marker></defs>
+    <g transform="translate(160,40)">
+      <rect x="10" y="20" width="4" height="40" fill="#78350f"/>
+      <line x1="0" y1="20" x2="24" y2="20" stroke="#78350f" stroke-width="3"/>
+      <path d="M4 20 L4 10 M20 20 L20 10" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="3,3"/>
+      <text x="12" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Jaringan</text>
+    </g>
+    <path d="M215 65 L265 65" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr2)"/>
+    <g transform="translate(275,25)">
+      <polygon points="35,0 70,30 70,80 0,80 0,30" fill="#f59e0b"/>
+      <rect x="15" y="40" width="40" height="40" fill="#fde68a"/>
+      <rect x="28" y="55" width="14" height="25" fill="#78350f"/>
+      <rect x="20" y="45" width="10" height="10" fill="#93c5fd"/>
+      <circle cx="42" cy="48" r="6" fill="#fff7d6" stroke="#f59e0b" stroke-width="2"/>
+      <text x="35" y="100" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Rumah &amp; Lampu</text>
+    </g>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Perjalanan energi: pembangkit listrik → jaringan distribusi → rumah dan lampu menyala.</p>
+</div>
+
 ## 🏠 Rumah Tangga
 
-Energi paling terasa di kehidupan sehari-hari kalian ada di rumah. Listrik menyalakan lampu, TV, kulkas, AC, sampai mengisi daya HP. Gas (LPG) dipakai untuk memasak. Ini sebabnya tagihan listrik rumah tangga jadi salah satu indikator konsumsi energi yang paling mudah dirasakan langsung.
+Energi paling terasa di kehidupan sehari-hari kalian ada di rumah. Listrik menyalakan lampu, TV, kulkas, AC, sampai mengisi daya HP. Gas (LPG tabung 3 kg atau 12 kg) dipakai untuk memasak lewat kompor gas. Ini sebabnya tagihan listrik rumah tangga jadi salah satu indikator konsumsi energi yang paling mudah dirasakan langsung -- coba perhatikan, bulan yang AC-nya sering nyala biasanya tagihan listriknya ikut melonjak.
+
+<div class="mtr-note">
+<p><strong>Tahu nggak?</strong> AC dan kulkas sebenarnya sama-sama "mesin pendingin" yang memakai prinsip yang mirip, cuma AC mendinginkan ruangan dan kulkas mendinginkan ruang kecil tertutup. Keduanya termasuk alat rumah tangga yang paling banyak "menyedot" listrik karena menyala lama (kulkas malah nyala 24 jam nonstop!).</p>
+</div>
 
 ## 🚗 Transportasi
 
@@ -196,7 +245,7 @@ Sektor ini masih sangat bergantung pada bahan bakar minyak (bensin, solar) hasil
 
 ## 🏭 Industri
 
-Industri memakai energi dalam skala jauh lebih besar dari rumah tangga -- untuk menggerakkan mesin produksi, proses pemanasan (misalnya peleburan logam, pembuatan semen), maupun pendinginan (penyimpanan makanan berskala besar). Sebagian besar industri berat masih mengandalkan energi fosil karena kebutuhan energinya sangat besar dan stabil.
+Industri memakai energi dalam skala jauh lebih besar dari rumah tangga -- untuk menggerakkan mesin produksi, proses pemanasan (misalnya peleburan logam, pembuatan semen), maupun pendinginan (penyimpanan makanan berskala besar, seperti gudang pendingin di pabrik pengolahan ikan). Sebagian besar industri berat masih mengandalkan energi fosil karena kebutuhan energinya sangat besar dan stabil -- bayangkan pabrik semen yang mesinnya harus terus menyala siang malam tanpa henti.
 
 ## 🌾 Pertanian
 

@@ -201,7 +201,31 @@ draft: false
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
 
+/* ---------- Mini-widget interaktif (ilustrasi kartun kecil, BUKAN lab
+   lengkap -- itu di halaman /eksperimen terpisah). Dibuat berdiri sendiri
+   (IIFE + id unik per widget) supaya dua widget di halaman yang sama tidak
+   saling bentrok variabel/fungsi. ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
+.mtr-mini-btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8125rem;
+  padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-solid); color: var(--ink); cursor: pointer;
+}
+.mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 </style>
+
+Pernah perhatikan lintasan kembang api yang mekar lalu jatuh, bola basket yang melambung ke ring, atau air yang muncrat dari selang taman? Semuanya punya bentuk lintasan yang sama persis -- melengkung, naik dulu baru turun. Itulah yang akan kita bahas di materi ini: **gerak parabola**.
 
 Sekarang kita gabungkan dua hal yang sudah kita pelajari sebelumnya: gerak lurus ([GLB](/materi/gerak-lurus-beraturan) dan [GLBB](/materi/gerak-lurus-berubah-beraturan)) dengan [Vektor](/materi/vektor). Hasilnya: **gerak parabola** -- gerak dua dimensi yang lintasannya melengkung, seperti bola yang ditendang, peluru yang ditembakkan, atau bola basket yang dilempar ke ring.
 
@@ -265,6 +289,120 @@ Kalau benda ditembakkan dengan kecepatan awal v₀ pada sudut elevasi θ (terhad
     </div>
   </div>
 </div>
+
+Sebelum lanjut ke contoh soal, coba dulu rasakan sendiri lewat animasi mini ini -- atur kecepatan awal dan sudut elevasinya, lalu "tembakkan" peluru virtualnya:
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🎯 Atur kecepatan awal dan sudut elevasi, lalu klik "Tembak!" untuk melihat lintasannya:</p>
+  <canvas id="parabolaCanvas" width="640" height="280" style="width:100%;height:auto;display:block;background:linear-gradient(180deg,#eaf6ff,#fef6e0);border-radius:14px;"></canvas>
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:10px;">Kecepatan awal: <strong id="parabolaV0Label">15</strong> m/s</label>
+  <input type="range" id="parabolaV0Slider" min="5" max="30" value="15" style="width:100%;accent-color:#f2760a;">
+  <label style="display:block;font-size:0.8125rem;color:var(--ink-soft);margin-top:8px;">Sudut elevasi: <strong id="parabolaSudutLabel">45</strong>&deg;</label>
+  <input type="range" id="parabolaSudutSlider" min="10" max="80" value="45" style="width:100%;accent-color:#8b3ddb;">
+  <div style="text-align:center;margin-top:10px;">
+    <button type="button" class="mtr-mini-btn" id="parabolaBtnTembak">🚀 Tembak!</button>
+  </div>
+  <p class="mtr-mini-label">Jarak maksimum: <strong id="parabolaJarakLabel">-</strong> &middot; Waktu di udara: <strong id="parabolaWaktuLabel">-</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('parabolaCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var v0Slider = document.getElementById('parabolaV0Slider');
+  var sudutSlider = document.getElementById('parabolaSudutSlider');
+  var v0Label = document.getElementById('parabolaV0Label');
+  var sudutLabel = document.getElementById('parabolaSudutLabel');
+  var jarakLabel = document.getElementById('parabolaJarakLabel');
+  var waktuLabel = document.getElementById('parabolaWaktuLabel');
+  var btnTembak = document.getElementById('parabolaBtnTembak');
+  var g = 10;
+  var w = canvas.width, h = canvas.height;
+  var groundY = h * 0.82;
+  var cannonX = w * 0.09;
+  var barrelLen = 40;
+  var terbangMulai = 0, sedangTerbang = false, v0 = 15, sudutDeg = 45;
+  function hitung() {
+    var rad = sudutDeg * Math.PI / 180;
+    var v0x = v0 * Math.cos(rad), v0y = v0 * Math.sin(rad);
+    var tTotal = (2 * v0y) / g;
+    var R = v0x * tTotal;
+    return { v0x: v0x, v0y: v0y, tTotal: tTotal, R: R, rad: rad };
+  }
+  function posisiPada(t, info) {
+    var x = info.v0x * t;
+    var y = info.v0y * t - 0.5 * g * t * t;
+    return { x: x, y: y < 0 ? 0 : y };
+  }
+  function wajahKecil(cx, cy, skala) {
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(skala, skala);
+    ctx.fillStyle = '#26243b';
+    [-6, 6].forEach(function (dx) { ctx.beginPath(); ctx.arc(dx, 0, 2.4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, 3, 4.5, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  function gambarMeriam(rad) {
+    ctx.save(); ctx.translate(cannonX, groundY);
+    ctx.fillStyle = '#7c6f64'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.rotate(-rad);
+    ctx.fillStyle = '#4b5563'; ctx.fillRect(0, -7, barrelLen, 14);
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 2; ctx.strokeRect(0, -7, barrelLen, 14);
+    ctx.restore();
+    wajahKecil(cannonX - 4, groundY - 20, 1);
+  }
+  function gambarLintasan(info, skala, launchX, launchY, sampaiT) {
+    ctx.strokeStyle = 'rgba(242,118,10,0.45)'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    var langkah = 40;
+    for (var i = 0; i <= langkah; i++) {
+      var t = (info.tTotal * i) / langkah;
+      if (t > sampaiT) break;
+      var p = posisiPada(t, info);
+      var px = launchX + p.x * skala, py = launchY - p.y * skala;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+  function render(tSekarang) {
+    var info = hitung();
+    var launchX = cannonX + barrelLen * Math.cos(info.rad);
+    var launchY = groundY - barrelLen * Math.sin(info.rad);
+    var maxTinggi = Math.max((info.v0y * info.v0y) / (2 * g), 0.1);
+    var skala = Math.min((w * 0.82) / Math.max(info.R, 1), (h * 0.58) / maxTinggi);
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#86efac'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, groundY + 2); ctx.lineTo(w, groundY + 2); ctx.stroke();
+    gambarMeriam(info.rad);
+    var tBerjalan = sedangTerbang ? Math.min((tSekarang - terbangMulai) / 1000, info.tTotal) : info.tTotal;
+    gambarLintasan(info, skala, launchX, launchY, tBerjalan);
+    var p = posisiPada(tBerjalan, info);
+    var bolaX = launchX + p.x * skala, bolaY = launchY - p.y * skala;
+    ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(bolaX, bolaY, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#26243b'; ctx.lineWidth = 1.5; ctx.stroke();
+    jarakLabel.textContent = info.R.toFixed(1).replace('.', ',') + ' m';
+    waktuLabel.textContent = info.tTotal.toFixed(1).replace('.', ',') + ' s';
+    if (sedangTerbang && tBerjalan < info.tTotal) { requestAnimationFrame(render); } else { sedangTerbang = false; }
+  }
+  function perbarui() {
+    v0 = parseInt(v0Slider.value, 10);
+    sudutDeg = parseInt(sudutSlider.value, 10);
+    v0Label.textContent = v0;
+    sudutLabel.textContent = sudutDeg;
+    if (!sedangTerbang) render(0);
+  }
+  function tembak() {
+    sedangTerbang = true;
+    terbangMulai = performance.now();
+    requestAnimationFrame(render);
+  }
+  v0Slider.addEventListener('input', perbarui);
+  sudutSlider.addEventListener('input', perbarui);
+  btnTembak.addEventListener('click', tembak);
+  perbarui();
+})();
+</script>
 
 ### Contoh Soal 1
 

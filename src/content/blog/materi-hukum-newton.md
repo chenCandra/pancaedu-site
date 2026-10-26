@@ -150,9 +150,13 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
 </style>
 
-Kenapa mobil yang direm mendadak bikin penumpangnya terdorong ke depan? Kenapa perahu ikut bergerak mundur waktu kalian melompat turun ke air? Semua itu bisa dijelaskan lewat tiga hukum yang dirumuskan Isaac Newton -- hukum yang menjelaskan hubungan antara gaya yang bekerja pada benda dengan gerak yang dihasilkannya.
+Kenapa badanmu terdorong ke depan waktu angkot yang kamu tumpangi ngebrake mendadak? Kenapa dorong gerobak kosong jauh lebih gampang dibanding gerobak yang penuh muatan? Dan kenapa perahu kecil ikut terdorong mundur begitu kamu melompat turun ke air? Tiga pertanyaan sehari-hari ini punya satu jawaban yang sama: tiga hukum yang dirumuskan Isaac Newton -- hukum yang menjelaskan hubungan antara gaya yang bekerja pada benda dengan gerak yang dihasilkannya.
 
 ## 🧲 Hukum I Newton (Kelembaman)
 
@@ -160,7 +164,7 @@ Kenapa mobil yang direm mendadak bikin penumpangnya terdorong ke depan? Kenapa p
 💡 <strong>Hukum I Newton:</strong> benda akan tetap diam, atau tetap bergerak lurus beraturan (GLB), selama tidak ada gaya total (resultan) yang bekerja padanya.
 </div>
 
-Hukum ini juga disebut **hukum kelembaman (inersia)** -- sifat alami benda untuk mempertahankan keadaan geraknya. Itulah kenapa badan kalian terdorong ke depan saat mobil direm mendadak: badan kalian "ingin" tetap bergerak sesuai kecepatan semula, sementara mobilnya sudah berhenti.
+Hukum ini juga disebut **hukum kelembaman (inersia)** -- sifat alami benda untuk mempertahankan keadaan geraknya. Itulah kenapa badan kalian terdorong ke depan saat angkot atau mobil direm mendadak: badan kalian "ingin" tetap bergerak sesuai kecepatan semula, sementara kendaraannya sudah berhenti. Semakin ngebut kendaraan itu sebelumnya, semakin kuat juga badanmu "memberontak" ingin tetap melaju.
 
 ~~Kalau tidak ada gaya sama sekali, benda pasti diam~~ → tidak selalu. Benda yang SUDAH bergerak dan tidak ada gaya total yang bekerja padanya akan **tetap bergerak** dengan kecepatan tetap, bukan otomatis berhenti.
 
@@ -176,10 +180,37 @@ Hukum ini juga disebut **hukum kelembaman (inersia)** -- sifat alami benda untuk
 * **ΣF** = gaya total/resultan yang bekerja pada benda (N)
 * **m** = massa benda (kg)
 
-Semakin besar gaya yang diberikan, semakin besar percepatannya. Sebaliknya, semakin besar massa benda, semakin sulit benda itu dipercepat dengan gaya yang sama -- inilah kenapa mendorong troli kosong terasa jauh lebih mudah dibanding troli penuh muatan.
+Semakin besar gaya yang diberikan, semakin besar percepatannya. Sebaliknya, semakin besar massa benda, semakin sulit benda itu dipercepat dengan gaya yang sama -- inilah kenapa mendorong gerobak kosong terasa jauh lebih mudah dibanding gerobak yang penuh muatan, padahal gaya dorongmu sama besarnya.
 
 <div class="mtr-note">
 ⚠️ Perhatikan simbol <strong>ΣF (gaya total)</strong>, bukan sekadar satu gaya saja. Kalau ada beberapa gaya bekerja sekaligus (mis. gaya dorong DAN gaya gesek yang berlawanan arah), yang menentukan percepatan adalah selisihnya (gaya totalnya), bukan salah satu gaya itu sendiri.
+</div>
+
+Gampangnya, Hukum I sebenarnya cuma kasus khusus dari Hukum II: kalau gaya total (ΣF) nol, otomatis percepatannya (a) juga nol -- benda diam tetap diam, benda bergerak tetap bergerak lurus beraturan. Supaya kedua kondisi itu (seimbang vs tidak seimbang) lebih jelas bedanya, lihat ilustrasi berikut:
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="200" y1="10" x2="200" y2="210" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 6" />
+    <text x="100" y="26" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1e3a8a">Gaya Seimbang</text>
+    <line x1="40" y1="170" x2="160" y2="170" stroke="#1e3a8a" stroke-width="3" />
+    <rect x="70" y="118" width="60" height="50" rx="6" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
+    <text x="100" y="148" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#fff" font-weight="700">kotak</text>
+    <line x1="40" y1="143" x2="65" y2="143" stroke="#f97316" stroke-width="5" stroke-linecap="round" />
+    <polygon points="40,143 52,137 52,149" fill="#f97316" />
+    <line x1="135" y1="143" x2="160" y2="143" stroke="#f97316" stroke-width="5" stroke-linecap="round" />
+    <polygon points="160,143 148,137 148,149" fill="#f97316" />
+    <text x="100" y="198" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Diam / GLB (ΣF = 0)</text>
+    <text x="300" y="26" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1e3a8a">Gaya Tak Seimbang</text>
+    <line x1="240" y1="170" x2="360" y2="170" stroke="#1e3a8a" stroke-width="3" />
+    <rect x="270" y="118" width="60" height="50" rx="6" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
+    <text x="300" y="148" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#fff" font-weight="700">kotak</text>
+    <line x1="245" y1="143" x2="265" y2="143" stroke="#f97316" stroke-width="4" stroke-linecap="round" />
+    <polygon points="245,143 255,138 255,148" fill="#f97316" />
+    <line x1="335" y1="143" x2="378" y2="143" stroke="#ef4444" stroke-width="6" stroke-linecap="round" />
+    <polygon points="378,143 364,135 364,151" fill="#ef4444" />
+    <text x="300" y="198" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Bergerak dipercepat (ΣF &ne; 0)</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Kiri: dua gaya sama besar berlawanan arah membuat kotak tetap diam (Hukum I). Kanan: gaya ke kanan lebih besar dari gaya ke kiri, membuat kotak dipercepat ke arah gaya yang lebih besar (Hukum II).</p>
 </div>
 
 ## 🤝 Hukum III Newton (Aksi-Reaksi)
@@ -188,7 +219,7 @@ Semakin besar gaya yang diberikan, semakin besar percepatannya. Sebaliknya, sema
 💡 <strong>Hukum III Newton:</strong> setiap gaya aksi yang bekerja pada suatu benda akan menghasilkan gaya reaksi yang sama besar, tapi berlawanan arah, pada benda lain.
 </div>
 
-Ketika tangan kalian mendorong tembok (aksi), tembok itu "mendorong balik" tangan kalian dengan gaya yang sama besar (reaksi) -- makanya tangan terasa sakit kalau mendorong terlalu keras. Contoh lain: roket bisa terbang karena gas yang disemburkan ke bawah (aksi) menghasilkan dorongan ke atas pada roket (reaksi).
+Ketika tangan kalian mendorong tembok (aksi), tembok itu "mendorong balik" tangan kalian dengan gaya yang sama besar (reaksi) -- makanya tangan terasa sakit kalau mendorong terlalu keras. Contoh lain yang mungkin pernah kalian alami sendiri: waktu melompat turun dari perahu kecil ke air atau ke dermaga, perahunya ikut terdorong mundur -- itu gaya reaksi dari perahu atas gaya aksi kaki kalian saat menolak. Begitu juga roket yang bisa terbang karena gas yang disemburkan ke bawah (aksi) menghasilkan dorongan ke atas pada roket (reaksi).
 
 <div class="mtr-note">
 💡 Pasangan aksi-reaksi selalu bekerja pada <strong>DUA benda yang berbeda</strong> -- itu sebabnya keduanya TIDAK saling meniadakan, meski besarnya sama dan arahnya berlawanan. Kalau keduanya bekerja pada benda yang sama, barulah bisa saling meniadakan (seperti gaya dorong vs gaya gesek pada Hukum II).

@@ -150,9 +150,13 @@ draft: false
   padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
+
+.mtr-ilustrasi { margin-block: 1.75rem; padding: 1.25rem; border-radius: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; text-align: center; }
+.mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #1e3a8a; font-weight: 600; }
 </style>
 
-Setelah kenalan sama energi dan [perubahannya](/materi/perubahan-energi), ada dua istilah yang selalu muncul berdampingan tiap kali energi "dipakai" untuk melakukan sesuatu: **usaha** dan **daya**. Sekilas terdengar seperti kata sehari-hari, tapi keduanya punya arti yang jauh lebih spesifik dalam Fisika.
+Bayangkan dua temanmu disuruh mendorong meja yang sama beratnya sejauh yang sama -- yang satu santai, yang satu buru-buru karena dikejar bel masuk. Dalam bahasa sehari-hari, keduanya sama-sama "kerja keras". Tapi dalam Fisika, ada satu hal yang beda total di antara mereka, dan itulah yang membedakan **usaha** dari **daya**. Setelah kenalan sama energi dan [perubahannya](/materi/perubahan-energi), sekarang giliran dua istilah yang selalu muncul berdampingan tiap kali energi "dipakai" untuk melakukan sesuatu. Sekilas terdengar seperti kata sehari-hari, tapi keduanya punya arti yang jauh lebih spesifik dalam Fisika.
 
 ## 💪 Apa Itu Usaha?
 
@@ -186,6 +190,30 @@ Artinya, usaha total yang bekerja pada benda sama dengan perubahan energi kineti
 ## ⏱️ Apa Itu Daya?
 
 Bayangkan dua orang mengangkat beban yang sama beratnya, ke ketinggian yang sama -- usaha yang mereka lakukan **sama besar**. Tapi kalau orang pertama menyelesaikannya dalam 5 detik dan orang kedua dalam 10 detik, ada sesuatu yang jelas beda: **seberapa cepat** usaha itu dilakukan. Itulah yang disebut daya.
+
+<div class="mtr-ilustrasi">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="20" y1="170" x2="380" y2="170" stroke="#1e3a8a" stroke-width="3" />
+    <circle cx="90" cy="100" r="16" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
+    <line x1="90" y1="116" x2="90" y2="150" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round" />
+    <line x1="90" y1="150" x2="75" y2="168" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round" />
+    <line x1="90" y1="150" x2="108" y2="168" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round" />
+    <line x1="90" y1="128" x2="130" y2="140" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round" />
+    <rect x="130" y="118" width="55" height="52" rx="4" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2" />
+    <text x="157" y="150" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="700">kotak</text>
+    <line x1="106" y1="140" x2="128" y2="140" stroke="#f97316" stroke-width="5" stroke-linecap="round" />
+    <polygon points="128,140 118,134 118,146" fill="#f97316" />
+    <line x1="190" y1="105" x2="265" y2="105" stroke="#64748b" stroke-width="2" stroke-dasharray="6 5" />
+    <polygon points="265,105 253,100 253,110" fill="#64748b" />
+    <text x="227" y="92" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="700">perpindahan (s)</text>
+    <circle cx="335" cy="70" r="26" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3" />
+    <line x1="335" y1="70" x2="335" y2="52" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="335" y1="70" x2="350" y2="70" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round" />
+    <rect x="328" y="38" width="14" height="6" rx="2" fill="#1e3a8a" />
+    <text x="335" y="112" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e3a8a" font-weight="700">waktu (t)</text>
+  </svg>
+  <p class="mtr-ilustrasi-caption">Gaya mendorong kotak sejauh s menghasilkan usaha -- seberapa cepat usaha itu selesai (diukur dari waktu t) itulah dayanya.</p>
+</div>
 
 <div class="mtr-def">
 💡 <strong>Daya (P)</strong> adalah besar usaha yang dilakukan tiap satuan waktu -- seberapa cepat energi dipindahkan atau diubah.
