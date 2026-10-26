@@ -174,11 +174,14 @@ draft: false
 .mtr-formula {
   text-align: center;
   font-size: 1.0625rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #831843;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid #f9a8d4;
+  border-left: 5px solid #db2777;
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
 
@@ -201,6 +204,68 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 Kita sudah membahas cahaya yang berkepribadian ganda ([Efek Fotolistrik](/materi/efek-fotolistrik-dan-dualisme-gelombang-partikel)) dan benda yang berperilaku aneh mendekati kecepatan cahaya ([Relativitas Khusus](/materi/teori-relativitas-khusus)). Sekarang kita masuk ke jantung materi itu sendiri: **inti atom** -- struktur mungil yang jadi sumber salah satu energi terbesar yang bisa dihasilkan manusia, sekaligus sumber sinar gamma yang sudah kita singgung di materi [Spektrum Elektromagnetik](/materi/spektrum-elektromagnetik).
@@ -230,7 +295,22 @@ Jawabannya: ada **gaya inti (gaya nuklir kuat)** yang bekerja di jarak sangat pe
 
 Menariknya, massa sebuah inti atom ternyata SEDIKIT LEBIH KECIL dibanding jumlah massa proton dan neutron penyusunnya secara terpisah. Selisih ini disebut **defek massa (Δm)**, dan "massa yang hilang" ini sebenarnya berubah menjadi **energi ikat inti** yang menahan nukleon-nukleon tetap menyatu -- persis seperti rumus **E=mc²** yang sudah kita kenal dari materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus)!
 
-<div class="mtr-formula">Δm = (Z×mₚ + N×mₙ) − mᵢₙₜᵢ &nbsp;&nbsp;|&nbsp;&nbsp; Eᵢₖₐₜ = Δm × c²</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Δm = (Z×mₚ + N×mₙ) − mᵢₙₜᵢ</div>
+    <div class="mtr-formula-rumus">Eᵢₖₐₜ = Δm × c²</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Δm</strong> = defek massa, selisih massa nukleon terpisah dengan massa inti sebenarnya (sma)</li>
+    <li><strong>Z</strong> = jumlah proton (nomor atom)</li>
+    <li><strong>mₚ</strong> = massa satu proton (≈1,0078 sma)</li>
+    <li><strong>N</strong> = jumlah neutron</li>
+    <li><strong>mₙ</strong> = massa satu neutron (≈1,0087 sma)</li>
+    <li><strong>mᵢₙₜᵢ</strong> = massa inti yang terukur (sma)</li>
+    <li><strong>Eᵢₖₐₜ</strong> = energi ikat inti, energi yang menahan nukleon tetap menyatu (pakai konversi 1 sma ≈ 931 MeV)</li>
+  </ul>
+</div>
 
 **Contoh:** Inti Helium-4 (²p+2n) tersusun dari 2 proton (mₚ≈1,0078 sma) dan 2 neutron (mₙ≈1,0087 sma), tapi massa inti He-4 yang terukur cuma 4,0026 sma. Maka:
 
@@ -264,14 +344,18 @@ Perhatikan pola pentingnya: peluruhan gamma TIDAK mengubah jenis unsurnya sama s
 
 Kamu tidak bisa memprediksi KAPAN PERSIS satu inti radioaktif tertentu akan meluruh -- ini murni proses acak (probabilistik). Tapi untuk sekumpulan BESAR inti radioaktif, polanya sangat bisa diprediksi secara statistik, mengikuti hukum peluruhan eksponensial:
 
-<div class="mtr-formula">N = N₀ × (1/2)^(t/T½)</div>
-
-dengan:
-
-* **N** = jumlah inti radioaktif yang tersisa setelah waktu t
-* **N₀** = jumlah inti radioaktif mula-mula
-* **T½** = waktu paruh (*half-life*) -- waktu yang dibutuhkan agar jumlah inti tersisa tinggal SETENGAH dari sebelumnya
-* **t** = waktu yang sudah berlalu
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">N = N₀ × (1/2)^(t/T½)</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>N</strong> = jumlah inti radioaktif yang tersisa setelah waktu t</li>
+    <li><strong>N₀</strong> = jumlah inti radioaktif mula-mula</li>
+    <li><strong>T½</strong> = waktu paruh (<em>half-life</em>) -- waktu yang dibutuhkan agar jumlah inti tersisa tinggal setengah dari sebelumnya</li>
+    <li><strong>t</strong> = waktu yang sudah berlalu</li>
+  </ul>
+</div>
 
 Setiap isotop punya waktu paruh sendiri-sendiri -- ada yang hanya beberapa detik, ada yang miliaran tahun -- tapi POLA peluruhannya selalu sama: setiap kali berlalu satu T½, sisa inti radioaktif selalu berkurang jadi setengahnya, TIDAK PEDULI berapa jumlah awalnya.
 

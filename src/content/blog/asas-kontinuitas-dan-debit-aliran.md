@@ -181,6 +181,68 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 </style>
 
 Setelah tuntas dengan Fluida Statis, sekarang kita masuk ke **Fluida Dinamis** -- fluida yang MENGALIR. Kita mulai dari aturan paling mendasar: hukum kekekalan untuk fluida yang mengalir di pipa.
@@ -202,17 +264,35 @@ Supaya perhitungannya sederhana, Fisika SMA menganggap fluida yang mengalir seba
 
 **Debit** (Q) adalah volume fluida yang mengalir melewati suatu penampang tiap satuan waktu.
 
-$$Q = \frac{V}{t} = A \cdot v$$
-
-- $Q$ = debit (m³/s)
-- $A$ = luas penampang pipa (m²)
-- $v$ = kecepatan aliran fluida (m/s)
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Q = V / t = A × v</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Q</strong> = debit (m³/s)</li>
+    <li><strong>V</strong> = volume fluida yang mengalir (m³)</li>
+    <li><strong>t</strong> = waktu (s)</li>
+    <li><strong>A</strong> = luas penampang pipa (m²)</li>
+    <li><strong>v</strong> = kecepatan aliran fluida (m/s)</li>
+  </ul>
+</div>
 
 ## ⚖️ Asas Kontinuitas
 
 Karena fluida ideal tak termampatkan (massa jenisnya tetap) dan tidak ada fluida yang "hilang" di sepanjang pipa tertutup, DEBIT-nya harus SAMA di setiap bagian pipa, berapa pun luas penampangnya berubah:
 
-$$Q_1 = Q_2 \quad\Rightarrow\quad A_1 \cdot v_1 = A_2 \cdot v_2$$
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Q1 = Q2 → A1 × v1 = A2 × v2</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>A1, A2</strong> = luas penampang pipa di titik 1 dan 2 (m²)</li>
+    <li><strong>v1, v2</strong> = kecepatan aliran fluida di titik 1 dan 2 (m/s)</li>
+    <li>Debit (Q) harus SAMA di setiap bagian pipa -- pipa menyempit (A kecil) berarti aliran harus lebih cepat (v besar), begitu juga sebaliknya.</li>
+  </ul>
+</div>
 
 Konsekuensinya: begitu pipa MENYEMPIT (A mengecil), kecepatan alirannya HARUS membesar supaya debitnya tetap sama. Inilah yang terjadi saat kamu menutup sebagian ujung selang taman dengan ibu jari -- air menyembur jauh lebih deras dan lebih jauh.
 
@@ -236,11 +316,11 @@ Air mengalir di sebuah pipa berdiameter 10 cm dengan kecepatan 2 m/s. Pipa itu k
 
 **Pembahasan**:
 
-$A_1 = \pi r_1^2 = \pi (0{,}05)^2 = 0{,}00785$ m², $A_2 = \pi r_2^2 = \pi (0{,}025)^2 = 0{,}00196$ m²
+A1 = πr1² = π(0,05)² = 0,00785 m², A2 = πr2² = π(0,025)² = 0,00196 m²
 
-$v_2 = v_1 \times \dfrac{A_1}{A_2} = v_1 \times \left(\dfrac{d_1}{d_2}\right)^2 = 2 \times \left(\dfrac{10}{5}\right)^2 = 2 \times 4 = \textbf{8 m/s}$
+v2 = v1 × (A1/A2) = v1 × (d1/d2)² = 2 × (10/5)² = 2 × 4 = **8 m/s**
 
-$Q = A_1 v_1 = 0{,}00785 \times 2 = 0{,}0157 \text{ m}^3\text{/s} = \textbf{15,7 L/s}$ (sama di kedua bagian pipa)
+Q = A1v1 = 0,00785 × 2 = 0,0157 m³/s = **15,7 L/s** (sama di kedua bagian pipa)
 
 ## ⚠️ Kesalahan Umum
 

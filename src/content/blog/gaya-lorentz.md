@@ -161,6 +161,68 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 Kita sudah tahu di materi [Medan Magnet oleh Arus Listrik](/materi/medan-magnet-oleh-arus-listrik) bahwa arus listrik menghasilkan medan magnet. Sekarang kita bahas kebalikannya: **apa yang terjadi kalau muatan bergerak berada DI DALAM medan magnet?** Jawabannya adalah gaya yang disebut **Gaya Lorentz**.
@@ -183,7 +245,18 @@ Untuk muatan (q) yang bergerak dengan kecepatan (v) tegak lurus medan magnet (B)
 </div>
 </div>
 
-**F = qvB**
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">F = qvB</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>F</strong> = Gaya Lorentz (N)</li>
+    <li><strong>q</strong> = besar muatan (C)</li>
+    <li><strong>v</strong> = kecepatan muatan, tegak lurus medan magnet (m/s)</li>
+    <li><strong>B</strong> = kuat medan magnet (T)</li>
+  </ul>
+</div>
 
 Sifat unik Gaya Lorentz: arahnya SELALU tegak lurus terhadap arah kecepatan (v) DAN arah medan magnet (B) sekaligus. Karena gaya selalu tegak lurus arah gerak, gaya ini TIDAK PERNAH mempercepat atau memperlambat muatan (tidak menambah/mengurangi kelajuan) -- ia HANYA membelokkan arah geraknya. Akibatnya, muatan yang bergerak tegak lurus medan magnet seragam akan bergerak melingkar beraturan.
 
@@ -191,7 +264,19 @@ Sifat unik Gaya Lorentz: arahnya SELALU tegak lurus terhadap arah kecepatan (v) 
 
 Karena Gaya Lorentz berperan sebagai gaya sentripetal (gaya yang menjaga benda tetap melingkar), jari-jari lintasannya:
 
-**r = mv / (qB)**
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">r = mv / (qB)</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>r</strong> = jari-jari lintasan melingkar (m)</li>
+    <li><strong>m</strong> = massa partikel bermuatan (kg)</li>
+    <li><strong>v</strong> = kecepatan partikel (m/s)</li>
+    <li><strong>q</strong> = besar muatan (C)</li>
+    <li><strong>B</strong> = kuat medan magnet (T)</li>
+  </ul>
+</div>
 
 Artinya: makin CEPAT muatannya atau makin LEMAH medannya, makin BESAR lingkarannya. Coba buktikan sendiri di simulasi bawah -- geser slider kecepatan dan kuat medan, amati bagaimana ukuran lingkaran lintasannya berubah.
 

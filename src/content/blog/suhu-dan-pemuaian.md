@@ -88,11 +88,14 @@ draft: false
 .mtr-formula {
   text-align: center;
   font-size: 1.0625rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #831843;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid #f9a8d4;
+  border-left: 5px solid #db2777;
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
 
@@ -129,6 +132,68 @@ draft: false
   font-weight: 600;
 }
 
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -158,20 +223,24 @@ Ada tiga skala suhu yang umum dipakai:
 🌡️ Kelvin adalah skala SUHU MUTLAK -- 0 K adalah suhu paling rendah yang mungkin ada di alam semesta (nol mutlak), jauh lebih rendah dari 0°C.
 </div>
 
-### Pemuaian Panjang
+### Pemuaian Panjang, Luas, dan Volume
 
-<div class="mtr-formula">ΔL = L0 × α × ΔT</div>
+Untuk benda 1 dimensi (panjang), 2 dimensi (luas), dan 3 dimensi (volume), pemuaiannya terjadi di lebih banyak arah sekaligus:
 
-* **α** = koefisien muai panjang, khas untuk tiap bahan (per °C)
-* **L0** = panjang mula-mula
-* **ΔT** = kenaikan suhu
-
-### Pemuaian Luas dan Volume
-
-Untuk benda 2 dimensi (luas) dan 3 dimensi (volume), pemuaiannya terjadi di lebih banyak arah sekaligus:
-
-<div class="mtr-formula">Muai Luas: ΔA = A0 × β × ΔT, dengan β = 2α</div>
-<div class="mtr-formula">Muai Volume: ΔV = V0 × γ × ΔT, dengan γ = 3α</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">ΔL = L0 × α × ΔT</div>
+    <div class="mtr-formula-rumus">ΔA = A0 × β × ΔT</div>
+    <div class="mtr-formula-rumus">ΔV = V0 × γ × ΔT</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>L0, A0, V0</strong> = panjang/luas/volume mula-mula</li>
+    <li><strong>α, β, γ</strong> = koefisien muai panjang, luas, dan volume -- khas untuk tiap bahan (per °C)</li>
+    <li><strong>ΔT</strong> = kenaikan suhu (°C)</li>
+    <li>Luas memuai di DUA arah dan volume di TIGA arah, sehingga <strong>β = 2α</strong> dan <strong>γ = 3α</strong>.</li>
+  </ul>
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>semua bahan memuai dengan besar yang sama untuk kenaikan suhu yang sama</del>. Yang benar: setiap bahan punya koefisien muai (α) yang BERBEDA -- itulah kenapa dua batang berbeda bahan dengan panjang awal dan kenaikan suhu yang sama bisa memuai dengan panjang berbeda.

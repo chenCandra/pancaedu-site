@@ -96,11 +96,14 @@ draft: false
 .mtr-formula {
   text-align: center;
   font-size: 1.0625rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #831843;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid #f9a8d4;
+  border-left: 5px solid #db2777;
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
 
@@ -149,6 +152,68 @@ draft: false
   font-weight: 600;
 }
 
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -186,9 +251,21 @@ Di bidang miring, gaya berat (mg) tidak bekerja tegak lurus terhadap permukaan b
 
 <div class="mtr-formula">Sejajar bidang: mg sinθ &nbsp;&nbsp;|&nbsp;&nbsp; Tegak lurus bidang: mg cosθ = N</div>
 
-Komponen **mg sinθ** (sejajar bidang) inilah yang menarik benda meluncur turun. Komponen **mg cosθ** (tegak lurus bidang) ditahan oleh gaya normal (N), sehingga N = mg cosθ. Kalau ada gesekan, gaya geseknya f = μN melawan arah gerak (menahan benda turun):
+Komponen **mg sinθ** (sejajar bidang) inilah yang menarik benda meluncur turun. Komponen **mg cosθ** (tegak lurus bidang) ditahan oleh gaya normal (N), sehingga N = mg cosθ. Kalau ada gesekan, gaya geseknya f = μN melawan arah gerak (menahan benda turun), sehingga percepatannya:
 
-<div class="mtr-formula">a = g sinθ − μg cosθ &nbsp;(meluncur turun, dengan gesekan)</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">a = g sinθ − μg cosθ</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>a</strong> = percepatan benda meluncur turun (m/s²)</li>
+    <li><strong>g</strong> = percepatan gravitasi (m/s²)</li>
+    <li><strong>θ</strong> = sudut kemiringan bidang</li>
+    <li><strong>μ</strong> (mu) = koefisien gesek kinetis</li>
+    <li>Kalau bidangnya licin (μ=0), rumusnya tinggal jadi a = g sinθ.</li>
+  </ul>
+</div>
 
 <div class="mtr-note">
 ⚠️ <strong>Hati-hati miskonsepsi:</strong> <del>gaya normal (N) pada bidang miring selalu sama dengan mg (berat penuh)</del>. Yang benar: N = mg cosθ, LEBIH KECIL dari mg (kecuali θ=0°, bidang datar). Sebagian gaya berat "dialihkan" jadi komponen sejajar bidang (mg sinθ).
@@ -202,10 +279,20 @@ Sistem katrol menghubungkan dua benda lewat tali yang melewati katrol -- contoh 
 🎣 Karena tali dianggap tidak mulur dan katrol tidak bermassa, KEDUA benda bergerak BERSAMAAN dengan percepatan (a) yang SAMA besar, meski arah geraknya berbeda (m1 mendatar, m2 vertikal).
 </div>
 
-<div class="mtr-formula">a = (m2 × g − f) / (m1 + m2)</div>
-
-* **f** = gaya gesek pada m1 (nol kalau meja licin)
-* Tegangan tali: **T = m1 × a + f** (dihitung dari gaya-gaya yang bekerja pada m1)
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">a = (m2 × g − f) / (m1 + m2)</div>
+    <div class="mtr-formula-rumus">T = m1 × a + f</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>a</strong> = percepatan sistem, sama besar untuk m1 dan m2 (m/s²)</li>
+    <li><strong>T</strong> = tegangan tali (N)</li>
+    <li><strong>m1, m2</strong> = massa masing-masing benda (kg)</li>
+    <li><strong>f</strong> = gaya gesek pada m1 (N), nol kalau meja licin</li>
+    <li>T dihitung dari gaya-gaya yang bekerja pada m1, setelah a diketahui dari rumus pertama.</li>
+  </ul>
+</div>
 
 ## 🧠 Mari Kita Analisis
 

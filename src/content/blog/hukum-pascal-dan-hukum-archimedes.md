@@ -181,6 +181,68 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 Setelah tuntas dengan [Massa Jenis dan Tekanan Hidrostatis](/materi/fluida-dan-massa-jenis), kita bahas dua hukum fluida statis paling terkenal -- yang satu bikin dongkrak bisa mengangkat mobil, yang satu bikin kapal besi bisa mengapung.
@@ -189,9 +251,19 @@ Setelah tuntas dengan [Massa Jenis dan Tekanan Hidrostatis](/materi/fluida-dan-m
 
 > "Tekanan yang diberikan pada fluida tertutup diteruskan sama besar ke segala arah."
 
-Karena tekanan $P = F/A$ harus sama di seluruh bagian fluida tertutup itu, kalau ada dua piston dengan luas berbeda yang terhubung lewat fluida yang sama:
+Karena tekanan P = F/A harus sama di seluruh bagian fluida tertutup itu, kalau ada dua piston dengan luas berbeda yang terhubung lewat fluida yang sama:
 
-$$P_1 = P_2 \quad\Rightarrow\quad \frac{F_1}{A_1} = \frac{F_2}{A_2}$$
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">P1 = P2 → F1/A1 = F2/A2</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>F1, F2</strong> = gaya pada piston 1 dan 2 (N)</li>
+    <li><strong>A1, A2</strong> = luas penampang piston 1 dan 2 (m²)</li>
+    <li>Gaya kecil di piston SEMPIT bisa menghasilkan gaya jauh lebih besar di piston LEBAR -- inilah prinsip dongkrak hidrolik.</li>
+  </ul>
+</div>
 
 Karena itu, piston yang lebih LUAS akan menghasilkan gaya yang jauh lebih BESAR. Inilah kenapa dongkrak hidrolik bisa mengangkat mobil 1 ton hanya dengan tenaga tangan -- kita menekan piston kecil, dan tekanannya diteruskan ke piston besar yang luasnya berkali-kali lipat.
 
@@ -207,13 +279,24 @@ Karena itu, piston yang lebih LUAS akan menghasilkan gaya yang jauh lebih BESAR.
 
 Sebuah dongkrak hidrolik punya piston kecil dengan luas 10 cm² dan piston besar dengan luas 250 cm². Kalau gaya yang diberikan pada piston kecil adalah 200 N, berapa gaya yang dihasilkan piston besar?
 
-**Pembahasan**: $F_2 = F_1 \times \dfrac{A_2}{A_1} = 200 \times \dfrac{250}{10} = 200 \times 25 = \textbf{5.000 N}$ (25 kali lipat lebih besar dari gaya yang kita berikan!)
+**Pembahasan**: F2 = F1 × (A2/A1) = 200 × (250/10) = 200 × 25 = **5.000 N** (25 kali lipat lebih besar dari gaya yang kita berikan!)
 
 ## 🏋️ Hukum Archimedes
 
 > "Benda yang tercelup sebagian atau seluruhnya dalam fluida akan mengalami gaya apung ke atas sebesar berat fluida yang dipindahkannya."
 
-$$F_a = \rho_{fluida} \cdot g \cdot V_{tercelup}$$
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Fa = ρfluida × g × Vtercelup</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Fa</strong> = gaya apung (N)</li>
+    <li><strong>ρfluida</strong> = massa jenis fluida (kg/m³)</li>
+    <li><strong>g</strong> = percepatan gravitasi (≈ 10 m/s²)</li>
+    <li><strong>Vtercelup</strong> = volume bagian benda yang tercelup fluida (m³)</li>
+  </ul>
+</div>
 
 Ingat kembali tiga kondisi dari sesi sebelumnya -- sekarang kita bisa memahaminya lewat KESEIMBANGAN GAYA antara berat benda (W) dan gaya apung (Fa):
 
@@ -235,9 +318,9 @@ Ingat kembali tiga kondisi dari sesi sebelumnya -- sekarang kita bisa memahaminy
 Sebuah benda bervolume 2.000 cm³ (0,002 m³) memiliki berat 150 N di udara. Benda itu dicelupkan PENUH ke dalam air (ρ = 1.000 kg/m³, g = 10 m/s²). Berapa berat semunya di dalam air?
 
 **Pembahasan**:
-$F_a = \rho g V = 1.000 \times 10 \times 0{,}002 = 20$ N
+Fa = ρgV = 1.000 × 10 × 0,002 = 20 N
 
-$W_{semu} = W - F_a = 150 - 20 = \textbf{130 N}$
+Wsemu = W − Fa = 150 − 20 = **130 N**
 
 ## 🚢 Kenapa Kapal Besi Bisa Mengapung?
 

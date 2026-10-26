@@ -181,6 +181,68 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
 </style>
 
 Kita mulai bab baru: **Fluida** -- ilmu yang mempelajari zat yang bisa mengalir (cairan dan gas). Sesi pertama ini membahas dua konsep dasar Fluida Statis (fluida yang diam): massa jenis, dan tekanan yang ditimbulkan oleh fluida diam itu sendiri -- tekanan hidrostatis.
@@ -189,11 +251,17 @@ Kita mulai bab baru: **Fluida** -- ilmu yang mempelajari zat yang bisa mengalir 
 
 Massa jenis (densitas) menyatakan seberapa rapat massa suatu benda terhadap volumenya.
 
-$$\rho = \frac{m}{V}$$
-
-- $\rho$ = massa jenis (kg/m³ atau g/cm³)
-- $m$ = massa benda (kg atau g)
-- $V$ = volume benda (m³ atau cm³)
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">ρ = m / V</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>ρ</strong> = massa jenis (kg/m³ atau g/cm³)</li>
+    <li><strong>m</strong> = massa benda (kg atau g)</li>
+    <li><strong>V</strong> = volume benda (m³ atau cm³)</li>
+  </ul>
+</div>
 
 ## 🌊 Kaitan dengan Terapung, Melayang, Tenggelam
 
@@ -205,18 +273,34 @@ $$\rho = \frac{m}{V}$$
 
 Coba selam ke kolam yang agak dalam -- telinga kalian akan terasa makin tertekan makin dalam kalian menyelam. Itu bukan perasaan saja: fluida diam ternyata memberi tekanan, dan tekanan itu membesar seiring kedalaman. Inilah **tekanan hidrostatis**.
 
-$$P_h = \rho \cdot g \cdot h$$
-
-- $P_h$ = tekanan hidrostatis (Pa)
-- $\rho$ = massa jenis fluida (kg/m³)
-- $g$ = percepatan gravitasi (≈ 10 m/s²)
-- $h$ = kedalaman diukur dari permukaan fluida (m)
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Ph = ρ × g × h</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Ph</strong> = tekanan hidrostatis (Pa)</li>
+    <li><strong>ρ</strong> = massa jenis fluida (kg/m³)</li>
+    <li><strong>g</strong> = percepatan gravitasi (≈ 10 m/s²)</li>
+    <li><strong>h</strong> = kedalaman diukur dari permukaan fluida (m)</li>
+  </ul>
+</div>
 
 Satu sifat penting (disebut **Hukum Utama Hidrostatis**): tekanan hidrostatis HANYA bergantung pada kedalaman dan jenis fluidanya, **tidak peduli bentuk wadahnya**. Titik-titik pada kedalaman yang sama, di wadah apa pun bentuknya, punya tekanan hidrostatis yang persis sama.
 
 Kalau permukaan fluida juga menanggung tekanan atmosfer (P₀ ≈ 1×10⁵ Pa di permukaan laut), maka **tekanan total** yang dialami suatu titik di kedalaman h adalah:
 
-$$P_{total} = P_0 + \rho \cdot g \cdot h$$
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Ptotal = P₀ + ρ × g × h</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Ptotal</strong> = tekanan total yang dialami (Pa)</li>
+    <li><strong>P₀</strong> = tekanan atmosfer di permukaan (≈ 1×10⁵ Pa di permukaan laut)</li>
+    <li><strong>ρ × g × h</strong> = tekanan hidrostatis tambahan akibat kedalaman</li>
+  </ul>
+</div>
 
 ## 🏗️ Fenomena Sehari-hari
 
@@ -236,16 +320,16 @@ Gunakan tab **Massa Jenis & Tekanan** di simulasi bawah ini. Coba ubah benda dan
 
 Sebuah balok bermassa 540 gram memiliki volume 200 cm³. Apakah balok tersebut akan terapung atau tenggelam di air (massa jenis air = 1 g/cm³)?
 
-**Pembahasan**: $\rho = m/V = 540/200 = 2{,}7$ g/cm³. Karena $2{,}7 > 1$, balok akan **tenggelam**.
+**Pembahasan**: ρ = m/V = 540/200 = 2,7 g/cm³. Karena 2,7 > 1, balok akan **tenggelam**.
 
 ## ✏️ Contoh Soal 2: Tekanan Hidrostatis
 
 Seorang penyelam berada di kedalaman 10 m di bawah permukaan air laut (ρ air = 1.000 kg/m³, g = 10 m/s², tekanan atmosfer P₀ = 1×10⁵ Pa). Berapa tekanan total yang dialaminya?
 
 **Pembahasan**:
-$P_h = \rho g h = 1.000 \times 10 \times 10 = 100.000$ Pa
+Ph = ρgh = 1.000 × 10 × 10 = 100.000 Pa
 
-$P_{total} = P_0 + P_h = 100.000 + 100.000 = \textbf{200.000 Pa}$ (setara 2 atmosfer -- tekanan di kedalaman itu sudah dua kali lipat tekanan di permukaan!)
+Ptotal = P₀ + Ph = 100.000 + 100.000 = **200.000 Pa** (setara 2 atmosfer -- tekanan di kedalaman itu sudah dua kali lipat tekanan di permukaan!)
 
 ## ⚠️ Kesalahan Umum
 

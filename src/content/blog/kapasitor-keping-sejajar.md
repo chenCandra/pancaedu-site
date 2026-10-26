@@ -128,11 +128,14 @@ draft: false
 .mtr-formula {
   text-align: center;
   font-size: 1.0625rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #831843;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid #f9a8d4;
+  border-left: 5px solid #db2777;
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
 
@@ -181,6 +184,68 @@ draft: false
   font-weight: 600;
 }
 
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 ## 🌱 Apersepsi
@@ -222,11 +287,17 @@ Di antara kedua keping itu muncul medan listrik yang (hampir) seragam, mengarah 
 
 Setiap kapasitor punya kemampuan menyimpan muatan yang berbeda-beda, tergantung bentuk dan ukurannya. Kemampuan ini diukur lewat besaran **kapasitansi**:
 
-<div class="mtr-formula">C = Q / V</div>
-
-* **C** = kapasitansi, satuannya **farad (F)**
-* **Q** = muatan yang tersimpan pada salah satu keping (C)
-* **V** = beda potensial antara dua keping (V)
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">C = Q / V</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>C</strong> = kapasitansi, satuannya farad (F)</li>
+    <li><strong>Q</strong> = muatan yang tersimpan pada salah satu keping (C)</li>
+    <li><strong>V</strong> = beda potensial antara dua keping (V)</li>
+  </ul>
+</div>
 
 Satu farad itu sangat besar untuk ukuran sehari-hari, jadi kapasitor yang kita temui biasanya bersatuan **mikrofarad (μF)**, **nanofarad (nF)**, atau **pikofarad (pF)**.
 
@@ -236,17 +307,22 @@ Satu farad itu sangat besar untuk ukuran sehari-hari, jadi kapasitor yang kita t
 
 ### Kapasitansi Kapasitor Keping Sejajar
 
-Untuk kapasitor keping sejajar, kapasitansinya bisa dihitung langsung dari bentuk fisiknya:
+Untuk kapasitor keping sejajar, kapasitansinya bisa dihitung langsung dari bentuk fisiknya -- di udara/vakum, atau kalau diisi bahan **dielektrik** (bahan isolator seperti kertas, mika, atau keramik) dengan konstanta dielektrik relatif εᵣ:
 
-<div class="mtr-formula">C = ε₀ A / d &nbsp;&nbsp;(di udara/vakum)</div>
-
-* **ε₀** = permitivitas vakum ≈ 8,85 × 10⁻¹² C²/N·m²
-* **A** = luas permukaan tiap keping (m²)
-* **d** = jarak antar keping (m)
-
-Kalau ruang di antara keping diisi bahan **dielektrik** (bahan isolator seperti kertas, mika, atau keramik) dengan konstanta dielektrik relatif εᵣ, rumusnya jadi:
-
-<div class="mtr-formula">C = ε₀ εᵣ A / d</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">C = ε₀ A / d &nbsp;(di udara/vakum)</div>
+    <div class="mtr-formula-rumus">C = ε₀ εᵣ A / d &nbsp;(dengan dielektrik)</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>C</strong> = kapasitansi kapasitor keping sejajar (F)</li>
+    <li><strong>ε₀</strong> = permitivitas vakum ≈ 8,85 × 10⁻¹² C²/N·m²</li>
+    <li><strong>εᵣ</strong> = konstanta dielektrik relatif bahan di antara keping</li>
+    <li><strong>A</strong> = luas permukaan tiap keping (m²)</li>
+    <li><strong>d</strong> = jarak antar keping (m)</li>
+  </ul>
+</div>
 
 Karena εᵣ bahan dielektrik selalu lebih besar dari 1 (udara/vakum ≈ 1), menyisipkan dielektrik selalu **memperbesar** kapasitansi -- ini sebabnya kapasitor komersial hampir selalu punya bahan dielektrik di dalamnya, bukan cuma udara.
 
@@ -263,7 +339,18 @@ Karena εᵣ bahan dielektrik selalu lebih besar dari 1 (udara/vakum ≈ 1), men
 
 Karena kapasitor menyimpan muatan sekaligus mengalami beda potensial, ia juga menyimpan **energi listrik**:
 
-<div class="mtr-formula">W = ½QV = ½CV²</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">W = ½QV = ½CV²</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>W</strong> = energi listrik yang tersimpan dalam kapasitor (joule)</li>
+    <li><strong>Q</strong> = muatan yang tersimpan (C)</li>
+    <li><strong>V</strong> = beda potensial antar keping (V)</li>
+    <li><strong>C</strong> = kapasitansi kapasitor (F)</li>
+  </ul>
+</div>
 
 Energi inilah yang dilepaskan sekaligus dalam waktu sangat singkat pada kasus lampu kilat kamera di awal artikel ini -- makanya cahayanya bisa jauh lebih terang daripada kemampuan baterai mendorong arus secara langsung.
 

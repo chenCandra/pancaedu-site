@@ -174,11 +174,14 @@ draft: false
 .mtr-formula {
   text-align: center;
   font-size: 1.0625rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #831843;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid #f9a8d4;
+  border-left: 5px solid #db2777;
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.1rem;
   margin-block: 1rem;
 }
 
@@ -201,6 +204,68 @@ draft: false
 .mtr-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
 .mtr-card h4 { font-family: var(--font-display); margin: 0 0 0.35rem; font-size: 1rem; }
 .mtr-card p { font-size: 0.8438rem; color: var(--ink-soft); margin: 0; }
+/* ---------- Kotak rumus: gaya "scrapbook" berwarna -- kartu krem sedikit
+   miring + tempelan selolip di sudut, di atas latar gradasi pink/magenta
+   dengan tepi atas disobek (clip-path). Playful, bukan kotak monokrom.
+   Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula-utama {
+  margin-block: 2rem;
+  padding: 1.75rem 1.25rem 1.35rem;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #ec4899 0%, #9d174d 100%);
+  box-shadow: 0 14px 30px rgba(157, 23, 77, 0.3);
+  position: relative;
+  clip-path: polygon(0% 11px, 4% 2px, 8% 13px, 12% 4px, 16% 12px, 20% 1px, 24% 10px, 28% 3px, 32% 13px, 36% 2px, 40% 11px, 44% 4px, 48% 12px, 52% 1px, 56% 10px, 60% 3px, 64% 13px, 68% 2px, 72% 11px, 76% 4px, 80% 12px, 84% 1px, 88% 10px, 92% 3px, 96% 13px, 100% 2px, 100% 100%, 0% 100%);
+}
+.mtr-formula-card {
+  position: relative;
+  background: #fdf0e0;
+  border-radius: 14px;
+  padding: 1.6rem 1.25rem;
+  margin: 0.35rem auto 1.35rem;
+  max-width: 22rem;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+.mtr-formula-card::before, .mtr-formula-card::after {
+  content: '';
+  position: absolute;
+  width: 3.6rem;
+  height: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.mtr-formula-card::before { top: -0.75rem; left: -0.6rem; transform: rotate(-16deg); }
+.mtr-formula-card::after { top: -0.75rem; right: -0.6rem; transform: rotate(13deg); }
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #26243b;
+  letter-spacing: 0.01em;
+}
+.mtr-formula-rumus + .mtr-formula-rumus { margin-top: 0.6rem; }
+.mtr-formula-keterangan-judul {
+  color: #fff;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  margin: 0 0 0.6rem;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: #ffe0ee;
+}
+.mtr-formula-keterangan strong { color: #fff; font-family: 'Courier New', monospace; font-style: italic; }
+
 </style>
 
 Sepanjang bab ini kita sudah membahas relativitas khusus -- konsekuensi aneh yang terjadi kalau BENDA bergerak sangat cepat. Sekarang kita pindah ke topik lain yang sama anehnya, tapi soal CAHAYA: ternyata cahaya sendiri punya kepribadian ganda, kadang berperilaku seperti gelombang, kadang seperti aliran partikel kecil. Fenomena yang membongkar rahasia ini disebut **efek fotolistrik**, dan penjelasannya oleh Einstein-lah (bukan teori relativitasnya!) yang justru mengantarkannya meraih Hadiah Nobel Fisika 1921 -- seperti sempat disinggung di materi [Teori Relativitas Khusus](/materi/teori-relativitas-khusus).
@@ -227,18 +292,32 @@ Masalahnya, ada tiga hal aneh yang SAMA SEKALI tidak bisa dijelaskan teori gelom
 
 Tahun 1905 (tahun yang sama dengan makalah relativitas khususnya!), Einstein mengusulkan ide radikal: **cahaya tidak merambat sebagai gelombang kontinu, melainkan sebagai paket-paket energi diskrit** yang disebut **foton**. Setiap foton membawa energi sebesar:
 
-<div class="mtr-formula">E = h × f = hc/λ</div>
-
-dengan:
-
-* **E** = energi satu foton (Joule, atau elektronvolt/eV untuk skala atomik)
-* **h** = konstanta Planck ≈ 6,626×10⁻³⁴ J·s (atau ≈ 4,136×10⁻¹⁵ eV·s)
-* **f** = frekuensi cahaya (Hz)
-* **λ** = panjang gelombang cahaya (m), dengan **c = λf**
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">E = h × f = hc/λ</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>E</strong> = energi satu foton (Joule, atau elektronvolt/eV untuk skala atomik)</li>
+    <li><strong>h</strong> = konstanta Planck ≈ 6,626×10⁻³⁴ J·s (atau ≈ 4,136×10⁻¹⁵ eV·s)</li>
+    <li><strong>f</strong> = frekuensi cahaya (Hz)</li>
+    <li><strong>λ</strong> = panjang gelombang cahaya (m), dengan <strong>c = λf</strong></li>
+  </ul>
+</div>
 
 Dalam efek fotolistrik, **satu foton berinteraksi dengan satu elektron sekaligus** -- bukan energi yang terkumpul pelan-pelan dari banyak gelombang. Kalau energi foton itu (hf) lebih besar dari **fungsi kerja (W₀)** logam -- energi minimum yang dibutuhkan elektron untuk lepas dari ikatan logamnya -- elektron langsung terlepas SEKETIKA, dengan sisa energinya menjadi energi kinetik:
 
-<div class="mtr-formula">Eₖ maks = h×f − W₀</div>
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">Eₖ maks = h×f − W₀</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Eₖ maks</strong> = energi kinetik maksimum elektron yang terlepas (Joule atau eV)</li>
+    <li><strong>h×f</strong> = energi satu foton yang datang (Joule atau eV)</li>
+    <li><strong>W₀</strong> = fungsi kerja logam, energi minimum untuk melepaskan elektron (Joule atau eV)</li>
+  </ul>
+</div>
 
 Persamaan inilah yang disebut **Persamaan Fotolistrik Einstein**. Perhatikan bagaimana ini menjawab TIGA keanehan di atas sekaligus:
 
@@ -276,7 +355,21 @@ Di sinilah letak keanehan terbesarnya: efek fotolistrik membuktikan cahaya berpe
 💡 <strong>Dualisme Gelombang-Partikel</strong>: cahaya (dan, seperti akan kamu pelajari lebih lanjut, semua materi) memiliki sifat gelombang SEKALIGUS sifat partikel. Bukan "kadang gelombang, kadang partikel" secara terpisah -- keduanya adalah cara berbeda untuk mendeskripsikan hal yang sama, dan aspek mana yang "terlihat" tergantung jenis eksperimen yang dilakukan untuk mengamatinya.
 </div>
 
-Fisikawan Perancis Louis de Broglie kemudian melangkah lebih jauh di tahun 1924: kalau cahaya (biasanya dianggap gelombang) bisa berperilaku seperti partikel, mungkinkah partikel materi (seperti elektron, biasanya dianggap partikel) juga bisa berperilaku seperti gelombang? Hipotesisnya terbukti benar -- setiap partikel bermomentum p ternyata punya **panjang gelombang de Broglie**, λ = h/p, dan ini sudah dibuktikan lewat eksperimen difraksi elektron. Dualisme gelombang-partikel ternyata berlaku UNIVERSAL, bukan cuma untuk cahaya.
+Fisikawan Perancis Louis de Broglie kemudian melangkah lebih jauh di tahun 1924: kalau cahaya (biasanya dianggap gelombang) bisa berperilaku seperti partikel, mungkinkah partikel materi (seperti elektron, biasanya dianggap partikel) juga bisa berperilaku seperti gelombang? Hipotesisnya terbukti benar -- setiap partikel bermomentum p ternyata punya **panjang gelombang de Broglie**, dirumuskan sebagai:
+
+<div class="mtr-formula-utama">
+  <div class="mtr-formula-card">
+    <div class="mtr-formula-rumus">λ = h/p</div>
+  </div>
+  <p class="mtr-formula-keterangan-judul">Keterangan:</p>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>λ</strong> = panjang gelombang de Broglie (m)</li>
+    <li><strong>h</strong> = konstanta Planck ≈ 6,626×10⁻³⁴ J·s</li>
+    <li><strong>p</strong> = momentum partikel (kg·m/s)</li>
+  </ul>
+</div>
+
+Hipotesis ini sudah dibuktikan lewat eksperimen difraksi elektron. Dualisme gelombang-partikel ternyata berlaku UNIVERSAL, bukan cuma untuk cahaya.
 
 ## 🔬 Aplikasi Efek Fotolistrik
 
