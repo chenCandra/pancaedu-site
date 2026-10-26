@@ -222,6 +222,39 @@ draft: false
   background: var(--surface-solid); color: var(--ink); cursor: pointer;
 }
 .mtr-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Kotak rumus: rumus besar di atas, keterangan tiap simbol di
+   bawahnya. Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula {
+  margin-block: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-align: center;
+  padding: 1rem 1.25rem;
+  background: #241f3d;
+  color: #f3eaff;
+  letter-spacing: 0.02em;
+}
+.mtr-formula-rumus .mtr-formula-var { color: #fde68a; }
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+.mtr-formula-keterangan strong { color: var(--ink); font-family: 'Courier New', monospace; }
 </style>
 
 Pernah lihat lampu sepeda yang menyala sendiri saat rodanya diputar (padahal tidak ada baterai), charger HP tanpa kabel yang tinggal ditaruh di atas alasnya, atau kompor listrik yang panasnya langsung muncul begitu panci diletakkan? Semua itu kerja pakai trik yang sama: **mengubah medan magnet jadi listrik, tanpa baterai sama sekali.** Trik inilah yang akan kita bongkar di materi ini.
@@ -307,7 +340,18 @@ Induksi elektromagnetik bukan cuma teori di buku -- ini prinsip yang bikin banya
 
 ## 📐 Hukum Faraday
 
-**Hukum Faraday** menyatakan: besar GGL induksi yang timbul SEBANDING dengan KECEPATAN perubahan fluks magnetik yang menembus kumparan. Singkatnya: **makin cepat perubahannya, makin besar listrik yang dihasilkan.**
+**Hukum Faraday** menyatakan: besar GGL induksi yang timbul SEBANDING dengan KECEPATAN perubahan fluks magnetik yang menembus kumparan. Singkatnya: **makin cepat perubahannya, makin besar listrik yang dihasilkan.** Secara matematis, ditulis:
+
+<div class="mtr-formula">
+  <div class="mtr-formula-rumus">ε = −N × (ΔΦ / Δt)</div>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>ε</strong> = GGL induksi (volt)</li>
+    <li><strong>N</strong> = jumlah lilitan kumparan</li>
+    <li><strong>ΔΦ</strong> = perubahan fluks magnetik (weber)</li>
+    <li><strong>Δt</strong> = selang waktu terjadinya perubahan (sekon)</li>
+    <li>Tanda negatif (−) cuma menandakan arah GGL melawan perubahan (Hukum Lenz) -- besarnya tetap dihitung pakai nilai mutlaknya.</li>
+  </ul>
+</div>
 
 Tiga faktor yang membuat GGL induksi lebih besar:
 

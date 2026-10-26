@@ -179,6 +179,38 @@ draft: false
 .mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
 .mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
 .mtr-mini-label strong { color: var(--ink); }
+
+/* ---------- Kotak rumus: rumus besar di atas, keterangan tiap simbol di
+   bawahnya. Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula {
+  margin-block: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-align: center;
+  padding: 1rem 1.25rem;
+  background: #241f3d;
+  color: #f3eaff;
+  letter-spacing: 0.02em;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+.mtr-formula-keterangan strong { color: var(--ink); font-family: 'Courier New', monospace; }
 </style>
 
 Pernah perhatikan lampu di rumahmu? Kelihatannya menyala terus-menerus, stabil, tidak berkedip. Padahal sebenarnya listrik yang mengalir ke lampu itu terus-menerus BERBALIK ARAH, puluhan kali setiap detik -- cuma matamu terlalu lambat untuk menangkapnya! Itulah **Arus Bolak-Balik (AC)**, jenis listrik yang dipakai hampir semua rumah di dunia.
@@ -213,8 +245,26 @@ Karena nilai AC terus berubah setiap saat (naik-turun membentuk gelombang sinus)
 
 - **Tegangan Puncak (Vp)**: nilai tertinggi yang dicapai gelombang.
 - **Periode (T)**: waktu yang dibutuhkan untuk satu gelombang penuh (dalam detik).
-- **Frekuensi (f)**: jumlah gelombang penuh per detik (f = 1/T), satuannya Hertz (Hz). Listrik PLN di Indonesia memakai **f = 50 Hz** -- artinya arus berbalik arah 50 kali per detik!
-- **Nilai RMS (Root Mean Square)**: nilai "efektif" yang setara dengan DC dalam hal daya yang dihasilkan. Rumusnya **Vrms = Vp/√2 ≈ 0,707 × Vp**.
+- **Frekuensi (f)**: jumlah gelombang penuh per detik, satuannya Hertz (Hz). Listrik PLN di Indonesia memakai **f = 50 Hz** -- artinya arus berbalik arah 50 kali per detik!
+- **Nilai RMS (Root Mean Square)**: nilai "efektif" yang setara dengan DC dalam hal daya yang dihasilkan.
+
+<div class="mtr-formula">
+  <div class="mtr-formula-rumus">f = 1 / T</div>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>f</strong> = frekuensi (Hz, jumlah gelombang penuh per detik)</li>
+    <li><strong>T</strong> = periode (sekon, waktu untuk satu gelombang penuh)</li>
+    <li>Makin pendek periodenya, makin tinggi frekuensinya -- keduanya berbanding terbalik.</li>
+  </ul>
+</div>
+
+<div class="mtr-formula">
+  <div class="mtr-formula-rumus">Vrms = Vp / √2 ≈ 0,707 × Vp</div>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Vrms</strong> = tegangan efektif (volt) -- inilah angka yang tertulis di stopkontak/alat listrik</li>
+    <li><strong>Vp</strong> = tegangan puncak (volt) -- nilai tertinggi yang sesaat dicapai gelombang</li>
+    <li>Rumus yang sama berlaku untuk arus: <strong>Irms = Ip / √2</strong></li>
+  </ul>
+</div>
 
 <div class="mtr-note">
 💡 <strong>Fakta seru:</strong> lampu di rumahmu yang pakai listrik AC 50 Hz sebenarnya menyala-padam <strong>100 kali setiap detik</strong> (karena gelombangnya naik DAN turun melewati nol, dua kali per gelombang)! Mata manusia cuma bisa menangkap perubahan cahaya sampai sekitar 50-60 kali per detik -- lebih cepat dari itu, otakmu "menghaluskannya" jadi terlihat seperti nyala terus-menerus. Itu sebabnya kamu tidak pernah sadar lampu rumahmu sebenarnya berkedip super cepat!

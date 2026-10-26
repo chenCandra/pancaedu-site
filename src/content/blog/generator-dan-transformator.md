@@ -199,6 +199,38 @@ draft: false
 .mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
 .mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
 .mtr-mini-label strong { color: var(--ink); }
+
+/* ---------- Kotak rumus: rumus besar di atas, keterangan tiap simbol di
+   bawahnya. Dipakai konsisten di semua materi yang ada rumusnya. ---------- */
+.mtr-formula {
+  margin-block: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-formula-rumus {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-align: center;
+  padding: 1rem 1.25rem;
+  background: #241f3d;
+  color: #f3eaff;
+  letter-spacing: 0.02em;
+}
+.mtr-formula-keterangan {
+  list-style: none;
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+.mtr-formula-keterangan strong { color: var(--ink); font-family: 'Courier New', monospace; }
 </style>
 
 Setiap kali kamu nge-charge HP, menyalakan lampu rumah, atau lewat jalan raya dan melihat menara besi tinggi berkabel tebal dengan tanda "AWAS TEGANGAN TINGGI" -- semuanya terhubung ke materi ini. Listrik yang sampai ke rumahmu itu perjalanannya panjang, dan dua alat inilah yang membuatnya mungkin: **Generator** (pembuat listriknya) dan **Transformator** (pengatur "tekanan" listriknya supaya aman dikirim jauh lalu dipakai di rumah).
@@ -239,7 +271,19 @@ Perhatikan pola pentingnya: apa pun sumber energinya (air, uap, angin), yang ter
 </div>
 </div>
 
-Perbandingan tegangan sebanding dengan perbandingan jumlah lilitan: **Vp/Vs = Np/Ns** (p = primer, s = sekunder). Coba main-main sendiri di bawah ini -- geser jumlah lilitan sekundernya, lihat tegangan keluarannya berubah:
+Perbandingan tegangan sebanding dengan perbandingan jumlah lilitan:
+
+<div class="mtr-formula">
+  <div class="mtr-formula-rumus">Vp / Vs = Np / Ns</div>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>Vp</strong> = tegangan kumparan primer (volt)</li>
+    <li><strong>Vs</strong> = tegangan kumparan sekunder (volt)</li>
+    <li><strong>Np</strong> = jumlah lilitan kumparan primer</li>
+    <li><strong>Ns</strong> = jumlah lilitan kumparan sekunder</li>
+  </ul>
+</div>
+
+Coba main-main sendiri di bawah ini -- geser jumlah lilitan sekundernya, lihat tegangan keluarannya berubah:
 
 <div class="mtr-mini-widget">
   <p class="mtr-mini-caption">🎚️ Geser lilitan sekunder (Ns) -- lilitan primer (Np) tetap 10, tegangan masuk tetap 100V:</p>
@@ -301,7 +345,19 @@ Ini yang sering bikin bingung: kenapa listrik ditransmisikan dari PLTA/PLTU ke k
 💡 <strong>Ibaratnya begini:</strong> bayangkan kamu mau mengalirkan air dalam jumlah tertentu lewat selang. Kalau pakai selang KECIL, kamu butuh TEKANAN tinggi supaya air tetap mengalir deras. Kalau pakai selang BESAR, air bisa mengalir banyak walau tekanannya rendah. Nah, <strong>tegangan listrik itu seperti tekanan air, dan arus listrik itu seperti derasnya aliran air</strong> -- buat mengirim daya listrik yang sama lewat kabel yang jauh, lebih untung pakai "tekanan" (tegangan) tinggi dengan "aliran" (arus) kecil, daripada sebaliknya.
 </div>
 
-Untuk daya listrik yang sama, kalau TEGANGAN dinaikkan (pakai trafo step-up), ARUS yang mengalir jadi lebih KECIL. Kerugian energi akibat panas di kabel (P=I²R) sangat bergantung pada besar arus (dikuadratkan!) -- jadi arus kecil = kerugian energi jauh lebih kecil sepanjang kabel transmisi yang panjang. Setelah sampai dekat kota, trafo step-down menurunkan tegangannya lagi ke level aman untuk dipakai di rumah -- kamu mungkin pernah lihat kotak abu-abu "Gardu PLN" di pinggir jalan dekat rumah/sekolahmu, itu salah satu tempat trafo step-down ini bekerja.
+Untuk daya listrik yang sama, kalau TEGANGAN dinaikkan (pakai trafo step-up), ARUS yang mengalir jadi lebih KECIL. Kerugian energi akibat panas di kabel sangat bergantung pada besar arus -- dan bukan sembarang bergantung, tapi DIKUADRATKAN:
+
+<div class="mtr-formula">
+  <div class="mtr-formula-rumus">P = I² × R</div>
+  <ul class="mtr-formula-keterangan">
+    <li><strong>P</strong> = daya yang hilang jadi panas di kabel (watt)</li>
+    <li><strong>I</strong> = arus listrik yang mengalir (ampere)</li>
+    <li><strong>R</strong> = hambatan kabel (ohm)</li>
+    <li>Karena I dikuadratkan, arus yang mengecil separuh saja membuat kerugian energi turun jadi SEPEREMPATNYA (bukan cuma separuh)!</li>
+  </ul>
+</div>
+
+Jadi arus kecil = kerugian energi jauh lebih kecil sepanjang kabel transmisi yang panjang. Setelah sampai dekat kota, trafo step-down menurunkan tegangannya lagi ke level aman untuk dipakai di rumah -- kamu mungkin pernah lihat kotak abu-abu "Gardu PLN" di pinggir jalan dekat rumah/sekolahmu, itu salah satu tempat trafo step-down ini bekerja.
 
 ## ⚠️ Kesalahan Umum
 
