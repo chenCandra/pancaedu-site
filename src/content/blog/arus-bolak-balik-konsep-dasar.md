@@ -161,11 +161,33 @@ draft: false
 
 .mtr-note strong.mtr-wrong { color: var(--rose); }
 .mtr-note strong.mtr-right { color: var(--teal); }
+
+/* ---------- Mini-widget interaktif. Pola sama seperti materi Hukum
+   Faraday & Lenz / Generator & Transformator -- IIFE + id unik, dan
+   SKRIP SENGAJA ditulis tanpa baris kosong sama sekali (markdown parser
+   situs ini tidak kebal baris kosong di dalam <script>, beda dari aturan
+   CommonMark semestinya -- baris kosong bikin kode JS ikut diproses jadi
+   markdown dan rusak). ---------- */
+.mtr-mini-widget {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mtr-mini-caption { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.6rem; font-weight: 600; }
+.mtr-mini-label { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.6rem; text-align: center; min-height: 1.2rem; }
+.mtr-mini-label strong { color: var(--ink); }
 </style>
 
-Di materi [Generator dan Transformator](/materi/generator-dan-transformator) kita singgung soal listrik AC yang mengalir di rumah kita. Sekarang kita bahas TUNTAS: apa sebenarnya Arus Bolak-Balik (AC) itu, dan kenapa hampir semua listrik rumah tangga di dunia memakainya.
+Pernah perhatikan lampu di rumahmu? Kelihatannya menyala terus-menerus, stabil, tidak berkedip. Padahal sebenarnya listrik yang mengalir ke lampu itu terus-menerus BERBALIK ARAH, puluhan kali setiap detik -- cuma matamu terlalu lambat untuk menangkapnya! Itulah **Arus Bolak-Balik (AC)**, jenis listrik yang dipakai hampir semua rumah di dunia.
+
+Di materi [Generator dan Transformator](/materi/generator-dan-transformator) kita singgung soal listrik AC ini. Sekarang kita bahas TUNTAS: apa sebenarnya AC itu, dan kenapa hampir semua listrik rumah tangga di dunia memakainya (bukan DC seperti baterai).
 
 ## 🔄 AC vs DC
+
+Bayangkan dua cara mengalirkan air lewat pipa: cara pertama, air mengalir TERUS ke satu arah dari sumbernya (seperti air mengalir dari bak mandi ke selokan) -- ini ibarat **DC (Arus Searah)**. Cara kedua, ada orang yang mendorong-tarik piston di ujung pipa berulang-ulang, bikin airnya bergerak maju-mundur terus-menerus tanpa henti -- ini ibarat **AC (Arus Bolak-Balik)**. Sama-sama "listrik mengalir", tapi arahnya beda total.
 
 <div class="mtr-table-wrap">
 <div class="mtr-table-scroll">
@@ -187,14 +209,76 @@ Alasan utamanya sudah kita singgung di materi Transformator: **AC bisa dengan mu
 
 ## 📈 Tegangan Puncak, RMS, dan Frekuensi
 
-Karena nilai AC terus berubah setiap saat, kita butuh beberapa cara untuk menyatakannya:
+Karena nilai AC terus berubah setiap saat (naik-turun membentuk gelombang sinus), kita butuh beberapa cara untuk menyatakannya:
 
 - **Tegangan Puncak (Vp)**: nilai tertinggi yang dicapai gelombang.
 - **Periode (T)**: waktu yang dibutuhkan untuk satu gelombang penuh (dalam detik).
 - **Frekuensi (f)**: jumlah gelombang penuh per detik (f = 1/T), satuannya Hertz (Hz). Listrik PLN di Indonesia memakai **f = 50 Hz** -- artinya arus berbalik arah 50 kali per detik!
 - **Nilai RMS (Root Mean Square)**: nilai "efektif" yang setara dengan DC dalam hal daya yang dihasilkan. Rumusnya **Vrms = Vp/√2 ≈ 0,707 × Vp**.
 
-Angka **220V** yang tertulis di stopkontak rumahmu adalah nilai RMS, BUKAN nilai puncaknya! Tegangan puncak sebenarnya jauh lebih tinggi: 220 × √2 ≈ **311V**. Coba buktikan sendiri di simulasi bawah -- atur tegangan puncak dan frekuensi, lihat nilai RMS-nya berubah mengikuti.
+<div class="mtr-note">
+💡 <strong>Fakta seru:</strong> lampu di rumahmu yang pakai listrik AC 50 Hz sebenarnya menyala-padam <strong>100 kali setiap detik</strong> (karena gelombangnya naik DAN turun melewati nol, dua kali per gelombang)! Mata manusia cuma bisa menangkap perubahan cahaya sampai sekitar 50-60 kali per detik -- lebih cepat dari itu, otakmu "menghaluskannya" jadi terlihat seperti nyala terus-menerus. Itu sebabnya kamu tidak pernah sadar lampu rumahmu sebenarnya berkedip super cepat!
+</div>
+
+Lalu, kenapa butuh "nilai RMS" segala, kalau sudah ada nilai puncak? Begini: kalau lampu kamu kasih AC yang puncaknya 311V, ternyata nyalanya akan SAMA TERANGNYA dengan kalau kamu kasih DC yang KONSTAN 220V (bukan 311V!). Nilai 220V itulah **nilai RMS** -- "nilai DC pengganti" yang menghasilkan efek (panas, cahaya, daya) yang SAMA PERSIS, meski tegangan AC aslinya terus naik-turun sampai 311V dan turun sampai -311V.
+
+Angka **220V** yang tertulis di stopkontak rumahmu adalah nilai RMS ini, BUKAN nilai puncaknya! Tegangan puncak sebenarnya jauh lebih tinggi: 220 × √2 ≈ **311V**.
+
+<div class="mtr-mini-widget">
+  <p class="mtr-mini-caption">🌊 Osiloskop Mini -- geser tegangan puncak &amp; frekuensi, lihat gelombangnya berubah (frekuensi SENGAJA diperlambat dari aslinya 50 Hz biar kelihatan mata):</p>
+  <canvas id="acCanvas" width="640" height="200" style="width:100%;height:auto;display:block;background:#1c1b2e;border-radius:14px;"></canvas>
+  <input type="range" id="acVpSlider" min="50" max="300" value="220" style="width:100%;margin-top:10px;accent-color:#8b3ddb;">
+  <p class="mtr-mini-label">Tegangan Puncak (Vp): <strong id="acVpLabel">220 V</strong></p>
+  <input type="range" id="acFreqSlider" min="1" max="8" value="2" style="width:100%;">
+  <p class="mtr-mini-label">Kecepatan Gelombang (ibarat frekuensi): <strong id="acFreqLabel">2</strong> &middot; Vrms = <strong id="acVrmsLabel">155,6 V</strong></p>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('acCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var vpSlider = document.getElementById('acVpSlider');
+  var freqSlider = document.getElementById('acFreqSlider');
+  var vpLabel = document.getElementById('acVpLabel');
+  var freqLabel = document.getElementById('acFreqLabel');
+  var vrmsLabel = document.getElementById('acVrmsLabel');
+  var fase = 0;
+  function gambar() {
+    var w = canvas.width, h = canvas.height;
+    var vp = parseFloat(vpSlider.value);
+    var freq = parseFloat(freqSlider.value);
+    var vrms = vp / Math.SQRT2;
+    vpLabel.textContent = vp.toFixed(0) + ' V';
+    freqLabel.textContent = freq.toFixed(0);
+    vrmsLabel.textContent = vrms.toFixed(1) + ' V';
+    ctx.clearRect(0, 0, w, h);
+    var tengah = h / 2, skalaY = (h * 0.42) / 311;
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, tengah); ctx.lineTo(w, tengah); ctx.stroke();
+    var yVp = tengah - vp * skalaY, yVrms = tengah - vrms * skalaY;
+    ctx.strokeStyle = 'rgba(251,191,36,0.55)'; ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.moveTo(0, yVp); ctx.lineTo(w, yVp); ctx.stroke();
+    ctx.strokeStyle = 'rgba(244,114,182,0.7)';
+    ctx.beginPath(); ctx.moveTo(0, yVrms); ctx.lineTo(w, yVrms); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('Vp', 6, yVp - 6);
+    ctx.fillStyle = '#f472b6'; ctx.fillText('Vrms', 6, yVrms - 6);
+    ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 3; ctx.beginPath();
+    for (var x = 0; x <= w; x += 2) {
+      var t = x / w;
+      var y = tengah - Math.sin(t * freq * Math.PI * 2 + fase) * vp * skalaY;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    fase += 0.05;
+    requestAnimationFrame(gambar);
+  }
+  requestAnimationFrame(gambar);
+})();
+</script>
+
+Coba buktikan sendiri di simulasi bawah -- atur tegangan puncak dan frekuensi, lihat nilai RMS-nya berubah mengikuti.
 
 ## ⚠️ Kesalahan Umum
 
