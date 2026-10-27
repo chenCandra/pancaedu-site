@@ -222,6 +222,14 @@ Di materi [Sumber Energi](/materi/sumber-energi), kita sudah kenalan sama klasif
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Batu bara dan minyak bumi terbentuk dalam jutaan tahun, sementara manusia bisa menghabiskannya jauh lebih cepat -- seperti pasir waktu yang terus berkurang.</p>
+  <div style="margin-top:1rem;text-align:left;">
+    <label for="talSlider" style="display:block;font-size:0.8125rem;color:#78350f;font-weight:600;margin-bottom:0.4rem;">⏳ Geser "tahun berlalu" -- lihat cadangannya makin menipis:</label>
+    <input type="range" id="talSlider" min="0" max="100" value="0" style="width:100%;accent-color:#d97706;" oninput="document.getElementById('talBar').style.width=(100-this.value)+'%';document.getElementById('talBar').style.background=this.value>70?'#ef4444':(this.value>40?'#f59e0b':'#22c55e');document.getElementById('talPct').textContent=(100-this.value)+'%';">
+    <div style="height:14px;border-radius:999px;background:#fde68a;border:1px solid #fcd34d;overflow:hidden;margin-top:0.5rem;">
+      <div id="talBar" style="height:100%;width:100%;background:#22c55e;"></div>
+    </div>
+    <p style="margin:0.5rem 0 0;font-size:0.8125rem;color:#78350f;font-weight:600;text-align:center;">Cadangan tersisa: <strong id="talPct">100%</strong></p>
+  </div>
 </div>
 
 ## ⛏️ Bahan Bakar Fosil

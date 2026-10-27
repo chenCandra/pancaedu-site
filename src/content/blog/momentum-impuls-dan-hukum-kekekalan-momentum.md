@@ -241,14 +241,56 @@ Prinsip yang sama dipakai pemain kiper atau penangkap bola baseball: saat bola k
     <line x1="22" y1="150" x2="58" y2="150" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"></line>
     <ellipse cx="120" cy="134" rx="34" ry="27" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"></ellipse>
     <ellipse cx="100" cy="112" rx="11" ry="9" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"></ellipse>
+    <g id="pukulSarungG">
     <line x1="148" y1="118" x2="168" y2="104" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
     <line x1="152" y1="134" x2="174" y2="134" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
     <line x1="148" y1="150" x2="168" y2="164" stroke="#facc15" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+    <g id="pukulTelanjangG" style="display:none;">
+    <line x1="150" y1="100" x2="180" y2="108" stroke="#ef4444" stroke-width="3" stroke-linecap="round"></line>
+    <line x1="150" y1="134" x2="186" y2="134" stroke="#ef4444" stroke-width="3" stroke-linecap="round"></line>
+    <line x1="150" y1="168" x2="180" y2="160" stroke="#ef4444" stroke-width="3" stroke-linecap="round"></line>
+    <text x="156" y="94" font-size="14" fill="#ef4444" font-weight="700">!</text>
+    </g>
     <text x="10" y="100" font-size="11" fill="#1e3a8a" font-weight="700">pukulan cepat</text>
-    <text x="255" y="100" font-size="11" fill="#1e3a8a" font-weight="700">sarung tinju empuk</text>
+    <text id="pukulLabel" x="255" y="100" font-size="11" fill="#1e3a8a" font-weight="700">sarung tinju empuk</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Makin empuk/lama kontaknya (Δt besar), makin kecil gaya (F) yang dirasakan untuk impuls (perubahan momentum) yang sama -- itulah kenapa sarung tinju empuk mengurangi dampak pukulan.</p>
+  <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+    <button type="button" id="pukulBtnKosong" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.55rem 1rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1e3a8a;cursor:pointer;">👊 Tangan Kosong</button>
+    <button type="button" id="pukulBtnSarung" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.55rem 1rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1e3a8a;cursor:pointer;">🥊 Sarung Tinju</button>
+  </div>
+  <p class="mtr-ilustrasi-caption" id="pukulCaption">Impuls (perubahan momentum) yang harus dihentikan sama saja, Δp &asymp; 6 kg&middot;m/s -- bedanya cuma selang waktu kontaknya.</p>
 </div>
+<script>
+(function () {
+  var btnKosong = document.getElementById('pukulBtnKosong');
+  var btnSarung = document.getElementById('pukulBtnSarung');
+  var gSarung = document.getElementById('pukulSarungG');
+  var gKosong = document.getElementById('pukulTelanjangG');
+  var label = document.getElementById('pukulLabel');
+  var caption = document.getElementById('pukulCaption');
+  if (!btnKosong || !btnSarung || !gSarung || !gKosong) return;
+  var dp = 6;
+  function setMode(mode) {
+    if (mode === 'kosong') {
+      gSarung.style.display = 'none';
+      gKosong.style.display = '';
+      label.textContent = 'tangan kosong (kontak singkat)';
+      var fKosong = dp / 0.01;
+      caption.textContent = 'Δt sangat singkat (≈ 0,01 s) → F = Δp/Δt ≈ ' + fKosong.toFixed(0) + ' N -- sakit sekali!';
+    } else {
+      gSarung.style.display = '';
+      gKosong.style.display = 'none';
+      label.textContent = 'sarung tinju empuk';
+      var fSarung = dp / 0.1;
+      caption.textContent = 'Δt lebih lama (≈ 0,1 s) → F = Δp/Δt ≈ ' + fSarung.toFixed(0) + ' N -- jauh lebih aman untuk impuls yang sama.';
+    }
+  }
+  btnKosong.addEventListener('click', function () { setMode('kosong'); });
+  btnSarung.addEventListener('click', function () { setMode('sarung'); });
+})();
+</script>
 
 ### Hukum Kekekalan Momentum
 

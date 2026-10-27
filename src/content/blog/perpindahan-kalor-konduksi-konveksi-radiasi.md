@@ -213,9 +213,9 @@ Gagang panci logam terasa cepat panas, makanya banyak panci sengaja dibuat denga
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
-    <rect x="4" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
-    <rect x="146" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
-    <rect x="288" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2"/>
+    <rect x="4" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2" style="cursor:pointer" onclick="document.getElementById('kalorLabel').textContent='🥄 Konduksi: kalor merambat lewat sentuhan langsung antar partikel zat padat -- makanya gagang sendok logam ikut panas.'"/>
+    <rect x="146" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2" style="cursor:pointer" onclick="document.getElementById('kalorLabel').textContent='🌊 Konveksi: kalor berpindah lewat aliran fluida (zat cair/gas) itu sendiri -- air mendidih berputar, angin laut-darat gantian arah.'"/>
+    <rect x="288" y="4" width="128" height="212" rx="12" fill="#ffedd5" stroke="#fdba74" stroke-width="2" style="cursor:pointer" onclick="document.getElementById('kalorLabel').textContent='☀️ Radiasi: kalor merambat lewat gelombang elektromagnetik, bisa menyeberangi ruang hampa tanpa medium -- itu caranya panas Matahari sampai ke kulit.'"/>
     <g>
       <rect x="35" y="140" width="70" height="40" rx="8" fill="#94a3b8"/>
       <rect x="55" y="80" width="12" height="70" rx="6" fill="#78350f"/>
@@ -250,6 +250,7 @@ Gagang panci logam terasa cepat panas, makanya banyak panci sengaja dibuat denga
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Tiga cara kalor berpindah: konduksi lewat sendok di sup panas, konveksi lewat air yang mendidih, radiasi lewat sinar Matahari ke kulit.</p>
+  <p class="mtr-mini-label" id="kalorLabel">👆 Klik salah satu panel buat baca penjelasan singkatnya!</p>
 </div>
 
 ## 🤔 Coba Pikirkan

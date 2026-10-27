@@ -221,18 +221,59 @@ Gaya yang meregangkan pegas berbanding LURUS dengan pertambahan panjangnya (Δx)
 <text x="90" y="118" font-size="12" fill="#64748b">L₀</text>
 <text x="250" y="40" font-size="14" fill="#1e3a8a" font-weight="700">Sesudah ditarik gaya F</text>
 <rect x="230" y="55" width="16" height="40" fill="#1e3a8a"/>
-<path d="M246,75 L258,65 L270,85 L282,65 L294,85 L306,65 L318,85 L330,65 L342,75" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
-<rect x="342" y="60" width="30" height="30" rx="5" fill="#3b82f6"/>
-<line x1="246" y1="105" x2="372" y2="105" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
-<text x="295" y="118" font-size="12" fill="#64748b">L₀ + Δx</text>
-<line x1="372" y1="75" x2="400" y2="75" stroke="#ef4444" stroke-width="4"/>
-<polygon points="400,75 390,69 390,81" fill="#ef4444"/>
-<text x="372" y="60" font-size="13" fill="#ef4444" font-weight="700">F</text>
+<path id="hookePath" d="M246,75 L259,65 L273,85 L286,65 L299,85 L313,65 L326,75" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+<rect id="hookeBox" x="326" y="61" width="28" height="28" rx="5" fill="#3b82f6"/>
+<line id="hookeDash" x1="246" y1="105" x2="354" y2="105" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="270" y="118" font-size="12" fill="#64748b">L₀ + Δx</text>
+<line id="hookeArrowLine" x1="356" y1="75" x2="368" y2="75" stroke="#ef4444" stroke-width="4"/>
+<polygon id="hookeArrowHead" points="368,75 360,69 360,81" fill="#ef4444"/>
+<text id="hookeFText" x="340" y="60" font-size="13" fill="#ef4444" font-weight="700">F</text>
 <text x="40" y="155" font-size="12" fill="#1e3a8a">Masih di daerah elastis: lepas gaya → kembali ke L₀.</text>
 <text x="40" y="175" font-size="12" fill="#1e3a8a">Melewati batas elastis: Δx menetap meski gaya dilepas.</text>
 </svg>
 <p class="mtr-ilustrasi-caption">Pegas bertambah panjang sejauh Δx saat ditarik gaya F -- F = kΔx berlaku selama masih di daerah elastis.</p>
+<input type="range" id="hookeSlider" min="0" max="25" value="10" step="1" style="width:100%;margin-top:10px;accent-color:#2563eb;">
+<p class="mtr-ilustrasi-caption" id="hookeCaption">Δx = <strong>0,10 m</strong> &middot; k = 100 N/m (dianggap tetap) &middot; F = k&middot;Δx = <strong>10,0 N</strong> -- geser buat lihat pegasnya meregang!</p>
 </div>
+<script>
+(function () {
+  var slider = document.getElementById('hookeSlider');
+  var path = document.getElementById('hookePath');
+  var box = document.getElementById('hookeBox');
+  var dash = document.getElementById('hookeDash');
+  var arrowLine = document.getElementById('hookeArrowLine');
+  var arrowHead = document.getElementById('hookeArrowHead');
+  var fText = document.getElementById('hookeFText');
+  var caption = document.getElementById('hookeCaption');
+  if (!slider || !path) return;
+  var startX = 246, baseSpan = 60, pxPerCm = 2, k = 100;
+  function render() {
+    var dxCm = parseFloat(slider.value);
+    var span = baseSpan + pxPerCm * dxCm;
+    var segs = 6, dx = span / segs, midY = 75, topY = 65, botY = 85;
+    var pts = [[startX, midY]];
+    for (var i = 1; i < segs; i++) {
+      pts.push([startX + dx * i, i % 2 === 1 ? topY : botY]);
+    }
+    pts.push([startX + span, midY]);
+    var d = 'M' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1]; }).join(' L');
+    path.setAttribute('d', d);
+    var boxLeft = startX + span;
+    box.setAttribute('x', boxLeft.toFixed(1));
+    var boxRight = boxLeft + 28;
+    dash.setAttribute('x2', boxRight.toFixed(1));
+    arrowLine.setAttribute('x1', (boxRight + 2).toFixed(1));
+    arrowLine.setAttribute('x2', (boxRight + 14).toFixed(1));
+    arrowHead.setAttribute('points', (boxRight + 14).toFixed(1) + ',75 ' + (boxRight + 6).toFixed(1) + ',69 ' + (boxRight + 6).toFixed(1) + ',81');
+    fText.setAttribute('x', (boxRight + 2).toFixed(1));
+    var dxM = dxCm / 100;
+    var F = k * dxM;
+    caption.innerHTML = 'Δx = <strong>' + dxM.toFixed(2) + ' m</strong> · k = ' + k + ' N/m (dianggap tetap) · F = k·Δx = <strong>' + F.toFixed(1) + ' N</strong> -- geser buat lihat pegasnya meregang!';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 ### Energi Potensial Elastis
 

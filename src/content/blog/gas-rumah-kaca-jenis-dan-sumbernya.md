@@ -210,17 +210,25 @@ Di materi [Pemanasan Global](/materi/pemanasan-global) kita sudah paham mekanism
     <path d="M30 190 L30 115 L370 115 L370 190" fill="none" stroke="#3b82f6" stroke-width="3"/>
     <rect x="130" y="190" width="30" height="20" fill="#fde68a"/>
     <polygon points="125,190 165,190 145,172" fill="#b45309"/>
-    <circle cx="200" cy="140" r="16" fill="#fca5a5" stroke="#dc2626" stroke-width="2"/>
-    <text x="200" y="145" font-size="12" font-weight="700" text-anchor="middle" fill="#7f1d1d" font-family="sans-serif">CO2</text>
-    <circle cx="260" cy="165" r="14" fill="#a7f3d0" stroke="#059669" stroke-width="2"/>
-    <text x="260" y="169" font-size="11" font-weight="700" text-anchor="middle" fill="#064e3b" font-family="sans-serif">CH4</text>
-    <circle cx="300" cy="130" r="10" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+    <g style="cursor:pointer;" onclick="document.getElementById('grkFaktaLabel').textContent='CO2 (karbon dioksida) -- jumlahnya paling banyak di udara, berasal dari pembakaran bahan bakar fosil: kendaraan, pabrik, dan pembangkit listrik.'">
+      <circle cx="200" cy="140" r="16" fill="#fca5a5" stroke="#dc2626" stroke-width="2"/>
+      <text x="200" y="145" font-size="12" font-weight="700" text-anchor="middle" fill="#7f1d1d" font-family="sans-serif">CO2</text>
+    </g>
+    <g style="cursor:pointer;" onclick="document.getElementById('grkFaktaLabel').textContent='CH4 (metana) -- jumlahnya lebih sedikit dari CO2, tapi tiap molekulnya menahan panas jauh lebih kuat. Berasal dari peternakan, sawah, dan sampah organik yang membusuk.'">
+      <circle cx="260" cy="165" r="14" fill="#a7f3d0" stroke="#059669" stroke-width="2"/>
+      <text x="260" y="169" font-size="11" font-weight="700" text-anchor="middle" fill="#064e3b" font-family="sans-serif">CH4</text>
+    </g>
+    <g style="cursor:pointer;" onclick="document.getElementById('grkFaktaLabel').textContent='N2O (dinitrogen oksida) -- jumlahnya paling sedikit, berasal dari pupuk pertanian dan beberapa proses industri.'">
+      <circle cx="300" cy="130" r="10" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+      <text x="300" y="133" font-size="7" font-weight="700" text-anchor="middle" fill="#78350f" font-family="sans-serif">N2O</text>
+    </g>
     <g stroke="#f97316" stroke-width="3" stroke-linecap="round">
       <path d="M150 95 q6 -10 12 0" transform="translate(0,-6)"/>
       <path d="M250 95 q6 -10 12 0" transform="translate(0,-6)"/>
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Rumah kaca mini: sinar matahari masuk dengan mudah, tapi molekul CO2 dan CH4 di "atap" menahan sebagian panasnya supaya tidak lolos keluar.</p>
+  <p id="grkFaktaLabel" style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;font-weight:600;">👆 Klik salah satu molekul gas di atap buat lihat faktanya!</p>
 </div>
 
 ## 💨 Enam Jenis Gas Rumah Kaca Utama

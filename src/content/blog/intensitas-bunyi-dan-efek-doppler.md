@@ -243,9 +243,9 @@ Ketika sumber bunyi **mendekati** pendengar, gelombang "termampatkan" di depanny
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <line x1="10" y1="165" x2="390" y2="165" stroke="#a1a1aa" stroke-width="2" />
     <circle cx="210" cy="110" r="20" fill="none" stroke="#9333ea" stroke-width="2.2" />
-    <circle cx="190" cy="110" r="45" fill="none" stroke="#9333ea" stroke-width="2" opacity="0.75" />
-    <circle cx="160" cy="110" r="75" fill="none" stroke="#9333ea" stroke-width="1.6" opacity="0.55" />
-    <circle cx="120" cy="110" r="110" fill="none" stroke="#9333ea" stroke-width="1.3" opacity="0.4" />
+    <circle id="ambRing1" cx="190" cy="110" r="45" fill="none" stroke="#9333ea" stroke-width="2" opacity="0.75" />
+    <circle id="ambRing2" cx="160" cy="110" r="75" fill="none" stroke="#9333ea" stroke-width="1.6" opacity="0.55" />
+    <circle id="ambRing3" cx="120" cy="110" r="110" fill="none" stroke="#9333ea" stroke-width="1.3" opacity="0.4" />
     <rect x="280" y="90" width="60" height="32" rx="6" fill="#f8fafc" stroke="#26243b" stroke-width="2" />
     <path d="M280,110 L280,100 L300,90 L305,100 L280,100" fill="#f8fafc" stroke="#26243b" stroke-width="2" />
     <rect x="296" y="78" width="16" height="10" rx="2" fill="#ef4444" />
@@ -260,6 +260,8 @@ Ketika sumber bunyi **mendekati** pendengar, gelombang "termampatkan" di depanny
     <text x="110" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#581c87">renggang → nada rendah</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Gelombang bunyi ambulans termampatkan di depan (nada tinggi) dan teregang di belakang (nada rendah).</p>
+  <input type="range" id="ambSlider" min="0" max="100" value="0" oninput="var v=this.value;var s=v*0.15;document.getElementById('ambRing1').setAttribute('cx',190-s*1);document.getElementById('ambRing2').setAttribute('cx',160-s*2);document.getElementById('ambRing3').setAttribute('cx',120-s*3);document.getElementById('ambLabel').textContent=(v==0?'🚑 Ambulans diam / melaju lambat.':v<50?'🚑 Melaju sedang -- nadanya mulai kedengaran beda di depan & belakang.':'🚑 Melaju cepat -- efek Doppler-nya makin jelas!');" style="width:100%;margin-top:10px;accent-color:#9333ea;">
+  <p class="mtr-mini-label" id="ambLabel">🎚️ Geser kecepatan ambulans -- lihat gelombangnya makin termampat di depan & teregang di belakang.</p>
 </div>
 
 <div class="mtr-note">

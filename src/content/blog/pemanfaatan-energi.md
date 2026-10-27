@@ -201,7 +201,7 @@ Sejauh ini kita sudah belajar energi dari sisi bentuknya, perubahannya, sampai s
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(15,30)">
+    <g transform="translate(15,30)" style="cursor:pointer" onclick="document.getElementById('pemanfaatanFaktaLabel').innerHTML='🏭 <strong>Pembangkit Listrik</strong>: tempat energi (batu bara, air, panas bumi, dll) diubah jadi energi listrik dalam skala besar.'">
       <rect x="0" y="30" width="80" height="55" rx="4" fill="#6b7280"/>
       <rect x="15" y="5" width="14" height="30" fill="#4b5563"/>
       <rect x="40" y="0" width="14" height="35" fill="#4b5563"/>
@@ -212,14 +212,14 @@ Sejauh ini kita sudah belajar energi dari sisi bentuknya, perubahannya, sampai s
     </g>
     <path d="M105 65 L155 65" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr2)"/>
     <defs><marker id="arrmtr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#78350f"/></marker></defs>
-    <g transform="translate(160,40)">
+    <g transform="translate(160,40)" style="cursor:pointer" onclick="document.getElementById('pemanfaatanFaktaLabel').innerHTML='🔌 <strong>Jaringan Distribusi</strong>: kabel dan tiang listrik yang menyalurkan listrik dari pembangkit ke seluruh rumah, kadang menempuh ratusan kilometer.'">
       <rect x="10" y="20" width="4" height="40" fill="#78350f"/>
       <line x1="0" y1="20" x2="24" y2="20" stroke="#78350f" stroke-width="3"/>
       <path d="M4 20 L4 10 M20 20 L20 10" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="3,3"/>
       <text x="12" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Jaringan</text>
     </g>
     <path d="M215 65 L265 65" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr2)"/>
-    <g transform="translate(275,25)">
+    <g transform="translate(275,25)" style="cursor:pointer" onclick="document.getElementById('pemanfaatanFaktaLabel').innerHTML='🏠 <strong>Rumah &amp; Lampu Menyala</strong>: titik akhir pemanfaatan &mdash; listrik diubah lagi jadi cahaya, panas, atau gerak sesuai kebutuhan sehari-hari.'">
       <polygon points="35,0 70,30 70,80 0,80 0,30" fill="#f59e0b"/>
       <rect x="15" y="40" width="40" height="40" fill="#fde68a"/>
       <rect x="28" y="55" width="14" height="25" fill="#78350f"/>
@@ -229,6 +229,7 @@ Sejauh ini kita sudah belajar energi dari sisi bentuknya, perubahannya, sampai s
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Perjalanan energi: pembangkit listrik → jaringan distribusi → rumah dan lampu menyala.</p>
+  <p id="pemanfaatanFaktaLabel" style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;min-height:1.2rem;text-align:center;">👆 Klik salah satu tahap di atas untuk lihat penjelasannya!</p>
 </div>
 
 ## 🏠 Rumah Tangga

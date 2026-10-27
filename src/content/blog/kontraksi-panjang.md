@@ -241,13 +241,13 @@ Analogi sederhana (bukan analogi persis, tapi membantu membayangkan): mirip foto
     <line x1="18" y1="138" x2="55" y2="138" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
     <line x1="18" y1="152" x2="55" y2="152" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
     <line x1="18" y1="166" x2="55" y2="166" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="6 5"></line>
-    <rect x="120" y="140" width="90" height="34" rx="6" fill="#c7d2fe" stroke="#4338ca" stroke-width="2"></rect>
+    <rect id="kpRocket2" x="120" y="140" width="90" height="34" rx="6" fill="#c7d2fe" stroke="#4338ca" stroke-width="2"></rect>
     <path d="M120,140 L105,131 L120,147 Z" fill="#4338ca"></path>
     <path d="M120,174 L105,183 L120,167 Z" fill="#4338ca"></path>
-    <path d="M210,140 L232,157 L210,174 Z" fill="#818cf8" stroke="#4338ca" stroke-width="2"></path>
-    <line x1="120" y1="200" x2="228" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
-    <line x1="228" y1="200" x2="120" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
-    <text x="174" y="214" font-size="12" text-anchor="middle" fill="#312e81" font-weight="700">L (lebih pendek!)</text>
+    <path id="kpNose2" d="M210,140 L232,157 L210,174 Z" fill="#818cf8" stroke="#4338ca" stroke-width="2"></path>
+    <line id="kpArrowF" x1="120" y1="200" x2="228" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <line id="kpArrowB" x1="228" y1="200" x2="120" y2="200" stroke="#312e81" stroke-width="2" marker-end="url(#kpArrow)"></line>
+    <text id="kpLabel2" x="174" y="214" font-size="12" text-anchor="middle" fill="#312e81" font-weight="700">L (lebih pendek!)</text>
     <circle cx="355" cy="160" r="16" fill="#fde8cf" stroke="#78350f" stroke-width="2"></circle>
     <circle cx="350" cy="157" r="2" fill="#312e81"></circle>
     <circle cx="360" cy="157" r="2" fill="#312e81"></circle>
@@ -255,6 +255,8 @@ Analogi sederhana (bukan analogi persis, tapi membantu membayangkan): mirip foto
     <text x="355" y="196" font-size="10" text-anchor="middle" fill="#312e81" font-weight="700">pengamat diam</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Roket yang sama -- diukur sepanjang L₀ saat diam, tapi terukur lebih pendek (L) oleh pengamat diam saat ia melesat mendekati kecepatan cahaya.</p>
+  <p id="kpSliderLabel" style="margin:0.85rem 0 0.35rem;font-size:0.875rem;font-weight:600;color:#312e81;">Kecepatan roket: 0% c</p>
+  <input type="range" min="0" max="99" value="0" style="width:90%;" oninput="var v=parseFloat(this.value);var f=Math.sqrt(1-(v*v)/10000);var w=90*f;var left=120;var right=left+w;var tip=right+18;document.getElementById('kpRocket2').setAttribute('width',w);document.getElementById('kpNose2').setAttribute('d','M'+right+',140 L'+(right+22)+',157 L'+right+',174 Z');document.getElementById('kpArrowF').setAttribute('x2',tip);document.getElementById('kpArrowB').setAttribute('x1',tip);document.getElementById('kpLabel2').setAttribute('x',(left+tip)/2);document.getElementById('kpLabel2').textContent='L ≈ '+Math.round(w)+' px (v='+v+'% c)';document.getElementById('kpSliderLabel').textContent='Kecepatan roket: '+v+'% c';">
 </div>
 
 ## 🧩 Kenapa Kontraksi Panjang Terjadi?

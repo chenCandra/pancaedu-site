@@ -210,11 +210,11 @@ Mau lihat garis gaya magnet secara langsung tanpa alat canggih? Taburkan **serbu
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
-    <rect x="150" y="90" width="100" height="40" fill="#ef4444"/>
-    <rect x="200" y="90" width="50" height="40" fill="#3b82f6"/>
+    <rect id="mmLeftPole" x="150" y="90" width="100" height="40" fill="#ef4444"/>
+    <rect id="mmRightPole" x="200" y="90" width="50" height="40" fill="#3b82f6"/>
     <rect x="150" y="90" width="100" height="40" fill="none" stroke="#26243b" stroke-width="3"/>
-    <text x="175" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">N</text>
-    <text x="225" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">S</text>
+    <text id="mmLabelLeft" x="175" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">N</text>
+    <text id="mmLabelRight" x="225" y="117" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">S</text>
     <path d="M150 95 C 90 80, 70 60, 95 40" fill="none" stroke="#9d174d" stroke-width="2.5"/>
     <path d="M150 110 C 70 100, 55 60, 95 25" fill="none" stroke="#9d174d" stroke-width="2.5"/>
     <path d="M150 125 C 60 135, 55 70, 95 10" fill="none" stroke="#9d174d" stroke-width="2.5"/>
@@ -224,12 +224,14 @@ Mau lihat garis gaya magnet secara langsung tanpa alat canggih? Taburkan **serbu
     <path d="M93 42 L80 36 L90 28" fill="none" stroke="#9d174d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M307 42 L320 36 L310 28" fill="none" stroke="#9d174d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     <circle cx="200" cy="185" r="26" fill="#fdf0e0" stroke="#26243b" stroke-width="3"/>
-    <path d="M200 185 L200 164" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
-    <path d="M200 185 L200 206" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
+    <path id="mmNeedleUp" d="M200 185 L200 164" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+    <path id="mmNeedleDown" d="M200 185 L200 206" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
     <circle cx="200" cy="185" r="2.5" fill="#26243b"/>
     <text x="200" y="146" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">Kompas</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Garis gaya magnet melengkung dari kutub N ke S -- jarum kompas ikut sejajar dengan arahnya.</p>
+  <button type="button" onclick="var flip=document.getElementById('mmLeftPole').getAttribute('fill')==='#ef4444';document.getElementById('mmLeftPole').setAttribute('fill',flip?'#3b82f6':'#ef4444');document.getElementById('mmRightPole').setAttribute('fill',flip?'#ef4444':'#3b82f6');document.getElementById('mmLabelLeft').textContent=flip?'S':'N';document.getElementById('mmLabelRight').textContent=flip?'N':'S';document.getElementById('mmNeedleUp').setAttribute('stroke',flip?'#26243b':'#ef4444');document.getElementById('mmNeedleDown').setAttribute('stroke',flip?'#ef4444':'#26243b');document.getElementById('mmStatusLabel').innerHTML=flip?'🔄 Magnet dibalik &mdash; kutub N dan S bertukar tempat, jarum kompas pun ikut membalik arah!':'🔄 Posisi magnet normal &mdash; kutub N di kiri, S di kanan.';this.textContent=flip?'↩️ Kembalikan Posisi':'🔄 Balik Magnet (Tukar N/S)';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #f9a8d4;background:#fff;color:#831843;cursor:pointer;margin-top:0.85rem;">🔄 Balik Magnet (Tukar N/S)</button>
+  <p id="mmStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#831843;">🔄 Posisi magnet normal &mdash; kutub N di kiri, S di kanan.</p>
 </div>
 
 Coba jelajahi sendiri di simulasi kompas virtual di bawah -- geser kompasnya ke berbagai posisi di sekitar magnet, dan lihat jarumnya otomatis mengikuti arah medan.

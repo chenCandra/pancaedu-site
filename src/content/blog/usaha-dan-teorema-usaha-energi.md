@@ -170,12 +170,37 @@ Teorema Usaha-Energi ini juga menjelaskan kenapa jarak pengereman mobil tidak be
     <polygon points="30,128 46,114 58,114 58,128" fill="#fecaca" stroke="#7f1d1d" stroke-width="1.5"></polygon>
     <circle cx="26" cy="156" r="8" fill="#1e293b"></circle>
     <circle cx="60" cy="156" r="8" fill="#1e293b"></circle>
-    <line x1="90" y1="141" x2="330" y2="141" stroke="#7f1d1d" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#brakeArrow)"></line>
-    <text x="90" y="121" font-size="11" fill="#7f1d1d" font-weight="700">80 km/jam (2×)</text>
-    <text x="150" y="160" font-size="11" fill="#7f1d1d" font-weight="700">jarak pengereman 4× lebih jauh!</text>
+    <line id="remLine" x1="90" y1="141" x2="330" y2="141" stroke="#7f1d1d" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#brakeArrow)"></line>
+    <text id="remSpeedLabel" x="90" y="121" font-size="11" fill="#7f1d1d" font-weight="700">80 km/jam (2,0×)</text>
+    <text id="remDistLabel" x="150" y="160" font-size="11" fill="#7f1d1d" font-weight="700">jarak pengereman 4,0× dari 40 km/jam!</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Mobil yang melaju 2× lebih cepat butuh jarak pengereman 4× lebih jauh untuk berhenti total -- karena Ek=½mv² berbanding lurus dengan KUADRAT kecepatan.</p>
+  <input type="range" id="remSlider" min="20" max="85" value="80" step="5" style="width:100%;margin-top:10px;accent-color:#7f1d1d;">
+  <p class="mtr-ilustrasi-caption" id="remCaption">Geser untuk mengubah kecepatan mobil merah dan lihat jarak berhentinya berubah sesuai KUADRAT kecepatan.</p>
 </div>
+<script>
+(function () {
+  var slider = document.getElementById('remSlider');
+  var line = document.getElementById('remLine');
+  var speedLabel = document.getElementById('remSpeedLabel');
+  var distLabel = document.getElementById('remDistLabel');
+  var caption = document.getElementById('remCaption');
+  if (!slider || !line) return;
+  var refV = 40, refLen = 58, startX = 90;
+  function render() {
+    var v = parseFloat(slider.value);
+    var mult = v / refV;
+    var len = refLen * mult * mult;
+    var x2 = startX + len;
+    line.setAttribute('x2', x2.toFixed(0));
+    speedLabel.textContent = v + ' km/jam (' + mult.toFixed(1) + '×)';
+    distLabel.textContent = 'jarak pengereman ' + (mult * mult).toFixed(1) + '× dari 40 km/jam!';
+    caption.textContent = 'Kecepatan: ' + v + ' km/jam → jarak pengereman relatif ' + (mult * mult).toFixed(1) + '× dibanding 40 km/jam (karena Ek ∝ v²).';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 ## 🧠 Mari Kita Analisis
 

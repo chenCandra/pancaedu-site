@@ -242,18 +242,51 @@ Konsep medan gravitasi ini juga menjelaskan kenapa astronot di ISS (stasiun luar
     <circle cx="333" cy="38" r="3" fill="#94a3b8"></circle>
     <circle cx="348" cy="50" r="4" fill="#94a3b8"></circle>
     <circle cx="344" cy="35" r="2.5" fill="#94a3b8"></circle>
-    <g transform="translate(255,55)">
+    <g id="satGroup" transform="translate(227,86)">
       <rect x="-8" y="-6" width="16" height="12" fill="#f59e0b" stroke="#1e3a8a" stroke-width="1.5"></rect>
       <rect x="-22" y="-3" width="12" height="6" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1"></rect>
       <rect x="10" y="-3" width="12" height="6" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1"></rect>
     </g>
-    <line x1="255" y1="55" x2="178" y2="113" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#gravArrow)"></line>
+    <line id="satGravArrow" x1="227" y1="86" x2="169" y2="123" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#gravArrow)"></line>
     <text x="198" y="78" font-size="11" fill="#1e3a8a" font-weight="700">gravitasi</text>
     <text x="318" y="78" font-size="11" fill="#1e3a8a" font-weight="700">Bulan</text>
-    <text x="236" y="35" font-size="11" fill="#1e3a8a" font-weight="700">Satelit/ISS</text>
+    <text id="satLabel" x="208" y="66" font-size="11" fill="#1e3a8a" font-weight="700">Satelit/ISS</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Gravitasi Bumi menarik satelit dan Bulan terus-menerus -- tapi kecepatan orbitnya membuat mereka terus "meleset", mengorbit bukan jatuh ke permukaan.</p>
+  <input type="range" id="satSlider" min="-180" max="180" value="-50" step="5" style="width:100%;margin-top:10px;accent-color:#1e3a8a;">
+  <p class="mtr-ilustrasi-caption" id="satCaption">Geser buat memindahkan satelit sepanjang orbitnya -- panah gravitasi selalu mengarah ke pusat Bumi, dari mana pun posisinya.</p>
 </div>
+<script>
+(function () {
+  var slider = document.getElementById('satSlider');
+  var sat = document.getElementById('satGroup');
+  var arrow = document.getElementById('satGravArrow');
+  var label = document.getElementById('satLabel');
+  var caption = document.getElementById('satCaption');
+  if (!slider || !sat || !arrow) return;
+  var cx = 150, cy = 140, rx = 120, ry = 70, earthR = 55;
+  function render() {
+    var deg = parseFloat(slider.value);
+    var rad = deg * Math.PI / 180;
+    var sx = cx + rx * Math.cos(rad);
+    var sy = cy + ry * Math.sin(rad);
+    sat.setAttribute('transform', 'translate(' + sx.toFixed(1) + ',' + sy.toFixed(1) + ')');
+    var dx = sx - cx, dy = sy - cy;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    var ux = dx / dist, uy = dy / dist;
+    var ex = cx + earthR * ux, ey = cy + earthR * uy;
+    arrow.setAttribute('x1', sx.toFixed(1));
+    arrow.setAttribute('y1', sy.toFixed(1));
+    arrow.setAttribute('x2', ex.toFixed(1));
+    arrow.setAttribute('y2', ey.toFixed(1));
+    label.setAttribute('x', (sx - 19).toFixed(1));
+    label.setAttribute('y', (sy - 19).toFixed(1));
+    caption.textContent = 'Ke mana pun satelit bergerak di orbitnya, panah gravitasi (garis putus-putus) selalu mengarah ke PUSAT Bumi -- itulah yang membelokkan lintasannya jadi orbit.';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 ## 🧠 Mari Kita Analisis
 

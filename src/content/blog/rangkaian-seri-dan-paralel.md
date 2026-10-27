@@ -227,12 +227,12 @@ Perhatikan: hambatan total paralel (5 Ω) justru **lebih kecil** dari salah satu
   <svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">
     <text x="100" y="16" text-anchor="middle" font-size="15" font-weight="700" fill="#831843">SERI</text>
     <rect x="20" y="28" width="160" height="150" rx="12" fill="none" stroke="#26243b" stroke-width="5"/>
-    <circle cx="55" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <circle cx="100" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <circle cx="145" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <path d="M47 21 L63 35 M63 21 L47 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M92 21 L108 35 M108 21 L92 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M137 21 L153 35 M153 21 L137 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <circle id="spS1" cx="55" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle id="spS2" cx="100" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle id="spS3" cx="145" cy="28" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <path id="spF1" d="M47 21 L63 35 M63 21 L47 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path id="spF2" d="M92 21 L108 35 M108 21 L92 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path id="spF3" d="M137 21 L153 35 M153 21 L137 35" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
     <line x1="90" y1="178" x2="90" y2="196" stroke="#26243b" stroke-width="6" stroke-linecap="round"/>
     <line x1="110" y1="172" x2="110" y2="202" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
     <text x="100" y="216" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">satu jalur -- satu putus, semua mati</text>
@@ -242,17 +242,19 @@ Perhatikan: hambatan total paralel (5 Ω) justru **lebih kecil** dari salah satu
     <line x1="255" y1="28" x2="255" y2="178" stroke="#26243b" stroke-width="5"/>
     <line x1="300" y1="28" x2="300" y2="178" stroke="#26243b" stroke-width="5"/>
     <line x1="345" y1="28" x2="345" y2="178" stroke="#26243b" stroke-width="5"/>
-    <circle cx="255" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <circle cx="300" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <circle cx="345" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
-    <path d="M247 96 L263 110 M263 96 L247 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M292 96 L308 110 M308 96 L292 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M337 96 L353 110 M353 96 L337 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <circle id="spP1" cx="255" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle id="spP2" cx="300" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <circle id="spP3" cx="345" cy="103" r="15" fill="#fef3c7" stroke="#26243b" stroke-width="3"/>
+    <path id="spFP1" d="M247 96 L263 110 M263 96 L247 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path id="spFP2" d="M292 96 L308 110 M308 96 L292 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+    <path id="spFP3" d="M337 96 L353 110 M353 96 L337 110" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
     <line x1="230" y1="178" x2="230" y2="196" stroke="#26243b" stroke-width="6" stroke-linecap="round"/>
     <line x1="250" y1="172" x2="250" y2="202" stroke="#26243b" stroke-width="3.5" stroke-linecap="round"/>
     <text x="300" y="216" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">banyak jalur -- satu putus, lain tetap nyala</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Rangkaian seri (satu jalur, seperti lampu Natal) vs paralel (banyak cabang, seperti lampu rumah).</p>
+  <button type="button" onclick="var broken=document.getElementById('spS2').getAttribute('fill')==='#fef3c7';var off='#9ca3af',offF='#6b7280',on='#fef3c7',onF='#f59e0b';var ids=['spS1','spS2','spS3'];var fids=['spF1','spF2','spF3'];for(var i=0;i<3;i++){document.getElementById(ids[i]).setAttribute('fill',broken?off:on);document.getElementById(fids[i]).setAttribute('stroke',broken?offF:onF);}document.getElementById('spP2').setAttribute('fill',broken?off:on);document.getElementById('spFP2').setAttribute('stroke',broken?offF:onF);document.getElementById('spStatusLabel').innerHTML=broken?'💡 Lampu tengah diputuskan &mdash; SERI: <strong>semua mati</strong>! PARALEL: <strong>cuma satu yang mati</strong>, sisanya tetap nyala.':'💡 Semua lampu nyala normal (belum ada yang putus).';this.textContent=broken?'🔧 Perbaiki Lampu Tengah':'💡 Putuskan Lampu Tengah';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #f9a8d4;background:#fff;color:#831843;cursor:pointer;margin-top:0.85rem;">💡 Putuskan Lampu Tengah</button>
+  <p id="spStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#831843;">💡 Semua lampu nyala normal (belum ada yang putus).</p>
 </div>
 
 Inilah sebabnya **lampu-lampu di rumah dirangkai paralel, bukan seri** -- kalau satu lampu putus atau dicabut, lampu lain di ruangan lain tetap menyala normal. Coba sendiri di simulasi di bawah -- bandingkan tab "Seri Lab" dan "Paralel Lab", lihat langsung bedanya lewat animasi arus dan data.

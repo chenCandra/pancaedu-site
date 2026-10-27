@@ -191,6 +191,8 @@ Coba bandingkan dua mainan yang mungkin pernah kamu pegang: **tali/slinki yang d
     <line x1="25" y1="110" x2="121" y2="110" stroke="#0ea5e9" stroke-width="2" />
     <path d="M25,110 l8,-5 l0,10 z" fill="#0ea5e9" />
     <path d="M121,110 l-8,-5 l0,10 z" fill="#0ea5e9" />
+    <text id="pegasLabelRapat" x="45" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626" opacity="0">rapat</text>
+    <text id="pegasLabelRenggang" x="81" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#0ea5e9" opacity="0">renggang</text>
     <text x="73" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#581c87">Longitudinal (pegas)</text>
     <text x="73" y="182" text-anchor="middle" font-size="11" fill="#581c87">rapat-renggang SEARAH dorongan</text>
     <line x1="195" y1="20" x2="195" y2="140" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="4 4" />
@@ -206,6 +208,7 @@ Coba bandingkan dua mainan yang mungkin pernah kamu pegang: **tali/slinki yang d
     <text x="291" y="182" text-anchor="middle" font-size="11" fill="#581c87">getar TEGAK LURUS arah rambat →</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Pegas yang didorong-tarik (longitudinal) vs tali yang digetarkan naik-turun (transversal).</p>
+  <button type="button" class="mtr-mini-btn" onclick="var a=document.getElementById('pegasLabelRapat');var b=document.getElementById('pegasLabelRenggang');var show=a.getAttribute('opacity')=='0';a.setAttribute('opacity',show?1:0);b.setAttribute('opacity',show?1:0);this.textContent=show?'🙈 Sembunyikan label':'🔍 Tunjukkan rapat/renggang';">🔍 Tunjukkan rapat/renggang</button>
 </div>
 
 ### Klasifikasi Berdasarkan Medium

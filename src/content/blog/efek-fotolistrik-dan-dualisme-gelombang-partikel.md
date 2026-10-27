@@ -292,16 +292,21 @@ Di tahun 1887, Heinrich Hertz (fisikawan yang sama yang membuktikan keberadaan g
     <line x1="90" y1="40" x2="90" y2="25" stroke="#f59e0b" stroke-width="2"/>
     <line x1="78" y1="48" x2="66" y2="38" stroke="#f59e0b" stroke-width="2"/>
     <line x1="102" y1="48" x2="114" y2="38" stroke="#f59e0b" stroke-width="2"/>
-    <line x1="90" y1="65" x2="150" y2="140" stroke="#312e81" stroke-width="3" stroke-dasharray="6 5"/>
-    <path d="M 142 125 L 150 140 L 132 136 Z" fill="#312e81"/>
-    <text x="55" y="28" font-size="11" font-weight="700" fill="#312e81">foton</text>
+    <g id="fpPhotonGroup" style="opacity:0;transition:opacity 0.6s ease;">
+      <line x1="90" y1="65" x2="150" y2="140" stroke="#312e81" stroke-width="3" stroke-dasharray="6 5"/>
+      <path d="M 142 125 L 150 140 L 132 136 Z" fill="#312e81"/>
+      <text x="55" y="28" font-size="11" font-weight="700" fill="#312e81">foton</text>
+    </g>
     <circle cx="150" cy="140" r="9" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
     <text x="150" y="143" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">e-</text>
-    <line x1="160" y1="128" x2="230" y2="55" stroke="#1e3a8a" stroke-width="3"/>
-    <path d="M 218 62 L 230 55 L 222 70 Z" fill="#1e3a8a"/>
-    <text x="235" y="48" font-size="11" font-weight="700" fill="#1e3a8a">elektron terlepas!</text>
+    <g id="fpEjectGroup" style="opacity:0;transition:opacity 0.6s ease 0.4s;">
+      <line x1="160" y1="128" x2="230" y2="55" stroke="#1e3a8a" stroke-width="3"/>
+      <path d="M 218 62 L 230 55 L 222 70 Z" fill="#1e3a8a"/>
+      <text x="235" y="48" font-size="11" font-weight="700" fill="#1e3a8a">elektron terlepas!</text>
+    </g>
   </svg>
-  <p class="mtr-ilustrasi-caption">Satu foton menghantam logam, menyerahkan seluruh energinya ke satu elektron sekaligus -- elektron itu langsung terlepas.</p>
+  <p class="mtr-ilustrasi-caption">Klik tombol di bawah untuk "menembakkan" foton ke permukaan logam, dan lihat elektronnya langsung terlepas.</p>
+  <button type="button" onclick="document.getElementById('fpPhotonGroup').style.opacity='1';document.getElementById('fpEjectGroup').style.opacity='1';this.disabled=true;this.style.opacity='0.6';this.textContent='✅ Foton Ditembakkan!';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #a5b4fc;background:#fff;color:#312e81;cursor:pointer;margin-top:0.85rem;">🔫 Tembakkan Foton</button>
 </div>
 
 Masalahnya, ada tiga hal aneh yang SAMA SEKALI tidak bisa dijelaskan teori gelombang klasik:

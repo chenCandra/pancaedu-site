@@ -286,8 +286,8 @@ I = V/R = 6/20 = **0,3 A**
     <polyline points="168,40 180,40 185,22 195,58 205,22 215,58 220,40 232,40" fill="none" stroke="#9d174d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="200" y="18" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">R (Hambatan)</text>
     <rect x="334" y="94" width="12" height="32" fill="#fdf2f8"/>
-    <circle cx="340" cy="110" r="26" fill="#fef3c7" stroke="#26243b" stroke-width="4"/>
-    <path d="M330 100 L350 120 M350 100 L330 120" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+    <circle id="ohmLampu" cx="340" cy="110" r="26" fill="#fef3c7" stroke="#26243b" stroke-width="4"/>
+    <path id="ohmFilamen" d="M330 100 L350 120 M350 100 L330 120" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
     <text x="340" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">Lampu</text>
     <rect x="170" y="174" width="60" height="12" fill="#fdf2f8"/>
     <line x1="185" y1="160" x2="185" y2="200" stroke="#26243b" stroke-width="7" stroke-linecap="round"/>
@@ -295,10 +295,12 @@ I = V/R = 6/20 = **0,3 A**
     <text x="178" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">−</text>
     <text x="215" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">+</text>
     <text x="200" y="214" text-anchor="middle" font-size="13" font-weight="700" fill="#9d174d">Sumber Tegangan (V)</text>
-    <path d="M60 130 L60 90" stroke="#ec4899" stroke-width="4" marker-end="url(#ohmArrow)"/>
+    <path id="ohmArrowI" d="M60 130 L60 90" stroke="#ec4899" stroke-width="4" marker-end="url(#ohmArrow)"/>
     <text x="38" y="110" text-anchor="middle" font-size="16" font-weight="700" fill="#9d174d">I</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Rangkaian sederhana: tegangan (V) "mendorong" arus (I) mengalir lewat hambatan (R) dan lampu.</p>
+  <button type="button" onclick="var dim=document.getElementById('ohmLampu').getAttribute('fill')==='#fef3c7';document.getElementById('ohmLampu').setAttribute('fill',dim?'#9ca3af':'#fef3c7');document.getElementById('ohmFilamen').setAttribute('stroke',dim?'#6b7280':'#f59e0b');document.getElementById('ohmArrowI').setAttribute('d',dim?'M60 125 L60 100':'M60 130 L60 90');document.getElementById('ohmStatusLabel').innerHTML=dim?'🔺 Hambatan (R) diperbesar &mdash; arus (I) jadi <strong>KECIL</strong>, lampu meredup!':'🔻 Hambatan (R) normal &mdash; arus (I) <strong>BESAR</strong>, lampu terang.';this.textContent=dim?'🔻 Kembalikan Hambatan':'🔺 Naikkan Hambatan (R)';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #f9a8d4;background:#fff;color:#831843;cursor:pointer;margin-top:0.85rem;">🔺 Naikkan Hambatan (R)</button>
+  <p id="ohmStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#831843;">🔻 Hambatan (R) normal &mdash; arus (I) <strong>BESAR</strong>, lampu terang.</p>
 </div>
 
 ## 📟 Memasang Amperemeter dan Voltmeter dengan Benar

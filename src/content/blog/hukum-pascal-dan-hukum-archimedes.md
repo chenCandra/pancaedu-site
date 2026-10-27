@@ -285,21 +285,27 @@ Karena itu, piston yang lebih LUAS akan menghasilkan gaya yang jauh lebih BESAR.
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <rect x="20" y="170" width="360" height="14" fill="#94a3b8" stroke="#334155" stroke-width="2" />
     <rect x="60" y="150" width="60" height="20" fill="#0e7490" stroke="#164e63" stroke-width="2" />
-    <rect x="80" y="100" width="20" height="50" fill="#94a3b8" stroke="#334155" stroke-width="2" />
-    <polygon points="70,100 110,100 102,86 78,86" fill="#475569" stroke="#164e63" stroke-width="2" />
+    <g id="pascalKecil" transform="translate(0,10)">
+      <rect x="80" y="100" width="20" height="50" fill="#94a3b8" stroke="#334155" stroke-width="2" />
+      <polygon points="70,100 110,100 102,86 78,86" fill="#475569" stroke="#164e63" stroke-width="2" />
+    </g>
     <path d="M60 170 Q90 184, 120 170" fill="none" stroke="#164e63" stroke-width="2" />
     <text x="90" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#164e63">Piston kecil (A1)</text>
     <text x="90" y="213" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">ditekan tangan</text>
     <line x1="140" y1="176" x2="260" y2="176" stroke="#0e7490" stroke-width="8" />
     <rect x="230" y="110" width="110" height="40" fill="#0e7490" stroke="#164e63" stroke-width="2" />
-    <rect x="245" y="60" width="80" height="50" fill="#64748b" stroke="#164e63" stroke-width="2" rx="6" />
-    <circle cx="265" cy="112" r="10" fill="#1f2937" />
-    <circle cx="305" cy="112" r="10" fill="#1f2937" />
-    <rect x="255" y="45" width="60" height="18" fill="#bae6fd" stroke="#164e63" stroke-width="2" rx="3" />
+    <g id="pascalMobil" transform="translate(0,-4)">
+      <rect x="245" y="60" width="80" height="50" fill="#64748b" stroke="#164e63" stroke-width="2" rx="6" />
+      <circle cx="265" cy="112" r="10" fill="#1f2937" />
+      <circle cx="305" cy="112" r="10" fill="#1f2937" />
+      <rect x="255" y="45" width="60" height="18" fill="#bae6fd" stroke="#164e63" stroke-width="2" rx="3" />
+    </g>
     <text x="285" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#164e63">Piston besar (A2)</text>
     <text x="285" y="213" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">mengangkat mobil</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Gaya kecil di piston sempit diteruskan fluida ke piston lebar, menghasilkan gaya raksasa yang mengangkat mobil -- prinsip dongkrak hidrolik.</p>
+  <input type="range" id="pascalSlider" min="0" max="100" value="50" oninput="var v=this.value;var f1=v*2;var f2=f1*25;document.getElementById('pascalKecil').setAttribute('transform','translate(0,'+(v*0.2)+')');document.getElementById('pascalMobil').setAttribute('transform','translate(0,-'+(v*0.08)+')');document.getElementById('pascalLabel').textContent='F1 = '+f1+' N mendorong piston kecil → F2 = '+f2+' N mengangkat mobil (25× lebih besar)';" style="width:100%;margin-top:10px;accent-color:#0e7490;">
+  <p class="mtr-mini-label" id="pascalLabel">🎚️ Geser gaya tekan di piston kecil: F1 = 100 N mendorong piston kecil → F2 = 2500 N mengangkat mobil (25× lebih besar)</p>
 </div>
 
 ### ✏️ Contoh Soal Pascal

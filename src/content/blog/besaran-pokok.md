@@ -214,37 +214,37 @@ Ada **7 besaran pokok dalam SI**. Mari kita kenalan satu per satu.
 
 <div class="mtr-ilustrasi">
 <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='📏 Panjang → satuan meter (m)'" style="cursor:pointer">
     <rect x="10" y="60" width="38" height="10" rx="3" fill="#fbbf24" stroke="#78350f" stroke-width="2"/>
     <text x="29" y="90" font-size="18" text-anchor="middle">📏</text>
     <text x="29" y="112" font-size="9" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panjang</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='⚖️ Massa → satuan kilogram (kg)'" style="cursor:pointer">
     <circle cx="80" cy="65" r="18" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
     <text x="80" y="72" font-size="16" text-anchor="middle">⚖️</text>
     <text x="80" y="112" font-size="9" font-weight="700" fill="#1e3a8a" text-anchor="middle" font-family="sans-serif">Massa</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='⏱️ Waktu → satuan sekon (s)'" style="cursor:pointer">
     <circle cx="140" cy="65" r="18" fill="#f87171" stroke="#991b1b" stroke-width="2"/>
     <text x="140" y="72" font-size="16" text-anchor="middle">⏱️</text>
     <text x="140" y="112" font-size="9" font-weight="700" fill="#991b1b" text-anchor="middle" font-family="sans-serif">Waktu</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='🔌 Kuat Arus Listrik → satuan ampere (A)'" style="cursor:pointer">
     <rect x="182" y="47" width="36" height="36" rx="8" fill="#c4b5fd" stroke="#4c1d95" stroke-width="2"/>
     <text x="200" y="72" font-size="16" text-anchor="middle">🔌</text>
     <text x="200" y="112" font-size="8.5" font-weight="700" fill="#4c1d95" text-anchor="middle" font-family="sans-serif">Kuat Arus</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='🌡️ Suhu Termodinamik → satuan kelvin (K)'" style="cursor:pointer">
     <rect x="242" y="47" width="36" height="36" rx="18" fill="#6ee7b7" stroke="#065f46" stroke-width="2"/>
     <text x="260" y="72" font-size="16" text-anchor="middle">🌡️</text>
     <text x="260" y="112" font-size="9" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Suhu</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='🧪 Jumlah Zat → satuan mol'" style="cursor:pointer">
     <circle cx="320" cy="65" r="18" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
     <text x="320" y="72" font-size="16" text-anchor="middle">🧪</text>
     <text x="320" y="112" font-size="8" font-weight="700" fill="#7f1d1d" text-anchor="middle" font-family="sans-serif">Jumlah Zat</text>
   </g>
-  <g>
+  <g onclick="document.getElementById('bpRevealLabel').textContent='💡 Intensitas Cahaya → satuan kandela (cd)'" style="cursor:pointer">
     <circle cx="372" cy="65" r="18" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
     <text x="372" y="72" font-size="16" text-anchor="middle">💡</text>
     <text x="372" y="112" font-size="8" font-weight="700" fill="#92400e" text-anchor="middle" font-family="sans-serif">Intensitas</text>
@@ -252,9 +252,9 @@ Ada **7 besaran pokok dalam SI**. Mari kita kenalan satu per satu.
   </g>
   <text x="200" y="22" font-size="13" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">7 Besaran Pokok -- "Alfabet" Fisika</text>
   <path d="M10 140 H390" stroke="#fcd34d" stroke-width="2" stroke-dasharray="3 3"/>
-  <text x="200" y="160" font-size="10" fill="#92400e" text-anchor="middle" font-family="sans-serif">Dari 7 ini, semua besaran turunan lain bisa dibentuk</text>
+  <text x="200" y="160" font-size="10" fill="#92400e" text-anchor="middle" font-family="sans-serif" id="bpRevealLabel">👆 Klik salah satu ikon di atas buat lihat satuannya</text>
 </svg>
-<p class="mtr-ilustrasi-caption">Tujuh besaran pokok SI, "bahan dasar" penyusun seluruh besaran Fisika lainnya.</p>
+<p class="mtr-ilustrasi-caption">Tujuh besaran pokok SI, "bahan dasar" penyusun seluruh besaran Fisika lainnya. Klik ikonnya buat lihat satuannya.</p>
 </div>
 
 ## 📏 Tujuh Besaran Pokok, Satu per Satu

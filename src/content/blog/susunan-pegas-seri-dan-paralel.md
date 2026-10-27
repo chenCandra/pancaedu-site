@@ -179,6 +179,7 @@ Pada rangkaian seri, gaya (F) yang diteruskan SAMA di setiap pegas, sedangkan Δ
 <div class="mtr-ilustrasi">
 <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
 <rect x="0" y="0" width="400" height="220" fill="#eff6ff"/>
+<g id="pegasParalelG">
 <text x="25" y="25" font-size="14" fill="#1e3a8a" font-weight="700">Paralel (shock kiri-kanan)</text>
 <rect x="20" y="40" width="14" height="20" fill="#1e3a8a"/>
 <rect x="150" y="40" width="14" height="20" fill="#1e3a8a"/>
@@ -188,7 +189,9 @@ Pada rangkaian seri, gaya (F) yang diteruskan SAMA di setiap pegas, sedangkan Δ
 <line x1="90" y1="136" x2="90" y2="155" stroke="#64748b" stroke-width="4"/>
 <rect x="60" y="155" width="60" height="26" rx="6" fill="#f2760a"/>
 <text x="55" y="200" font-size="12" fill="#1e3a8a">Δx sama, gaya beda</text>
+</g>
 <line x1="200" y1="0" x2="200" y2="220" stroke="#93c5fd" stroke-width="2" stroke-dasharray="5,5"/>
+<g id="pegasSeriG">
 <text x="225" y="25" font-size="14" fill="#1e3a8a" font-weight="700">Seri (pegas kursi)</text>
 <rect x="280" y="20" width="16" height="20" fill="#1e3a8a"/>
 <path d="M288,40 L280,48 L296,56 L280,64 L296,72 L280,80 L288,88" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
@@ -196,9 +199,45 @@ Pada rangkaian seri, gaya (F) yang diteruskan SAMA di setiap pegas, sedangkan Δ
 <path d="M288,100 L280,108 L296,116 L280,124 L296,132 L280,140 L288,148" fill="none" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
 <rect x="263" y="148" width="50" height="26" rx="6" fill="#f2760a"/>
 <text x="235" y="200" font-size="12" fill="#1e3a8a">Gaya sama, Δx beda</text>
+</g>
 </svg>
 <p class="mtr-ilustrasi-caption">Paralel: beban ditopang bersama, pertambahan panjang sama. Seri: pegas tersambung ujung ke ujung, gaya yang diteruskan sama.</p>
+<div style="display:flex;gap:0.5rem;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+<button type="button" id="pegasBtnParalel" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.55rem 1rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1e3a8a;cursor:pointer;">🔎 Sorot Paralel</button>
+<button type="button" id="pegasBtnSeri" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.55rem 1rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1e3a8a;cursor:pointer;">🔎 Sorot Seri</button>
+<button type="button" id="pegasBtnReset" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.55rem 1rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1e3a8a;cursor:pointer;">↩️ Tampilkan Keduanya</button>
 </div>
+<p class="mtr-ilustrasi-caption" id="pegasFokusCaption">Klik salah satu tombol buat fokus ke satu rangkaian dan lihat bedanya.</p>
+</div>
+<script>
+(function () {
+  var p = document.getElementById('pegasParalelG');
+  var s = document.getElementById('pegasSeriG');
+  var btnP = document.getElementById('pegasBtnParalel');
+  var btnS = document.getElementById('pegasBtnSeri');
+  var btnR = document.getElementById('pegasBtnReset');
+  var cap = document.getElementById('pegasFokusCaption');
+  if (!p || !s || !btnP || !btnS || !btnR) return;
+  function setFocus(which) {
+    if (which === 'paralel') {
+      p.setAttribute('opacity', '1');
+      s.setAttribute('opacity', '0.25');
+      cap.textContent = 'Paralel: k_total = k1 + k2 + ... (dijumlah langsung) -- SELALU lebih besar/kaku dari pegas mana pun dalam rangkaian.';
+    } else if (which === 'seri') {
+      p.setAttribute('opacity', '0.25');
+      s.setAttribute('opacity', '1');
+      cap.textContent = 'Seri: 1/k_total = 1/k1 + 1/k2 + ... (resiprokal) -- SELALU lebih kecil/lunak dari pegas mana pun dalam rangkaian.';
+    } else {
+      p.setAttribute('opacity', '1');
+      s.setAttribute('opacity', '1');
+      cap.textContent = 'Klik salah satu tombol buat fokus ke satu rangkaian dan lihat bedanya.';
+    }
+  }
+  btnP.addEventListener('click', function () { setFocus('paralel'); });
+  btnS.addEventListener('click', function () { setFocus('seri'); });
+  btnR.addEventListener('click', function () { setFocus('reset'); });
+})();
+</script>
 
 <div class="mtr-note">
 ⚠️ <strong>Pola ini SAMA seperti kapasitor, BEDA dari resistor!</strong> Resistor seri dijumlah langsung (makin besar), resistor paralel pakai resiprokal (makin kecil). Pegas (dan kapasitor) justru: paralel dijumlah langsung, seri pakai resiprokal. Jangan tertukar dengan pola resistor.

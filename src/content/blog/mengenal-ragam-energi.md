@@ -231,25 +231,25 @@ Contohnya, "energi angin" dan "energi air" sebenarnya bukan bentuk energi tersen
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(10,20)">
+    <g transform="translate(10,20)" style="cursor:pointer" onclick="document.getElementById('ragamFaktaLabel').innerHTML='🔋 <strong>Energi Kimia</strong>: tersimpan dalam ikatan/reaksi kimia &mdash; contohnya baterai, makanan, dan bahan bakar.'">
       <rect x="10" y="20" width="40" height="70" rx="8" fill="#22c55e"/>
       <rect x="22" y="10" width="16" height="12" rx="3" fill="#16a34a"/>
       <rect x="18" y="38" width="24" height="12" rx="2" fill="#fff"/>
       <text x="30" y="115" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Kimia</text>
     </g>
-    <g transform="translate(85,20)">
+    <g transform="translate(85,20)" style="cursor:pointer" onclick="document.getElementById('ragamFaktaLabel').innerHTML='⚽ <strong>Energi Potensial</strong>: tersimpan karena posisi/ketinggian &mdash; makin tinggi suatu benda, makin besar energi potensialnya.'">
       <circle cx="30" cy="20" r="10" fill="#ef4444"/>
       <line x1="30" y1="30" x2="30" y2="75" stroke="#78350f" stroke-width="2" stroke-dasharray="3,3"/>
       <text x="30" y="115" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Potensial</text>
     </g>
-    <g transform="translate(155,30)">
+    <g transform="translate(155,30)" style="cursor:pointer" onclick="document.getElementById('ragamFaktaLabel').innerHTML='🏎️ <strong>Energi Kinetik</strong>: dimiliki benda yang bergerak &mdash; makin cepat dan makin berat bendanya, makin besar energi kinetiknya.'">
       <rect x="4" y="25" width="55" height="25" rx="10" fill="#3b82f6"/>
       <rect x="14" y="10" width="30" height="20" rx="8" fill="#60a5fa"/>
       <circle cx="18" cy="52" r="8" fill="#26243b"/>
       <circle cx="48" cy="52" r="8" fill="#26243b"/>
       <text x="30" y="95" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Kinetik</text>
     </g>
-    <g transform="translate(240,20)">
+    <g transform="translate(240,20)" style="cursor:pointer" onclick="document.getElementById('ragamFaktaLabel').innerHTML='💡 <strong>Energi Listrik</strong>: energi dari aliran muatan listrik &mdash; paling praktis dipindahkan dan diubah ke bentuk energi lain, makanya dipakai di hampir semua alat rumah.'">
       <circle cx="30" cy="35" r="22" fill="#fde68a"/>
       <rect x="22" y="55" width="16" height="10" fill="#9ca3af"/>
       <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
@@ -259,13 +259,14 @@ Contohnya, "energi angin" dan "energi air" sebenarnya bukan bentuk energi tersen
       </g>
       <text x="30" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Listrik</text>
     </g>
-    <g transform="translate(315,25)">
+    <g transform="translate(315,25)" style="cursor:pointer" onclick="document.getElementById('ragamFaktaLabel').innerHTML='🔥 <strong>Energi Panas (Termal)</strong>: berasal dari gerak acak partikel dalam benda &mdash; makin panas suatu benda, makin cepat partikel di dalamnya bergerak.'">
       <path d="M30 10 Q45 35 32 50 Q38 55 30 65 Q12 55 15 38 Q18 48 22 42 Q10 25 30 10 Z" fill="#f97316"/>
       <path d="M30 25 Q38 40 30 52 Q25 48 26 40 Q22 44 23 36 Q24 30 30 25 Z" fill="#fde68a"/>
       <text x="30" y="100" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panas</text>
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Lima bentuk energi: baterai (kimia), bola di ketinggian (potensial), motor melaju (kinetik), lampu (listrik), dan api (panas/termal).</p>
+  <p id="ragamFaktaLabel" style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;min-height:1.2rem;text-align:center;">👆 Klik salah satu ikon di atas untuk lihat definisinya!</p>
 </div>
 
 ## 🏃 Energi Mekanik: Kinetik dan Potensial

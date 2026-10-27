@@ -301,6 +301,8 @@ Alat yang mereka pakai disebut **interferometer** -- mampu mendeteksi perbedaan 
   <text x="190" y="229" font-size="11" font-weight="700" fill="#312e81" text-anchor="middle" font-family="sans-serif">teleskop</text>
 </svg>
 <p class="mtr-ilustrasi-caption">Interferometer Michelson: cahaya dibagi dua oleh cermin setengah perak, dipantulkan balik dari dua cermin di ujung lengan yang saling tegak lurus, lalu digabung kembali dan diamati lewat teleskop -- mencari jejak "angin eter" lewat pergeseran pola interferensinya.</p>
+<button type="button" onclick="document.getElementById('mmResultLabel').innerHTML='✅ Hasil: <strong>TIDAK ADA</strong> pergeseran pola interferensi &mdash; cahaya di kedua lengan sama cepat, &quot;angin eter&quot; tidak pernah ketemu!';this.disabled=true;this.style.opacity='0.6';this.textContent='🔬 Sudah Dijalankan';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #a5b4fc;background:#fff;color:#312e81;cursor:pointer;margin-top:0.85rem;">🔬 Jalankan Percobaannya</button>
+<p id="mmResultLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#312e81;">Klik tombol di atas untuk melihat hasilnya...</p>
 </div>
 
 ## 😲 Hasilnya: Nihil -- Seperti Berburu Hantu yang Ternyata Tidak Ada

@@ -138,14 +138,16 @@ Coba pegang knalpot motor yang baru dipakai jalan -- panas banget, kan? Itu adal
     <text x="110" y="60" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">bahan bakar</text>
     <path d="M250 115 L285 115" stroke="#16a34a" stroke-width="5" stroke-linecap="round"/>
     <path d="M278 108 L292 115 L278 122 Z" fill="#16a34a"/>
-    <rect x="292" y="100" width="40" height="30" rx="6" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+    <rect id="mesinUsaha" x="292" y="100" width="40" height="30" rx="6" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
     <text x="312" y="140" font-size="12" font-weight="700" fill="#166534" text-anchor="middle">usaha</text>
     <rect x="252" y="150" width="14" height="40" rx="6" fill="#78716c"/>
-    <path d="M259 150 q-6 -16 4 -26 q10 -10 0 -24" stroke="#cbd5e1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>
+    <path id="mesinAsap" d="M259 150 q-6 -16 4 -26 q10 -10 0 -24" stroke="#cbd5e1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>
     <text x="259" y="205" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">knalpot</text>
     <text x="340" y="205" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">kalor terbuang</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Mesin mengubah sebagian kalor bahan bakar jadi usaha -- sisanya selalu terbuang lewat knalpot, tidak pernah 100% efisien.</p>
+  <input type="range" id="mesinSlider" min="20" max="55" value="35" oninput="var v=parseInt(this.value);var w=40+(v-35)*0.8;document.getElementById('mesinUsaha').setAttribute('width',w);document.getElementById('mesinUsaha').setAttribute('height',w*0.75);document.getElementById('mesinAsap').setAttribute('opacity',(1-(v-20)/60).toFixed(2));document.getElementById('mesinLabel').textContent='⚙️ Efisiensi ' + v + '% jadi usaha, sisanya ' + (100-v) + '% tetap terbuang sebagai kalor -- nggak pernah bisa 100%!';" style="width:100%;margin-top:10px;accent-color:#16a34a;">
+  <p class="mtr-mini-label" id="mesinLabel">⚙️ Efisiensi 35% jadi usaha, sisanya 65% tetap terbuang sebagai kalor -- nggak pernah bisa 100%!</p>
 </div>
 
 ## 🤔 Coba Pikirkan

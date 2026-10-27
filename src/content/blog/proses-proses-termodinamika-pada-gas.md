@@ -215,8 +215,6 @@ Pernah mompa ban sepeda dengan cepat dan merasa badan pompanya jadi hangat, bahk
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <rect x="60" y="40" width="180" height="120" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="4"/>
     <rect x="68" y="150" width="164" height="10" fill="#94a3b8"/>
-    <rect x="60" y="20" width="180" height="22" rx="6" fill="#cbd5e1" stroke="#64748b" stroke-width="3"/>
-    <rect x="140" y="0" width="20" height="24" fill="#94a3b8"/>
     <circle cx="110" cy="100" r="9" fill="#38bdf8"/>
     <circle cx="150" cy="120" r="9" fill="#38bdf8"/>
     <circle cx="180" cy="90" r="9" fill="#38bdf8"/>
@@ -228,14 +226,20 @@ Pernah mompa ban sepeda dengan cepat dan merasa badan pompanya jadi hangat, bahk
       <path d="M150 120 l-6 -8"/>
       <path d="M180 90 l7 7"/>
     </g>
+    <rect id="procPistonRod" x="140" y="0" width="20" height="20" fill="#94a3b8"/>
+    <rect id="procPistonCap" x="60" y="20" width="180" height="22" rx="6" fill="#cbd5e1" stroke="#64748b" stroke-width="3"/>
     <circle cx="320" cy="100" r="46" fill="#fef3c7" stroke="#f97316" stroke-width="5"/>
-    <path d="M320 70 L320 92 L336 100" stroke="#7c2d12" stroke-width="4" stroke-linecap="round" fill="none"/>
-    <circle cx="320" cy="100" r="4" fill="#7c2d12"/>
+    <g id="procNeedle">
+      <path d="M320 70 L320 92 L336 100" stroke="#7c2d12" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <circle cx="320" cy="100" r="4" fill="#7c2d12"/>
+    </g>
     <text x="320" y="160" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">pengukur tekanan</text>
     <path d="M244 100 L296 100" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 4"/>
     <text x="150" y="190" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">gas dalam silinder + piston</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Molekul gas dalam silinder berpiston -- dimampatkan atau dibiarkan mengembang, tekanannya terbaca di pengukur.</p>
+  <input type="range" id="procSlider" min="0" max="100" value="0" oninput="var v=this.value;var capY=20+v*0.5;document.getElementById('procPistonCap').setAttribute('y',capY);document.getElementById('procPistonRod').setAttribute('height',capY);document.getElementById('procNeedle').setAttribute('transform','rotate('+(-40+v*0.8)+' 320 100)');document.getElementById('procLabel').textContent=(v<30?'🔧 Piston ditarik ke atas -- volume gas besar, tekanan rendah.':v<70?'🔧 Piston di tengah -- volume & tekanan sedang.':'🔧 Piston ditekan ke bawah -- volume gas mengecil, tekanan jadi tinggi!');" style="width:100%;margin-top:10px;accent-color:#f97316;">
+  <p class="mtr-mini-label" id="procLabel">🎚️ Geser posisi piston -- lihat jarum pengukur tekanan berubah mengikuti volume gas.</p>
 </div>
 
 ## 🤔 Coba Pikirkan

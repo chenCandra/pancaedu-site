@@ -221,6 +221,10 @@ draft: false
 }
 .mtr-ilustrasi svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 .mtr-ilustrasi-caption { margin: 0.75rem 0 0; font-size: 0.875rem; color: #78350f; font-weight: 600; }
+
+.mtr-ilustrasi-btn-row { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.9rem; flex-wrap: wrap; }
+.mtr-ilustrasi-btn { font-size: 0.8125rem; font-weight: 600; padding: 0.35rem 0.9rem; border-radius: 999px; border: 1.5px solid #d97706; background: #fff7ed; color: #78350f; cursor: pointer; }
+.mtr-ilustrasi-btn:hover { background: #fde68a; }
 </style>
 
 Bayangkan dua anak menyebut benda yang sama dengan nama berbeda: satu bilang "newton", satu lagi bilang "kg·m/s²" -- padahal keduanya ngomongin gaya yang sama persis! Nama satuan bisa macam-macam dan kadang menipu (kelihatannya beda, padahal sama), tapi ada satu "bahasa rahasia" di balik semua besaran Fisika yang nggak peduli nama satuannya apa -- itu namanya **dimensi**, cara menunjukkan dari besaran pokok apa saja sebuah besaran itu sebenarnya "disusun".
@@ -346,22 +350,27 @@ Menariknya, dari sini kita juga dapat melihat asal satuan newton. Satuan gaya ad
   <text x="105" y="100" font-size="22" font-weight="800" fill="#92400e" text-anchor="middle">×</text>
   <g>
     <rect x="125" y="60" width="60" height="60" rx="10" fill="#fbbf24" stroke="#78350f" stroke-width="3"/>
-    <text x="155" y="98" font-size="20" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">L</text>
+    <text x="155" y="98" font-size="20" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif" id="dimBlockL">L</text>
     <text x="155" y="135" font-size="10" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">panjang</text>
   </g>
   <text x="200" y="100" font-size="20" font-weight="800" fill="#92400e" text-anchor="middle">T⁻²</text>
   <text x="235" y="100" font-size="22" font-weight="800" fill="#92400e" text-anchor="middle">=</text>
   <g>
     <rect x="255" y="48" width="130" height="84" rx="12" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
-    <text x="320" y="88" font-size="19" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif">MLT⁻²</text>
-    <text x="320" y="108" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif">Dimensi Gaya</text>
-    <text x="320" y="121" font-size="9" fill="#065f46" text-anchor="middle" font-family="sans-serif">(satuannya: newton)</text>
+    <text x="320" y="88" font-size="19" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif" id="dimResult">MLT⁻²</text>
+    <text x="320" y="108" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle" font-family="sans-serif" id="dimResultLabel">Dimensi Gaya</text>
+    <text x="320" y="121" font-size="9" fill="#065f46" text-anchor="middle" font-family="sans-serif" id="dimResultSatuan">(satuannya: newton)</text>
   </g>
   <circle cx="45" cy="52" r="3" fill="#1e3a8a"/>
   <circle cx="55" cy="52" r="3" fill="#1e3a8a"/>
   <path d="M40 44 Q50 38 60 44" stroke="#1e3a8a" stroke-width="2" fill="none" stroke-linecap="round"/>
 </svg>
-<p class="mtr-ilustrasi-caption">Balok dimensi massa dan panjang digabung (dengan waktu di penyebutnya) menjadi dimensi gaya MLT⁻².</p>
+<p class="mtr-ilustrasi-caption">Balok dimensi massa dan panjang digabung (dengan waktu di penyebutnya) menjadi dimensi gaya MLT⁻². Coba klik tombol di bawah buat lihat besaran turunan lain yang mirip.</p>
+<div class="mtr-ilustrasi-btn-row">
+  <button type="button" class="mtr-ilustrasi-btn" onclick="document.getElementById('dimBlockL').textContent='L';document.getElementById('dimResult').textContent='MLT⁻²';document.getElementById('dimResultLabel').textContent='Dimensi Gaya';document.getElementById('dimResultSatuan').textContent='(satuannya: newton)'">⚡ Gaya (F = ma)</button>
+  <button type="button" class="mtr-ilustrasi-btn" onclick="document.getElementById('dimBlockL').textContent='L²';document.getElementById('dimResult').textContent='ML²T⁻²';document.getElementById('dimResultLabel').textContent='Dimensi Usaha';document.getElementById('dimResultSatuan').textContent='(satuannya: joule)'">💪 Usaha (W = Fs)</button>
+  <button type="button" class="mtr-ilustrasi-btn" onclick="document.getElementById('dimBlockL').textContent='L⁻¹';document.getElementById('dimResult').textContent='ML⁻¹T⁻²';document.getElementById('dimResultLabel').textContent='Dimensi Tekanan';document.getElementById('dimResultSatuan').textContent='(satuannya: pascal)'">🧱 Tekanan (P = F/A)</button>
+</div>
 </div>
 
 ### Tekanan

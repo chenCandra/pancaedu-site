@@ -232,7 +232,7 @@ Setiap kali kita mengukur sesuatu -- panjang meja, massa benda, suhu ruangan -- 
   <rect x="40" y="20" width="140" height="150" rx="14" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
   <rect x="55" y="35" width="110" height="34" rx="6" fill="#0f172a"/>
   <text x="110" y="58" font-size="20" font-weight="700" font-family="'Courier New', monospace" text-anchor="middle">
-    <tspan fill="#86efac">2,3</tspan><tspan fill="#f87171">333333</tspan>
+    <tspan fill="#86efac" id="apTspanKept">2,3</tspan><tspan fill="#f87171" id="apTspanDiscarded">333333</tspan>
   </text>
   <g fill="#e2e8f0">
     <rect x="58" y="80" width="24" height="18" rx="3"/>
@@ -253,12 +253,19 @@ Setiap kali kita mengukur sesuatu -- panjang meja, massa benda, suhu ruangan -- 
     <circle cx="228" cy="88" r="32" fill="none" stroke="#78350f" stroke-width="5"/>
     <line x1="250" y1="110" x2="275" y2="135" stroke="#78350f" stroke-width="7" stroke-linecap="round"/>
   </g>
-  <text x="330" y="80" font-size="30" font-weight="800" fill="#16a34a" text-anchor="middle" font-family="sans-serif">2,3</text>
-  <text x="330" y="110" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">dipertahankan</text>
+  <text x="330" y="80" font-size="30" font-weight="800" fill="#16a34a" text-anchor="middle" font-family="sans-serif" id="apBigKept">2,3</text>
+  <text x="330" y="110" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif" id="apKeepLabel">2 angka penting dipertahankan</text>
   <text x="330" y="145" font-size="11" fill="#b91c1c" text-anchor="middle" font-family="sans-serif">sisanya dibuang</text>
 </svg>
-<p class="mtr-ilustrasi-caption">Kalkulator jujur menghitung semua digit, tapi angka penting menentukan mana yang boleh "dipercaya".</p>
+<p class="mtr-ilustrasi-caption">Kalkulator jujur menghitung semua digit, tapi angka penting menentukan mana yang boleh "dipercaya". Geser slidernya buat lihat efeknya.</p>
+<div style="display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-top:0.9rem; flex-wrap:wrap;">
+  <input type="range" id="apSigRange" min="1" max="8" value="2" step="1" oninput="apUpdateSig(this.value)" style="width:60%; max-width:220px;">
+  <span style="font-size:0.8125rem; color:#78350f; font-weight:600;">Jumlah angka penting</span>
 </div>
+</div>
+<script>
+function apUpdateSig(n){var digits='3333333';n=parseInt(n,10);var kept=n<=1?'2':'2,'+digits.slice(0,n-1);var discarded=n<=1?digits:digits.slice(n-1);document.getElementById('apTspanKept').textContent=kept;document.getElementById('apTspanDiscarded').textContent=discarded;document.getElementById('apBigKept').textContent=kept;document.getElementById('apKeepLabel').textContent=n+' angka penting dipertahankan';}
+</script>
 
 ## 🔎 Apa Itu Angka Penting?
 

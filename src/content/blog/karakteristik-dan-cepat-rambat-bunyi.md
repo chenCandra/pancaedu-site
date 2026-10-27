@@ -208,13 +208,15 @@ Pernah perhatikan saat badai: kilat selalu terlihat DULUAN, baru beberapa saat k
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="75,20 55,75 72,75 60,120 110,60 88,60 100,20" fill="#fbbf24" stroke="#26243b" stroke-width="2" />
+    <polygon id="petirKilat" points="75,20 55,75 72,75 60,120 110,60 88,60 100,20" fill="#fbbf24" stroke="#26243b" stroke-width="2" />
     <line x1="85" y1="90" x2="330" y2="110" stroke="#fde047" stroke-width="2" stroke-dasharray="6 4" />
     <path d="M330,110 l-14,-4 l2,10 z" fill="#fde047" />
     <text x="190" y="85" text-anchor="middle" font-size="12" fill="#92661a" font-weight="700">cahaya: sampai ~seketika</text>
-    <path d="M100,95 A30,30 0 0 1 100,155" fill="none" stroke="#9333ea" stroke-width="2.5" />
-    <path d="M100,80 A55,55 0 0 1 100,170" fill="none" stroke="#9333ea" stroke-width="2.2" opacity="0.75" />
-    <path d="M100,65 A80,80 0 0 1 100,185" fill="none" stroke="#9333ea" stroke-width="1.8" opacity="0.5" />
+    <g id="petirGuntur">
+      <path d="M100,95 A30,30 0 0 1 100,155" fill="none" stroke="#9333ea" stroke-width="2.5" />
+      <path d="M100,80 A55,55 0 0 1 100,170" fill="none" stroke="#9333ea" stroke-width="2.2" opacity="0.75" />
+      <path d="M100,65 A80,80 0 0 1 100,185" fill="none" stroke="#9333ea" stroke-width="1.8" opacity="0.5" />
+    </g>
     <text x="190" y="195" text-anchor="middle" font-size="12" fill="#581c87" font-weight="700">bunyi: beberapa detik kemudian</text>
     <path d="M345,100 Q335,110 345,125 Q355,135 348,145" fill="none" stroke="#26243b" stroke-width="3" stroke-linecap="round" />
     <line x1="230" y1="150" x2="330" y2="150" stroke="#581c87" stroke-width="1.5" />
@@ -223,6 +225,8 @@ Pernah perhatikan saat badai: kilat selalu terlihat DULUAN, baru beberapa saat k
     <text x="280" y="143" text-anchor="middle" font-size="11" fill="#581c87">jeda waktu (Δt)</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Cahaya kilat sampai ke mata hampir seketika, bunyi guntur baru sampai ke telinga beberapa detik kemudian.</p>
+  <button type="button" class="mtr-mini-btn" onclick="var k=document.getElementById('petirKilat');var g=document.getElementById('petirGuntur');var l=document.getElementById('petirLabel');k.style.filter='brightness(2.6) drop-shadow(0 0 12px #fde047)';g.style.opacity='0.25';l.textContent='⚡ Kilat menyambar -- cahayanya sampai ke mata hampir seketika...';setTimeout(function(){k.style.filter='none';},300);setTimeout(function(){g.style.opacity='1';l.textContent='🔊 ...dan baru BEBERAPA DETIK kemudian guntur terdengar di telinga!';},1000);">⚡ Sambar!</button>
+  <p class="mtr-mini-label" id="petirLabel">Klik tombol buat lihat jeda antara kilat dan guntur.</p>
 </div>
 
 ## 🤔 Coba Pikirkan

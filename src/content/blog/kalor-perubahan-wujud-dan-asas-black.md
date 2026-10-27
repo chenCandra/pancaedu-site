@@ -193,8 +193,8 @@ Kalau kamu merebus air, suhunya naik terus sampai 100°C, lalu berhenti naik mes
     <path d="M118 48 L282 48 L270 195 Q266 206 256 206 L144 206 Q134 206 130 195 Z" fill="#7dd3fc" opacity="0.6"/>
     <ellipse cx="200" cy="48" rx="82" ry="8" fill="#e0f2fe"/>
     <g fill="#ffffff" stroke="#bae6fd" stroke-width="2">
-      <rect x="150" y="70" width="46" height="46" rx="8"/>
-      <rect x="205" y="90" width="38" height="38" rx="7"/>
+      <rect id="esBesar" x="150" y="70" width="46" height="46" rx="8"/>
+      <rect id="esKecil" x="205" y="90" width="38" height="38" rx="7"/>
     </g>
     <g stroke="#f97316" stroke-width="3" stroke-linecap="round" fill="none">
       <path d="M170 60 q4 -14 -2 -24"/>
@@ -213,6 +213,8 @@ Kalau kamu merebus air, suhunya naik terus sampai 100°C, lalu berhenti naik mes
     <text x="345" y="88" font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle">kalor</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Es batu menyerap kalor dari air hangat di sekitarnya, melebur jadi air, sampai suhunya setimbang -- persis Asas Black.</p>
+  <button type="button" class="mtr-mini-btn" data-m="0" onclick="var besar=document.getElementById('esBesar');var kecil=document.getElementById('esKecil');var lbl=document.getElementById('blackLabel');var melted=this.dataset.m=='1';if(!melted){besar.setAttribute('width',26);besar.setAttribute('height',26);besar.setAttribute('x',160);besar.setAttribute('y',90);kecil.setAttribute('width',20);kecil.setAttribute('height',20);kecil.setAttribute('x',212);kecil.setAttribute('y',108);lbl.textContent='⏳ Beberapa menit kemudian -- es sudah mengecil (melebur), suhu air & es mendekati setimbang.';this.dataset.m='1';this.textContent='↩️ Kembali ke awal';}else{besar.setAttribute('width',46);besar.setAttribute('height',46);besar.setAttribute('x',150);besar.setAttribute('y',70);kecil.setAttribute('width',38);kecil.setAttribute('height',38);kecil.setAttribute('x',205);kecil.setAttribute('y',90);lbl.textContent='🧊 Es batu baru dimasukkan ke air hangat.';this.dataset.m='0';this.textContent='⏳ Lihat setelah beberapa menit';}">⏳ Lihat setelah beberapa menit</button>
+  <p class="mtr-mini-label" id="blackLabel">🧊 Es batu baru dimasukkan ke air hangat.</p>
 </div>
 
 ## 🤔 Coba Pikirkan

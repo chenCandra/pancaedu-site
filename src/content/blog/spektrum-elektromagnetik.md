@@ -257,30 +257,35 @@ Perhatikan betapa SEMPITNYA daerah **Cahaya Tampak** (400-700 nm) dibanding kese
     <rect x="20" y="95" width="360" height="30" rx="15" fill="url(#specGrad)"/>
     <text x="28" y="82" font-size="11" font-weight="700" fill="#312e81">Radio</text>
     <text x="340" y="82" font-size="11" font-weight="700" fill="#312e81">Gamma</text>
-    <g transform="translate(60,150)">
+    <g transform="translate(60,150)" style="cursor:pointer;" onclick="document.getElementById('specFact').innerHTML='📡 <strong>Gelombang Radio/Mikro</strong>: panjang gelombang dari beberapa mm sampai ratusan meter &mdash; dipakai sinyal HP, WiFi, dan radio.';">
+      <rect x="-20" y="-32" width="40" height="64" fill="transparent"/>
       <line x1="0" y1="0" x2="0" y2="-22" stroke="#312e81" stroke-width="3"/>
       <circle cx="0" cy="-25" r="4" fill="#312e81"/>
       <line x1="-10" y1="-18" x2="-18" y2="-26" stroke="#312e81" stroke-width="2"/>
       <line x1="10" y1="-18" x2="18" y2="-26" stroke="#312e81" stroke-width="2"/>
       <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">antena HP</text>
     </g>
-    <g transform="translate(150,150)">
+    <g transform="translate(150,150)" style="cursor:pointer;" onclick="document.getElementById('specFact').innerHTML='🔴 <strong>Sinar Infrared</strong>: dipakai remote TV, AC, dan night-vision &mdash; dirasakan sebagai panas oleh kulit kita.';">
+      <rect x="-20" y="-32" width="40" height="64" fill="transparent"/>
       <rect x="-8" y="-24" width="16" height="30" rx="4" fill="#312e81"/>
       <circle cx="0" cy="-30" r="3" fill="#f97316"/>
       <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">remote TV</text>
     </g>
-    <g transform="translate(240,150)">
+    <g transform="translate(240,150)" style="cursor:pointer;" onclick="document.getElementById('specFact').innerHTML='💡 <strong>Cahaya Tampak</strong>: cuma sepotong KECIL dari spektrum (panjang gelombang &asymp;400&ndash;700 nanometer) &mdash; satu-satunya yang bisa dilihat mata manusia.';">
+      <rect x="-20" y="-32" width="40" height="64" fill="transparent"/>
       <circle cx="0" cy="-18" r="10" fill="#fde047" stroke="#312e81" stroke-width="2"/>
       <rect x="-4" y="-8" width="8" height="8" fill="#312e81"/>
       <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">lampu</text>
     </g>
-    <g transform="translate(335,150)">
+    <g transform="translate(335,150)" style="cursor:pointer;" onclick="document.getElementById('specFact').innerHTML='☢️ <strong>Sinar-X (Rontgen)</strong>: energi sangat tinggi, bisa menembus jaringan lunak tubuh &mdash; dipakai cek tulang di rumah sakit, tapi berbahaya kalau dosisnya berlebihan.';">
+      <rect x="-20" y="-32" width="40" height="64" fill="transparent"/>
       <rect x="-15" y="-30" width="30" height="38" rx="4" fill="#ffffff" stroke="#312e81" stroke-width="2"/>
       <text x="0" y="-7" text-anchor="middle" font-size="13" font-weight="800" fill="#312e81">X</text>
       <text x="0" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#312e81">rontgen</text>
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Satu keluarga gelombang yang sama -- cuma beda panjang gelombang, dari yang dipakai HP/remote sampai yang dipakai rontgen di rumah sakit.</p>
+  <p id="specFact" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#312e81;">👉 Klik salah satu ikon di atas untuk lihat faktanya!</p>
 </div>
 
 ## 🔧 Pemanfaatan Tiap Daerah Spektrum

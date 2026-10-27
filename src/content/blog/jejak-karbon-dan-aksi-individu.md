@@ -206,37 +206,46 @@ Sepanjang bab ini kita sudah bahas pemanasan global dari skala gas, sektor, damp
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <rect x="0" y="0" width="400" height="220" rx="16" fill="#fef9ec"/>
     <path d="M140 40 Q180 30 190 70 Q200 95 175 110 Q190 125 175 150 Q180 175 145 180 Q100 185 90 150 Q75 140 85 115 Q70 95 95 75 Q90 45 140 40 Z" fill="#fde68a" stroke="#b45309" stroke-width="3"/>
-    <g>
-      <rect x="115" y="60" width="24" height="16" rx="2" fill="#ef4444"/>
-      <circle cx="120" cy="80" r="5" fill="#1f2937"/>
-      <circle cx="134" cy="80" r="5" fill="#1f2937"/>
+    <g id="jkBadIcons">
+      <g>
+        <rect x="115" y="60" width="24" height="16" rx="2" fill="#ef4444"/>
+        <circle cx="120" cy="80" r="5" fill="#1f2937"/>
+        <circle cx="134" cy="80" r="5" fill="#1f2937"/>
+      </g>
+      <g>
+        <circle cx="150" cy="100" r="9" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
+        <line x1="150" y1="109" x2="150" y2="120" stroke="#92400e" stroke-width="2"/>
+      </g>
+      <g>
+        <path d="M110 130 Q100 120 112 112 Q122 108 128 118 L118 140 Z" fill="#60a5fa" opacity="0.8"/>
+      </g>
+      <g>
+        <rect x="128" y="145" width="20" height="24" rx="3" fill="#9ca3af"/>
+      </g>
     </g>
-    <g>
-      <circle cx="150" cy="100" r="9" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
-      <line x1="150" y1="109" x2="150" y2="120" stroke="#92400e" stroke-width="2"/>
-    </g>
-    <g>
-      <path d="M110 130 Q100 120 112 112 Q122 108 128 118 L118 140 Z" fill="#60a5fa" opacity="0.8"/>
-    </g>
-    <g>
-      <rect x="128" y="145" width="20" height="24" rx="3" fill="#9ca3af"/>
-    </g>
-    <g transform="translate(265,70)">
-      <circle cx="30" cy="55" r="22" fill="#fff" stroke="#16a34a" stroke-width="4"/>
-      <path d="M30 40 L30 70 M18 50 L42 50" stroke="#16a34a" stroke-width="3"/>
-      <circle cx="30" cy="20" r="10" fill="#16a34a"/>
-    </g>
-    <g transform="translate(250,135)">
-      <circle cx="10" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
-      <circle cx="55" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
-      <line x1="10" y1="22" x2="30" y2="5" stroke="#1f2937" stroke-width="3"/>
-      <line x1="30" y1="5" x2="40" y2="22" stroke="#1f2937" stroke-width="3"/>
-      <line x1="30" y1="5" x2="22" y2="22" stroke="#1f2937" stroke-width="3"/>
-      <line x1="40" y1="22" x2="55" y2="22" stroke="#1f2937" stroke-width="3"/>
-      <line x1="30" y1="5" x2="30" y2="-3" stroke="#1f2937" stroke-width="3"/>
+    <g id="jkGoodIcons">
+      <g transform="translate(265,70)">
+        <circle cx="30" cy="55" r="22" fill="#fff" stroke="#16a34a" stroke-width="4"/>
+        <path d="M30 40 L30 70 M18 50 L42 50" stroke="#16a34a" stroke-width="3"/>
+        <circle cx="30" cy="20" r="10" fill="#16a34a"/>
+      </g>
+      <g transform="translate(250,135)">
+        <circle cx="10" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
+        <circle cx="55" cy="22" r="13" fill="none" stroke="#1f2937" stroke-width="3"/>
+        <line x1="10" y1="22" x2="30" y2="5" stroke="#1f2937" stroke-width="3"/>
+        <line x1="30" y1="5" x2="40" y2="22" stroke="#1f2937" stroke-width="3"/>
+        <line x1="30" y1="5" x2="22" y2="22" stroke="#1f2937" stroke-width="3"/>
+        <line x1="40" y1="22" x2="55" y2="22" stroke="#1f2937" stroke-width="3"/>
+        <line x1="30" y1="5" x2="30" y2="-3" stroke="#1f2937" stroke-width="3"/>
+      </g>
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Jejak karbon kita terbentuk dari banyak kebiasaan kecil (motor, listrik, plastik) -- tapi bisa diperkecil dengan aksi positif seperti bersepeda dan membawa tumbler sendiri.</p>
+  <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:0.9rem;flex-wrap:wrap;">
+    <button type="button" onclick="document.getElementById('jkBadIcons').style.opacity='1';document.getElementById('jkGoodIcons').style.opacity='0.25';document.getElementById('jkStatusLabel').textContent='Ini kebiasaan dengan jejak karbon BESAR: naik motor sendirian, lampu nyala terus, dan plastik sekali pakai.';" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.5rem 1rem;border-radius:999px;border:1px solid #fcd34d;background:#fffbeb;color:#78350f;cursor:pointer;">🚗 Jejak Besar</button>
+    <button type="button" onclick="document.getElementById('jkGoodIcons').style.opacity='1';document.getElementById('jkBadIcons').style.opacity='0.25';document.getElementById('jkStatusLabel').textContent='Ini kebiasaan dengan jejak karbon KECIL: bersepeda atau jalan kaki, dan membawa tumbler sendiri.';" style="font-family:inherit;font-weight:700;font-size:0.8125rem;padding:0.5rem 1rem;border-radius:999px;border:1px solid #fcd34d;background:#fffbeb;color:#78350f;cursor:pointer;">🚲 Jejak Kecil</button>
+  </div>
+  <p id="jkStatusLabel" style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;font-weight:600;">Klik salah satu tombol buat bandingin!</p>
 </div>
 
 ## 📊 Sumber Jejak Karbon Pribadi

@@ -251,9 +251,43 @@ Inilah sebabnya pintu terasa berat didorong dekat engsel: lengan gaya (r) jadi k
 <text x="90" y="194" font-size="12" fill="#64748b">r kecil</text>
 <line x1="50" y1="185" x2="320" y2="185" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4"/>
 <text x="220" y="212" font-size="12" fill="#64748b">r besar</text>
+<circle id="torsiTitik" cx="204" cy="115" r="8" fill="#f2760a"/>
+<line id="torsiGaris" x1="204" y1="115" x2="204" y2="66" stroke="#9d174d" stroke-width="5"/>
+<polygon id="torsiKepala" points="204,66 196,80 212,80" fill="#9d174d"/>
 </svg>
 <p class="mtr-ilustrasi-caption">Gaya dorong yang sama (F) menghasilkan torsi lebih besar kalau diberikan pada lengan (r) yang lebih panjang -- seperti mendorong pintu di tepinya, bukan dekat engsel.</p>
+<input type="range" id="torsiSlider" min="0" max="90" value="48" step="2" style="width:100%;margin-top:10px;accent-color:#9d174d;">
+<p class="mtr-ilustrasi-caption" id="torsiCaption">Jarak gaya dari engsel (r): <strong>0,48 m</strong> &middot; Torsi (&tau; = F&middot;r&middot;sin90&deg;, F=50 N): <strong>24,0 N&middot;m</strong> -- geser buat lihat efeknya!</p>
 </div>
+<script>
+(function () {
+  var slider = document.getElementById('torsiSlider');
+  var titik = document.getElementById('torsiTitik');
+  var garis = document.getElementById('torsiGaris');
+  var kepala = document.getElementById('torsiKepala');
+  var caption = document.getElementById('torsiCaption');
+  if (!slider || !titik) return;
+  var x0 = 50, y0 = 170, x1 = 340, y1 = 60;
+  function render() {
+    var rCm = parseFloat(slider.value);
+    var t = rCm / 90;
+    var cx = x0 + t * (x1 - x0);
+    var cy = y0 + t * (y1 - y0);
+    titik.setAttribute('cx', cx.toFixed(1));
+    titik.setAttribute('cy', cy.toFixed(1));
+    garis.setAttribute('x1', cx.toFixed(1));
+    garis.setAttribute('y1', cy.toFixed(1));
+    garis.setAttribute('x2', cx.toFixed(1));
+    garis.setAttribute('y2', (cy - 49).toFixed(1));
+    kepala.setAttribute('points', cx.toFixed(1) + ',' + (cy - 49).toFixed(1) + ' ' + (cx - 8).toFixed(1) + ',' + (cy - 35).toFixed(1) + ' ' + (cx + 8).toFixed(1) + ',' + (cy - 35).toFixed(1));
+    var rMeter = rCm / 100;
+    var tau = 50 * rMeter;
+    caption.innerHTML = 'Jarak gaya dari engsel (r): <strong>' + rMeter.toFixed(2) + ' m</strong> · Torsi (τ = F·r·sin90°, F=50 N): <strong>' + tau.toFixed(1) + ' N·m</strong> -- geser buat lihat efeknya!';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 ### Momen Inersia
 

@@ -277,16 +277,26 @@ Solusinya: ukur besaran yang sama **beberapa kali**, lalu olah datanya. Dengan b
   <circle cx="190" cy="55" r="9" fill="#fbbf24" stroke="#78350f" stroke-width="2"/>
   <line x1="190" y1="64" x2="190" y2="90" stroke="#78350f" stroke-width="2" stroke-dasharray="3 2"/>
   <text x="190" y="25" font-size="10" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">120,1</text>
+  <circle cx="220" cy="55" r="9" fill="#a78bfa" stroke="#4c1d95" stroke-width="2" id="pkPoint4Dot"/>
+  <line x1="220" y1="64" x2="220" y2="90" stroke="#4c1d95" stroke-width="2" stroke-dasharray="3 2" id="pkPoint4Line"/>
+  <text x="220" y="42" font-size="10" font-weight="700" fill="#4c1d95" text-anchor="middle" font-family="sans-serif" id="pkPoint4Text">120,5</text>
   <path d="M30 120 H370" stroke="#fcd34d" stroke-width="2" stroke-dasharray="2 3"/>
   <g>
-    <rect x="140" y="128" width="120" height="34" rx="8" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
-    <text x="200" y="150" font-size="14" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif">x̄ = (120,3 ± 0,1) cm</text>
+    <rect x="130" y="128" width="140" height="34" rx="8" fill="#6ee7b7" stroke="#065f46" stroke-width="3"/>
+    <text x="200" y="150" font-size="13" font-weight="800" fill="#065f46" text-anchor="middle" font-family="sans-serif" id="pkResultText">x̄ = 120,30 cm (rata-rata 4 data)</text>
   </g>
   <path d="M200 97 L200 126" stroke="#065f46" stroke-width="2.5" stroke-dasharray="2 2"/>
-  <text x="200" y="12" font-size="12" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">3 kali ukur, hasilnya sedikit beda-beda</text>
+  <text x="200" y="12" font-size="11" font-weight="800" fill="#78350f" text-anchor="middle" font-family="sans-serif">Geser slider buat ubah data ke-4, lihat rata-ratanya!</text>
 </svg>
 <p class="mtr-ilustrasi-caption">Tiga kali pengukuran yang sedikit berbeda dirata-ratakan jadi satu hasil akhir yang lebih bisa dipercaya.</p>
+<div style="display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-top:0.9rem; flex-wrap:wrap;">
+  <input type="range" id="pkRange" min="119.8" max="120.8" step="0.1" value="120.5" oninput="pkUpdate(this.value)" style="width:60%; max-width:220px;">
+  <span style="font-size:0.8125rem; color:#78350f; font-weight:600;">Data pengukuran ke-4</span>
 </div>
+</div>
+<script>
+function pkUpdate(v){v=parseFloat(v);var x=170+(v-120)*100;if(x<150)x=150;if(x>250)x=250;document.getElementById('pkPoint4Dot').setAttribute('cx',x);document.getElementById('pkPoint4Line').setAttribute('x1',x);document.getElementById('pkPoint4Line').setAttribute('x2',x);document.getElementById('pkPoint4Text').setAttribute('x',x);document.getElementById('pkPoint4Text').textContent=v.toFixed(1).replace('.',',');var avg=(120.2+120.4+120.1+v)/4;document.getElementById('pkResultText').textContent='x̄ = '+avg.toFixed(2).replace('.',',')+' cm (rata-rata 4 data)';}
+</script>
 
 ## 🧮 Cara Melaporkan Pengukuran Berulang
 

@@ -245,7 +245,7 @@ Pernah merhatiin nggak, kok belakangan ini kipas angin atau AC di kamar rasanya 
     <g>
       <rect x="275" y="40" width="22" height="110" rx="11" fill="#fef2f2" stroke="#ef4444" stroke-width="3"/>
       <circle cx="286" cy="155" r="18" fill="#ef4444"/>
-      <rect x="280" y="60" width="12" height="80" rx="6" fill="#ef4444"/>
+      <rect id="pgMercury" x="280" y="70" width="12" height="70" rx="6" fill="#ef4444"/>
       <line x1="305" y1="55" x2="315" y2="55" stroke="#78350f" stroke-width="2"/>
       <line x1="305" y1="75" x2="312" y2="75" stroke="#78350f" stroke-width="2"/>
       <line x1="305" y1="95" x2="315" y2="95" stroke="#78350f" stroke-width="2"/>
@@ -265,7 +265,23 @@ Pernah merhatiin nggak, kok belakangan ini kipas angin atau AC di kamar rasanya 
     </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Bumi kita, dengan termometer yang pelan-pelan naik -- itulah inti dari pemanasan global.</p>
+  <div style="margin-top:0.9rem;">
+    <input type="range" id="pgTahunSlider" min="1900" max="2100" value="2024" step="1" oninput="pgUpdateTermo(this.value)" style="width:100%;accent-color:#ef4444;">
+    <p style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;font-weight:600;">🎚️ Geser tahunnya: <strong id="pgTahunLabel">2024</strong> &middot; suhu rata-rata bumi <strong id="pgSuhuLabel">mulai terasa naik</strong></p>
+  </div>
 </div>
+<script>
+function pgUpdateTermo(v) {
+  var t = (v - 1900) / 200;
+  var topY = 110 - 65 * t;
+  var mercury = document.getElementById('pgMercury');
+  mercury.setAttribute('y', topY);
+  mercury.setAttribute('height', 140 - topY);
+  document.getElementById('pgTahunLabel').textContent = v;
+  var suhuLabel = document.getElementById('pgSuhuLabel');
+  suhuLabel.textContent = t < 0.4 ? 'relatif stabil' : t < 0.7 ? 'mulai terasa naik' : 'naik cukup banyak';
+}
+</script>
 
 ## 🏠 Mekanisme di Baliknya: Efek Rumah Kaca
 

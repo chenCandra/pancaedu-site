@@ -206,12 +206,12 @@ $$\gamma = \frac{F}{d}$$
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <rect x="0" y="120" width="400" height="100" fill="#67e8f9" />
     <line x1="0" y1="120" x2="400" y2="120" stroke="#0e7490" stroke-width="2" />
-    <ellipse cx="135" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
-    <ellipse cx="195" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
-    <ellipse cx="255" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
-    <line x1="135" y1="113" x2="135" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
-    <line x1="195" y1="110" x2="195" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
-    <line x1="255" y1="113" x2="255" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <ellipse id="dimple1" cx="135" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <ellipse id="dimple2" cx="195" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <ellipse id="dimple3" cx="255" cy="123" rx="16" ry="4" fill="#0e7490" opacity="0.45" />
+    <line id="kaki1" x1="135" y1="113" x2="135" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <line id="kaki2" x1="195" y1="110" x2="195" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
+    <line id="kaki3" x1="255" y1="113" x2="255" y2="123" stroke="#164e63" stroke-width="3" stroke-linecap="round" />
     <ellipse cx="195" cy="100" rx="38" ry="9" fill="#166534" />
     <circle cx="150" cy="96" r="5" fill="#166534" />
     <circle cx="240" cy="96" r="5" fill="#166534" />
@@ -226,7 +226,12 @@ $$\gamma = \frac{F}{d}$$
     <text x="200" y="183" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#164e63">Beratnya disebar ke kaki-kaki lebar, membuat lekukan tapi tidak memecah permukaan</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Kaki serangga air menekan permukaan air hingga melekuk (seperti membran elastis), tapi tidak sampai memecahnya -- itulah tegangan permukaan.</p>
+  <input type="range" id="tegSlider" min="0" max="100" value="0" oninput="tegUpdate(this.value)" style="width:100%;margin-top:10px;accent-color:#0e7490;">
+  <p class="mtr-mini-label" id="tegLabel">🎚️ Geser "berat serangga" -- lihat lekukan permukaan air berubah.</p>
 </div>
+<script>
+function tegUpdate(v){var depth=v*0.25;var ids=[1,2,3];for(var i=0;i<3;i++){var d=document.getElementById('dimple'+ids[i]);var k=document.getElementById('kaki'+ids[i]);var cy=123+depth;d.setAttribute('cy',cy);d.setAttribute('ry',4+depth*0.3);k.setAttribute('y2',cy);}var lbl=document.getElementById('tegLabel');if(v<40){lbl.textContent='🦟 Berat ringan -- permukaan cuma melekuk sedikit, serangga tetap terapung.';}else if(v<80){lbl.textContent='🦟 Beratnya nambah -- lekukannya makin dalam, tapi tegangan permukaan masih menahan.';}else{lbl.textContent='⚠️ Kelewat berat! Tegangan permukaan nggak cukup kuat menahan -- serangga akan TENGGELAM.';}}
+</script>
 
 ## 📈 Kapilaritas
 

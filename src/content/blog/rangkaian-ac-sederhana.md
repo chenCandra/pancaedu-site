@@ -256,7 +256,7 @@ Kombinasi induktor dan kapasitor ini juga dipakai di dalam **charger HP**-mu. Se
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
     <text x="20" y="16" font-size="12" font-weight="700" fill="#831843">Tegangan &amp; arus AC yang terus bergelombang...</text>
-    <path d="M20,55 C50,20 70,20 100,55 C130,90 150,90 180,55 C210,20 230,20 260,55 C290,90 310,90 340,55 C355,40 365,40 380,55" fill="none" stroke="#9d174d" stroke-width="3"/>
+    <path id="acWave" d="M20,55 C50,20 70,20 100,55 C130,90 150,90 180,55 C210,20 230,20 260,55 C290,90 310,90 340,55 C355,40 365,40 380,55" fill="none" stroke="#9d174d" stroke-width="3"/>
     <text x="20" y="108" font-size="12" font-weight="700" fill="#831843">...mengalir lewat tiga komponen ini:</text>
     <line x1="20" y1="150" x2="380" y2="150" stroke="#26243b" stroke-width="4"/>
     <polyline points="55,150 65,150 70,135 80,165 90,135 100,165 105,150 115,150" fill="none" stroke="#ec4899" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -268,6 +268,8 @@ Kombinasi induktor dan kapasitor ini juga dipakai di dalam **charger HP**-mu. Se
     <text x="297" y="188" text-anchor="middle" font-size="16" font-weight="800" fill="#831843">C</text>
   </svg>
   <p class="mtr-ilustrasi-caption">R, L, dan C bereaksi berbeda-beda terhadap arus AC yang terus bergelombang.</p>
+  <button type="button" onclick="var lowD='M20,55 C50,20 70,20 100,55 C130,90 150,90 180,55 C210,20 230,20 260,55 C290,90 310,90 340,55 C355,40 365,40 380,55';var highD='M20,55 C35,20 45,20 60,55 C75,90 85,90 100,55 C115,20 125,20 140,55 C155,90 165,90 180,55 C195,20 205,20 220,55 C235,90 245,90 260,55 C275,20 285,20 300,55 C315,90 325,90 340,55 C352,40 362,40 380,55';var el=document.getElementById('acWave');var isLow=el.getAttribute('d')===lowD;el.setAttribute('d',isLow?highD:lowD);document.getElementById('acStatusLabel').innerHTML=isLow?'⚡ Frekuensi <strong>TINGGI</strong> &mdash; gelombang lebih rapat (lebih banyak siklus per detik).':'⚡ Frekuensi <strong>RENDAH</strong> &mdash; gelombang lebih renggang.';this.textContent=isLow?'🐢 Turunkan Frekuensi':'⚡ Naikkan Frekuensi';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #f9a8d4;background:#fff;color:#831843;cursor:pointer;margin-top:0.85rem;">⚡ Naikkan Frekuensi</button>
+  <p id="acStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#831843;">⚡ Frekuensi <strong>RENDAH</strong> &mdash; gelombang lebih renggang.</p>
 </div>
 
 Coba jelajahi ketiganya langsung di simulasi bawah -- pindah-pindah tab, geser slider Frekuensi dan nilai komponennya, lalu amati bagaimana bentuk gelombang arus (garis biru) bergeser maju/mundur relatif terhadap tegangan (garis kuning), dan bagaimana angka reaktansinya berubah.

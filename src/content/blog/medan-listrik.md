@@ -310,12 +310,14 @@ Kalau digambar sebagai garis medan, garis-garisnya **keluar** dari muatan positi
     <path d="M 222 46 L 230 40 L 226 50" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M 240 104 L 250 110 L 240 116" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M 222 174 L 230 180 L 222 186" fill="none" stroke="#9d174d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="300" cy="150" r="12" fill="#3b82f6"/>
-    <text x="300" y="154" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">q</text>
-    <text x="300" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">muatan uji</text>
+    <circle id="mlTestCharge" cx="300" cy="150" r="12" fill="#3b82f6"/>
+    <text id="mlTestLabel" x="300" y="154" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">q</text>
+    <text id="mlTestCaption" x="300" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#831843">muatan uji</text>
     <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">muatan sumber</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Garis medan listrik memancar keluar dari muatan positif -- muatan uji di sekitarnya ikut merasakan gayanya.</p>
+  <button type="button" onclick="var far=document.getElementById('mlTestCharge').getAttribute('cx')==='300';var cx=far?195:300,cy=far?135:150;document.getElementById('mlTestCharge').setAttribute('cx',cx);document.getElementById('mlTestCharge').setAttribute('cy',cy);document.getElementById('mlTestLabel').setAttribute('x',cx);document.getElementById('mlTestLabel').setAttribute('y',cy+4);document.getElementById('mlTestCaption').setAttribute('x',cx);document.getElementById('mlTestCaption').setAttribute('y',cy+30);document.getElementById('mlStatusLabel').innerHTML=far?'🔵 Muatan uji didekatkan &mdash; medan yang dirasakan jadi <strong>KUAT</strong>!':'🔵 Muatan uji dijauhkan &mdash; medan yang dirasakan jadi <strong>LEMAH</strong>.';this.textContent=far?'↩️ Jauhkan Muatan Uji':'➡️ Dekatkan Muatan Uji';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #f9a8d4;background:#fff;color:#831843;cursor:pointer;margin-top:0.85rem;">➡️ Dekatkan Muatan Uji</button>
+  <p id="mlStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#831843;">🔵 Muatan uji dijauhkan &mdash; medan yang dirasakan jadi <strong>LEMAH</strong>.</p>
 </div>
 
 ### Kalau Ada Muatan di Dalam Medan

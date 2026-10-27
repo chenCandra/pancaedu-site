@@ -211,9 +211,19 @@ Bayangkan dua orang mengangkat beban yang sama beratnya, ke ketinggian yang sama
     <line x1="335" y1="70" x2="350" y2="70" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round" />
     <rect x="328" y="38" width="14" height="6" rx="2" fill="#1e3a8a" />
     <text x="335" y="112" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e3a8a" font-weight="700">waktu (t)</text>
+    <text x="335" y="126" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e3a8a" font-weight="800" id="udTimeVal">t = 4 s</text>
+    <rect x="130" y="185" width="140" height="30" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2" />
+    <text x="200" y="205" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="800" fill="#1e3a8a" id="udPowerVal">P = W/t = 100/4 = 25 W</text>
   </svg>
-  <p class="mtr-ilustrasi-caption">Gaya mendorong kotak sejauh s menghasilkan usaha -- seberapa cepat usaha itu selesai (diukur dari waktu t) itulah dayanya.</p>
+  <p class="mtr-ilustrasi-caption">Gaya mendorong kotak sejauh s menghasilkan usaha -- seberapa cepat usaha itu selesai (diukur dari waktu t) itulah dayanya. Geser slidernya buat lihat dayanya berubah (usaha dianggap tetap 100 J).</p>
+  <div style="display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-top:0.75rem; flex-wrap:wrap;">
+    <input type="range" id="udRange" min="1" max="10" step="1" value="4" oninput="udUpdate(this.value)" style="width:60%; max-width:220px;">
+    <span style="font-size:0.8125rem; color:#1e3a8a; font-weight:600;">Waktu (t) dalam sekon</span>
+  </div>
 </div>
+<script>
+function udUpdate(t){t=parseFloat(t);document.getElementById('udTimeVal').textContent='t = '+t+' s';var p=100/t;var pStr=(Math.round(p*10)/10).toString();document.getElementById('udPowerVal').textContent='P = W/t = 100/'+t+' = '+pStr+' W';}
+</script>
 
 <div class="mtr-def">
 💡 <strong>Daya (P)</strong> adalah besar usaha yang dilakukan tiap satuan waktu -- seberapa cepat energi dipindahkan atau diubah.

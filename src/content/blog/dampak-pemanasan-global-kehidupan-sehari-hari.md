@@ -210,15 +210,29 @@ Setelah tiga materi sebelumnya membahas mekanisme, gas, dan penyebab pemanasan g
     <rect x="250" y="110" width="40" height="40" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
     <polygon points="245,110 295,110 270,88" fill="#b45309"/>
     <rect x="263" y="128" width="12" height="18" fill="#92400e"/>
-    <path d="M230 158 Q300 150 370 158 L370 175 Q300 167 230 175 Z" fill="#3b82f6"/>
-    <g stroke="#1d4ed8" stroke-width="2" fill="none" opacity="0.7">
-      <path d="M245 160 q6 -3 12 0 q6 3 12 0"/>
-      <path d="M320 162 q6 -3 12 0 q6 3 12 0"/>
+    <g id="damAirGrup">
+      <path d="M230 158 Q300 150 370 158 L370 175 Q300 167 230 175 Z" fill="#3b82f6"/>
+      <g stroke="#1d4ed8" stroke-width="2" fill="none" opacity="0.7">
+        <path d="M245 160 q6 -3 12 0 q6 3 12 0"/>
+        <path d="M320 162 q6 -3 12 0 q6 3 12 0"/>
+      </g>
+      <path d="M260 148 L260 140 L268 140 L268 148" stroke="#1d4ed8" stroke-width="2" fill="none"/>
     </g>
-    <path d="M260 148 L260 140 L268 140 L268 148" stroke="#1d4ed8" stroke-width="2" fill="none"/>
   </svg>
   <p class="mtr-ilustrasi-caption">Permukaan air yang naik sedikit demi sedikit di kawasan pesisir -- perubahan kecil yang terasa besar bagi warga sekitar.</p>
+  <div style="margin-top:0.9rem;">
+    <input type="range" id="damAirSlider" min="0" max="100" value="0" step="1" oninput="damUpdateAir(this.value)" style="width:100%;accent-color:#3b82f6;">
+    <p style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;font-weight:600;">🎚️ Coba geser: kalau permukaan air terus naik sedikit demi sedikit, begini kira-kira tampilannya -- air <strong id="damAirLabel">masih di posisi sekarang</strong></p>
+  </div>
 </div>
+<script>
+function damUpdateAir(v) {
+  var offset = (v / 100) * 22;
+  document.getElementById('damAirGrup').setAttribute('transform', 'translate(0,-' + offset + ')');
+  var label = document.getElementById('damAirLabel');
+  label.textContent = v < 10 ? 'masih di posisi sekarang' : v < 50 ? 'naik sedikit, mendekati rumah' : 'naik lebih banyak lagi';
+}
+</script>
 
 ## 🌦️ Cuaca yang Makin Sulit Diprediksi
 

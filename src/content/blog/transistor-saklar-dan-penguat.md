@@ -189,20 +189,22 @@ Kemampuan "arus kecil mengendalikan arus besar" inilah yang membuat transistor p
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <rect x="40" y="110" width="320" height="50" rx="10" fill="#a7f3d0" stroke="#059669" stroke-width="3"/>
     <text x="55" y="100" font-size="12" font-weight="700" fill="#065f46">arus BESAR (kolektor → emitor)</text>
-    <circle cx="90" cy="135" r="8" fill="#10b981"/>
-    <circle cx="130" cy="135" r="8" fill="#10b981"/>
-    <circle cx="300" cy="135" r="8" fill="#10b981"/>
-    <circle cx="330" cy="135" r="8" fill="#10b981"/>
+    <circle id="tsFlow1" cx="90" cy="135" r="8" fill="#10b981"/>
+    <circle id="tsFlow2" cx="130" cy="135" r="8" fill="#10b981"/>
+    <circle id="tsFlow3" cx="300" cy="135" r="8" fill="#10b981"/>
+    <circle id="tsFlow4" cx="330" cy="135" r="8" fill="#10b981"/>
     <path d="M 340 135 L 358 128 L 358 142 Z" fill="#065f46"/>
     <rect x="185" y="55" width="30" height="55" rx="6" fill="#6ee7b7" stroke="#059669" stroke-width="3"/>
-    <circle cx="200" cy="50" r="10" fill="#34d399" stroke="#065f46" stroke-width="2"/>
-    <line x1="200" y1="30" x2="200" y2="15" stroke="#065f46" stroke-width="3"/>
+    <circle id="tsBasis" cx="200" cy="50" r="10" fill="#34d399" stroke="#065f46" stroke-width="2"/>
+    <line id="tsBasisLine" x1="200" y1="30" x2="200" y2="15" stroke="#065f46" stroke-width="3"/>
     <path d="M 192 22 L 200 10 L 208 22 Z" fill="#065f46"/>
     <text x="200" y="8" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">arus kecil (basis)</text>
     <rect x="193" y="112" width="14" height="46" fill="#059669"/>
     <text x="200" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">keran mini mengatur keran besar</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Arus kecil di basis seperti keran mini yang mengatur aliran air jauh lebih besar -- persis cara transistor mengendalikan arus kolektor-emitor.</p>
+  <button type="button" onclick="var up=document.getElementById('tsBasis').getAttribute('r')==='10';var ids=['tsFlow1','tsFlow2','tsFlow3','tsFlow4'];for(var i=0;i<4;i++){document.getElementById(ids[i]).setAttribute('r',up?12:8);document.getElementById(ids[i]).setAttribute('fill',up?'#059669':'#10b981');}document.getElementById('tsBasis').setAttribute('r',up?14:10);document.getElementById('tsBasisLine').setAttribute('stroke-width',up?5:3);document.getElementById('tsStatusLabel').innerHTML=up?'🚿 Arus basis (kecil) diperbesar sedikit &mdash; arus kolektor-emitor (besar) ikut membesar JAUH lebih banyak. Itulah efek <strong>penguatan</strong>!':'🚿 Arus basis normal.';this.textContent=up?'↩️ Kecilkan Arus Basis':'🚿 Perbesar Arus Basis';" style="font-weight:700;font-size:0.8125rem;padding:0.55rem 1.1rem;border-radius:999px;border:1.5px solid #6ee7b7;background:#fff;color:#065f46;cursor:pointer;margin-top:0.85rem;">🚿 Perbesar Arus Basis</button>
+  <p id="tsStatusLabel" style="margin:0.6rem 0 0;font-size:0.875rem;font-weight:600;color:#065f46;">🚿 Arus basis normal.</p>
 </div>
 
 ## 🔬 Dari Komponen ke IC (Integrated Circuit)

@@ -179,13 +179,15 @@ Kenapa, sih, nggak ada satu pun benda -- roket tercanggih, partikel di akselerat
     <path d="M 150 35 A 160 160 0 0 1 280 48" fill="none" stroke="#eab308" stroke-width="22" stroke-linecap="round"/>
     <path d="M 280 48 A 160 160 0 0 1 360 180" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round"/>
     <circle cx="200" cy="180" r="14" fill="#312e81"/>
-    <line x1="200" y1="180" x2="330" y2="90" stroke="#312e81" stroke-width="6" stroke-linecap="round"/>
+    <line id="bgNeedle" x1="200" y1="180" x2="330" y2="90" stroke="#312e81" stroke-width="6" stroke-linecap="round"/>
     <text x="48" y="205" font-size="13" font-weight="700" fill="#312e81">0</text>
     <text x="352" y="178" font-size="16" font-weight="800" fill="#312e81">c</text>
     <text x="298" y="58" font-size="13" font-weight="800" fill="#b91c1c">semakin SUSAH!</text>
     <text x="200" y="30" text-anchor="middle" font-size="11" font-weight="700" fill="#312e81">butuh energi makin gede</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Makin dekat ke "c", jarumnya serasa makin macet -- padahal energi yang terus disuntikkan makin besar.</p>
+  <input type="range" min="0" max="99" value="80" style="width:90%;" oninput="var v=parseFloat(this.value);var a=(180-1.8*v)*Math.PI/180;var x=200+150*Math.cos(a);var y=180-150*Math.sin(a);document.getElementById('bgNeedle').setAttribute('x2',x);document.getElementById('bgNeedle').setAttribute('y2',y);document.getElementById('bgLabel').textContent='Kecepatan: '+v+'% c — butuh energi '+(v<50?'sedikit':(v<90?'BANYAK':'TAK TERHINGGA (mustahil!)'));">
+  <p id="bgLabel" style="margin:0.5rem 0 0;font-size:0.875rem;font-weight:600;color:#312e81;">Kecepatan: 80% c &mdash; butuh energi BANYAK</p>
 </div>
 
 ## 🚀 Menurut Benda Itu Sendiri

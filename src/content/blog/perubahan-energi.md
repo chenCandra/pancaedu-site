@@ -206,37 +206,46 @@ Di materi [Bentuk-bentuk Energi](/materi/mengenal-ragam-energi), kita sudah kena
 
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="35" cy="45" r="22" fill="#fde68a"/>
-    <circle cx="35" cy="45" r="16" fill="#f59e0b"/>
-    <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
-      <line x1="35" y1="12" x2="35" y2="4"/>
-      <line x1="8" y1="45" x2="0" y2="45"/>
-      <line x1="14" y1="24" x2="8" y2="18"/>
-      <line x1="14" y1="66" x2="8" y2="72"/>
+    <g style="cursor:pointer" onclick="document.getElementById('perubahanFaktaLabel').innerHTML='☀️ <strong>Cahaya &amp; panas (Matahari)</strong>: titik awal rantai ini &mdash; energi dari reaksi nuklir di matahari yang dipancarkan ke Bumi.'">
+      <circle cx="35" cy="45" r="22" fill="#fde68a"/>
+      <circle cx="35" cy="45" r="16" fill="#f59e0b"/>
+      <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+        <line x1="35" y1="12" x2="35" y2="4"/>
+        <line x1="8" y1="45" x2="0" y2="45"/>
+        <line x1="14" y1="24" x2="8" y2="18"/>
+        <line x1="14" y1="66" x2="8" y2="72"/>
+      </g>
     </g>
     <path d="M55 48 L85 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
     <defs><marker id="arrmtr1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#78350f"/></marker></defs>
-    <rect x="90" y="30" width="55" height="35" rx="4" fill="#3b82f6" transform="skewX(-8)"/>
-    <line x1="100" y1="30" x2="100" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
-    <line x1="115" y1="30" x2="115" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
-    <line x1="130" y1="30" x2="130" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
-    <text x="118" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panel Surya</text>
-    <path d="M160 48 L190 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
-    <path d="M198 30 L213 30 L206 45 L220 45 L200 68 L205 50 L192 50 Z" fill="#fbbf24"/>
-    <text x="208" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Listrik</text>
-    <path d="M232 48 L262 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
-    <circle cx="300" cy="42" r="22" fill="#fff7d6" stroke="#fcd34d" stroke-width="3"/>
-    <rect x="293" y="62" width="14" height="10" fill="#9ca3af"/>
-    <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
-      <line x1="300" y1="12" x2="300" y2="4"/>
-      <line x1="270" y1="42" x2="262" y2="42"/>
-      <line x1="330" y1="42" x2="338" y2="42"/>
-      <line x1="280" y1="22" x2="274" y2="16"/>
-      <line x1="320" y1="22" x2="326" y2="16"/>
+    <g style="cursor:pointer" onclick="document.getElementById('perubahanFaktaLabel').innerHTML='🔆 <strong>Panel Surya mengubah cahaya jadi listrik</strong>: sel surya menyerap foton cahaya dan membangkitkan arus listrik (efek fotovoltaik).'">
+      <rect x="90" y="30" width="55" height="35" rx="4" fill="#3b82f6" transform="skewX(-8)"/>
+      <line x1="100" y1="30" x2="100" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+      <line x1="115" y1="30" x2="115" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+      <line x1="130" y1="30" x2="130" y2="65" stroke="#1e3a8a" stroke-width="1.5"/>
+      <text x="118" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Panel Surya</text>
     </g>
-    <text x="300" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Lampu Menyala</text>
+    <path d="M160 48 L190 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
+    <g style="cursor:pointer" onclick="document.getElementById('perubahanFaktaLabel').innerHTML='⚡ <strong>Energi Listrik mengalir lewat kabel</strong>: bentuk energi yang paling praktis dipindahkan dan diubah ke bentuk lain.'">
+      <path d="M198 30 L213 30 L206 45 L220 45 L200 68 L205 50 L192 50 Z" fill="#fbbf24"/>
+      <text x="208" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Listrik</text>
+    </g>
+    <path d="M232 48 L262 48" stroke="#78350f" stroke-width="3" fill="none" marker-end="url(#arrmtr1)"/>
+    <g style="cursor:pointer" onclick="document.getElementById('perubahanFaktaLabel').innerHTML='💡 <strong>Listrik jadi cahaya &amp; sedikit panas</strong>: LED/filamen di lampu mengubah energi listrik jadi cahaya tampak, dengan sedikit panas yang terbuang.'">
+      <circle cx="300" cy="42" r="22" fill="#fff7d6" stroke="#fcd34d" stroke-width="3"/>
+      <rect x="293" y="62" width="14" height="10" fill="#9ca3af"/>
+      <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+        <line x1="300" y1="12" x2="300" y2="4"/>
+        <line x1="270" y1="42" x2="262" y2="42"/>
+        <line x1="330" y1="42" x2="338" y2="42"/>
+        <line x1="280" y1="22" x2="274" y2="16"/>
+        <line x1="320" y1="22" x2="326" y2="16"/>
+      </g>
+      <text x="300" y="90" font-size="11" font-weight="700" fill="#78350f" text-anchor="middle" font-family="sans-serif">Lampu Menyala</text>
+    </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Rantai perubahan energi: cahaya matahari → panel surya → energi listrik → lampu menyala.</p>
+  <p id="perubahanFaktaLabel" style="margin:0.6rem 0 0;font-size:0.8125rem;color:#78350f;min-height:1.2rem;text-align:center;">👆 Klik salah satu tahap di atas untuk lihat penjelasannya!</p>
 </div>
 
 ## 🔄 Prinsip Dasar Perubahan Energi

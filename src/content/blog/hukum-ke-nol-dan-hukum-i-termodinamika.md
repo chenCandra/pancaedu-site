@@ -200,7 +200,7 @@ Setelah membahas kalor secara umum, sekarang kita masuk ke sub-bab Termodinamika
     <path d="M286 104 q14 -8 28 0" stroke="#1e3a8a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <text x="300" y="150" font-size="13" font-weight="700" fill="#1e3a8a" text-anchor="middle">dingin</text>
     <rect x="178" y="55" width="44" height="90" rx="20" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
-    <rect x="193" y="70" width="14" height="60" rx="7" fill="#f97316"/>
+    <rect id="hknMercury" x="193" y="70" width="14" height="60" rx="7" fill="#f97316"/>
     <circle cx="200" cy="140" r="16" fill="#f97316"/>
     <circle cx="200" cy="140" r="16" fill="none" stroke="#94a3b8" stroke-width="3"/>
     <text x="200" y="178" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">termometer</text>
@@ -210,6 +210,8 @@ Setelah membahas kalor secara umum, sekarang kita masuk ke sub-bab Termodinamika
     <path d="M234 83 L222 90 L234 97 Z" fill="#ea580c"/>
   </svg>
   <p class="mtr-ilustrasi-caption">Termometer mencapai kesetimbangan termal dengan tubuh -- begitu suhunya sama, itulah yang dibaca sebagai "suhu badan".</p>
+  <input type="range" id="hknSlider" min="0" max="100" value="50" oninput="var v=this.value;var h=15+v*0.55;document.getElementById('hknMercury').setAttribute('height',h);document.getElementById('hknMercury').setAttribute('y',130-h);document.getElementById('hknLabel').textContent=(v<34?'🌡️ Termometer menyentuh benda dingin -- air raksa turun, menyesuaikan suhu benda itu.':v<67?'🌡️ Termometer sedang menyesuaikan diri -- suhunya di antara dingin dan panas.':'🌡️ Termometer menyentuh benda panas -- air raksa naik, mengikuti suhu benda itu.')+' Begitu suhunya SAMA, itulah kesetimbangan termal.';" style="width:100%;margin-top:10px;accent-color:#f97316;">
+  <p class="mtr-mini-label" id="hknLabel">🎚️ Geser suhu benda yang disentuh termometer -- lihat air raksanya naik/turun.</p>
 </div>
 
 ## 🤔 Coba Pikirkan

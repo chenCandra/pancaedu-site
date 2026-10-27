@@ -191,6 +191,7 @@ Gampangnya, Hukum I sebenarnya cuma kasus khusus dari Hukum II: kalau gaya total
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <line x1="200" y1="10" x2="200" y2="210" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 6" />
+    <g id="hnLeft" style="transition: opacity 0.2s ease;">
     <text x="100" y="26" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1e3a8a">Gaya Seimbang</text>
     <line x1="40" y1="170" x2="160" y2="170" stroke="#1e3a8a" stroke-width="3" />
     <rect x="70" y="118" width="60" height="50" rx="6" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
@@ -200,6 +201,8 @@ Gampangnya, Hukum I sebenarnya cuma kasus khusus dari Hukum II: kalau gaya total
     <line x1="135" y1="143" x2="160" y2="143" stroke="#f97316" stroke-width="5" stroke-linecap="round" />
     <polygon points="160,143 148,137 148,149" fill="#f97316" />
     <text x="100" y="198" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Diam / GLB (ΣF = 0)</text>
+    </g>
+    <g id="hnRight" style="transition: opacity 0.2s ease;">
     <text x="300" y="26" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1e3a8a">Gaya Tak Seimbang</text>
     <line x1="240" y1="170" x2="360" y2="170" stroke="#1e3a8a" stroke-width="3" />
     <rect x="270" y="118" width="60" height="50" rx="6" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
@@ -209,8 +212,14 @@ Gampangnya, Hukum I sebenarnya cuma kasus khusus dari Hukum II: kalau gaya total
     <line x1="335" y1="143" x2="378" y2="143" stroke="#ef4444" stroke-width="6" stroke-linecap="round" />
     <polygon points="378,143 364,135 364,151" fill="#ef4444" />
     <text x="300" y="198" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Bergerak dipercepat (ΣF &ne; 0)</text>
+    </g>
   </svg>
   <p class="mtr-ilustrasi-caption">Kiri: dua gaya sama besar berlawanan arah membuat kotak tetap diam (Hukum I). Kanan: gaya ke kanan lebih besar dari gaya ke kiri, membuat kotak dipercepat ke arah gaya yang lebih besar (Hukum II).</p>
+  <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:0.75rem; flex-wrap:wrap;">
+    <button type="button" onclick="document.getElementById('hnLeft').style.opacity='1';document.getElementById('hnRight').style.opacity='0.2'" style="font-size:0.8125rem;font-weight:600;padding:0.35rem 0.9rem;border-radius:999px;border:1.5px solid #2563eb;background:#eff6ff;color:#1e3a8a;cursor:pointer;">🔵 Sorot: Seimbang</button>
+    <button type="button" onclick="document.getElementById('hnRight').style.opacity='1';document.getElementById('hnLeft').style.opacity='0.2'" style="font-size:0.8125rem;font-weight:600;padding:0.35rem 0.9rem;border-radius:999px;border:1.5px solid #2563eb;background:#eff6ff;color:#1e3a8a;cursor:pointer;">🔴 Sorot: Tak Seimbang</button>
+    <button type="button" onclick="document.getElementById('hnLeft').style.opacity='1';document.getElementById('hnRight').style.opacity='1'" style="font-size:0.8125rem;font-weight:600;padding:0.35rem 0.9rem;border-radius:999px;border:1.5px solid #94a3b8;background:#f8fafc;color:#1e293b;cursor:pointer;">↔️ Lihat Keduanya</button>
+  </div>
 </div>
 
 ## 🤝 Hukum III Newton (Aksi-Reaksi)

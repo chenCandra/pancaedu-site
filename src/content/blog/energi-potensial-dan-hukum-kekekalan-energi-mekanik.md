@@ -230,26 +230,47 @@ Inilah jawaban teka-teki roller coaster: energi yang "ditabung" jadi Ep besar di
 <div class="mtr-ilustrasi">
   <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
     <line x1="10" y1="190" x2="390" y2="190" stroke="#1e3a8a" stroke-width="2"></line>
-    <path d="M20,180 C70,180 90,40 120,40 C150,40 170,160 220,160 C260,160 280,90 320,90 C350,90 370,140 390,150" fill="none" stroke="#475569" stroke-width="6" stroke-linecap="round"></path>
+    <path id="rollerPath" d="M20,180 C70,180 90,40 120,40 C150,40 170,160 220,160 C260,160 280,90 320,90 C350,90 370,140 390,150" fill="none" stroke="#475569" stroke-width="6" stroke-linecap="round"></path>
     <line x1="120" y1="40" x2="120" y2="188" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="4 4"></line>
     <line x1="220" y1="160" x2="220" y2="188" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="4 4"></line>
     <text x="126" y="115" font-size="10" fill="#1e3a8a" font-weight="700">h tinggi</text>
     <text x="226" y="178" font-size="10" fill="#1e3a8a" font-weight="700">h rendah</text>
-    <g transform="translate(120,32)">
-      <rect x="-18" y="-14" width="36" height="16" rx="4" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"></rect>
-      <circle cx="-10" cy="4" r="6" fill="#1e293b"></circle>
-      <circle cx="10" cy="4" r="6" fill="#1e293b"></circle>
-    </g>
     <text x="80" y="10" font-size="11" fill="#1e3a8a" font-weight="700">Ep besar, Ek kecil</text>
-    <g transform="translate(220,150)">
-      <rect x="-18" y="-14" width="36" height="16" rx="4" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"></rect>
+    <text x="233" y="146" font-size="11" fill="#1e3a8a" font-weight="700">Ep kecil, Ek besar</text>
+    <g id="rollerCart" transform="translate(120,32)">
+      <rect x="-18" y="-14" width="36" height="16" rx="4" fill="#f2760a" stroke="#7f1d1d" stroke-width="2"></rect>
       <circle cx="-10" cy="4" r="6" fill="#1e293b"></circle>
       <circle cx="10" cy="4" r="6" fill="#1e293b"></circle>
     </g>
-    <text x="233" y="146" font-size="11" fill="#1e3a8a" font-weight="700">Ep kecil, Ek besar</text>
   </svg>
   <p class="mtr-ilustrasi-caption">Di puncak, energi potensial (Ep) besar dan energi kinetik (Ek) kecil. Di lembah, Ep kecil tapi Ek besar -- energi mekanik totalnya (Em=Ek+Ep) tetap sama.</p>
+  <input type="range" id="rollerSlider" min="0" max="100" value="20" step="1" style="width:100%;margin-top:10px;accent-color:#f2760a;">
+  <p class="mtr-ilustrasi-caption" id="rollerCaption">Geser buat menggerakkan gerbong di sepanjang lintasan -- lihat Ep dan Ek saling bertukar!</p>
 </div>
+<script>
+(function () {
+  var slider = document.getElementById('rollerSlider');
+  var path = document.getElementById('rollerPath');
+  var cart = document.getElementById('rollerCart');
+  var caption = document.getElementById('rollerCaption');
+  if (!slider || !path || !cart) return;
+  var totalLen = path.getTotalLength();
+  var groundY = 190, topY = 40, rangeY = groundY - topY;
+  function render() {
+    var pct = parseFloat(slider.value);
+    var pt = path.getPointAtLength((pct / 100) * totalLen);
+    cart.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ',' + (pt.y - 8).toFixed(1) + ')');
+    var frac = (groundY - pt.y) / rangeY;
+    if (frac < 0) frac = 0;
+    if (frac > 1) frac = 1;
+    var epPct = Math.round(frac * 100);
+    var ekPct = 100 - epPct;
+    caption.textContent = 'Posisi gerbong: ' + pct + '% lintasan → Ep ≈ ' + epPct + '% dan Ek ≈ ' + ekPct + '% dari energi mekanik total (Em = Ek + Ep tetap).';
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
 
 Prinsip yang sama berlaku saat kamu meluncur di perosotan atau kolam seluncuran di waterpark: di titik tertinggi (sebelum meluncur, hampir diam) Ep besar dan Ek kecil. Begitu meluncur turun, Ep berkurang drastis sementara Ek bertambah drastis -- itulah kenapa makin tinggi titik awal seluncurannya, makin kencang pula kecepatanmu saat tiba di dasar.
 

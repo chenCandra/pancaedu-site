@@ -236,15 +236,17 @@ Pernah perhatikan sambungan rel kereta api? Ada celah kecil di antaranya, bukan 
       <rect x="280" y="150" width="14" height="30" rx="3"/>
       <rect x="340" y="150" width="14" height="30" rx="3"/>
     </g>
-    <rect x="14" y="140" width="148" height="14" rx="7" fill="#94a3b8"/>
-    <rect x="186" y="140" width="178" height="14" rx="7" fill="#94a3b8"/>
-    <rect x="14" y="140" width="148" height="5" rx="2.5" fill="#cbd5e1"/>
-    <rect x="186" y="140" width="178" height="5" rx="2.5" fill="#cbd5e1"/>
-    <path d="M168 132 l6 10 l-6 10 M178 132 l-6 10 l6 10" stroke="#ea580c" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect id="suhuRelKiri" x="14" y="140" width="148" height="14" rx="7" fill="#94a3b8"/>
+    <rect id="suhuRelKanan" x="186" y="140" width="178" height="14" rx="7" fill="#94a3b8"/>
+    <rect id="suhuRelKiriHi" x="14" y="140" width="148" height="5" rx="2.5" fill="#cbd5e1"/>
+    <rect id="suhuRelKananHi" x="186" y="140" width="178" height="5" rx="2.5" fill="#cbd5e1"/>
+    <path id="suhuGapMark" d="M168 132 l6 10 l-6 10 M178 132 l-6 10 l6 10" stroke="#ea580c" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="173" y="200" font-size="13" font-weight="700" fill="#7c2d12" text-anchor="middle">celah muai</text>
     <path d="M60 196 q112 -10 224 0" stroke="#fde68a" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
   </svg>
   <p class="mtr-ilustrasi-caption">Celah kecil di sambungan rel kereta api memberi ruang bagi rel untuk memuai saat suhu naik.</p>
+  <input type="range" id="suhuSlider" min="0" max="100" value="20" oninput="var v=this.value;var d=v*0.1;document.getElementById('suhuRelKiri').setAttribute('width',148+d);document.getElementById('suhuRelKiriHi').setAttribute('width',148+d);document.getElementById('suhuRelKanan').setAttribute('x',186-d);document.getElementById('suhuRelKanan').setAttribute('width',178+d);document.getElementById('suhuRelKananHi').setAttribute('x',186-d);document.getElementById('suhuRelKananHi').setAttribute('width',178+d);document.getElementById('suhuGapMark').setAttribute('transform','translate('+(-d)+',0) scale('+(1-d/24)+',1)');document.getElementById('suhuLabel').textContent=(v<30?'🌡️ Suhu rendah -- rel masih pendek, celah muai lebar.':v<70?'🌡️ Suhu naik -- rel mulai memuai, celah menyempit.':'🌡️ Suhu sangat tinggi -- rel memuai banyak, celahnya nyaris tertutup!');" style="width:100%;margin-top:10px;accent-color:#ea580c;">
+  <p class="mtr-mini-label" id="suhuLabel">🎚️ Geser suhu rel -- lihat celah muai menyempit saat rel memanjang karena panas.</p>
 </div>
 
 ## 🤔 Coba Pikirkan
