@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-12
 tags: ["Kapasitor", "Rangkaian Kapasitor", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
+coverImage: /covers/rangkaian-kapasitor.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/rangkaian-kapasitor.html"
   judul: "Laboratorium Maya: Rangkaian Kapasitor (Seri & Paralel)"

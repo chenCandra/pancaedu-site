@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bgTint" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7fefb"/>
+      <stop offset="1" stop-color="#d1fae5"/>
+    </linearGradient>
+    <radialGradient id="blobG" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10b981" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dioG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fb923c"/>
+      <stop offset="1" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="ledG" cx="0.5" cy="0.5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fde68a"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint)"/>
+  <circle cx="540" cy="90" r="190" fill="url(#blobG)"/>
+  <circle cx="90" cy="320" r="140" fill="url(#blobG)"/>
+  <rect width="640" height="360" fill="none" stroke="#a7f3d0" stroke-width="2"/>
+
+  <!-- dot texture -->
+  <g fill="#10b981" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
+  </g>
+
+  <!-- brand mark, top-left -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#a7f3d0" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
+
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#d1fae5"/>
+    <text x="493" y="32" text-anchor="middle" fill="#065f46">Fisika</text>
+    <rect x="526" y="16" width="86" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="569" y="32" text-anchor="middle" fill="#3730a3">Kelas XII</text>
+  </g>
+
+  <!-- eyebrow pill -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="240" height="24" rx="12" fill="#10b981"/>
+    <text x="148" y="84.5" text-anchor="middle" fill="#ffffff">ELEKTRONIKA DIGITAL</text>
+  </g>
+
+  <!-- title (2 lines) -->
+  <g font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#1b2340">
+    <text x="26" y="128">Semikonduktor</text>
+    <text x="26" y="170">dan Dioda</text>
+  </g>
+  <text x="26" y="196" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#065f46">Bahan Ajaib di Balik Elektronika Modern</text>
+
+  <!-- mini badge chips: Dioda / Arus Searah / Semikonduktor -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,218)">
+      <circle cx="26" cy="26" r="26" fill="#fed7aa"/>
+      <path d="M16 15 L34 26 L16 37 Z" fill="#c2410c"/>
+      <line x1="34" y1="15" x2="34" y2="37" stroke="#c2410c" stroke-width="3"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">Dioda</text>
+    </g>
+    <g transform="translate(104,218)">
+      <circle cx="26" cy="26" r="26" fill="#dbeafe"/>
+      <line x1="13" y1="26" x2="35" y2="26" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+      <path d="M29 20 L37 26 L29 32 Z" fill="#2563eb"/>
+      <text x="26" y="66" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e3a8a">Arus Searah</text>
+    </g>
+    <g transform="translate(182,218)">
+      <circle cx="26" cy="26" r="26" fill="#ede9fe"/>
+      <g fill="#7c3aed">
+        <circle cx="18" cy="18" r="2.6"/><circle cx="26" cy="18" r="2.6"/><circle cx="34" cy="18" r="2.6"/>
+        <circle cx="18" cy="26" r="2.6"/><circle cx="26" cy="26" r="2.6"/><circle cx="34" cy="26" r="2.6"/>
+        <circle cx="18" cy="34" r="2.6"/><circle cx="26" cy="34" r="2.6"/><circle cx="34" cy="34" r="2.6"/>
+      </g>
+      <text x="26" y="66" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b21b6">Semikonduktor</text>
+    </g>
+  </g>
+
+  <!-- hero illustration: diode symbol, forward (glowing) vs reverse (blocked) current, plus LED -->
+  <g transform="translate(372,118)">
+    <ellipse cx="115" cy="175" rx="140" ry="16" fill="#1b2340" opacity="0.08"/>
+
+    <!-- Row A: forward bias, current flows (glowing) -->
+    <g transform="translate(0,16)">
+      <line x1="0" y1="4" x2="230" y2="4" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="4" x2="230" y2="4" stroke="#34d399" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+      <path d="M100 4 L132 -14 L132 22 Z" fill="url(#dioG)"/>
+      <line x1="132" y1="-16" x2="132" y2="24" stroke="#78350f" stroke-width="4"/>
+      <path d="M190 4 L206 4" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+      <path d="M198 -4 L212 4 L198 12 Z" fill="#34d399"/>
+      <circle cx="60" cy="4" r="5" fill="#34d399" opacity="0.35"/>
+      <circle cx="60" cy="4" r="2.5" fill="#34d399"/>
+      <text x="4" y="-10" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#047857">MAJU: MENGALIR</text>
+    </g>
+
+    <!-- Row B: reverse bias, current blocked -->
+    <g transform="translate(0,96)">
+      <line x1="0" y1="4" x2="230" y2="4" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+      <path d="M100 4 L132 -14 L132 22 Z" fill="url(#dioG)" opacity="0.35"/>
+      <line x1="132" y1="-16" x2="132" y2="24" stroke="#78350f" stroke-width="4" opacity="0.4"/>
+      <path d="M205 4 L185 4" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" stroke-dasharray="5 5" opacity="0.7"/>
+      <path d="M193 -4 L179 4 L193 12 Z" fill="#94a3b8" opacity="0.7"/>
+      <g stroke="#ef4444" stroke-width="4" stroke-linecap="round">
+        <line x1="123" y1="-6" x2="141" y2="12"/>
+        <line x1="141" y1="-6" x2="123" y2="12"/>
+      </g>
+      <text x="4" y="-10" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#94a3b8">BALIK: DITAHAN</text>
+    </g>
+
+    <!-- small LED detail, bottom-right -->
+    <g transform="translate(220,150)">
+      <rect x="-6" y="14" width="12" height="8" rx="2" fill="#64748b"/>
+      <circle cx="0" cy="4" r="12" fill="url(#ledG)"/>
+      <g stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.85">
+        <line x1="0" y1="-16" x2="0" y2="-22"/>
+        <line x1="12" y1="-10" x2="17" y2="-14"/>
+        <line x1="-12" y1="-10" x2="-17" y2="-14"/>
+      </g>
+    </g>
+
+    <!-- connecting dashed trace to LED -->
+    <g stroke="#a855f7" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round" opacity="0.5">
+      <path d="M206 24 C214 70 218 110 220 138" fill="none"/>
+    </g>
+
+    <!-- sparkle + dot accents -->
+    <path d="M232 -24 l3 7 7 1 -5 5 1 7 -6 -4 -6 4 1 -7 -5 -5 7 -1 z" fill="#fbbf24" opacity="0.9"/>
+    <path d="M-10 60 l2.5 5.5 5.5 0.8 -4 4 0.8 5.5 -4.8 -3 -4.8 3 0.8 -5.5 -4 -4 5.5 -0.8 z" fill="#14b8a6" opacity="0.85"/>
+    <circle cx="40" cy="170" r="3.5" fill="#a855f7" opacity="0.6"/>
+    <circle cx="10" cy="110" r="3" fill="#2563eb" opacity="0.5"/>
+  </g>
+</svg>

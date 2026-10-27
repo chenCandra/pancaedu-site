@@ -4,6 +4,7 @@ description: "Kenapa rel kereta api sengaja diberi celah kecil antar sambungan? 
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/suhu-dan-pemuaian.svg
 pubDate: 2026-10-22
 tags: ["Suhu", "Pemuaian", "Kalor", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

@@ -4,6 +4,7 @@ description: "Belajar empat jenis proses termodinamika pada gas -- isobarik, iso
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/proses-proses-termodinamika-pada-gas.svg
 pubDate: 2026-10-30
 tags: ["Proses Termodinamika", "Diagram P-V", "Isobarik", "Isotermal", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

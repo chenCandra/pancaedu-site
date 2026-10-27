@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Efek Fotolistrik", "Dualisme Gelombang-Partikel", "Foton", "Fisika Modern", "Fisika Kelas XII"]
+coverImage: /covers/efek-fotolistrik-dan-dualisme-gelombang-partikel.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/efek-fotolistrik.html"
   judul: "Laboratorium Maya: Efek Fotolistrik"

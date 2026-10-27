@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-09-28
+coverImage: /covers/gaya-gesek-bidang-miring-dan-sistem-katrol.svg
 tags: ["Gaya Gesek", "Bidang Miring", "Sistem Katrol", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/gaya-gesek-bidang-miring-katrol.html"

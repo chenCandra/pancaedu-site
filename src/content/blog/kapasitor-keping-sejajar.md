@@ -4,6 +4,7 @@ description: "Kenalan sama kapasitor -- komponen yang menyimpan muatan dan energ
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/kapasitor-keping-sejajar.svg
 pubDate: 2026-09-09
 tags: ["Kapasitor", "Kapasitor Keping Sejajar", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
 simulasi:

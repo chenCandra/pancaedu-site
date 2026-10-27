@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Inti Atom", "Radioaktivitas", "Waktu Paruh", "Fisika Modern", "Fisika Kelas XII"]
+coverImage: /covers/inti-atom-dan-radioaktivitas.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/peluruhan-radioaktif.html"
   judul: "Laboratorium Maya: Peluruhan Radioaktif"

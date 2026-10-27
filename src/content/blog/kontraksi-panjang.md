@@ -7,6 +7,7 @@ kelas: XII
 pubDate: 2024-01-14
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Kontraksi Panjang", "Fisika Kelas XII"]
+coverImage: /covers/kontraksi-panjang.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
   judul: "Laboratorium Maya: Efek Relativistik (Kontraksi Panjang)"

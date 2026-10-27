@@ -7,7 +7,7 @@ kelas: XII
 pubDate: 2024-01-13
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Dilatasi Waktu", "Fisika Kelas XII"]
-coverImage: "/images/dilatasi-waktu-cover.svg"
+coverImage: "/covers/dilatasi-waktu.svg"
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
   judul: "Laboratorium Maya: Efek Relativistik (Dilatasi Waktu)"

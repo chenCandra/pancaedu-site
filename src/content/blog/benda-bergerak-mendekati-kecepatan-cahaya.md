@@ -7,6 +7,7 @@ kelas: XII
 pubDate: 2024-01-14
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Fisika Kelas XII"]
+coverImage: /covers/benda-bergerak-mendekati-kecepatan-cahaya.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
   judul: "Laboratorium Maya: Efek Relativistik (Kalkulator Lengkap)"

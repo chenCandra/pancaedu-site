@@ -4,6 +4,7 @@ description: "Kenapa gagang panci logam terasa panas, air yang dipanaskan berger
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/perpindahan-kalor-konduksi-konveksi-radiasi.svg
 pubDate: 2026-10-26
 tags: ["Perpindahan Kalor", "Konduksi", "Konveksi", "Radiasi", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

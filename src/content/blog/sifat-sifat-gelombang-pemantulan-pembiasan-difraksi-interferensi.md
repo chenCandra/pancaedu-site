@@ -1,5 +1,6 @@
 ---
 title: "Sifat-sifat Gelombang: Pemantulan, Pembiasan, Difraksi, Interferensi"
+coverImage: /covers/sifat-sifat-gelombang-pemantulan-pembiasan-difraksi-interferensi.svg
 description: "Kenapa suara bisa terdengar mengelilingi sudut tembok, kenapa sedotan terlihat 'patah' di dalam gelas berisi air, dan kenapa dua speaker yang berdekatan bisa menghasilkan titik-titik senyap? Empat sifat universal gelombang."
 category: materi
 mapel: Fisika

@@ -1,5 +1,6 @@
 ---
 title: "Tegangan Permukaan, Kapilaritas, dan Viskositas"
+coverImage: /covers/tegangan-permukaan-kapilaritas-dan-viskositas.svg
 description: "Kenapa serangga bisa 'berjalan' di atas air, kenapa air naik sendiri lewat pipa sempit, dan kenapa madu mengalir jauh lebih lambat dari air -- tiga sifat fluida yang sering luput diperhatikan."
 category: materi
 mapel: "Fisika"

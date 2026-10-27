@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Medan Magnet", "Fenomena Elektromagnetik", "Fisika Kelas XII"]
+coverImage: /covers/medan-magnet-konsep-dasar.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/medan-magnet.html"
   judul: "Laboratorium Maya: Medan Magnet"

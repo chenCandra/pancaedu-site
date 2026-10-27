@@ -4,6 +4,7 @@ description: "Kenapa tidak ada mesin (mobil, pembangkit listrik, kulkas) yang ef
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/hukum-ii-termodinamika-dan-mesin-kalor.svg
 pubDate: 2026-11-01
 tags: ["Hukum II Termodinamika", "Mesin Kalor", "Efisiensi Carnot", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

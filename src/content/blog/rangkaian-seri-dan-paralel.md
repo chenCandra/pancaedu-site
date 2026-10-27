@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Listrik Dinamis", "Rangkaian Seri", "Rangkaian Paralel", "Fisika Kelas XII"]
+coverImage: /covers/rangkaian-seri-dan-paralel.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/hukum-ohm.html"
   judul: "Virtual Circuit Lab -- Seri & Paralel"

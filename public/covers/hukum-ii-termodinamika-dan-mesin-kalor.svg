@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bgTint6" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffaf5"/>
+      <stop offset="1" stop-color="#ffedd5"/>
+    </linearGradient>
+    <radialGradient id="blobG6" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f97316" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="engineG6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+    <linearGradient id="smokeG6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="flameG6" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#dc2626"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="gearG6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4ade80"/>
+      <stop offset="1" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint6)"/>
+  <circle cx="540" cy="90" r="190" fill="url(#blobG6)"/>
+  <circle cx="90" cy="320" r="140" fill="url(#blobG6)"/>
+  <rect width="640" height="360" fill="none" stroke="#fed7aa" stroke-width="2"/>
+
+  <!-- dot texture -->
+  <g fill="#f97316" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
+  </g>
+
+  <!-- brand mark, top-left -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#fed7aa" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
+
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#ffedd5"/>
+    <text x="493" y="32" text-anchor="middle" fill="#9a3412">Fisika</text>
+    <rect x="532" y="16" width="80" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="572" y="32" text-anchor="middle" fill="#3730a3">Kelas XI</text>
+  </g>
+
+  <!-- eyebrow pill -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="188" height="24" rx="12" fill="#f97316"/>
+    <text x="122" y="84.5" text-anchor="middle" fill="#ffffff">TERMODINAMIKA</text>
+  </g>
+
+  <!-- title (2 lines, long title) -->
+  <text x="26" y="122" font-family="Arial, sans-serif" font-size="30" font-weight="800" fill="#1b2340">Hukum II Termodinamika</text>
+  <text x="26" y="156" font-family="Arial, sans-serif" font-size="30" font-weight="800" fill="#1b2340">dan Mesin Kalor</text>
+  <text x="26" y="182" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#9a3412">Kenapa Mesin Tak Pernah 100% Efisien?</text>
+
+  <!-- mini badge chips: Efisiensi / Mesin Kalor / Entropi -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,216)">
+      <circle cx="26" cy="26" r="26" fill="#d1fae5"/>
+      <text x="26" y="33" text-anchor="middle" font-size="17" font-weight="800" fill="#059669">%</text>
+      <text x="26" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">Efisiensi</text>
+    </g>
+    <g transform="translate(104,216)">
+      <circle cx="26" cy="26" r="26" fill="#ffedd5"/>
+      <circle cx="26" cy="26" r="9" fill="none" stroke="#c2410c" stroke-width="3"/>
+      <circle cx="26" cy="26" r="3" fill="#c2410c"/>
+      <g stroke="#c2410c" stroke-width="3" stroke-linecap="round">
+        <line x1="26" y1="12" x2="26" y2="16"/>
+        <line x1="26" y1="36" x2="26" y2="40"/>
+        <line x1="12" y1="26" x2="16" y2="26"/>
+        <line x1="36" y1="26" x2="40" y2="26"/>
+        <line x1="16" y1="16" x2="19" y2="19"/>
+        <line x1="33" y1="33" x2="36" y2="36"/>
+        <line x1="36" y1="16" x2="33" y2="19"/>
+        <line x1="19" y1="33" x2="16" y2="36"/>
+      </g>
+      <text x="26" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="#9a3412">Mesin Kalor</text>
+    </g>
+    <g transform="translate(182,216)">
+      <circle cx="26" cy="26" r="26" fill="#f3e8ff"/>
+      <circle cx="16" cy="17" r="2.2" fill="#7c3aed"/>
+      <circle cx="30" cy="14" r="1.6" fill="#a855f7"/>
+      <circle cx="22" cy="27" r="2" fill="#7c3aed"/>
+      <circle cx="35" cy="24" r="2.4" fill="#a855f7"/>
+      <circle cx="28" cy="36" r="1.8" fill="#7c3aed"/>
+      <circle cx="15" cy="34" r="1.5" fill="#a855f7"/>
+      <text x="26" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#5b21b6">Entropi</text>
+    </g>
+  </g>
+
+  <!-- hero illustration: car engine with fuel/fire input and waste smoke/heat escaping -->
+  <g transform="translate(360,116)">
+    <ellipse cx="135" cy="188" rx="150" ry="14" fill="#1b2340" opacity="0.08"/>
+
+    <!-- engine block -->
+    <rect x="50" y="90" width="120" height="86" rx="10" fill="url(#engineG6)" stroke="#334155" stroke-width="2"/>
+    <rect x="68" y="66" width="48" height="28" rx="6" fill="#64748b" stroke="#334155" stroke-width="1.5"/>
+    <g fill="#334155">
+      <circle cx="60" cy="100" r="3"/><circle cx="160" cy="100" r="3"/>
+      <circle cx="60" cy="166" r="3"/><circle cx="160" cy="166" r="3"/>
+    </g>
+    <rect x="58" y="112" width="104" height="10" rx="3" fill="#1b2340" opacity="0.3"/>
+    <rect x="58" y="134" width="104" height="10" rx="3" fill="#1b2340" opacity="0.3"/>
+
+    <!-- fuel/fire input, left -->
+    <g transform="translate(18,128)">
+      <rect x="0" y="-6" width="24" height="12" rx="3" fill="#78350f"/>
+      <path d="M-10 0 C-16 -9 -18 -18 -13 -24 C-15 -19 -10 -15 -8 -19 C-6 -14 -1 -10 -4 -3 C1 -9 -2 -18 -10 -26 Z" fill="url(#flameG6)"/>
+    </g>
+
+    <!-- exhaust pipe, right -->
+    <rect x="170" y="140" width="34" height="14" rx="4" fill="#64748b"/>
+
+    <!-- waste smoke/heat escaping -->
+    <g opacity="0.9">
+      <circle cx="214" cy="118" r="14" fill="url(#smokeG6)"/>
+      <circle cx="230" cy="92" r="18" fill="url(#smokeG6)"/>
+      <circle cx="208" cy="80" r="12" fill="url(#smokeG6)"/>
+      <circle cx="244" cy="60" r="14" fill="url(#smokeG6)" opacity="0.75"/>
+    </g>
+    <g stroke="#f97316" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.6">
+      <path d="M196 150 q6 -10 0 -20"/>
+      <path d="M208 150 q6 -10 0 -20"/>
+    </g>
+
+    <!-- small gear + useful work arrow, bottom (the small efficient share) -->
+    <g transform="translate(110,196)">
+      <circle cx="0" cy="0" r="12" fill="url(#gearG6)"/>
+      <g stroke="#15803d" stroke-width="3" stroke-linecap="round">
+        <line x1="0" y1="-16" x2="0" y2="-20"/>
+        <line x1="0" y1="16" x2="0" y2="20"/>
+        <line x1="-16" y1="0" x2="-20" y2="0"/>
+        <line x1="16" y1="0" x2="20" y2="0"/>
+      </g>
+      <path d="M26 0 h16 m-6 -5 l6 5 -6 5" stroke="#16a34a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- sparkle accents, varied colors -->
+    <circle cx="6" cy="40" r="3.5" fill="#14b8a6" opacity="0.75"/>
+    <path d="M258 150 l2.5 5.5 5.5 0.8 -4 4 0.8 5.5 -4.8 -3 -4.8 3 0.8 -5.5 -4 -4 5.5 -0.8 z" fill="#a855f7" opacity="0.85"/>
+    <circle cx="140" cy="48" r="3" fill="#2563eb" opacity="0.6"/>
+  </g>
+</svg>

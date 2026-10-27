@@ -4,6 +4,7 @@ description: "Kenalan dengan bahan di balik seluruh elektronika modern -- semiko
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/semikonduktor-dan-dioda.svg
 pubDate: 2026-09-14
 tags: ["Sistem Elektronika", "Semikonduktor", "Dioda", "Fisika Kelas XII"]
 simulasi:

@@ -4,6 +4,7 @@ description: "Kenalan sama Hukum Coulomb -- rumus, arah gaya, prinsip superposis
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/hukum-coulomb.svg
 pubDate: 2026-08-26
 tags: ["Hukum Coulomb", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
 simulasi:

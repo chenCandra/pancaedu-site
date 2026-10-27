@@ -1,5 +1,6 @@
 ---
 title: "Resonansi dan Pelayangan Bunyi"
+coverImage: /covers/resonansi-dan-pelayangan-bunyi.svg
 description: "Kenapa alat musik tiup punya panjang kolom udara yang berbeda-beda untuk menghasilkan nada berbeda? Dan kenapa dua gitar yang hampir sama nadanya bisa menghasilkan bunyi 'wow-wow-wow'? Belajar resonansi pipa organa dan pelayangan bunyi."
 category: materi
 mapel: Fisika

@@ -1,5 +1,6 @@
 ---
 title: "Massa Jenis dan Tekanan Hidrostatis"
+coverImage: /covers/fluida-dan-massa-jenis.svg
 description: "Pengertian massa jenis dan kaitannya dengan terapung-melayang-tenggelam, ditambah tekanan hidrostatis (P = ρgh) yang bikin telinga terasa sakit saat menyelam makin dalam."
 category: materi
 mapel: "Fisika"

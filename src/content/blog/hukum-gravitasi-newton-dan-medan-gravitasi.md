@@ -4,6 +4,7 @@ description: "Kenapa Bulan tidak jatuh ke Bumi, padahal ditarik gravitasi Bumi t
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/hukum-gravitasi-newton-dan-medan-gravitasi.svg
 pubDate: 2026-09-30
 tags: ["Gravitasi", "Medan Gravitasi", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:

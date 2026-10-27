@@ -4,6 +4,7 @@ description: "Kenapa air mendidih suhunya tidak naik terus meski terus dipanaska
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/kalor-perubahan-wujud-dan-asas-black.svg
 pubDate: 2026-10-24
 tags: ["Kalor", "Kalor Laten", "Asas Black", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

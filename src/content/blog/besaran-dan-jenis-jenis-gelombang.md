@@ -1,5 +1,6 @@
 ---
 title: "Besaran dan Jenis-jenis Gelombang"
+coverImage: /covers/besaran-dan-jenis-jenis-gelombang.svg
 description: "Kenapa gelombang tali bergetar naik-turun tegak lurus arah rambatnya, sementara gelombang bunyi bergetar maju-mundur SEARAH rambatnya? Belajar besaran-besaran gelombang dan dua cara mengklasifikasikannya."
 category: materi
 mapel: Fisika

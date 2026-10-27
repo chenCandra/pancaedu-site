@@ -4,6 +4,7 @@ description: "Hubungan tegangan, arus, dan hambatan (Hukum Ohm), cara memasang a
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/hukum-ohm-dan-rangkaian-sederhana.svg
 pubDate: 2026-09-14
 tags: ["Listrik Dinamis", "Hukum Ohm", "Fisika Kelas XII", "Rangkaian Listrik"]
 simulasi:

@@ -4,6 +4,7 @@ description: "Kenapa planet yang lebih jauh dari Matahari butuh waktu jauh lebih
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/hukum-kepler-dan-gerak-satelit.svg
 pubDate: 2026-10-02
 tags: ["Hukum Kepler", "Gerak Satelit", "Orbit", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:

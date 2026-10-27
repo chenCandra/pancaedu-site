@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-10-12
+coverImage: /covers/momen-gaya-torsi-dan-momen-inersia.svg
 tags: ["Momen Gaya", "Torsi", "Momen Inersia", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/torsi-dan-dinamika-rotasi.html"

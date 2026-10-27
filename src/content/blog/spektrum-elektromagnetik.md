@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Gelombang Elektromagnetik", "Spektrum Elektromagnetik", "Fenomena Elektromagnetik", "Fisika Kelas XII"]
+coverImage: /covers/spektrum-elektromagnetik.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/spektrum-elektromagnetik.html"
   judul: "Laboratorium Maya: Spektrum Elektromagnetik"

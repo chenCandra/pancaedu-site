@@ -4,6 +4,7 @@ description: "Cara komputer 'membaca' angka -- kenalan dengan sistem bilangan bi
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/bilangan-biner.svg
 pubDate: 2026-09-14
 tags: ["Bilangan Biner", "Sistem Digital", "Konversi Biner Desimal", "Fisika Kelas XII"]
 simulasi:

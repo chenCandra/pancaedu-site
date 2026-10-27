@@ -1,5 +1,6 @@
 ---
 title: "Asas Kontinuitas dan Debit Aliran"
+coverImage: /covers/asas-kontinuitas-dan-debit-aliran.svg
 description: "Kenapa air menyembur lebih deras saat ujung selang ditekan dengan ibu jari? Jawabannya ada di Asas Kontinuitas -- aturan dasar Fluida Dinamis."
 category: materi
 mapel: "Fisika"

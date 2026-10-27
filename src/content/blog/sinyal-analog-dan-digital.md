@@ -4,6 +4,7 @@ description: "Kenapa dunia elektronika modern beralih dari analog ke digital? Ba
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/sinyal-analog-dan-digital.svg
 pubDate: 2026-09-14
 tags: ["Sinyal Digital", "Sinyal Analog", "Sistem Elektronika", "Fisika Kelas XII"]
 simulasi:

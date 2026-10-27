@@ -1,5 +1,6 @@
 ---
 title: "Karakteristik dan Cepat Rambat Bunyi"
+coverImage: /covers/karakteristik-dan-cepat-rambat-bunyi.svg
 description: "Kenapa bunyi terdengar lebih cepat sampai di telinga saat udara panas dibanding dingin? Belajar karakteristik bunyi (nada, desah, kuat-lemah), klasifikasi audiosonik-infrasonik-ultrasonik, dan cepat rambat bunyi di udara."
 category: materi
 mapel: Fisika

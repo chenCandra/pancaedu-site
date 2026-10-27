@@ -1,5 +1,6 @@
 ---
 title: "Asas Bernoulli dan Penerapannya"
+coverImage: /covers/asas-bernoulli-dan-penerapannya.svg
 description: "Rahasia di balik gaya angkat sayap pesawat, penyemprot parfum, dan karburator -- semua memanfaatkan satu prinsip: aliran cepat, tekanan rendah."
 category: materi
 mapel: "Fisika"

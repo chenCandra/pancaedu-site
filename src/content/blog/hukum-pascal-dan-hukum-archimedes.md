@@ -1,5 +1,6 @@
 ---
 title: "Hukum Pascal dan Hukum Archimedes"
+coverImage: /covers/hukum-pascal-dan-hukum-archimedes.svg
 description: "Kenapa dongkrak hidrolik bisa mengangkat mobil seberat 1 ton dengan tenaga tangan, dan kenapa kapal besi yang berat bisa mengapung -- dua hukum fluida statis paling terkenal."
 category: materi
 mapel: "Fisika"

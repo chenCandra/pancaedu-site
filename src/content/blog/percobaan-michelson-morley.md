@@ -7,6 +7,7 @@ kelas: XII
 pubDate: 2024-01-11
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Michelson-Morley", "Fisika Kelas XII"]
+coverImage: /covers/percobaan-michelson-morley.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/percobaan-michelson-morley.html"
   judul: "Laboratorium Maya: Percobaan Michelson-Morley"

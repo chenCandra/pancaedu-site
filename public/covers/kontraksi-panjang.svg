@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bgTint3" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fbfbff"/>
+      <stop offset="1" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <radialGradient id="blobG3" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rocketG3a" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="rocketG3b" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fb923c"/>
+      <stop offset="1" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint3)"/>
+  <circle cx="545" cy="80" r="190" fill="url(#blobG3)"/>
+  <circle cx="80" cy="330" r="140" fill="url(#blobG3)"/>
+  <rect width="640" height="360" fill="none" stroke="#c7d2fe" stroke-width="2"/>
+
+  <!-- dot texture -->
+  <g fill="#6366f1" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
+  </g>
+
+  <!-- brand mark, top-left -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#c7d2fe" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
+
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="493" y="32" text-anchor="middle" fill="#3730a3">Fisika</text>
+    <rect x="532" y="16" width="80" height="24" rx="12" fill="#ede9fe"/>
+    <text x="572" y="32" text-anchor="middle" fill="#5b21b6">Kelas XII</text>
+  </g>
+
+  <!-- eyebrow pill -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="176" height="24" rx="12" fill="#6366f1"/>
+    <text x="116" y="84.5" text-anchor="middle" fill="#ffffff">FISIKA MODERN</text>
+  </g>
+
+  <!-- title -->
+  <text x="26" y="140" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#1b2340">Kontraksi Panjang</text>
+  <text x="26" y="172" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#4338ca">Benda Bergerak Terlihat Lebih Pendek</text>
+
+  <!-- mini badge chips: L=L0/gamma / Memendek / v mendekati c -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,208)">
+      <circle cx="26" cy="26" r="26" fill="#dbeafe"/>
+      <text x="26" y="31" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e3a8a">L=L0/&#947;</text>
+      <text x="26" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#1e3a8a">L=L0/&#947;</text>
+    </g>
+    <g transform="translate(104,208)">
+      <circle cx="26" cy="26" r="26" fill="#ffedd5"/>
+      <path d="M14 26 L38 26" stroke="#ea580c" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M18 20 L14 26 L18 32" stroke="#ea580c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M34 20 L38 26 L34 32" stroke="#ea580c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <text x="26" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#9a3412">Memendek</text>
+    </g>
+    <g transform="translate(182,208)">
+      <circle cx="26" cy="26" r="26" fill="#fef3c7"/>
+      <text x="26" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">v &#8776; c</text>
+      <path d="M14 36 L38 36" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+      <path d="M33 32 L38 36 L33 40" stroke="#d97706" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="26" y="66" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400e">v mendekati c</text>
+    </g>
+  </g>
+
+  <!-- hero illustration: rocket normal vs compressed, observer marker -->
+  <g transform="translate(372,112)">
+    <ellipse cx="118" cy="196" rx="150" ry="16" fill="#1b2340" opacity="0.08"/>
+
+    <!-- normal-length rocket, at rest, top -->
+    <g transform="translate(20,55)">
+      <rect x="0" y="0" width="150" height="26" rx="13" fill="url(#rocketG3a)"/>
+      <path d="M150 0 L172 13 L150 26 Z" fill="#1d4ed8"/>
+      <circle cx="30" cy="13" r="6" fill="#dbeafe"/>
+      <circle cx="54" cy="13" r="6" fill="#dbeafe"/>
+      <circle cx="78" cy="13" r="6" fill="#dbeafe"/>
+      <path d="M0 2 L-14 -8 L0 6 Z" fill="#1d4ed8"/>
+      <path d="M0 24 L-14 34 L0 20 Z" fill="#1d4ed8"/>
+      <text x="75" y="46" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">Diam (L&#8320;)</text>
+    </g>
+
+    <!-- compressed rocket, "moving", bottom -->
+    <g transform="translate(55,150)">
+      <rect x="0" y="0" width="92" height="26" rx="13" fill="url(#rocketG3b)"/>
+      <path d="M92 0 L108 13 L92 26 Z" fill="#c2410c"/>
+      <circle cx="22" cy="13" r="5.5" fill="#ffedd5"/>
+      <circle cx="40" cy="13" r="5.5" fill="#ffedd5"/>
+      <path d="M0 2 L-10 -8 L0 6 Z" fill="#c2410c"/>
+      <path d="M0 24 L-10 34 L0 20 Z" fill="#c2410c"/>
+      <g stroke="#9a3412" stroke-width="1.6" stroke-dasharray="1 4" opacity="0.6">
+        <line x1="108" y1="-10" x2="108" y2="36"/>
+      </g>
+      <text x="46" y="46" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#9a3412">Bergerak (L)</text>
+    </g>
+
+    <!-- observer marker -->
+    <g transform="translate(220,120)">
+      <circle cx="0" cy="0" r="16" fill="#d1fae5"/>
+      <circle cx="0" cy="-2" r="5" fill="#059669"/>
+      <path d="M-7 10 Q0 0 7 10" stroke="#059669" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="0" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#065f46">Pengamat</text>
+    </g>
+
+    <!-- sparkle accents -->
+    <path d="M230 50 l3 7 7 1 -5 5 1 7 -6 -4 -6 4 1 -7 -5 -5 7 -1 z" fill="#fbbf24" opacity="0.9"/>
+    <circle cx="10" cy="130" r="3.5" fill="#14b8a6" opacity="0.7"/>
+    <circle cx="200" cy="30" r="4" fill="#a855f7" opacity="0.7"/>
+  </g>
+</svg>

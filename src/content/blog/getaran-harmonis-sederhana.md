@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-11-03
+coverImage: /covers/getaran-harmonis-sederhana.svg
 tags: ["Getaran Harmonis", "Pegas", "Bandul", "Fisika Kelas XI", "Fase F", "Gelombang"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/getaran-harmonis.html"

@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Medan Magnet", "Elektromagnet", "Fenomena Elektromagnetik", "Fisika Kelas XII"]
+coverImage: /covers/medan-magnet-oleh-arus-listrik.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/medan-magnet.html"
   judul: "Laboratorium Maya: Medan Magnet -- tab Kawat Berarus"

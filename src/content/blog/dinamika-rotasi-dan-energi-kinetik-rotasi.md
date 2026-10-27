@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-10-14
+coverImage: /covers/dinamika-rotasi-dan-energi-kinetik-rotasi.svg
 tags: ["Dinamika Rotasi", "Energi Kinetik Rotasi", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/torsi-dan-dinamika-rotasi.html"

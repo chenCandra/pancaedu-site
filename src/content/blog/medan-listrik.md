@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-08-26
 tags: ["Medan Listrik", "Fisika Kelas XII", "Fase F", "Listrik Statis"]
+coverImage: /covers/medan-listrik.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/medan-listrik.html"
   judul: "Medan Listrik di Sekitar Muatan"

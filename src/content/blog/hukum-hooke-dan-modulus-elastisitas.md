@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-10-18
+coverImage: /covers/hukum-hooke-dan-modulus-elastisitas.svg
 tags: ["Hukum Hooke", "Elastisitas", "Modulus Young", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/hukum-hooke.html"

@@ -1,5 +1,6 @@
 ---
 title: "Intensitas Bunyi dan Efek Doppler"
+coverImage: /covers/intensitas-bunyi-dan-efek-doppler.svg
 description: "Kenapa nada sirine ambulans terdengar lebih tinggi saat mendekat, lalu tiba-tiba turun begitu melewatimu? Belajar intensitas bunyi, taraf intensitas (desibel), dan efek Doppler."
 category: materi
 mapel: Fisika

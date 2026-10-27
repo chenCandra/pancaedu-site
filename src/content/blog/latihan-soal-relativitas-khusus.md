@@ -7,6 +7,7 @@ kelas: XII
 pubDate: 2024-01-15
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Latihan Soal", "Fisika Kelas XII"]
+coverImage: /covers/latihan-soal-relativitas-khusus.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/efek-relativistik.html"
   judul: "Laboratorium Maya: Efek Relativistik (Kalkulator Lengkap)"

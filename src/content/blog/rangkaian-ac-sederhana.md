@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: XII
 pubDate: 2026-09-14
 tags: ["Arus Bolak-Balik", "Reaktansi", "Rangkaian AC", "Fisika Kelas XII"]
+coverImage: /covers/rangkaian-ac-sederhana.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/rangkaian-ac-sederhana.html"
   judul: "Laboratorium Maya: Rangkaian AC Sederhana"

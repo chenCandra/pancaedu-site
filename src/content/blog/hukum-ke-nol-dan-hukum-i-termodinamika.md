@@ -4,6 +4,7 @@ description: "Kenapa termometer bisa dipakai untuk mengukur suhu benda lain? Bel
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/hukum-ke-nol-dan-hukum-i-termodinamika.svg
 pubDate: 2026-10-28
 tags: ["Termodinamika", "Hukum ke-Nol", "Hukum I Termodinamika", "Fisika Kelas XI", "Fase F", "Kalor dan Termodinamika"]
 simulasi:

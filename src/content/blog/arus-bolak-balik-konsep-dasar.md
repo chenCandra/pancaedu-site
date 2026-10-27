@@ -4,6 +4,7 @@ description: "Perbedaan arus bolak-balik (AC) dan arus searah (DC), kenapa listr
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/arus-bolak-balik-konsep-dasar.svg
 pubDate: 2026-09-14
 tags: ["Arus Bolak-Balik", "AC", "Fisika Kelas XII"]
 simulasi:

@@ -4,6 +4,7 @@ description: "Bagaimana miliaran transistor di dalam chip komputer bisa 'berpiki
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/gerbang-logika.svg
 pubDate: 2026-09-14
 tags: ["Gerbang Logika", "Sistem Digital", "Aljabar Boolean", "Fisika Kelas XII"]
 simulasi:

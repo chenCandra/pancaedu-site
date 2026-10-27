@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-10-20
+coverImage: /covers/susunan-pegas-seri-dan-paralel.svg
 tags: ["Pegas Seri Paralel", "Elastisitas", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/susunan-pegas-seri-paralel.html"

@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: XI
 pubDate: 2026-09-26
+coverImage: /covers/hukum-newton-dan-penerapannya.svg
 tags: ["Hukum Newton", "Diagram Bebas Gaya", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/hukum-newton.html"

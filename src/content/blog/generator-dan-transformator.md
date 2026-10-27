@@ -4,6 +4,7 @@ description: "Dua alat yang memanfaatkan induksi elektromagnetik dalam kehidupan
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/generator-dan-transformator.svg
 pubDate: 2026-09-14
 tags: ["Induksi Elektromagnetik", "Generator", "Transformator", "Fisika Kelas XII"]
 simulasi:

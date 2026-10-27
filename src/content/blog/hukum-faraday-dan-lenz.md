@@ -4,6 +4,7 @@ description: "Bagaimana perubahan medan magnet bisa menghasilkan listrik -- GGL 
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/hukum-faraday-dan-lenz.svg
 pubDate: 2026-09-14
 tags: ["Induksi Elektromagnetik", "Hukum Faraday", "Hukum Lenz", "Fisika Kelas XII"]
 simulasi:

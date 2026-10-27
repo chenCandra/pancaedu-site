@@ -4,6 +4,7 @@ description: "Kenapa roller coaster tidak butuh mesin di sepanjang lintasannya, 
 category: materi
 mapel: Fisika
 kelas: XI
+coverImage: /covers/energi-potensial-dan-hukum-kekekalan-energi-mekanik.svg
 pubDate: 2026-10-10
 tags: ["Energi Potensial", "Energi Mekanik", "Kekekalan Energi", "Fisika Kelas XI", "Fase F", "Gerak dan Gaya"]
 simulasi:

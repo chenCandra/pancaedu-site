@@ -4,6 +4,7 @@ description: "Komponen elektronika paling penting di zaman modern -- bagaimana t
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/transistor-saklar-dan-penguat.svg
 pubDate: 2026-09-14
 tags: ["Sistem Elektronika", "Transistor", "IC", "Fisika Kelas XII"]
 simulasi:

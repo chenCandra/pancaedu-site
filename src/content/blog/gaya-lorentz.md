@@ -4,6 +4,7 @@ description: "Gaya yang dialami muatan bergerak dan kawat berarus di dalam medan
 category: materi
 mapel: Fisika
 kelas: XII
+coverImage: /covers/gaya-lorentz.svg
 pubDate: 2026-09-14
 tags: ["Gaya Lorentz", "Medan Magnet", "Fenomena Elektromagnetik", "Fisika Kelas XII"]
 simulasi:

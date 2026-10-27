@@ -7,6 +7,7 @@ kelas: XII
 pubDate: 2024-01-07
 updatedDate: 2026-09-13
 tags: ["Relativitas Khusus", "Fisika Modern", "Fisika Kelas XII"]
+coverImage: /covers/teori-relativitas-khusus.svg
 kuis:
   - soal: "Siapa yang mengemukakan teori relativitas khusus, dan tahun berapa?"
     pilihan: ["Isaac Newton, 1687", "Albert Einstein, 1905", "Albert Einstein, 1921", "Max Planck, 1900"]

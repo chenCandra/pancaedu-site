@@ -1,5 +1,6 @@
 ---
 title: "Gelombang Berjalan dan Gelombang Stasioner"
+coverImage: /covers/gelombang-berjalan-dan-gelombang-stasioner.svg
 description: "Kenapa senar gitar yang dipetik punya titik-titik yang selalu diam (tidak bergetar sama sekali), sementara bagian lainnya bergetar dengan hebat? Belajar gelombang berjalan dan gelombang stasioner -- kunci memahami alat musik dawai."
 category: materi
 mapel: Fisika
