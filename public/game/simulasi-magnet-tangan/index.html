@@ -133,12 +133,13 @@
     <h2>🧲 Simulasi Magnet Tangan</h2>
     <p>
       Game tanpa sentuh: kamera mendeteksi tangan Anda dan mengubahnya
-      menjadi "magnet batang" virtual. <b>Buka telapak tangan</b> = kutub
+      menjadi bola energi berpilin. <b>Buka telapak tangan</b> = kutub
       <span class="north-color" style="font-weight:800;">Utara (U)</span>,
       <b>kepalkan tangan</b> = kutub
       <span class="south-color" style="font-weight:800;">Selatan (S)</span>.
-      Dekatkan / jauhkan tangan dari magnet batang di sisi kiri layar untuk
-      melihat tarik-menarik atau tolak-menolak pada garis gaya magnet.
+      Dekatkan / jauhkan tangan dari bola energi tetap di sisi kiri layar --
+      atau dekatkan dua tangan sekaligus -- untuk melihat garis energi
+      tarik-menarik atau tolak-menolak.
     </p>
     <p style="font-size:13px;">
       Butuh izin kamera dan koneksi internet (memuat model deteksi tangan).
@@ -172,7 +173,7 @@
     <div class="panel" id="legend">
       <div><span class="sw north-color" style="background:var(--north);"></span>Utara (U) — telapak terbuka</div>
       <div><span class="sw south-color" style="background:var(--south);"></span>Selatan (S) — tangan mengepal</div>
-      <div style="margin-top:6px;color:var(--muted);">Magnet batang kiri = referensi tetap (bisa dibalik).</div>
+      <div style="margin-top:6px;color:var(--muted);">Bola energi kiri = referensi tetap (bisa dibalik). Dua tangan juga bisa saling berinteraksi.</div>
     </div>
     <div class="panel" id="status">
       <div>Tangan terdeteksi: <span id="handCountPill" class="pill off">0</span></div>
@@ -274,83 +275,153 @@ function scale(a,s){ return vec(a.x*s, a.y*s); }
 function len(a){ return Math.hypot(a.x,a.y) || 1e-6; }
 function norm(a){ const l = len(a); return vec(a.x/l, a.y/l); }
 
-function makeBarMagnet(center, dir, halfLen, topSign){
-  const top = add(center, scale(dir, halfLen));
-  const bottom = add(center, scale(dir, -halfLen));
-  return {
-    center, dir, halfLen,
-    poles: [ {pos: top, sign: topSign}, {pos: bottom, sign: -topSign} ]
-  };
+function makeOrb(center, sign, radius){
+  return { center, sign, radius };
 }
 
-function fieldAt(point, magnets){
+function fieldAt(point, orbs){
   let fx = 0, fy = 0;
-  for (const m of magnets){
-    for (const p of m.poles){
-      const d = sub(point, p.pos);
-      const dist = Math.max(len(d), 16);
-      const k = 4200 * p.sign / (dist*dist);
-      const u = norm(d);
-      fx += u.x * k;
-      fy += u.y * k;
-    }
+  for (const o of orbs){
+    const d = sub(point, o.center);
+    const dist = Math.max(len(d), 18);
+    const k = 5200 * o.sign / (dist*dist);
+    const u = norm(d);
+    fx += u.x * k;
+    fy += u.y * k;
   }
   return {x:fx, y:fy};
 }
 
-function nearestPoleInteraction(m1, m2){
-  let best = null;
-  for (const p1 of m1.poles){
-    for (const p2 of m2.poles){
-      const d = len(sub(p2.pos, p1.pos));
-      if (!best || d < best.d) best = { d, sign1: p1.sign, sign2: p2.sign };
-    }
-  }
-  return best;
+function pairResult(a, b){
+  return { d: len(sub(b.center, a.center)), attract: a.sign !== b.sign };
 }
+
+function pseudoRandom(n){
+  const x = Math.sin(n*12.9898)*43758.5453;
+  return x - Math.floor(x);
+}
+function quadBezier(p0,p1,p2,t){ return (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2; }
+function colorStr(sign,a){ return sign>0 ? `rgba(239,68,68,${a})` : `rgba(59,130,246,${a})`; }
 
 // ---------- Loop utama ----------
 let lastT = performance.now();
 let fpsSmoothed = 0;
 
-function drawBarMagnet(m){
-  const topColor = m.poles[0].sign > 0 ? '#ef4444' : '#3b82f6';
-  const botColor = m.poles[0].sign > 0 ? '#3b82f6' : '#ef4444';
-  const thickness = Math.max(16, m.halfLen*0.45);
+// Bola energi berpilin (gaya "rasengan") -- U/S tetap ditandai lewat warna
+// (merah=Utara, biru=Selatan) & label huruf, konsep kutubnya tidak berubah.
+function drawEnergyOrb(orb, t){
+  const { center, sign, radius } = orb;
+  const [r,g,b] = sign > 0 ? [239,68,68] : [59,130,246];
+  const rh = Math.min(255,r+70), gh = Math.min(255,g+70), bh = Math.min(255,b+70);
 
   ctx.save();
-  ctx.translate(m.center.x, m.center.y);
-  const angle = Math.atan2(m.dir.y, m.dir.x) - Math.PI/2;
-  ctx.rotate(angle);
+  ctx.globalCompositeOperation = 'lighter';
 
-  const w = thickness, h = m.halfLen*2;
-  const grad = ctx.createLinearGradient(0, -h/2, 0, h/2);
-  grad.addColorStop(0, topColor);
-  grad.addColorStop(0.5, '#111827');
-  grad.addColorStop(1, botColor);
-  ctx.fillStyle = grad;
-  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
-  ctx.lineWidth = 2;
-  roundRect(-w/2, -h/2, w, h, 8);
-  ctx.fill(); ctx.stroke();
+  const halo = ctx.createRadialGradient(center.x,center.y,0, center.x,center.y, radius*2.1);
+  halo.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
+  halo.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  ctx.fillStyle = halo;
+  ctx.beginPath(); ctx.arc(center.x,center.y,radius*2.1,0,Math.PI*2); ctx.fill();
 
+  for (let i=0;i<3;i++){
+    ctx.save();
+    ctx.translate(center.x, center.y);
+    ctx.rotate(t*(0.0014+i*0.0005) + i*2.1);
+    ctx.scale(1, 0.4 + i*0.09);
+    const band = ctx.createRadialGradient(0,0,radius*0.2,0,0,radius*1.05);
+    band.addColorStop(0, `rgba(${r},${g},${b},0)`);
+    band.addColorStop(0.65, `rgba(${rh},${gh},${bh},0.5)`);
+    band.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    ctx.strokeStyle = band;
+    ctx.lineWidth = radius*0.22;
+    ctx.beginPath();
+    ctx.arc(0,0,radius*0.85,0,Math.PI*1.5);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  for (let i=0;i<6;i++){
+    const ang = t*0.0028 + i*(Math.PI*2/6);
+    const rr = radius*0.92 + Math.sin(t*0.004+i)*radius*0.08;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath();
+    ctx.arc(center.x + Math.cos(ang)*rr, center.y + Math.sin(ang)*rr, Math.max(1.5, radius*0.05), 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  const core = ctx.createRadialGradient(center.x,center.y,0, center.x,center.y, radius*0.5);
+  core.addColorStop(0, 'rgba(255,255,255,0.95)');
+  core.addColorStop(0.35, `rgba(${rh},${gh},${bh},0.9)`);
+  core.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  ctx.fillStyle = core;
+  ctx.beginPath(); ctx.arc(center.x,center.y,radius*0.5,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  ctx.save();
   ctx.fillStyle = '#fff';
-  ctx.font = `800 ${Math.max(14, thickness*0.8)}px Arial`;
+  ctx.font = `800 ${Math.max(14, radius*0.42)}px Arial`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(m.poles[0].sign > 0 ? 'U' : 'S', 0, -h/2 + thickness*0.65);
-  ctx.fillText(m.poles[0].sign > 0 ? 'S' : 'U', 0, h/2 - thickness*0.65);
+  ctx.shadowColor = `rgba(${r},${g},${b},0.9)`;
+  ctx.shadowBlur = 10;
+  ctx.fillText(sign > 0 ? 'U' : 'S', center.x, center.y);
   ctx.restore();
 }
 
-function roundRect(x,y,w,h,r){
-  ctx.beginPath();
-  ctx.moveTo(x+r,y);
-  ctx.arcTo(x+w,y,x+w,y+h,r);
-  ctx.arcTo(x+w,y+h,x,y+h,r);
-  ctx.arcTo(x,y+h,x,y,r);
-  ctx.arcTo(x,y,x+w,y,r);
-  ctx.closePath();
+// Garis energi dinamis antar dua bola -- mengalir & berpadu kalau tarik-menarik,
+// jadi petir patah-patah kalau tolak-menolak. seedKey membedakan tiap pasangan.
+function drawInteractionBeam(a, b, result, t, seedKey){
+  const dx = b.center.x - a.center.x, dy = b.center.y - a.center.y;
+  const dist = Math.hypot(dx,dy) || 1;
+  const nx = -dy/dist, ny = dx/dist;
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+
+  if (result.attract){
+    const strands = 3;
+    for (let i=0;i<strands;i++){
+      const off = (i-(strands-1)/2) * (16 + dist*0.035);
+      const wob = Math.sin(t*0.004 + i*2.3 + seedKey) * (dist*0.07);
+      const midx = (a.center.x+b.center.x)/2 + nx*(off+wob);
+      const midy = (a.center.y+b.center.y)/2 + ny*(off+wob);
+      const grad = ctx.createLinearGradient(a.center.x,a.center.y,b.center.x,b.center.y);
+      grad.addColorStop(0, colorStr(a.sign,0.9));
+      grad.addColorStop(0.5, 'rgba(190,255,215,0.85)');
+      grad.addColorStop(1, colorStr(b.sign,0.9));
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 3.4 - i*0.5;
+      ctx.beginPath();
+      ctx.moveTo(a.center.x,a.center.y);
+      ctx.quadraticCurveTo(midx,midy,b.center.x,b.center.y);
+      ctx.stroke();
+    }
+    const midx = (a.center.x+b.center.x)/2 + nx*Math.sin(t*0.004+seedKey)*(dist*0.07);
+    const midy = (a.center.y+b.center.y)/2 + ny*Math.sin(t*0.004+seedKey)*(dist*0.07);
+    for (let i=0;i<5;i++){
+      const tt = (t*0.0007 + i/5) % 1;
+      const px = quadBezier(a.center.x, midx, b.center.x, tt);
+      const py = quadBezier(a.center.y, midy, b.center.y, tt);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath(); ctx.arc(px,py,2.8,0,Math.PI*2); ctx.fill();
+    }
+  } else {
+    const segs = 7;
+    const jitterSeed = Math.floor(t/90) + seedKey*97;
+    ctx.strokeStyle = 'rgba(255,140,60,0.9)';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.moveTo(a.center.x,a.center.y);
+    for (let i=1;i<segs;i++){
+      const tt = i/segs;
+      const bx = a.center.x + dx*tt, by = a.center.y + dy*tt;
+      const j = pseudoRandom(jitterSeed+i) * (dist*0.09) - (dist*0.045);
+      ctx.lineTo(bx + nx*j, by + ny*j);
+    }
+    ctx.lineTo(b.center.x,b.center.y);
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 function handOpenness(lm){
@@ -382,75 +453,86 @@ function loop(){
   handCountPill.textContent = handsLm.length;
   handCountPill.className = 'pill ' + (handsLm.length ? 'ok' : 'off');
 
-  // Magnet tetap, tampak di kiri layar (posisi di-balik karena seluruh
+  // Bola energi tetap, tampak di kiri layar (posisi di-balik karena seluruh
   // canvas+video di-mirror lewat CSS scaleX(-1) untuk efek cermin)
-  const fixed = makeBarMagnet(
-    vec(W*0.84, H*0.5),
-    vec(0,1),
-    Math.min(H*0.17, 110),
-    fixedPolarity
-  );
+  const fixed = makeOrb(vec(W*0.84, H*0.5), fixedPolarity, Math.min(H*0.16, 90));
+  fixed.label = 'Magnet Tetap';
 
-  const handMagnets = handsLm.map(lm => {
+  const handOrbs = handsLm.map((lm, idx) => {
     const toPx = p => vec(p.x*W, p.y*H);
     const wrist = toPx(lm[0]);
     const midMcp = toPx(lm[9]);
     const midTip = toPx(lm[12]);
-    const center = midMcp;
     const dir = norm(sub(midTip, wrist));
     const handSize = len(sub(midMcp, wrist));
-    const halfLen = Math.max(28, Math.min(70, handSize*0.9));
+    const radius = Math.max(34, Math.min(85, handSize*0.62));
+    const center = add(midMcp, scale(dir, handSize*0.4));
     const openness = handOpenness(lm);
-    const topSign = openness > 1.55 ? 1 : -1; // terbuka=Utara, mengepal=Selatan
-    return { magnet: makeBarMagnet(center, dir, halfLen, topSign), openness };
+    const sign = openness > 1.55 ? 1 : -1; // terbuka=Utara, mengepal=Selatan
+    const orb = makeOrb(center, sign, radius);
+    orb.label = idx === 0 ? 'Tangan' : 'Tangan 2';
+    return { orb, openness };
   });
 
-  const allMagnets = [fixed, ...handMagnets.map(h => h.magnet)];
+  const allOrbs = [fixed, ...handOrbs.map(h => h.orb)];
 
-  // Garis gaya (jarum kompas kecil)
+  // Medan latar (jarum kompas kecil, dibuat lebih halus biar bola energi
+  // tetap jadi fokus utama)
   if (showGrid){
-    const cell = 26;
+    const cell = 34;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
     for (let y = cell/2; y < H; y += cell){
       for (let x = cell/2; x < W; x += cell){
-        const f = fieldAt(vec(x,y), allMagnets);
-        const mag = Math.min(1, len(f)/420);
-        if (mag < 0.04) continue;
+        const f = fieldAt(vec(x,y), allOrbs);
+        const mag = Math.min(1, len(f)/460);
+        if (mag < 0.05) continue;
         const ang = Math.atan2(f.y, f.x);
-        const L = 5 + mag*11;
+        const L = 4 + mag*9;
         const r = Math.round(90 + mag*165);
-        const g = Math.round(100 + mag*40);
-        const b = Math.round(150 - mag*110);
-        ctx.strokeStyle = `rgba(${r},${g},${b},${0.35+mag*0.55})`;
-        ctx.lineWidth = 2;
+        const g = Math.round(90 + mag*60);
+        const b = Math.round(160 - mag*60);
+        ctx.strokeStyle = `rgba(${r},${g},${b},${0.2+mag*0.35})`;
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.moveTo(x - Math.cos(ang)*L, y - Math.sin(ang)*L);
         ctx.lineTo(x + Math.cos(ang)*L, y + Math.sin(ang)*L);
         ctx.stroke();
-        ctx.fillStyle = ctx.strokeStyle;
-        ctx.beginPath();
-        ctx.arc(x + Math.cos(ang)*L, y + Math.sin(ang)*L, 2, 0, Math.PI*2);
-        ctx.fill();
       }
     }
+    ctx.restore();
   }
 
-  drawBarMagnet(fixed);
-  for (const h of handMagnets) drawBarMagnet(h.magnet);
+  // Garis energi antar semua pasangan bola yang cukup dekat (tangan-tangan
+  // maupun tangan-magnet tetap), digambar sebelum bola supaya bola di atas.
+  const RANGE = 460;
+  const pairs = [];
+  for (let i=0;i<allOrbs.length;i++){
+    for (let j=i+1;j<allOrbs.length;j++){
+      const result = pairResult(allOrbs[i], allOrbs[j]);
+      if (result.d <= RANGE) pairs.push({ a: allOrbs[i], b: allOrbs[j], result, seed: i*13+j });
+    }
+  }
+  for (const p of pairs) drawInteractionBeam(p.a, p.b, p.result, now, p.seed);
 
-  // Teks interaksi
-  if (handMagnets.length === 0){
+  for (const o of allOrbs) drawEnergyOrb(o, now);
+
+  // Teks interaksi -- ambil pasangan terdekat sebagai sorotan utama
+  if (handOrbs.length === 0){
     interactionText.innerHTML = 'Gerakkan tangan ke kamera…';
+  } else if (pairs.length === 0){
+    const openLabel = handOrbs[0].openness > 1.55 ? 'Utara (terbuka)' : 'Selatan (mengepal)';
+    interactionText.innerHTML = `Tangan: <b>${openLabel}</b><br>Dekatkan ke bola energi lain`;
   } else {
-    const info = nearestPoleInteraction(fixed, handMagnets[0].magnet);
-    const attract = info.sign1 !== info.sign2;
-    const distLabel = info.d < 140 ? 'dekat' : (info.d < 320 ? 'sedang' : 'jauh');
-    const openLabel = handMagnets[0].openness > 1.55 ? 'Utara (terbuka)' : 'Selatan (mengepal)';
-    if (info.d > 480){
-      interactionText.innerHTML = `Tangan: <b>${openLabel}</b><br>Dekatkan ke magnet tetap`;
-    } else if (attract){
-      interactionText.innerHTML = `Tangan: <b>${openLabel}</b><br><span style="color:var(--ok)">🧲 Tarik-menarik</span> (${distLabel}, kutub berlawanan)`;
+    pairs.sort((p1,p2) => p1.result.d - p2.result.d);
+    const nearest = pairs[0];
+    const bothHands = nearest.a !== fixed && nearest.b !== fixed;
+    const pairLabel = bothHands ? 'Tangan ↔ Tangan' : 'Tangan ↔ Magnet Tetap';
+    const distLabel = nearest.result.d < 140 ? 'dekat' : (nearest.result.d < 320 ? 'sedang' : 'jauh');
+    if (nearest.result.attract){
+      interactionText.innerHTML = `${pairLabel}<br><span style="color:var(--ok)">🧲 Tarik-menarik</span> (${distLabel}, kutub berlawanan)`;
     } else {
-      interactionText.innerHTML = `Tangan: <b>${openLabel}</b><br><span style="color:var(--warn)">🚫 Tolak-menolak</span> (${distLabel}, kutub sama)`;
+      interactionText.innerHTML = `${pairLabel}<br><span style="color:var(--warn)">🚫 Tolak-menolak</span> (${distLabel}, kutub sama)`;
     }
   }
 
