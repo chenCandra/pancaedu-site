@@ -54,5 +54,19 @@
     "ikon": "💥",
     "status": "Baru",
     "path": "/game/perang-cacing/"
+  },
+  {
+    "id": "simulasi-magnet-tangan",
+    "judul": "Simulasi Magnet Tangan",
+    "deskripsi": "Tanpa sentuh layar sama sekali -- cukup lambaikan tangan di depan kamera. Buka telapak jadi kutub Utara, kepalkan jadi kutub Selatan, lalu lihat garis gaya magnet berubah saat kamu dekatkan atau jauhkan tangan dari magnet batang di layar.",
+    "mapel": "Fisika",
+    "materi": "Medan Magnet",
+    "kelas": "SMA Kelas XII",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "pink",
+    "ikon": "🧲",
+    "status": "Uji Coba",
+    "path": "/game/simulasi-magnet-tangan/"
   }
 ]
