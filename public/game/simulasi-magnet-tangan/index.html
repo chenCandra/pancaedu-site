@@ -110,13 +110,23 @@
   #errBox{ margin-top:14px; color:#fca5a5; font-size:14px; display:none; white-space:pre-wrap; }
   #loadingLine{ margin-top:14px; color:var(--accent); font-size:14px; display:none; }
 
-  #toolbar{ pointer-events:auto; display:flex; gap:10px; }
+  #toolbar{ pointer-events:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
   .btn-sm{
     background:#13203f; color:var(--text); border:1px solid var(--line);
     border-radius:10px; padding:8px 14px; font-size:13px; font-weight:700;
     cursor:pointer;
   }
   .btn-sm:hover{ background:#1b2d57; }
+
+  #strengthBox{
+    display:flex; align-items:center; gap:8px;
+    background:#13203f; border:1px solid var(--line); border-radius:10px;
+    padding:7px 14px; font-size:13px; font-weight:700;
+  }
+  #strengthBox input[type="range"]{
+    width:110px; accent-color: var(--accent);
+  }
+  #strengthValue{ color:var(--accent); min-width:34px; display:inline-block; }
 
   #disclaimer{
     position:fixed; bottom:8px; left:0; right:0; text-align:center;
@@ -164,6 +174,11 @@
       <p class="sub">Uji coba · Arena Game Edukasi PancaEdu</p>
     </div>
     <div id="toolbar">
+      <label id="strengthBox">
+        Kekuatan Magnet
+        <input type="range" id="strengthSlider" min="0.5" max="2.5" step="0.1" value="1">
+        <span id="strengthValue">1.0x</span>
+      </label>
       <button class="btn-sm" id="toggleGridBtn">Sembunyikan garis gaya</button>
     </div>
   </div>
@@ -198,12 +213,19 @@ const handCountPill = document.getElementById('handCountPill');
 const interactionText = document.getElementById('interactionText');
 const fpsLabel = document.getElementById('fps');
 const toggleGridBtn = document.getElementById('toggleGridBtn');
+const strengthSlider = document.getElementById('strengthSlider');
+const strengthValue = document.getElementById('strengthValue');
 
 let showGrid = true;
+let magnetStrength = 1;
 
 toggleGridBtn.addEventListener('click', () => {
   showGrid = !showGrid;
   toggleGridBtn.textContent = showGrid ? 'Sembunyikan garis gaya' : 'Tampilkan garis gaya';
+});
+strengthSlider.addEventListener('input', () => {
+  magnetStrength = parseFloat(strengthSlider.value);
+  strengthValue.textContent = magnetStrength.toFixed(1) + 'x';
 });
 
 function showError(msg){
@@ -280,7 +302,7 @@ function fieldAt(point, orbs){
   for (const o of orbs){
     const d = sub(point, o.center);
     const dist = Math.max(len(d), 18);
-    const k = 5200 * o.sign / (dist*dist);
+    const k = 5200 * magnetStrength * o.sign / (dist*dist);
     const u = norm(d);
     fx += u.x * k;
     fy += u.y * k;
@@ -371,6 +393,7 @@ function drawInteractionBeam(a, b, result, t, seedKey){
   const dist = Math.hypot(dx,dy) || 1;
   const nx = -dy/dist, ny = dx/dist;
   const baseMidX = (a.center.x+b.center.x)/2, baseMidY = (a.center.y+b.center.y)/2;
+  const sFactor = 0.7 + 0.3*magnetStrength; // efek visual ikut skala kekuatan magnet
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
@@ -388,7 +411,7 @@ function drawInteractionBeam(a, b, result, t, seedKey){
       grad.addColorStop(0.5, 'rgba(190,255,215,0.85)');
       grad.addColorStop(1, colorStr(b.sign,0.9));
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 3.4 - i*0.5;
+      ctx.lineWidth = (3.4 - i*0.5) * sFactor;
       ctx.beginPath();
       ctx.moveTo(a.center.x,a.center.y);
       ctx.quadraticCurveTo(midx,midy,b.center.x,b.center.y);
@@ -409,7 +432,7 @@ function drawInteractionBeam(a, b, result, t, seedKey){
     for (let i=0;i<vortexCount;i++){
       const cyc = (t*0.0012 + i/vortexCount) % 1;
       const ang = cyc*Math.PI*6 + seedKey;
-      const rr = (1-cyc) * Math.min(dist*0.18, 46);
+      const rr = (1-cyc) * Math.min(dist*0.18, 46*sFactor);
       ctx.fillStyle = `rgba(200,255,220,${0.15 + (1-cyc)*0.6})`;
       ctx.beginPath();
       ctx.arc(baseMidX + Math.cos(ang)*rr, baseMidY + Math.sin(ang)*rr, 1.6 + (1-cyc)*2, 0, Math.PI*2);
@@ -418,11 +441,11 @@ function drawInteractionBeam(a, b, result, t, seedKey){
     const pulse = 0.5 + Math.sin(t*0.006+seedKey)*0.5;
     ctx.strokeStyle = `rgba(190,255,215,${0.35+pulse*0.35})`;
     ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(baseMidX, baseMidY, 14+pulse*10, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(baseMidX, baseMidY, (14+pulse*10)*sFactor, 0, Math.PI*2); ctx.stroke();
 
     ctx.save();
     ctx.globalCompositeOperation = 'source-over';
-    ctx.font = `${16+pulse*4}px Arial`;
+    ctx.font = `${(16+pulse*4)*sFactor}px Arial`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(34,197,94,0.9)'; ctx.shadowBlur = 8;
     ctx.fillText('🧲', baseMidX, baseMidY);
@@ -432,7 +455,7 @@ function drawInteractionBeam(a, b, result, t, seedKey){
     const segs = 7;
     const jitterSeed = Math.floor(t/90) + seedKey*97;
     ctx.strokeStyle = 'rgba(255,140,60,0.9)';
-    ctx.lineWidth = 2.6;
+    ctx.lineWidth = 2.6 * sFactor;
     ctx.beginPath();
     ctx.moveTo(a.center.x,a.center.y);
     for (let i=1;i<segs;i++){
@@ -445,26 +468,47 @@ function drawInteractionBeam(a, b, result, t, seedKey){
     ctx.stroke();
 
     // Gelombang kejut melebar dari titik tengah -- kesan "saling mendorong"
+    const shockCycle = (t*0.0015) % 1;
     for (let i=0;i<2;i++){
       const cyc = (t*0.0015 + i*0.5) % 1;
-      const rr = cyc * Math.min(dist*0.4, 70);
+      const rr = cyc * Math.min(dist*0.4, 70*sFactor);
       ctx.strokeStyle = `rgba(255,140,60,${(1-cyc)*0.55})`;
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2.2 * sFactor;
       ctx.beginPath(); ctx.arc(baseMidX, baseMidY, rr, 0, Math.PI*2); ctx.stroke();
     }
-    for (let i=0;i<4;i++){
-      const ang = pseudoRandom(jitterSeed*3+i)*Math.PI*2;
-      const rr = 8 + pseudoRandom(jitterSeed*5+i)*18;
-      ctx.fillStyle = 'rgba(255,200,120,0.85)';
+
+    // "Letusan" -- percikan meledak keluar dari titik tengah, berdenyut
+    // mengikuti siklus gelombang kejut
+    const burstCount = 14;
+    for (let i=0;i<burstCount;i++){
+      const ang = pseudoRandom(seedKey*31+i) * Math.PI*2;
+      const speedVar = 0.6 + pseudoRandom(seedKey*53+i)*0.7;
+      const cyc = (t*0.0015*speedVar + i/burstCount) % 1;
+      const rr = cyc * Math.min(dist*0.45, 85*sFactor);
+      const alpha = Math.max(0, 1-cyc);
+      const warm = i % 2 === 0 ? '255,190,90' : '255,100,50';
+      ctx.fillStyle = `rgba(${warm},${alpha*0.9})`;
       ctx.beginPath();
-      ctx.arc(baseMidX+Math.cos(ang)*rr, baseMidY+Math.sin(ang)*rr, 1.8, 0, Math.PI*2);
+      ctx.arc(baseMidX+Math.cos(ang)*rr, baseMidY+Math.sin(ang)*rr, (1.6+alpha*2.4)*sFactor, 0, Math.PI*2);
       ctx.fill();
+    }
+
+    // Kilatan terang tiap siklus baru mulai -- kesan letusan "menyala"
+    const flashA = Math.max(0, 1 - shockCycle*7);
+    if (flashA > 0){
+      const flashR = 46*sFactor;
+      const flash = ctx.createRadialGradient(baseMidX,baseMidY,0, baseMidX,baseMidY, flashR);
+      flash.addColorStop(0, `rgba(255,235,180,${flashA*0.9})`);
+      flash.addColorStop(0.5, `rgba(255,150,70,${flashA*0.5})`);
+      flash.addColorStop(1, 'rgba(255,110,40,0)');
+      ctx.fillStyle = flash;
+      ctx.beginPath(); ctx.arc(baseMidX,baseMidY,flashR,0,Math.PI*2); ctx.fill();
     }
 
     ctx.save();
     ctx.globalCompositeOperation = 'source-over';
     const jpulse = 0.5 + Math.sin(t*0.01+seedKey)*0.5;
-    ctx.font = `${16+jpulse*5}px Arial`;
+    ctx.font = `${(16+jpulse*5)*sFactor}px Arial`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(249,115,22,0.9)'; ctx.shadowBlur = 8;
     ctx.fillText('💥', baseMidX, baseMidY);
@@ -502,6 +546,7 @@ function loop(){
   handCountPill.textContent = handsLm.length;
   handCountPill.className = 'pill ' + (handsLm.length ? 'ok' : 'off');
 
+  const orbScale = 0.8 + 0.2*magnetStrength; // bola tampak lebih besar kalau kekuatan dinaikkan
   const handOrbs = handsLm.map((lm, idx) => {
     const toPx = p => vec(p.x*W, p.y*H);
     const wrist = toPx(lm[0]);
@@ -509,7 +554,7 @@ function loop(){
     const midTip = toPx(lm[12]);
     const dir = norm(sub(midTip, wrist));
     const handSize = len(sub(midMcp, wrist));
-    const radius = Math.max(34, Math.min(85, handSize*0.62));
+    const radius = Math.max(34, Math.min(85, handSize*0.62)) * orbScale;
     const center = add(midMcp, scale(dir, handSize*0.4));
     const openness = handOpenness(lm);
     const sign = openness > 1.55 ? 1 : -1; // terbuka=Utara, mengepal=Selatan
@@ -549,7 +594,7 @@ function loop(){
 
   // Garis energi antar semua pasangan tangan yang cukup dekat, digambar
   // sebelum bola supaya bola energinya tampil di atas.
-  const RANGE = 460;
+  const RANGE = Math.min(900, 300 + 260*magnetStrength); // magnet lebih kuat = jangkauan interaksi lebih jauh
   const pairs = [];
   for (let i=0;i<allOrbs.length;i++){
     for (let j=i+1;j<allOrbs.length;j++){
