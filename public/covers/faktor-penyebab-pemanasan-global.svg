@@ -1,82 +1,159 @@
-<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img"
   aria-label="Ilustrasi mobil berasap, cerobong asap pabrik, dan tunggul pohon yang asapnya mengalir ke sebuah awan besar, menggambarkan faktor penyebab pemanasan global">
   <defs>
-    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f59e0b"/>
-      <stop offset="1" stop-color="#b45309"/>
+    <linearGradient id="bgTint" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+    <radialGradient id="blobG" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="carG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f87171"/>
+      <stop offset="1" stop-color="#dc2626"/>
+    </linearGradient>
+    <linearGradient id="factoryG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="cloudG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1f5f9"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4ade80"/>
+      <stop offset="1" stop-color="#15803d"/>
     </linearGradient>
   </defs>
 
-  <rect width="640" height="360" fill="url(#bg3)"/>
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint)"/>
+  <circle cx="540" cy="90" r="190" fill="url(#blobG)"/>
+  <circle cx="90" cy="320" r="140" fill="url(#blobG)"/>
+  <rect width="640" height="360" fill="none" stroke="#fde68a" stroke-width="2"/>
 
-  <!-- dekorasi lembut -->
-  <circle cx="70" cy="70" r="50" fill="#ffffff" opacity="0.08"/>
-  <circle cx="580" cy="300" r="60" fill="#ffffff" opacity="0.08"/>
-
-  <!-- awan besar tujuan asap -->
-  <g fill="#e2e8f0">
-    <ellipse cx="320" cy="95" rx="90" ry="40"/>
-    <ellipse cx="260" cy="85" rx="55" ry="34"/>
-    <ellipse cx="390" cy="88" rx="58" ry="32"/>
-  </g>
-  <g fill="#cbd5e1" opacity="0.7">
-    <ellipse cx="320" cy="110" rx="80" ry="22"/>
+  <!-- dot texture -->
+  <g fill="#f59e0b" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
   </g>
 
-  <!-- tanah -->
-  <path d="M0 300 Q 160 275 330 300 T 640 290 L 640 360 L 0 360 Z" fill="#15803d"/>
-  <path d="M0 320 Q 180 300 340 315 T 640 310 L 640 360 L 0 360 Z" fill="#22c55e"/>
+  <!-- brand mark -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#fde68a" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
 
-  <!-- pabrik kiri -->
-  <g transform="translate(110,230)">
-    <rect x="-55" y="20" width="110" height="60" fill="#94a3b8"/>
-    <rect x="-40" y="-20" width="18" height="40" fill="#64748b"/>
-    <rect x="-10" y="-35" width="18" height="55" fill="#64748b"/>
-    <rect x="-50" y="35" width="16" height="16" fill="#cbd5e1"/>
-    <rect x="-20" y="35" width="16" height="16" fill="#cbd5e1"/>
-    <rect x="10" y="35" width="16" height="16" fill="#cbd5e1"/>
-    <!-- asap -->
-    <g fill="#9ca3af" opacity="0.8">
-      <circle cx="-1" cy="-50" r="12"/>
-      <circle cx="10" cy="-68" r="15"/>
-      <circle cx="4" cy="-90" r="18"/>
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#fde68a"/>
+    <text x="493" y="32" text-anchor="middle" fill="#92400e">Fisika</text>
+    <rect x="532" y="16" width="80" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="572" y="32" text-anchor="middle" fill="#3730a3">Kelas X</text>
+  </g>
+
+  <!-- eyebrow -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="150" height="24" rx="12" fill="#fbbf24"/>
+    <text x="103" y="84.5" text-anchor="middle" fill="#ffffff">LINGKUNGAN</text>
+  </g>
+
+  <!-- title -->
+  <text x="26" y="140" font-family="Arial, sans-serif" font-size="40" font-weight="800" fill="#1b2340">Faktor Penyebab</text>
+  <text x="26" y="172" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#78350f">Apa yang Membuat Bumi Makin Panas?</text>
+
+  <!-- badge chips: Kendaraan / Industri / Deforestasi -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,208)">
+      <circle cx="26" cy="26" r="26" fill="#fee2e2"/>
+      <rect x="12" y="24" width="28" height="10" rx="3" fill="#dc2626"/>
+      <path d="M14 24 Q18 16 26 16 Q34 16 36 24 Z" fill="#dc2626"/>
+      <circle cx="18" cy="35" r="3" fill="#1f2937"/>
+      <circle cx="34" cy="35" r="3" fill="#1f2937"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">Kendaraan</text>
+    </g>
+    <g transform="translate(104,208)">
+      <circle cx="26" cy="26" r="26" fill="#e2e8f0"/>
+      <rect x="14" y="26" width="24" height="12" fill="#64748b"/>
+      <rect x="19" y="14" width="5" height="14" fill="#64748b"/>
+      <rect x="28" y="10" width="5" height="18" fill="#64748b"/>
+      <circle cx="30" cy="8" r="3" fill="#cbd5e1"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Industri</text>
+    </g>
+    <g transform="translate(182,208)">
+      <circle cx="26" cy="26" r="26" fill="#fef3c7"/>
+      <rect x="20" y="24" width="12" height="14" fill="#92400e"/>
+      <ellipse cx="26" cy="24" rx="12" ry="5" fill="#b45309"/>
+      <circle cx="26" cy="24" r="8" fill="none" stroke="#78350f" stroke-width="1.6"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">Deforestasi</text>
     </g>
   </g>
 
-  <!-- mobil tengah -->
-  <g transform="translate(320,275)">
-    <rect x="-55" y="-18" width="110" height="26" rx="8" fill="#ef4444"/>
-    <path d="M-35 -18 Q -20 -40 20 -40 Q 42 -40 48 -18 Z" fill="#ef4444"/>
-    <rect x="-20" y="-34" width="36" height="16" fill="#bfdbfe" opacity="0.9"/>
-    <circle cx="-30" cy="8" r="13" fill="#1f2937"/>
-    <circle cx="30" cy="8" r="13" fill="#1f2937"/>
-    <circle cx="-30" cy="8" r="5" fill="#9ca3af"/>
-    <circle cx="30" cy="8" r="5" fill="#9ca3af"/>
-    <!-- knalpot asap -->
-    <g fill="#9ca3af" opacity="0.8">
-      <circle cx="-72" cy="2" r="8"/>
-      <circle cx="-88" cy="-10" r="11"/>
-      <circle cx="-95" cy="-28" r="13"/>
-    </g>
-  </g>
+  <!-- hero illustration: mobil, pabrik, tunggul -> awan besar -->
+  <g transform="translate(336,96)">
+    <ellipse cx="140" cy="222" rx="160" ry="18" fill="#1b2340" opacity="0.08"/>
 
-  <!-- tunggul pohon kanan -->
-  <g transform="translate(520,268)">
-    <rect x="-16" y="0" width="32" height="30" fill="#92400e"/>
-    <ellipse cx="0" cy="0" rx="20" ry="10" fill="#b45309"/>
-    <circle cx="0" cy="0" r="14" fill="none" stroke="#78350f" stroke-width="2"/>
-    <circle cx="0" cy="0" r="7" fill="none" stroke="#78350f" stroke-width="2"/>
-    <!-- asap halus dari tunggul -->
-    <g fill="#9ca3af" opacity="0.6">
-      <circle cx="4" cy="-22" r="8"/>
-      <circle cx="10" cy="-38" r="10"/>
+    <!-- awan besar tujuan asap -->
+    <g fill="url(#cloudG)">
+      <ellipse cx="150" cy="38" rx="78" ry="34"/>
+      <ellipse cx="98" cy="30" rx="46" ry="28"/>
+      <ellipse cx="206" cy="32" rx="48" ry="26"/>
     </g>
-  </g>
 
-  <!-- rumput kecil -->
-  <g stroke="#15803d" stroke-width="3" stroke-linecap="round" opacity="0.7">
-    <path d="M200 330 q 3 -12 0 -18"/>
-    <path d="M210 332 q 3 -12 0 -18"/>
-    <path d="M430 335 q 3 -12 0 -18"/>
+    <!-- tanah -->
+    <path d="M-30 196 Q 60 176 150 196 T 300 186 L 300 230 L -30 230 Z" fill="url(#landG)"/>
+
+    <!-- pabrik kiri -->
+    <g transform="translate(14,172)">
+      <rect x="-34" y="14" width="70" height="42" fill="url(#factoryG)"/>
+      <rect x="-24" y="-12" width="12" height="26" fill="#94a3b8"/>
+      <rect x="-4" y="-22" width="12" height="36" fill="#94a3b8"/>
+      <rect x="-30" y="24" width="10" height="10" fill="#f1f5f9"/>
+      <rect x="-10" y="24" width="10" height="10" fill="#f1f5f9"/>
+      <g fill="#94a3b8" opacity="0.85">
+        <circle cx="2" cy="-30" r="8"/>
+        <circle cx="10" cy="-44" r="10"/>
+      </g>
+    </g>
+
+    <!-- mobil tengah -->
+    <g transform="translate(150,196)">
+      <rect x="-38" y="-12" width="76" height="18" rx="6" fill="url(#carG)"/>
+      <path d="M-24 -12 Q -14 -28 14 -28 Q 30 -28 34 -12 Z" fill="url(#carG)"/>
+      <rect x="-14" y="-24" width="24" height="11" fill="#bfdbfe" opacity="0.9"/>
+      <circle cx="-20" cy="8" r="9" fill="#1f2937"/>
+      <circle cx="20" cy="8" r="9" fill="#1f2937"/>
+      <g fill="#9ca3af" opacity="0.8">
+        <circle cx="-50" cy="2" r="6"/>
+        <circle cx="-62" cy="-8" r="8"/>
+        <circle cx="-68" cy="-20" r="9"/>
+      </g>
+    </g>
+
+    <!-- tunggul pohon kanan -->
+    <g transform="translate(250,186)">
+      <rect x="-13" y="0" width="26" height="22" fill="#92400e"/>
+      <ellipse cx="0" cy="0" rx="16" ry="8" fill="#b45309"/>
+      <circle cx="0" cy="0" r="10" fill="none" stroke="#78350f" stroke-width="1.6"/>
+      <g fill="#9ca3af" opacity="0.6">
+        <circle cx="4" cy="-18" r="6"/>
+        <circle cx="8" cy="-30" r="7"/>
+      </g>
+    </g>
+
+    <!-- dotted link, purple accent -->
+    <g stroke="#a855f7" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round" opacity="0.5">
+      <path d="M40 150 Q 100 90 130 60" fill="none"/>
+    </g>
+
+    <!-- sparkle + grass accents -->
+    <path d="M30 60 l2.5 5.5 5.5 0.8 -4 4 0.8 5.5 -4.8 -3 -4.8 3 0.8 -5.5 -4 -4 5.5 -0.8 z" fill="#14b8a6" opacity="0.85"/>
+    <circle cx="270" cy="60" r="4" fill="#f97316" opacity="0.7"/>
+    <g stroke="#15803d" stroke-width="3" stroke-linecap="round" opacity="0.7">
+      <path d="M-14 208 q 3 -12 0 -18"/>
+      <path d="M-4 210 q 3 -12 0 -18"/>
+    </g>
   </g>
 </svg>

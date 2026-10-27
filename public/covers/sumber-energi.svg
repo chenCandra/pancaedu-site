@@ -1,52 +1,128 @@
-<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
   <defs>
-    <linearGradient id="bg4" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f59e0b"/>
-      <stop offset="1" stop-color="#b45309"/>
+    <linearGradient id="bgTint4" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+    <radialGradient id="blobG4" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sunG4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fde047"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="waterG4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#0284c7"/>
     </linearGradient>
   </defs>
-  <rect width="640" height="360" fill="url(#bg4)"/>
-  <circle cx="80" cy="60" r="70" fill="#ffffff" opacity="0.07"/>
-  <circle cx="600" cy="300" r="90" fill="#ffffff" opacity="0.06"/>
 
-  <!-- sun -->
-  <g transform="translate(540,70)">
-    <g stroke="#fde047" stroke-width="5" stroke-linecap="round">
-      <line x1="0" y1="-40" x2="0" y2="-30"/>
-      <line x1="-30" y1="-28" x2="-22" y2="-20"/>
-      <line x1="30" y1="-28" x2="22" y2="-20"/>
-      <line x1="-40" y1="0" x2="-30" y2="0"/>
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint4)"/>
+  <circle cx="540" cy="90" r="190" fill="url(#blobG4)"/>
+  <circle cx="90" cy="320" r="140" fill="url(#blobG4)"/>
+  <rect width="640" height="360" fill="none" stroke="#fde68a" stroke-width="2"/>
+
+  <!-- dot texture -->
+  <g fill="#f59e0b" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
+  </g>
+
+  <!-- brand mark -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#fde68a" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
+
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#fde68a"/>
+    <text x="493" y="32" text-anchor="middle" fill="#92400e">Fisika</text>
+    <rect x="532" y="16" width="80" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="572" y="32" text-anchor="middle" fill="#3730a3">Kelas X</text>
+  </g>
+
+  <!-- eyebrow pill -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="163" height="24" rx="12" fill="#fbbf24"/>
+    <text x="109.5" y="84.5" text-anchor="middle" fill="#ffffff">SUMBER ENERGI</text>
+  </g>
+
+  <!-- title -->
+  <text x="26" y="140" font-family="Arial, sans-serif" font-size="40" font-weight="800" fill="#1b2340">Sumber Energi</text>
+  <text x="26" y="172" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#78350f">Terbarukan dan Tak Terbarukan</text>
+
+  <!-- mini badge chips: Surya / Angin / Air -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,208)">
+      <circle cx="26" cy="26" r="26" fill="#fef3c7"/>
+      <g stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round">
+        <line x1="26" y1="6" x2="26" y2="11"/>
+        <line x1="26" y1="41" x2="26" y2="46"/>
+        <line x1="6" y1="26" x2="11" y2="26"/>
+        <line x1="41" y1="26" x2="46" y2="26"/>
+      </g>
+      <circle cx="26" cy="26" r="11" fill="#fbbf24"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">Surya</text>
     </g>
-    <circle r="26" fill="#fde047"/>
+    <g transform="translate(104,208)">
+      <circle cx="26" cy="26" r="26" fill="#e0f2fe"/>
+      <circle cx="26" cy="20" r="3" fill="#0284c7"/>
+      <path d="M26 20 Q40 16 40 26 Q40 34 30 32" stroke="#0369a1" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M26 20 Q14 24 16 32" stroke="#38bdf8" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#075985">Angin</text>
+    </g>
+    <g transform="translate(182,208)">
+      <circle cx="26" cy="26" r="26" fill="#dbeafe"/>
+      <path d="M26 10 C34 20 36 28 26 34 C16 28 18 20 26 10 Z" fill="#0ea5e9"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Air</text>
+    </g>
   </g>
 
-  <!-- rolling hills -->
-  <path d="M0 260 Q100 220 220 250 Q340 280 440 240 Q560 210 640 250 L640 360 L0 360 Z" fill="#16a34a"/>
-  <path d="M0 280 Q120 250 260 275 Q400 300 520 265 Q600 250 640 270 L640 360 L0 360 Z" fill="#15803d"/>
+  <!-- hero illustration: mini landscape, sun + wind turbine + waterfall -->
+  <g>
+    <!-- green ground -->
+    <path d="M340 300 Q420 278 500 298 Q570 316 640 292 L640 360 L340 360 Z" fill="#16a34a"/>
+    <path d="M340 320 Q440 305 540 322 Q590 332 640 312 L640 360 L340 360 Z" fill="#15803d"/>
 
-  <!-- wind turbine -->
-  <g transform="translate(150,190)">
-    <rect x="-5" y="0" width="10" height="100" fill="#f3f4f6"/>
-    <circle r="8" fill="#e5e7eb"/>
-    <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#f9fafb" transform="rotate(0)"/>
-    <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#f3f4f6" transform="rotate(120)"/>
-    <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#e5e7eb" transform="rotate(240)"/>
-  </g>
+    <!-- sun -->
+    <g transform="translate(480,155)">
+      <g stroke="#fbbf24" stroke-width="5" stroke-linecap="round">
+        <line x1="0" y1="-40" x2="0" y2="-30"/>
+        <line x1="28" y1="-28" x2="21" y2="-21"/>
+        <line x1="-28" y1="-28" x2="-21" y2="-21"/>
+        <line x1="40" y1="0" x2="30" y2="0"/>
+      </g>
+      <circle r="30" fill="url(#sunG4)"/>
+      <circle cx="-9" cy="-3" r="3" fill="#78350f"/>
+      <circle cx="9" cy="-3" r="3" fill="#78350f"/>
+      <path d="M-10 9 Q0 17 10 9" stroke="#78350f" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
 
-  <!-- waterfall rock -->
-  <g transform="translate(330,150)">
-    <polygon points="-50,140 -20,20 40,0 70,140" fill="#9ca3af"/>
-    <polygon points="-50,140 -20,20 -5,40 -30,140" fill="#6b7280"/>
-    <path d="M10 10 Q5 60 14 120 Q18 60 22 110 Q26 60 30 130" stroke="#60a5fa" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.9"/>
-    <ellipse cx="18" cy="148" rx="46" ry="14" fill="#38bdf8" opacity="0.8"/>
-  </g>
+    <!-- wind turbine -->
+    <g transform="translate(400,195)">
+      <rect x="-5" y="0" width="10" height="100" fill="#f3f4f6"/>
+      <circle r="8" fill="#e5e7eb"/>
+      <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#f9fafb" transform="rotate(8)"/>
+      <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#f3f4f6" transform="rotate(128)"/>
+      <ellipse cx="0" cy="-34" rx="7" ry="34" fill="#cbd5e1" transform="rotate(248)"/>
+    </g>
 
-  <!-- coal / mountain element -->
-  <g transform="translate(500,150)">
-    <polygon points="-60,150 0,30 60,150" fill="#a8a29e"/>
-    <polygon points="-20,150 0,30 20,150" fill="#78716c" opacity="0.5"/>
-    <circle cx="-70" cy="158" r="14" fill="#1f2937"/>
-    <circle cx="-48" cy="166" r="12" fill="#111827"/>
-    <circle cx="-62" cy="172" r="10" fill="#1f2937"/>
+    <!-- waterfall rock -->
+    <g transform="translate(480,230)">
+      <polygon points="-50,140 -20,20 40,0 70,140" fill="#9ca3af"/>
+      <polygon points="-50,140 -20,20 -5,40 -30,140" fill="#6b7280"/>
+      <path d="M10 10 Q5 60 14 120 Q18 60 22 110 Q26 60 30 130" stroke="url(#waterG4)" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.9"/>
+      <ellipse cx="18" cy="138" rx="42" ry="12" fill="#38bdf8" opacity="0.75"/>
+    </g>
+
+    <!-- sparkle accents, varied colors -->
+    <path d="M605 150 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 z" fill="#a855f7" opacity="0.8"/>
+    <circle cx="375" cy="150" r="3.6" fill="#f472b6" opacity="0.65"/>
+    <circle cx="362" cy="166" r="2.4" fill="#f472b6" opacity="0.55"/>
+    <circle cx="560" cy="110" r="4" fill="#14b8a6" opacity="0.7"/>
   </g>
 </svg>

@@ -1,87 +1,150 @@
-<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img"
   aria-label="Ilustrasi empat ikon musim -- awan hujan, bunga mekar, matahari, dan daun berjatuhan -- tersusun melingkar dengan panah yang menunjukkan pergeseran siklus, menggambarkan perubahan iklim">
   <defs>
-    <linearGradient id="bg7" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f59e0b"/>
-      <stop offset="1" stop-color="#b45309"/>
+    <linearGradient id="bgTint" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+    <radialGradient id="blobG" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rainG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#93c5fd"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="sunG2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fde047"/>
+      <stop offset="1" stop-color="#f59e0b"/>
     </linearGradient>
   </defs>
 
-  <rect width="640" height="360" fill="url(#bg7)"/>
+  <!-- base card -->
+  <rect width="640" height="360" fill="url(#bgTint)"/>
+  <circle cx="540" cy="90" r="190" fill="url(#blobG)"/>
+  <circle cx="90" cy="320" r="140" fill="url(#blobG)"/>
+  <rect width="640" height="360" fill="none" stroke="#fde68a" stroke-width="2"/>
 
-  <!-- dekorasi lembut -->
-  <circle cx="90" cy="300" r="60" fill="#ffffff" opacity="0.08"/>
-  <circle cx="560" cy="60" r="56" fill="#ffffff" opacity="0.08"/>
-
-  <!-- lingkaran siklus putus-putus dengan panah pergeseran -->
-  <circle cx="320" cy="190" r="118" fill="none" stroke="#fef3c7" stroke-width="4" stroke-dasharray="10 12" opacity="0.7"/>
-  <g stroke="#fef3c7" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.9">
-    <path d="M400 95 A 118 118 0 0 1 432 150"/>
-    <path d="M432 150 l -14 -2 M432 150 l -4 -14"/>
+  <!-- dot texture -->
+  <g fill="#f59e0b" opacity="0.12">
+    <circle cx="40" cy="40" r="2"/><circle cx="64" cy="40" r="2"/><circle cx="88" cy="40" r="2"/>
+    <circle cx="40" cy="64" r="2"/><circle cx="64" cy="64" r="2"/><circle cx="88" cy="64" r="2"/>
   </g>
 
-  <!-- musim hujan: awan + tetes -->
-  <g transform="translate(320,72)">
-    <ellipse cx="0" cy="0" rx="36" ry="18" fill="#60a5fa"/>
-    <ellipse cx="-18" cy="-6" rx="20" ry="14" fill="#93c5fd"/>
-    <ellipse cx="18" cy="-6" rx="22" ry="15" fill="#93c5fd"/>
-    <g fill="#38bdf8">
-      <path d="M-14 22 q 5 10 0 16 q -5 -6 0 -16"/>
-      <path d="M4 26 q 5 10 0 16 q -5 -6 0 -16"/>
-      <path d="M20 20 q 5 10 0 16 q -5 -6 0 -16"/>
+  <!-- brand mark -->
+  <g transform="translate(28,24)">
+    <rect width="26" height="26" rx="8" fill="#1b2340"/>
+    <path d="M6 7h14a2 2 0 0 1 2 2v12l-4-2-4 2-4-2-4 2V9a2 2 0 0 1 2-2z" fill="#fde68a" transform="translate(0,-1) scale(0.72)"/>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1b2340">PancaEdu</text>
+  </g>
+
+  <!-- top-right pills -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="462" y="16" width="62" height="24" rx="12" fill="#fde68a"/>
+    <text x="493" y="32" text-anchor="middle" fill="#92400e">Fisika</text>
+    <rect x="532" y="16" width="80" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="572" y="32" text-anchor="middle" fill="#3730a3">Kelas X</text>
+  </g>
+
+  <!-- eyebrow -->
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="28" y="68" width="150" height="24" rx="12" fill="#fbbf24"/>
+    <text x="103" y="84.5" text-anchor="middle" fill="#ffffff">LINGKUNGAN</text>
+  </g>
+
+  <!-- title -->
+  <text x="26" y="140" font-family="Arial, sans-serif" font-size="40" font-weight="800" fill="#1b2340">Perubahan Iklim</text>
+  <text x="26" y="172" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#78350f">Musim dan Cuaca yang Mulai Bergeser</text>
+
+  <!-- badge chips: Musim / Cuaca / Pola Berubah -->
+  <g font-family="Arial, sans-serif">
+    <g transform="translate(26,208)">
+      <circle cx="26" cy="26" r="26" fill="#fce7f3"/>
+      <circle cx="26" cy="22" r="7" fill="#f472b6"/>
+      <circle cx="18" cy="28" r="7" fill="#f9a8d4"/>
+      <circle cx="34" cy="28" r="7" fill="#f9a8d4"/>
+      <circle cx="26" cy="30" r="4" fill="#fde047"/>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#be185d">Musim</text>
+    </g>
+    <g transform="translate(104,208)">
+      <circle cx="26" cy="26" r="26" fill="#dbeafe"/>
+      <ellipse cx="26" cy="24" rx="12" ry="7" fill="#60a5fa"/>
+      <g stroke="#1d4ed8" stroke-width="2" stroke-linecap="round">
+        <path d="M18 34 q 2 5 0 8"/>
+        <path d="M26 36 q 2 5 0 8"/>
+        <path d="M34 34 q 2 5 0 8"/>
+      </g>
+      <text x="26" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Cuaca</text>
+    </g>
+    <g transform="translate(182,208)">
+      <circle cx="26" cy="26" r="26" fill="#ede9fe"/>
+      <path d="M16 30 a 10 10 0 1 1 2 10" stroke="#7c3aed" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <path d="M14 34 l 0 -8 l 7 2" stroke="#7c3aed" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <text x="26" y="66" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b21b6">Pola Berubah</text>
     </g>
   </g>
 
-  <!-- musim semi: bunga mekar -->
-  <g transform="translate(438,190)">
-    <rect x="-4" y="6" width="8" height="26" fill="#15803d"/>
-    <g fill="#f472b6">
-      <circle cx="0" cy="-18" r="10"/>
-      <circle cx="-14" cy="-10" r="10"/>
-      <circle cx="14" cy="-10" r="10"/>
-      <circle cx="-9" cy="2" r="10"/>
-      <circle cx="9" cy="2" r="10"/>
-    </g>
-    <circle cx="0" cy="-8" r="8" fill="#fde047"/>
-  </g>
+  <!-- hero illustration: 4 ikon musim melingkar -->
+  <g transform="translate(366,100)">
+    <ellipse cx="90" cy="210" rx="140" ry="16" fill="#1b2340" opacity="0.08"/>
 
-  <!-- musim panas: matahari -->
-  <g transform="translate(320,308)">
-    <circle cx="0" cy="0" r="26" fill="#fde047"/>
-    <g stroke="#fde047" stroke-width="4" stroke-linecap="round">
-      <line x1="0" y1="-38" x2="0" y2="-50"/>
-      <line x1="0" y1="38" x2="0" y2="50"/>
-      <line x1="-38" y1="0" x2="-50" y2="0"/>
-      <line x1="38" y1="0" x2="50" y2="0"/>
-      <line x1="-27" y1="-27" x2="-35" y2="-35"/>
-      <line x1="27" y1="27" x2="35" y2="35"/>
+    <circle cx="90" cy="95" r="98" fill="none" stroke="#fef3c7" stroke-width="4" stroke-dasharray="10 12" opacity="0.8"/>
+    <g stroke="#f59e0b" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.85">
+      <path d="M160 24 A 98 98 0 0 1 186 70"/>
+      <path d="M186 70 l -12 -2 M186 70 l -4 -12"/>
     </g>
-  </g>
 
-  <!-- musim gugur: daun jatuh -->
-  <g transform="translate(202,190)">
-    <g fill="#ea580c">
-      <path d="M0 -24 Q 16 -14 10 4 Q 2 16 -8 6 Q -14 -10 0 -24 Z"/>
+    <!-- musim hujan: awan + tetes -->
+    <g transform="translate(90,0)">
+      <ellipse cx="0" cy="0" rx="30" ry="15" fill="url(#rainG)"/>
+      <ellipse cx="-15" cy="-5" rx="16" ry="12" fill="#93c5fd"/>
+      <ellipse cx="15" cy="-5" rx="18" ry="13" fill="#93c5fd"/>
+      <g fill="#38bdf8">
+        <path d="M-11 18 q 4 8 0 13 q -4 -5 0 -13"/>
+        <path d="M4 20 q 4 8 0 13 q -4 -5 0 -13"/>
+      </g>
     </g>
-    <g fill="#f97316" opacity="0.85">
-      <path d="M-26 10 Q -16 16 -18 28 Q -24 34 -30 26 Q -34 16 -26 10 Z"/>
-    </g>
-    <g fill="#fbbf24" opacity="0.85">
-      <path d="M22 18 Q 32 22 30 34 Q 24 40 18 32 Q 14 22 22 18 Z"/>
-    </g>
-  </g>
 
-  <!-- pusat label siklus -->
-  <circle cx="320" cy="190" r="34" fill="#fef3c7" opacity="0.95"/>
-  <g stroke="#b45309" stroke-width="4" fill="none" stroke-linecap="round">
-    <path d="M308 182 a 14 14 0 1 1 -2 12"/>
-    <path d="M306 194 l 0 -10 l 8 2"/>
-  </g>
+    <!-- musim semi: bunga mekar, pink+kuning -->
+    <g transform="translate(188,95)">
+      <rect x="-3" y="4" width="6" height="22" fill="#15803d"/>
+      <g fill="#f472b6">
+        <circle cx="0" cy="-14" r="8"/>
+        <circle cx="-11" cy="-8" r="8"/>
+        <circle cx="11" cy="-8" r="8"/>
+        <circle cx="-7" cy="2" r="8"/>
+        <circle cx="7" cy="2" r="8"/>
+      </g>
+      <circle cx="0" cy="-6" r="6" fill="#fde047"/>
+    </g>
 
-  <!-- kilau -->
-  <g fill="#fef3c7" opacity="0.9">
-    <circle cx="500" cy="300" r="3"/>
-    <circle cx="140" cy="80" r="2.5"/>
-    <circle cx="80" cy="150" r="2"/>
+    <!-- musim panas: matahari -->
+    <g transform="translate(90,190)">
+      <circle cx="0" cy="0" r="22" fill="url(#sunG2)"/>
+      <g stroke="#f59e0b" stroke-width="3.6" stroke-linecap="round">
+        <line x1="0" y1="-32" x2="0" y2="-42"/>
+        <line x1="0" y1="32" x2="0" y2="42"/>
+        <line x1="-32" y1="0" x2="-42" y2="0"/>
+        <line x1="32" y1="0" x2="42" y2="0"/>
+      </g>
+    </g>
+
+    <!-- musim gugur: daun jatuh, oranye -->
+    <g transform="translate(-8,95)">
+      <path d="M0 -20 Q 13 -11 8 3 Q 2 13 -6 5 Q -11 -8 0 -20 Z" fill="#ea580c"/>
+      <path d="M-20 10 Q -12 14 -14 23 Q -19 28 -24 21 Q -27 13 -20 10 Z" fill="#f97316" opacity="0.85"/>
+      <path d="M16 16 Q 24 19 22 28 Q 17 33 12 27 Q 10 19 16 16 Z" fill="#fbbf24" opacity="0.85"/>
+    </g>
+
+    <!-- pusat label siklus -->
+    <circle cx="90" cy="95" r="28" fill="#fff7e6" opacity="0.95"/>
+    <g stroke="#b45309" stroke-width="3.4" fill="none" stroke-linecap="round">
+      <path d="M80 89 a 11 11 0 1 1 -1.6 9.4"/>
+      <path d="M78 98 l 0 -8 l 6.4 1.6"/>
+    </g>
+
+    <!-- sparkle accents -->
+    <path d="M10 170 l2.5 5.5 5.5 0.8 -4 4 0.8 5.5 -4.8 -3 -4.8 3 0.8 -5.5 -4 -4 5.5 -0.8 z" fill="#14b8a6" opacity="0.85"/>
+    <circle cx="170" cy="165" r="3.5" fill="#a855f7" opacity="0.7"/>
   </g>
 </svg>
