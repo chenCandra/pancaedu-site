@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Sumber Energi", "Energi Tak Terbarukan", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/energi-tak-terbarukan.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/non-renewable-energy-lab.html"
   judul: "Non-Renewable Energy Lab"

@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/konsep-energi.svg
 kuis:
   - soal: "Secara fisika, energi paling tepat didefinisikan sebagai..."
     pilihan: ["Sesuatu yang membuat benda bergerak cepat", "Kemampuan untuk melakukan usaha (kerja)", "Kekuatan yang dimiliki benda besar", "Panas yang keluar dari suatu benda"]

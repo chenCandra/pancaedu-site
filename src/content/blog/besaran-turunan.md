@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-26
 tags: ["Besaran Turunan", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/besaran-turunan.svg
 kuis:
   - soal: "Manakah yang termasuk besaran turunan?"
     pilihan: ["Massa", "Waktu", "Panjang", "Kecepatan"]

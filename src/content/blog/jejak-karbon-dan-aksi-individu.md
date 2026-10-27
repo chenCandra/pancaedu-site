@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Jejak Karbon", "Pemanasan Global", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/jejak-karbon-dan-aksi-individu.svg
 kuis:
   - soal: "Jejak karbon (carbon footprint) adalah..."
     pilihan: ["Total emisi gas rumah kaca yang dihasilkan oleh aktivitas seseorang atau kelompok", "Jejak kaki di tanah yang berwarna hitam seperti karbon", "Jumlah pohon yang ditanam seseorang", "Berat karbon murni yang dimiliki seseorang"]

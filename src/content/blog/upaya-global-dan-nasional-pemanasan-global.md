@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Pemanasan Global", "Mitigasi", "Adaptasi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/upaya-global-dan-nasional-pemanasan-global.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/perubahan-iklim.html"
   judul: "Climate Change Simulator"

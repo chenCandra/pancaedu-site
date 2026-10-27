@@ -1,0 +1,91 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Ilustrasi siluet jejak kaki yang berisi ikon-ikon ramah lingkungan seperti sepeda, gelas guna ulang, dan tanaman, menggambarkan jejak karbon dan aksi individu secara positif">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+    <clipPath id="footClip">
+      <path d="M320 55
+        C 365 55 372 95 368 125
+        C 364 155 388 165 392 200
+        C 396 240 372 260 335 258
+        C 300 256 288 230 292 200
+        C 295 175 278 160 276 130
+        C 274 95 290 55 320 55 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg6)"/>
+
+  <!-- dekorasi lembut -->
+  <circle cx="80" cy="80" r="56" fill="#ffffff" opacity="0.08"/>
+  <circle cx="560" cy="300" r="60" fill="#ffffff" opacity="0.08"/>
+  <circle cx="540" cy="70" r="14" fill="#ffffff" opacity="0.16"/>
+
+  <!-- jejak kaki besar sebagai bingkai -->
+  <path d="M320 55
+    C 365 55 372 95 368 125
+    C 364 155 388 165 392 200
+    C 396 240 372 260 335 258
+    C 300 256 288 230 292 200
+    C 295 175 278 160 276 130
+    C 274 95 290 55 320 55 Z" fill="#f0fdf4"/>
+  <!-- jari-jari kaki kecil -->
+  <circle cx="284" cy="70" r="14" fill="#f0fdf4"/>
+  <circle cx="310" cy="56" r="15" fill="#f0fdf4"/>
+  <circle cx="338" cy="54" r="15" fill="#f0fdf4"/>
+  <circle cx="364" cy="62" r="13" fill="#f0fdf4"/>
+  <circle cx="384" cy="78" r="11" fill="#f0fdf4"/>
+
+  <!-- isi jejak kaki: ikon-ikon ramah lingkungan, diklip di dalam siluet -->
+  <g clip-path="url(#footClip)">
+    <rect x="250" y="40" width="160" height="230" fill="#dcfce7"/>
+
+    <!-- sepeda -->
+    <g transform="translate(320,120)">
+      <circle cx="-26" cy="18" r="17" fill="none" stroke="#16a34a" stroke-width="4"/>
+      <circle cx="26" cy="18" r="17" fill="none" stroke="#16a34a" stroke-width="4"/>
+      <path d="M-26 18 L-6 -14 L18 -14 L26 18 M-6 -14 L8 18 M-26 18 L18 -14" stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="18" cy="-14" r="4" fill="#15803d"/>
+    </g>
+
+    <!-- gelas guna ulang -->
+    <g transform="translate(300,200)">
+      <path d="M-10 -14 L10 -14 L7 20 Q0 26 -7 20 Z" fill="#22c55e"/>
+      <rect x="-12" y="-20" width="24" height="7" rx="3" fill="#15803d"/>
+      <path d="M10 -10 Q 22 -8 18 2 Q 15 8 8 6" fill="none" stroke="#15803d" stroke-width="3"/>
+    </g>
+
+    <!-- tanaman kecil -->
+    <g transform="translate(345,205)">
+      <rect x="-10" y="4" width="20" height="14" rx="2" fill="#a16207"/>
+      <path d="M0 4 Q -10 -14 -2 -24" stroke="#15803d" stroke-width="3" fill="none"/>
+      <path d="M0 4 Q 10 -10 4 -22" stroke="#15803d" stroke-width="3" fill="none"/>
+      <circle cx="-2" cy="-24" r="6" fill="#4ade80"/>
+      <circle cx="4" cy="-22" r="6" fill="#22c55e"/>
+    </g>
+  </g>
+
+  <!-- garis luar jejak -->
+  <path d="M320 55
+    C 365 55 372 95 368 125
+    C 364 155 388 165 392 200
+    C 396 240 372 260 335 258
+    C 300 256 288 230 292 200
+    C 295 175 278 160 276 130
+    C 274 95 290 55 320 55 Z" fill="none" stroke="#15803d" stroke-width="4"/>
+
+  <!-- panah kecil "aksi positif" -->
+  <g stroke="#fde68a" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M460 140 Q 500 150 492 190"/>
+    <path d="M492 190 l -12 -6 M492 190 l 4 -14"/>
+  </g>
+
+  <!-- kilau -->
+  <g fill="#fef3c7" opacity="0.9">
+    <circle cx="150" cy="260" r="3"/>
+    <circle cx="500" cy="260" r="2.5"/>
+    <circle cx="470" cy="90" r="2"/>
+  </g>
+</svg>

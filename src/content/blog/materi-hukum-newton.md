@@ -5,6 +5,7 @@ category: materi
 mapel: "Fisika"
 kelas: "X"
 pubDate: 2026-08-29
+coverImage: /covers/materi-hukum-newton.svg
 tags: ["Hukum Newton", "Gerak", "Mekanika", "Fisika Kelas X"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/hukum-newton.html"

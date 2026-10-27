@@ -1,0 +1,72 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Ilustrasi siswa penasaran mengamati apel dan bintang melayang dengan kaca pembesar, suasana penuh keajaiban">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" fill="#ffffff" fill-opacity="0.14"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#dots)"/>
+  <circle cx="500" cy="80" r="110" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="60" cy="300" r="80" fill="#ffffff" fill-opacity="0.06"/>
+
+  <!-- bintang bertebaran -->
+  <g fill="#fde68a">
+    <path transform="translate(80,70) scale(1)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+    <path transform="translate(560,60) scale(0.8)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+    <path transform="translate(300,45) scale(0.6)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+  </g>
+  <circle cx="200" cy="100" r="5" fill="#ffffff"/>
+  <circle cx="470" cy="150" r="5" fill="#ec4899"/>
+
+  <ellipse cx="300" cy="320" rx="180" ry="14" fill="#000000" fill-opacity="0.12"/>
+
+  <!-- daun melayang -->
+  <g transform="translate(460,190) rotate(20)">
+    <path d="M0 -30 C 22 -20 22 20 0 30 C -22 20 -22 -20 0 -30 Z" fill="#22c55e"/>
+    <line x1="0" y1="-28" x2="0" y2="28" stroke="#15803d" stroke-width="2"/>
+  </g>
+  <!-- apel melayang -->
+  <g transform="translate(420,110)">
+    <circle r="26" fill="#ef4444"/>
+    <path d="M0 -26 Q 8 -36 16 -30" stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="-8" cy="-6" r="5" fill="#ffffff" fill-opacity="0.5"/>
+  </g>
+  <!-- bintang kecil melayang -->
+  <g fill="#fde047">
+    <path transform="translate(500,230) scale(1.1)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+  </g>
+  <!-- garis melayang putus putus -->
+  <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="2 6">
+    <path d="M420 136 Q 420 160 420 180" fill="none"/>
+    <path d="M460 160 Q 460 180 460 198" fill="none"/>
+  </g>
+
+  <!-- karakter siswa -->
+  <g transform="translate(220,220)">
+    <!-- badan -->
+    <path d="M-55 10 Q 0 -30 55 10 L 55 90 L -55 90 Z" fill="#3b82f6"/>
+    <!-- kepala -->
+    <circle cx="0" cy="-40" r="46" fill="#fde68a"/>
+    <!-- rambut -->
+    <path d="M-44 -58 Q 0 -92 44 -58 Q 44 -78 0 -84 Q -44 -78 -44 -58 Z" fill="#78350f"/>
+    <!-- mata besar penasaran -->
+    <circle cx="-16" cy="-42" r="8" fill="#1e293b"/>
+    <circle cx="16" cy="-42" r="8" fill="#1e293b"/>
+    <circle cx="-14" cy="-45" r="3" fill="#ffffff"/>
+    <circle cx="18" cy="-45" r="3" fill="#ffffff"/>
+    <path d="M-10 -18 Q 0 -10 10 -18" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="-30" cy="-22" r="8" fill="#f9a8d4" fill-opacity="0.6"/>
+    <circle cx="30" cy="-22" r="8" fill="#f9a8d4" fill-opacity="0.6"/>
+  </g>
+
+  <!-- kaca pembesar di tangan -->
+  <g transform="translate(300,255) rotate(-15)">
+    <circle cx="0" cy="0" r="38" fill="#ffffff" fill-opacity="0.15" stroke="#14b8a6" stroke-width="10"/>
+    <line x1="27" y1="27" x2="62" y2="62" stroke="#14b8a6" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>

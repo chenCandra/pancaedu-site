@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-28
 tags: ["Pengukuran", "Pengukuran Berulang", "Fisika Kelas X"]
+coverImage: /covers/pengukuran-alat-ukur-dan-angka-penting.svg
 kuis:
   - soal: "Kenapa suatu besaran perlu diukur berulang kali, bukan cukup sekali saja?"
     pilihan: ["Supaya angkanya kelihatan lebih banyak", "Untuk mengurangi pengaruh kesalahan acak dan mendapat hasil yang lebih dapat dipercaya", "Karena alat ukur tidak boleh dipakai dua kali berturut-turut", "Supaya hasilnya pasti sama persis tiap kali diukur"]

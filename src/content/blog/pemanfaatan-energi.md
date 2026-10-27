@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Pemanfaatan Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/pemanfaatan-energi.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/energy-consumption-lab.html"
   judul: "Energy Consumption Lab"

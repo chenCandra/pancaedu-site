@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+
+  <!-- decorative background -->
+  <circle cx="90" cy="70" r="26" fill="#fde047" opacity="0.9"/>
+  <circle cx="90" cy="70" r="36" fill="#fde047" opacity="0.2"/>
+  <circle cx="540" cy="300" r="60" fill="#ffffff" opacity="0.08"/>
+  <circle cx="60" cy="300" r="10" fill="#ffffff" opacity="0.2"/>
+  <circle cx="580" cy="80" r="7" fill="#ffffff" opacity="0.25"/>
+
+  <!-- ground -->
+  <rect x="0" y="320" width="640" height="40" fill="#1d4ed8" opacity="0.4"/>
+
+  <!-- central pivot post -->
+  <rect x="312" y="190" width="16" height="130" rx="4" fill="#1e293b"/>
+  <ellipse cx="320" cy="325" rx="46" ry="10" fill="#0f172a" opacity="0.3"/>
+
+  <!-- dashed circular path -->
+  <circle cx="320" cy="190" r="118" fill="none" stroke="#ffffff" stroke-width="5" stroke-dasharray="14 12" opacity="0.6"/>
+
+  <!-- motion direction arrow on the path -->
+  <g transform="translate(320,72)">
+    <path d="M-18 6 L12 -4 L-4 -20" fill="none" stroke="#fde047" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ferris-wheel style spokes with colorful gondolas -->
+  <g>
+    <line x1="320" y1="190" x2="320" y2="72" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+    <line x1="320" y1="190" x2="422" y2="131" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+    <line x1="320" y1="190" x2="422" y2="249" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+    <line x1="320" y1="190" x2="320" y2="308" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+    <line x1="320" y1="190" x2="218" y2="249" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+    <line x1="320" y1="190" x2="218" y2="131" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+
+    <!-- hub -->
+    <circle cx="320" cy="190" r="20" fill="#fde047"/>
+    <circle cx="320" cy="190" r="8" fill="#1e293b"/>
+
+    <!-- gondolas, varied colors, with cute faces -->
+    <g>
+      <rect x="305" y="52" width="30" height="26" rx="8" fill="#ef4444"/>
+      <circle cx="314" cy="63" r="2.5" fill="#fff"/>
+      <circle cx="326" cy="63" r="2.5" fill="#fff"/>
+      <path d="M312 70 Q320 75 328 70" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <g>
+      <rect x="407" y="111" width="30" height="26" rx="8" fill="#22c55e"/>
+      <circle cx="416" cy="122" r="2.5" fill="#fff"/>
+      <circle cx="428" cy="122" r="2.5" fill="#fff"/>
+      <path d="M414 129 Q422 134 430 129" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <g>
+      <rect x="407" y="229" width="30" height="26" rx="8" fill="#f97316"/>
+      <circle cx="416" cy="240" r="2.5" fill="#fff"/>
+      <circle cx="428" cy="240" r="2.5" fill="#fff"/>
+      <path d="M414 247 Q422 252 430 247" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <g>
+      <rect x="305" y="288" width="30" height="26" rx="8" fill="#a855f7"/>
+      <circle cx="314" cy="299" r="2.5" fill="#fff"/>
+      <circle cx="326" cy="299" r="2.5" fill="#fff"/>
+      <path d="M312 306 Q320 311 328 306" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <g>
+      <rect x="203" y="229" width="30" height="26" rx="8" fill="#eab308"/>
+      <circle cx="212" cy="240" r="2.5" fill="#fff"/>
+      <circle cx="224" cy="240" r="2.5" fill="#fff"/>
+      <path d="M210 247 Q218 252 226 247" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <g>
+      <rect x="203" y="111" width="30" height="26" rx="8" fill="#ec4899"/>
+      <circle cx="212" cy="122" r="2.5" fill="#fff"/>
+      <circle cx="224" cy="122" r="2.5" fill="#fff"/>
+      <path d="M210 129 Q218 134 226 129" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- extra sparkle -->
+  <path d="M560 180 l5 12 13 1 -10 9 3 13 -11 -7 -11 7 3 -13 -10 -9 13 -1 z" fill="#fde047" opacity="0.85"/>
+</svg>

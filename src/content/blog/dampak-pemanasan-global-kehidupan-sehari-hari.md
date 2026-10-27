@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Pemanasan Global", "Dampak", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/dampak-pemanasan-global-kehidupan-sehari-hari.svg
 kuis:
   - soal: "Salah satu dampak pemanasan global yang paling terasa dalam pola cuaca sehari-hari adalah..."
     pilihan: ["Musim hujan dan kemarau jadi lebih sulit diprediksi dan lebih ekstrem", "Cuaca menjadi selalu stabil sepanjang tahun", "Semua daerah mengalami dampak yang sama persis", "Hujan berhenti sama sekali di seluruh dunia"]

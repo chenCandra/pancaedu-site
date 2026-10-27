@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <marker id="ud-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#fde047"/>
+    </marker>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+
+  <!-- sun + clouds -->
+  <circle cx="540" cy="65" r="30" fill="#fde047"/>
+  <circle cx="540" cy="65" r="42" fill="#fde047" opacity="0.2"/>
+  <g fill="#ffffff" opacity="0.18">
+    <ellipse cx="110" cy="60" rx="34" ry="14"/>
+    <ellipse cx="140" cy="52" rx="22" ry="11"/>
+  </g>
+
+  <!-- ground -->
+  <rect x="0" y="300" width="640" height="60" fill="#1d4ed8" opacity="0.45"/>
+  <ellipse cx="320" cy="300" rx="320" ry="14" fill="#1e3a8a" opacity="0.3"/>
+
+  <!-- motion lines showing displacement of the crate -->
+  <g stroke="#f97316" stroke-width="6" stroke-linecap="round" opacity="0.85">
+    <line x1="310" y1="230" x2="345" y2="230"/>
+    <line x1="310" y1="250" x2="345" y2="250"/>
+    <line x1="310" y1="270" x2="345" y2="270"/>
+  </g>
+
+  <!-- wooden crate -->
+  <g transform="translate(380,0)">
+    <ellipse cx="50" cy="298" rx="58" ry="12" fill="#0f172a" opacity="0.25"/>
+    <rect x="0" y="210" width="100" height="88" rx="6" fill="#d97706"/>
+    <rect x="0" y="210" width="100" height="88" rx="6" fill="none" stroke="#92400e" stroke-width="4"/>
+    <line x1="0" y1="254" x2="100" y2="254" stroke="#92400e" stroke-width="5"/>
+    <line x1="25" y1="210" x2="25" y2="298" stroke="#92400e" stroke-width="4"/>
+    <line x1="75" y1="210" x2="75" y2="298" stroke="#92400e" stroke-width="4"/>
+  </g>
+
+  <!-- force arrow F from character to crate -->
+  <line x1="300" y1="260" x2="368" y2="260" stroke="#fde047" stroke-width="10" stroke-linecap="round" marker-end="url(#ud-ah)"/>
+  <text x="300" y="245" fill="#ffffff" font-size="24" font-family="Arial, sans-serif" font-weight="bold">F</text>
+
+  <!-- cartoon character pushing -->
+  <g transform="translate(130,0)">
+    <ellipse cx="80" cy="298" rx="60" ry="12" fill="#0f172a" opacity="0.25"/>
+    <!-- back leg -->
+    <path d="M70 250 Q50 270 48 298" stroke="#1e293b" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <!-- front leg, leaning into push -->
+    <path d="M92 250 Q118 262 128 296" stroke="#1e293b" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <!-- torso leaning forward -->
+    <path d="M55 185 Q50 225 75 252 L108 240 Q118 205 100 178 Q78 165 55 185 Z" fill="#ec4899"/>
+    <!-- arms pushing forward, straight and tense -->
+    <path d="M98 205 Q140 215 168 240" stroke="#ec4899" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M95 225 Q138 232 165 252" stroke="#ec4899" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <!-- head -->
+    <circle cx="78" cy="152" r="28" fill="#fbbf24"/>
+    <!-- hair -->
+    <path d="M52 142 Q78 118 104 142 Q100 128 78 124 Q56 128 52 142 Z" fill="#1e293b"/>
+    <!-- determined face -->
+    <path d="M66 154 L76 154" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M84 154 L94 154" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M68 166 Q78 162 88 166" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- sweat drop for effort -->
+    <path d="M44 145 Q50 155 44 162 Q38 155 44 145 Z" fill="#60a5fa"/>
+  </g>
+
+  <!-- stopwatch icon implying work-vs-time / power -->
+  <g transform="translate(520,210)">
+    <rect x="-6" y="-42" width="12" height="12" rx="3" fill="#1e293b"/>
+    <circle cx="0" cy="0" r="40" fill="#ffffff" opacity="0.95"/>
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#1d4ed8" stroke-width="5"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#22c55e" stroke-width="4" opacity="0.6"/>
+    <line x1="0" y1="0" x2="0" y2="-22" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="16" y2="8" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="4" fill="#1e293b"/>
+  </g>
+
+  <!-- small energy accents -->
+  <path d="M90 90 l4 10 11 1 -8 7 2 11 -9 -6 -9 6 2 -11 -8 -7 11 -1 z" fill="#22c55e" opacity="0.8"/>
+  <circle cx="440" cy="130" r="5" fill="#ffffff" opacity="0.5"/>
+</svg>

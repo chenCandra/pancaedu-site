@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Sumber Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/sumber-energi.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/energy-crisis-lab.html"
   judul: "Energy Crisis Lab"

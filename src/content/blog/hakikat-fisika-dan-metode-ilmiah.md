@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-06
 tags: ["Hakikat Fisika", "Metode Ilmiah", "Fisika Kelas X"]
+coverImage: /covers/hakikat-fisika-dan-metode-ilmiah.svg
 kuis:
   - soal: "Fisika punya berapa 'wajah' sekaligus menurut hakikatnya?"
     pilihan: ["2", "3", "4", "5"]

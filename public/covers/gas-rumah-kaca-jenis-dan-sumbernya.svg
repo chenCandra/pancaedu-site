@@ -1,0 +1,74 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Ilustrasi kubah kaca rumah kaca menutupi sebuah lanskap kecil dengan sinar matahari masuk dan titik-titik molekul gas CO2 dan CH4 di dalamnya">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg5)"/>
+
+  <!-- dekorasi lembut -->
+  <circle cx="90" cy="280" r="60" fill="#ffffff" opacity="0.08"/>
+  <circle cx="580" cy="90" r="50" fill="#ffffff" opacity="0.08"/>
+
+  <!-- matahari -->
+  <circle cx="540" cy="70" r="36" fill="#fde68a"/>
+  <g stroke="#fde68a" stroke-width="4" stroke-linecap="round" opacity="0.85">
+    <line x1="540" y1="20" x2="540" y2="6"/>
+    <line x1="586" y1="70" x2="600" y2="70"/>
+    <line x1="572" y1="38" x2="582" y2="26"/>
+  </g>
+  <!-- sinar masuk ke kubah -->
+  <g stroke="#fde68a" stroke-width="3" opacity="0.6">
+    <line x1="520" y1="95" x2="430" y2="190"/>
+    <line x1="500" y1="90" x2="400" y2="200"/>
+    <line x1="480" y1="86" x2="370" y2="210"/>
+  </g>
+
+  <!-- tanah di dalam kubah -->
+  <path d="M100 280 Q 320 255 540 280 L 540 300 L 100 300 Z" fill="#22c55e"/>
+
+  <!-- kubah kaca (potongan melintang) -->
+  <path d="M100 280 A 220 220 0 0 1 540 280" fill="#bae6fd" opacity="0.35" stroke="#38bdf8" stroke-width="4"/>
+  <path d="M100 280 A 220 220 0 0 1 540 280 L 540 285 A 220 220 0 0 0 100 285 Z" fill="#7dd3fc" opacity="0.2"/>
+  <line x1="100" y1="280" x2="100" y2="300" stroke="#38bdf8" stroke-width="4"/>
+  <line x1="540" y1="280" x2="540" y2="300" stroke="#38bdf8" stroke-width="4"/>
+
+  <!-- pohon kecil di dalam -->
+  <g transform="translate(160,268)">
+    <rect x="-4" y="0" width="8" height="18" fill="#78350f"/>
+    <circle cx="0" cy="-8" r="16" fill="#16a34a"/>
+  </g>
+  <g transform="translate(480,268)">
+    <rect x="-4" y="0" width="8" height="18" fill="#78350f"/>
+    <circle cx="0" cy="-8" r="16" fill="#22c55e"/>
+  </g>
+  <g transform="translate(320,278)">
+    <rect x="-10" y="-14" width="22" height="16" fill="#f0fdf4"/>
+    <path d="M-12 -14 L0 -28 L12 -14 Z" fill="#dc2626"/>
+  </g>
+
+  <!-- molekul gas di dalam kubah -->
+  <g>
+    <circle cx="230" cy="210" r="10" fill="#374151"/>
+    <circle cx="214" cy="198" r="7" fill="#ef4444"/>
+    <circle cx="246" cy="198" r="7" fill="#ef4444"/>
+    <text x="230" y="234" text-anchor="middle" fill="#1f2937" font-family="sans-serif" font-size="14" font-weight="bold">CO2</text>
+  </g>
+  <g>
+    <circle cx="400" cy="225" r="9" fill="#374151"/>
+    <circle cx="388" cy="214" r="5.5" fill="#f1f5f9"/>
+    <circle cx="412" cy="214" r="5.5" fill="#f1f5f9"/>
+    <circle cx="388" cy="236" r="5.5" fill="#f1f5f9"/>
+    <circle cx="412" cy="236" r="5.5" fill="#f1f5f9"/>
+    <text x="400" y="252" text-anchor="middle" fill="#1f2937" font-family="sans-serif" font-size="14" font-weight="bold">CH4</text>
+  </g>
+
+  <!-- kilau kecil -->
+  <g fill="#fef3c7" opacity="0.9">
+    <circle cx="60" cy="130" r="3"/>
+    <circle cx="140" cy="90" r="2"/>
+  </g>
+</svg>

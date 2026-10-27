@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Permasalahan Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/permasalahan-dan-upaya-pemenuhan-kebutuhan-energi.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/energy-efficiency-lab.html"
   judul: "Energy Efficiency Lab"

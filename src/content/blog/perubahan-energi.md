@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Perubahan Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/perubahan-energi.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/energi-mekanik.html"
   judul: "Energi Mekanik: Pertukaran Eₖ dan Eₚ"

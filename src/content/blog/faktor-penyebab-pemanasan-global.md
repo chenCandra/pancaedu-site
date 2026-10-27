@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Pemanasan Global", "Penyebab", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/faktor-penyebab-pemanasan-global.svg
 kuis:
   - soal: "Sektor yang paling banyak menyumbang CO2 lewat pembakaran bensin/solar adalah..."
     pilihan: ["Transportasi", "Pertanian organik", "Kehutanan lestari", "Pariwisata"]

@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Sumber Energi", "Energi Terbarukan", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/energi-terbarukan.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/renewable-energy-lab.html"
   judul: "Lab Energi Terbarukan"

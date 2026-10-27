@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Gas Rumah Kaca", "Pemanasan Global", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/gas-rumah-kaca-jenis-dan-sumbernya.svg
 kuis:
   - soal: "Gas rumah kaca yang PALING BANYAK dihasilkan manusia dari pembakaran bahan bakar fosil adalah..."
     pilihan: ["Ozon (O3)", "Karbon dioksida (CO2)", "Uap air (H2O)", "Gas fluorinasi"]

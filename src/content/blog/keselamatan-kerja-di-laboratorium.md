@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Keselamatan Kerja", "K3 Laboratorium", "Fisika Kelas X", "Praktikum"]
+coverImage: /covers/keselamatan-kerja-di-laboratorium.svg
 kuis:
   - soal: "Kenapa Alat Pelindung Diri (APD) wajib dipakai selama praktikum, meski percobaannya kelihatan sederhana?"
     pilihan: ["Supaya terlihat seperti ilmuwan sungguhan", "Karena diwajibkan tanpa alasan khusus", "Untuk melindungi tubuh dari risiko yang mungkin tidak terlihat jelas sebelumnya, seperti percikan bahan atau pecahan kaca", "Karena APD wajib dipakai di semua ruangan sekolah"]

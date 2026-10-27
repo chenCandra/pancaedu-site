@@ -1,0 +1,63 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg1)"/>
+
+  <circle cx="560" cy="70" r="100" fill="#ffffff" opacity="0.08"/>
+  <circle cx="60" cy="320" r="80" fill="#ffffff" opacity="0.08"/>
+  <circle cx="330" cy="40" r="40" fill="#ffffff" opacity="0.06"/>
+
+  <g fill="#fff7ed" opacity="0.85">
+    <path d="M510 230 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 Z"/>
+    <path d="M95 90 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 Z"/>
+    <path d="M300 300 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 Z"/>
+  </g>
+
+  <!-- Sun -->
+  <g transform="translate(150,110)">
+    <g stroke="#fde047" stroke-width="8" stroke-linecap="round">
+      <line x1="0" y1="-78" x2="0" y2="-60"/>
+      <line x1="0" y1="78" x2="0" y2="60"/>
+      <line x1="-78" y1="0" x2="-60" y2="0"/>
+      <line x1="78" y1="0" x2="60" y2="0"/>
+      <line x1="-55" y1="-55" x2="-42" y2="-42"/>
+      <line x1="55" y1="-55" x2="42" y2="-42"/>
+      <line x1="-55" y1="55" x2="-42" y2="42"/>
+      <line x1="55" y1="55" x2="42" y2="42"/>
+    </g>
+    <circle r="46" fill="#fbbf24"/>
+    <circle cx="-15" cy="-6" r="5" fill="#78350f"/>
+    <circle cx="15" cy="-6" r="5" fill="#78350f"/>
+    <path d="M-16 14 Q0 28 16 14" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="-26" cy="10" r="6" fill="#f97316" opacity="0.45"/>
+    <circle cx="26" cy="10" r="6" fill="#f97316" opacity="0.45"/>
+  </g>
+
+  <!-- Battery -->
+  <g transform="translate(430,170)">
+    <rect x="-18" y="-70" width="36" height="16" rx="4" fill="#1e3a8a"/>
+    <rect x="-45" y="-54" width="90" height="140" rx="16" fill="#2563eb"/>
+    <rect x="-37" y="-46" width="74" height="124" rx="10" fill="#3b82f6"/>
+    <polygon points="6,-30 -18,10 -2,10 -10,46 20,0 2,0" fill="#fde047"/>
+  </g>
+
+  <!-- Running kid -->
+  <g transform="translate(225,300)">
+    <path d="M-6 0 Q-30 10 -44 36" stroke="#15803d" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M10 0 Q30 -6 46 24" stroke="#16a34a" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <circle cx="-44" cy="40" r="9" fill="#374151"/>
+    <circle cx="46" cy="28" r="9" fill="#374151"/>
+    <path d="M-16 -70 Q0 -80 16 -70 L18 2 Q0 12 -18 2 Z" fill="#ef4444"/>
+    <path d="M-14 -58 Q-40 -50 -48 -22" stroke="#f3b985" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M14 -58 Q38 -78 34 -104" stroke="#f3b985" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <circle cx="2" cy="-96" r="22" fill="#f3b985"/>
+    <path d="M-20 -100 Q0 -122 22 -100 Q22 -112 0 -116 Q-20 -112 -20 -100 Z" fill="#4b3621"/>
+    <circle cx="-6" cy="-98" r="3" fill="#1f2937"/>
+    <circle cx="10" cy="-98" r="3" fill="#1f2937"/>
+    <path d="M-6 -88 Q2 -84 10 -88" stroke="#1f2937" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

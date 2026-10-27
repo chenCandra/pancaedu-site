@@ -1,0 +1,76 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Ilustrasi panel surya, turbin angin, dan tangan menanam pohon kecil di depan globe Bumi, menggambarkan upaya global dan nasional mencegah pemanasan global secara optimis">
+  <defs>
+    <linearGradient id="bg8" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg8)"/>
+
+  <!-- dekorasi lembut -->
+  <circle cx="60" cy="70" r="50" fill="#ffffff" opacity="0.08"/>
+  <circle cx="580" cy="300" r="60" fill="#ffffff" opacity="0.08"/>
+
+  <!-- globe kecil di belakang sebagai motif kerja sama global -->
+  <g transform="translate(320,120)">
+    <circle r="62" fill="#38bdf8" opacity="0.9"/>
+    <path d="M-40 -16 Q -20 -36 8 -26 Q 20 -14 10 2 Q -8 8 -22 2 Q -40 -4 -40 -16 Z" fill="#22c55e"/>
+    <path d="M14 14 Q 32 6 42 22 Q 42 38 26 40 Q 10 38 8 24 Q 8 16 14 14 Z" fill="#16a34a"/>
+    <g stroke="#ffffff" stroke-width="1.5" opacity="0.35" fill="none">
+      <ellipse rx="62" ry="24" cy="0"/>
+      <ellipse rx="24" ry="62" cx="0"/>
+    </g>
+  </g>
+
+  <!-- tanah -->
+  <path d="M0 290 Q 160 265 330 288 T 640 275 L 640 360 L 0 360 Z" fill="#15803d"/>
+  <path d="M0 310 Q 180 292 340 308 T 640 300 L 640 360 L 0 360 Z" fill="#22c55e"/>
+
+  <!-- turbin angin kiri -->
+  <g transform="translate(110,250)">
+    <rect x="-4" y="0" width="8" height="90" fill="#f1f5f9"/>
+    <circle cx="0" cy="0" r="7" fill="#e2e8f0"/>
+    <g fill="#ffffff">
+      <path d="M0 0 L -8 -68 L 10 -58 Z"/>
+      <path d="M0 0 L 48 24 L 36 38 Z" transform="rotate(12)"/>
+      <path d="M0 0 L -40 42 L -54 28 Z" transform="rotate(12)"/>
+    </g>
+  </g>
+
+  <!-- panel surya kanan -->
+  <g transform="translate(520,280) rotate(-18)">
+    <rect x="-20" y="0" width="12" height="36" fill="#78350f"/>
+    <rect x="40" y="0" width="12" height="36" fill="#78350f"/>
+    <rect x="-55" y="-34" width="130" height="40" rx="5" fill="#1d4ed8"/>
+    <g stroke="#93c5fd" stroke-width="2">
+      <line x1="-28" y1="-34" x2="-28" y2="6"/>
+      <line x1="0" y1="-34" x2="0" y2="6"/>
+      <line x1="28" y1="-34" x2="28" y2="6"/>
+      <line x1="-55" y1="-14" x2="75" y2="-14"/>
+    </g>
+  </g>
+
+  <!-- tangan menanam pohon kecil di tengah -->
+  <g transform="translate(320,290)">
+    <!-- gundukan tanah kecil -->
+    <ellipse cx="0" cy="18" rx="46" ry="14" fill="#92400e"/>
+    <!-- batang & daun bibit -->
+    <rect x="-3" y="-28" width="6" height="34" fill="#15803d"/>
+    <path d="M0 -28 Q -22 -34 -26 -52" stroke="#16a34a" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M0 -24 Q 22 -30 28 -48" stroke="#22c55e" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="-26" cy="-52" r="9" fill="#4ade80"/>
+    <circle cx="28" cy="-48" r="9" fill="#22c55e"/>
+    <!-- tangan (dua tangan menangkup bibit, motif gotong royong) -->
+    <path d="M-50 10 Q -40 -10 -14 -6 Q 0 -2 0 10 L -10 24 Q -34 26 -50 10 Z" fill="#fcd9a8"/>
+    <path d="M50 10 Q 40 -10 14 -6 Q 0 -2 0 10 L 10 24 Q 34 26 50 10 Z" fill="#f4b680"/>
+  </g>
+
+  <!-- kilau -->
+  <g fill="#fef3c7" opacity="0.9">
+    <circle cx="200" cy="90" r="3"/>
+    <circle cx="430" cy="70" r="2.5"/>
+    <circle cx="470" cy="160" r="2"/>
+  </g>
+</svg>

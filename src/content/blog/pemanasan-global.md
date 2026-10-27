@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Pemanasan Global", "Efek Rumah Kaca", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/pemanasan-global.svg
 kuis:
   - soal: "Pemanasan global adalah istilah untuk..."
     pilihan: ["Kenaikan suhu rata-rata permukaan bumi secara terus-menerus dalam jangka panjang", "Cuaca panas yang terjadi satu-dua hari di musim kemarau", "Suhu matahari yang semakin panas dari waktu ke waktu", "Efek rumah kaca yang seharusnya dihilangkan sama sekali"]

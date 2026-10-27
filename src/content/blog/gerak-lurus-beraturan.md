@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
+coverImage: /covers/gerak-lurus-beraturan.svg
 tags: ["Gerak Lurus", "GLB", "Kinematika", "Fisika Kelas X", "Fase E"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/gerak-lurus.html"

@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: X
 pubDate: 2026-09-20
+coverImage: /covers/gerak-melingkar.svg
 tags: ["Gerak Melingkar", "Kinematika", "Fisika Kelas X", "Fase E"]
 kuis:
   - soal: "Pada Gerak Melingkar Beraturan (GMB), yang tetap (konstan) adalah..."

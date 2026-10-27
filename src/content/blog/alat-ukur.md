@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-26
 tags: ["Alat Ukur", "Fisika Kelas X", "Fase E", "Pengukuran"]
+coverImage: /covers/alat-ukur.svg
 kuis:
   - soal: "Alat yang paling sesuai untuk mengukur diameter kawat yang tipis adalah..."
     pilihan: ["Penggaris", "Stopwatch", "Mikrometer sekrup", "Termometer"]

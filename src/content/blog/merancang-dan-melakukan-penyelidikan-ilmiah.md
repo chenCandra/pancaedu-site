@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Penyelidikan Ilmiah", "Metode Ilmiah", "Fisika Kelas X", "Praktikum"]
+coverImage: /covers/merancang-dan-melakukan-penyelidikan-ilmiah.svg
 kuis:
   - soal: "Dalam percobaan 'pengaruh panjang tali terhadap periode ayunan bandul', yang menjadi variabel bebas adalah..."
     pilihan: ["Periode ayunan", "Panjang tali", "Massa beban", "Warna tali"]

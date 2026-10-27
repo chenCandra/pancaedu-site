@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <marker id="ah-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f97316"/>
+    </marker>
+    <marker id="ah-yellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#fde047"/>
+    </marker>
+    <marker id="ah-pink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ec4899"/>
+    </marker>
+    <marker id="ah-white" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ffffff"/>
+    </marker>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+
+  <!-- decorative grid dots -->
+  <g fill="#ffffff" opacity="0.15">
+    <circle cx="80" cy="80" r="3"/>
+    <circle cx="140" cy="80" r="3"/>
+    <circle cx="200" cy="80" r="3"/>
+    <circle cx="80" cy="140" r="3"/>
+    <circle cx="140" cy="140" r="3"/>
+    <circle cx="80" cy="200" r="3"/>
+    <circle cx="500" cy="280" r="3"/>
+    <circle cx="560" cy="280" r="3"/>
+    <circle cx="500" cy="320" r="3"/>
+  </g>
+
+  <!-- soft background circles for energy -->
+  <circle cx="540" cy="80" r="50" fill="#ffffff" opacity="0.06"/>
+  <circle cx="90" cy="300" r="40" fill="#ffffff" opacity="0.06"/>
+
+  <!-- faint axis lines -->
+  <line x1="60" y1="190" x2="580" y2="190" stroke="#ffffff" stroke-width="2" opacity="0.2"/>
+  <line x1="200" y1="60" x2="200" y2="320" stroke="#ffffff" stroke-width="2" opacity="0.2"/>
+
+  <!-- origin point -->
+  <circle cx="200" cy="190" r="8" fill="#ffffff"/>
+  <circle cx="200" cy="190" r="8" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+
+  <!-- vector A: orange, pointing up-right -->
+  <line x1="200" y1="190" x2="340" y2="90" stroke="#f97316" stroke-width="9" stroke-linecap="round" marker-end="url(#ah-orange)"/>
+  <text x="345" y="80" fill="#fde047" font-size="26" font-family="Arial, sans-serif" font-weight="bold">A</text>
+
+  <!-- vector B: yellow, pointing right-down -->
+  <line x1="200" y1="190" x2="330" y2="260" stroke="#fde047" stroke-width="9" stroke-linecap="round" marker-end="url(#ah-yellow)"/>
+  <text x="332" y="282" fill="#fde047" font-size="26" font-family="Arial, sans-serif" font-weight="bold">B</text>
+
+  <!-- vector C: pink, pointing up -->
+  <line x1="200" y1="190" x2="200" y2="75" stroke="#ec4899" stroke-width="9" stroke-linecap="round" marker-end="url(#ah-pink)"/>
+  <text x="208" y="68" fill="#ec4899" font-size="26" font-family="Arial, sans-serif" font-weight="bold">C</text>
+
+  <!-- resultant vector R: bold white, dashed guide, longer, more prominent -->
+  <line x1="200" y1="190" x2="470" y2="150" stroke="#ffffff" stroke-width="12" stroke-linecap="round" marker-end="url(#ah-white)" opacity="0.95"/>
+  <text x="440" y="130" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="bold">R</text>
+
+  <!-- dashed parallelogram hint for composition -->
+  <path d="M340 90 L470 150" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="8 7" opacity="0.5" fill="none"/>
+
+  <!-- small star accents -->
+  <path d="M520 220 l4 10 11 1 -8 7 2 11 -9 -6 -9 6 2 -11 -8 -7 11 -1 z" fill="#22c55e" opacity="0.85"/>
+  <circle cx="90" cy="100" r="5" fill="#ffffff" opacity="0.5"/>
+</svg>

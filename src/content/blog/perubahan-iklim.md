@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-09-13
 tags: ["Perubahan Iklim", "Pemanasan Global", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/perubahan-iklim.svg
 kuis:
   - soal: "Manakah yang TERMASUK dampak perubahan iklim skala bumi?"
     pilihan: ["Kenaikan permukaan laut akibat mencairnya es kutub", "Cuaca menjadi selalu stabil dan mudah diprediksi", "Semua spesies makhluk hidup diuntungkan", "Suhu bumi menjadi lebih dingin secara merata"]

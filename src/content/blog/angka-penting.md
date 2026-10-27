@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Angka Penting", "Notasi Ilmiah", "Fisika Kelas X", "Pengukuran"]
+coverImage: /covers/angka-penting.svg
 kuis:
   - soal: "Berapa jumlah angka penting pada 3,0500?"
     pilihan: ["2", "3", "4", "5"]

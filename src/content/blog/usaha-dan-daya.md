@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
+coverImage: /covers/usaha-dan-daya.svg
 tags: ["Usaha", "Daya", "Energi", "Fisika Kelas X", "Fase E"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/usaha-dan-daya.html"

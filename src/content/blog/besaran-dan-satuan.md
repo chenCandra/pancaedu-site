@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Besaran dan Satuan", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/besaran-dan-satuan.svg
 kuis:
   - soal: "Besaran adalah..."
     pilihan: ["Angka hasil pengukuran saja", "Sesuatu yang dapat diukur dan dinyatakan dengan angka serta satuan", "Nama alat ukur yang dipakai", "Satuan yang dipakai dalam pengukuran"]

@@ -5,6 +5,7 @@ category: materi
 mapel: Fisika
 kelas: X
 pubDate: 2026-09-12
+coverImage: /covers/gerak-parabola.svg
 tags: ["Gerak Parabola", "Gerak Dua Dimensi", "Fisika Kelas X", "Fase E"]
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/gerak-parabola.html"

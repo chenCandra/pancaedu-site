@@ -1,0 +1,62 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Ilustrasi kalkulator kartun dengan digit menyala dan kaca pembesar menyoroti angka penting">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" fill="#ffffff" fill-opacity="0.14"/>
+    </pattern>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5eead4" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#dots)"/>
+  <circle cx="80" cy="80" r="90" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="580" cy="300" r="90" fill="#ffffff" fill-opacity="0.07"/>
+
+  <g fill="#fde68a">
+    <path transform="translate(560,70) scale(1)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+    <path transform="translate(60,250) scale(0.8)" d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z"/>
+  </g>
+  <circle cx="500" cy="100" r="5" fill="#ec4899"/>
+  <circle cx="110" cy="160" r="5" fill="#ffffff"/>
+  <circle cx="470" cy="260" r="5" fill="#fde047"/>
+
+  <ellipse cx="300" cy="300" rx="110" ry="14" fill="#000000" fill-opacity="0.12"/>
+
+  <!-- Kalkulator -->
+  <g transform="translate(260,180)">
+    <rect x="-110" y="-120" width="220" height="250" rx="26" fill="#0ea5a3"/>
+    <rect x="-110" y="-120" width="220" height="250" rx="26" fill="none" stroke="#0f766e" stroke-width="0"/>
+    <circle cx="-70" cy="-96" r="5" fill="#ffffff" fill-opacity="0.6"/>
+    <circle cx="70" cy="-96" r="5" fill="#ffffff" fill-opacity="0.6"/>
+    <!-- screen -->
+    <rect x="-90" y="-100" width="180" height="70" rx="10" fill="#083344"/>
+    <circle cx="0" cy="-65" r="60" fill="url(#glow)"/>
+    <text x="0" y="-55" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold" fill="#5eead4">2,50</text>
+    <!-- highlighted digits box -->
+    <rect x="-18" y="-85" width="52" height="40" rx="8" fill="none" stroke="#fde047" stroke-width="3" stroke-dasharray="4 4"/>
+    <!-- buttons -->
+    <g>
+      <rect x="-90" y="-10" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="-40" y="-10" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="10" y="-10" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="-90" y="34" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="-40" y="34" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="10" y="34" width="40" height="34" rx="8" fill="#ec4899"/>
+      <rect x="-90" y="78" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="-40" y="78" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="10" y="78" width="40" height="34" rx="8" fill="#ffffff" fill-opacity="0.9"/>
+    </g>
+  </g>
+
+  <!-- Kaca pembesar menyoroti digit -->
+  <g transform="translate(330,-30) translate(0,70) rotate(18)">
+    <circle cx="340" cy="60" r="62" fill="#fde047" fill-opacity="0.18" stroke="#3b82f6" stroke-width="10"/>
+    <line x1="382" y1="104" x2="430" y2="152" stroke="#3b82f6" stroke-width="16" stroke-linecap="round"/>
+  </g>
+</svg>

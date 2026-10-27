@@ -6,6 +6,7 @@ mapel: Fisika
 kelas: X
 pubDate: 2026-08-29
 tags: ["Energi", "Fisika Kelas X", "Fase E"]
+coverImage: /covers/mengenal-ragam-energi.svg
 simulasi:
   url: "https://pancaedu.web.id/lab-embeds/energy-transformation-lab.html"
   judul: "Energy Transformation Lab"
