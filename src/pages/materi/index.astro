@@ -82,10 +82,8 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
   </p>
 
   {restPosts.length > PAGE_SIZE && (
-    <div class="container load-more-wrap">
-      <button type="button" class="btn load-more-btn" data-load-more data-page-size={PAGE_SIZE}>
-        Muat lebih banyak
-      </button>
+    <div class="container load-more-wrap" data-load-more-sentinel data-page-size={PAGE_SIZE}>
+      <p class="loading-indicator" data-loading-indicator>Memuat materi lainnya&hellip;</p>
     </div>
   )}
 </BaseLayout>
@@ -95,16 +93,17 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
   const grid = document.querySelector<HTMLElement>('[data-post-grid]');
   const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
   const featuredWrap = document.querySelector<HTMLElement>('[data-featured-wrap]');
-  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-load-more]');
+  const sentinel = document.querySelector<HTMLElement>('[data-load-more-sentinel]');
   const adDivider = document.querySelector<HTMLElement>('[data-ad-divider]');
 
   if (grid) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('a.post-card'));
-    const pageSize = Number(loadMoreBtn?.dataset.pageSize) || cards.length;
+    const pageSize = Number(sentinel?.dataset.pageSize) || cards.length;
     let activeKelas = '';
     let activeMapel = '';
     // Berapa kartu yang boleh tampil di tampilan "Semua" (tanpa filter) —
-    // nambah tiap kali tombol "Muat lebih banyak" diklik.
+    // nambah otomatis tiap kali sentinel di bawah grid masuk viewport
+    // (infinite scroll), lihat IntersectionObserver di bawah.
     let revealedCount = pageSize;
 
     const applyFilter = () => {
@@ -118,8 +117,8 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
         let visible = matches;
         if (matches && !filterActive) {
           // Tanpa filter aktif: batasi ke revealedCount pertama, sisanya
-          // nunggu tombol "Muat lebih banyak". Begitu ada filter dipakai,
-          // semua kartu yang cocok langsung ditampilkan.
+          // nunggu scroll ke bawah (infinite scroll). Begitu ada filter
+          // dipakai, semua kartu yang cocok langsung ditampilkan.
           matchedSoFar++;
           visible = matchedSoFar <= revealedCount;
         }
@@ -127,10 +126,10 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
         if (visible) visibleCount++;
       }
       if (emptyState) emptyState.hidden = visibleCount > 0;
-      // Kartu unggulan & tombol muat-lebih cuma masuk akal di tampilan
-      // "Semua" — begitu ada filter aktif, sembunyikan keduanya.
+      // Kartu unggulan & sentinel infinite-scroll cuma masuk akal di
+      // tampilan "Semua" — begitu ada filter aktif, sembunyikan keduanya.
       if (featuredWrap) featuredWrap.hidden = filterActive;
-      if (loadMoreBtn) loadMoreBtn.hidden = filterActive || revealedCount >= cards.length;
+      if (sentinel) sentinel.hidden = filterActive || revealedCount >= cards.length;
       // Pembatas iklan cuma masuk akal di batas "halaman pertama" tampilan
       // "Semua" — sembunyikan begitu filter Kelas/Mapel aktif.
       if (adDivider) adDivider.hidden = filterActive;
@@ -158,10 +157,25 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
       });
     }
 
-    loadMoreBtn?.addEventListener('click', () => {
-      revealedCount += pageSize;
-      applyFilter();
-    });
+    // Infinite scroll: begitu sentinel di bawah grid masuk viewport (sambil
+    // nggak ada filter aktif & masih ada kartu yang belum ditampilkan),
+    // tambah revealedCount otomatis -- gantiin tombol "Muat lebih banyak".
+    // rootMargin dikasih jarak ke depan biar kartu baru sudah kebuka SEBELUM
+    // sentinel-nya benar-benar kelihatan, jadi scroll-nya kerasa mulus.
+    if (sentinel) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              revealedCount += pageSize;
+              applyFilter();
+            }
+          }
+        },
+        { rootMargin: '600px 0px' }
+      );
+      observer.observe(sentinel);
+    }
 
     applyFilter();
   }
@@ -245,8 +259,8 @@ const mapelList = [...new Set(posts.map((p) => p.data.mapel).filter(Boolean))] a
     padding-block: 0 4rem;
   }
 
-  .load-more-btn {
-    cursor: pointer;
-    font-family: var(--font-body);
+  .loading-indicator {
+    color: var(--ink-faint);
+    font-size: 0.875rem;
   }
 </style>
