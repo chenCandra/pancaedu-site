@@ -367,30 +367,63 @@ function drawEnergyOrb(orb, t){
   ctx.fillStyle = halo;
   ctx.beginPath(); ctx.arc(center.x,center.y,radius*2.1,0,Math.PI*2); ctx.fill();
 
-  for (let i=0;i<3;i++){
-    ctx.save();
-    ctx.translate(center.x, center.y);
-    ctx.rotate(t*(0.0014+i*0.0005) + i*2.1);
-    ctx.scale(1, 0.4 + i*0.09);
-    const band = ctx.createRadialGradient(0,0,radius*0.2,0,0,radius*1.05);
-    band.addColorStop(0, `rgba(${r},${g},${b},0)`);
-    band.addColorStop(0.65, `rgba(${rh},${gh},${bh},0.5)`);
-    band.addColorStop(1, `rgba(${r},${g},${b},0)`);
-    ctx.strokeStyle = band;
-    ctx.lineWidth = radius*0.22;
-    ctx.beginPath();
-    ctx.arc(0,0,radius*0.85,0,Math.PI*1.5);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  for (let i=0;i<6;i++){
-    const ang = t*0.0028 + i*(Math.PI*2/6);
-    const rr = radius*0.92 + Math.sin(t*0.004+i)*radius*0.08;
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.beginPath();
-    ctx.arc(center.x + Math.cos(ang)*rr, center.y + Math.sin(ang)*rr, Math.max(1.5, radius*0.05), 0, Math.PI*2);
-    ctx.fill();
+  if (sign > 0){
+    // UTARA -- lonjakan runcing memancar keluar, kesan sumber/ledakan energi
+    const spikeCount = 8;
+    for (let i=0;i<spikeCount;i++){
+      const ang = t*0.0012 + i*(Math.PI*2/spikeCount);
+      const pulse = 0.5 + Math.sin(t*0.005 + i)*0.5;
+      const inner = radius*0.5, outer = radius*(1.0 + pulse*0.4);
+      const spread = 0.16;
+      ctx.beginPath();
+      ctx.moveTo(center.x + Math.cos(ang-spread)*inner, center.y + Math.sin(ang-spread)*inner);
+      ctx.lineTo(center.x + Math.cos(ang)*outer, center.y + Math.sin(ang)*outer);
+      ctx.lineTo(center.x + Math.cos(ang+spread)*inner, center.y + Math.sin(ang+spread)*inner);
+      ctx.closePath();
+      const spikeGrad = ctx.createRadialGradient(center.x,center.y,radius*0.25,center.x,center.y,outer);
+      spikeGrad.addColorStop(0, `rgba(${rh},${gh},${bh},0.6)`);
+      spikeGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx.fillStyle = spikeGrad;
+      ctx.fill();
+    }
+    // percikan terbang keluar lalu menghilang -- kesan terus "memancarkan"
+    for (let i=0;i<7;i++){
+      const cyc = (t*0.0012 + i/7) % 1;
+      const ang = i*(Math.PI*2/7) + 0.4;
+      const rr = radius*(0.5 + cyc*0.95);
+      ctx.fillStyle = `rgba(255,255,255,${0.9*(1-cyc)})`;
+      ctx.beginPath();
+      ctx.arc(center.x+Math.cos(ang)*rr, center.y+Math.sin(ang)*rr, Math.max(1.2, radius*0.065*(1-cyc*0.4)), 0, Math.PI*2);
+      ctx.fill();
+    }
+  } else {
+    // SELATAN -- pusaran spiral melilit ke dalam, kesan menyerap/menampung energi
+    const arms = 3;
+    for (let a=0;a<arms;a++){
+      ctx.beginPath();
+      const turns = 1.5, steps = 24;
+      for (let s=0;s<=steps;s++){
+        const f = s/steps;
+        const ang = t*-0.0016 + a*(Math.PI*2/arms) + f*turns*Math.PI*2;
+        const rr = radius*(1.05 - f*0.82);
+        const x = center.x + Math.cos(ang)*rr, y = center.y + Math.sin(ang)*rr;
+        if (s===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle = `rgba(${rh},${gh},${bh},0.55)`;
+      ctx.lineWidth = radius*0.15;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+    // percikan tersedot masuk ke pusat lalu lenyap -- kesan terus "menyerap"
+    for (let i=0;i<7;i++){
+      const cyc = (t*0.0012 + i/7) % 1;
+      const ang = i*(Math.PI*2/7) + 0.4 + cyc*2.2;
+      const rr = radius*(1.25 - cyc*1.05);
+      ctx.fillStyle = `rgba(255,255,255,${0.85*cyc})`;
+      ctx.beginPath();
+      ctx.arc(center.x+Math.cos(ang)*rr, center.y+Math.sin(ang)*rr, Math.max(1.2, radius*0.065*(0.3+cyc*0.5)), 0, Math.PI*2);
+      ctx.fill();
+    }
   }
 
   const core = ctx.createRadialGradient(center.x,center.y,0, center.x,center.y, radius*0.5);
