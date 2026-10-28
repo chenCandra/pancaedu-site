@@ -173,7 +173,8 @@
       <span class="north-color" style="font-weight:800;">Utara (U)</span>,
       <b>kepalkan tangan</b> = kutub
       <span class="south-color" style="font-weight:800;">Selatan (S)</span>.
-      Angkat <b>dua tangan</b>, lalu dekatkan satu sama lain -- bola energi
+      Angkat <b>dua tangan</b> (bisa juga ajak teman, sampai 4 tangan
+      sekaligus di kamera), lalu dekatkan satu sama lain -- bola energi
       baru muncul saat tangan terdeteksi, dan garis energinya baru menyala
       begitu dua bola energi cukup dekat.
     </p>
@@ -209,7 +210,7 @@
     <div class="ctrlSection" id="legend">
       <div><span class="sw north-color" style="background:var(--north);"></span>Utara (U) — telapak terbuka</div>
       <div><span class="sw south-color" style="background:var(--south);"></span>Selatan (S) — tangan mengepal</div>
-      <div style="margin-top:6px;color:var(--muted);">Angkat dua tangan lalu dekatkan satu sama lain untuk melihat interaksinya.</div>
+      <div style="margin-top:6px;color:var(--muted);">Angkat dua tangan (atau ajak teman, sampai 4 tangan) lalu dekatkan satu sama lain untuk melihat interaksinya.</div>
     </div>
 
     <div class="ctrlSection">
@@ -274,7 +275,7 @@ async function loadModel(){
       delegate: "GPU"
     },
     runningMode: "VIDEO",
-    numHands: 2
+    numHands: 4
   });
 }
 
@@ -731,7 +732,7 @@ function loop(){
     const openness = handOpenness(lm);
     const sign = openness > 1.55 ? 1 : -1; // terbuka=Utara, mengepal=Selatan
     const orb = makeOrb(center, sign, radius);
-    orb.label = idx === 0 ? 'Tangan' : 'Tangan 2';
+    orb.label = 'Tangan ' + (idx+1);
     return { orb, openness };
   });
 
@@ -765,7 +766,7 @@ function loop(){
   } else if (handOrbs.length === 1){
     interactionText.innerHTML = `Tangan: <b>${polLabel(handOrbs[0].openness)}</b><br>Angkat tangan satunya untuk berinteraksi`;
   } else if (pairs.length === 0){
-    interactionText.innerHTML = `Dua tangan terdeteksi<br>Dekatkan satu sama lain untuk melihat interaksinya`;
+    interactionText.innerHTML = `${handOrbs.length} tangan terdeteksi<br>Dekatkan satu sama lain untuk melihat interaksinya`;
   } else {
     pairs.sort((p1,p2) => p1.result.d - p2.result.d);
     const nearest = pairs[0];
