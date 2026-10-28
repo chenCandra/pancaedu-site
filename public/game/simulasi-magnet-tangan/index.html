@@ -368,33 +368,72 @@ function drawEnergyOrb(orb, t){
   ctx.beginPath(); ctx.arc(center.x,center.y,radius*2.1,0,Math.PI*2); ctx.fill();
 
   if (sign > 0){
-    // UTARA -- lonjakan runcing memancar keluar, kesan sumber/ledakan energi
-    const spikeCount = 8;
+    // UTARA -- ledakan energi bombastis: cincin kejut berdenyut, korona
+    // bergerigi yang berkedip liar, lonjakan tajam yang "retak-retak", dan
+    // percikan panjang yang melesat keluar
+    const tJit = Math.floor(t/70);
+
+    // cincin kejut berdenyut keluar dari inti, berulang
+    for (let i=0;i<3;i++){
+      const cyc = (t*0.0011 + i/3) % 1;
+      const rr = radius*(0.85 + cyc*1.9);
+      ctx.strokeStyle = `rgba(${rh},${gh},${bh},${(1-cyc)*0.5})`;
+      ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.arc(center.x,center.y,rr,0,Math.PI*2); ctx.stroke();
+    }
+
+    // korona bergerigi -- titik panjang & pendek berseling, berkedip cepat
+    const coronaPts = 18;
+    ctx.beginPath();
+    for (let i=0;i<=coronaPts;i++){
+      const idx = i % coronaPts;
+      const ang = (idx/coronaPts)*Math.PI*2 + t*0.0007;
+      const flick = 0.5 + 0.5*Math.sin(t*0.018 + idx*2.1);
+      const base = idx % 2 === 0 ? 1.55 : 1.02;
+      const rr = radius*(base + flick*0.55);
+      const x = center.x + Math.cos(ang)*rr, y = center.y + Math.sin(ang)*rr;
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    const coronaGrad = ctx.createRadialGradient(center.x,center.y,radius*0.3,center.x,center.y,radius*2.6);
+    coronaGrad.addColorStop(0, `rgba(${rh},${gh},${bh},0.55)`);
+    coronaGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    ctx.fillStyle = coronaGrad;
+    ctx.fill();
+
+    // lonjakan utama tajam, panjangnya "meretak" acak tiap ~70ms -- bukan
+    // berosilasi mulus, biar terasa liar kayak ledakan
+    const spikeCount = 10;
     for (let i=0;i<spikeCount;i++){
-      const ang = t*0.0012 + i*(Math.PI*2/spikeCount);
-      const pulse = 0.5 + Math.sin(t*0.005 + i)*0.5;
-      const inner = radius*0.5, outer = radius*(1.0 + pulse*0.4);
-      const spread = 0.16;
+      const ang = t*0.0016 + i*(Math.PI*2/spikeCount);
+      const jitter = pseudoRandom(tJit*31+i);
+      const inner = radius*0.5, outer = radius*(1.25 + jitter*0.75);
+      const spread = 0.095;
       ctx.beginPath();
       ctx.moveTo(center.x + Math.cos(ang-spread)*inner, center.y + Math.sin(ang-spread)*inner);
       ctx.lineTo(center.x + Math.cos(ang)*outer, center.y + Math.sin(ang)*outer);
       ctx.lineTo(center.x + Math.cos(ang+spread)*inner, center.y + Math.sin(ang+spread)*inner);
       ctx.closePath();
-      const spikeGrad = ctx.createRadialGradient(center.x,center.y,radius*0.25,center.x,center.y,outer);
-      spikeGrad.addColorStop(0, `rgba(${rh},${gh},${bh},0.6)`);
+      const spikeGrad = ctx.createRadialGradient(center.x,center.y,radius*0.2,center.x,center.y,outer);
+      spikeGrad.addColorStop(0, 'rgba(255,255,255,0.85)');
+      spikeGrad.addColorStop(0.4, `rgba(${rh},${gh},${bh},0.75)`);
       spikeGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
       ctx.fillStyle = spikeGrad;
       ctx.fill();
     }
-    // percikan terbang keluar lalu menghilang -- kesan terus "memancarkan"
-    for (let i=0;i<7;i++){
-      const cyc = (t*0.0012 + i/7) % 1;
-      const ang = i*(Math.PI*2/7) + 0.4;
-      const rr = radius*(0.5 + cyc*0.95);
-      ctx.fillStyle = `rgba(255,255,255,${0.9*(1-cyc)})`;
+
+    // percikan panjang melesat keluar dengan jejak, lalu lenyap
+    for (let i=0;i<11;i++){
+      const cyc = (t*0.0013 + i/11) % 1;
+      const ang = i*(Math.PI*2/11) + Math.sin(i*3.3)*0.25;
+      const rr = radius*(0.55 + cyc*1.5);
+      const trailRr = radius*(0.55 + Math.max(0,cyc-0.1)*1.5);
+      ctx.strokeStyle = `rgba(255,255,255,${0.85*(1-cyc)})`;
+      ctx.lineWidth = Math.max(1, radius*0.05*(1-cyc*0.5));
       ctx.beginPath();
-      ctx.arc(center.x+Math.cos(ang)*rr, center.y+Math.sin(ang)*rr, Math.max(1.2, radius*0.065*(1-cyc*0.4)), 0, Math.PI*2);
-      ctx.fill();
+      ctx.moveTo(center.x+Math.cos(ang)*trailRr, center.y+Math.sin(ang)*trailRr);
+      ctx.lineTo(center.x+Math.cos(ang)*rr, center.y+Math.sin(ang)*rr);
+      ctx.stroke();
     }
   } else {
     // SELATAN -- pusaran spiral melilit ke dalam, kesan menyerap/menampung energi
