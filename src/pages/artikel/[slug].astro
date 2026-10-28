@@ -158,6 +158,30 @@ const jsonLd = {
     opacity: 0.5;
   }
 
+  /* Catatan kaki (sintaks [^1] markdown, GFM) -- cuma muncul kalau
+     artikelnya memang pakai footnote, jadi aman dipasang global di sini. */
+  :global(.prose section[data-footnotes]) {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  :global(.prose section[data-footnotes]::before) {
+    content: "Catatan Kaki & Referensi";
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.prose section[data-footnotes] li) {
+    margin-bottom: 0.5rem;
+  }
+
   .post-meta-row {
     display: flex;
     flex-wrap: wrap;

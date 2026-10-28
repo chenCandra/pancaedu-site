@@ -329,6 +329,25 @@ a {
   padding-inline: 1.5rem;
 }
 
+/* Utility standar "sembunyikan visual, tetap kebaca screen reader" --
+   Tailwind punya ini bawaan, TAPI cuma kalau nama kelasnya kedeteksi di
+   source yang di-scan JIT-nya. remark-gfm nyisipin class="sr-only" di
+   heading "Footnotes" hasil render footnote ([^1]) langsung ke HTML
+   output, bukan dari source yang discan Tailwind -- jadi kelasnya nggak
+   pernah ke-generate & heading itu malah tampil gede-gede. Ditulis manual
+   di sini (ditemukan 2026-10-28 lewat artikel yang pertama pakai footnote). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Dipakai section-section besar di Beranda (Hero, Featured, Bento, dst). */
 .section {
   padding-block: clamp(4rem, 10vw, 8rem);

@@ -16,7 +16,10 @@ const { headings } = Astro.props;
 
 // Cuma level 2 (##) — level 3 ke bawah biasanya detail kecil (contoh soal,
 // sub-poin) yang bikin daftar isi kepanjangan & kurang berguna buat navigasi.
-const items = headings.filter((h) => h.depth === 2);
+// `footnote-label` dikecualikan -- itu heading "Footnotes" yang otomatis
+// disisipkan remark-gfm (sr-only, bahasa Inggris) tiap kali artikel pakai
+// catatan kaki ([^1]), bukan sub-judul yang ditulis penulisnya.
+const items = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
 ---
 
 {items.length >= 3 && (
