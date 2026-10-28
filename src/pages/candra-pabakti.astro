@@ -1,5 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
 
 const roles = [
   { label: 'Guru Fisika', badge: '' },
@@ -34,6 +36,14 @@ const works = [
     desc: 'Tulisan lepas: refleksi ruang kelas, catatan studi, dan opini seputar pendidikan.',
   },
 ];
+
+// Tulisan terbaru di /artikel -- materi punya listing sendiri (lihat kartu
+// "Materi" di bawah), jadi tidak ikut digabung di sini.
+const latestPosts = (
+  await getCollection('blog', ({ data }) => data.category === 'artikel' && !data.draft)
+)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
 
 const canonicalURL = new URL('/candra-pabakti', Astro.site).toString();
 
@@ -110,6 +120,15 @@ const jsonLd = {
         ))}
       </div>
     </section>
+
+    {latestPosts.length > 0 && (
+      <section class="latest-posts" data-reveal>
+        <p class="eyebrow">Tulisan Terbaru</p>
+        <div class="latest-posts-grid">
+          {latestPosts.map((post) => <PostCard post={post} />)}
+        </div>
+      </section>
+    )}
 
     <div class="cta-row">
       <a class="btn btn-primary" href="/kontak">Hubungi Saya</a>
@@ -209,6 +228,17 @@ const jsonLd = {
     margin: 0;
     font-size: 0.9rem;
     color: var(--ink-soft);
+  }
+
+  .latest-posts {
+    margin-top: 3rem;
+  }
+
+  .latest-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
   }
 
   .cta-row {

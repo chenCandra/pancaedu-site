@@ -44,30 +44,55 @@ const formattedDate = pubDate.toLocaleDateString('id-ID', {
   year: 'numeric',
 });
 
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: title,
-  description,
-  datePublished: pubDate.toISOString(),
-  dateModified: (updatedDate ?? pubDate).toISOString(),
-  author: {
-    '@type': 'Person',
-    name: 'Candra Pabakti',
-    url: new URL('/candra-pabakti', Astro.site).toString(),
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'PancaEdu',
-    url: Astro.site?.toString(),
-  },
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      datePublished: pubDate.toISOString(),
+      dateModified: (updatedDate ?? pubDate).toISOString(),
+      mainEntityOfPage: pageUrl,
+      author: {
+        '@type': 'Person',
+        name: 'Candra Pabakti',
+        url: new URL('/candra-pabakti', Astro.site).toString(),
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'PancaEdu',
+        url: Astro.site?.toString(),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Beranda', item: Astro.site?.toString() },
+        { '@type': 'ListItem', position: 2, name: 'Artikel', item: new URL('/artikel', Astro.site).toString() },
+        { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+      ],
+    },
+  ],
 };
 ---
 
 <BaseLayout title={title} description={description} image={coverImage} article jsonLd={jsonLd}>
   <ReadingProgress />
   <article class="container post">
-    <p class="eyebrow">Artikel</p>
+    <nav class="eyebrow breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <a href="/artikel">Artikel</a>
+      {topik && (
+        <>
+          <span aria-hidden="true">/</span>
+          <span>{topik}</span>
+        </>
+      )}
+    </nav>
     <h1>{title}</h1>
     <div class="post-meta-row">
       <p class="post-date">Dipublikasikan {formattedDate}</p>
@@ -111,6 +136,26 @@ const jsonLd = {
   .post {
     padding-block: 3rem 4rem;
     max-width: var(--measure);
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb span[aria-hidden] {
+    opacity: 0.5;
   }
 
   .post-meta-row {

@@ -2,9 +2,9 @@
 title: "Filsafat Ilmu dalam 10 Menit: Ontologi, Epistemologi, Aksiologi"
 description: "Ringkasan gampang-dicerna mata kuliah Filsafat Ilmu — tiga pertanyaan dasar yang menopang semua ilmu pengetahuan, dari ontologi sampai aksiologi."
 category: artikel
-topik: "Pustaka"
+topik: "Filsafat Ilmu"
 pubDate: 2026-10-28
-tags: ["Pustaka", "Filsafat Ilmu", "Kuliah"]
+tags: ["Filsafat Ilmu", "Kuliah", "Pustaka"]
 draft: false
 ---
 

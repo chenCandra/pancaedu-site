@@ -22,13 +22,22 @@ const PAGE_SIZE = 9;
 
 // Urutan tetap (bukan sekadar unique-dari-data) supaya tombol filternya
 // nggak lompat-lompat posisi tiap kali ada artikel baru diterbitkan.
-const topikOrder = ['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka'];
+const topikOrder = [
+  'Sains & Fakta Unik',
+  'Kurikulum Merdeka',
+  'Refleksi Mengajar',
+  'Pustaka',
+  'Filsafat Ilmu',
+  'Manajemen Pendidikan',
+];
 const topikList = topikOrder.filter((t) => posts.some((p) => p.data.topik === t));
 const topikBadgeClass: Record<string, string> = {
   'Sains & Fakta Unik': 'badge-teal',
   'Kurikulum Merdeka': '',
   'Refleksi Mengajar': 'badge-rose',
   Pustaka: 'badge-gold',
+  'Filsafat Ilmu': 'badge-indigo',
+  'Manajemen Pendidikan': 'badge-purple',
 };
 ---
 

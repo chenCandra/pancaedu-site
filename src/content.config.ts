@@ -26,7 +26,9 @@ const blog = defineCollection({
     // filter di /artikel, biar "Sains & Fakta Unik" nggak nyampur keliatan
     // sama "Refleksi Mengajar" dst. Materi tidak pakai field ini (materi
     // sudah punya mapel+kelas sendiri buat klasifikasi).
-    topik: z.enum(['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka']).optional(),
+    topik: z
+      .enum(['Sains & Fakta Unik', 'Kurikulum Merdeka', 'Refleksi Mengajar', 'Pustaka', 'Filsafat Ilmu', 'Manajemen Pendidikan'])
+      .optional(),
     mapel: z.string().optional(),
     kelas: z.enum(['X', 'XI', 'XII', 'TKA']).optional(), // jenjang kelas (atau "TKA"), dipakai khusus untuk materi
     pubDate: z.coerce.date(),
