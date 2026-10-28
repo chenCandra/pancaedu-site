@@ -16,6 +16,14 @@ backend:
 # production (pancaedu.web.id/admin) -- OAuth app + Worker auth-nya sudah
 # di-setup (lihat base_url di atas).
 
+# Sedikit branding biar UI Sveltia CMS nggak kerasa generik/asing --
+# logo_url tampil di pojok kiri atas panel admin, site_url dipakai tombol
+# "View Site" bawaan Sveltia (link ke PancaEdu, bukan ke URL deploy/preview).
+site_url: https://pancaedu.web.id
+display_url: https://pancaedu.web.id
+logo:
+  src: /favicon.svg
+
 media_folder: "public/images"
 public_folder: "/images"
 

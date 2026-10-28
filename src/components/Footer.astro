@@ -18,7 +18,13 @@ const links = [
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
 
-    <a href="/admin-panca/login" class="footer-admin-icon" aria-label="Admin" title="Admin">⚙️</a>
+    <details class="footer-admin-menu">
+      <summary class="footer-admin-icon" aria-label="Menu admin" title="Menu admin">⚙️</summary>
+      <div class="footer-admin-popover">
+        <a href="/admin/">📝 Kelola Konten <span>(Sveltia CMS — artikel &amp; materi)</span></a>
+        <a href="/admin-panca/login">🎓 Admin Panca <span>(Penugasan, PPDB, data sekolah)</span></a>
+      </div>
+    </details>
 
     <p class="footer-copy">
       &copy; {year} PancaEdu — Ruang Belajar Digital oleh <a href="/candra-pabakti">Candra Pabakti</a>.
@@ -84,17 +90,73 @@ const links = [
   }
 
   /* Kecil sengaja -- bukan CTA, cuma jalan pintas buat guru sendiri supaya
-     tidak perlu ingat/ketik /admin-panca/login manual. Opacity dinaikkan
-     (2026-09-11) supaya lebih gampang ditemukan sendiri -- awalnya 0,35. */
+     tidak perlu ingat/ketik /admin/ atau /admin-panca/login manual. Opacity
+     dinaikkan (2026-09-11) supaya lebih gampang ditemukan sendiri -- awalnya
+     0,35. Diubah (2026-10-28) dari link langsung ke /admin-panca jadi menu
+     popover <details> -- dua tujuan admin (Sveltia buat konten, Admin Panca
+     buat Penugasan/PPDB) sebelumnya ambigu di satu ikon. <details>/<summary>
+     dipakai biar nggak perlu JS buat toggle & tetap bisa dioperasikan lewat
+     keyboard bawaan browser.
+  */
+  .footer-admin-menu {
+    position: relative;
+  }
+
   .footer-admin-icon {
+    display: inline-block;
     font-size: 0.9rem;
-    text-decoration: none;
+    cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.2s ease;
     line-height: 1;
+    list-style: none;
+  }
+
+  .footer-admin-icon::-webkit-details-marker {
+    display: none;
   }
 
   .footer-admin-icon:hover {
     opacity: 1;
+  }
+
+  .footer-admin-popover {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 15rem;
+    padding: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  }
+
+  .footer-admin-popover a {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.15s ease;
+  }
+
+  .footer-admin-popover a:hover {
+    background: var(--accent-soft);
+  }
+
+  .footer-admin-popover a span {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--ink-soft);
   }
 </style>
