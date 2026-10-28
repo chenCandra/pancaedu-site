@@ -242,12 +242,12 @@ const toggleGridBtn = document.getElementById('toggleGridBtn');
 const strengthSlider = document.getElementById('strengthSlider');
 const strengthValue = document.getElementById('strengthValue');
 
-let showGrid = true;
+let showFieldLines = true;
 let magnetStrength = 1;
 
 toggleGridBtn.addEventListener('click', () => {
-  showGrid = !showGrid;
-  toggleGridBtn.textContent = showGrid ? 'Sembunyikan garis gaya' : 'Tampilkan garis gaya';
+  showFieldLines = !showFieldLines;
+  toggleGridBtn.textContent = showFieldLines ? 'Sembunyikan garis gaya' : 'Tampilkan garis gaya';
 });
 strengthSlider.addEventListener('input', () => {
   magnetStrength = parseFloat(strengthSlider.value);
@@ -543,6 +543,80 @@ function drawInteractionBeam(a, b, result, t, seedKey){
   ctx.restore();
 }
 
+// Telusuri satu garis gaya mengikuti vektor medan (fieldAt), langkah demi
+// langkah -- persis cara buku fisika menggambarkannya. Garis dari Utara
+// berjalan SEARAH medan; garis dari Selatan berjalan BERLAWANAN arah medan
+// (biar tampilannya tetap "masuk" ke kutub Selatan, bukan keluar darinya).
+function traceFieldLine(start, orbs, sign, maxSteps, stepSize, W, H){
+  const pts = [start];
+  let p = start;
+  let terminated = false;
+  for (let i=0;i<maxSteps;i++){
+    const f = fieldAt(p, orbs);
+    let dir = norm(f);
+    if (sign < 0) dir = scale(dir, -1);
+    p = add(p, scale(dir, stepSize));
+    pts.push(p);
+    if (p.x < -30 || p.x > W+30 || p.y < -30 || p.y > H+30) break;
+    let hitSink = false;
+    for (const o of orbs){
+      if (o.sign !== sign && len(sub(p, o.center)) < o.radius*1.15){ hitSink = true; break; }
+    }
+    if (hitSink){ terminated = true; break; }
+  }
+  return { pts, terminated };
+}
+
+function drawArrowHead(p, ang, size, color){
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(ang);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(size, 0);
+  ctx.lineTo(-size*0.7, size*0.55);
+  ctx.lineTo(-size*0.7, -size*0.55);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// Gambar garis gaya dari tiap bola: Utara jadi sumber (garis keluar ke
+// segala arah, melengkung masuk ke Selatan terdekat kalau ada, atau
+// melengkung menjauh kalau ketemu Utara lain), Selatan jadi penampung.
+function drawFieldLines(orbs, W, H){
+  if (orbs.length === 0) return;
+  const stepSize = 7, maxSteps = 120, linesPerOrb = 9;
+
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  for (const src of orbs){
+    for (let i=0;i<linesPerOrb;i++){
+      const angle = (i/linesPerOrb) * Math.PI*2;
+      const start = add(src.center, scale(vec(Math.cos(angle), Math.sin(angle)), src.radius*1.12));
+      const { pts, terminated } = traceFieldLine(start, orbs, src.sign, maxSteps, stepSize, W, H);
+      if (pts.length < 4) continue;
+
+      const baseAlpha = terminated ? 0.55 : 0.32;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let k=1;k<pts.length;k++) ctx.lineTo(pts[k].x, pts[k].y);
+      ctx.strokeStyle = `rgba(195,218,255,${baseAlpha})`;
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      for (let k=8; k<pts.length-2; k+=18){
+        const p0 = pts[k], p1 = pts[k+1];
+        const ang = Math.atan2(p1.y-p0.y, p1.x-p0.x);
+        drawArrowHead(p0, ang, 4.5, `rgba(220,235,255,${baseAlpha+0.2})`);
+      }
+    }
+  }
+  ctx.restore();
+}
+
 function handOpenness(lm){
   const wrist = lm[0];
   const midMcp = lm[9];
@@ -591,32 +665,12 @@ function loop(){
 
   const allOrbs = handOrbs.map(h => h.orb);
 
-  // Medan latar (jarum kompas kecil, dibuat lebih halus biar bola energi
-  // tetap jadi fokus utama)
-  if (showGrid){
-    const cell = 34;
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    for (let y = cell/2; y < H; y += cell){
-      for (let x = cell/2; x < W; x += cell){
-        const f = fieldAt(vec(x,y), allOrbs);
-        const mag = Math.min(1, len(f)/460);
-        if (mag < 0.05) continue;
-        const ang = Math.atan2(f.y, f.x);
-        const L = 4 + mag*9;
-        const r = Math.round(90 + mag*165);
-        const g = Math.round(90 + mag*60);
-        const b = Math.round(160 - mag*60);
-        ctx.strokeStyle = `rgba(${r},${g},${b},${0.2+mag*0.35})`;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.moveTo(x - Math.cos(ang)*L, y - Math.sin(ang)*L);
-        ctx.lineTo(x + Math.cos(ang)*L, y + Math.sin(ang)*L);
-        ctx.stroke();
-      }
-    }
-    ctx.restore();
-  }
+  // Garis gaya ala buku teks -- ditelusuri langsung dari vektor medan
+  // (fieldAt), bukan grid jarum statis. Setiap garis dimulai dari kutub
+  // Utara: kalau ada Selatan di dekatnya, garis melengkung masuk ke sana
+  // (seperti diagram "N ke S" di buku); kalau yang di dekatnya sama-sama
+  // Utara, garis otomatis melengkung menjauh (diagram tolak-menolak).
+  if (showFieldLines) drawFieldLines(allOrbs, W, H);
 
   // Garis energi antar semua pasangan tangan yang cukup dekat, digambar
   // sebelum bola supaya bola energinya tampil di atas.
