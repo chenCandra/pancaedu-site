@@ -33,6 +33,9 @@ const nav = [
       ))}
       <a href="/cari" class="site-nav-icon-mobile">Cari</a>
       <a href="/tersimpan" class="site-nav-icon-mobile">Tersimpan</a>
+      <button type="button" class="site-nav-icon-mobile js-theme-toggle" aria-label="Ganti mode terang/gelap">
+        🌙 Mode Gelap
+      </button>
     </nav>
     <div class="site-nav-icons">
       <a href="/cari" class="site-nav-icon" aria-label="Cari artikel & materi">
@@ -46,6 +49,15 @@ const nav = [
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
         </svg>
       </a>
+      <button type="button" class="site-nav-icon js-theme-toggle" aria-label="Ganti mode terang/gelap">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
     </div>
     <a href="/ruang-belajar" class="btn btn-primary site-nav-cta" data-magnetic>Ruang Belajar</a>
     <button
@@ -193,11 +205,69 @@ const nav = [
     background: var(--accent-soft);
   }
 
+  /* Tombol toggle terang/gelap pakai elemen <button>, bukan <a> seperti ikon
+     lain -- reset tampilan bawaan tombol browser dulu. */
+  button.site-nav-icon {
+    appearance: none;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  /* Ikon matahari/bulan saling sembunyi-tampil ngikut data-theme di <html>
+     (lihat script toggle di bawah & script inline early-apply di
+     BaseLayout.astro) -- default (belum pernah di-toggle manual) ikut
+     prefers-color-scheme sistem lewat media query. */
+  .js-theme-toggle .icon-sun {
+    display: none;
+  }
+
+  .js-theme-toggle .icon-moon {
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .js-theme-toggle .icon-sun {
+      display: block;
+    }
+
+    :root:not([data-theme='light']) .js-theme-toggle .icon-moon {
+      display: none;
+    }
+  }
+
+  :root[data-theme='dark'] .js-theme-toggle .icon-sun {
+    display: block;
+  }
+
+  :root[data-theme='dark'] .js-theme-toggle .icon-moon {
+    display: none;
+  }
+
+  :root[data-theme='light'] .js-theme-toggle .icon-sun {
+    display: none;
+  }
+
+  :root[data-theme='light'] .js-theme-toggle .icon-moon {
+    display: block;
+  }
+
   /* Versi teks di dalam dropdown mobile — ikon .site-nav-icons disembunyikan
      di mobile (lihat media query di bawah), diganti link teks biasa di sini
      biar tetap bisa diakses tanpa nambah tombol ikon terpisah di header sempit. */
   .site-nav-icon-mobile {
     display: none;
+  }
+
+  button.site-nav-icon-mobile {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    color: var(--ink-soft);
+    font-family: inherit;
+    cursor: pointer;
   }
 
   .site-nav-toggle {
@@ -281,7 +351,8 @@ const nav = [
       opacity: 1;
     }
 
-    .site-nav a {
+    .site-nav a,
+    .site-nav button.site-nav-icon-mobile {
       padding: 0.9rem 1.5rem;
       border-top: 1px solid var(--border);
     }
@@ -342,5 +413,45 @@ const nav = [
     mq.addEventListener('change', (e) => {
       if (e.matches) close();
     });
+  }
+
+  // Toggle mode terang/gelap manual -- lihat juga script inline early-apply
+  // di BaseLayout.astro (nerapin preferensi tersimpan SEBELUM render
+  // pertama, biar tidak ada kedipan ganti tema) & aturan [data-theme] di
+  // global.css. localStorage kosong/belum pernah di-toggle = situs tetap
+  // ikut prefers-color-scheme sistem seperti biasa.
+  const THEME_KEY = 'pancaedu-theme';
+  const themeToggles = document.querySelectorAll<HTMLButtonElement>('.js-theme-toggle');
+  const mobileThemeToggle = document.querySelector<HTMLButtonElement>('button.site-nav-icon-mobile.js-theme-toggle');
+
+  function getEffectiveTheme(): 'light' | 'dark' {
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function syncMobileLabel() {
+    if (!mobileThemeToggle) return;
+    const isDark = getEffectiveTheme() === 'dark';
+    mobileThemeToggle.textContent = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+  }
+
+  function applyTheme(theme: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // diamkan -- toggle tetap jalan di sesi ini, cuma nggak tersimpan
+    }
+    syncMobileLabel();
+  }
+
+  if (themeToggles.length > 0) {
+    themeToggles.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyTheme(getEffectiveTheme() === 'dark' ? 'light' : 'dark');
+      });
+    });
+    syncMobileLabel();
   }
 </script>

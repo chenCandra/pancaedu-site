@@ -58,6 +58,22 @@ const finalJsonLd = jsonLd ?? autoJsonLd;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Terapkan preferensi mode terang/gelap TERSIMPAN (lihat tombol toggle
+         di Header.astro) sebelum render pertama -- sengaja inline & paling
+         awal di <head>, BUKAN script module biasa, biar tidak ada kedipan
+         (FOUC) ganti tema sesaat setelah halaman tampil. Kalau belum pernah
+         di-toggle manual, atribut ini tidak diset sama sekali -- situs tetap
+         ikut prefers-color-scheme sistem seperti biasa (lihat global.css). -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('pancaedu-theme');
+          if (saved === 'light' || saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <SEO
       title={title}

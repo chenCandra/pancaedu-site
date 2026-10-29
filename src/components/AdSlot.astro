@@ -7,7 +7,12 @@ interface Props {
   label?: string;
 }
 
-const { label = 'Iklan' } = Astro.props;
+// Default "Jeda" (BUKAN "Iklan") -- belum ada akun AdSense terpasang di
+// slot ini, jadi labelnya sengaja netral/tidak mencolok, bukan menyiratkan
+// ada ruang iklan yang kosong. Ganti balik ke "Iklan" (atau ganti isi
+// <div class="ad-slot"> dengan <ins class="adsbygoogle">) begitu AdSense
+// disetujui dan dipasang beneran -- lihat catatan di atas.
+const { label = 'Jeda' } = Astro.props;
 ---
 
 <div class="ad-slot" data-ad-placeholder>

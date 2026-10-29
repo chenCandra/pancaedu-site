@@ -79,7 +79,7 @@ const topikBadgeClass: Record<string, string> = {
         {restPosts.slice(0, PAGE_SIZE).map((post) => <PostCard post={post} />)}
         {restPosts.length > PAGE_SIZE && (
           <div class="ad-divider" data-ad-divider>
-            <AdSlot label="Iklan" />
+            <AdSlot label="Jeda" />
           </div>
         )}
         {restPosts.slice(PAGE_SIZE).map((post) => <PostCard post={post} hidden />)}

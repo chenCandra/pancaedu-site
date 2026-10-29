@@ -25,10 +25,16 @@ const loopedQuotes = [...quotes, ...quotes];
 
 <style>
   .quote-ticker {
+    /* Latar ticker SENGAJA selalu gelap di kedua tema (campuran 70% hitam) --
+       makanya teksnya TIDAK pakai var(--accent-ink) (itu buat teks di atas
+       var(--accent) langsung, dan di mode gelap --accent-ink malah berubah
+       jadi nyaris hitam -- teks hitam di atas latar gelap jadi nyaris tak
+       kelihatan). Putih tetap/fixed di kedua tema karena latarnya juga
+       fixed gelap. */
     background: color-mix(in srgb, var(--accent) 30%, black 70%);
-    color: var(--accent-ink);
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
+    color: #fff;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
     border-image: linear-gradient(
         90deg,
         var(--accent),

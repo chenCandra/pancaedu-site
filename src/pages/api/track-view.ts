@@ -15,7 +15,8 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const slug = typeof body.slug === 'string' ? body.slug.slice(0, 200) : '';
-  const category = body.category === 'materi' || body.category === 'artikel' ? body.category : '';
+  const category =
+    body.category === 'materi' || body.category === 'artikel' || body.category === 'tools' ? body.category : '';
   if (!slug || !category) return new Response(null, { status: 204 });
 
   // Fire-and-forget dari sisi klien (sendBeacon) -- gagal nulis D1 di sini
