@@ -63,8 +63,11 @@ export default defineConfig({
     sitemap({
       // Halaman /hasil-ujian (nilai per kelas, digerbangi PIN) & /admin-panca
       // (panel admin custom, login-gated) sengaja tidak dimasukkan sitemap --
-      // bukan konten yang ingin ditemukan lewat pencarian.
-      filter: (page) => !page.includes('/hasil-ujian') && !page.includes('/admin-panca'),
+      // bukan konten yang ingin ditemukan lewat pencarian. /preview-classic
+      // juga dikecualikan -- halaman pratinjau tata letak alternatif
+      // (data contoh, bukan konten asli), sudah ber-noindex sendiri.
+      filter: (page) =>
+        !page.includes('/hasil-ujian') && !page.includes('/admin-panca') && !page.includes('/preview-classic'),
     }),
   ],
   vite: {

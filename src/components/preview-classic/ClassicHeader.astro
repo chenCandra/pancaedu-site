@@ -1,0 +1,56 @@
+---
+// Nav REAL (rute sungguhan di situs) -- cuma komponen materi/lab maya/
+// game/artikel di kolom konten yang dummy (lihat previewClassicDummy.ts).
+// Search dipindah ke hero (ClassicHero.astro), biar tidak dobel.
+// Ruang Belajar SENGAJA tidak masuk daftar teks ini -- fitur flagship
+// (semi-LMS) situs asli dikasih tombol CTA terpisah, bukan teks nav biasa
+// (lihat pola sama di Header.astro produksi), jadi di sini juga begitu
+// (lihat tombol .cp-cta di cp-identity-right).
+const nav = [
+  { href: '/', label: 'Beranda' },
+  { href: '/artikel', label: 'Artikel' },
+  { href: '/materi', label: 'Materi Pelajaran' },
+  { href: '/lab-maya', label: 'Lab Maya' },
+  { href: '/game', label: 'Game Edukasi' },
+  { href: '/kenangan', label: 'Jejak Kelas' },
+];
+
+const today = new Date().toLocaleDateString('id-ID', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<header>
+  <div class="cp-identity">
+    <div class="cp-container cp-identity-inner">
+      <a href="/" class="cp-logo">
+        <span class="cp-logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle>
+            <ellipse cx="12" cy="12" rx="9" ry="3.8"></ellipse>
+            <ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(60 12 12)"></ellipse>
+            <ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(-60 12 12)"></ellipse>
+          </svg>
+        </span>
+        <span class="cp-logo-text">
+          <span class="cp-logo-name">PancaEdu</span>
+          <span class="cp-logo-tagline">Ruang Belajar Digital</span>
+        </span>
+      </a>
+      <div class="cp-identity-right">
+        <span class="cp-date">{today}</span>
+        <a href="/ruang-belajar" class="btn btn-primary cp-cta">Ruang Belajar</a>
+      </div>
+    </div>
+  </div>
+  <nav class="cp-navbar" aria-label="Navigasi utama">
+    <div class="cp-container cp-navbar-inner">
+      {nav.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </div>
+  </nav>
+</header>

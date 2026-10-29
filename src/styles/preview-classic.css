@@ -1,0 +1,803 @@
+/* ============================================================
+   PREVIEW "Classic News Portal" — TAHAP 2.
+   Tahap 1 sengaja berdiri sendiri (palet krem/navy kustom, font serif)
+   supaya proporsi tata letak bisa dinilai lepas dari gaya visual situs.
+   Layout itu sudah disetujui -- SEMUA ukuran/grid/breakpoint di bawah
+   TIDAK diubah dari tahap 1. Yang berubah cuma "kulit"-nya: warna,
+   tipografi, radius, shadow sekarang diambil dari token tema situs asli
+   (src/styles/global.css, diimpor di preview-classic.astro SEBELUM file
+   ini) -- biar hasilnya terasa seperti bagian dari PancaEdu, bukan situs
+   lain yang ditempel. Mengikuti token global juga berarti preview ini
+   otomatis ikut dark mode situs, gratis.
+   ============================================================ */
+
+/* Font judul: Playfair Display kerasa terlalu formal/kaku -- diganti
+   Fraunces, serif juga (masih beda suasana dari Space Grotesk situs asli)
+   tapi lekuknya lebih lembut & hangat, jadi tidak terlalu "portal berita
+   resmi". Hanya di-import di file ini, tidak menambah beban font di
+   halaman lain. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap');
+
+.cp {
+  /* "Navy" & "accent" di tahap 1 adalah peran desain (warna utama tegas +
+     warna penanda/tag), bukan warna hardcode -- sekarang dipetakan ke
+     token situs asli supaya satu sumber kebenaran tetap di global.css. */
+  --cp-navy: var(--accent);
+  --cp-navy-dark: color-mix(in srgb, var(--accent) 30%, black 70%);
+  --cp-accent: var(--gold);
+  --cp-max: 1220px;
+  --cp-font-display: 'Fraunces', Georgia, serif;
+
+  min-height: 100vh;
+}
+
+.cp a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cp-container {
+  max-width: var(--cp-max);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ---------- Banner mode pratinjau ---------- */
+.cp-preview-banner {
+  background: var(--cp-navy-dark);
+  color: var(--accent-ink);
+  text-align: center;
+  font-size: 0.8125rem;
+  padding: 0.5rem 1rem;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Header: identitas (bar kaca, persis gaya site-header asli) ---------- */
+.cp-identity {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.cp-identity-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.cp-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cp-logo-mark {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--cp-navy);
+  color: var(--accent-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--glow-accent);
+}
+
+.cp-logo-mark svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.cp-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cp-logo-name {
+  font-family: var(--cp-font-display);
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.cp-logo-tagline {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.cp-identity-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.cp-date {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* Tombol CTA "Ruang Belajar" -- pakai .btn.btn-primary global (situs asli)
+   apa adanya, cuma dikecilkan dikit biar pas duduk di bar identitas. */
+.cp-cta {
+  padding: 0.6rem 1.25rem;
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+}
+
+/* ---------- Header: navbar (bar warna accent) ---------- */
+.cp-navbar {
+  background: var(--cp-navy);
+}
+
+.cp-navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cp-navbar-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.cp-navbar a {
+  color: var(--accent-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.9rem 1rem;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  opacity: 0.88;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.cp-navbar a:hover,
+.cp-navbar a:focus-visible {
+  opacity: 1;
+  border-bottom-color: var(--cp-accent);
+}
+
+/* ---------- Hero: tahap 3, full-bleed (foto = latar seluruh section,
+   bukan kartu di dalam container) -- "Akses Cepat" (panel terpisah) sudah
+   dibuang, fungsinya digantikan baris pil quick-link di bawah excerpt. ---------- */
+.cp-hero {
+  position: relative;
+  min-height: 34rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cp-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cp-hero-scrim {
+  position: absolute;
+  inset: 0;
+  /* Beda dari percobaan sebelumnya (overlay GELAP + teks putih): sekarang
+     foto jadi latar utuh satu layar, jadi overlainya TERANG (turunan
+     --paper, otomatis ikut gelap sendiri di dark mode) di sisi kiri tempat
+     teks duduk, lalu memudar ke kanan supaya foto tetap kelihatan jelas --
+     meniru referensi yang dilampirkan user. Teks pakai var(--ink), yang
+     sudah otomatis kontras di kedua tema. */
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--paper) 94%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 86%, transparent) 38%,
+    color-mix(in srgb, var(--paper) 35%, transparent) 62%,
+    transparent 85%
+  );
+}
+
+.cp-hero-inner {
+  position: relative;
+  max-width: 34rem;
+  padding-block: 3rem;
+}
+
+/* Hero full-bleed TIDAK pakai gutter center-container biasa (itu yang
+   bikin teks "ketengah" dengan ruang kosong lebar di kiri pada layar
+   lebar) -- di sini kontainer didorong mepet ke tepi kiri saja. */
+.cp-hero .cp-container {
+  margin-inline: 0;
+  max-width: none;
+  padding-inline-start: clamp(1.5rem, 6vw, 4rem);
+  padding-inline-end: 1.5rem;
+}
+
+.cp-hero-title {
+  font-family: var(--cp-font-display);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-hero-title-accent {
+  color: var(--accent);
+  /* Sentuhan santai -- baris kedua dimiringkan, Fraunces italic-nya
+     berkarakter hangat, bikin judul tidak terkesan kaku/resmi. */
+  font-style: italic;
+  font-weight: 500;
+}
+
+.cp-hero-excerpt {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 30rem;
+  margin: 0 0 1.5rem;
+}
+
+.cp-hero-quicklinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.cp-hero-quicklink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cp-hero-quicklink:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.cp-hero-quicklink svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+}
+
+.cp-hero-quicklink-arrow {
+  opacity: 0.7;
+  font-size: 0.8em;
+}
+
+.cp-hero-quicklink[data-tone='teal'] {
+  background: var(--teal-soft);
+  color: var(--teal);
+}
+
+.cp-hero-quicklink[data-tone='purple'] {
+  background: var(--accent-2-soft);
+  color: var(--accent-2);
+}
+
+.cp-hero-quicklink[data-tone='gold'] {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+.cp-hero-quicklink[data-tone='rose'] {
+  background: var(--rose-soft);
+  color: var(--rose);
+}
+
+.cp-hero-search {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  max-width: 28rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cp-hero-search svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.cp-hero-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+.cp-hero-search button {
+  flex-shrink: 0;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+@media (max-width: 36rem) {
+  .cp-hero {
+    min-height: 28rem;
+  }
+
+  .cp-hero-scrim {
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+  }
+}
+
+/* HP mungil (iPhone SE dkk, <400px): judul 2 baris + 4 pil + search bisa
+   kepanjangan dan mendorong hero jadi sangat tinggi -- dikecilkan dikit
+   supaya tetap muat tanpa scroll berlebihan. */
+@media (max-width: 25rem) {
+  .cp-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .cp-hero-excerpt {
+    font-size: 0.9375rem;
+  }
+
+  .cp-hero-quicklink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* HP posisi landscape (lebar lebih dari tinggi, tinggi pendek): hero
+   full-bleed 28-34rem kepanjangan dan mendorong konten lain jauh ke
+   bawah layar pertama -- dipangkas berdasar tinggi viewport, bukan lebar. */
+@media (max-height: 28rem) and (orientation: landscape) {
+  .cp-hero {
+    min-height: auto;
+    padding-block: 2rem;
+  }
+
+  .cp-hero-inner {
+    padding-block: 1rem;
+  }
+}
+
+/* ---------- Quote berjalan (marquee) ---------- */
+.cp-quotebar {
+  background: var(--cp-navy-dark);
+  color: var(--accent-ink);
+  /* Border solid tipis diganti gradasi warna tebal biar mencolok --
+     border-image butuh border-style+width dulu, warnanya ditarik dari
+     token situs (accent/gold/teal/accent-2) biar tetap satu sumber. */
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      var(--accent),
+      var(--gold),
+      var(--teal),
+      var(--accent-2),
+      var(--accent)
+    )
+    1;
+  position: relative;
+}
+
+/* Pita datar lurus kerasa monoton -- mobil mini melintas di tepi ATAS
+   (kanan ke kiri, moncong 🚗 memang menghadap kiri) dan roket melintas di
+   tepi BAWAH (kiri ke kanan) -- dua arah berlawanan biar kerasa "rame",
+   masing-masing dikasih semburan kecil di belakangnya jadi tanda ia
+   bergerak. Dekoratif murni (aria-hidden). */
+.cp-quotebar-car {
+  position: absolute;
+  top: -0.8rem;
+  left: 104%;
+  font-size: 1.15rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+  animation: cp-car-drive 13s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cp-quotebar-car::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  right: -0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ink-faint) 75%, transparent) 0%, transparent 70%);
+  transform: translateY(-50%) scale(0.5);
+  animation: cp-puff 0.5s ease-out infinite;
+}
+
+@keyframes cp-car-drive {
+  0% {
+    left: 104%;
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.2rem);
+  }
+  100% {
+    left: -10%;
+    transform: translateY(0);
+  }
+}
+
+.cp-quotebar-rocket {
+  position: absolute;
+  bottom: -0.8rem;
+  left: -8%;
+  font-size: 1.2rem;
+  line-height: 1;
+  /* Glyph 🚀 secara default miring ~45° (moncong ke kanan-atas) -- diputar
+     supaya moncongnya sejajar arah terbang (horizontal, ke kanan). */
+  transform: rotate(45deg);
+  animation: cp-rocket-fly 11s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cp-quotebar-rocket::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  left: -0.35rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 80%, transparent) 0%, transparent 70%);
+  transform: translateY(-50%) scale(0.5);
+  animation: cp-puff 0.4s ease-out infinite;
+}
+
+@keyframes cp-rocket-fly {
+  0% {
+    left: -8%;
+    transform: rotate(45deg) translateY(0);
+  }
+  50% {
+    transform: rotate(45deg) translateY(-0.45rem);
+  }
+  100% {
+    left: 104%;
+    transform: rotate(45deg) translateY(0);
+  }
+}
+
+@keyframes cp-puff {
+  0% {
+    opacity: 0.65;
+    transform: translateY(-50%) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scale(1.7);
+  }
+}
+
+.cp-quotebar-viewport {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.6rem;
+  font-size: 0.8125rem;
+  /* Overflow-hidden dipindah ke sini (bukan lagi di .cp-quotebar) supaya
+     teks tetap ke-clip rapi, sementara roket dekoratif di atasnya boleh
+     "nongol" sedikit melewati tepi atas pita. */
+  overflow: hidden;
+}
+
+.cp-quotebar-track {
+  display: flex;
+  flex-shrink: 0;
+  width: max-content;
+  gap: 3rem;
+  /* Dulu 42s, lalu 130s, lalu 240s -- masih kerasa kencang. Diperlambat
+     sedikit lagi supaya makin santai diikuti mata. */
+  animation: cp-quote-scroll 300s linear infinite;
+}
+
+.cp-quotebar:hover .cp-quotebar-track {
+  animation-play-state: paused;
+}
+
+.cp-quotebar-item {
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.cp-quotebar-author {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+@keyframes cp-quote-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Track berisi 2 salinan daftar quote berdampingan -- geser tepat
+       separuh lebar supaya saat salinan pertama habis, salinan kedua
+       sudah pas di posisi awal (loop mulus, tanpa "lompatan"). */
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-quotebar-viewport {
+    overflow-x: auto;
+  }
+
+  .cp-quotebar-track {
+    animation: none;
+  }
+
+  .cp-quotebar-car,
+  .cp-quotebar-rocket {
+    display: none;
+  }
+}
+
+/* ---------- Konten 3 kolom ---------- */
+.cp-columns {
+  padding-block: 2.5rem;
+}
+
+.cp-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Tablet: dari 1 kolom langsung ke 3 kolom sempit di 1024px kurang pas
+   dipakai -- di rentang tablet (768-1024px) pakai 2 kolom dulu, kolom
+   ke-3 (Artikel + Kelas) turun ke bawah selebar penuh. */
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+  .cp-columns-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+
+  .cp-columns-grid > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .cp-columns-grid {
+    grid-template-columns: 32fr 37fr 31fr;
+    gap: 1.75rem;
+  }
+}
+
+.cp-col-heading {
+  font-family: var(--cp-font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cp-col-heading + .cp-col-heading {
+  margin-top: 2rem;
+}
+
+.cp-card-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-card {
+  display: flex;
+  gap: 0.9rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cp-card:first-child {
+  padding-top: 0;
+}
+
+.cp-card:last-child {
+  border-bottom: none;
+}
+
+.cp-card-thumb {
+  width: 4.5rem;
+  height: 4.5rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-ink);
+  opacity: 0.9;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.cp-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.cp-card-title {
+  font-family: var(--cp-font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.cp-card-excerpt {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cp-kelas-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.cp-kelas-item {
+  text-align: center;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--cp-navy);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.cp-kelas-item:hover {
+  background: var(--cp-navy);
+  color: var(--accent-ink);
+  border-color: var(--cp-navy);
+}
+
+/* ---------- Footer ---------- */
+.cp-footer {
+  background: var(--surface-solid);
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.cp-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-block: 2.5rem;
+}
+
+@media (min-width: 48rem) {
+  .cp-footer-grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  }
+}
+
+.cp-footer-col h4 {
+  font-family: var(--cp-font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.9rem;
+}
+
+.cp-footer-col p {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cp-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cp-footer-links a {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+
+.cp-footer-links a:hover {
+  color: var(--cp-navy);
+}
+
+.cp-footer-bottom {
+  background: var(--cp-navy-dark);
+  color: var(--accent-ink);
+  opacity: 0.85;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 0.9rem 1rem;
+}
+
+/* ---------- Responsif: tablet & mobile ---------- */
+@media (max-width: 63.9375rem) {
+  .cp-identity-inner {
+    padding-block: 1.1rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .cp-logo-name {
+    font-size: 1.4rem;
+  }
+
+  .cp-identity-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cp-cta {
+    padding: 0.55rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .cp-hero-inner {
+    padding-block: 2rem;
+  }
+
+  .cp-hero-search {
+    max-width: none;
+  }
+
+  .cp-kelas-list {
+    grid-template-columns: 1fr;
+  }
+}

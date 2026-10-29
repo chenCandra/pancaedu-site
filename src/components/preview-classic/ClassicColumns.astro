@@ -1,0 +1,76 @@
+---
+import { dummyMateri, dummySimulasi, dummyGame, dummyArtikel, dummyKelas } from '../../data/previewClassicDummy';
+
+// Thumbnail kartu SENGAJA cuma gradient + singkatan label, bukan foto, biar
+// jelas-jelas kebaca sebagai placeholder dummy, bukan konten asli (poin E
+// brief redesign: dummy harus konsisten & tidak menyamar jadi data produksi).
+---
+
+<div class="cp-columns">
+  <div class="cp-container cp-columns-grid">
+    <div>
+      <h2 class="cp-col-heading">Materi Terbaru</h2>
+      <div class="cp-card-list">
+        {dummyMateri.map((item) => (
+          <div class="cp-card">
+            <span class="cp-card-thumb" aria-hidden="true">Materi</span>
+            <div class="cp-card-body">
+              <span class="cp-card-title">{item.title}</span>
+              <span class="cp-card-excerpt">{item.excerpt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <h2 class="cp-col-heading">Lab Maya Pilihan</h2>
+      <div class="cp-card-list">
+        {dummySimulasi.map((item) => (
+          <div class="cp-card">
+            <span class="cp-card-thumb" aria-hidden="true">Lab</span>
+            <div class="cp-card-body">
+              <span class="cp-card-title">{item.title}</span>
+              <span class="cp-card-excerpt">{item.excerpt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="cp-col-heading">Game Edukasi Populer</h2>
+      <div class="cp-card-list">
+        {dummyGame.map((item) => (
+          <div class="cp-card">
+            <span class="cp-card-thumb" aria-hidden="true">Game</span>
+            <div class="cp-card-body">
+              <span class="cp-card-title">{item.title}</span>
+              <span class="cp-card-excerpt">{item.excerpt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <h2 class="cp-col-heading">Artikel Terbaru</h2>
+      <div class="cp-card-list">
+        {dummyArtikel.map((item) => (
+          <div class="cp-card">
+            <span class="cp-card-thumb" aria-hidden="true">Artikel</span>
+            <div class="cp-card-body">
+              <span class="cp-card-title">{item.title}</span>
+              <span class="cp-card-excerpt">{item.excerpt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="cp-col-heading">Jelajahi Berdasarkan Kelas</h2>
+      <div class="cp-kelas-list">
+        {dummyKelas.map((item) => (
+          <a href={item.href} class="cp-kelas-item">{item.label}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+---
+// Pita "Quote Berjalan" -- menggantikan bar "Info Terbaru" dari tahap 2
+// awal (konten dummy, tidak disukai sebagai elemen). Quote di sini BUKAN
+// dummy -- diambil dari koleksi `homepage` (heroQuotes) yang sama persis
+// dipakai Hero.astro di homepage produksi, jadi kontennya konten asli.
+import { getCollection } from 'astro:content';
+
+const [homepage] = await getCollection('homepage');
+const quotes = homepage.data.heroQuotes;
+// Digandakan 2x di markup supaya animasi scroll bisa loop mulus (lihat
+// keyframe cp-quote-scroll di preview-classic.css) -- trik marquee umum:
+// begitu salinan pertama habis bergeser, salinan kedua pas mengambil alih.
+const loopedQuotes = [...quotes, ...quotes];
+---
+
+<div class="cp-quotebar">
+  <span class="cp-quotebar-car" aria-hidden="true">🚗</span>
+  <span class="cp-quotebar-rocket" aria-hidden="true">🚀</span>
+  <div class="cp-container cp-quotebar-viewport">
+    <div class="cp-quotebar-track">
+      {loopedQuotes.map((q) => (
+        <span class="cp-quotebar-item">
+          “{q.quote}”{q.author && <span class="cp-quotebar-author"> — {q.author}</span>}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
