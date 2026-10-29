@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.astro';
 import Hero from '../components/home/Hero.astro';
 import QuoteTicker from '../components/home/QuoteTicker.astro';
+import Spotlight from '../components/home/Spotlight.astro';
 import ContentColumns from '../components/home/ContentColumns.astro';
 import Works from '../components/home/Works.astro';
 import Quote from '../components/home/Quote.astro';
@@ -62,6 +63,7 @@ const workItems = materiPosts
   <Hero />
   {daringAktif && <PembelajaranDaringBanner />}
   <QuoteTicker />
+  <Spotlight />
   <ContentColumns />
 
   {workItems.length > 0 && <Works items={workItems} />}

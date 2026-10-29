@@ -1,0 +1,153 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Satu item "andalan" -- bisa materi, artikel, ATAU simulasi Lab Maya
+// (Lab Maya di koleksi `blog` nempel di materi lewat field `simulasi`,
+// bukan koleksi terpisah). Prioritas: materi terbaru yang PUNYA simulasi
+// DAN cover image (biar kartu-nya mentereng, bukan cuma placeholder),
+// baru kalau nggak ada turun ke materi/artikel terbaru yang punya cover
+// image, baru kalau itu juga nggak ada, post terbaru apa adanya.
+const spotlight =
+  allPosts.find((p) => p.data.simulasi && p.data.coverImage) ??
+  allPosts.find((p) => p.data.coverImage) ??
+  allPosts[0];
+
+const hasLab = Boolean(spotlight?.data.simulasi);
+const basePath = spotlight?.data.category === 'materi' ? '/materi' : '/artikel';
+const eyebrow = hasLab ? '🧪 Simulasi Lab Maya' : spotlight?.data.category === 'materi' ? 'Materi Pilihan' : 'Artikel Pilihan';
+const title = hasLab ? spotlight?.data.simulasi?.judul ?? spotlight?.data.title : spotlight?.data.title;
+---
+
+{spotlight && (
+  <section class="spotlight">
+    <div class="container">
+      <a href={`${basePath}/${spotlight.id}`} class="spotlight-card" data-reveal data-tilt>
+        <div class="spotlight-visual">
+          {spotlight.data.coverImage ? (
+            <img src={spotlight.data.coverImage} alt="" loading="eager" />
+          ) : (
+            <span class="spotlight-visual-fallback" aria-hidden="true">{hasLab ? '🧪' : '📘'}</span>
+          )}
+        </div>
+        <div class="spotlight-body">
+          <span class="spotlight-eyebrow">{eyebrow}</span>
+          <h2 class="spotlight-title">{title}</h2>
+          <p class="spotlight-excerpt">{spotlight.data.description}</p>
+          <span class="spotlight-cta">
+            {hasLab ? 'Coba simulasinya' : 'Baca selengkapnya'} <span aria-hidden="true">→</span>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+)}
+
+<style>
+  .spotlight {
+    padding-block: 2.5rem;
+  }
+
+  .spotlight-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    text-decoration: none;
+    color: var(--ink);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  }
+
+  .spotlight-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+  }
+
+  .spotlight-visual {
+    position: relative;
+    min-height: 16rem;
+    background: linear-gradient(135deg, var(--accent-soft), var(--teal-soft));
+  }
+
+  .spotlight-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotlight-visual-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .spotlight-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+    padding: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .spotlight-eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .spotlight-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .spotlight-excerpt {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .spotlight-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    width: fit-content;
+  }
+
+  .spotlight-cta span {
+    transition: transform 0.25s ease;
+  }
+
+  .spotlight-card:hover .spotlight-cta span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 48rem) {
+    .spotlight-card {
+      grid-template-columns: 1fr;
+    }
+
+    .spotlight-visual {
+      min-height: 12rem;
+    }
+  }
+</style>
