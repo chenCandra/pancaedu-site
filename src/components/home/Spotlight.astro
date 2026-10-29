@@ -212,6 +212,7 @@ const sideItems: SideItem[] = [...secondaryCards.map(toSideItem), ...(toolItem ?
     text-decoration: none;
     color: var(--ink);
     box-shadow: var(--shadow-md);
+    overflow: hidden;
     transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
   }
 
@@ -223,7 +224,6 @@ const sideItems: SideItem[] = [...secondaryCards.map(toSideItem), ...(toolItem ?
 
   .spotlight-visual {
     position: relative;
-    width: 100%;
     aspect-ratio: 16 / 9;
     margin: clamp(0.75rem, 2vw, 1.25rem);
     margin-bottom: 0;
