@@ -5,47 +5,15 @@ import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.ast
 import Hero from '../components/home/Hero.astro';
 import QuoteTicker from '../components/home/QuoteTicker.astro';
 import ContentColumns from '../components/home/ContentColumns.astro';
-import About from '../components/home/About.astro';
-import Counters from '../components/home/Counters.astro';
-import Bento from '../components/home/Bento.astro';
 import Works from '../components/home/Works.astro';
 import Timeline from '../components/home/Timeline.astro';
 import Quote from '../components/home/Quote.astro';
 import Contact from '../components/home/Contact.astro';
 
-// Semua angka & konten di bawah diambil dari data situs yang sesungguhnya
-// saat build — bukan angka atau contoh dikarang. Lihat catatan di
-// Counters.astro.
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const materiPosts = allPosts.filter((p) => p.data.category === 'materi');
-const artikelPosts = allPosts.filter((p) => p.data.category === 'artikel');
-
-const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).length;
-
-// Jumlah simulasi Lab Maya TIDAK dihitung dari content collection (alat
-// ukurnya komponen kode, bukan entri konten) -- di-hardcode di sini, tapi
-// tetap angka NYATA (bukan dikarang), samain manual tiap kali nambah
-// simulasi baru. Per 2026-08-29: sama dengan jumlah entri di customLabs
-// pada src/pages/lab-maya/index.astro -- 1 Eksplorasi Alat Ukur (Jangka
-// Sorong, Mikrometer Sekrup, Neraca Ohaus, Stopwatch Analog, Amperemeter,
-// Termometer digabung 1 halaman) + Hukum Coulomb, Medan Listrik, Hukum
-// Newton, Usaha dan Daya, Energi Mekanik, Energy Transformation Lab, Energy
-// Conservation Lab, Lab Energi Terbarukan, Energy Consumption Lab,
-// Non-Renewable Energy Lab, Energy Efficiency Lab, Energy Crisis Lab,
-// Energy Planning Lab, Simulasi Massa Jenis (PhET, wrapper sendiri),
-// Hukum Hooke, Virtual Collision Lab (Momentum & Impuls), Virtual
-// Motion Lab (GLB & GLBB), Virtual Circuit Lab (Hukum Ohm), Faraday
-// Electromagnetic Induction Lab.
-const LAB_MAYA_SIMULASI_COUNT = 20;
-
-const counters = [
-  { icon: '📘', value: String(materiPosts.length), suffix: '+', label: 'Materi Pelajaran' },
-  { icon: '✍️', value: String(artikelPosts.length), suffix: '', label: 'Artikel' },
-  { icon: '🧪', value: String(LAB_MAYA_SIMULASI_COUNT), suffix: '', label: 'Simulasi Lab Maya' },
-  { icon: '🎥', value: String(ruangBelajarSesi), suffix: '', label: 'Sesi Ruang Belajar' },
-];
 
 const modeDaring = await getEntry('modeDaring', 'index');
 const daringAktif = modeDaring?.data.aktif ?? false;
@@ -93,13 +61,10 @@ const workItems = materiPosts
   jsonLd={jsonLd}
 >
   <Hero />
-  <Counters counters={counters} />
   {daringAktif && <PembelajaranDaringBanner />}
   <QuoteTicker />
   <ContentColumns />
 
-  <About />
-  <Bento />
   {workItems.length > 0 && <Works items={workItems} />}
   <Timeline />
   <Quote />
