@@ -1,10 +1,10 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.astro';
 import Hero from '../components/home/Hero.astro';
-import Featured from '../components/home/Featured.astro';
+import QuoteTicker from '../components/home/QuoteTicker.astro';
+import ContentColumns from '../components/home/ContentColumns.astro';
 import About from '../components/home/About.astro';
 import Counters from '../components/home/Counters.astro';
 import Bento from '../components/home/Bento.astro';
@@ -21,7 +21,6 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 );
 const materiPosts = allPosts.filter((p) => p.data.category === 'materi');
 const artikelPosts = allPosts.filter((p) => p.data.category === 'artikel');
-const latestPosts = allPosts.slice(0, 6);
 
 const ruangBelajarSesi = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).length;
 
@@ -47,8 +46,6 @@ const counters = [
   { icon: '🧪', value: String(LAB_MAYA_SIMULASI_COUNT), suffix: '', label: 'Simulasi Lab Maya' },
   { icon: '🎥', value: String(ruangBelajarSesi), suffix: '', label: 'Sesi Ruang Belajar' },
 ];
-
-const featured = materiPosts.find((p) => p.data.simulasi) ?? materiPosts[0] ?? allPosts[0];
 
 const modeDaring = await getEntry('modeDaring', 'index');
 const daringAktif = modeDaring?.data.aktif ?? false;
@@ -98,27 +95,8 @@ const workItems = materiPosts
   <Hero />
   <Counters counters={counters} />
   {daringAktif && <PembelajaranDaringBanner />}
-  {featured && (
-    <Featured
-      title={featured.data.title}
-      description={featured.data.description}
-      href={`/materi/${featured.id}`}
-      mapel={featured.data.mapel}
-      kelas={featured.data.kelas}
-      hasLab={Boolean(featured.data.simulasi)}
-    />
-  )}
-
-  {latestPosts.length > 0 && (
-    <section class="section latest">
-      <div class="container">
-        <p class="eyebrow" data-reveal>Terbaru</p>
-        <div class="post-grid">
-          {latestPosts.map((post) => <PostCard post={post} />)}
-        </div>
-      </div>
-    </section>
-  )}
+  <QuoteTicker />
+  <ContentColumns />
 
   <About />
   <Bento />
@@ -127,16 +105,3 @@ const workItems = materiPosts
   <Quote />
   <Contact />
 </BaseLayout>
-
-<style>
-  .latest {
-    padding-top: 0;
-  }
-
-  .post-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-</style>

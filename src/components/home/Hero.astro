@@ -2,430 +2,282 @@
 import { getCollection } from 'astro:content';
 
 const [homepage] = await getCollection('homepage');
-const { heroQuotes, heroLede } = homepage.data;
-// Quote pertama dirender apa adanya di HTML statis (fallback buat
-// crawler/no-JS, dan hindar "flash" kosong sebelum JS sempat jalan) --
-// script inline di bawah nimpa ke pilihan ACAK begitu halaman dimuat,
-// beda tiap kali direfresh. Seluruh daftar quote ikut dikirim ke
-// browser lewat tag JSON (bukan cuma index-nya) supaya pemilihannya
-// murni di sisi klien, nggak perlu server request tambahan.
-const quotesJson = JSON.stringify(heroQuotes);
+const { heroLede } = homepage.data;
+
+// Rute REAL di situs -- /game & /tools sempat dikira belum ada saat
+// pengecekan awal integrasi ini, ternyata sudah ada sebagai halaman
+// statis di public/game & public/tools (bukan lewat src/pages/), jadi
+// tetap aman dipakai di sini.
+const quicklinks = [
+  {
+    label: 'Materi',
+    href: '/materi',
+    tone: 'accent',
+    icon: '<path d="M12 6.3C10.4 4.9 8 4.4 4 4.4v13c4 0 6.4.5 8 1.9 1.6-1.4 4-1.9 8-1.9v-13c-4 0-6.4.5-8 1.9Z"/><path d="M12 6.3v13"/>',
+  },
+  {
+    label: 'Lab Maya',
+    href: '/lab-maya',
+    tone: 'teal',
+    icon: '<path d="M9 2v6.3L3.6 17.6A2 2 0 0 0 5.3 21h13.4a2 2 0 0 0 1.7-3.4L15 8.3V2"/><path d="M8.5 2h7"/><path d="M8 13h8"/>',
+  },
+  {
+    label: 'Game Edukasi',
+    href: '/game',
+    tone: 'purple',
+    icon: '<rect x="2" y="7" width="20" height="10" rx="4"/><circle cx="8" cy="12" r="1.4"/><path d="M8 10.2v3.6M6.2 12h3.6"/><circle cx="16.5" cy="10.3" r="1"/><circle cx="18.5" cy="13.3" r="1"/>',
+  },
+  {
+    label: 'Artikel',
+    href: '/artikel',
+    tone: 'gold',
+    icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h8"/>',
+  },
+  {
+    label: 'Perkakas',
+    href: '/tools',
+    tone: 'rose',
+    icon: '<path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 1 5.4-5.4l-2.6 2.6-2-2z"/>',
+  },
+];
 ---
 
 <section class="hero" id="hero">
-  <div class="hero-mesh" aria-hidden="true"></div>
-  <div class="hero-aurora" aria-hidden="true">
-    <span class="aurora aurora--1"></span>
-    <span class="aurora aurora--2"></span>
-    <span class="aurora aurora--3"></span>
-  </div>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="hero-shapes" aria-hidden="true">
-    <span class="shape shape--1">✨</span>
-    <span class="shape shape--2">📘</span>
-    <span class="shape shape--3">💡</span>
-    <span class="sparkle sparkle--1">✨</span>
-    <span class="sparkle sparkle--2">✨</span>
-    <span class="sparkle sparkle--3">✨</span>
-  </div>
+  <img class="hero-bg" src="/images/hero-beranda.png" alt="" loading="eager" fetchpriority="high" />
+  <div class="hero-scrim" aria-hidden="true"></div>
 
-  <div class="container hero-content">
-    <p class="eyebrow hero-eyebrow" data-reveal>PancaEdu — Ruang Belajar Digital</p>
-    <h1 class="hero-title" data-hero-title>
-      <span class="hero-line" data-hero-quote-text data-fade>&ldquo;{heroQuotes[0].quote}&rdquo;</span>
+  <div class="hero-inner">
+    <h1 class="hero-title">
+      <span>Belajar Sains,</span>
+      <span class="hero-title-accent">Lebih Dekat dengan Kehidupan</span>
     </h1>
-    <p class="hero-quote-author" data-hero-quote-author data-fade data-reveal>{heroQuotes[0].author && `— ${heroQuotes[0].author}`}</p>
-    <p class="hero-lede" data-reveal>
-      {heroLede}
-    </p>
-    <div class="hero-actions" data-reveal>
-      <a href="/materi" class="btn btn-primary" data-magnetic>Jelajahi Materi</a>
-      <a href="/candra-pabakti" class="btn btn-ghost" data-magnetic>Baca Cerita di Baliknya</a>
-    </div>
-  </div>
+    <p class="hero-excerpt">{heroLede}</p>
 
-  <div class="hero-scroll-indicator" data-reveal aria-hidden="true">
-    <span class="hero-scroll-line"></span>
-    <span class="hero-scroll-label">Scroll</span>
+    <div class="hero-quicklinks">
+      {quicklinks.map((item) => (
+        <a href={item.href} class="hero-quicklink" data-tone={item.tone} data-magnetic>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={item.icon} />
+          <span>{item.label}</span>
+          <span class="hero-quicklink-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+
+    <form class="hero-search" action="/cari" method="get">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="search" name="q" placeholder="Cari materi, simulasi, game, atau artikel..." aria-label="Cari" />
+      <button type="submit">Cari</button>
+    </form>
   </div>
 </section>
-
-<script type="application/json" id="hero-quotes-data" set:html={quotesJson} />
-<script is:inline>
-  (function () {
-    var dataEl = document.getElementById('hero-quotes-data');
-    var textEl = document.querySelector('[data-hero-quote-text]');
-    var authorEl = document.querySelector('[data-hero-quote-author]');
-    if (!dataEl || !textEl) return;
-
-    var quotes;
-    try {
-      quotes = JSON.parse(dataEl.textContent);
-    } catch (e) {
-      return;
-    }
-    if (!Array.isArray(quotes) || quotes.length === 0) return;
-
-    var kurangGerak = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var idxSekarang = -1;
-
-    function acakIndexBaru() {
-      if (quotes.length === 1) return 0;
-      // Jangan sampai quote yang sama muncul dua kali berturut-turut.
-      var i;
-      do {
-        i = Math.floor(Math.random() * quotes.length);
-      } while (i === idxSekarang);
-      return i;
-    }
-
-    function tampilkan(i) {
-      idxSekarang = i;
-      var pilihan = quotes[i];
-      textEl.textContent = '“' + pilihan.quote + '”';
-      if (authorEl) {
-        authorEl.textContent = pilihan.author ? '— ' + pilihan.author : '';
-      }
-    }
-
-    tampilkan(acakIndexBaru());
-
-    // Ganti quote otomatis tiap 10 detik -- fade out singkat dulu (skip
-    // kalau prefers-reduced-motion) baru ganti teks & fade in, supaya
-    // pergantiannya tidak terasa "meloncat" mendadak. Berhenti berputar
-    // kalau tab sedang tidak aktif (document.hidden), biar tidak
-    // membuang siklus render pas user pindah tab.
-    setInterval(function () {
-      if (document.hidden) return;
-      var iBaru = acakIndexBaru();
-
-      if (kurangGerak) {
-        tampilkan(iBaru);
-        return;
-      }
-
-      textEl.classList.add('is-fading');
-      if (authorEl) authorEl.classList.add('is-fading');
-      setTimeout(function () {
-        tampilkan(iBaru);
-        textEl.classList.remove('is-fading');
-        if (authorEl) authorEl.classList.remove('is-fading');
-      }, 400);
-    }, 10000);
-  })();
-</script>
 
 <style>
   .hero {
     position: relative;
-    min-height: 100svh;
+    min-height: 34rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .hero-mesh {
-    position: absolute;
-    inset: 0;
-    z-index: -3;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(59, 111, 237, 0.16), transparent 60%),
-      radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 214, 107, 0.16), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(124, 111, 240, 0.1), transparent 65%),
-      var(--paper);
-  }
-
-  :root[data-theme='dark'] .hero-mesh {
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(126, 162, 255, 0.24), transparent 60%),
-      radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 216, 115, 0.1), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(156, 139, 255, 0.16), transparent 65%),
-      var(--paper);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .hero-mesh {
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 15%, rgba(126, 162, 255, 0.24), transparent 60%),
-        radial-gradient(ellipse 55% 45% at 85% 20%, rgba(255, 216, 115, 0.1), transparent 60%),
-        radial-gradient(ellipse 70% 60% at 50% 100%, rgba(156, 139, 255, 0.16), transparent 65%),
-        var(--paper);
-    }
-  }
-
-  .hero-aurora {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
     overflow: hidden;
   }
 
-  .aurora {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.5;
-    will-change: transform;
-  }
-
-  .aurora--1 {
-    width: 30rem;
-    height: 30rem;
-    top: -8rem;
-    left: 8%;
-    background: radial-gradient(circle, rgba(110, 168, 255, 0.35), transparent 70%);
-    animation: aurora-a 20s ease-in-out infinite alternate;
-  }
-
-  .aurora--2 {
-    width: 26rem;
-    height: 26rem;
-    top: 10%;
-    right: 5%;
-    background: radial-gradient(circle, rgba(255, 214, 107, 0.28), transparent 70%);
-    animation: aurora-b 24s ease-in-out infinite alternate;
-  }
-
-  .aurora--3 {
-    width: 34rem;
-    height: 20rem;
-    bottom: -6rem;
-    left: 30%;
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.24), transparent 70%);
-    animation: aurora-c 28s ease-in-out infinite alternate;
-  }
-
-  :root[data-theme='dark'] .aurora--2 {
-    background: radial-gradient(circle, rgba(255, 216, 115, 0.14), transparent 70%);
-  }
-
-  @keyframes aurora-a {
-    from { transform: translate(0, 0); }
-    to { transform: translate(4rem, 3rem); }
-  }
-  @keyframes aurora-b {
-    from { transform: translate(0, 0); }
-    to { transform: translate(-3rem, 4rem); }
-  }
-  @keyframes aurora-c {
-    from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(2rem, -2rem) scale(1.1); }
-  }
-
-  .hero-shapes {
+  .hero-bg {
     position: absolute;
     inset: 0;
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .shape {
+  .hero-scrim {
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--glass-border);
-    background: var(--surface);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 1.5rem;
-    opacity: 0.85;
-    line-height: 1;
-    will-change: transform;
+    inset: 0;
+    /* Overlay TERANG (turunan --paper, otomatis ikut gelap sendiri di dark
+       mode) di sisi kiri tempat teks duduk, memudar ke kanan supaya foto
+       tetap kelihatan jelas. Teks pakai var(--ink), otomatis kontras di
+       kedua tema. */
+    background: linear-gradient(
+      100deg,
+      color-mix(in srgb, var(--paper) 94%, transparent) 0%,
+      color-mix(in srgb, var(--paper) 86%, transparent) 38%,
+      color-mix(in srgb, var(--paper) 35%, transparent) 62%,
+      transparent 85%
+    );
   }
 
-  .shape--1 {
-    width: 3.75rem;
-    height: 3.75rem;
-    top: 18%;
-    right: 14%;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    box-shadow: var(--glow-accent);
-    animation: float-a 9s ease-in-out infinite;
-  }
-
-  .shape--2 {
-    width: 3.25rem;
-    height: 3.25rem;
-    bottom: 22%;
-    left: 10%;
-    font-size: 1.375rem;
-    animation: float-b 11s ease-in-out infinite;
-  }
-
-  .shape--3 {
-    width: 2.75rem;
-    height: 2.75rem;
-    top: 55%;
-    right: 8%;
-    border-radius: 50%;
-    font-size: 1.1rem;
-    animation: float-a 7s ease-in-out infinite reverse;
-  }
-
-  .sparkle {
-    position: absolute;
-    font-size: 0.85rem;
-    opacity: 0;
-    will-change: transform, opacity;
-    animation: twinkle 3.6s ease-in-out infinite;
-  }
-
-  .sparkle--1 {
-    top: 30%;
-    left: 20%;
-    animation-delay: 0.3s;
-  }
-
-  .sparkle--2 {
-    top: 68%;
-    right: 22%;
-    animation-delay: 1.4s;
-  }
-
-  .sparkle--3 {
-    top: 12%;
-    left: 55%;
-    animation-delay: 2.3s;
-  }
-
-  @keyframes float-a {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-1.25rem); }
-  }
-  @keyframes float-b {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(1rem) rotate(8deg); }
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
-    50% { opacity: 1; transform: scale(1.15) rotate(20deg); }
-  }
-
-  .hero-content {
+  .hero-inner {
     position: relative;
-    text-align: center;
-    max-width: 46rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.75rem;
-    padding-block: 6rem 4rem;
-  }
-
-  .hero-eyebrow {
-    display: inline-flex;
-    padding: 0.4rem 0.9rem;
-    border-radius: 999px;
-    background: var(--surface);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
+    max-width: 34rem;
+    padding-block: 3rem;
+    padding-inline-start: clamp(1.5rem, 6vw, 4rem);
+    padding-inline-end: 1.5rem;
   }
 
   .hero-title {
-    font-size: clamp(2rem, 5vw, 3.75rem);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3rem);
     font-weight: 600;
-    line-height: 1.25;
-  }
-
-  .hero-title .hero-line {
-    display: block;
-  }
-
-  [data-fade] {
-    transition: opacity 0.4s ease;
-  }
-
-  [data-fade].is-fading {
-    opacity: 0;
-  }
-
-  .hero-quote-author {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--accent);
-    margin-top: -0.75rem;
-  }
-
-  /* Kosong kalau quote yang lagi tampil (statis maupun hasil pilihan
-     acak JS) nggak punya author -- daripada baris kosong nyisa ruang. */
-  .hero-quote-author:empty {
-    display: none;
-  }
-
-  .hero-lede {
-    font-size: clamp(1.0625rem, 2vw, 1.25rem);
-    color: var(--ink-soft);
-    max-width: 34rem;
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-
-  .hero-scroll-indicator {
-    position: absolute;
-    bottom: 2.5rem;
-    left: 50%;
-    transform: translateX(-50%);
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 1rem;
     display: flex;
     flex-direction: column;
+  }
+
+  .hero-title-accent {
+    color: var(--accent);
+  }
+
+  .hero-excerpt {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 30rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .hero-quicklinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-quicklink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: var(--accent-soft);
+    color: var(--accent);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .hero-quicklink:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-quicklink svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .hero-quicklink-arrow {
+    opacity: 0.7;
+    font-size: 0.8em;
+  }
+
+  .hero-quicklink[data-tone='teal'] {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .hero-quicklink[data-tone='purple'] {
+    background: var(--accent-2-soft);
+    color: var(--accent-2);
+  }
+
+  .hero-quicklink[data-tone='gold'] {
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+
+  .hero-quicklink[data-tone='rose'] {
+    background: var(--rose-soft);
+    color: var(--rose);
+  }
+
+  .hero-search {
+    display: flex;
     align-items: center;
     gap: 0.6rem;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    max-width: 28rem;
+    box-shadow: var(--shadow-sm);
   }
 
-  .hero-scroll-line {
-    width: 1px;
-    height: 2.5rem;
-    background: linear-gradient(var(--ink-faint), transparent);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-scroll-line::after {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--ink);
-    animation: scroll-drip 2.2s ease-in-out infinite;
-  }
-
-  @keyframes scroll-drip {
-    0% { top: -100%; }
-    60%, 100% { top: 100%; }
-  }
-
-  .hero-scroll-label {
-    font-size: 0.6875rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+  .hero-search svg {
+    width: 1.1rem;
+    height: 1.1rem;
     color: var(--ink-faint);
+    flex-shrink: 0;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .aurora,
-    .shape,
-    .sparkle,
-    .hero-scroll-line::after {
-      animation: none !important;
+  .hero-search input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--ink);
+  }
+
+  .hero-search button {
+    flex-shrink: 0;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 36rem) {
+    .hero {
+      min-height: 28rem;
     }
-    .sparkle {
-      display: none;
+
+    .hero-scrim {
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
     }
-    [data-fade] {
-      transition: none !important;
+
+    .hero-inner {
+      padding-block: 2rem;
+    }
+
+    .hero-search {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .hero-title {
+      font-size: 1.75rem;
+    }
+
+    .hero-excerpt {
+      font-size: 0.9375rem;
+    }
+
+    .hero-quicklink {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (max-height: 28rem) and (orientation: landscape) {
+    .hero {
+      min-height: auto;
+      padding-block: 2rem;
+    }
+
+    .hero-inner {
+      padding-block: 1rem;
     }
   }
 </style>
