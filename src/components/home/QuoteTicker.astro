@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content';
+
+const [homepage] = await getCollection('homepage');
+const quotes = homepage.data.heroQuotes;
+// Digandakan 2x di markup supaya animasi scroll bisa loop mulus -- trik
+// marquee umum: begitu salinan pertama habis bergeser, salinan kedua pas
+// mengambil alih (lihat keyframe quote-scroll di bawah).
+const loopedQuotes = [...quotes, ...quotes];
+---
+
+<div class="quote-ticker">
+  <span class="quote-ticker-car" aria-hidden="true">🚗</span>
+  <span class="quote-ticker-rocket" aria-hidden="true">🚀</span>
+  <div class="container quote-ticker-viewport">
+    <div class="quote-ticker-track">
+      {loopedQuotes.map((q) => (
+        <span class="quote-ticker-item">
+          “{q.quote}”{q.author && <span class="quote-ticker-author"> — {q.author}</span>}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .quote-ticker {
+    /* Latar ticker SENGAJA selalu gelap di kedua tema (campuran 70% hitam) --
+       makanya teksnya TIDAK pakai var(--accent-ink) (itu buat teks di atas
+       var(--accent) langsung, dan di mode gelap --accent-ink malah berubah
+       jadi nyaris hitam -- teks hitam di atas latar gelap jadi nyaris tak
+       kelihatan). Putih tetap/fixed di kedua tema karena latarnya juga
+       fixed gelap. */
+    background: color-mix(in srgb, var(--accent) 30%, black 70%);
+    color: #fff;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        var(--accent),
+        var(--gold),
+        var(--teal),
+        var(--accent-2),
+        var(--accent)
+      )
+      1;
+    position: relative;
+  }
+
+  /* Mobil mini melintas di tepi ATAS (kanan ke kiri, moncong 🚗 memang
+     menghadap kiri) dan roket di tepi BAWAH (kiri ke kanan) -- dua arah
+     berlawanan biar kerasa "rame", masing-masing dikasih semburan kecil
+     di belakangnya jadi tanda ia bergerak. Dekoratif murni (aria-hidden). */
+  .quote-ticker-car {
+    position: absolute;
+    top: -0.8rem;
+    left: 104%;
+    font-size: 1.15rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+    animation: car-drive 13s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .quote-ticker-car::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    right: -0.3rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--ink-faint) 75%, transparent) 0%, transparent 70%);
+    transform: translateY(-50%) scale(0.5);
+    animation: ticker-puff 0.5s ease-out infinite;
+  }
+
+  @keyframes car-drive {
+    0% {
+      left: 104%;
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.2rem);
+    }
+    100% {
+      left: -10%;
+      transform: translateY(0);
+    }
+  }
+
+  .quote-ticker-rocket {
+    position: absolute;
+    bottom: -0.8rem;
+    left: -8%;
+    font-size: 1.2rem;
+    line-height: 1;
+    /* Glyph 🚀 secara default miring ~45° (moncong ke kanan-atas) --
+       diputar supaya moncongnya sejajar arah terbang (horizontal, ke
+       kanan). */
+    transform: rotate(45deg);
+    animation: rocket-fly 11s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .quote-ticker-rocket::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    left: -0.35rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--gold) 80%, transparent) 0%, transparent 70%);
+    transform: translateY(-50%) scale(0.5);
+    animation: ticker-puff 0.4s ease-out infinite;
+  }
+
+  @keyframes rocket-fly {
+    0% {
+      left: -8%;
+      transform: rotate(45deg) translateY(0);
+    }
+    50% {
+      transform: rotate(45deg) translateY(-0.45rem);
+    }
+    100% {
+      left: 104%;
+      transform: rotate(45deg) translateY(0);
+    }
+  }
+
+  @keyframes ticker-puff {
+    0% {
+      opacity: 0.65;
+      transform: translateY(-50%) scale(0.4);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50%) scale(1.7);
+    }
+  }
+
+  .quote-ticker-viewport {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    font-size: 0.8125rem;
+    overflow: hidden;
+  }
+
+  .quote-ticker-track {
+    display: flex;
+    flex-shrink: 0;
+    width: max-content;
+    gap: 3rem;
+    animation: quote-scroll 300s linear infinite;
+  }
+
+  .quote-ticker:hover .quote-ticker-track {
+    animation-play-state: paused;
+  }
+
+  .quote-ticker-item {
+    white-space: nowrap;
+    opacity: 0.92;
+  }
+
+  .quote-ticker-author {
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  @keyframes quote-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* Track berisi 2 salinan daftar quote berdampingan -- geser tepat
+         separuh lebar supaya saat salinan pertama habis, salinan kedua
+         sudah pas di posisi awal (loop mulus, tanpa "lompatan"). */
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quote-ticker-viewport {
+      overflow-x: auto;
+    }
+
+    .quote-ticker-track {
+      animation: none;
+    }
+
+    .quote-ticker-car,
+    .quote-ticker-rocket {
+      display: none;
+    }
+  }
+</style>

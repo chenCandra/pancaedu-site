@@ -1,0 +1,429 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+// Hasil query D1 (page_views) yang ditarik SEBELUM build (lihat
+// scripts/fetch-top-viewed.mjs & .github/workflows/deploy.yml) -- import ES
+// biasa, bukan fs runtime (adapter Cloudflare tidak bundle node:fs). Array
+// kosong kalau belum pernah ada data/gagal ditarik, diurutkan dari view
+// TERBANYAK -- item [0] = andalan utama, [1..] = andalan kedua/ketiga.
+import topViewed from '../../data/topViewed.json';
+import topTool from '../../data/topTool.json';
+// Katalog Perkakas (public/tools/, HTML statis -- bukan koleksi konten astro)
+// -- dipakai biar satu slot di pojok kanan-bawah bisa nonjolin satu halaman
+// Perkakas, bukan cuma materi/artikel.
+import toolsCatalog from '../../../public/tools/tools.json';
+
+type Post = CollectionEntry<'blog'>;
+interface Tool {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  ikon: string;
+  warna: string;
+  path: string;
+}
+interface SideItem {
+  href: string;
+  title: string;
+  eyebrow: string;
+  meta: string;
+  thumb: { kind: 'image'; src: string } | { kind: 'icon'; icon: string };
+}
+
+const SECONDARY_COUNT = 3;
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const topViewedList: Array<{ slug?: string; category?: string }> = Array.isArray(topViewed) ? topViewed : [];
+const topViewedPosts = topViewedList
+  .map((row) => allPosts.find((p) => p.id === row.slug))
+  .filter((p): p is Post => Boolean(p));
+
+// Andalan utama -- bisa materi, artikel, ATAU simulasi Lab Maya (Lab Maya di
+// koleksi `blog` nempel di materi lewat field `simulasi`, bukan koleksi
+// terpisah). Prioritas:
+// 1. Halaman dengan VIEW TERBANYAK (data D1 asli, bukan tebakan).
+// 2. Materi terbaru yang PUNYA simulasi DAN cover image (biar kartunya
+//    mentereng) -- dipakai sebelum ada data view sama sekali.
+// 3. Materi/artikel terbaru yang punya cover image.
+// 4. Post terbaru apa adanya.
+const main: Post | undefined =
+  topViewedPosts[0] ??
+  allPosts.find((p) => p.data.simulasi && p.data.coverImage) ??
+  allPosts.find((p) => p.data.coverImage) ??
+  allPosts[0];
+
+// Andalan kedua/ketiga -- isi dulu dari sisa daftar view terbanyak, kalau
+// belum cukup (situs baru/data view belum terkumpul) ditambal dari post
+// terbaru lain biar section tidak pincang sebelah.
+const usedIds = new Set<string>(main ? [main.id] : []);
+const secondary: Post[] = [];
+for (const p of topViewedPosts) {
+  if (secondary.length >= SECONDARY_COUNT) break;
+  if (usedIds.has(p.id)) continue;
+  secondary.push(p);
+  usedIds.add(p.id);
+}
+for (const p of allPosts) {
+  if (secondary.length >= SECONDARY_COUNT) break;
+  if (usedIds.has(p.id)) continue;
+  secondary.push(p);
+  usedIds.add(p.id);
+}
+
+function describe(post: Post, rank: number) {
+  const hasLab = Boolean(post.data.simulasi);
+  const basePath = post.data.category === 'materi' ? '/materi' : '/artikel';
+  const title = hasLab ? post.data.simulasi?.judul ?? post.data.title : post.data.title;
+  const eyebrow =
+    rank === 0
+      ? '🔥 Paling Banyak Dibaca'
+      : rank > 0
+        ? `🔥 Terpopuler #${rank + 1}`
+        : hasLab
+          ? '🧪 Simulasi Lab Maya'
+          : post.data.category === 'materi'
+            ? 'Materi Pilihan'
+            : 'Artikel Pilihan';
+  const formattedDate = post.data.pubDate.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  return { post, href: `${basePath}/${post.id}`, hasLab, title, eyebrow, formattedDate };
+}
+
+const mainCard = main ? describe(main, topViewedPosts[0]?.id === main.id ? 0 : -1) : null;
+const secondaryCards = secondary.map((post) =>
+  describe(
+    post,
+    topViewedPosts.findIndex((p) => p.id === post.id)
+  )
+);
+
+function toSideItem(card: ReturnType<typeof describe>): SideItem {
+  return {
+    href: card.href,
+    title: card.title ?? card.post.data.title,
+    eyebrow: card.eyebrow,
+    meta: card.formattedDate,
+    thumb: card.post.data.coverImage
+      ? { kind: 'image', src: card.post.data.coverImage }
+      : { kind: 'icon', icon: card.hasLab ? '🧪' : '📘' },
+  };
+}
+
+// Satu halaman Perkakas (/tools/*) paling sering dikunjungi -- sama pola
+// fallback-nya seperti andalan utama: pakai data view D1 asli kalau sudah
+// ada, kalau belum jatuh ke tool pertama di katalog biar slot ini tidak
+// kosong.
+const tools = toolsCatalog as Tool[];
+const topToolSlug = typeof (topTool as { slug?: unknown })?.slug === 'string' ? (topTool as { slug: string }).slug : null;
+const toolPick: Tool | undefined = (topToolSlug && tools.find((t) => t.id === topToolSlug)) ?? tools[0];
+const toolIsRanked = Boolean(topToolSlug && toolPick?.id === topToolSlug);
+
+const toolItem: SideItem | null = toolPick
+  ? {
+      href: toolPick.path,
+      title: toolPick.judul,
+      eyebrow: toolIsRanked ? '🛠️ Perkakas Terpopuler' : '🛠️ Perkakas Pilihan',
+      meta: 'Perkakas',
+      thumb: { kind: 'icon', icon: toolPick.ikon },
+    }
+  : null;
+
+const sideItems: SideItem[] = [...secondaryCards.map(toSideItem), ...(toolItem ? [toolItem] : [])];
+---
+
+{mainCard && (
+  <section class="spotlight">
+    <div class="container">
+      <div class="spotlight-grid">
+        <a href={mainCard.href} class="spotlight-main" data-reveal data-tilt>
+          <div class="spotlight-visual">
+            {mainCard.post.data.coverImage ? (
+              <img src={mainCard.post.data.coverImage} alt="" loading="eager" />
+            ) : (
+              <span class="spotlight-visual-fallback" aria-hidden="true">{mainCard.hasLab ? '🧪' : '📘'}</span>
+            )}
+          </div>
+          <div class="spotlight-body">
+            <p class="spotlight-meta">
+              <span class="spotlight-eyebrow">{mainCard.eyebrow}</span>
+              <span class="spotlight-date">{mainCard.formattedDate}</span>
+            </p>
+            <h2 class="spotlight-title">{mainCard.title}</h2>
+            <p class="spotlight-excerpt">{mainCard.post.data.description}</p>
+            <span class="spotlight-cta">
+              {mainCard.hasLab ? 'Coba simulasinya' : 'Baca selengkapnya'} <span aria-hidden="true">→</span>
+            </span>
+          </div>
+        </a>
+
+        {sideItems.length > 0 && (
+          <div class="spotlight-side">
+            {sideItems.map((item) => (
+              <a href={item.href} class="spotlight-side-card" data-reveal>
+                <div class="spotlight-side-visual">
+                  {item.thumb.kind === 'image' ? (
+                    <img src={item.thumb.src} alt="" loading="lazy" />
+                  ) : (
+                    <span class="spotlight-side-fallback" aria-hidden="true">{item.thumb.icon}</span>
+                  )}
+                </div>
+                <div class="spotlight-side-body">
+                  <p class="spotlight-side-meta">
+                    <span class="spotlight-side-eyebrow">{item.eyebrow}</span>
+                    <span class="spotlight-side-date">{item.meta}</span>
+                  </p>
+                  <h3 class="spotlight-side-title">{item.title}</h3>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .spotlight {
+    padding-block: 2.5rem;
+  }
+
+  .spotlight-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  /* --- Kartu andalan utama --- */
+
+  .spotlight-main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  }
+
+  .spotlight-main:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+  }
+
+  .spotlight-visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: clamp(0.75rem, 2vw, 1.25rem);
+    margin-bottom: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-soft), var(--teal-soft));
+  }
+
+  .spotlight-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotlight-visual-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .spotlight-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 3vw, 1.75rem) clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .spotlight-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .spotlight-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 999px);
+  }
+
+  .spotlight-date {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+
+  .spotlight-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .spotlight-excerpt {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .spotlight-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    width: fit-content;
+    margin-top: auto;
+  }
+
+  .spotlight-cta span {
+    transition: transform 0.25s ease;
+  }
+
+  .spotlight-main:hover .spotlight-cta span {
+    transform: translateX(4px);
+  }
+
+  /* --- Kartu-kartu andalan kedua/ketiga di samping --- */
+
+  .spotlight-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+  }
+
+  .spotlight-side-card {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.9rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    padding: 0.75rem;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .spotlight-side-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+  }
+
+  .spotlight-side-visual {
+    position: relative;
+    width: 5.5rem;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-soft), var(--teal-soft));
+  }
+
+  .spotlight-side-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotlight-side-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+  }
+
+  .spotlight-side-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .spotlight-side-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .spotlight-side-eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-full, 999px);
+  }
+
+  .spotlight-side-date {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+  }
+
+  .spotlight-side-title {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 56rem) {
+    .spotlight-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .spotlight-side-card {
+      padding: 0.6rem;
+    }
+
+    .spotlight-side-visual {
+      width: 4.5rem;
+    }
+  }
+</style>

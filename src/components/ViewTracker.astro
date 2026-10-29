@@ -1,0 +1,28 @@
+---
+// Lapor satu kali per kunjungan ke /api/track-view (fire-and-forget, lewat
+// sendBeacon -- tetap terkirim walau pengunjung langsung pindah halaman).
+// Dipasang di halaman detail materi & artikel; datanya dipakai section
+// Spotlight di homepage (lihat src/components/home/Spotlight.astro &
+// scripts/fetch-top-viewed.mjs).
+interface Props {
+  slug: string;
+  category: 'materi' | 'artikel';
+}
+
+const { slug, category } = Astro.props;
+---
+
+<script define:vars={{ slug, category }}>
+  (function () {
+    try {
+      var payload = JSON.stringify({ slug: slug, category: category });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/track-view', new Blob([payload], { type: 'application/json' }));
+      } else {
+        fetch('/api/track-view', { method: 'POST', body: payload, keepalive: true }).catch(function () {});
+      }
+    } catch {
+      // diamkan -- pelacakan view tidak boleh ganggu pengalaman baca
+    }
+  })();
+</script>

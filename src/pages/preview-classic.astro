@@ -1,0 +1,52 @@
+---
+// Pratinjau layout homepage alternatif bergaya "portal berita klasik".
+// Tahap 1: palet krem/navy + font serif berdiri sendiri, supaya proporsi
+// tata letak bisa dinilai lepas dari gaya visual situs -- SUDAH DISETUJUI.
+// Tahap 2 (sekarang): "kulit" visualnya disamakan dengan tema situs asli,
+// makanya global.css IKUT diimpor di sini (beda dari tahap 1 yang sengaja
+// menghindarinya) -- preview-classic.css dimuat SESUDAHNYA supaya token
+// --accent/--ink/--font-display dst. dari situs asli tersedia untuk dipakai
+// ulang. SENGAJA TETAP BUKAN lewat BaseLayout (Header/Footer asli situs
+// dua-bar-nya beda struktur dari layout portal berita yang sudah disukai)
+// -- jadi cuma CSS/token-nya yang dipinjam, bukan komponennya. Rute ini
+// TIDAK ditaut dari nav mana pun, noindex, dikecualikan dari sitemap
+// (lihat astro.config.mjs), dan semua konten materi/lab maya/game/artikel
+// di dalamnya adalah DATA CONTOH (src/data/previewClassicDummy.ts) --
+// bukan diambil dari koleksi `blog` asli. src/pages/index.astro (homepage
+// produksi) TIDAK disentuh.
+import '../styles/global.css';
+import '../styles/preview-classic.css';
+import ClassicHeader from '../components/preview-classic/ClassicHeader.astro';
+import ClassicHero from '../components/preview-classic/ClassicHero.astro';
+import ClassicQuoteBar from '../components/preview-classic/ClassicQuoteBar.astro';
+import ClassicColumns from '../components/preview-classic/ClassicColumns.astro';
+import ClassicFooter from '../components/preview-classic/ClassicFooter.astro';
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pratinjau: Classic News Portal — PancaEdu</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="cp">
+    <div class="bg-blobs" aria-hidden="true">
+      <span class="bg-blob bg-blob--1"></span>
+      <span class="bg-blob bg-blob--2"></span>
+      <span class="bg-blob bg-blob--3"></span>
+    </div>
+    <p class="cp-preview-banner">
+      Mode Pratinjau — tata letak uji coba, konten materi/lab maya/game/artikel di bawah ini adalah DATA CONTOH, bukan konten asli
+    </p>
+    <ClassicHeader />
+    <main>
+      <ClassicHero />
+      <ClassicQuoteBar />
+      <ClassicColumns />
+    </main>
+    <ClassicFooter />
+  </body>
+</html>

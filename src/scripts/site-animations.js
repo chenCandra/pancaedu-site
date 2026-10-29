@@ -17,24 +17,25 @@ function initNavScrollState() {
   window.addEventListener('scroll', setState, { passive: true });
 }
 
-/* ---------- Hero Beranda: cinematic entrance (kalau ada di halaman) ---------- */
+/* ---------- Hero Beranda: cinematic entrance (kalau ada di halaman) ----------
+   Struktur hero diganti total (foto full-bleed + judul + pil quick-link +
+   search, lihat Hero.astro) -- target animasi di-sesuaikan, bukan lagi
+   eyebrow/quote-rotation/scroll-indicator versi lama. */
 function initHeroEntrance() {
-  const eyebrow = document.querySelector('.hero-eyebrow');
-  const lines = document.querySelectorAll('.hero-title .hero-line');
-  const rest = document.querySelectorAll('.hero-lede, .hero-actions, .hero-scroll-indicator');
+  const title = document.querySelector('.hero-title');
+  const rest = document.querySelectorAll('.hero-excerpt, .hero-quicklinks, .hero-search');
 
-  if (lines.length === 0) return; // bukan halaman yang punya hero
+  if (!title) return; // bukan halaman yang punya hero
 
   if (prefersReducedMotion) {
-    [eyebrow, ...lines, ...rest].forEach((el) => el && gsap.set(el, { opacity: 1, y: 0 }));
+    [title, ...rest].forEach((el) => el && gsap.set(el, { opacity: 1, y: 0 }));
     return;
   }
 
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  tl.set([eyebrow, ...lines, ...rest], { opacity: 0, y: 24 })
-    .to(eyebrow, { opacity: 1, y: 0, duration: 0.7 }, 0.1)
-    .to(lines, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 }, 0.25)
-    .to(rest, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, 0.7);
+  tl.set([title, ...rest], { opacity: 0, y: 24 })
+    .to(title, { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+    .to(rest, { opacity: 1, y: 0, duration: 0.7, stagger: 0.12 }, 0.5);
 }
 
 /* ---------- Scroll reveal untuk [data-reveal] (dipakai section Beranda) ----------

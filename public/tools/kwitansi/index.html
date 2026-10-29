@@ -204,5 +204,17 @@
 
     render();
   </script>
+  <script>
+    (function () {
+      try {
+        var payload = JSON.stringify({ slug: "kwitansi", category: "tools" });
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/track-view', new Blob([payload], { type: 'application/json' }));
+        } else {
+          fetch('/api/track-view', { method: 'POST', body: payload, keepalive: true }).catch(function () {});
+        }
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>

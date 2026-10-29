@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "fetch-top-viewed": "node scripts/fetch-top-viewed.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

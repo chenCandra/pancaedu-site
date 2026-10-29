@@ -348,7 +348,7 @@ a {
   border: 0;
 }
 
-/* Dipakai section-section besar di Beranda (Hero, Featured, Bento, dst). */
+/* Dipakai section-section besar di Beranda (Hero, Bento, dst). */
 .section {
   padding-block: clamp(4rem, 10vw, 8rem);
 }
