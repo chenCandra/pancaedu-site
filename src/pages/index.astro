@@ -6,7 +6,6 @@ import Hero from '../components/home/Hero.astro';
 import QuoteTicker from '../components/home/QuoteTicker.astro';
 import ContentColumns from '../components/home/ContentColumns.astro';
 import Works from '../components/home/Works.astro';
-import Timeline from '../components/home/Timeline.astro';
 import Quote from '../components/home/Quote.astro';
 import Contact from '../components/home/Contact.astro';
 
@@ -66,7 +65,6 @@ const workItems = materiPosts
   <ContentColumns />
 
   {workItems.length > 0 && <Works items={workItems} />}
-  <Timeline />
   <Quote />
   <Contact />
 </BaseLayout>
