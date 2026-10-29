@@ -1,5 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
+// Hasil query D1 (page_views) yang ditarik SEBELUM build (lihat
+// scripts/fetch-top-viewed.mjs & .github/workflows/deploy.yml) -- import ES
+// biasa, bukan fs runtime (adapter Cloudflare tidak bundle node:fs). Default
+// {slug: null, category: null} kalau belum pernah ada data/gagal ditarik.
+import topViewed from '../../data/topViewed.json';
 
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -7,18 +12,31 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 // Satu item "andalan" -- bisa materi, artikel, ATAU simulasi Lab Maya
 // (Lab Maya di koleksi `blog` nempel di materi lewat field `simulasi`,
-// bukan koleksi terpisah). Prioritas: materi terbaru yang PUNYA simulasi
-// DAN cover image (biar kartu-nya mentereng, bukan cuma placeholder),
-// baru kalau nggak ada turun ke materi/artikel terbaru yang punya cover
-// image, baru kalau itu juga nggak ada, post terbaru apa adanya.
+// bukan koleksi terpisah). Prioritas:
+// 1. Halaman dengan VIEW TERBANYAK (data D1 asli, bukan tebakan) -- kalau
+//    sudah ada datanya & postingannya masih ada/belum draft.
+// 2. Materi terbaru yang PUNYA simulasi DAN cover image (biar kartunya
+//    mentereng, bukan cuma placeholder) -- dipakai sebelum ada data view
+//    sama sekali (situs baru/view belum terkumpul).
+// 3. Materi/artikel terbaru yang punya cover image.
+// 4. Post terbaru apa adanya.
+const topViewedPost = typeof topViewed.slug === 'string' ? allPosts.find((p) => p.id === topViewed.slug) : undefined;
 const spotlight =
+  topViewedPost ??
   allPosts.find((p) => p.data.simulasi && p.data.coverImage) ??
   allPosts.find((p) => p.data.coverImage) ??
   allPosts[0];
 
+const isTopViewed = Boolean(topViewedPost && spotlight?.id === topViewedPost.id);
 const hasLab = Boolean(spotlight?.data.simulasi);
 const basePath = spotlight?.data.category === 'materi' ? '/materi' : '/artikel';
-const eyebrow = hasLab ? '🧪 Simulasi Lab Maya' : spotlight?.data.category === 'materi' ? 'Materi Pilihan' : 'Artikel Pilihan';
+const eyebrow = isTopViewed
+  ? '🔥 Paling Banyak Dibaca'
+  : hasLab
+    ? '🧪 Simulasi Lab Maya'
+    : spotlight?.data.category === 'materi'
+      ? 'Materi Pilihan'
+      : 'Artikel Pilihan';
 const title = hasLab ? spotlight?.data.simulasi?.judul ?? spotlight?.data.title : spotlight?.data.title;
 ---
 
