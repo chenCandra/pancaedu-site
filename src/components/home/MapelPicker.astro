@@ -1,0 +1,186 @@
+---
+// Titik masuk "pilih mata pelajaran" di homepage -- PancaEdu mulai
+// berkembang ke mapel lain di luar Fisika (Biologi direncanakan mulai
+// minggu depan). Backend (content.config.ts: field `mapel` di collection
+// blog/ruangBelajar/penugasan) SUDAH bebas teks, dan halaman listing
+// (/ruang-belajar, /materi, /game) SUDAH otomatis mengelompokkan &
+// memfilter per mapel dari isi konten -- TIDAK perlu ubah kode di sana
+// begitu materi Biologi ditambahkan. Section ini cuma lapisan DISCOVERY
+// di homepage, biar pengunjung baru langsung ngerti situs ini multi-mapel,
+// bukan cuma Fisika.
+//
+// Card tanpa `href` dirender non-link dengan badge "Segera" (pola sama
+// dengan ArTeaser.astro) -- begitu Biologi beneran live, cukup tambah
+// field href di sini, TIDAK perlu ubah struktur section.
+const mapelList = [
+  {
+    nama: 'Fisika',
+    icon: '⚛️',
+    desc: 'Ruang Belajar Kelas X–XII bab demi bab, ratusan materi & artikel, Lab Maya, dan simulasi AR kamera.',
+    href: '/ruang-belajar',
+    stat: '3 jenjang · 100+ materi',
+  },
+  {
+    nama: 'Biologi',
+    icon: '🧬',
+    desc: 'Mulai dari Struktur Sel -- Ruang Belajar, Materi, dan Lab Maya Biologi disiapkan menyusul.',
+    stat: 'Segera hadir',
+  },
+];
+---
+
+<section class="section mapel-picker">
+  <div class="container">
+    <div class="mapel-picker-intro" data-reveal>
+      <p class="eyebrow">📚 Mata Pelajaran</p>
+      <h2>Pilih Mata Pelajaran</h2>
+      <p class="mapel-picker-desc">
+        PancaEdu terus berkembang — bukan cuma Fisika. Pilih mapel di bawah buat mulai belajar.
+      </p>
+    </div>
+
+    <div class="mapel-grid">
+      {mapelList.map((m) =>
+        m.href ? (
+          <a href={m.href} class="mapel-card card" data-reveal>
+            <span class="mapel-card-icon" aria-hidden="true">{m.icon}</span>
+            <div class="mapel-card-body">
+              <h3>{m.nama}</h3>
+              <p>{m.desc}</p>
+              <div class="mapel-card-footer">
+                <span class="mapel-card-stat">{m.stat}</span>
+                <span class="mapel-card-cta">Mulai belajar →</span>
+              </div>
+            </div>
+          </a>
+        ) : (
+          <div class="mapel-card mapel-card-soon card" data-reveal>
+            <span class="mapel-card-icon" aria-hidden="true">{m.icon}</span>
+            <div class="mapel-card-body">
+              <span class="badge badge-soon">Segera</span>
+              <h3>{m.nama}</h3>
+              <p>{m.desc}</p>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mapel-picker-intro {
+    max-width: 38rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    width: fit-content;
+    background: var(--accent-soft);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 999px);
+  }
+
+  .mapel-picker-intro h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .mapel-picker-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .mapel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .mapel-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  a.mapel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .mapel-card-icon {
+    font-size: 2.25rem;
+    line-height: 1;
+  }
+
+  .mapel-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .mapel-card-body h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .mapel-card-body p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .mapel-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.3rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .mapel-card-stat {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .mapel-card-cta {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .mapel-card-soon {
+    border-style: dashed;
+    opacity: 0.75;
+  }
+
+  .badge-soon {
+    background: transparent;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+</style>

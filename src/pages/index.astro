@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.astro';
 import Hero from '../components/home/Hero.astro';
+import MapelPicker from '../components/home/MapelPicker.astro';
 import QuoteTicker from '../components/home/QuoteTicker.astro';
 import Spotlight from '../components/home/Spotlight.astro';
 import ContentColumns from '../components/home/ContentColumns.astro';
@@ -46,6 +47,7 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <Hero />
+  <MapelPicker />
   {daringAktif && <PembelajaranDaringBanner />}
   <QuoteTicker />
   <Spotlight />
