@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Medan Magnet AR & WebXR | Lab Maya PancaEdu</title>
-<meta name="description" content="Lihat garis gaya medan magnet 3D menempel di dunia nyata lewat kamera HP kamu -- Mode AR Marker (semua HP) atau Mode WebXR (Android Chrome, deteksi permukaan otomatis).">
+<meta name="description" content="Lihat garis gaya medan magnet 3D lewat kamera HP kamu -- Mode Tangan (ikuti telapak tanganmu, paling gampang), Mode AR Marker (semua HP), atau Mode WebXR (Android Chrome, deteksi permukaan otomatis).">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
 <!--
@@ -135,9 +135,9 @@
     display:none; white-space:pre-line;
   }
 
-  /* ---------- Panggung AR (keduanya mode) ---------- */
+  /* ---------- Panggung AR (ketiga mode) ---------- */
   #arStage{ position:fixed; inset:0; z-index:10; display:none; background:#000; }
-  #markerContainer, #webxrContainer{
+  #markerContainer, #webxrContainer, #handContainer{
     position:absolute; inset:0;
   }
   #markerContainer video, #markerContainer canvas,
@@ -145,6 +145,19 @@
     width:100% !important; height:100% !important;
     object-fit:cover;
   }
+
+  /* Mode Tangan: kamera depan di-cermin (konvensi game tangan yang sudah
+     ada, public/game/simulasi-magnet-tangan/) -- canvas Three.js (ditambah
+     lewat JS) ikut di-cermin juga karena dipasang di dalam #handMirror
+     yang sama, jadi tidak perlu membalik koordinat landmark secara manual. */
+  #handContainer{ display:none; overflow:hidden; }
+  #handMirror{ position:absolute; inset:0; transform:scaleX(-1); }
+  #handVideo, #handMirror canvas{
+    position:absolute; inset:0;
+    width:100% !important; height:100% !important;
+    object-fit:cover;
+  }
+  #handVideo{ filter:brightness(0.85) saturate(1.05); }
 
   #hud{
     position:fixed; top:1rem; right:1rem; z-index:50;
@@ -196,14 +209,13 @@
       yang melengkung dari kutub Utara ke Selatan -- putar HP-nya buat lihat dari segala sudut.
     </p>
 
-    <button type="button" class="mode-btn" id="webxrBtn" disabled>
-      <span class="emo">🧭</span>
+    <button type="button" class="mode-btn" id="handBtn">
+      <span class="emo">✋</span>
       <span class="label">
-        Mode WebXR (deteksi permukaan otomatis)
-        <small>Mengecek dukungan browser…</small>
+        Mode Tangan (paling gampang, Rekomendasi)
+        <small>Kamera depan, magnetnya ikut posisi telapak tanganmu</small>
       </span>
     </button>
-    <div id="webxrNote"></div>
 
     <button type="button" class="mode-btn" id="markerBtn">
       <span class="emo">🎯</span>
@@ -212,6 +224,15 @@
         <small>Arahkan kamera ke gambar marker di bawah</small>
       </span>
     </button>
+
+    <button type="button" class="mode-btn" id="webxrBtn" disabled>
+      <span class="emo">🧭</span>
+      <span class="label">
+        Mode WebXR (deteksi permukaan otomatis)
+        <small>Mengecek dukungan browser…</small>
+      </span>
+    </button>
+    <div id="webxrNote"></div>
 
     <div id="markerPreview">
       <img src="/ar/medan-magnet/marker-source.svg" alt="Marker Medan Magnet PancaEdu" />
@@ -234,6 +255,11 @@
 <div id="arStage">
   <div id="markerContainer"></div>
   <div id="webxrContainer"></div>
+  <div id="handContainer">
+    <div id="handMirror">
+      <video id="handVideo" autoplay playsinline muted></video>
+    </div>
+  </div>
   <div id="hud">
     <span class="badge" id="modeBadge"></span>
     <button type="button" id="stopBtn">✕ Berhenti</button>
@@ -247,13 +273,18 @@
 import * as THREE from 'three';
 import { ARButton } from 'three/addons/webxr/ARButton.js';
 import { MindARThree } from 'mindar-image-three';
+import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 
 const startOverlay = document.getElementById('startOverlay');
 const arStage = document.getElementById('arStage');
 const markerContainer = document.getElementById('markerContainer');
 const webxrContainer = document.getElementById('webxrContainer');
+const handContainer = document.getElementById('handContainer');
+const handMirror = document.getElementById('handMirror');
+const handVideo = document.getElementById('handVideo');
 const markerBtn = document.getElementById('markerBtn');
 const webxrBtn = document.getElementById('webxrBtn');
+const handBtn = document.getElementById('handBtn');
 const webxrNote = document.getElementById('webxrNote');
 const loadingLine = document.getElementById('loadingLine');
 const errBox = document.getElementById('errBox');
@@ -266,6 +297,7 @@ function showError(msg) {
   errBox.textContent = msg;
   loadingLine.style.display = 'none';
   markerBtn.disabled = false;
+  handBtn.disabled = false;
 }
 
 function clearError() {
@@ -273,7 +305,7 @@ function clearError() {
   errBox.textContent = '';
 }
 
-// ---------- Scene fisika bersama (dipakai Mode AR Marker & Mode WebXR) ----------
+// ---------- Scene fisika bersama (dipakai ketiga mode) ----------
 // Magnet batang sederhana (kotak merah = Utara, kotak biru = Selatan) +
 // beberapa loop garis gaya 3D di sekelilingnya. Disederhanakan buat tujuan
 // edukasi (bukan solver medan magnet presisi) -- lihat #disclaimer.
@@ -336,6 +368,7 @@ async function startMarkerMode() {
   clearError();
   markerBtn.disabled = true;
   webxrBtn.disabled = true;
+  handBtn.disabled = true;
   loadingLine.style.display = 'block';
   loadingLine.textContent = 'Menyiapkan pelacakan marker…';
 
@@ -360,6 +393,7 @@ async function startMarkerMode() {
     arStage.style.display = 'block';
     markerContainer.style.display = 'block';
     webxrContainer.style.display = 'none';
+    handContainer.style.display = 'none';
     modeBadge.textContent = '🎯 Mode AR Marker';
 
     markerClock = new THREE.Clock();
@@ -371,6 +405,7 @@ async function startMarkerMode() {
     console.error(err);
     markerBtn.disabled = false;
     webxrBtn.disabled = !webxrSupported;
+    handBtn.disabled = false;
     showError(
       'Gagal memulai Mode AR Marker: ' + (err && err.message ? err.message : err) +
       '\nPastikan izin kamera diberikan, dan file targets.mind sudah tersedia di server ' +
@@ -409,6 +444,7 @@ async function startWebXRMode() {
   clearError();
   markerBtn.disabled = true;
   webxrBtn.disabled = true;
+  handBtn.disabled = true;
   loadingLine.style.display = 'block';
   loadingLine.textContent = 'Menyiapkan sesi WebXR…';
 
@@ -454,6 +490,7 @@ async function startWebXRMode() {
     arStage.style.display = 'block';
     webxrContainer.style.display = 'block';
     markerContainer.style.display = 'none';
+    handContainer.style.display = 'none';
     modeBadge.textContent = '🧭 Mode WebXR';
     webxrHint.style.display = 'block';
     webxrHint.textContent = 'Meminta sesi WebXR + overlay…';
@@ -565,6 +602,7 @@ async function startWebXRMode() {
     console.error(err);
     markerBtn.disabled = false;
     webxrBtn.disabled = !webxrSupported;
+    handBtn.disabled = false;
     startOverlay.style.display = 'flex';
     arStage.style.display = 'none';
     showError('Gagal memulai Mode WebXR: ' + (err && err.message ? err.message : err));
@@ -591,18 +629,203 @@ function stopWebXRMode(fromSessionEnd) {
   xrSession = null;
 }
 
+// ================= MODE TANGAN (deteksi telapak tangan, MediaPipe) =================
+// Pendekatan paling andal dibanding WebXR: tidak tergantung ARCore/deteksi
+// permukaan sama sekali, cuma computer-vision biasa (sudah terbukti jalan
+// stabil di public/game/simulasi-magnet-tangan/). Magnet 3D yang SAMA
+// (buildMagnetScene) diposisikan & diskalakan ikut posisi/ukuran telapak
+// tangan di layar -- bukan pelacakan 6DOF dunia nyata seperti WebXR, cuma
+// overlay 2D-mengikuti-tangan (perkiraan visual, bukan kedalaman asli).
+let handLandmarkerModel = null;
+let handLandmarkerLoading = null;
+let handRenderer = null;
+let handScene = null;
+let handCamera = null;
+let handMagnetGroup = null;
+let handClock = null;
+let handRafId = null;
+let handStream = null;
+let handFoundShown = false;
+let handResizeHandler = null;
+
+async function loadHandLandmarker() {
+  if (handLandmarkerModel) return handLandmarkerModel;
+  if (!handLandmarkerLoading) {
+    handLandmarkerLoading = (async () => {
+      const vision = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      );
+      handLandmarkerModel = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath:
+            'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
+        numHands: 1,
+      });
+      return handLandmarkerModel;
+    })();
+  }
+  return handLandmarkerLoading;
+}
+
+function resizeHandCanvas() {
+  if (!handRenderer || !handCamera) return;
+  const w = handContainer.clientWidth || window.innerWidth;
+  const h = handContainer.clientHeight || window.innerHeight;
+  handRenderer.setSize(w, h);
+  handCamera.aspect = w / h;
+  handCamera.updateProjectionMatrix();
+}
+
+async function startHandMode() {
+  clearError();
+  markerBtn.disabled = true;
+  webxrBtn.disabled = true;
+  handBtn.disabled = true;
+  loadingLine.style.display = 'block';
+  loadingLine.textContent = 'Memuat model deteksi tangan…';
+
+  try {
+    await loadHandLandmarker();
+
+    loadingLine.textContent = 'Mengaktifkan kamera…';
+    handStream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+      audio: false,
+    });
+    handVideo.srcObject = handStream;
+    await handVideo.play();
+
+    handScene = new THREE.Scene();
+    handCamera = new THREE.PerspectiveCamera(50, 1, 0.01, 10);
+    handScene.add(new THREE.HemisphereLight(0xffffff, 0x222233, 1.3));
+
+    handRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    handRenderer.setPixelRatio(window.devicePixelRatio);
+    handMirror.appendChild(handRenderer.domElement);
+
+    handMagnetGroup = buildMagnetScene();
+    handMagnetGroup.visible = false;
+    handScene.add(handMagnetGroup);
+
+    resizeHandCanvas();
+    handResizeHandler = resizeHandCanvas;
+    window.addEventListener('resize', handResizeHandler);
+
+    startOverlay.style.display = 'none';
+    arStage.style.display = 'block';
+    markerContainer.style.display = 'none';
+    webxrContainer.style.display = 'none';
+    handContainer.style.display = 'block';
+    modeBadge.textContent = '✋ Mode Tangan';
+    webxrHint.style.display = 'block';
+    webxrHint.textContent = 'Tunjukkan telapak tangan terbuka ke kamera…';
+
+    handFoundShown = false;
+    handClock = new THREE.Clock();
+    handLoop();
+  } catch (err) {
+    console.error(err);
+    markerBtn.disabled = false;
+    webxrBtn.disabled = !webxrSupported;
+    handBtn.disabled = false;
+    showError(
+      'Gagal memulai Mode Tangan: ' + (err && err.message ? err.message : err) +
+      '\nPastikan izin kamera diberikan.'
+    );
+  }
+}
+
+function handLoop() {
+  handRafId = requestAnimationFrame(handLoop);
+  if (!handVideo.videoWidth || !handLandmarkerModel) return;
+
+  const now = performance.now();
+  const result = handLandmarkerModel.detectForVideo(handVideo, now);
+  const lm = result.landmarks && result.landmarks[0];
+
+  if (lm) {
+    const wrist = lm[0];
+    const midMcp = lm[9];
+    const cx = (wrist.x + midMcp.x) / 2;
+    const cy = (wrist.y + midMcp.y) / 2;
+    const handSpan = Math.hypot(midMcp.x - wrist.x, midMcp.y - wrist.y);
+
+    // Proyeksikan posisi normalized (0..1) ke bidang dunia Three.js pada
+    // kedalaman virtual TETAP -- kamera HP cuma 2D, jadi ini cuma perkiraan
+    // visual biar magnetnya "menempel" kira-kira di posisi tangan, bukan
+    // pelacakan jarak asli.
+    const depth = 0.5;
+    const vFov = (handCamera.fov * Math.PI) / 180;
+    const visibleH = 2 * Math.tan(vFov / 2) * depth;
+    const visibleW = visibleH * handCamera.aspect;
+    const worldX = (cx - 0.5) * visibleW;
+    const worldY = -(cy - 0.5) * visibleH;
+
+    handMagnetGroup.position.set(worldX, worldY, -depth);
+    const scale = THREE.MathUtils.clamp(handSpan * 2.4, 0.4, 2.4);
+    handMagnetGroup.scale.setScalar(scale);
+    handMagnetGroup.visible = true;
+
+    if (!handFoundShown) {
+      handFoundShown = true;
+      webxrHint.textContent = 'Telapak tangan terdeteksi! Gerakkan tanganmu pelan-pelan.';
+    }
+  } else {
+    handMagnetGroup.visible = false;
+    if (handFoundShown) {
+      handFoundShown = false;
+      webxrHint.textContent = 'Tunjukkan telapak tangan terbuka ke kamera…';
+    }
+  }
+
+  animateMagnetScene(handMagnetGroup, handClock.getElapsedTime());
+  handRenderer.render(handScene, handCamera);
+}
+
+function stopHandMode() {
+  if (handRafId) {
+    cancelAnimationFrame(handRafId);
+    handRafId = null;
+  }
+  if (handResizeHandler) {
+    window.removeEventListener('resize', handResizeHandler);
+    handResizeHandler = null;
+  }
+  if (handStream) {
+    handStream.getTracks().forEach((track) => track.stop());
+    handStream = null;
+  }
+  handVideo.srcObject = null;
+  if (handRenderer) {
+    if (handMirror.contains(handRenderer.domElement)) {
+      handMirror.removeChild(handRenderer.domElement);
+    }
+    handRenderer.dispose();
+    handRenderer = null;
+  }
+  handScene = null;
+  handCamera = null;
+  handMagnetGroup = null;
+}
+
 // ================= Wiring UI =================
 markerBtn.addEventListener('click', startMarkerMode);
 webxrBtn.addEventListener('click', startWebXRMode);
+handBtn.addEventListener('click', startHandMode);
 
 stopBtn.addEventListener('click', () => {
   stopMarkerMode();
   stopWebXRMode(false);
+  stopHandMode();
   arStage.style.display = 'none';
   startOverlay.style.display = 'flex';
   loadingLine.style.display = 'none';
   markerBtn.disabled = false;
   webxrBtn.disabled = !webxrSupported;
+  handBtn.disabled = false;
 });
 
 (async function init() {
