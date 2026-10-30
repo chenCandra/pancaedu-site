@@ -258,6 +258,7 @@
   <div id="handContainer">
     <div id="handMirror">
       <video id="handVideo" autoplay playsinline muted></video>
+      <canvas id="handCanvas"></canvas>
     </div>
   </div>
   <div id="hud">
@@ -631,22 +632,19 @@ function stopWebXRMode(fromSessionEnd) {
 
 // ================= MODE TANGAN (deteksi telapak tangan, MediaPipe) =================
 // Pendekatan paling andal dibanding WebXR: tidak tergantung ARCore/deteksi
-// permukaan sama sekali, cuma computer-vision biasa (sudah terbukti jalan
-// stabil di public/game/simulasi-magnet-tangan/). Magnet 3D yang SAMA
-// (buildMagnetScene) diposisikan & diskalakan ikut posisi/ukuran telapak
-// tangan di layar -- bukan pelacakan 6DOF dunia nyata seperti WebXR, cuma
-// overlay 2D-mengikuti-tangan (perkiraan visual, bukan kedalaman asli).
+// permukaan sama sekali, cuma computer-vision biasa. Visualnya SENGAJA
+// dibuat SAMA PERSIS dengan public/game/simulasi-magnet-tangan/ (bola
+// energi berpilin + garis gaya yang ditelusuri langsung dari vektor medan)
+// karena itu sudah terbukti bagus & stabil -- BUKAN model magnet batang 3D
+// (buildMagnetScene) yang dipakai Mode AR Marker/WebXR. Mode ini memang
+// overlay 2D-mengikuti-tangan, bukan AR 3D sungguhan, jadi gaya visual 2D
+// kanvas ini jauh lebih cocok & lebih enak dilihat dibanding kotak 3D polos.
 let handLandmarkerModel = null;
 let handLandmarkerLoading = null;
-let handRenderer = null;
-let handScene = null;
-let handCamera = null;
-let handMagnetGroup = null;
-let handClock = null;
-let handRafId = null;
+let handCanvasEl = null;
+let handCtx = null;
 let handStream = null;
-let handFoundShown = false;
-let handResizeHandler = null;
+let handRafId = null;
 
 async function loadHandLandmarker() {
   if (handLandmarkerModel) return handLandmarkerModel;
@@ -662,7 +660,7 @@ async function loadHandLandmarker() {
           delegate: 'GPU',
         },
         runningMode: 'VIDEO',
-        numHands: 1,
+        numHands: 2,
       });
       return handLandmarkerModel;
     })();
@@ -671,12 +669,9 @@ async function loadHandLandmarker() {
 }
 
 function resizeHandCanvas() {
-  if (!handRenderer || !handCamera) return;
-  const w = handContainer.clientWidth || window.innerWidth;
-  const h = handContainer.clientHeight || window.innerHeight;
-  handRenderer.setSize(w, h);
-  handCamera.aspect = w / h;
-  handCamera.updateProjectionMatrix();
+  if (!handCanvasEl || !handVideo.videoWidth) return;
+  handCanvasEl.width = handVideo.videoWidth;
+  handCanvasEl.height = handVideo.videoHeight;
 }
 
 async function startHandMode() {
@@ -698,21 +693,10 @@ async function startHandMode() {
     handVideo.srcObject = handStream;
     await handVideo.play();
 
-    handScene = new THREE.Scene();
-    handCamera = new THREE.PerspectiveCamera(50, 1, 0.01, 10);
-    handScene.add(new THREE.HemisphereLight(0xffffff, 0x222233, 1.3));
-
-    handRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    handRenderer.setPixelRatio(window.devicePixelRatio);
-    handMirror.appendChild(handRenderer.domElement);
-
-    handMagnetGroup = buildMagnetScene();
-    handMagnetGroup.visible = false;
-    handScene.add(handMagnetGroup);
-
+    handCanvasEl = document.getElementById('handCanvas');
+    handCtx = handCanvasEl.getContext('2d');
     resizeHandCanvas();
-    handResizeHandler = resizeHandCanvas;
-    window.addEventListener('resize', handResizeHandler);
+    window.addEventListener('resize', resizeHandCanvas);
 
     startOverlay.style.display = 'none';
     arStage.style.display = 'block';
@@ -721,11 +705,9 @@ async function startHandMode() {
     handContainer.style.display = 'block';
     modeBadge.textContent = '✋ Mode Tangan';
     webxrHint.style.display = 'block';
-    webxrHint.textContent = 'Tunjukkan telapak tangan terbuka ke kamera…';
+    webxrHint.textContent = 'Buka telapak tangan (Utara) atau kepalkan (Selatan) di depan kamera…';
 
-    handFoundShown = false;
-    handClock = new THREE.Clock();
-    handLoop();
+    handRafId = requestAnimationFrame(handLoop);
   } catch (err) {
     console.error(err);
     markerBtn.disabled = false;
@@ -738,51 +720,412 @@ async function startHandMode() {
   }
 }
 
-function handLoop() {
-  handRafId = requestAnimationFrame(handLoop);
-  if (!handVideo.videoWidth || !handLandmarkerModel) return;
+// ---------- Util & gambar 2D (porting persis dari simulasi-magnet-tangan) ----------
+function hVec(x, y) { return { x, y }; }
+function hSub(a, b) { return hVec(a.x - b.x, a.y - b.y); }
+function hAdd(a, b) { return hVec(a.x + b.x, a.y + b.y); }
+function hScale(a, s) { return hVec(a.x * s, a.y * s); }
+function hLen(a) { return Math.hypot(a.x, a.y) || 1e-6; }
+function hNorm(a) { const l = hLen(a); return hVec(a.x / l, a.y / l); }
+function hMakeOrb(center, sign, radius) { return { center, sign, radius }; }
 
-  const now = performance.now();
-  const result = handLandmarkerModel.detectForVideo(handVideo, now);
-  const lm = result.landmarks && result.landmarks[0];
+function hFieldAt(point, orbs) {
+  let fx = 0, fy = 0;
+  for (const o of orbs) {
+    const d = hSub(point, o.center);
+    const dist = Math.max(hLen(d), 18);
+    const k = (5200 * o.sign) / (dist * dist);
+    const u = hNorm(d);
+    fx += u.x * k;
+    fy += u.y * k;
+  }
+  return { x: fx, y: fy };
+}
 
-  if (lm) {
-    const wrist = lm[0];
-    const midMcp = lm[9];
-    const cx = (wrist.x + midMcp.x) / 2;
-    const cy = (wrist.y + midMcp.y) / 2;
-    const handSpan = Math.hypot(midMcp.x - wrist.x, midMcp.y - wrist.y);
+function hPairResult(a, b) {
+  return { d: hLen(hSub(b.center, a.center)), attract: a.sign !== b.sign };
+}
 
-    // Proyeksikan posisi normalized (0..1) ke bidang dunia Three.js pada
-    // kedalaman virtual TETAP -- kamera HP cuma 2D, jadi ini cuma perkiraan
-    // visual biar magnetnya "menempel" kira-kira di posisi tangan, bukan
-    // pelacakan jarak asli.
-    const depth = 0.5;
-    const vFov = (handCamera.fov * Math.PI) / 180;
-    const visibleH = 2 * Math.tan(vFov / 2) * depth;
-    const visibleW = visibleH * handCamera.aspect;
-    const worldX = (cx - 0.5) * visibleW;
-    const worldY = -(cy - 0.5) * visibleH;
+function hPseudoRandom(n) {
+  const x = Math.sin(n * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+function hQuadBezier(p0, p1, p2, t) { return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2; }
+function hColorStr(sign, a) { return sign > 0 ? `rgba(239,68,68,${a})` : `rgba(59,130,246,${a})`; }
 
-    handMagnetGroup.position.set(worldX, worldY, -depth);
-    const scale = THREE.MathUtils.clamp(handSpan * 2.4, 0.4, 2.4);
-    handMagnetGroup.scale.setScalar(scale);
-    handMagnetGroup.visible = true;
+function hDrawEnergyOrb(orb, t) {
+  const { center, sign, radius } = orb;
+  const [r, g, b] = sign > 0 ? [239, 68, 68] : [59, 130, 246];
+  const rh = Math.min(255, r + 70), gh = Math.min(255, g + 70), bh = Math.min(255, b + 70);
 
-    if (!handFoundShown) {
-      handFoundShown = true;
-      webxrHint.textContent = 'Telapak tangan terdeteksi! Gerakkan tanganmu pelan-pelan.';
+  handCtx.save();
+  handCtx.globalCompositeOperation = 'lighter';
+
+  const halo = handCtx.createRadialGradient(center.x, center.y, 0, center.x, center.y, radius * 2.1);
+  halo.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
+  halo.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  handCtx.fillStyle = halo;
+  handCtx.beginPath(); handCtx.arc(center.x, center.y, radius * 2.1, 0, Math.PI * 2); handCtx.fill();
+
+  if (sign > 0) {
+    const tJit = Math.floor(t / 70);
+    for (let i = 0; i < 3; i++) {
+      const cyc = (t * 0.0011 + i / 3) % 1;
+      const rr = radius * (0.85 + cyc * 1.9);
+      handCtx.strokeStyle = `rgba(${rh},${gh},${bh},${(1 - cyc) * 0.5})`;
+      handCtx.lineWidth = 2.6;
+      handCtx.beginPath(); handCtx.arc(center.x, center.y, rr, 0, Math.PI * 2); handCtx.stroke();
+    }
+    const coronaPts = 18;
+    handCtx.beginPath();
+    for (let i = 0; i <= coronaPts; i++) {
+      const idx = i % coronaPts;
+      const ang = (idx / coronaPts) * Math.PI * 2 + t * 0.0007;
+      const flick = 0.5 + 0.5 * Math.sin(t * 0.018 + idx * 2.1);
+      const base = idx % 2 === 0 ? 1.55 : 1.02;
+      const rr = radius * (base + flick * 0.55);
+      const x = center.x + Math.cos(ang) * rr, y = center.y + Math.sin(ang) * rr;
+      if (i === 0) handCtx.moveTo(x, y); else handCtx.lineTo(x, y);
+    }
+    handCtx.closePath();
+    const coronaGrad = handCtx.createRadialGradient(center.x, center.y, radius * 0.3, center.x, center.y, radius * 2.6);
+    coronaGrad.addColorStop(0, `rgba(${rh},${gh},${bh},0.55)`);
+    coronaGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    handCtx.fillStyle = coronaGrad;
+    handCtx.fill();
+
+    const spikeCount = 10;
+    for (let i = 0; i < spikeCount; i++) {
+      const ang = t * 0.0016 + i * ((Math.PI * 2) / spikeCount);
+      const jitter = hPseudoRandom(tJit * 31 + i);
+      const inner = radius * 0.5, outer = radius * (1.25 + jitter * 0.75);
+      const spread = 0.095;
+      handCtx.beginPath();
+      handCtx.moveTo(center.x + Math.cos(ang - spread) * inner, center.y + Math.sin(ang - spread) * inner);
+      handCtx.lineTo(center.x + Math.cos(ang) * outer, center.y + Math.sin(ang) * outer);
+      handCtx.lineTo(center.x + Math.cos(ang + spread) * inner, center.y + Math.sin(ang + spread) * inner);
+      handCtx.closePath();
+      const spikeGrad = handCtx.createRadialGradient(center.x, center.y, radius * 0.2, center.x, center.y, outer);
+      spikeGrad.addColorStop(0, 'rgba(255,255,255,0.85)');
+      spikeGrad.addColorStop(0.4, `rgba(${rh},${gh},${bh},0.75)`);
+      spikeGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      handCtx.fillStyle = spikeGrad;
+      handCtx.fill();
+    }
+
+    for (let i = 0; i < 11; i++) {
+      const cyc = (t * 0.0013 + i / 11) % 1;
+      const ang = i * ((Math.PI * 2) / 11) + Math.sin(i * 3.3) * 0.25;
+      const rr = radius * (0.55 + cyc * 1.5);
+      const trailRr = radius * (0.55 + Math.max(0, cyc - 0.1) * 1.5);
+      handCtx.strokeStyle = `rgba(255,255,255,${0.85 * (1 - cyc)})`;
+      handCtx.lineWidth = Math.max(1, radius * 0.05 * (1 - cyc * 0.5));
+      handCtx.beginPath();
+      handCtx.moveTo(center.x + Math.cos(ang) * trailRr, center.y + Math.sin(ang) * trailRr);
+      handCtx.lineTo(center.x + Math.cos(ang) * rr, center.y + Math.sin(ang) * rr);
+      handCtx.stroke();
     }
   } else {
-    handMagnetGroup.visible = false;
-    if (handFoundShown) {
-      handFoundShown = false;
-      webxrHint.textContent = 'Tunjukkan telapak tangan terbuka ke kamera…';
+    const arms = 3;
+    for (let a = 0; a < arms; a++) {
+      handCtx.beginPath();
+      const turns = 1.5, steps = 24;
+      for (let s = 0; s <= steps; s++) {
+        const f = s / steps;
+        const ang = t * -0.0016 + a * ((Math.PI * 2) / arms) + f * turns * Math.PI * 2;
+        const rr = radius * (1.05 - f * 0.82);
+        const x = center.x + Math.cos(ang) * rr, y = center.y + Math.sin(ang) * rr;
+        if (s === 0) handCtx.moveTo(x, y); else handCtx.lineTo(x, y);
+      }
+      handCtx.strokeStyle = `rgba(${rh},${gh},${bh},0.55)`;
+      handCtx.lineWidth = radius * 0.15;
+      handCtx.lineCap = 'round';
+      handCtx.stroke();
+    }
+    for (let i = 0; i < 7; i++) {
+      const cyc = (t * 0.0012 + i / 7) % 1;
+      const ang = i * ((Math.PI * 2) / 7) + 0.4 + cyc * 2.2;
+      const rr = radius * (1.25 - cyc * 1.05);
+      handCtx.fillStyle = `rgba(255,255,255,${0.85 * cyc})`;
+      handCtx.beginPath();
+      handCtx.arc(center.x + Math.cos(ang) * rr, center.y + Math.sin(ang) * rr, Math.max(1.2, radius * 0.065 * (0.3 + cyc * 0.5)), 0, Math.PI * 2);
+      handCtx.fill();
     }
   }
 
-  animateMagnetScene(handMagnetGroup, handClock.getElapsedTime());
-  handRenderer.render(handScene, handCamera);
+  const core = handCtx.createRadialGradient(center.x, center.y, 0, center.x, center.y, radius * 0.5);
+  core.addColorStop(0, 'rgba(255,255,255,0.95)');
+  core.addColorStop(0.35, `rgba(${rh},${gh},${bh},0.9)`);
+  core.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  handCtx.fillStyle = core;
+  handCtx.beginPath(); handCtx.arc(center.x, center.y, radius * 0.5, 0, Math.PI * 2); handCtx.fill();
+  handCtx.restore();
+
+  handCtx.save();
+  handCtx.fillStyle = '#fff';
+  handCtx.font = `800 ${Math.max(14, radius * 0.42)}px Arial`;
+  handCtx.textAlign = 'center';
+  handCtx.textBaseline = 'middle';
+  handCtx.shadowColor = `rgba(${r},${g},${b},0.9)`;
+  handCtx.shadowBlur = 10;
+  handCtx.fillText(sign > 0 ? 'U' : 'S', center.x, center.y);
+  handCtx.restore();
+}
+
+function hDrawInteractionBeam(a, b, result, t, seedKey) {
+  const dx = b.center.x - a.center.x, dy = b.center.y - a.center.y;
+  const dist = Math.hypot(dx, dy) || 1;
+  const nx = -dy / dist, ny = dx / dist;
+  const baseMidX = (a.center.x + b.center.x) / 2, baseMidY = (a.center.y + b.center.y) / 2;
+
+  handCtx.save();
+  handCtx.globalCompositeOperation = 'lighter';
+
+  if (result.attract) {
+    const strands = 3;
+    for (let i = 0; i < strands; i++) {
+      const off = (i - (strands - 1) / 2) * (16 + dist * 0.035);
+      const wob = Math.sin(t * 0.004 + i * 2.3 + seedKey) * (dist * 0.07);
+      const midx = baseMidX + nx * (off + wob);
+      const midy = baseMidY + ny * (off + wob);
+      const grad = handCtx.createLinearGradient(a.center.x, a.center.y, b.center.x, b.center.y);
+      grad.addColorStop(0, hColorStr(a.sign, 0.9));
+      grad.addColorStop(0.5, 'rgba(190,255,215,0.85)');
+      grad.addColorStop(1, hColorStr(b.sign, 0.9));
+      handCtx.strokeStyle = grad;
+      handCtx.lineWidth = 3.4 - i * 0.5;
+      handCtx.beginPath();
+      handCtx.moveTo(a.center.x, a.center.y);
+      handCtx.quadraticCurveTo(midx, midy, b.center.x, b.center.y);
+      handCtx.stroke();
+    }
+    const midx = baseMidX + nx * Math.sin(t * 0.004 + seedKey) * (dist * 0.07);
+    const midy = baseMidY + ny * Math.sin(t * 0.004 + seedKey) * (dist * 0.07);
+    for (let i = 0; i < 5; i++) {
+      const tt = (t * 0.0007 + i / 5) % 1;
+      const px = hQuadBezier(a.center.x, midx, b.center.x, tt);
+      const py = hQuadBezier(a.center.y, midy, b.center.y, tt);
+      handCtx.fillStyle = 'rgba(255,255,255,0.9)';
+      handCtx.beginPath(); handCtx.arc(px, py, 2.8, 0, Math.PI * 2); handCtx.fill();
+    }
+
+    const vortexCount = 10;
+    for (let i = 0; i < vortexCount; i++) {
+      const cyc = (t * 0.0012 + i / vortexCount) % 1;
+      const ang = cyc * Math.PI * 6 + seedKey;
+      const rr = (1 - cyc) * Math.min(dist * 0.18, 46);
+      handCtx.fillStyle = `rgba(200,255,220,${0.15 + (1 - cyc) * 0.6})`;
+      handCtx.beginPath();
+      handCtx.arc(baseMidX + Math.cos(ang) * rr, baseMidY + Math.sin(ang) * rr, 1.6 + (1 - cyc) * 2, 0, Math.PI * 2);
+      handCtx.fill();
+    }
+    const pulse = 0.5 + Math.sin(t * 0.006 + seedKey) * 0.5;
+    handCtx.strokeStyle = `rgba(190,255,215,${0.35 + pulse * 0.35})`;
+    handCtx.lineWidth = 2;
+    handCtx.beginPath(); handCtx.arc(baseMidX, baseMidY, 14 + pulse * 10, 0, Math.PI * 2); handCtx.stroke();
+
+    handCtx.save();
+    handCtx.globalCompositeOperation = 'source-over';
+    handCtx.font = `${16 + pulse * 4}px Arial`;
+    handCtx.textAlign = 'center'; handCtx.textBaseline = 'middle';
+    handCtx.shadowColor = 'rgba(34,197,94,0.9)'; handCtx.shadowBlur = 8;
+    handCtx.fillText('🧲', baseMidX, baseMidY);
+    handCtx.restore();
+  } else {
+    const segs = 7;
+    const jitterSeed = Math.floor(t / 90) + seedKey * 97;
+    handCtx.strokeStyle = 'rgba(255,140,60,0.9)';
+    handCtx.lineWidth = 2.6;
+    handCtx.beginPath();
+    handCtx.moveTo(a.center.x, a.center.y);
+    for (let i = 1; i < segs; i++) {
+      const tt = i / segs;
+      const bx = a.center.x + dx * tt, by = a.center.y + dy * tt;
+      const j = hPseudoRandom(jitterSeed + i) * (dist * 0.09) - dist * 0.045;
+      handCtx.lineTo(bx + nx * j, by + ny * j);
+    }
+    handCtx.lineTo(b.center.x, b.center.y);
+    handCtx.stroke();
+
+    const shockCycle = (t * 0.0015) % 1;
+    for (let i = 0; i < 2; i++) {
+      const cyc = (t * 0.0015 + i * 0.5) % 1;
+      const rr = cyc * Math.min(dist * 0.4, 70);
+      handCtx.strokeStyle = `rgba(255,140,60,${(1 - cyc) * 0.55})`;
+      handCtx.lineWidth = 2.2;
+      handCtx.beginPath(); handCtx.arc(baseMidX, baseMidY, rr, 0, Math.PI * 2); handCtx.stroke();
+    }
+
+    const burstCount = 14;
+    for (let i = 0; i < burstCount; i++) {
+      const ang = hPseudoRandom(seedKey * 31 + i) * Math.PI * 2;
+      const speedVar = 0.6 + hPseudoRandom(seedKey * 53 + i) * 0.7;
+      const cyc = (t * 0.0015 * speedVar + i / burstCount) % 1;
+      const rr = cyc * Math.min(dist * 0.45, 85);
+      const alpha = Math.max(0, 1 - cyc);
+      const warm = i % 2 === 0 ? '255,190,90' : '255,100,50';
+      handCtx.fillStyle = `rgba(${warm},${alpha * 0.9})`;
+      handCtx.beginPath();
+      handCtx.arc(baseMidX + Math.cos(ang) * rr, baseMidY + Math.sin(ang) * rr, 1.6 + alpha * 2.4, 0, Math.PI * 2);
+      handCtx.fill();
+    }
+
+    const flashA = Math.max(0, 1 - shockCycle * 7);
+    if (flashA > 0) {
+      const flashR = 46;
+      const flash = handCtx.createRadialGradient(baseMidX, baseMidY, 0, baseMidX, baseMidY, flashR);
+      flash.addColorStop(0, `rgba(255,235,180,${flashA * 0.9})`);
+      flash.addColorStop(0.5, `rgba(255,150,70,${flashA * 0.5})`);
+      flash.addColorStop(1, 'rgba(255,110,40,0)');
+      handCtx.fillStyle = flash;
+      handCtx.beginPath(); handCtx.arc(baseMidX, baseMidY, flashR, 0, Math.PI * 2); handCtx.fill();
+    }
+
+    handCtx.save();
+    handCtx.globalCompositeOperation = 'source-over';
+    const jpulse = 0.5 + Math.sin(t * 0.01 + seedKey) * 0.5;
+    handCtx.font = `${16 + jpulse * 5}px Arial`;
+    handCtx.textAlign = 'center'; handCtx.textBaseline = 'middle';
+    handCtx.shadowColor = 'rgba(249,115,22,0.9)'; handCtx.shadowBlur = 8;
+    handCtx.fillText('💥', baseMidX, baseMidY);
+    handCtx.restore();
+  }
+  handCtx.restore();
+}
+
+function hTraceFieldLine(start, orbs, sign, maxSteps, stepSize, W, H) {
+  const pts = [start];
+  let p = start;
+  let terminated = false;
+  for (let i = 0; i < maxSteps; i++) {
+    const f = hFieldAt(p, orbs);
+    let dir = hNorm(f);
+    if (sign < 0) dir = hScale(dir, -1);
+    p = hAdd(p, hScale(dir, stepSize));
+    pts.push(p);
+    if (p.x < -30 || p.x > W + 30 || p.y < -30 || p.y > H + 30) break;
+    let hitSink = false;
+    for (const o of orbs) {
+      if (o.sign !== sign && hLen(hSub(p, o.center)) < o.radius * 1.15) { hitSink = true; break; }
+    }
+    if (hitSink) { terminated = true; break; }
+  }
+  return { pts, terminated };
+}
+
+function hDrawArrowHead(p, ang, size, color) {
+  handCtx.save();
+  handCtx.translate(p.x, p.y);
+  handCtx.rotate(ang);
+  handCtx.fillStyle = color;
+  handCtx.beginPath();
+  handCtx.moveTo(size, 0);
+  handCtx.lineTo(-size * 0.7, size * 0.55);
+  handCtx.lineTo(-size * 0.7, -size * 0.55);
+  handCtx.closePath();
+  handCtx.fill();
+  handCtx.restore();
+}
+
+function hDrawFieldLines(orbs, W, H) {
+  if (orbs.length === 0) return;
+  const stepSize = 7, maxSteps = 120, linesPerOrb = 9;
+
+  handCtx.save();
+  handCtx.lineCap = 'round';
+  handCtx.lineJoin = 'round';
+
+  for (const src of orbs) {
+    for (let i = 0; i < linesPerOrb; i++) {
+      const angle = (i / linesPerOrb) * Math.PI * 2;
+      const start = hAdd(src.center, hScale(hVec(Math.cos(angle), Math.sin(angle)), src.radius * 1.12));
+      const { pts, terminated } = hTraceFieldLine(start, orbs, src.sign, maxSteps, stepSize, W, H);
+      if (pts.length < 4) continue;
+
+      const baseAlpha = terminated ? 0.55 : 0.32;
+      handCtx.beginPath();
+      handCtx.moveTo(pts[0].x, pts[0].y);
+      for (let k = 1; k < pts.length; k++) handCtx.lineTo(pts[k].x, pts[k].y);
+      handCtx.strokeStyle = `rgba(195,218,255,${baseAlpha})`;
+      handCtx.lineWidth = 1.4;
+      handCtx.stroke();
+
+      for (let k = 8; k < pts.length - 2; k += 18) {
+        const p0 = pts[k], p1 = pts[k + 1];
+        const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+        hDrawArrowHead(p0, ang, 4.5, `rgba(220,235,255,${baseAlpha + 0.2})`);
+      }
+    }
+  }
+  handCtx.restore();
+}
+
+function hHandOpenness(lm) {
+  const wrist = lm[0];
+  const midMcp = lm[9];
+  const handScale = Math.hypot(midMcp.x - wrist.x, midMcp.y - wrist.y) || 1e-6;
+  const tips = [lm[8], lm[12], lm[16], lm[20]];
+  let avg = 0;
+  for (const tp of tips) {
+    avg += Math.hypot(tp.x - wrist.x, tp.y - wrist.y) / handScale;
+  }
+  avg /= tips.length;
+  return avg; // ~1.0-1.3 mengepal, ~1.8-2.3 terbuka
+}
+
+function handLoop() {
+  handRafId = requestAnimationFrame(handLoop);
+  if (!handVideo.videoWidth || !handLandmarkerModel || !handCtx) return;
+
+  const now = performance.now();
+  const W = handCanvasEl.width, H = handCanvasEl.height;
+  handCtx.clearRect(0, 0, W, H);
+
+  const result = handLandmarkerModel.detectForVideo(handVideo, now);
+  const handsLm = result.landmarks || [];
+
+  const handOrbs = handsLm.map((lm) => {
+    const toPx = (p) => hVec(p.x * W, p.y * H);
+    const wrist = toPx(lm[0]);
+    const midMcp = toPx(lm[9]);
+    const midTip = toPx(lm[12]);
+    const dir = hNorm(hSub(midTip, wrist));
+    const handSize = hLen(hSub(midMcp, wrist));
+    const radius = Math.max(22, Math.min(56, handSize * 0.46));
+    const center = hAdd(midMcp, hScale(dir, handSize * 0.4));
+    const openness = hHandOpenness(lm);
+    const sign = openness > 1.55 ? 1 : -1; // terbuka=Utara, mengepal=Selatan
+    return { orb: hMakeOrb(center, sign, radius), openness };
+  });
+
+  const allOrbs = handOrbs.map((h) => h.orb);
+
+  hDrawFieldLines(allOrbs, W, H);
+
+  const RANGE = 560;
+  const pairs = [];
+  for (let i = 0; i < allOrbs.length; i++) {
+    for (let j = i + 1; j < allOrbs.length; j++) {
+      const r = hPairResult(allOrbs[i], allOrbs[j]);
+      if (r.d <= RANGE) pairs.push({ a: allOrbs[i], b: allOrbs[j], result: r, seed: i * 13 + j });
+    }
+  }
+  for (const p of pairs) hDrawInteractionBeam(p.a, p.b, p.result, now, p.seed);
+  for (const o of allOrbs) hDrawEnergyOrb(o, now);
+
+  const polLabel = (o) => (o > 1.55 ? 'Utara (terbuka)' : 'Selatan (mengepal)');
+  if (handOrbs.length === 0) {
+    webxrHint.textContent = 'Buka telapak tangan (Utara) atau kepalkan (Selatan) di depan kamera…';
+  } else if (handOrbs.length === 1) {
+    webxrHint.textContent = `Tangan: ${polLabel(handOrbs[0].openness)} -- angkat tangan satunya buat lihat interaksi tarik/tolak.`;
+  } else if (pairs.length === 0) {
+    webxrHint.textContent = `${handOrbs.length} tangan terdeteksi -- dekatkan satu sama lain buat lihat interaksinya.`;
+  } else {
+    pairs.sort((p1, p2) => p1.result.d - p2.result.d);
+    webxrHint.textContent = pairs[0].result.attract
+      ? '🧲 Tarik-menarik! (kutub berlawanan)'
+      : '🚫 Tolak-menolak! (kutub sama)';
+  }
 }
 
 function stopHandMode() {
@@ -790,25 +1133,16 @@ function stopHandMode() {
     cancelAnimationFrame(handRafId);
     handRafId = null;
   }
-  if (handResizeHandler) {
-    window.removeEventListener('resize', handResizeHandler);
-    handResizeHandler = null;
-  }
+  window.removeEventListener('resize', resizeHandCanvas);
   if (handStream) {
     handStream.getTracks().forEach((track) => track.stop());
     handStream = null;
   }
   handVideo.srcObject = null;
-  if (handRenderer) {
-    if (handMirror.contains(handRenderer.domElement)) {
-      handMirror.removeChild(handRenderer.domElement);
-    }
-    handRenderer.dispose();
-    handRenderer = null;
+  if (handCtx && handCanvasEl) {
+    handCtx.clearRect(0, 0, handCanvasEl.width, handCanvasEl.height);
   }
-  handScene = null;
-  handCamera = null;
-  handMagnetGroup = null;
+  handCtx = null;
 }
 
 // ================= Wiring UI =================
