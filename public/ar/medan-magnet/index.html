@@ -165,8 +165,8 @@
   #stopBtn:hover{ border-color:var(--accent); }
 
   #webxrHint{
-    position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
-    z-index:50; max-width:22rem; text-align:center;
+    position:fixed; top:4.75rem; left:50%; transform:translateX(-50%);
+    z-index:55; max-width:22rem; text-align:center;
     background:var(--panel); border:1px solid var(--line);
     border-radius:14px; padding:.75rem 1rem;
     font-size:.8125rem; color:var(--muted);
@@ -394,6 +394,7 @@ function stopMarkerMode() {
 let webxrSupported = false;
 let xrRenderer = null;
 let xrSession = null;
+let webxrTapHandler = null;
 
 async function detectWebXR() {
   if (!('xr' in navigator)) return false;
@@ -534,7 +535,7 @@ async function startWebXRMode() {
     xrRenderer.xr.setReferenceSpaceType('local');
     await xrRenderer.xr.setSession(session);
 
-    session.addEventListener('select', () => {
+    function placeMagnetAtReticle() {
       if (!reticle.visible) return;
       if (placedScene) scene.remove(placedScene);
       placedScene = buildMagnetScene();
@@ -544,7 +545,16 @@ async function startWebXRMode() {
       placedScene.position.setFromMatrixPosition(reticle.matrix);
       placedScene.quaternion.setFromRotationMatrix(reticle.matrix);
       scene.add(placedScene);
-    });
+    }
+
+    session.addEventListener('select', placeMagnetAtReticle);
+
+    // Fallback: dengan dom-overlay aktif, beberapa Chrome/HP tidak konsisten
+    // memicu event 'select' XR saat ketukan jatuh di area overlay DOM.
+    // Dengarkan pointerdown langsung di container sebagai cadangan supaya
+    // ketuk-untuk-menaruh tetap jalan walau event 'select' gagal terpicu.
+    webxrTapHandler = () => placeMagnetAtReticle();
+    webxrContainer.addEventListener('pointerdown', webxrTapHandler);
 
     session.addEventListener('end', () => {
       stopWebXRMode(true);
@@ -563,6 +573,10 @@ async function startWebXRMode() {
 
 function stopWebXRMode(fromSessionEnd) {
   webxrHint.style.display = 'none';
+  if (webxrTapHandler) {
+    webxrContainer.removeEventListener('pointerdown', webxrTapHandler);
+    webxrTapHandler = null;
+  }
   if (xrRenderer) {
     xrRenderer.setAnimationLoop(null);
     if (webxrContainer.contains(xrRenderer.domElement)) {
