@@ -182,8 +182,8 @@
   <section id="simPanel">
     <div id="mirror">
       <video id="video" autoplay playsinline muted></video>
-      <canvas id="fieldCanvas"></canvas>
     </div>
+    <canvas id="fieldCanvas"></canvas>
     <div id="simBadge">✋ <span id="handCountPill" class="pill off">0</span></div>
   </section>
 
@@ -421,9 +421,16 @@ function loop(){
   handCountPill.textContent = handsLm.length;
   handCountPill.className = 'pill ' + (handsLm.length ? 'ok' : 'off');
 
+  // Kanvas ini SENGAJA TIDAK ikut transform cermin CSS (lihat #mirror di
+  // markup) -- kalau ikut, semua teks/angka yang digambar lewat fillText
+  // ikut terbalik kebaca (mirror kebalik hurufnya). Makanya pembalikan
+  // "cermin" dilakukan manual di sini (flip X), bukan lewat CSS, biar
+  // posisi vektor tetap sinkron sama video yang dicermin tapi teksnya
+  // tetap terbaca normal.
+  const toPx = p => vec((1 - p.x) * W, p.y * H);
+
   // Urutkan berdasarkan handedness (Left/Right dari MediaPipe) biar F1/F2
   // tidak "lompat" warna tiap frame kalau urutan deteksi tangan berubah.
-  const toPx = p => vec(p.x*W, p.y*H);
   const hands = handsLm.map((lm, i) => {
     const wrist = toPx(lm[0]);
     const midMcp = toPx(lm[9]);

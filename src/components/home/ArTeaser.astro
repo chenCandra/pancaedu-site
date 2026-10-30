@@ -5,69 +5,91 @@
 // topik-topik yang punya versi "AR kamera" (interaksi lewat kamera HP,
 // bukan cuma lihat simulasi di layar datar).
 //
-// Medan Magnet nunjuk ke game kamera yang SUDAH ADA & terbukti bagus
-// (public/game/simulasi-magnet-tangan/) -- bukan halaman AR/WebXR
-// terpisah (percobaan itu sudah dihentikan, visualnya kalah jauh dari
-// game ini). Topik lain masih "Segera" sampai ada yang beneran dibangun
+// Tiap topik dirender sebagai KARTU (pola sama persis dengan .lab-card di
+// /lab-maya: ikon besar + badge + judul + deskripsi + CTA), bukan cuma
+// chip teks kecil -- biar lebih jelas kelihatan ini simulasi sungguhan,
+// bukan placeholder teks doang.
+//
+// Medan Magnet & Vektor Gaya nunjuk ke game kamera yang SUDAH ADA & LIVE
+// (public/game/*) -- bukan halaman AR/WebXR terpisah (percobaan itu sudah
+// dihentikan). Topik lain masih "Segera" sampai ada yang beneran dibangun
 // dengan pendekatan serupa (kamera + deteksi tangan/gerakan, BUKAN WebXR
 // marker/permukaan -- itu sudah terbukti tidak andal di sesi sebelumnya).
 const previewTopics = [
-  { label: 'Medan Magnet', icon: '🧲', href: '/game/simulasi-magnet-tangan/' },
-  { label: 'Vektor Gaya', icon: '🧭', href: '/game/simulasi-vektor-gaya/' },
-  { label: 'Gerak Parabola', icon: '🎯' },
-  { label: 'Orbit Planet', icon: '🪐' },
+  {
+    label: 'Medan Magnet',
+    icon: '🧲',
+    href: '/game/simulasi-magnet-tangan/',
+    tag: 'Kelas XII · Medan Magnet',
+    desc: 'Buka telapak tangan jadi kutub Utara, kepalkan jadi Selatan -- lihat garis gaya magnetnya hidup lewat kamera.',
+  },
+  {
+    label: 'Vektor Gaya',
+    icon: '🧭',
+    href: '/game/simulasi-vektor-gaya/',
+    tag: 'Kelas XI · Resultan Vektor',
+    desc: 'Dua tangan jadi dua vektor gaya -- Resultannya tergambar otomatis pakai metode jajaran genjang.',
+  },
+  {
+    label: 'Gerak Parabola',
+    icon: '🎯',
+    tag: 'Kelas X · Gerak Parabola',
+    desc: 'Gestur lempar jadi kecepatan & sudut lontar, lintasan parabolanya tergambar langsung lewat kamera.',
+  },
+  {
+    label: 'Orbit Planet',
+    icon: '🪐',
+    tag: 'Kelas X · Gravitasi',
+    desc: 'Gerakkan tangan buat mengatur orbit planet virtual di sekitar matahari.',
+  },
 ];
 ---
 
 <section class="section ar-teaser">
   <div class="container">
-    <div class="ar-teaser-card" data-reveal>
-      <div class="ar-teaser-body">
-        <p class="eyebrow">🎥 Simulasi AR Kamera</p>
-        <h2>Lab Maya lewat Kamera HP</h2>
-        <p class="ar-teaser-desc">
-          Simulasi fisika yang berinteraksi langsung lewat kamera HP-mu — gerakkan tanganmu,
-          dan medan magnetnya "nongol" nempel ke dunia nyata, bukan cuma di layar datar.
-          Topik lain bakal menyusul dengan pendekatan serupa.
-        </p>
+    <div class="ar-teaser-intro" data-reveal>
+      <p class="eyebrow">🎥 Simulasi AR Kamera</p>
+      <h2>Lab Maya lewat Kamera HP</h2>
+      <p class="ar-teaser-desc">
+        Simulasi fisika yang berinteraksi langsung lewat kamera HP-mu — gerakkan tanganmu, dan
+        simulasinya "nongol" nempel ke dunia nyata, bukan cuma di layar datar.
+      </p>
+    </div>
 
-        <div class="ar-teaser-topics">
-          {previewTopics.map((t) =>
-            t.href ? (
-              <a href={t.href} class="ar-teaser-topic ar-teaser-topic-live">
-                <span aria-hidden="true">{t.icon}</span> {t.label}
-                <span class="ar-teaser-topic-cta">Coba sekarang →</span>
-              </a>
-            ) : (
-              <span class="ar-teaser-topic">
-                <span aria-hidden="true">{t.icon}</span> {t.label}
-                <span class="ar-teaser-topic-soon">Segera</span>
-              </span>
-            )
-          )}
-        </div>
-      </div>
+    <div class="ar-teaser-grid">
+      {previewTopics.map((t) =>
+        t.href ? (
+          <a href={t.href} class="ar-teaser-card card" data-reveal>
+            <span class="ar-teaser-card-icon" aria-hidden="true">{t.icon}</span>
+            <div class="ar-teaser-card-body">
+              <span class="badge">{t.tag}</span>
+              <h3>{t.label}</h3>
+              <p>{t.desc}</p>
+              <span class="ar-teaser-card-cta">Coba sekarang →</span>
+            </div>
+          </a>
+        ) : (
+          <div class="ar-teaser-card ar-teaser-card-soon card" data-reveal>
+            <span class="ar-teaser-card-icon" aria-hidden="true">{t.icon}</span>
+            <div class="ar-teaser-card-body">
+              <span class="badge badge-soon">Segera</span>
+              <h3>{t.label}</h3>
+              <p>{t.desc}</p>
+            </div>
+          </div>
+        )
+      )}
     </div>
   </div>
 </section>
 
 <style>
-  .ar-teaser-card {
-    position: relative;
-    border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-strong);
-    background: var(--surface);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    padding: clamp(1.75rem, 4vw, 2.75rem);
-    overflow: hidden;
-  }
-
-  .ar-teaser-body {
+  .ar-teaser-intro {
+    max-width: 38rem;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
-    max-width: 38rem;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
   }
 
   .eyebrow {
@@ -82,7 +104,7 @@ const previewTopics = [
     border-radius: var(--radius-full, 999px);
   }
 
-  .ar-teaser-body h2 {
+  .ar-teaser-intro h2 {
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 600;
@@ -97,49 +119,67 @@ const previewTopics = [
     margin: 0;
   }
 
-  .ar-teaser-topics {
+  .ar-teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .ar-teaser-card {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-block: 0.25rem;
-  }
-
-  .ar-teaser-topic {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--ink-soft);
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full, 999px);
-    padding: 0.4rem 0.85rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
     text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
 
-  .ar-teaser-topic-soon {
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-
-  .ar-teaser-topic-live {
-    color: var(--accent);
-    background: var(--accent-soft);
+  a.ar-teaser-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
     border-color: var(--border-strong);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .ar-teaser-topic-live:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+  .ar-teaser-card-icon {
+    font-size: 1.85rem;
+    line-height: 1;
   }
 
-  .ar-teaser-topic-cta {
-    font-size: 0.75rem;
+  .ar-teaser-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ar-teaser-card-body h3 {
+    font-size: 1.0625rem;
     font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .ar-teaser-card-body p {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .ar-teaser-card-cta {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 0.15rem;
+  }
+
+  .ar-teaser-card-soon {
+    border-style: dashed;
+    opacity: 0.75;
+  }
+
+  .badge-soon {
+    background: transparent;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
   }
 </style>
