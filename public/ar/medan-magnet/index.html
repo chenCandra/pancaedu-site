@@ -11,15 +11,19 @@
   Import map: WAJIB tampil SEBELUM blok module script di bawah yang pakai
   bare specifier "three" / "mindar-image-three". Versi dipin eksplisit
   (bukan @latest) biar halaman ini tidak tiba-tiba rusak kalau rilis baru
-  breaking change. Kalau mau upgrade, ganti nomor versi di SEMUA baris
-  di bawah sekaligus (three dan three/addons/ harus versi yang SAMA; mind-ar
-  butuh three >= r137, versi di bawah jauh di atas itu).
+  breaking change. PENTING: three HARUS <=0.151.x -- mind-ar@1.2.5 masih
+  memanggil API lama yang sudah DIHAPUS di three r152+ (sRGBEncoding,
+  outputEncoding). Pernah dipin ke 0.184.0 dan itu membuat SELURUH script
+  modul ini gagal dimuat dari awal (import error), jadi semua tombol mati
+  total tanpa pesan error apa pun -- jangan naikkan tanpa cek ulang export
+  itu masih ada. Kalau mau upgrade, ganti nomor versi di SEMUA baris
+  di bawah sekaligus (three dan three/addons/ harus versi yang SAMA).
 -->
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+    "three": "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/",
     "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
   }
 }
