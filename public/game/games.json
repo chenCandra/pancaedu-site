@@ -68,5 +68,19 @@
     "ikon": "🧲",
     "status": "Uji Coba",
     "path": "/game/simulasi-magnet-tangan/"
+  },
+  {
+    "id": "simulasi-vektor-gaya",
+    "judul": "Simulasi Vektor Gaya Tangan",
+    "deskripsi": "Angkat dua tanganmu di depan kamera -- masing-masing jadi vektor gaya yang menarik dari satu titik tengah. Lihat Resultannya digambar otomatis pakai metode jajaran genjang, lengkap nilai Newton & sudutnya.",
+    "mapel": "Fisika",
+    "materi": "Gaya & Resultan Vektor",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "kuning",
+    "ikon": "🧭",
+    "status": "Baru",
+    "path": "/game/simulasi-vektor-gaya/"
   }
 ]
