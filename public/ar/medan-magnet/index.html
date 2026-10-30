@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Medan Magnet AR & WebXR | Lab Maya PancaEdu</title>
+<meta name="description" content="Lihat garis gaya medan magnet 3D menempel di dunia nyata lewat kamera HP kamu -- Mode AR Marker (semua HP) atau Mode WebXR (Android Chrome, deteksi permukaan otomatis).">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+<!--
+  Import map: WAJIB tampil SEBELUM blok module script di bawah yang pakai
+  bare specifier "three" / "mindar-image-three". Versi dipin eksplisit
+  (bukan @latest) biar halaman ini tidak tiba-tiba rusak kalau rilis baru
+  breaking change -- kalau mau upgrade, ganti nomor versi di SEMUA baris
+  di bawah sekaligus (three & three/addons/ harus versi yang SAMA; mind-ar
+  butuh three >= r137, versi di bawah jauh di atas itu).
+-->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+    "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+  }
+}
+</script>
+
+<style>
+  :root{
+    --bg:#070b16;
+    --panel:#0f1830cc;
+    --line:#2a3a63;
+    --accent:#60a5fa;
+    --north:#ef4444;
+    --south:#3b82f6;
+    --ok:#22c55e;
+    --warn:#f59e0b;
+    --text:#e8edf9;
+    --muted:#93a1c4;
+  }
+  html,body{
+    margin:0; padding:0;
+    background:var(--bg); color:var(--text);
+    font-family:"Segoe UI", Arial, sans-serif;
+  }
+  body{ min-height:100vh; overflow-x:hidden; }
+
+  .tombol-kembali-mengambang{
+    position:fixed; top:1rem; left:1rem; z-index:60;
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.65rem 1.15rem;
+    border-radius:999px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    text-decoration:none;
+    font-weight:600; font-size:.875rem;
+    backdrop-filter:blur(6px);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .tombol-kembali-mengambang:hover{ transform:translateY(-2px); border-color:var(--accent); }
+
+  /* ---------- Overlay awal: pilih mode ---------- */
+  #startOverlay{
+    position:fixed; inset:0; z-index:40;
+    display:flex; align-items:center; justify-content:center;
+    padding:5rem 1rem 2rem;
+    background:radial-gradient(circle at 50% 20%, #142040 0%, var(--bg) 70%);
+    overflow-y:auto;
+  }
+  #startOverlay .card{
+    width:100%; max-width:34rem;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:1.75rem;
+    box-shadow:0 20px 50px rgba(0,0,0,.45);
+    box-sizing:border-box;
+  }
+  #startOverlay h2{ margin:0 0 .6rem; font-size:1.4rem; }
+  #startOverlay p{ line-height:1.6; color:var(--muted); font-size:.9375rem; }
+  #startOverlay p strong{ color:var(--text); }
+
+  .mode-btn{
+    display:flex; align-items:center; gap:.75rem;
+    width:100%; margin-top:.75rem;
+    padding:.9rem 1.1rem;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:#101b38;
+    color:var(--text);
+    font-size:.9375rem; font-weight:700;
+    cursor:pointer; text-align:left;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .mode-btn:hover:not(:disabled){ border-color:var(--accent); transform:translateY(-2px); }
+  .mode-btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .mode-btn .emo{ font-size:1.4rem; flex-shrink:0; }
+  .mode-btn .label{ display:flex; flex-direction:column; gap:.15rem; }
+  .mode-btn .label small{ font-weight:500; color:var(--muted); }
+
+  #webxrNote{
+    margin-top:.6rem; padding:.6rem .8rem;
+    border-radius:10px;
+    background:rgba(245,158,11,.1);
+    border:1px solid rgba(245,158,11,.35);
+    color:#fbbf24;
+    font-size:.8125rem; line-height:1.5;
+    display:none;
+  }
+
+  #markerPreview{
+    margin-top:1.1rem; padding-top:1rem;
+    border-top:1px solid var(--line);
+  }
+  #markerPreview img{
+    width:84px; height:84px; border-radius:10px;
+    border:1px solid var(--line);
+    display:block; margin-bottom:.5rem;
+  }
+  #markerPreview a{ color:var(--accent); }
+
+  #loadingLine{ margin-top:.9rem; color:var(--accent); font-size:.875rem; display:none; }
+  #errBox{
+    margin-top:.75rem; padding:.7rem .9rem;
+    border-radius:10px;
+    background:rgba(239,68,68,.12);
+    border:1px solid rgba(239,68,68,.4);
+    color:#fca5a5;
+    font-size:.8125rem; line-height:1.55;
+    display:none; white-space:pre-line;
+  }
+
+  /* ---------- Panggung AR (keduanya mode) ---------- */
+  #arStage{ position:fixed; inset:0; z-index:10; display:none; background:#000; }
+  #markerContainer, #webxrContainer{
+    position:absolute; inset:0;
+  }
+  #markerContainer video, #markerContainer canvas,
+  #webxrContainer canvas{
+    width:100% !important; height:100% !important;
+    object-fit:cover;
+  }
+
+  #hud{
+    position:fixed; top:1rem; right:1rem; z-index:50;
+    display:flex; flex-direction:column; align-items:flex-end; gap:.5rem;
+  }
+  #hud .badge{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:999px; padding:.5rem 1rem;
+    font-size:.8125rem; font-weight:600;
+    backdrop-filter:blur(6px);
+  }
+  #stopBtn{
+    background:var(--panel); border:1px solid var(--line);
+    color:var(--text); border-radius:999px;
+    padding:.5rem 1rem; font-size:.8125rem; font-weight:700;
+    cursor:pointer;
+  }
+  #stopBtn:hover{ border-color:var(--accent); }
+
+  #webxrHint{
+    position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
+    z-index:50; max-width:22rem; text-align:center;
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; padding:.75rem 1rem;
+    font-size:.8125rem; color:var(--muted);
+  }
+
+  #disclaimer{
+    position:fixed; bottom:.5rem; left:0; right:0;
+    text-align:center; font-size:.75rem; color:var(--muted);
+    z-index:5; padding:0 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .mode-btn, .tombol-kembali-mengambang{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<a href="/lab-maya/" class="tombol-kembali-mengambang">← Kembali ke Lab Maya</a>
+
+<div id="startOverlay">
+  <div class="card">
+    <h2>🧲 Medan Magnet — AR &amp; WebXR</h2>
+    <p>
+      Lihat <strong>garis gaya magnet 3D</strong> menempel di dunia nyata lewat kamera HP-mu.
+      Magnet batang virtual bakal "berdiri" di meja atau di atas marker, lengkap garis gayanya
+      yang melengkung dari kutub Utara ke Selatan -- putar HP-nya buat lihat dari segala sudut.
+    </p>
+
+    <button type="button" class="mode-btn" id="webxrBtn" disabled>
+      <span class="emo">🧭</span>
+      <span class="label">
+        Mode WebXR (deteksi permukaan otomatis)
+        <small>Mengecek dukungan browser…</small>
+      </span>
+    </button>
+    <div id="webxrNote"></div>
+
+    <button type="button" class="mode-btn" id="markerBtn">
+      <span class="emo">🎯</span>
+      <span class="label">
+        Mode AR Marker (semua HP, termasuk iPhone)
+        <small>Arahkan kamera ke gambar marker di bawah</small>
+      </span>
+    </button>
+
+    <div id="markerPreview">
+      <img src="/ar/medan-magnet/marker-source.svg" alt="Marker Medan Magnet PancaEdu" />
+      <p style="margin:.25rem 0;">
+        Tampilkan gambar di atas di layar lain (laptop/proyektor) atau cetak,
+        lalu arahkan kamera HP ke situ saat pakai Mode AR Marker.
+        <a href="/ar/medan-magnet/marker-source.svg" target="_blank" rel="noopener">Buka gambar penuh →</a>
+      </p>
+    </div>
+
+    <p style="font-size:.8125rem;">
+      Butuh izin kamera dan koneksi internet (memuat pustaka 3D & pelacakan).
+    </p>
+
+    <div id="loadingLine">Memuat…</div>
+    <div id="errBox"></div>
+  </div>
+</div>
+
+<div id="arStage">
+  <div id="markerContainer"></div>
+  <div id="webxrContainer"></div>
+  <div id="hud">
+    <span class="badge" id="modeBadge"></span>
+    <button type="button" id="stopBtn">✕ Berhenti</button>
+  </div>
+  <div id="webxrHint" style="display:none;">Arahkan HP ke lantai/meja, tunggu lingkaran putih muncul, lalu ketuk layar buat menaruh magnetnya.</div>
+</div>
+
+<p id="disclaimer">Simulasi edukatif sederhana (bentuk garis gaya disederhanakan), bukan perhitungan medan magnet presisi penuh.</p>
+
+<script type="module">
+import * as THREE from 'three';
+import { ARButton } from 'three/addons/webxr/ARButton.js';
+import { MindARThree } from 'mindar-image-three';
+
+const startOverlay = document.getElementById('startOverlay');
+const arStage = document.getElementById('arStage');
+const markerContainer = document.getElementById('markerContainer');
+const webxrContainer = document.getElementById('webxrContainer');
+const markerBtn = document.getElementById('markerBtn');
+const webxrBtn = document.getElementById('webxrBtn');
+const webxrNote = document.getElementById('webxrNote');
+const loadingLine = document.getElementById('loadingLine');
+const errBox = document.getElementById('errBox');
+const stopBtn = document.getElementById('stopBtn');
+const modeBadge = document.getElementById('modeBadge');
+const webxrHint = document.getElementById('webxrHint');
+
+function showError(msg) {
+  errBox.style.display = 'block';
+  errBox.textContent = msg;
+  loadingLine.style.display = 'none';
+  markerBtn.disabled = false;
+}
+
+function clearError() {
+  errBox.style.display = 'none';
+  errBox.textContent = '';
+}
+
+// ---------- Scene fisika bersama (dipakai Mode AR Marker & Mode WebXR) ----------
+// Magnet batang sederhana (kotak merah = Utara, kotak biru = Selatan) +
+// beberapa loop garis gaya 3D di sekelilingnya. Disederhanakan buat tujuan
+// edukasi (bukan solver medan magnet presisi) -- lihat #disclaimer.
+function buildMagnetScene() {
+  const group = new THREE.Group();
+
+  const poleHeight = 0.075; // tinggi SETENGAH magnet (meter) -- total 15cm
+  const poleWidth = 0.04;
+
+  const northMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.4, metalness: 0.3 });
+  const southMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, roughness: 0.4, metalness: 0.3 });
+
+  const northBox = new THREE.Mesh(new THREE.BoxGeometry(poleWidth, poleHeight, poleWidth), northMat);
+  northBox.position.y = poleHeight / 2;
+  const southBox = new THREE.Mesh(new THREE.BoxGeometry(poleWidth, poleHeight, poleWidth), southMat);
+  southBox.position.y = -poleHeight / 2;
+  group.add(northBox, southBox);
+
+  // Garis gaya: beberapa loop (kurva dari kutub U, membusur keluar, balik
+  // ke kutub S), masing-masing diputar di sekeliling sumbu Y biar
+  // kelihatan seperti "bunga" 3D khas diagram medan magnet buku teks.
+  const fieldMat = new THREE.MeshBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.85 });
+  const loopCount = 7;
+  const radiusSteps = [0.035, 0.06, 0.09];
+
+  radiusSteps.forEach((radius) => {
+    for (let i = 0; i < loopCount; i++) {
+      const points = [];
+      const segments = 32;
+      for (let s = 0; s <= segments; s++) {
+        const t = s / segments; // 0 di kutub U, 1 di kutub S
+        const angle = t * Math.PI;
+        const y = poleHeight * Math.cos(angle);
+        const r = radius * Math.sin(angle);
+        points.push(new THREE.Vector3(r, y, 0));
+      }
+      const curve = new THREE.CatmullRomCurve3(points);
+      const tube = new THREE.TubeGeometry(curve, 40, 0.0015, 6, false);
+      const line = new THREE.Mesh(tube, fieldMat);
+      line.rotation.y = (i / loopCount) * Math.PI * 2;
+      group.add(line);
+    }
+  });
+
+  group.scale.setScalar(1);
+  return group;
+}
+
+function animateMagnetScene(group, elapsedSeconds) {
+  // Putaran lambat biar garis gaya 3D-nya kebaca dari satu sudut pandang
+  // statis juga (tidak cuma mengandalkan user muter-muter HP-nya).
+  group.rotation.y = elapsedSeconds * 0.25;
+}
+
+// ================= MODE AR MARKER (MindAR) =================
+let mindarThree = null;
+let markerClock = null;
+
+async function startMarkerMode() {
+  clearError();
+  markerBtn.disabled = true;
+  webxrBtn.disabled = true;
+  loadingLine.style.display = 'block';
+  loadingLine.textContent = 'Menyiapkan pelacakan marker…';
+
+  try {
+    mindarThree = new MindARThree({
+      container: markerContainer,
+      imageTargetSrc: '/ar/medan-magnet/targets.mind',
+    });
+    const { renderer, scene, camera } = mindarThree;
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x222233, 1.2);
+    scene.add(light);
+
+    const magnetScene = buildMagnetScene();
+    const anchor = mindarThree.addAnchor(0);
+    anchor.group.add(magnetScene);
+
+    loadingLine.textContent = 'Meminta izin kamera…';
+    await mindarThree.start();
+
+    startOverlay.style.display = 'none';
+    arStage.style.display = 'block';
+    markerContainer.style.display = 'block';
+    webxrContainer.style.display = 'none';
+    modeBadge.textContent = '🎯 Mode AR Marker';
+
+    markerClock = new THREE.Clock();
+    renderer.setAnimationLoop(() => {
+      animateMagnetScene(magnetScene, markerClock.getElapsedTime());
+      renderer.render(scene, camera);
+    });
+  } catch (err) {
+    console.error(err);
+    markerBtn.disabled = false;
+    webxrBtn.disabled = !webxrSupported;
+    showError(
+      'Gagal memulai Mode AR Marker: ' + (err && err.message ? err.message : err) +
+      '\nPastikan izin kamera diberikan, dan file targets.mind sudah tersedia di server ' +
+      '(lihat catatan admin -- marker perlu dikompilasi lewat alat resmi MindAR dulu).'
+    );
+  }
+}
+
+function stopMarkerMode() {
+  if (!mindarThree) return;
+  try {
+    mindarThree.renderer.setAnimationLoop(null);
+    mindarThree.stop();
+  } catch (err) {
+    console.warn('Gagal menghentikan MindAR dengan bersih:', err);
+  }
+  mindarThree = null;
+}
+
+// ================= MODE WEBXR (hit-test native) =================
+let webxrSupported = false;
+let xrRenderer = null;
+let xrSession = null;
+
+async function detectWebXR() {
+  if (!('xr' in navigator)) return false;
+  try {
+    return await navigator.xr.isSessionSupported('immersive-ar');
+  } catch {
+    return false;
+  }
+}
+
+async function startWebXRMode() {
+  clearError();
+  markerBtn.disabled = true;
+  webxrBtn.disabled = true;
+  loadingLine.style.display = 'block';
+  loadingLine.textContent = 'Menyiapkan sesi WebXR…';
+
+  try {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x222233, 1.2));
+
+    xrRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    xrRenderer.setPixelRatio(window.devicePixelRatio);
+    xrRenderer.setSize(window.innerWidth, window.innerHeight);
+    xrRenderer.xr.enabled = true;
+    webxrContainer.appendChild(xrRenderer.domElement);
+
+    const reticleGeo = new THREE.RingGeometry(0.06, 0.075, 32).rotateX(-Math.PI / 2);
+    const reticleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const reticle = new THREE.Mesh(reticleGeo, reticleMat);
+    reticle.matrixAutoUpdate = false;
+    reticle.visible = false;
+    scene.add(reticle);
+
+    let hitTestSource = null;
+    let hitTestSourceRequested = false;
+    const clock = new THREE.Clock();
+    let placedScene = null;
+
+    const session = await navigator.xr.requestSession('immersive-ar', {
+      requiredFeatures: ['hit-test'],
+    });
+    xrSession = session;
+    xrRenderer.xr.setReferenceSpaceType('local');
+    await xrRenderer.xr.setSession(session);
+
+    session.addEventListener('select', () => {
+      if (!reticle.visible) return;
+      if (placedScene) scene.remove(placedScene);
+      placedScene = buildMagnetScene();
+      placedScene.matrixAutoUpdate = false;
+      placedScene.matrix.copy(reticle.matrix);
+      placedScene.matrixAutoUpdate = true;
+      placedScene.position.setFromMatrixPosition(reticle.matrix);
+      placedScene.quaternion.setFromRotationMatrix(reticle.matrix);
+      scene.add(placedScene);
+    });
+
+    session.addEventListener('end', () => {
+      stopWebXRMode(true);
+    });
+
+    xrRenderer.setAnimationLoop((timestamp, frame) => {
+      if (frame) {
+        const referenceSpace = xrRenderer.xr.getReferenceSpace();
+
+        if (!hitTestSourceRequested) {
+          session.requestReferenceSpace('viewer').then((viewerSpace) => {
+            session.requestHitTestSource({ space: viewerSpace }).then((source) => {
+              hitTestSource = source;
+            });
+          });
+          hitTestSourceRequested = true;
+        }
+
+        if (hitTestSource) {
+          const hitTestResults = frame.getHitTestResults(hitTestSource);
+          if (hitTestResults.length) {
+            const hit = hitTestResults[0];
+            reticle.visible = true;
+            reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
+          } else {
+            reticle.visible = false;
+          }
+        }
+      }
+
+      if (placedScene) animateMagnetScene(placedScene, clock.getElapsedTime());
+      xrRenderer.render(scene, camera);
+    });
+
+    startOverlay.style.display = 'none';
+    arStage.style.display = 'block';
+    webxrContainer.style.display = 'block';
+    markerContainer.style.display = 'none';
+    modeBadge.textContent = '🧭 Mode WebXR';
+    webxrHint.style.display = 'block';
+  } catch (err) {
+    console.error(err);
+    markerBtn.disabled = false;
+    webxrBtn.disabled = !webxrSupported;
+    showError('Gagal memulai Mode WebXR: ' + (err && err.message ? err.message : err));
+  }
+}
+
+function stopWebXRMode(fromSessionEnd) {
+  webxrHint.style.display = 'none';
+  if (xrRenderer) {
+    xrRenderer.setAnimationLoop(null);
+    if (webxrContainer.contains(xrRenderer.domElement)) {
+      webxrContainer.removeChild(xrRenderer.domElement);
+    }
+    xrRenderer.dispose();
+    xrRenderer = null;
+  }
+  if (xrSession && !fromSessionEnd) {
+    try { xrSession.end(); } catch { /* sesi mungkin sudah berakhir */ }
+  }
+  xrSession = null;
+}
+
+// ================= Wiring UI =================
+markerBtn.addEventListener('click', startMarkerMode);
+webxrBtn.addEventListener('click', startWebXRMode);
+
+stopBtn.addEventListener('click', () => {
+  stopMarkerMode();
+  stopWebXRMode(false);
+  arStage.style.display = 'none';
+  startOverlay.style.display = 'flex';
+  loadingLine.style.display = 'none';
+  markerBtn.disabled = false;
+  webxrBtn.disabled = !webxrSupported;
+});
+
+(async function init() {
+  webxrSupported = await detectWebXR();
+  if (webxrSupported) {
+    webxrBtn.disabled = false;
+    webxrBtn.querySelector('small').textContent = 'Jalan di Android + Chrome';
+  } else {
+    webxrBtn.disabled = true;
+    webxrBtn.querySelector('small').textContent = 'Tidak didukung browser ini';
+    webxrNote.style.display = 'block';
+    webxrNote.textContent =
+      'Mode WebXR butuh Android + Chrome dengan dukungan AR aktif -- browser ini sepertinya belum ' +
+      'mendukung (umumnya karena pakai iPhone/Safari, atau Chrome versi lama). Tenang, Mode AR Marker ' +
+      'di bawah tetap jalan di semua HP.';
+  }
+})();
+</script>
+
+</body>
+</html>

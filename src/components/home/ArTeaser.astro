@@ -1,0 +1,160 @@
+---
+// Placeholder section "Segera Hadir" buat fitur WebXR & AR (lihat obrolan
+// yang minta ini disiapkan DULU di homepage, SEBELUM fiturnya sendiri
+// dibangun) -- sengaja menggantikan posisi section "Materi & Lab Maya
+// Pilihan" (src/components/home/Works.astro, sekarang tidak dipakai lagi
+// di index.astro) karena itu rencananya slot permanen buat fitur ini nanti.
+// Medan Magnet sudah live (public/ar/medan-magnet/, didaftarkan juga di
+// /lab-maya) -- chip-nya jadi link aktif. Topik lain masih "Segera" sampai
+// beneran dibangun; begitu semua topik live, section ini boleh dirombak
+// total jadi showcase kartu penuh (BUKAN cuma hapus placeholder-nya).
+const previewTopics = [
+  { label: 'Medan Magnet', icon: '🧲', href: '/ar/medan-magnet/' },
+  { label: 'Gerak Parabola', icon: '🎯' },
+  { label: 'Orbit Planet', icon: '🪐' },
+];
+---
+
+<section class="section ar-teaser">
+  <div class="container">
+    <div class="ar-teaser-card" data-reveal>
+      <div class="ar-teaser-body">
+        <p class="eyebrow">🥽 Segera Hadir</p>
+        <h2>Lab Maya AR &amp; WebXR</h2>
+        <p class="ar-teaser-desc">
+          Simulasi fisika interaktif yang bisa kamu lihat langsung lewat kamera HP — medan
+          magnet, lintasan parabola, dan topik lain bakal "nongol" di dunia nyata, bukan cuma di
+          layar datar.
+        </p>
+
+        <div class="ar-teaser-topics">
+          {previewTopics.map((t) =>
+            t.href ? (
+              <a href={t.href} class="ar-teaser-topic ar-teaser-topic-live">
+                <span aria-hidden="true">{t.icon}</span> {t.label}
+                <span class="ar-teaser-topic-cta">Coba sekarang →</span>
+              </a>
+            ) : (
+              <span class="ar-teaser-topic">
+                <span aria-hidden="true">{t.icon}</span> {t.label}
+                <span class="ar-teaser-topic-soon">Segera</span>
+              </span>
+            )
+          )}
+        </div>
+
+        <p class="ar-teaser-note">
+          <strong>Catatan kompatibilitas:</strong> mode WebXR penuh (deteksi permukaan otomatis)
+          cuma jalan di Android (Chrome) — Safari iOS belum mendukungnya. Mode AR lewat marker
+          kamera tetap bisa dipakai di iPhone.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ar-teaser-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-strong);
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    overflow: hidden;
+  }
+
+  .ar-teaser-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-width: 38rem;
+  }
+
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    width: fit-content;
+    background: var(--accent-soft);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 999px);
+  }
+
+  .ar-teaser-body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .ar-teaser-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .ar-teaser-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block: 0.25rem;
+  }
+
+  .ar-teaser-topic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full, 999px);
+    padding: 0.4rem 0.85rem;
+    text-decoration: none;
+  }
+
+  .ar-teaser-topic-soon {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .ar-teaser-topic-live {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--border-strong);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ar-teaser-topic-live:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .ar-teaser-topic-cta {
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .ar-teaser-note {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-faint);
+    margin: 0;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .ar-teaser-note strong {
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,19 +1,14 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PembelajaranDaringBanner from '../components/PembelajaranDaringBanner.astro';
 import Hero from '../components/home/Hero.astro';
 import QuoteTicker from '../components/home/QuoteTicker.astro';
 import Spotlight from '../components/home/Spotlight.astro';
 import ContentColumns from '../components/home/ContentColumns.astro';
-import Works from '../components/home/Works.astro';
+import ArTeaser from '../components/home/ArTeaser.astro';
 import Quote from '../components/home/Quote.astro';
 import Contact from '../components/home/Contact.astro';
-
-const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const materiPosts = allPosts.filter((p) => p.data.category === 'materi');
 
 const modeDaring = await getEntry('modeDaring', 'index');
 const daringAktif = modeDaring?.data.aktif ?? false;
@@ -42,16 +37,6 @@ const jsonLd = {
   ],
 };
 
-const workItems = materiPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4)
-  .map((p) => ({
-    title: p.data.title,
-    description: p.data.description,
-    href: `/materi/${p.id}`,
-    tag: p.data.mapel ?? 'Materi',
-    hasLab: Boolean(p.data.simulasi),
-  }));
 ---
 
 <BaseLayout
@@ -66,7 +51,7 @@ const workItems = materiPosts
   <Spotlight />
   <ContentColumns />
 
-  {workItems.length > 0 && <Works items={workItems} />}
+  <ArTeaser />
   <Quote />
   <Contact />
 </BaseLayout>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!--
+    Gambar sumber buat marker Mode AR. Pola sengaja ASIMETRIS & kontras
+    tinggi (bukan simetris/polos) -- itu syarat gambar yang bagus buat
+    image-tracking (MindAR butuh banyak "fitur" unik buat dikenali kamera).
+    Upload file ini (atau ekspor ke PNG dulu) ke compiler resmi MindAR:
+    https://hiukim.github.io/mind-ar-js-doc/tools/compile -- unduh hasilnya
+    (targets.mind), taruh di folder yang sama dengan index.html di sini.
+    Mode AR Marker TIDAK AKAN JALAN sebelum targets.mind ada.
+  -->
+  <rect width="512" height="512" fill="#ffffff"/>
+  <rect x="24" y="24" width="464" height="464" fill="none" stroke="#111827" stroke-width="12"/>
+  <rect x="96" y="80" width="130" height="200" fill="#dc2626"/>
+  <rect x="226" y="80" width="130" height="200" fill="#1d4ed8"/>
+  <text x="161" y="195" font-family="Arial, sans-serif" font-size="64" font-weight="900" fill="#ffffff" text-anchor="middle">U</text>
+  <text x="291" y="195" font-family="Arial, sans-serif" font-size="64" font-weight="900" fill="#ffffff" text-anchor="middle">S</text>
+  <circle cx="110" cy="340" r="22" fill="#111827"/>
+  <rect x="150" y="320" width="90" height="40" fill="#111827"/>
+  <polygon points="260,320 320,320 290,370" fill="#111827"/>
+  <circle cx="360" cy="340" r="18" fill="none" stroke="#111827" stroke-width="10"/>
+  <circle cx="400" cy="340" r="10" fill="#111827"/>
+  <text x="256" y="430" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#111827" text-anchor="middle">PancaEdu · Lab Maya AR</text>
+  <text x="256" y="464" font-family="Arial, sans-serif" font-size="20" fill="#4b5563" text-anchor="middle">Medan Magnet</text>
+</svg>
