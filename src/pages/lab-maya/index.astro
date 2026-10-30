@@ -7,19 +7,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const customLabs = [
   {
     // SENGAJA di luar pola "/lab-maya/{slug}" (satu-satunya pengecualian di
-    // array ini) -- halaman AR/WebXR ini request izin kamera & sesi WebXR
-    // di top-level browsing context-nya sendiri (public/ar/medan-magnet/),
-    // BUKAN dibungkus wrapper Astro + iframe seperti Lab Maya lain, biar
-    // tidak kena masalah kompatibilitas izin kamera/WebXR di dalam iframe
-    // (pola iframe di situs ini belum pernah diuji buat kasus kamera/WebXR
-    // sama sekali). Baris `customLabEmbedSlugs` di bawah tetap aman — href
-    // ini cuma tidak match pola `/lab-maya/` jadi tidak mempengaruhi apa pun.
-    href: '/ar/medan-magnet/',
+    // array ini) -- ini bukan halaman lab-maya baru, cuma nunjuk ke game
+    // kamera yang SUDAH ADA (public/game/simulasi-magnet-tangan/) yang kita
+    // jadikan "wajah AR" buat topik Medan Magnet, karena visual bola energi
+    // + garis gayanya sudah terbukti bagus & stabil. Percobaan bikin
+    // halaman AR/WebXR terpisah (public/ar/medan-magnet/) sudah dihentikan.
+    href: '/game/simulasi-magnet-tangan/',
     icon: '🧲',
-    title: 'Medan Magnet (AR & WebXR)',
+    title: 'Medan Magnet (AR Kamera)',
     description:
-      'Lihat garis gaya magnet 3D menempel di dunia nyata lewat kamera HP-mu — Mode AR Marker (semua HP) atau Mode WebXR (Android Chrome, deteksi permukaan otomatis).',
-    tag: 'AR & WebXR · Kelas XII',
+      'Lihat telapak tanganmu berubah jadi magnet virtual lewat kamera HP -- buka telapak = kutub Utara, kepalkan = kutub Selatan, dekatkan dua tangan buat lihat tarik-menarik/tolak-menolaknya.',
+    tag: 'AR Kamera · Kelas XII',
   },
   {
     href: '/lab-maya/alat-ukur',

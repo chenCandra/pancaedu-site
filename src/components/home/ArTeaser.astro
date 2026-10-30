@@ -1,15 +1,18 @@
 ---
-// Placeholder section "Segera Hadir" buat fitur WebXR & AR (lihat obrolan
-// yang minta ini disiapkan DULU di homepage, SEBELUM fiturnya sendiri
-// dibangun) -- sengaja menggantikan posisi section "Materi & Lab Maya
-// Pilihan" (src/components/home/Works.astro, sekarang tidak dipakai lagi
-// di index.astro) karena itu rencananya slot permanen buat fitur ini nanti.
-// Medan Magnet sudah live (public/ar/medan-magnet/, didaftarkan juga di
-// /lab-maya) -- chip-nya jadi link aktif. Topik lain masih "Segera" sampai
-// beneran dibangun; begitu semua topik live, section ini boleh dirombak
-// total jadi showcase kartu penuh (BUKAN cuma hapus placeholder-nya).
+// Section preview AR di homepage -- menggantikan posisi section lama
+// "Materi & Lab Maya Pilihan" (src/components/home/Works.astro, sekarang
+// tidak dipakai lagi di index.astro), jadi slot permanen buat showcase
+// topik-topik yang punya versi "AR kamera" (interaksi lewat kamera HP,
+// bukan cuma lihat simulasi di layar datar).
+//
+// Medan Magnet nunjuk ke game kamera yang SUDAH ADA & terbukti bagus
+// (public/game/simulasi-magnet-tangan/) -- bukan halaman AR/WebXR
+// terpisah (percobaan itu sudah dihentikan, visualnya kalah jauh dari
+// game ini). Topik lain masih "Segera" sampai ada yang beneran dibangun
+// dengan pendekatan serupa (kamera + deteksi tangan/gerakan, BUKAN WebXR
+// marker/permukaan -- itu sudah terbukti tidak andal di sesi sebelumnya).
 const previewTopics = [
-  { label: 'Medan Magnet', icon: '🧲', href: '/ar/medan-magnet/' },
+  { label: 'Medan Magnet', icon: '🧲', href: '/game/simulasi-magnet-tangan/' },
   { label: 'Gerak Parabola', icon: '🎯' },
   { label: 'Orbit Planet', icon: '🪐' },
 ];
@@ -19,12 +22,12 @@ const previewTopics = [
   <div class="container">
     <div class="ar-teaser-card" data-reveal>
       <div class="ar-teaser-body">
-        <p class="eyebrow">🥽 Segera Hadir</p>
-        <h2>Lab Maya AR &amp; WebXR</h2>
+        <p class="eyebrow">🎥 Simulasi AR Kamera</p>
+        <h2>Lab Maya lewat Kamera HP</h2>
         <p class="ar-teaser-desc">
-          Simulasi fisika interaktif yang bisa kamu lihat langsung lewat kamera HP — medan
-          magnet, lintasan parabola, dan topik lain bakal "nongol" di dunia nyata, bukan cuma di
-          layar datar.
+          Simulasi fisika yang berinteraksi langsung lewat kamera HP-mu — gerakkan tanganmu,
+          dan medan magnetnya "nongol" nempel ke dunia nyata, bukan cuma di layar datar.
+          Topik lain bakal menyusul dengan pendekatan serupa.
         </p>
 
         <div class="ar-teaser-topics">
@@ -42,12 +45,6 @@ const previewTopics = [
             )
           )}
         </div>
-
-        <p class="ar-teaser-note">
-          <strong>Catatan kompatibilitas:</strong> mode WebXR penuh (deteksi permukaan otomatis)
-          cuma jalan di Android (Chrome) — Safari iOS belum mendukungnya. Mode AR lewat marker
-          kamera tetap bisa dipakai di iPhone.
-        </p>
       </div>
     </div>
   </div>
@@ -143,18 +140,5 @@ const previewTopics = [
   .ar-teaser-topic-cta {
     font-size: 0.75rem;
     font-weight: 700;
-  }
-
-  .ar-teaser-note {
-    font-size: 0.8125rem;
-    line-height: 1.55;
-    color: var(--ink-faint);
-    margin: 0;
-    padding-top: 0.6rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .ar-teaser-note strong {
-    color: var(--ink-soft);
   }
 </style>
