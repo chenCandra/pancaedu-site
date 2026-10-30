@@ -457,52 +457,62 @@ async function startWebXRMode() {
       stopWebXRMode(true);
     });
 
+    let xrFrameCount = 0;
     xrRenderer.setAnimationLoop((timestamp, frame) => {
-      if (frame) {
-        const referenceSpace = xrRenderer.xr.getReferenceSpace();
+      try {
+        xrFrameCount++;
+        if (frame) {
+          const referenceSpace = xrRenderer.xr.getReferenceSpace();
 
-        if (!hitTestSourceRequested) {
-          hitTestSourceRequested = true;
-          webxrHint.textContent = 'Menyiapkan deteksi permukaan…';
-          session.requestReferenceSpace('viewer')
-            .then((viewerSpace) => session.requestHitTestSource({ space: viewerSpace }))
-            .then((source) => {
-              hitTestSource = source;
-              webxrHint.textContent = 'Gerakkan HP pelan-pelan ke meja/lantai bertekstur, tunggu lingkaran putih muncul…';
-            })
-            .catch((err) => {
-              console.error('Gagal mengaktifkan hit-test:', err);
-              webxrHint.textContent =
-                'Deteksi permukaan gagal diaktifkan: ' + (err && err.message ? err.message : err) +
-                ' -- HP ini mungkin tidak mendukung hit-test WebXR secara penuh.';
-            });
-        }
+          if (!hitTestSourceRequested) {
+            hitTestSourceRequested = true;
+            webxrHint.textContent = 'Menyiapkan deteksi permukaan… (frame #' + xrFrameCount + ')';
+            session.requestReferenceSpace('viewer')
+              .then((viewerSpace) => session.requestHitTestSource({ space: viewerSpace }))
+              .then((source) => {
+                hitTestSource = source;
+                webxrHint.textContent = 'Gerakkan HP pelan-pelan ke meja/lantai bertekstur, tunggu lingkaran putih muncul…';
+              })
+              .catch((err) => {
+                console.error('Gagal mengaktifkan hit-test:', err);
+                webxrHint.textContent =
+                  'Deteksi permukaan gagal diaktifkan: ' + (err && err.message ? err.message : err) +
+                  ' -- HP ini mungkin tidak mendukung hit-test WebXR secara penuh.';
+              });
+          }
 
-        if (hitTestSource && referenceSpace) {
-          const hitTestResults = frame.getHitTestResults(hitTestSource);
-          if (hitTestResults.length) {
-            const hit = hitTestResults[0];
-            const pose = hit.getPose(referenceSpace);
-            if (pose) {
-              reticle.visible = true;
-              reticle.matrix.fromArray(pose.transform.matrix);
-              if (!reticle.userData.found) {
-                reticle.userData.found = true;
-                webxrHint.textContent = 'Permukaan ditemukan! Ketuk layar buat menaruh magnetnya.';
+          if (hitTestSource && referenceSpace) {
+            const hitTestResults = frame.getHitTestResults(hitTestSource);
+            if (hitTestResults.length) {
+              const hit = hitTestResults[0];
+              const pose = hit.getPose(referenceSpace);
+              if (pose) {
+                reticle.visible = true;
+                reticle.matrix.fromArray(pose.transform.matrix);
+                if (!reticle.userData.found) {
+                  reticle.userData.found = true;
+                  webxrHint.textContent = 'Permukaan ditemukan! Ketuk layar buat menaruh magnetnya.';
+                }
+              }
+            } else {
+              reticle.visible = false;
+              if (reticle.userData.found) {
+                reticle.userData.found = false;
+                webxrHint.textContent = 'Gerakkan HP pelan-pelan ke meja/lantai bertekstur, tunggu lingkaran putih muncul…';
               }
             }
-          } else {
-            reticle.visible = false;
-            if (reticle.userData.found) {
-              reticle.userData.found = false;
-              webxrHint.textContent = 'Gerakkan HP pelan-pelan ke meja/lantai bertekstur, tunggu lingkaran putih muncul…';
-            }
           }
+        } else if (xrFrameCount < 10 || xrFrameCount % 60 === 0) {
+          webxrHint.textContent = 'Menunggu frame XR dari sistem… (hitungan #' + xrFrameCount + ')';
         }
-      }
 
-      if (placedScene) animateMagnetScene(placedScene, clock.getElapsedTime());
-      xrRenderer.render(scene, camera);
+        if (placedScene) animateMagnetScene(placedScene, clock.getElapsedTime());
+        xrRenderer.render(scene, camera);
+      } catch (loopErr) {
+        console.error('Error di animation loop WebXR:', loopErr);
+        webxrHint.textContent =
+          'ERROR di loop WebXR: ' + (loopErr && loopErr.message ? loopErr.message : loopErr);
+      }
     });
 
     startOverlay.style.display = 'none';
@@ -511,6 +521,7 @@ async function startWebXRMode() {
     markerContainer.style.display = 'none';
     modeBadge.textContent = '🧭 Mode WebXR';
     webxrHint.style.display = 'block';
+    webxrHint.textContent = 'Sesi WebXR aktif, menunggu frame pertama…';
   } catch (err) {
     console.error(err);
     markerBtn.disabled = false;
