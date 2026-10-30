@@ -434,8 +434,24 @@ async function startWebXRMode() {
     const clock = new THREE.Clock();
     let placedScene = null;
 
+    // PENTING: tanpa fitur "dom-overlay", browser menyembunyikan SEMUA
+    // elemen HTML biasa (hud, badge, tombol Berhenti, teks hint) selama
+    // sesi immersive-ar aktif -- yang kelihatan cuma kamera + canvas WebGL
+    // polos, persis seperti kamera foto biasa. arStage harus sudah
+    // ditampilkan (bukan display:none) SEBELUM requestSession dipanggil
+    // supaya elemen root-nya valid dilacak browser.
+    startOverlay.style.display = 'none';
+    arStage.style.display = 'block';
+    webxrContainer.style.display = 'block';
+    markerContainer.style.display = 'none';
+    modeBadge.textContent = '🧭 Mode WebXR';
+    webxrHint.style.display = 'block';
+    webxrHint.textContent = 'Meminta sesi WebXR + overlay…';
+
     const session = await navigator.xr.requestSession('immersive-ar', {
       requiredFeatures: ['hit-test'],
+      optionalFeatures: ['dom-overlay'],
+      domOverlay: { root: arStage },
     });
     xrSession = session;
     xrRenderer.xr.setReferenceSpaceType('local');
@@ -515,17 +531,13 @@ async function startWebXRMode() {
       }
     });
 
-    startOverlay.style.display = 'none';
-    arStage.style.display = 'block';
-    webxrContainer.style.display = 'block';
-    markerContainer.style.display = 'none';
-    modeBadge.textContent = '🧭 Mode WebXR';
-    webxrHint.style.display = 'block';
     webxrHint.textContent = 'Sesi WebXR aktif, menunggu frame pertama…';
   } catch (err) {
     console.error(err);
     markerBtn.disabled = false;
     webxrBtn.disabled = !webxrSupported;
+    startOverlay.style.display = 'flex';
+    arStage.style.display = 'none';
     showError('Gagal memulai Mode WebXR: ' + (err && err.message ? err.message : err));
   }
 }
