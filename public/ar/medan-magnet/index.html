@@ -422,9 +422,17 @@ async function startWebXRMode() {
     xrRenderer.xr.enabled = true;
     webxrContainer.appendChild(xrRenderer.domElement);
 
-    const reticleGeo = new THREE.RingGeometry(0.06, 0.075, 32).rotateX(-Math.PI / 2);
-    const reticleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    // Cincin lebih tebal + warna biru terang (bukan putih polos) -- putih
+    // tipis gampang hilang kontras di meja/lantai yang juga terang.
+    const reticleGeo = new THREE.RingGeometry(0.05, 0.075, 32).rotateX(-Math.PI / 2);
+    const reticleMat = new THREE.MeshBasicMaterial({
+      color: 0x60a5fa,
+      transparent: true,
+      opacity: 0.95,
+      depthTest: false,
+    });
     const reticle = new THREE.Mesh(reticleGeo, reticleMat);
+    reticle.renderOrder = 999;
     reticle.matrixAutoUpdate = false;
     reticle.visible = false;
     scene.add(reticle);
