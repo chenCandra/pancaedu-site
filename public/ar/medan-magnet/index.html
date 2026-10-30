@@ -433,6 +433,7 @@ async function startWebXRMode() {
     let hitTestSourceRequested = false;
     const clock = new THREE.Clock();
     let placedScene = null;
+    let session; // ditugaskan di bawah; dipakai lewat closure di setAnimationLoop
 
     // PENTING: tanpa fitur "dom-overlay", browser menyembunyikan SEMUA
     // elemen HTML biasa (hud, badge, tombol Berhenti, teks hint) selama
@@ -448,31 +449,16 @@ async function startWebXRMode() {
     webxrHint.style.display = 'block';
     webxrHint.textContent = 'Meminta sesi WebXR + overlay…';
 
-    const session = await navigator.xr.requestSession('immersive-ar', {
-      requiredFeatures: ['hit-test'],
-      optionalFeatures: ['dom-overlay'],
-      domOverlay: { root: arStage },
-    });
-    xrSession = session;
-    xrRenderer.xr.setReferenceSpaceType('local');
-    await xrRenderer.xr.setSession(session);
-
-    session.addEventListener('select', () => {
-      if (!reticle.visible) return;
-      if (placedScene) scene.remove(placedScene);
-      placedScene = buildMagnetScene();
-      placedScene.matrixAutoUpdate = false;
-      placedScene.matrix.copy(reticle.matrix);
-      placedScene.matrixAutoUpdate = true;
-      placedScene.position.setFromMatrixPosition(reticle.matrix);
-      placedScene.quaternion.setFromRotationMatrix(reticle.matrix);
-      scene.add(placedScene);
-    });
-
-    session.addEventListener('end', () => {
-      stopWebXRMode(true);
-    });
-
+    // PENTING #2: setAnimationLoop WAJIB dipasang SEBELUM renderer.xr.setSession()
+    // dipanggil. Three.js mendengarkan event 'sessionstart' buat menghentikan
+    // loop requestAnimationFrame biasa dan menggantinya dengan loop milik sesi
+    // XR (yang menyediakan argumen "frame"). Kalau setAnimationLoop dipasang
+    // SETELAH setSession, event sessionstart sudah lewat lebih dulu -- maka
+    // panggilan setAnimationLoop malah menyalakan ULANG loop rAF biasa, yang
+    // callback-nya jalan terus (hitungan naik) tapi argumen "frame" SELALU
+    // undefined, sehingga hit-test tidak pernah berjalan tanpa pesan error
+    // apa pun. Ini akar masalah "Menunggu frame XR... (hitungan #...)" yang
+    // tidak pernah masuk ke cabang if(frame).
     let xrFrameCount = 0;
     xrRenderer.setAnimationLoop((timestamp, frame) => {
       try {
@@ -529,6 +515,31 @@ async function startWebXRMode() {
         webxrHint.textContent =
           'ERROR di loop WebXR: ' + (loopErr && loopErr.message ? loopErr.message : loopErr);
       }
+    });
+
+    session = await navigator.xr.requestSession('immersive-ar', {
+      requiredFeatures: ['hit-test'],
+      optionalFeatures: ['dom-overlay'],
+      domOverlay: { root: arStage },
+    });
+    xrSession = session;
+    xrRenderer.xr.setReferenceSpaceType('local');
+    await xrRenderer.xr.setSession(session);
+
+    session.addEventListener('select', () => {
+      if (!reticle.visible) return;
+      if (placedScene) scene.remove(placedScene);
+      placedScene = buildMagnetScene();
+      placedScene.matrixAutoUpdate = false;
+      placedScene.matrix.copy(reticle.matrix);
+      placedScene.matrixAutoUpdate = true;
+      placedScene.position.setFromMatrixPosition(reticle.matrix);
+      placedScene.quaternion.setFromRotationMatrix(reticle.matrix);
+      scene.add(placedScene);
+    });
+
+    session.addEventListener('end', () => {
+      stopWebXRMode(true);
     });
 
     webxrHint.textContent = 'Sesi WebXR aktif, menunggu frame pertama…';
