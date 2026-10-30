@@ -10,11 +10,11 @@
 // chip teks kecil -- biar lebih jelas kelihatan ini simulasi sungguhan,
 // bukan placeholder teks doang.
 //
-// Medan Magnet & Vektor Gaya nunjuk ke game kamera yang SUDAH ADA & LIVE
-// (public/game/*) -- bukan halaman AR/WebXR terpisah (percobaan itu sudah
-// dihentikan). Topik lain masih "Segera" sampai ada yang beneran dibangun
-// dengan pendekatan serupa (kamera + deteksi tangan/gerakan, BUKAN WebXR
-// marker/permukaan -- itu sudah terbukti tidak andal di sesi sebelumnya).
+// Keempat topik di bawah SUDAH LIVE, semua nunjuk ke game kamera di
+// public/game/* (MediaPipe HandLandmarker + kanvas 2D) -- bukan halaman
+// AR/WebXR terpisah (percobaan itu sudah dihentikan, WebXR/ARCore
+// terbukti tidak andal). Cabang "Segera" di template di bawah tetap
+// dipertahankan buat topik baru di masa depan sebelum sempat dibangun.
 const previewTopics = [
   {
     label: 'Medan Magnet',
@@ -33,14 +33,16 @@ const previewTopics = [
   {
     label: 'Gerak Parabola',
     icon: '🎯',
+    href: '/game/simulasi-parabola-tangan/',
     tag: 'Kelas X · Gerak Parabola',
-    desc: 'Gestur lempar jadi kecepatan & sudut lontar, lintasan parabolanya tergambar langsung lewat kamera.',
+    desc: 'Buka telapak buat membidik, kepalkan buat menembak -- lintasan parabolanya tergambar langsung lewat kamera.',
   },
   {
     label: 'Orbit Planet',
     icon: '🪐',
-    tag: 'Kelas X · Gravitasi',
-    desc: 'Gerakkan tangan buat mengatur orbit planet virtual di sekitar matahari.',
+    href: '/game/simulasi-orbit-tangan/',
+    tag: 'Kelas X · Hukum Kepler',
+    desc: 'Jarak tanganmu dari matahari virtual menentukan orbit planetnya -- lepaskan dan lihat Hukum Kepler bekerja.',
   },
 ];
 ---

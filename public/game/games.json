@@ -82,5 +82,33 @@
     "ikon": "🧭",
     "status": "Baru",
     "path": "/game/simulasi-vektor-gaya/"
+  },
+  {
+    "id": "simulasi-parabola-tangan",
+    "judul": "Simulasi Gerak Parabola Tangan",
+    "deskripsi": "Buka telapak buat membidik arah & kecepatan lontaran, kepalkan buat menembak -- lihat lintasan parabola, jarak, dan tinggi maksimumnya dihitung langsung lewat kamera.",
+    "mapel": "Fisika",
+    "materi": "Gerak Parabola",
+    "kelas": "SMA Kelas X",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "biru",
+    "ikon": "🎯",
+    "status": "Baru",
+    "path": "/game/simulasi-parabola-tangan/"
+  },
+  {
+    "id": "simulasi-orbit-tangan",
+    "judul": "Simulasi Orbit Planet Tangan",
+    "deskripsi": "Jarak tanganmu dari matahari virtual menentukan jarak orbit planetnya -- lepaskan dan lihat planetnya mengorbit sendiri sesuai Hukum Kepler, dekat berputar cepat, jauh berputar lambat.",
+    "mapel": "Fisika",
+    "materi": "Gravitasi & Hukum Kepler",
+    "kelas": "SMA Kelas X",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "ungu",
+    "ikon": "🪐",
+    "status": "Baru",
+    "path": "/game/simulasi-orbit-tangan/"
   }
 ]
