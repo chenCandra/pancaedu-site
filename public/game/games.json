@@ -6,7 +6,9 @@
     "mapel": "Fisika",
     "materi": "Gerak Parabola",
     "kelas": "SMA Kelas X",
-    "mode": ["2 pemain (1 perangkat)"],
+    "mode": [
+      "2 pemain (1 perangkat)"
+    ],
     "durasi": "10-15 menit",
     "warna": "biru",
     "ikon": "🎯",
@@ -20,7 +22,9 @@
     "mapel": "Fisika",
     "materi": "GLB, GLBB & Gaya Gesekan",
     "kelas": "SMA Kelas X",
-    "mode": ["2 pemain (1 perangkat)"],
+    "mode": [
+      "2 pemain (1 perangkat)"
+    ],
     "durasi": "10-15 menit",
     "warna": "hijau",
     "ikon": "🏎️",
@@ -34,7 +38,9 @@
     "mapel": "Umum",
     "materi": "Arcade / Aksi",
     "kelas": "Semua Umur",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-15 menit",
     "warna": "ungu",
     "ikon": "🚀",
@@ -48,7 +54,9 @@
     "mapel": "Fisika",
     "materi": "Gerak Parabola & Gravitasi",
     "kelas": "SMA Kelas X",
-    "mode": ["2-8 pemain (1 perangkat)"],
+    "mode": [
+      "2-8 pemain (1 perangkat)"
+    ],
     "durasi": "15-25 menit",
     "warna": "oranye",
     "ikon": "💥",
@@ -62,12 +70,15 @@
     "mapel": "Fisika",
     "materi": "Medan Magnet",
     "kelas": "SMA Kelas XII",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "pink",
     "ikon": "🧲",
     "status": "Uji Coba",
-    "path": "/game/simulasi-magnet-tangan/"
+    "path": "/game/simulasi-magnet-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-vektor-gaya",
@@ -76,12 +87,15 @@
     "mapel": "Fisika",
     "materi": "Gaya & Resultan Vektor",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "kuning",
     "ikon": "🧭",
     "status": "Baru",
-    "path": "/game/simulasi-vektor-gaya/"
+    "path": "/game/simulasi-vektor-gaya/",
+    "kamera": true
   },
   {
     "id": "simulasi-parabola-tangan",
@@ -90,12 +104,15 @@
     "mapel": "Fisika",
     "materi": "Gerak Parabola",
     "kelas": "SMA Kelas X",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "biru",
     "ikon": "🎯",
     "status": "Baru",
-    "path": "/game/simulasi-parabola-tangan/"
+    "path": "/game/simulasi-parabola-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-orbit-tangan",
@@ -104,12 +121,15 @@
     "mapel": "Fisika",
     "materi": "Gravitasi & Hukum Kepler",
     "kelas": "SMA Kelas X",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "ungu",
     "ikon": "🪐",
     "status": "Baru",
-    "path": "/game/simulasi-orbit-tangan/"
+    "path": "/game/simulasi-orbit-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-pegas-tangan",
@@ -118,12 +138,15 @@
     "mapel": "Fisika",
     "materi": "Hukum Hooke & Elastisitas",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "hijau",
     "ikon": "🌀",
     "status": "Baru",
-    "path": "/game/simulasi-pegas-tangan/"
+    "path": "/game/simulasi-pegas-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-momentum-tangan",
@@ -132,12 +155,15 @@
     "mapel": "Fisika",
     "materi": "Momentum & Tumbukan",
     "kelas": "SMA Kelas X",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "pink",
     "ikon": "💥",
     "status": "Baru",
-    "path": "/game/simulasi-momentum-tangan/"
+    "path": "/game/simulasi-momentum-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-transformasi-tangan",
@@ -146,12 +172,15 @@
     "mapel": "Matematika",
     "materi": "Transformasi Geometri",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "oranye",
     "ikon": "📐",
     "status": "Baru",
-    "path": "/game/simulasi-transformasi-tangan/"
+    "path": "/game/simulasi-transformasi-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-difusi-tangan",
@@ -160,12 +189,15 @@
     "mapel": "Biologi",
     "materi": "Difusi & Osmosis",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "biru",
     "ikon": "🧫",
     "status": "Baru",
-    "path": "/game/simulasi-difusi-tangan/"
+    "path": "/game/simulasi-difusi-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-listrik-tangan",
@@ -174,12 +206,15 @@
     "mapel": "Fisika",
     "materi": "Medan Listrik & Hukum Coulomb",
     "kelas": "SMA Kelas XII",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "pink",
     "ikon": "⚡",
     "status": "Baru",
-    "path": "/game/simulasi-listrik-tangan/"
+    "path": "/game/simulasi-listrik-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-gelombang-tangan",
@@ -188,12 +223,15 @@
     "mapel": "Fisika",
     "materi": "Gelombang Transversal",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "biru",
     "ikon": "🌊",
     "status": "Baru",
-    "path": "/game/simulasi-gelombang-tangan/"
+    "path": "/game/simulasi-gelombang-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-rotasi-tangan",
@@ -202,12 +240,15 @@
     "mapel": "Fisika",
     "materi": "Gerak Rotasi & Momen Inersia",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "ungu",
     "ikon": "🎡",
     "status": "Baru",
-    "path": "/game/simulasi-rotasi-tangan/"
+    "path": "/game/simulasi-rotasi-tangan/",
+    "kamera": true
   },
   {
     "id": "simulasi-fluida-tangan",
@@ -216,11 +257,14 @@
     "mapel": "Fisika",
     "materi": "Fluida Statis & Hukum Archimedes",
     "kelas": "SMA Kelas XI",
-    "mode": ["1 pemain"],
+    "mode": [
+      "1 pemain"
+    ],
     "durasi": "5-10 menit",
     "warna": "kuning",
     "ikon": "🌊",
     "status": "Baru",
-    "path": "/game/simulasi-fluida-tangan/"
+    "path": "/game/simulasi-fluida-tangan/",
+    "kamera": true
   }
 ]

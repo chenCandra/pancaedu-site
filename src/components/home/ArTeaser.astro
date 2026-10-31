@@ -15,12 +15,13 @@ import allGamesData from '../../../public/game/games.json';
 // bukan placeholder teks doang.
 //
 // Daftar topik DITARIK OTOMATIS dari games.json (bukan hardcode array lagi)
-// -- semua game kamera (MediaPipe HandLandmarker) di situs ini diberi id
-// berakhiran "-tangan" sebagai konvensi, jadi game kamera BARU otomatis
-// muncul di sini tanpa perlu sentuh file ini lagi. Game non-kamera (duel-
-// meriam, balap-mobil, dst, dikontrol keyboard/sentuh) SENGAJA tidak ikut.
-type Game = { id: string; judul: string; deskripsi: string; ikon: string; path: string; kelas: string; materi: string };
-const kameraGames = (allGamesData as Game[]).filter((g) => g.id.endsWith('-tangan'));
+// -- tiap game kamera (MediaPipe HandLandmarker) diberi field `kamera: true`
+// eksplisit di games.json, jadi game kamera BARU otomatis muncul di sini
+// cukup dengan nambah field itu, tidak perlu sentuh file ini lagi. Game
+// non-kamera (duel-meriam, balap-mobil, dst, dikontrol keyboard/sentuh)
+// SENGAJA tidak ikut (field `kamera` kosong/absen untuk mereka).
+type Game = { id: string; judul: string; deskripsi: string; ikon: string; path: string; kelas: string; materi: string; kamera?: boolean };
+const kameraGames = (allGamesData as Game[]).filter((g) => g.kamera === true);
 ---
 
 <section class="section ar-teaser">
