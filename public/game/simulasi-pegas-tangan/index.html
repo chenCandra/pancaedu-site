@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Simulasi Pegas Tangan (Hukum Hooke) | Arena Game Edukasi</title>
+<meta name="description" content="Simulasi Hukum Hooke tanpa sentuh: tarik atau tekan pegas virtual pakai tanganmu lewat kamera, lihat gaya pegas (F=kx) dan energi potensialnya berubah live.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/game/assets/style.css">
+<style>
+  :root{
+    --bg:#070b16; --panel:#0f1830cc; --line:#2a3a63; --accent:#60a5fa;
+    --spring:#34d399; --mass:#fbbf24; --ok:#22c55e; --warn:#f59e0b;
+    --text:#e8edf9; --muted:#93a1c4;
+  }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:"Segoe UI", Arial, sans-serif; }
+  body{ min-height:100vh; overflow-x:hidden; }
+  #appShell{ display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:center; max-width:1180px; margin:0 auto; padding:84px 16px 28px; box-sizing:border-box; }
+  #simPanel{ position:relative; flex:1 1 440px; max-width:640px; aspect-ratio:4/3; border-radius:18px; overflow:hidden; background:#000; box-shadow:0 14px 34px rgba(0,0,0,0.45); }
+  #mirror{ position:absolute; inset:0; transform: scaleX(-1); }
+  video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.75) saturate(1.05); }
+  canvas{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  #simBadge{ position:absolute; top:12px; left:12px; background:rgba(10,16,32,0.7); border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; backdrop-filter:blur(4px); }
+  #controlPanel{ flex:1 1 280px; max-width:380px; min-width:240px; display:flex; flex-direction:column; gap:14px; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px; backdrop-filter: blur(6px); box-shadow:0 8px 24px rgba(0,0,0,0.35); box-sizing:border-box; }
+  .ctrlSection + .ctrlSection{ border-top:1px solid var(--line); padding-top:14px; }
+  h1{ font-size:clamp(16px,2.6vw,21px); margin:0 0 2px 0; font-weight:800; }
+  .sub{ color:var(--muted); font-size:13px; margin:0; }
+  #legend{ font-size:13.5px; line-height:1.55; }
+  #legend .sw{ display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px; vertical-align:-2px; box-shadow:0 0 8px currentColor; }
+  #statusBox .row{ font-size:clamp(14px,3vw,16px); font-weight:700; line-height:1.7; }
+  #statusBox .row .lbl{ color:var(--muted); font-weight:600; }
+  .pill{ display:inline-block; padding:3px 10px; border-radius:999px; font-weight:700; font-size:0.8em; }
+  .pill.ok{ background:rgba(34,197,94,.18); color:var(--ok); }
+  .pill.off{ background:rgba(148,163,184,.18); color:var(--muted); }
+  #fps{ color:var(--muted); font-size:12px; margin-top:6px; }
+  .btn-sm{ width:100%; box-sizing:border-box; background:#13203f; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:14px; font-weight:700; cursor:pointer; }
+  .btn-sm:hover{ background:#1b2d57; }
+  .btn-sm:active{ transform:scale(0.98); }
+  #disclaimer{ text-align:center; color:#5b6b94; font-size:11px; margin:0; padding:0 16px 22px; }
+  @media (max-width:760px){ #appShell{ padding-top:70px; gap:12px; } #simPanel, #controlPanel{ flex-basis:100%; max-width:100%; } }
+  #startOverlay{ position:fixed; inset:0; z-index:20; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 30%, #0e2a22, #05070f 70%); text-align:center; padding:24px; }
+  #startOverlay .card{ max-width:620px; }
+  #startOverlay h2{ font-size:clamp(22px,3.4vw,34px); margin:0 0 10px; font-weight:800; }
+  #startOverlay p{ color:var(--muted); font-size:clamp(14px,1.8vw,17px); line-height:1.6; }
+  #startBtn{ margin-top:18px; padding:16px 36px; font-size:clamp(16px,2vw,20px); font-weight:800; border:none; border-radius:14px; cursor:pointer; background:linear-gradient(135deg,#34d399,#60a5fa); color:#032018; box-shadow:0 10px 30px rgba(52,211,153,.3); }
+  #startBtn:active{ transform:scale(0.98); }
+  #errBox{ margin-top:14px; color:#fca5a5; font-size:14px; display:none; white-space:pre-wrap; }
+  #loadingLine{ margin-top:14px; color:var(--accent); font-size:14px; display:none; }
+</style>
+</head>
+<body>
+
+<a href="/game/" class="tombol-kembali-mengambang">← Kembali ke Arena Game</a>
+
+<div id="startOverlay">
+  <div class="card">
+    <h2>🌀 Simulasi Pegas Tangan — Hukum Hooke</h2>
+    <p>
+      Game tanpa sentuh: ujung pegas virtual mengikuti telapak tanganmu lewat
+      kamera. <b>Tarik tanganmu menjauh</b> dari titik jangkar buat meregangkan
+      pegas, atau <b>dekatkan</b> buat menekannya -- lihat gaya pegas (F = k·x)
+      dan energi potensialnya berubah live, sesuai Hukum Hooke.
+    </p>
+    <p style="font-size:13px;">
+      Butuh izin kamera dan koneksi internet (memuat model deteksi tangan).
+    </p>
+    <button id="startBtn">Mulai Kamera</button>
+    <div id="loadingLine">Memuat model deteksi tangan…</div>
+    <div id="errBox"></div>
+  </div>
+</div>
+
+<main id="appShell">
+  <section id="simPanel">
+    <div id="mirror">
+      <video id="video" autoplay playsinline muted></video>
+    </div>
+    <canvas id="fieldCanvas"></canvas>
+    <div id="simBadge">✋ <span id="handCountPill" class="pill off">0</span></div>
+  </section>
+
+  <aside id="controlPanel">
+    <div class="ctrlSection">
+      <h1>Simulasi Pegas Tangan</h1>
+      <p class="sub">Uji coba · Arena Game Edukasi PancaEdu</p>
+    </div>
+
+    <div class="ctrlSection" id="statusBox">
+      <div class="row"><span class="lbl">Status</span> <span id="statusText">Menunggu tangan…</span></div>
+      <div class="row"><span class="lbl">x (perubahan)</span> <span id="xText">—</span></div>
+      <div class="row"><span class="lbl">F = k·x</span> <span id="fText">—</span></div>
+      <div class="row"><span class="lbl">Energi potensial</span> <span id="peText">—</span></div>
+      <div id="fps">fps: —</div>
+    </div>
+
+    <div class="ctrlSection" id="legend">
+      <div><span class="sw" style="background:var(--spring);color:var(--spring);"></span>Pegas — hijau</div>
+      <div><span class="sw" style="background:var(--mass);color:var(--mass);"></span>Beban — ikut telapak tanganmu</div>
+      <div style="margin-top:6px;color:var(--muted);">Lingkaran putus-putus = posisi pegas alami (x=0).</div>
+    </div>
+
+    <div class="ctrlSection">
+      <button class="btn-sm" id="kToggleBtn">Kekakuan pegas: Sedang (k=40 N/m)</button>
+    </div>
+  </aside>
+</main>
+
+<p id="disclaimer">Simulasi edukatif sederhana (skala meter & Newton perkiraan visual), bukan alat ukur presisi.</p>
+
+<script type="module">
+import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('fieldCanvas');
+const ctx = canvas.getContext('2d');
+const startOverlay = document.getElementById('startOverlay');
+const startBtn = document.getElementById('startBtn');
+const loadingLine = document.getElementById('loadingLine');
+const errBox = document.getElementById('errBox');
+const handCountPill = document.getElementById('handCountPill');
+const statusText = document.getElementById('statusText');
+const xText = document.getElementById('xText');
+const fText = document.getElementById('fText');
+const peText = document.getElementById('peText');
+const fpsLabel = document.getElementById('fps');
+const kToggleBtn = document.getElementById('kToggleBtn');
+
+const K_LEVELS = [
+  { label: 'Lunak (k=15 N/m)', k: 15 },
+  { label: 'Sedang (k=40 N/m)', k: 40 },
+  { label: 'Kaku (k=90 N/m)', k: 90 },
+];
+let kIndex = 1;
+kToggleBtn.addEventListener('click', () => {
+  kIndex = (kIndex + 1) % K_LEVELS.length;
+  kToggleBtn.textContent = 'Kekakuan pegas: ' + K_LEVELS[kIndex].label;
+});
+
+function showError(msg){
+  errBox.style.display = 'block';
+  errBox.textContent = msg;
+  loadingLine.style.display = 'none';
+  startBtn.disabled = false;
+}
+
+let handLandmarker = null;
+
+async function loadModel(){
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+  );
+  handLandmarker = await HandLandmarker.createFromOptions(vision, {
+    baseOptions: {
+      modelAssetPath:
+        "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+      delegate: "GPU"
+    },
+    runningMode: "VIDEO",
+    numHands: 1
+  });
+}
+
+async function startCamera(){
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
+    audio: false
+  });
+  video.srcObject = stream;
+  await video.play();
+}
+
+startBtn.addEventListener('click', async () => {
+  startBtn.disabled = true;
+  loadingLine.style.display = 'block';
+  try {
+    loadingLine.textContent = 'Memuat model deteksi tangan…';
+    await loadModel();
+    loadingLine.textContent = 'Mengaktifkan kamera…';
+    await startCamera();
+    startOverlay.style.display = 'none';
+    resizeCanvas();
+    requestAnimationFrame(loop);
+  } catch (err) {
+    console.error(err);
+    showError('Gagal memulai: ' + (err && err.message ? err.message : err) +
+      '\nPastikan izin kamera diberikan.');
+  }
+});
+
+function resizeCanvas(){
+  canvas.width = video.videoWidth || window.innerWidth;
+  canvas.height = video.videoHeight || window.innerHeight;
+}
+window.addEventListener('resize', () => { if (video.videoWidth) resizeCanvas(); });
+
+function vec(x,y){ return {x,y}; }
+function len(a){ return Math.hypot(a.x,a.y) || 1e-6; }
+
+// Kanvas SENGAJA di luar #mirror -- flip X manual di sini biar teks yang
+// digambar lewat fillText tidak ikut terbalik kebaca lewat transform CSS.
+function toPx(p, W, H){ return vec((1 - p.x) * W, p.y * H); }
+
+const L0_PX = 150; // panjang alami pegas (piksel)
+const PX_TO_M = 1 / 400; // konversi piksel -> meter (perkiraan visual)
+
+function drawSpring(p0, p1, coils, amp){
+  const dx = p1.x-p0.x, dy = p1.y-p0.y;
+  const length = len(vec(dx,dy));
+  const ux = dx/length, uy = dy/length;
+  const nx = -uy, ny = ux;
+  const segs = coils * 2;
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.strokeStyle = 'rgba(52,211,153,0.35)';
+  ctx.lineWidth = 10;
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.lineTo(p1.x,p1.y); ctx.stroke();
+  ctx.restore();
+
+  ctx.save();
+  ctx.strokeStyle = '#6ee7b7';
+  ctx.lineWidth = 3;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(p0.x, p0.y);
+  for (let i=1; i<=segs; i++){
+    const t = i/segs;
+    const baseX = p0.x + dx*t, baseY = p0.y + dy*t;
+    const sign = (i % 2 === 0) ? 1 : -1;
+    const offset = (i === segs) ? 0 : amp*sign;
+    ctx.lineTo(baseX + nx*offset, baseY + ny*offset);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawAnchor(p){
+  ctx.save();
+  ctx.fillStyle = '#93a1c4';
+  ctx.fillRect(p.x-6, p.y-26, 12, 52);
+  ctx.restore();
+}
+
+function drawNaturalMarker(center, r){
+  ctx.save();
+  ctx.setLineDash([5,6]);
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, r, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawMass(p){
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const halo = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,30);
+  halo.addColorStop(0,'rgba(251,191,36,0.85)');
+  halo.addColorStop(1,'rgba(251,191,36,0)');
+  ctx.fillStyle = halo;
+  ctx.beginPath(); ctx.arc(p.x,p.y,30,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+  ctx.save();
+  ctx.fillStyle = '#fde68a';
+  ctx.beginPath(); ctx.arc(p.x,p.y,13,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#78350f';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+function fmt(n, unit){ return n.toFixed(2) + ' ' + unit; }
+
+function loop(){
+  if (!video.videoWidth){ requestAnimationFrame(loop); return; }
+  const now = performance.now();
+
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const anchor = vec(W*0.18, H*0.5);
+  drawNaturalMarker(anchor, L0_PX);
+
+  const result = handLandmarker.detectForVideo(video, now);
+  const handsLm = result.landmarks || [];
+  handCountPill.textContent = handsLm.length;
+  handCountPill.className = 'pill ' + (handsLm.length ? 'ok' : 'off');
+
+  if (handsLm.length > 0){
+    const lm = handsLm[0];
+    const wrist = toPx(lm[0], W, H);
+    const midMcp = toPx(lm[9], W, H);
+    const handPt = vec((wrist.x+midMcp.x)/2, (wrist.y+midMcp.y)/2);
+
+    const Lpx = len(vec(handPt.x-anchor.x, handPt.y-anchor.y));
+    const stretchPx = Lpx - L0_PX;
+    const x = stretchPx * PX_TO_M;
+    const k = K_LEVELS[kIndex].k;
+    const F = k * x;
+    const PE = 0.5 * k * x * x;
+
+    const coils = 10;
+    const amp = 14;
+    drawSpring(anchor, handPt, coils, amp);
+    drawAnchor(anchor);
+    drawMass(handPt);
+
+    const arah = x > 0.005 ? 'teregang (menarik ke dalam)' : (x < -0.005 ? 'tertekan (mendorong keluar)' : 'netral');
+    statusText.textContent = 'Pegas ' + arah;
+    xText.textContent = fmt(x, 'm');
+    fText.textContent = fmt(Math.abs(F), 'N') + (F > 0.05 ? ' (tarik)' : (F < -0.05 ? ' (dorong)' : ''));
+    peText.textContent = fmt(PE, 'J');
+  } else {
+    drawAnchor(anchor);
+    statusText.textContent = 'Menunggu tangan…';
+    xText.textContent = '—'; fText.textContent = '—'; peText.textContent = '—';
+  }
+
+  if (!fpsLabel._lastT) fpsLabel._lastT = now;
+  const dtf = now - fpsLabel._lastT; fpsLabel._lastT = now;
+  const fps = 1000/Math.max(dtf,1);
+  fpsLabel._smoothed = fpsLabel._smoothed ? fpsLabel._smoothed*0.9 + fps*0.1 : fps;
+  fpsLabel.textContent = 'fps: ' + fpsLabel._smoothed.toFixed(0);
+
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

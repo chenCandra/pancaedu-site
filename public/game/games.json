@@ -110,5 +110,61 @@
     "ikon": "🪐",
     "status": "Baru",
     "path": "/game/simulasi-orbit-tangan/"
+  },
+  {
+    "id": "simulasi-pegas-tangan",
+    "judul": "Simulasi Pegas Tangan (Hukum Hooke)",
+    "deskripsi": "Tarik atau tekan pegas virtual pakai telapak tanganmu lewat kamera -- lihat gaya pegas (F=kx) dan energi potensialnya berubah live, sesuai Hukum Hooke.",
+    "mapel": "Fisika",
+    "materi": "Hukum Hooke & Elastisitas",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "hijau",
+    "ikon": "🌀",
+    "status": "Baru",
+    "path": "/game/simulasi-pegas-tangan/"
+  },
+  {
+    "id": "simulasi-momentum-tangan",
+    "judul": "Simulasi Momentum & Tumbukan Tangan",
+    "deskripsi": "Dua tangan jadi dua bola di lintasan -- bidik kecepatannya, kepalkan buat menembak, dan lihat momentum totalnya tetap sama sebelum & sesudah bertumbukan.",
+    "mapel": "Fisika",
+    "materi": "Momentum & Tumbukan",
+    "kelas": "SMA Kelas X",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "pink",
+    "ikon": "💥",
+    "status": "Baru",
+    "path": "/game/simulasi-momentum-tangan/"
+  },
+  {
+    "id": "simulasi-transformasi-tangan",
+    "judul": "Simulasi Transformasi Geometri Tangan",
+    "deskripsi": "Pilih Translasi, Rotasi, atau Dilatasi, lalu gerakkan tanganmu lewat kamera buat mengatur arah/sudut/skalanya -- lihat bayangan bangunnya berubah langsung.",
+    "mapel": "Matematika",
+    "materi": "Transformasi Geometri",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "oranye",
+    "ikon": "📐",
+    "status": "Baru",
+    "path": "/game/simulasi-transformasi-tangan/"
+  },
+  {
+    "id": "simulasi-difusi-tangan",
+    "judul": "Simulasi Difusi & Osmosis Tangan",
+    "deskripsi": "Tinggi tanganmu mengatur jumlah partikel di kiri/kanan membran lewat kamera -- lepaskan dan lihat partikelnya berpindah sendiri dari konsentrasi tinggi ke rendah sampai setimbang.",
+    "mapel": "Biologi",
+    "materi": "Difusi & Osmosis",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "biru",
+    "ikon": "🧫",
+    "status": "Baru",
+    "path": "/game/simulasi-difusi-tangan/"
   }
 ]
