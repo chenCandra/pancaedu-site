@@ -449,6 +449,63 @@ const penugasanPengaturan = defineCollection({
   }),
 });
 
+// Kategori prompt untuk Perkakas "Generator Prompt AI" (/tools/generator-
+// prompt-ai) -- SENGAJA dipisah jadi collection CMS (bukan kode JS
+// hardcode seperti versi pertama), supaya guru bisa menambah kategori
+// prompt baru sendiri lewat /admin tanpa perlu minta bantuan developer.
+// Tiap field di `bidang` tetap discriminated union sama seperti pola
+// `soal` di collection `penugasan` -- cuma field "select" yang butuh
+// daftar `opsi`, cuma field "checkbox" yang butuh `teksJikaDicentang`.
+const bidangPromptText = z.object({
+  tipe: z.literal('text'),
+  id: z.string(), // dipakai sebagai token {{id}} di `template` -- harus unik dalam satu kategori
+  label: z.string(),
+  placeholder: z.string().optional(),
+});
+const bidangPromptTextarea = z.object({
+  tipe: z.literal('textarea'),
+  id: z.string(),
+  label: z.string(),
+  placeholder: z.string().optional(),
+});
+const bidangPromptSelect = z.object({
+  tipe: z.literal('select'),
+  id: z.string(),
+  label: z.string(),
+  opsi: z.array(z.string()).min(1),
+});
+const bidangPromptCheckbox = z.object({
+  tipe: z.literal('checkbox'),
+  id: z.string(),
+  label: z.string(),
+  // Teks yang DISISIPKAN ke token {{id}} di template kalau kotaknya
+  // dicentang guru -- kalau TIDAK dicentang, token diganti string kosong.
+  teksJikaDicentang: z.string(),
+});
+const bidangPromptSchema = z.discriminatedUnion('tipe', [
+  bidangPromptText,
+  bidangPromptTextarea,
+  bidangPromptSelect,
+  bidangPromptCheckbox,
+]);
+
+const promptKategori = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/prompt-kategori' }),
+  schema: z.object({
+    ikon: z.string(), // satu emoji, mis. "📘"
+    label: z.string(), // mis. "Modul Ajar / RPP"
+    urutan: z.number().int().optional(), // angka kecil tampil duluan; kosong = di akhir, urut abjad
+    bidang: z.array(bidangPromptSchema).min(1),
+    // Teks prompt lengkap, pakai token {{idBidang}} di mana pun nilai
+    // isian guru mau disisipkan. Field text/textarea yang dikosongkan
+    // guru otomatis diganti "[isi <label>]" saat dirender (lihat
+    // src/pages/tools/generator-prompt-ai.astro), TIDAK perlu ditulis
+    // manual di sini.
+    template: z.string(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   blog,
   kelas,
@@ -459,4 +516,5 @@ export const collections = {
   ruangBelajarPengaturan,
   penugasan,
   penugasanPengaturan,
+  promptKategori,
 };

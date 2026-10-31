@@ -542,6 +542,72 @@ collections:
       - { label: "Draft (belum tayang)", name: draft, widget: boolean, default: false }
       - { label: "Isi Materi", name: body, widget: markdown }
 
+  - name: "prompt-kategori"
+    label: "Generator Prompt AI — Kategori"
+    label_singular: "Kategori Prompt"
+    folder: "src/content/prompt-kategori"
+    create: true
+    slug: "{{fields.label}}"
+    identifier_field: label
+    summary: "{{fields.ikon}} {{fields.label}}"
+    fields:
+      - label: "Ikon (satu emoji)"
+        name: ikon
+        widget: string
+        hint: 'mis. "📘" -- tampil di tombol pemilih kategori & judul form.'
+      - label: "Nama Kategori"
+        name: label
+        widget: string
+        hint: 'mis. "Modul Ajar / RPP"'
+      - label: "Urutan Tampil (opsional)"
+        name: urutan
+        widget: number
+        value_type: int
+        required: false
+        hint: "Angka kecil tampil lebih dulu di deretan tombol kategori. Kosongkan kalau tidak masalah urutannya di belakang."
+      - name: "bidang"
+        label: "Form yang Diisi Guru"
+        widget: list
+        summary: "{{fields.label}}"
+        hint: "Urutan di sini = urutan form tampil ke guru. ID Field WAJIB unik dalam satu kategori (tanpa spasi, huruf kecil, mis. 'mapel') -- dipakai sebagai token {{id}} di Template Prompt di bawah."
+        typeKey: tipe
+        types:
+          - name: "text"
+            label: "Isian Singkat (satu baris)"
+            fields:
+              - { label: "ID Field", name: id, widget: string, hint: "mis. mapel -- tanpa spasi, dipakai sebagai {{mapel}} di template" }
+              - { label: "Label yang Dilihat Guru", name: label, widget: string, hint: 'mis. "Mata Pelajaran"' }
+              - { label: "Contoh Isian (placeholder)", name: placeholder, widget: string, required: false, hint: "mis. Fisika" }
+          - name: "textarea"
+            label: "Isian Panjang (banyak baris)"
+            fields:
+              - { label: "ID Field", name: id, widget: string, hint: "mis. catatan -- tanpa spasi" }
+              - { label: "Label yang Dilihat Guru", name: label, widget: string }
+              - { label: "Contoh Isian (placeholder)", name: placeholder, widget: string, required: false }
+          - name: "select"
+            label: "Pilihan Dropdown"
+            fields:
+              - { label: "ID Field", name: id, widget: string, hint: "mis. jenis -- tanpa spasi" }
+              - { label: "Label yang Dilihat Guru", name: label, widget: string }
+              - label: "Daftar Opsi"
+                name: opsi
+                widget: list
+                hint: "Satu pilihan per baris. Opsi PALING ATAS jadi pilihan default."
+          - name: "checkbox"
+            label: "Centang Ya/Tidak"
+            fields:
+              - { label: "ID Field", name: id, widget: string, hint: "mis. sertakanKode -- tanpa spasi" }
+              - { label: "Label Centang yang Dilihat Guru", name: label, widget: string, hint: 'mis. "Sertakan draf kode"' }
+              - label: "Teks yang Muncul di Prompt Kalau Dicentang"
+                name: teksJikaDicentang
+                widget: text
+                hint: "Tulis kalimat/baris lengkap yang akan ditambahkan ke prompt KALAU guru mencentang kotak ini. Kalau TIDAK dicentang, token ini jadi kosong (baris ini tidak muncul sama sekali)."
+      - label: "Template Prompt"
+        name: template
+        widget: text
+        hint: "Tulis teks prompt lengkapnya di sini (Bahasa Indonesia, siap ditempel ke ChatGPT/Gemini/Claude). Selipkan {{id}} di mana pun nilai isian guru mau muncul -- id-nya harus SAMA PERSIS dengan 'ID Field' di atas. Isian text/textarea yang dikosongkan guru otomatis diganti '[isi <label>]' saat ditampilkan, tidak perlu ditulis manual."
+      - { label: "Draft (sembunyikan dari situs)", name: draft, widget: boolean, default: false }
+
   - name: "kelas"
     label: "Jejak Kelas (Buku Alumni)"
     label_singular: "Angkatan"
