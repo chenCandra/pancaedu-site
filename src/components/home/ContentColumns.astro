@@ -90,7 +90,9 @@ const kelasList = [
           </a>
         ))}
       </div>
+    </div>
 
+    <div>
       <h2 class="col-heading">Game Edukasi Populer</h2>
       <div class="card-list">
         {gameEdukasiPopuler.map((game) => (
@@ -144,24 +146,20 @@ const kelasList = [
     gap: 2rem;
   }
 
-  /* Tablet: dari 1 kolom langsung ke 3 kolom sempit di 1024px kurang pas
-     dipakai -- di rentang tablet (768-1024px) pakai 2 kolom dulu, kolom
-     ke-3 (Artikel + Kelas) turun ke bawah selebar penuh. */
+  /* Tablet: dari 1 kolom langsung ke 4 kolom sempit di 1024px kurang pas
+     dipakai -- di rentang tablet (768-1024px) pakai 2x2 dulu, baru di
+     desktop (>=1024px) jadi 4 kolom sejajar. */
   @media (min-width: 48rem) and (max-width: 63.9375rem) {
     .columns-grid {
       grid-template-columns: 1fr 1fr;
       gap: 1.75rem;
     }
-
-    .columns-grid > :last-child {
-      grid-column: 1 / -1;
-    }
   }
 
   @media (min-width: 64rem) {
     .columns-grid {
-      grid-template-columns: 32fr 37fr 31fr;
-      gap: 1.75rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
     }
   }
 
@@ -202,8 +200,8 @@ const kelasList = [
   }
 
   .content-card-thumb {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 3.75rem;
+    height: 3.75rem;
     flex-shrink: 0;
     border-radius: var(--radius-md);
     object-fit: cover;
@@ -214,7 +212,7 @@ const kelasList = [
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .content-card-body {
