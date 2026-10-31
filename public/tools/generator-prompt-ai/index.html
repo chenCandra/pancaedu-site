@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Prompt AI untuk Guru | Perkakas PancaEdu</title>
+<meta name="description" content="Buat prompt siap pakai untuk ChatGPT, Gemini, Claude, atau AI lain -- modul ajar/RPP, konsep Lab Maya & simulasi kamera/AR, soal & asesmen, sampai administrasi guru lainnya. Isi form, salin prompt-nya.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tools/assets/style.css">
+<style>
+  .panggung { max-width: 64rem; margin-inline: auto; padding: 1rem 1.25rem 3rem; padding-top: 4.5rem; }
+  .judul-alat { text-align: center; margin-bottom: 1.5rem; }
+  .judul-alat h1 { font-size: clamp(1.5rem, 4vw, 2rem); background: linear-gradient(90deg, var(--ungu), var(--biru)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .judul-alat p { color: var(--tinta-lembut); margin-top: 0.4rem; }
+
+  .chip-jenis { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; justify-content: center; }
+  .chip-jenis button {
+    border: 2px solid var(--garis); background: #fff; color: var(--tinta);
+    border-radius: 999px; padding: 0.55rem 1.1rem; font-weight: 700; font-size: 0.875rem;
+    cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .chip-jenis button:hover { border-color: var(--ungu); color: var(--ungu); }
+  .chip-jenis button.aktif { background: var(--ungu); border-color: var(--ungu); color: #fff; }
+
+  .tata-letak { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 52rem) { .tata-letak { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+  .baris-2kol { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  @media (max-width: 22rem) { .baris-2kol { grid-template-columns: 1fr; } }
+
+  .panel-hasil {
+    position: sticky; top: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .kotak-prompt {
+    width: 100%; min-height: 26rem; max-height: 34rem;
+    background: #0f172a; color: #e2e8f0;
+    border: 1px solid var(--garis); border-radius: var(--radius, 12px);
+    padding: 1.1rem; font-family: 'Courier New', monospace; font-size: 0.8125rem; line-height: 1.6;
+    white-space: pre-wrap; resize: vertical; box-sizing: border-box;
+  }
+  .baris-tombol-hasil { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+  .pesan-salin { font-size: 0.8125rem; color: var(--hijau); font-weight: 700; opacity: 0; transition: opacity 0.2s ease; }
+  .pesan-salin.tampil { opacity: 1; }
+
+  .tips-pakai {
+    background: var(--kuning-lembut); border: 1px solid var(--kuning);
+    border-radius: var(--radius, 12px); padding: 0.9rem 1.1rem; font-size: 0.8125rem; color: var(--tinta);
+  }
+
+  .cek-opsi { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; }
+  .cek-opsi input { width: 1.1rem; height: 1.1rem; }
+</style>
+</head>
+<body>
+  <div class="bentuk-dekor no-print" aria-hidden="true">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span><span class="b5"></span>
+  </div>
+
+  <a href="/tools/" class="tombol-kembali-mengambang no-print">← Kembali ke Perkakas</a>
+
+  <div class="panggung">
+    <header class="judul-alat">
+      <h1>🤖 Generator Prompt AI untuk Guru</h1>
+      <p>Isi form di bawah, prompt siap pakai langsung tersusun -- tinggal salin &amp; tempel ke ChatGPT, Gemini, Claude, atau AI favoritmu.</p>
+    </header>
+
+    <div class="chip-jenis" id="chip-jenis"></div>
+
+    <div class="tata-letak">
+      <div class="kartu-panel" id="panel-form"></div>
+
+      <div class="panel-hasil">
+        <textarea class="kotak-prompt" id="kotak-prompt" readonly></textarea>
+        <div class="baris-tombol-hasil">
+          <button class="tombol" id="btn-salin">📋 Salin Prompt</button>
+          <span class="pesan-salin" id="pesan-salin">Tersalin ke clipboard!</span>
+        </div>
+        <div class="tips-pakai">
+          💡 <strong>Cara pakai:</strong> salin prompt di atas, tempel ke ChatGPT/Gemini/Claude/AI lain, lalu jalankan. Hasilnya masih draf -- sesuaikan lagi dengan kondisi kelasmu sebelum dipakai.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var elChipJenis = document.getElementById('chip-jenis');
+    var elPanelForm = document.getElementById('panel-form');
+    var elKotakPrompt = document.getElementById('kotak-prompt');
+    var elBtnSalin = document.getElementById('btn-salin');
+    var elPesanSalin = document.getElementById('pesan-salin');
+
+    // Daftar jenis prompt -- makin ke sini makin luas (sesuai permintaan),
+    // tinggal tambah entri baru di objek JENIS_PROMPT buat nambah kategori
+    // baru tanpa bongkar struktur file ini.
+    var JENIS_PROMPT = {
+      'modul-ajar': {
+        label: '📘 Modul Ajar / RPP',
+        bidang: [
+          { id: 'ma-mapel', label: 'Mata Pelajaran', tipe: 'text', placeholder: 'mis. Fisika' },
+          { id: 'ma-kelas', label: 'Kelas / Fase', tipe: 'text', placeholder: 'mis. Kelas X / Fase E' },
+          { id: 'ma-topik', label: 'Topik / Materi', tipe: 'text', placeholder: 'mis. Gerak Parabola' },
+          { id: 'ma-waktu', label: 'Alokasi Waktu', tipe: 'text', placeholder: 'mis. 2 x 45 menit' },
+          { id: 'ma-model', label: 'Model Pembelajaran (opsional)', tipe: 'text', placeholder: 'mis. Problem Based Learning -- kosongkan biar AI yang pilih' },
+          { id: 'ma-catatan', label: 'Catatan tambahan (opsional)', tipe: 'textarea', placeholder: 'mis. siswa sudah paham konsep vektor dasar, kelas cenderung aktif' },
+        ],
+        susun: function (v) {
+          return (
+            'Kamu adalah asisten perencanaan pembelajaran untuk guru SMA di Indonesia yang mengikuti Kurikulum Merdeka.\n\n' +
+            'Buatkan Modul Ajar (RPP) lengkap dengan detail berikut:\n' +
+            '- Mata Pelajaran: ' + (v['ma-mapel'] || '[isi mata pelajaran]') + '\n' +
+            '- Kelas/Fase: ' + (v['ma-kelas'] || '[isi kelas/fase]') + '\n' +
+            '- Topik/Materi: ' + (v['ma-topik'] || '[isi topik]') + '\n' +
+            '- Alokasi Waktu: ' + (v['ma-waktu'] || '[isi alokasi waktu]') + '\n' +
+            '- Model/Pendekatan Pembelajaran: ' + (v['ma-model'] || 'pilihkan yang paling sesuai dengan topik di atas') + '\n' +
+            (v['ma-catatan'] ? '- Catatan tambahan dari guru: ' + v['ma-catatan'] + '\n' : '') +
+            '\nSusun Modul Ajar dengan struktur berikut:\n' +
+            '1. Identitas (mata pelajaran, fase/kelas, alokasi waktu)\n' +
+            '2. Capaian Pembelajaran & Tujuan Pembelajaran (pakai kata kerja operasional Taksonomi Bloom)\n' +
+            '3. Pemahaman Bermakna & Pertanyaan Pemantik\n' +
+            '4. Profil Pelajar Pancasila yang relevan\n' +
+            '5. Kegiatan Pembelajaran (Pendahuluan, Inti -- rinci sesuai sintaks model pembelajaran yang dipilih, Penutup), dibagi per alokasi menit\n' +
+            '6. Asesmen (diagnostik, formatif, sumatif) lengkap contoh instrumennya\n' +
+            '7. Diferensiasi pembelajaran (untuk siswa yang butuh dukungan lebih dan yang sudah mahir)\n' +
+            '8. Refleksi guru & refleksi siswa\n\n' +
+            'Tulis dalam Bahasa Indonesia yang jelas, siap pakai, dan format pakai heading markdown.'
+          );
+        },
+      },
+      'lab-maya-ar': {
+        label: '🧪 Lab Maya & Simulasi Kamera/AR',
+        bidang: [
+          { id: 'lm-mapel', label: 'Mata Pelajaran', tipe: 'text', placeholder: 'mis. Fisika' },
+          { id: 'lm-kelas', label: 'Kelas / Fase', tipe: 'text', placeholder: 'mis. Kelas XI' },
+          { id: 'lm-topik', label: 'Topik / Konsep', tipe: 'text', placeholder: 'mis. Hukum Archimedes' },
+          { id: 'lm-interaksi', label: 'Jenis Interaksi', tipe: 'select', opsi: [
+            'Gestur tangan lewat kamera (tanpa sentuh layar)',
+            'Drag-and-drop / geser elemen',
+            'Slider / tombol biasa',
+            'Belum tahu, minta AI yang menyarankan',
+          ] },
+          { id: 'lm-tujuan', label: 'Tujuan Pembelajaran', tipe: 'textarea', placeholder: 'mis. siswa memahami hubungan tekanan fluida dan kedalaman' },
+          { id: 'lm-kode', label: 'Sertakan draf kode HTML/JS sederhana', tipe: 'checkbox' },
+        ],
+        susun: function (v) {
+          return (
+            'Kamu adalah desainer simulasi pembelajaran interaktif (Lab Maya) untuk siswa SMA di Indonesia.\n\n' +
+            'Rancang konsep simulasi interaktif untuk topik berikut:\n' +
+            '- Mata Pelajaran: ' + (v['lm-mapel'] || '[isi mata pelajaran]') + '\n' +
+            '- Kelas/Fase: ' + (v['lm-kelas'] || '[isi kelas/fase]') + '\n' +
+            '- Topik/Konsep: ' + (v['lm-topik'] || '[isi topik]') + '\n' +
+            '- Jenis interaksi yang diinginkan: ' + (v['lm-interaksi'] || 'bebas, sarankan yang paling cocok') + '\n' +
+            '- Tujuan pembelajaran: ' + (v['lm-tujuan'] || '[isi tujuan pembelajaran]') + '\n\n' +
+            'Berikan jawabanmu dengan struktur:\n' +
+            '1. Konsep inti: bagaimana konsep di atas divisualisasikan secara interaktif\n' +
+            '2. Mekanisme interaksi pengguna, langkah demi langkah\n' +
+            '3. Variabel yang bisa diubah pengguna, dan bagaimana visualnya berubah -- hubungkan ke rumus/konsep yang relevan\n' +
+            '4. Info/data yang ditampilkan live ke pengguna selama berinteraksi\n' +
+            '5. Potensi miskonsepsi siswa yang bisa diluruskan lewat simulasi ini\n' +
+            (v['lm-kode']
+              ? '6. Draf kode HTML/CSS/JavaScript sederhana (satu file, vanilla JS tanpa framework/build tool) yang mengimplementasikan konsep ini langsung di browser\n'
+              : '') +
+            '\nJelaskan dengan bahasa yang mudah dipahami, siap saya pakai sebagai acuan pengembangan.'
+          );
+        },
+      },
+      'soal-asesmen': {
+        label: '📝 Soal & Asesmen',
+        bidang: [
+          { id: 'sa-mapel', label: 'Mata Pelajaran', tipe: 'text', placeholder: 'mis. Fisika' },
+          { id: 'sa-kelas', label: 'Kelas / Fase', tipe: 'text', placeholder: 'mis. Kelas X' },
+          { id: 'sa-topik', label: 'Topik', tipe: 'text', placeholder: 'mis. Besaran dan Satuan' },
+          { id: 'sa-jumlah', label: 'Jumlah Soal', tipe: 'text', placeholder: 'mis. 10' },
+          { id: 'sa-jenis', label: 'Jenis Soal', tipe: 'select', opsi: ['Pilihan Ganda', 'Esai', 'Benar-Salah', 'Isian Singkat', 'Campuran'] },
+          { id: 'sa-level', label: 'Level Kognitif (Bloom)', tipe: 'select', opsi: [
+            'Campuran semua level', 'C1 - Mengingat', 'C2 - Memahami', 'C3 - Menerapkan', 'C4 - Menganalisis', 'C5 - Mengevaluasi', 'C6 - Mencipta',
+          ] },
+          { id: 'sa-catatan', label: 'Catatan tambahan (opsional)', tipe: 'textarea', placeholder: 'mis. gunakan konteks sehari-hari, hindari angka desimal rumit' },
+        ],
+        susun: function (v) {
+          return (
+            'Kamu adalah asisten pembuatan soal untuk guru SMA di Indonesia.\n\n' +
+            'Buatkan ' + (v['sa-jumlah'] || '10') + ' soal ' + (v['sa-jenis'] || 'Pilihan Ganda') + ' untuk:\n' +
+            '- Mata Pelajaran: ' + (v['sa-mapel'] || '[isi mata pelajaran]') + '\n' +
+            '- Kelas/Fase: ' + (v['sa-kelas'] || '[isi kelas/fase]') + '\n' +
+            '- Topik: ' + (v['sa-topik'] || '[isi topik]') + '\n' +
+            '- Level kognitif: ' + (v['sa-level'] || 'Campuran semua level') + ' (acuan Taksonomi Bloom)\n' +
+            (v['sa-catatan'] ? '- Catatan tambahan: ' + v['sa-catatan'] + '\n' : '') +
+            '\nUntuk tiap soal, sertakan:\n' +
+            '1. Teks soal yang jelas dan kontekstual (pakai konteks sehari-hari bila memungkinkan)\n' +
+            '2. Pilihan jawaban (khusus pilihan ganda: 4-5 opsi, 1 kunci jawaban, pengecoh masuk akal)\n' +
+            '3. Kunci jawaban\n' +
+            '4. Pembahasan singkat kenapa jawaban itu benar\n\n' +
+            'Format dalam Bahasa Indonesia, pakai penomoran yang rapi.'
+          );
+        },
+      },
+      'administrasi-lain': {
+        label: '🗂️ Administrasi Lainnya',
+        bidang: [
+          { id: 'al-jenis', label: 'Jenis Dokumen', tipe: 'text', placeholder: 'mis. Program Tahunan, Jurnal Mengajar, Analisis KKM' },
+          { id: 'al-mapel', label: 'Mata Pelajaran / Konteks (opsional)', tipe: 'text', placeholder: 'mis. Fisika Kelas XI' },
+          { id: 'al-detail', label: 'Detail & Kebutuhan', tipe: 'textarea', placeholder: 'jelaskan apa saja yang perlu dimasukkan ke dokumen ini' },
+        ],
+        susun: function (v) {
+          return (
+            'Kamu adalah asisten administrasi guru di Indonesia.\n\n' +
+            'Bantu saya menyusun dokumen berikut:\n' +
+            '- Jenis dokumen: ' + (v['al-jenis'] || '[isi jenis dokumen]') + '\n' +
+            (v['al-mapel'] ? '- Mata Pelajaran/Konteks: ' + v['al-mapel'] + '\n' : '') +
+            '- Detail & kebutuhan: ' + (v['al-detail'] || '[isi detail kebutuhan]') + '\n\n' +
+            'Susun dokumennya secara lengkap, profesional, dan siap pakai (format sesuai kebiasaan administrasi sekolah di Indonesia), dalam Bahasa Indonesia.'
+          );
+        },
+      },
+    };
+
+    var jenisAktif = 'modul-ajar';
+    var salinTimeout = null;
+
+    function buatChip() {
+      elChipJenis.innerHTML = '';
+      Object.keys(JENIS_PROMPT).forEach(function (key) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = JENIS_PROMPT[key].label;
+        btn.className = key === jenisAktif ? 'aktif' : '';
+        btn.addEventListener('click', function () {
+          jenisAktif = key;
+          buatChip();
+          renderForm();
+        });
+        elChipJenis.appendChild(btn);
+      });
+    }
+
+    function nilaiSemuaBidang() {
+      var v = {};
+      JENIS_PROMPT[jenisAktif].bidang.forEach(function (b) {
+        var el = document.getElementById(b.id);
+        if (!el) return;
+        v[b.id] = b.tipe === 'checkbox' ? el.checked : el.value;
+      });
+      return v;
+    }
+
+    function renderPrompt() {
+      var v = nilaiSemuaBidang();
+      elKotakPrompt.value = JENIS_PROMPT[jenisAktif].susun(v);
+    }
+
+    function renderForm() {
+      elPanelForm.innerHTML = '';
+      JENIS_PROMPT[jenisAktif].bidang.forEach(function (b) {
+        var wrap = document.createElement('div');
+        wrap.className = 'bidang';
+
+        if (b.tipe === 'checkbox') {
+          wrap.innerHTML = '<label class="cek-opsi" for="' + b.id + '"><input type="checkbox" id="' + b.id + '"> ' + b.label + '</label>';
+        } else if (b.tipe === 'select') {
+          var opsiHtml = b.opsi.map(function (o) { return '<option value="' + o + '">' + o + '</option>'; }).join('');
+          wrap.innerHTML = '<label for="' + b.id + '">' + b.label + '</label><select id="' + b.id + '">' + opsiHtml + '</select>';
+        } else if (b.tipe === 'textarea') {
+          wrap.innerHTML = '<label for="' + b.id + '">' + b.label + '</label><textarea id="' + b.id + '" placeholder="' + (b.placeholder || '') + '" rows="3"></textarea>';
+        } else {
+          wrap.innerHTML = '<label for="' + b.id + '">' + b.label + '</label><input type="text" id="' + b.id + '" placeholder="' + (b.placeholder || '') + '">';
+        }
+        elPanelForm.appendChild(wrap);
+      });
+
+      document.querySelectorAll('#panel-form input, #panel-form select, #panel-form textarea').forEach(function (el) {
+        var evt = el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input';
+        el.addEventListener(evt, renderPrompt);
+      });
+
+      renderPrompt();
+    }
+
+    elBtnSalin.addEventListener('click', function () {
+      elKotakPrompt.select();
+      elKotakPrompt.setSelectionRange(0, elKotakPrompt.value.length);
+      var berhasil = false;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(elKotakPrompt.value);
+          berhasil = true;
+        } else {
+          berhasil = document.execCommand('copy');
+        }
+      } catch (e) { berhasil = false; }
+
+      if (berhasil) {
+        elPesanSalin.classList.add('tampil');
+        clearTimeout(salinTimeout);
+        salinTimeout = setTimeout(function () { elPesanSalin.classList.remove('tampil'); }, 2200);
+      }
+    });
+
+    buatChip();
+    renderForm();
+  </script>
+  <script>
+    (function () {
+      try {
+        var payload = JSON.stringify({ slug: "generator-prompt-ai", category: "tools" });
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/track-view', new Blob([payload], { type: 'application/json' }));
+        } else {
+          fetch('/api/track-view', { method: 'POST', body: payload, keepalive: true }).catch(function () {});
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

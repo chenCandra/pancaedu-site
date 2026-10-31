@@ -78,5 +78,13 @@
     "ikon": "🧾",
     "warna": "oranye",
     "path": "/tools/kwitansi/"
+  },
+  {
+    "id": "generator-prompt-ai",
+    "judul": "Generator Prompt AI untuk Guru",
+    "deskripsi": "Isi form singkat, dapatkan prompt siap pakai untuk ChatGPT/Gemini/Claude -- modul ajar/RPP, konsep Lab Maya & simulasi kamera/AR, soal & asesmen, sampai administrasi guru lainnya.",
+    "ikon": "🤖",
+    "warna": "ungu",
+    "path": "/tools/generator-prompt-ai/"
   }
 ]
