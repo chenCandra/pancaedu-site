@@ -166,5 +166,61 @@
     "ikon": "🧫",
     "status": "Baru",
     "path": "/game/simulasi-difusi-tangan/"
+  },
+  {
+    "id": "simulasi-listrik-tangan",
+    "judul": "Simulasi Medan Listrik Tangan",
+    "deskripsi": "Buka telapak jadi muatan positif, kepalkan jadi muatan negatif -- lihat garis gaya listrik berubah saat kamu dekatkan atau jauhkan tangan, sesuai Hukum Coulomb.",
+    "mapel": "Fisika",
+    "materi": "Medan Listrik & Hukum Coulomb",
+    "kelas": "SMA Kelas XII",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "pink",
+    "ikon": "⚡",
+    "status": "Baru",
+    "path": "/game/simulasi-listrik-tangan/"
+  },
+  {
+    "id": "simulasi-gelombang-tangan",
+    "judul": "Simulasi Gelombang Tali Tangan",
+    "deskripsi": "Tangan pertama atur amplitudo, tangan kedua atur frekuensi -- lihat panjang gelombang berubah sesuai v=lambda.f lewat kamera, lengkap partikel tali yang cuma bergerak naik-turun.",
+    "mapel": "Fisika",
+    "materi": "Gelombang Transversal",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "biru",
+    "ikon": "🌊",
+    "status": "Baru",
+    "path": "/game/simulasi-gelombang-tangan/"
+  },
+  {
+    "id": "simulasi-rotasi-tangan",
+    "judul": "Simulasi Gerak Rotasi & Momen Inersia Tangan",
+    "deskripsi": "Dorong roda virtual pakai telapak tangan lewat kamera -- jarak ke pusat jadi lengan gaya, bandingkan kecepatan putar saat massa roda di tepi vs di tengah.",
+    "mapel": "Fisika",
+    "materi": "Gerak Rotasi & Momen Inersia",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "ungu",
+    "ikon": "🎡",
+    "status": "Baru",
+    "path": "/game/simulasi-rotasi-tangan/"
+  },
+  {
+    "id": "simulasi-fluida-tangan",
+    "judul": "Simulasi Tekanan Hidrostatis & Archimedes Tangan",
+    "deskripsi": "Turunkan benda ke dalam fluida pakai gerakan tanganmu lewat kamera -- lihat tekanan hidrostatis dan gaya apung berubah, lalu tebak: mengapung atau tenggelam?",
+    "mapel": "Fisika",
+    "materi": "Fluida Statis & Hukum Archimedes",
+    "kelas": "SMA Kelas XI",
+    "mode": ["1 pemain"],
+    "durasi": "5-10 menit",
+    "warna": "kuning",
+    "ikon": "🌊",
+    "status": "Baru",
+    "path": "/game/simulasi-fluida-tangan/"
   }
 ]
