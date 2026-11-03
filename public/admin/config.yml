@@ -49,6 +49,20 @@ collections:
                 widget: string
                 required: false
                 hint: 'mis. "Nelson Mandela" -- kosongkan kalau quote-nya orisinal/anonim.'
+          - label: "Quote Besar (section tersendiri di tengah halaman)"
+            name: mainQuotes
+            widget: list
+            summary: "{{fields.quote}}"
+            min: 1
+            max: 10
+            hint: "Minimal 1, maksimal 10 -- tiap kali halaman dimuat/direfresh, satu quote dipilih ACAK dari daftar ini untuk tampil besar di tengah halaman."
+            fields:
+              - { label: "Quote", name: quote, widget: text }
+              - label: "Sumber"
+                name: author
+                widget: string
+                required: false
+                hint: 'mis. "Panca, penulis PancaEdu" -- kosongkan kalau mau tanpa atribusi.'
           - label: "Subjudul Hero"
             name: heroLede
             widget: text

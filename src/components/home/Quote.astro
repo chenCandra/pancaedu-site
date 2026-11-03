@@ -1,19 +1,29 @@
 ---
-// Kutipan orisinal dari pemilik situs sendiri (bukan atas nama orang lain
-// yang belum pernah bilang begitu) — draft, silakan diganti kalau mau.
+import { getCollection } from 'astro:content';
+
+// Daftar quote diedit lewat CMS (/admin, field "Quote Besar" di koleksi
+// homepage, lihat mainQuotes di content.config.ts) -- sampai 10 quote.
+// Quote pertama dirender di server jadi tampilan awal/fallback kalau JS
+// mati, lalu script di bawah MENGGANTINYA dengan satu quote ACAK begitu
+// halaman dimuat/direfresh di browser (beda tiap pengunjung/refresh,
+// bukan cuma beda tiap deploy).
+const [homepage] = await getCollection('homepage');
+const quotes = homepage.data.mainQuotes;
+const first = quotes[0];
 ---
 
 <section class="section quote">
   <div class="container">
     <blockquote class="quote-block" data-reveal>
-      <p>
-        “Mengajar bukan soal mengisi kepala, tapi menyalakan rasa ingin tahu yang sudah ada di
-        sana.”
-      </p>
-      <footer>— Panca, penulis PancaEdu</footer>
+      <p id="quote-text">“{first.quote}”</p>
+      <footer id="quote-author" style={first.author ? '' : 'display:none'}>— {first.author}</footer>
     </blockquote>
   </div>
 </section>
+
+{quotes.length > 1 && (
+  <script is:inline type="application/json" id="quote-data" set:html={JSON.stringify(quotes)} />
+)}
 
 <style>
   .quote-block {
@@ -37,3 +47,29 @@
     color: var(--ink-soft);
   }
 </style>
+
+{quotes.length > 1 && (
+  <script is:inline>
+    (function () {
+      try {
+        var dataEl = document.getElementById('quote-data');
+        if (!dataEl) return;
+        var quotes = JSON.parse(dataEl.textContent);
+        if (!quotes.length) return;
+        var pick = quotes[Math.floor(Math.random() * quotes.length)];
+        var textEl = document.getElementById('quote-text');
+        var authorEl = document.getElementById('quote-author');
+        if (textEl) textEl.textContent = '“' + pick.quote + '”';
+        if (authorEl) {
+          if (pick.author) {
+            authorEl.textContent = '— ' + pick.author;
+            authorEl.style.display = '';
+          } else {
+            authorEl.textContent = '';
+            authorEl.style.display = 'none';
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
+)}

@@ -169,6 +169,19 @@ const homepage = defineCollection({
         })
       )
       .min(1),
+    // Quote besar di section tersendiri (lihat Quote.astro) -- bukan ticker
+    // seperti heroQuotes, satu dipilih ACAK DI BROWSER tiap halaman
+    // dimuat/direfresh. Minimal 1, maksimal 10 (biar section ini tidak
+    // kelebihan beban teks kalau diisi kebanyakan).
+    mainQuotes: z
+      .array(
+        z.object({
+          quote: z.string(),
+          author: z.string().optional(),
+        })
+      )
+      .min(1)
+      .max(10),
     heroLede: z.string(), // subjudul di bawah quote
     aboutTitle: z.string(), // judul section "Tentang" di beranda
     aboutText: z.string(),
