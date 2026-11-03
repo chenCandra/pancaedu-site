@@ -2,6 +2,11 @@
 // `node:fs` TIDAK dibundel di adapter Cloudflare -- games.json di-import
 // langsung sebagai modul ES (sama pola dengan ContentColumns.astro).
 import allGamesData from '../../../public/game/games.json';
+// Hasil query D1 (page_views, kategori 'game') yang ditarik SEBELUM build
+// (lihat scripts/fetch-top-viewed.mjs & .github/workflows/deploy.yml) --
+// array slug terurut dari view TERBANYAK. Kosong kalau belum pernah ada
+// data/gagal ditarik (situs baru/game baru), lihat fallback di bawah.
+import topGames from '../../data/topGames.json';
 
 // Section preview AR di homepage -- menggantikan posisi section lama
 // "Materi & Lab Maya Pilihan" (src/components/home/Works.astro, sekarang
@@ -21,7 +26,29 @@ import allGamesData from '../../../public/game/games.json';
 // non-kamera (duel-meriam, balap-mobil, dst, dikontrol keyboard/sentuh)
 // SENGAJA tidak ikut (field `kamera` kosong/absen untuk mereka).
 type Game = { id: string; judul: string; deskripsi: string; ikon: string; path: string; kelas: string; materi: string; kamera?: boolean };
-const kameraGames = (allGamesData as Game[]).filter((g) => g.kamera === true);
+const MAX_CARDS = 10;
+const allKameraGames = (allGamesData as Game[]).filter((g) => g.kamera === true);
+
+// Dibatasi MAX_CARDS kartu, dipilih dari yang VIEW TERBANYAK (data D1 asli).
+// Selama data belum terkumpul (topGames.json masih kosong) jatuh ke urutan
+// asli di games.json biar section ini tidak pernah kosong.
+const topGamesSlugs: string[] = (Array.isArray(topGames) ? topGames : [])
+  .map((row: { slug?: unknown }) => row?.slug)
+  .filter((slug: unknown): slug is string => typeof slug === 'string');
+
+const rankedGames = topGamesSlugs
+  .map((slug) => allKameraGames.find((g) => g.id === slug))
+  .filter((g): g is Game => Boolean(g));
+
+const usedIds = new Set(rankedGames.map((g) => g.id));
+for (const g of allKameraGames) {
+  if (rankedGames.length >= MAX_CARDS) break;
+  if (usedIds.has(g.id)) continue;
+  rankedGames.push(g);
+  usedIds.add(g.id);
+}
+
+const kameraGames = rankedGames.slice(0, MAX_CARDS);
 ---
 
 <section class="section ar-teaser">

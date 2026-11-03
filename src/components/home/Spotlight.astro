@@ -6,10 +6,11 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 // kosong kalau belum pernah ada data/gagal ditarik, diurutkan dari view
 // TERBANYAK -- item [0] = andalan utama, [1..] = andalan kedua/ketiga.
 import topViewed from '../../data/topViewed.json';
+// Sama pola, tapi array sampai 2 slug Perkakas (lihat MAX_TOOL_CARDS di bawah).
 import topTool from '../../data/topTool.json';
 // Katalog Perkakas (public/tools/, HTML statis -- bukan koleksi konten astro)
-// -- dipakai biar satu slot di pojok kanan-bawah bisa nonjolin satu halaman
-// Perkakas, bukan cuma materi/artikel.
+// -- dipakai biar slot di pojok kanan-bawah bisa nonjolin halaman Perkakas,
+// bukan cuma materi/artikel.
 import toolsCatalog from '../../../public/tools/tools.json';
 
 type Post = CollectionEntry<'blog'>;
@@ -29,7 +30,8 @@ interface SideItem {
   thumb: { kind: 'image'; src: string } | { kind: 'icon'; icon: string };
 }
 
-const SECONDARY_COUNT = 3;
+const SECONDARY_COUNT = 2;
+const MAX_TOOL_CARDS = 2;
 
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -114,26 +116,38 @@ function toSideItem(card: ReturnType<typeof describe>): SideItem {
   };
 }
 
-// Satu halaman Perkakas (/tools/*) paling sering dikunjungi -- sama pola
-// fallback-nya seperti andalan utama: pakai data view D1 asli kalau sudah
-// ada, kalau belum jatuh ke tool pertama di katalog biar slot ini tidak
-// kosong.
+// Sampai MAX_TOOL_CARDS halaman Perkakas (/tools/*) paling sering dikunjungi
+// -- sama pola fallback-nya seperti andalan utama: pakai data view D1 asli
+// kalau sudah ada, kalau belum/kurang jatuh ke tool lain di katalog biar
+// slot ini tidak kosong/kurang dari MAX_TOOL_CARDS.
 const tools = toolsCatalog as Tool[];
-const topToolSlug = typeof (topTool as { slug?: unknown })?.slug === 'string' ? (topTool as { slug: string }).slug : null;
-const toolPick: Tool | undefined = (topToolSlug && tools.find((t) => t.id === topToolSlug)) ?? tools[0];
-const toolIsRanked = Boolean(topToolSlug && toolPick?.id === topToolSlug);
+const topToolSlugs: string[] = (Array.isArray(topTool) ? topTool : [])
+  .map((row: { slug?: unknown }) => row?.slug)
+  .filter((slug: unknown): slug is string => typeof slug === 'string');
 
-const toolItem: SideItem | null = toolPick
-  ? {
-      href: toolPick.path,
-      title: toolPick.judul,
-      eyebrow: toolIsRanked ? '🛠️ Perkakas Terpopuler' : '🛠️ Perkakas Pilihan',
-      meta: 'Perkakas',
-      thumb: { kind: 'icon', icon: toolPick.ikon },
-    }
-  : null;
+const rankedTools: Tool[] = topToolSlugs
+  .map((slug) => tools.find((t) => t.id === slug))
+  .filter((t): t is Tool => Boolean(t));
+const rankedToolCount = rankedTools.length;
 
-const sideItems: SideItem[] = [...secondaryCards.map(toSideItem), ...(toolItem ? [toolItem] : [])];
+const usedToolIds = new Set(rankedTools.map((t) => t.id));
+for (const t of tools) {
+  if (rankedTools.length >= MAX_TOOL_CARDS) break;
+  if (usedToolIds.has(t.id)) continue;
+  rankedTools.push(t);
+  usedToolIds.add(t.id);
+}
+const toolPicks = rankedTools.slice(0, MAX_TOOL_CARDS);
+
+const toolItems: SideItem[] = toolPicks.map((tool, idx) => ({
+  href: tool.path,
+  title: tool.judul,
+  eyebrow: idx < rankedToolCount ? '🛠️ Perkakas Terpopuler' : '🛠️ Perkakas Pilihan',
+  meta: 'Perkakas',
+  thumb: { kind: 'icon', icon: tool.ikon },
+}));
+
+const sideItems: SideItem[] = [...secondaryCards.map(toSideItem), ...toolItems];
 ---
 
 {mainCard && (
