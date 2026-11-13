@@ -34,6 +34,12 @@ vocabulary:
   - word: "deserved"
     maknaId: "pantas mendapatkan"
     example: "You deserved that award -- you worked so hard for it."
+  - word: "participants"
+    maknaId: "peserta -- orang-orang yang ikut serta dalam suatu kegiatan/lomba"
+    example: "48 participants joined the science competition this year."
+  - word: "percent"
+    maknaId: "persen -- cara menyatakan bagian dari 100"
+    example: "Rangga's score put him in the top 2 percent of all participants."
 
 modelTexts:
   - title: "Congratulations, Rangga!"
@@ -47,6 +53,14 @@ modelTexts:
         note: "Prestasi/pencapaian yang patut dirayakan."
       - text: "deserved"
         note: "Pantas mendapatkan -- dipakai untuk menegaskan bahwa hasil itu memang layak didapat."
+    grammarTerms: []
+  - title: "The Results Are In!"
+    body: "The school science competition results were announced yesterday. Out of 48 participants from three classes, Rangga finished in 1st place with a score of 92 out of 100 -- the highest score in the whole competition. Dinda came in 2nd place with 88 points, and Farah finished 3rd with 85 points. That means Rangga scored 4 points higher than Dinda, and his result put him in the top 2 percent of all participants in the school. When the results were posted on the notice board, students rushed to congratulate the winners. 'Congratulations on finishing 1st out of 48 participants, Rangga! That's an incredible achievement,' said his teacher. His friends just gave him a high-five and said, 'Dude, you crushed it!'"
+    annotations:
+      - text: "participants"
+        note: "Peserta lomba -- di sini totalnya 48 orang dari tiga kelas."
+      - text: "percent"
+        note: "Persen -- cara menyatakan proporsi dari 100, dipakai untuk menunjukkan seberapa tinggi peringkat Rangga."
     grammarTerms: []
 
 activities:
@@ -136,6 +150,7 @@ reflection:
   - "respond to congratulations and compliments politely."
   - "choose formal or informal expressions depending on who I'm talking to."
   - "create a congratulation message for a real achievement."
+  - "read simple ranking/score data (points, percent) in an English announcement text."
 
 kuis:
   - soal: "Which word means \"tulus\" in English, as used in this lesson?"
@@ -170,6 +185,22 @@ kuis:
       - "Because Budi forgot the correct words"
     jawaban: 1
     penjelasan: "Teks menjelaskan bahwa guru memakai bahasa formal karena beliau orang dewasa yang dihormati, sedangkan Budi memakai bahasa informal karena mereka teman akrab -- hubungan yang berbeda menentukan gaya bahasa yang dipakai."
+  - soal: "According to 'The Results Are In!', how many participants joined the science competition?"
+    pilihan:
+      - "38"
+      - "48"
+      - "84"
+      - "92"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: 'Out of 48 participants from three classes...'"
+  - soal: "Rangga scored 92 and Dinda scored 88. How many points higher was Rangga's score than Dinda's?"
+    pilihan:
+      - "2 points"
+      - "4 points"
+      - "8 points"
+      - "12 points"
+    jawaban: 1
+    penjelasan: "92 - 88 = 4 -- latihan numerasi sederhana: mengurangkan dua skor untuk menemukan selisihnya."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Congratulating & Complimenting'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"

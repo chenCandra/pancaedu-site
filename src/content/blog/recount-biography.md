@@ -34,6 +34,12 @@ vocabulary:
   - word: "contribution"
     maknaId: "kontribusi/sumbangan"
     example: "His contribution to aviation technology is still remembered today."
+  - word: "patent"
+    maknaId: "paten -- hak atas sebuah temuan/penemuan teknik"
+    example: "He held several patents related to aircraft design."
+  - word: "legacy"
+    maknaId: "warisan -- hal berharga yang ditinggalkan seseorang untuk generasi berikutnya"
+    example: "His legacy continues to inspire young Indonesian engineers."
 
 modelTexts:
   - title: "B.J. Habibie: A Short Biography"
@@ -48,6 +54,14 @@ modelTexts:
       - text: "inspires"
         note: "Menginspirasi -- mendorong seseorang untuk melakukan sesuatu yang baik."
     grammarTerms: ["was born", "showed", "moved", "studied", "graduated", "began", "developed", "returned", "became", "continued", "passed away"]
+  - title: "Habibie's Legacy in Aviation"
+    body: "Besides his work in government, Habibie was also known internationally as an aviation engineer with several patents. During his career in Germany, he contributed to important aircraft designs. After returning to Indonesia, he led the team that built the N250, Indonesia's first domestically designed commercial aircraft, which first flew in 1995. Engineers sometimes call the way he solved a specific structural problem in aircraft wings the 'Habibie Factor', a term still used in aviation engineering today. His story shows that a scientist's contribution can be measured not only in titles, but also in ideas that outlive him."
+    annotations:
+      - text: "patent"
+        note: "Paten -- hak eksklusif atas sebuah temuan teknik."
+      - text: "legacy"
+        note: "Warisan pemikiran/karya yang terus bermanfaat meski penemunya sudah tiada."
+    grammarTerms: ["was", "contributed", "led", "first flew", "call", "shows"]
 
 activities:
   - type: "timeline"
@@ -100,6 +114,7 @@ reflection:
   - "arrange events in chronological order using a timeline."
   - "use time connectors to link events in a biography."
   - "write a short biography using Simple Past Tense."
+  - "calculate age or duration between events using years mentioned in an English timeline."
 
 kuis:
   - soal: "What is the correct structure of a recount text?"
@@ -134,6 +149,30 @@ kuis:
       - "Playing football for Indonesia"
     jawaban: 1
     penjelasan: "B.J. Habibie dikenal luas sebagai bapak teknologi pesawat Indonesia dan kontribusinya di dunia penerbangan."
+  - soal: "B.J. Habibie was born in 1936 and moved to Germany in 1955. How old was he when he moved to Germany?"
+    pilihan:
+      - "17 years old"
+      - "19 years old"
+      - "21 years old"
+      - "25 years old"
+    jawaban: 1
+    penjelasan: "1955 - 1936 = 19 -- latihan numerasi sederhana: menghitung usia dari selisih dua tahun pada garis waktu."
+  - soal: "Habibie returned to Indonesia in 1974 and became President in 1998. How many years passed between these two events?"
+    pilihan:
+      - "14 years"
+      - "24 years"
+      - "34 years"
+      - "44 years"
+    jawaban: 1
+    penjelasan: "1998 - 1974 = 24 -- latihan numerasi membaca selisih tahun pada garis waktu."
+  - soal: "According to 'Habibie's Legacy in Aviation', the N250 aircraft first flew in 1995. How many years after Habibie returned to Indonesia (1974) was that?"
+    pilihan:
+      - "11 years"
+      - "21 years"
+      - "31 years"
+      - "41 years"
+    jawaban: 1
+    penjelasan: "1995 - 1974 = 21 -- menggabungkan informasi dari dua teks model untuk menghitung selisih tahun."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Recount: Biography'. Semua aktivitas dikerjakan langsung di browser; garis waktu, ceklis refleksi, dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"

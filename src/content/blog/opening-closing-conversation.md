@@ -34,6 +34,12 @@ vocabulary:
   - word: "hallway"
     maknaId: "koridor/lorong sekolah"
     example: "I met my teacher in the hallway this morning."
+  - word: "schedule"
+    maknaId: "jadwal"
+    example: "Let's check the exam schedule before we start studying."
+  - word: "duration"
+    maknaId: "durasi/lama waktu"
+    example: "The duration of the test is 90 minutes."
 
 modelTexts:
   - title: "Meeting a New Teacher"
@@ -47,6 +53,14 @@ modelTexts:
         note: "Cara sopan memberi tahu bahwa kita harus pergi, sebelum menutup percakapan."
       - text: "Have a nice day"
         note: "Ungkapan penutup percakapan yang sopan dan ramah."
+    grammarTerms: []
+  - title: "Talking About the School Schedule"
+    body: "Rani: Hey, what time does the English test start today? Dion: It starts at 9:20, right after break. I think it ends at 10:50. Rani: So that's 90 minutes total? That's longer than last week's math test. Dion: Yeah, that one was only 60 minutes. This one's definitely longer -- 30 minutes more. Rani: Good, I'll need that extra time to double-check my answers! Dion: Same here. Anyway, good luck! Catch you after the test. Rani: Thanks, you too! See you later."
+    annotations:
+      - text: "schedule"
+        note: "Jadwal -- konteks small talk yang sangat umum di sekolah."
+      - text: "90 minutes total"
+        note: "Durasi dihitung dari selisih waktu mulai (9:20) dan waktu selesai (10:50)."
     grammarTerms: []
 
 activities:
@@ -194,6 +208,7 @@ reflection:
   - "use different expressions to open a conversation depending on the context."
   - "close a conversation politely."
   - "tell the difference between formal and informal expressions."
+  - "calculate a simple time duration (e.g., from a schedule) mentioned in an English conversation."
 
 kuis:
   - soal: "Which greeting is most appropriate when meeting your teacher for the first time?"
@@ -228,6 +243,22 @@ kuis:
       - "A formal business meeting"
     jawaban: 1
     penjelasan: "'Small talk' adalah obrolan ringan dan santai tentang topik sehari-hari, biasanya untuk membuka percakapan."
+  - soal: "In 'Talking About the School Schedule', the test starts at 9:20 and ends at 10:50. How long is the test?"
+    pilihan:
+      - "60 minutes"
+      - "90 minutes"
+      - "120 minutes"
+      - "150 minutes"
+    jawaban: 1
+    penjelasan: "Dari pukul 9:20 ke 10:50 selisihnya 1 jam 30 menit = 90 menit -- latihan numerasi membaca selisih waktu dari jadwal."
+  - soal: "The English test is 90 minutes, and last week's math test was 60 minutes. How many minutes longer is the English test?"
+    pilihan:
+      - "20 minutes"
+      - "30 minutes"
+      - "40 minutes"
+      - "50 minutes"
+    jawaban: 1
+    penjelasan: "90 - 60 = 30 menit -- latihan numerasi sederhana membandingkan dua durasi."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Opening & Closing Conversation'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"

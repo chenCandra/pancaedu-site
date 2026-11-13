@@ -1,6 +1,6 @@
 ---
 title: "Narrative: Indonesian Legends"
-description: "Belajar struktur cerita legenda (Orientation-Complication-Resolution) lewat kisah Malin Kundang, lalu ceritakan ulang legenda favoritmu sendiri dalam bahasa Inggris."
+description: "Belajar struktur cerita legenda (Orientation-Complication-Evaluation-Resolution) lewat kisah Malin Kundang, lalu ceritakan ulang legenda favoritmu sendiri dalam bahasa Inggris."
 category: materi
 mapel: Bahasa Inggris
 kelas: X
@@ -34,6 +34,12 @@ vocabulary:
   - word: "moral"
     maknaId: "pesan moral"
     example: "The moral of this story is to always respect your parents."
+  - word: "rock formation"
+    maknaId: "bentukan batu -- struktur batu alami yang membentuk pola tertentu"
+    example: "Many tourists visit the rock formation said to be Malin Kundang."
+  - word: "tourist"
+    maknaId: "wisatawan/turis"
+    example: "Thousands of tourists visit Air Manis Beach every year."
 
 modelTexts:
   - title: "Malin Kundang"
@@ -47,7 +53,17 @@ modelTexts:
         note: "Mengutuk -- mendoakan hal buruk terjadi pada seseorang."
       - text: "turned into a stone"
         note: "Berubah menjadi batu -- akibat dari kutukan ibunya."
+      - text: "His mother felt deeply hurt"
+        note: "Evaluation -- bagian cerita yang menunjukkan perasaan tokoh tentang masalah yang terjadi, sebelum masuk ke penyelesaian (Resolution)."
     grammarTerms: ["lived", "decided", "sailed", "became", "arrived", "pushed", "denied", "cursed", "hit", "turned"]
+  - title: "Fun Facts: The Real Malin Kundang Rock"
+    body: "Many Indonesians believe the Malin Kundang legend is connected to a real rock formation at Air Manis Beach in Padang, West Sumatra. The rocks are said to look like a kneeling man, broken pieces of a ship, and even a dog -- shapes that match characters and objects from the story. The beach is located roughly 15 kilometers from the center of Padang city <!-- CEK FAKTA -->, making it a popular stop for tourists who want to see the legend 'in real life'. Thousands of tourists visit Air Manis Beach every year, not just to see the rock formation, but also to enjoy the sunset view across the Indian Ocean."
+    annotations:
+      - text: "rock formation"
+        note: "Bentukan batu di Pantai Air Manis yang dipercaya sebagai jelmaan Malin Kundang."
+      - text: "tourist"
+        note: "Wisatawan yang datang untuk melihat lokasi legenda secara langsung."
+    grammarTerms: []
 
 activities:
   - type: "sequencing"
@@ -62,8 +78,10 @@ activities:
         - id: "s4"
           text: "When his ship returned to the village, Malin denied that the poor old woman was his mother."
         - id: "s5"
-          text: "His heartbroken mother cursed him for his cruelty."
+          text: "His mother felt deeply hurt and humiliated in front of everyone on the beach."
         - id: "s6"
+          text: "His heartbroken mother cursed him for his cruelty."
+        - id: "s7"
           text: "A terrible storm destroyed the ship, and Malin turned into a stone."
   - type: "story-map"
     config:
@@ -89,29 +107,38 @@ activities:
           answer: ["forgot", "denied", "rejected"]
 
 task:
-  prompt: "Now it's your turn! Choose an Indonesian legend you know well -- it could be from your own region (like a Jambi legend, for example the story of Angso Duo), or any legend from Nusantara (like Sangkuriang, Roro Jonggrang, or Timun Mas). Write your own retelling (150-200 words) using Simple Past Tense. Make sure your story has three parts: Orientation (who, where, when), Complication (the problem), and Resolution (how it ends) -- and don't forget the moral message! Note: since every region tells legends a little differently, ask your teacher or check a trusted local source to make sure your version is accurate before you share it."
+  prompt: "Now it's your turn! Choose an Indonesian legend you know well -- it could be from your own region (like a Jambi legend, for example the story of Angso Duo), or any legend from Nusantara (like Sangkuriang, Roro Jonggrang, or Timun Mas). Write your own retelling (150-200 words) using Simple Past Tense. Make sure your story has four parts: Orientation (who, where, when), Complication (the problem), Evaluation (how the characters felt about the problem), and Resolution (how it ends) -- and don't forget the moral message! Note: since every region tells legends a little differently, ask your teacher or check a trusted local source to make sure your version is accurate before you share it."
   rubric:
-    - "Struktur cerita jelas: Orientation, Complication, Resolution."
+    - "Struktur cerita jelas: Orientation, Complication, Evaluation, Resolution."
     - "Konsisten menggunakan Simple Past Tense."
     - "Pesan moral cerita disampaikan dengan jelas."
     - "Cerita ditulis ulang dengan kata-katamu sendiri (bukan menyalin dari buku/internet)."
   submissionType: "text"
 
 reflection:
-  - "understand the structure of a legend (Orientation, Complication, Resolution)."
+  - "understand the structure of a legend (Orientation, Complication, Evaluation, Resolution)."
   - "identify the moral message of a story."
   - "retell a legend using Simple Past Tense."
   - "use time connectors to show the order of events."
+  - "read simple distance/quantity facts (e.g., kilometers, visitor numbers) in an English text."
 
 kuis:
   - soal: "What is the correct structure of a narrative text?"
     pilihan:
       - "Introduction, Body, Conclusion"
-      - "Orientation, Complication, Resolution"
+      - "Orientation, Complication, Evaluation, Resolution"
       - "Classification, Description"
       - "Problem, Solution"
     jawaban: 1
-    penjelasan: "Teks narasi (termasuk legenda) punya struktur Orientation (pengenalan), Complication (masalah), dan Resolution (penyelesaian)."
+    penjelasan: "Teks narasi (termasuk legenda) punya struktur Orientation (pengenalan), Complication (masalah), Evaluation (perasaan tokoh tentang masalah itu), dan Resolution (penyelesaian)."
+  - soal: "Which sentence represents the Evaluation stage of the Malin Kundang story?"
+    pilihan:
+      - "There lived a poor woman and her son, Malin Kundang."
+      - "His mother felt deeply hurt and humiliated in front of everyone on the beach."
+      - "A terrible storm hit the ship."
+      - "Malin decided to leave the village to find a better life."
+    jawaban: 1
+    penjelasan: "Evaluation menunjukkan perasaan tokoh terhadap masalah (Complication) sebelum cerita bergerak ke penyelesaian (Resolution) -- di sini ditunjukkan lewat perasaan sang ibu."
   - soal: "Why did Malin Kundang turn into a stone?"
     pilihan:
       - "He was a bad swimmer"
@@ -136,6 +163,14 @@ kuis:
       - "Rich people are always happy"
     jawaban: 1
     penjelasan: "Pesan moral utama cerita ini adalah pentingnya menghormati orang tua dan tidak melupakan asal-usul kita, sekaya apapun kita nanti."
+  - soal: "According to 'Fun Facts: The Real Malin Kundang Rock', roughly how far is Air Manis Beach from the center of Padang city?"
+    pilihan:
+      - "About 5 kilometers"
+      - "About 15 kilometers"
+      - "About 50 kilometers"
+      - "About 150 kilometers"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: 'The beach is located roughly 15 kilometers from the center of Padang city.'"
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Narrative: Indonesian Legends'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"

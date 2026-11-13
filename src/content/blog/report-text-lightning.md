@@ -28,6 +28,12 @@ vocabulary:
   - word: "particles"
     maknaId: "partikel -- bagian yang sangat kecil dari suatu zat, di sini maksudnya butiran es dan air di dalam awan"
     example: "Ice particles move up and down very fast inside the cloud."
+  - word: "estimate"
+    maknaId: "memperkirakan -- menghitung jumlah kira-kira, bukan angka pasti"
+    example: "Scientists estimate that lightning strikes the Earth about 44 times every second."
+  - word: "roughly"
+    maknaId: "kira-kira/sekitar -- dipakai sebelum angka perkiraan, bukan angka yang pasti"
+    example: "That adds up to roughly 3.8 million lightning flashes every day."
 
 modelTexts:
   - title: "Lightning"
@@ -42,6 +48,14 @@ modelTexts:
       - text: "particles"
         note: "Partikel -- butiran sangat kecil, di sini maksudnya es dan air di dalam awan."
     grammarTerms: ["is", "happens", "forms", "creates", "becomes", "releases", "travels", "heats", "causes", "produces"]
+  - title: "Lightning by the Numbers"
+    body: "Lightning might look random, but scientists have measured it closely using satellites and ground sensors. Scientists estimate that lightning strikes the Earth about 44 times every second <!-- CEK FAKTA -->. That works out to roughly 3.8 million lightning flashes every single day around the world. Most of this lightning happens over land near the equator, in places with warm, humid air -- including countries like Indonesia. Indonesia is actually one of the places with the highest lightning activity on the planet, especially during the rainy season. Even though lightning is extremely common, the chance of one particular person being struck is still very small -- but the numbers remind us just how active our planet's atmosphere really is."
+    annotations:
+      - text: "estimate"
+        note: "Memperkirakan -- angka ini bukan hitungan pasti, melainkan perkiraan ilmiah."
+      - text: "roughly"
+        note: "Kira-kira/sekitar -- menunjukkan angka ini adalah perkiraan, bukan angka presisi."
+    grammarTerms: ["estimate", "strikes", "works out", "happens", "is", "remind"]
 
 activities:
   - type: "structuresorter"
@@ -109,6 +123,7 @@ reflection:
   - "find Simple Present Tense verbs in a text."
   - "tell the difference between a fact and an opinion."
   - "write a short report text about a natural phenomenon using Simple Present Tense."
+  - "read and reason about simple numerical data (estimates, rates) presented in an English text."
 
 kuis:
   - soal: "What is the main purpose of a report text?"
@@ -143,6 +158,22 @@ kuis:
       - "Opinion, but only children think so"
     jawaban: 1
     penjelasan: "Kata 'paling seru' adalah penilaian pribadi (opini), bukan sesuatu yang bisa diukur/dibuktikan secara ilmiah (fakta)."
+  - soal: "According to the 'Lightning by the Numbers' text, about how many times does lightning strike the Earth every second?"
+    pilihan:
+      - "About 4 times"
+      - "About 44 times"
+      - "About 440 times"
+      - "About 4,400 times"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: 'Scientists estimate that lightning strikes the Earth about 44 times every second.'"
+  - soal: "If lightning strikes about 44 times every second, roughly how many times does it strike in one minute? (1 minute = 60 seconds)"
+    pilihan:
+      - "About 440"
+      - "About 2,640"
+      - "About 4,400"
+      - "About 26,400"
+    jawaban: 1
+    penjelasan: "44 x 60 detik = 2.640 -- latihan numerasi sederhana: mengalikan laju per detik dengan jumlah detik dalam semenit."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Report Text: Lightning'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"

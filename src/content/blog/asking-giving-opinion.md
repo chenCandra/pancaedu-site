@@ -37,6 +37,12 @@ vocabulary:
   - word: "issue"
     maknaId: "isu/persoalan"
     example: "Climate change is an important issue."
+  - word: "survey"
+    maknaId: "survei -- cara mengumpulkan pendapat banyak orang lewat pertanyaan terstruktur"
+    example: "The student council did a survey about phone use in class."
+  - word: "majority"
+    maknaId: "mayoritas -- bagian terbesar dari suatu kelompok"
+    example: "The majority of students want some rules about phone use."
 
 modelTexts:
   - title: "Phones in Class: What Do You Think?"
@@ -50,6 +56,14 @@ modelTexts:
         note: "Ungkapan untuk tidak sepenuhnya setuju, tapi tetap sopan (mengakui pendapat lawan bicara dulu)."
       - text: "I agree with you because"
         note: "Ungkapan untuk setuju, DISERTAI alasan -- bukan cuma 'setuju' tanpa penjelasan."
+    grammarTerms: []
+  - title: "School Survey: What Do Students Think About Phones in Class?"
+    body: "Last month, the student council surveyed 120 students about phone use in class. The results showed that 45 percent of students think phones should be allowed for research only, while 30 percent believe phones should be banned completely during lessons. Another 20 percent think phones should always be allowed, and the remaining 5 percent had no opinion. Based on these numbers, the majority of students -- 75 percent, if we combine the first two groups -- want at least some rules about phone use, rather than no rules at all. What do you think: does the survey support a 'research only' policy, or a full ban?"
+    annotations:
+      - text: "survey"
+        note: "Survei -- cara mengumpulkan pendapat 120 siswa lewat pertanyaan yang sama."
+      - text: "majority"
+        note: "Mayoritas -- 75% dihitung dengan menjumlahkan dua kelompok pendapat."
     grammarTerms: []
 
 activities:
@@ -181,6 +195,7 @@ reflection:
   - "give my own opinion using appropriate expressions."
   - "agree or disagree with someone politely."
   - "support my opinion with a reason."
+  - "read and interpret simple survey percentages in an English text to form an opinion."
 
 kuis:
   - soal: "What does \"perspective\" mean?"
@@ -215,6 +230,22 @@ kuis:
       - "They both changed their minds completely"
     jawaban: 1
     penjelasan: "Mereka saling mendengarkan pendapat satu sama lain dan akhirnya menemukan solusi tengah (kompromi) -- itulah cara berdiskusi yang baik."
+  - soal: "According to the school survey, what percentage of students think phones should be banned completely?"
+    pilihan:
+      - "20 percent"
+      - "30 percent"
+      - "45 percent"
+      - "75 percent"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: '30 percent believe phones should be banned completely during lessons.'"
+  - soal: "If 45% of the 120 surveyed students think phones should only be used for research, how many students does that represent?"
+    pilihan:
+      - "45 students"
+      - "54 students"
+      - "60 students"
+      - "75 students"
+    jawaban: 1
+    penjelasan: "45% x 120 = 54 -- latihan numerasi sederhana: menghitung persentase dari jumlah total."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Asking & Giving Opinion'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
 reviewStatus: "draft"
