@@ -3,32 +3,44 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ModulCard from '../../../components/bahasa-inggris/ModulCard.astro';
 
-// Hardcode cuma "x" -- Fase E/Kelas X satu-satunya yang digarap sekarang
-// (lihat /bahasa-inggris/index.astro, kartu Kelas XI/XII masih "Segera
-// Hadir"). Sengaja TIDAK diturunkan dari entri yang ada (beda dari pola
-// ruang-belajar/kelas/[kelas].astro) supaya laman ini tidak 404 sebelum ada
-// modul nyata (modul pertama ditulis di tahap berikutnya).
+// Kelas X = Fase E, Kelas XI & XII = Fase F (lihat panduan kurikulum di
+// PROMPT/) -- dipetakan di sini, BUKAN pakai lib/ruangBelajar.ts punya
+// Fisika, karena sistem Bahasa Inggris ini sengaja berdiri sendiri
+// (koleksi `blog`, bukan `ruangBelajar`). label/fase dikirim lewat
+// `props`, BUKAN lookup dari const di luar getStaticPaths -- adapter
+// Cloudflare menjalankan getStaticPaths terisolasi dari sisa scope modul
+// ini saat prerender, closure ke const luar bikin "ReferenceError: ...
+// is not defined" waktu build.
 export async function getStaticPaths() {
-  return [{ params: { kelas: 'x' } }];
+  return [
+    { params: { kelas: 'x' }, props: { kelasLabel: 'X', fase: 'Fase E' } },
+    { params: { kelas: 'xi' }, props: { kelasLabel: 'XI', fase: 'Fase F' } },
+    { params: { kelas: 'xii' }, props: { kelasLabel: 'XII', fase: 'Fase F' } },
+  ];
 }
+
+const { kelasLabel, fase } = Astro.props as { kelasLabel: string; fase: string };
 
 const modul = (
   await getCollection(
     'blog',
     ({ data }) =>
-      data.category === 'materi' && data.mapel === 'Bahasa Inggris' && data.kelas === 'X' && !data.draft
+      data.category === 'materi' && data.mapel === 'Bahasa Inggris' && data.kelas === kelasLabel && !data.draft
   )
 ).sort(
   (a, b) => (a.data.urutan ?? 999) - (b.data.urutan ?? 999) || a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
 );
 ---
 
-<BaseLayout title="Bahasa Inggris Kelas X" description="Modul Bahasa Inggris Kelas X (Fase E) PancaEdu, tersusun berurutan.">
+<BaseLayout
+  title={`Bahasa Inggris Kelas ${kelasLabel}`}
+  description={`Modul Bahasa Inggris Kelas ${kelasLabel} (${fase}) PancaEdu, tersusun berurutan.`}
+>
   <section class="container bi-hero">
     <a href="/bahasa-inggris" class="bi-small-back">&larr; Bahasa Inggris</a>
     <p class="eyebrow">🇬🇧 Bahasa Inggris</p>
-    <h1>Kelas X</h1>
-    <p class="bi-hero-lede">Fase E -- ikuti modulnya berurutan dari atas ke bawah.</p>
+    <h1>Kelas {kelasLabel}</h1>
+    <p class="bi-hero-lede">{fase} -- ikuti modulnya berurutan dari atas ke bawah.</p>
   </section>
 
   <section class="container bi-grid-section">
@@ -38,8 +50,7 @@ const modul = (
       </div>
     ) : (
       <p class="bi-empty">
-        Belum ada modul Bahasa Inggris untuk Kelas X -- modul pertama (Report Text) sedang
-        disiapkan.
+        Belum ada modul Bahasa Inggris untuk Kelas {kelasLabel} -- sedang disiapkan.
       </p>
     )}
   </section>

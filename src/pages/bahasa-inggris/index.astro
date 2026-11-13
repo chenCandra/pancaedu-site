@@ -2,13 +2,20 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const modulXCount = (
-  await getCollection(
-    'blog',
-    ({ data }) =>
-      data.category === 'materi' && data.mapel === 'Bahasa Inggris' && data.kelas === 'X' && !data.draft
-  )
-).length;
+const semuaModul = await getCollection(
+  'blog',
+  ({ data }) => data.category === 'materi' && data.mapel === 'Bahasa Inggris' && !data.draft
+);
+
+const KELAS_URUT = [
+  { label: 'X', slug: 'x', fase: 'Fase E' },
+  { label: 'XI', slug: 'xi', fase: 'Fase F' },
+  { label: 'XII', slug: 'xii', fase: 'Fase F' },
+];
+const kelasCards = KELAS_URUT.map((k) => ({
+  ...k,
+  count: semuaModul.filter((m) => m.data.kelas === k.label).length,
+}));
 ---
 
 <BaseLayout
@@ -29,23 +36,21 @@ const modulXCount = (
   <section class="container bi-kelas-section">
     <h2 class="bi-section-title">Pilih Kelas</h2>
     <div class="bi-kelas-grid">
-      <a href="/bahasa-inggris/kelas/x" class="bi-kelas-card">
-        <h3 class="bi-kelas-card-title">Kelas X</h3>
-        <p class="bi-kelas-card-desc">
-          Fase E -- {modulXCount > 0 ? `${modulXCount} modul tersedia` : 'modul pertama sedang disiapkan'}.
-        </p>
-        <span class="bi-kelas-card-cta">Lihat Modul &rarr;</span>
-      </a>
-      <div class="bi-kelas-card bi-kelas-card--disabled" aria-disabled="true">
-        <h3 class="bi-kelas-card-title">Kelas XI</h3>
-        <p class="bi-kelas-card-desc">Fase F</p>
-        <span class="bi-kelas-card-badge">Segera Hadir</span>
-      </div>
-      <div class="bi-kelas-card bi-kelas-card--disabled" aria-disabled="true">
-        <h3 class="bi-kelas-card-title">Kelas XII</h3>
-        <p class="bi-kelas-card-desc">Fase F</p>
-        <span class="bi-kelas-card-badge">Segera Hadir</span>
-      </div>
+      {kelasCards.map((k) =>
+        k.count > 0 ? (
+          <a href={`/bahasa-inggris/kelas/${k.slug}`} class="bi-kelas-card">
+            <h3 class="bi-kelas-card-title">Kelas {k.label}</h3>
+            <p class="bi-kelas-card-desc">{k.fase} -- {k.count} modul tersedia.</p>
+            <span class="bi-kelas-card-cta">Lihat Modul &rarr;</span>
+          </a>
+        ) : (
+          <div class="bi-kelas-card bi-kelas-card--disabled" aria-disabled="true">
+            <h3 class="bi-kelas-card-title">Kelas {k.label}</h3>
+            <p class="bi-kelas-card-desc">{k.fase}</p>
+            <span class="bi-kelas-card-badge">Segera Hadir</span>
+          </div>
+        )
+      )}
     </div>
   </section>
 </BaseLayout>
