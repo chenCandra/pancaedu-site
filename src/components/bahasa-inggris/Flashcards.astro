@@ -1,0 +1,107 @@
+---
+// Kartu kosakata (Warm-up/BKoF) -- klik buat membalik kartu (teks <->
+// makna+contoh), tombol dengar terpisah (ListenButton) buat pelafalan.
+// Flip pakai toggle `hidden` sederhana (bukan transform 3D) -- lebih
+// ringan & tanpa quirk backface-visibility browser.
+import ListenButton from './ListenButton.astro';
+
+interface Item {
+  word: string;
+  maknaId: string;
+  example?: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <div class="fc-grid">
+    {items.map((item) => (
+      <button type="button" class="fc-card" data-fc-card aria-pressed="false">
+        <span class="fc-face fc-face-front">
+          <span class="fc-word">{item.word}</span>
+          <ListenButton text={item.word} />
+        </span>
+        <span class="fc-face fc-face-back" hidden>
+          <span class="fc-makna">{item.maknaId}</span>
+          {item.example && <span class="fc-example">&ldquo;{item.example}&rdquo;</span>}
+        </span>
+      </button>
+    ))}
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-fc-card]').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // Jangan flip kalau yang diklik tombol dengar (ListenButton) di dalam
+      // kartu -- itu aksi terpisah (dengar pelafalan), bukan membalik kartu.
+      if ((e.target as HTMLElement).closest('.lb-btn')) return;
+      const front = card.querySelector<HTMLElement>('.fc-face-front');
+      const back = card.querySelector<HTMLElement>('.fc-face-back');
+      const wasFlipped = card.getAttribute('aria-pressed') === 'true';
+      const nowFlipped = !wasFlipped;
+      card.setAttribute('aria-pressed', String(nowFlipped));
+      if (front) front.hidden = nowFlipped;
+      if (back) back.hidden = !nowFlipped;
+    });
+  });
+</script>
+
+<style>
+  .fc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 1rem;
+    margin-block: 1rem;
+  }
+
+  .fc-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 7rem;
+    padding: 1rem;
+    text-align: center;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .fc-card:hover {
+    border-color: var(--emerald);
+  }
+
+  .fc-face {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .fc-word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--ink);
+  }
+
+  .fc-makna {
+    font-weight: 600;
+    color: var(--emerald);
+  }
+
+  .fc-example {
+    font-size: 0.8125rem;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+</style>

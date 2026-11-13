@@ -1,5 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { isFisikaMateri } from '../../lib/materi';
 // Hasil query D1 (page_views) yang ditarik SEBELUM build (lihat
 // scripts/fetch-top-viewed.mjs & .github/workflows/deploy.yml) -- import ES
 // biasa, bukan fs runtime (adapter Cloudflare tidak bundle node:fs). Array
@@ -33,9 +34,14 @@ interface SideItem {
 const SECONDARY_COUNT = 2;
 const MAX_TOOL_CARDS = 2;
 
-const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// Materi non-Fisika (mis. "Bahasa Inggris") dikecualikan dari pool andalan
+// beranda ini -- Spotlight pakai gaya tampilan & asumsi "materi = Fisika"
+// (eyebrow "Materi Pilihan" dkk, lihat describe() di bawah), belum dirancang
+// untuk menampilkan mapel lain. Entri `artikel` tidak terdampak (helper ini
+// cuma menyaring category:materi).
+const allPosts = (
+  await getCollection('blog', ({ data }) => !data.draft && isFisikaMateri(data))
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const topViewedList: Array<{ slug?: string; category?: string }> = Array.isArray(topViewed) ? topViewed : [];
 const topViewedPosts = topViewedList

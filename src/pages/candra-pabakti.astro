@@ -3,11 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 
-const roles = [
-  { label: 'Guru Fisika', badge: '' },
-  { label: 'Wali Kelas', badge: 'badge-teal' },
-  { label: 'Pembelajar Seumur Hidup', badge: 'badge-purple' },
-];
+// Prosa halaman ini (tagline, bio, badge peran) diedit lewat CMS (/admin,
+// koleksi "Halaman Tentang (Profil)", lihat profilPabakti di
+// content.config.ts). Grid "works" di bawah TETAP hardcode (lihat catatan
+// di content.config.ts).
+const [profil] = await getCollection('profilPabakti');
+const { tagline, roles, bioIntro, bioHeading, bioAbout, bioClosing } = profil.data;
 
 const works = [
   {
@@ -75,11 +76,7 @@ const jsonLd = {
       <div class="hero-text">
         <p class="eyebrow">Pengembang PancaEdu</p>
         <h1>Candra Pabakti</h1>
-        <p class="hero-tagline">
-          Pendidik dan pengembang media pembelajaran digital, pendiri &amp; pengelola tunggal
-          <strong>PancaEdu</strong> — ruang belajar digital gratis di
-          <a href="https://pancaedu.web.id">pancaedu.web.id</a>.
-        </p>
+        <p class="hero-tagline">{tagline}</p>
         <ul class="hero-roles">
           {roles.map((r) => (
             <li class={`badge ${r.badge}`.trim()}>{r.label}</li>
@@ -89,24 +86,10 @@ const jsonLd = {
     </header>
 
     <div class="prose bio">
-      <p>
-        Saya <strong>Candra Pabakti</strong>, seorang guru yang sekaligus menjabat sebagai wali
-        kelas di sekolah tempat saya mengajar. Di luar itu, saya juga seorang pembelajar yang
-        senang menambah ilmu baru — termasuk belajar menulis dan membangun situs ini dari nol.
-      </p>
-
-      <h2>Tentang PancaEdu</h2>
-      <p>
-        <strong>PancaEdu</strong> adalah ruang belajar digital yang saya kembangkan untuk
-        menyediakan materi pembelajaran, artikel pendidikan, dan laboratorium maya interaktif —
-        semuanya gratis untuk dipakai siapa saja. Semua tulisan, materi, dan sistem interaktif di
-        situs ini — Ruang Belajar, Lab Maya, sampai Penugasan — saya rancang dan kelola sendiri.
-      </p>
-      <p>
-        Kalau Anda seorang guru, murid, atau siapa pun yang menemukan materi di sini bermanfaat,
-        silakan dipakai. Kalau ada masukan, ingin berdiskusi, atau sekadar menyapa, saya senang
-        mendengarnya lewat halaman <a href="/kontak">Kontak</a>.
-      </p>
+      <p>{bioIntro}</p>
+      <h2>{bioHeading}</h2>
+      <p>{bioAbout}</p>
+      <p>{bioClosing}</p>
     </div>
 
     <section class="works" data-reveal>

@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const modulXCount = (
+  await getCollection(
+    'blog',
+    ({ data }) =>
+      data.category === 'materi' && data.mapel === 'Bahasa Inggris' && data.kelas === 'X' && !data.draft
+  )
+).length;
+---
+
+<BaseLayout
+  title="Bahasa Inggris"
+  description="Ruang Belajar Bahasa Inggris PancaEdu -- modul Fase E Kelas X berbasis pendekatan Genre-Based, gratis dipakai siapa saja."
+>
+  <section class="container bi-hero">
+    <p class="eyebrow">🇬🇧 Bahasa Inggris</p>
+    <h1>Ruang Belajar Bahasa Inggris</h1>
+    <p class="bi-hero-lede">
+      Modul disusun dengan pendekatan berbasis teks (Genre-Based Approach) sesuai Capaian
+      Pembelajaran Fase E: murid memahami alur informasi, gagasan utama, dan detail dari teks
+      fiksi maupun nonfiksi tentang topik sehari-hari atau isu terkini -- lalu berlatih
+      mengomunikasikan gagasan dan pengalamannya sendiri, secara lisan maupun tertulis.
+    </p>
+  </section>
+
+  <section class="container bi-kelas-section">
+    <h2 class="bi-section-title">Pilih Kelas</h2>
+    <div class="bi-kelas-grid">
+      <a href="/bahasa-inggris/kelas/x" class="bi-kelas-card">
+        <h3 class="bi-kelas-card-title">Kelas X</h3>
+        <p class="bi-kelas-card-desc">
+          Fase E -- {modulXCount > 0 ? `${modulXCount} modul tersedia` : 'modul pertama sedang disiapkan'}.
+        </p>
+        <span class="bi-kelas-card-cta">Lihat Modul &rarr;</span>
+      </a>
+      <div class="bi-kelas-card bi-kelas-card--disabled" aria-disabled="true">
+        <h3 class="bi-kelas-card-title">Kelas XI</h3>
+        <p class="bi-kelas-card-desc">Fase F</p>
+        <span class="bi-kelas-card-badge">Segera Hadir</span>
+      </div>
+      <div class="bi-kelas-card bi-kelas-card--disabled" aria-disabled="true">
+        <h3 class="bi-kelas-card-title">Kelas XII</h3>
+        <p class="bi-kelas-card-desc">Fase F</p>
+        <span class="bi-kelas-card-badge">Segera Hadir</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .bi-hero {
+    padding-block: 3rem 1.5rem;
+    max-width: var(--measure);
+  }
+
+  .bi-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .bi-section-title {
+    font-size: 1.375rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .bi-kelas-section {
+    padding-block: 1rem 3rem;
+  }
+
+  .bi-kelas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bi-kelas-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  a.bi-kelas-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--emerald);
+  }
+
+  .bi-kelas-card--disabled {
+    opacity: 0.6;
+  }
+
+  .bi-kelas-card-title {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .bi-kelas-card-desc {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .bi-kelas-card-cta {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--emerald);
+  }
+
+  .bi-kelas-card-badge {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+</style>

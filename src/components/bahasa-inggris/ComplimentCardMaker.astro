@@ -1,0 +1,244 @@
+---
+// Compliment Card Maker -- murid menulis kartu ucapan selamat/pujian
+// (pilih nama, acara, pesan -- bisa pakai kalimat pemandu/starter), lihat
+// pratinjau langsung, lalu unduh sebagai gambar PNG. Dirender lewat
+// Canvas 2D API murni (bukan library eksternal) -- "unduh gambar" tinggal
+// `canvas.toDataURL()` + trigger klik link download, tanpa dependency baru.
+interface Props {
+  occasions?: string[];
+  starters?: string[];
+}
+
+const {
+  occasions = ['Juara Lomba Sains', 'Presentasi Kelas', 'Kelulusan', 'Lainnya'],
+  starters = [
+    'Congratulations on your achievement!',
+    'Well done!',
+    "I'm so happy for you!",
+    "That's a wonderful accomplishment!",
+    'I love the way you worked so hard for this.',
+  ],
+} = Astro.props;
+---
+
+<div class="ccm" data-ccm>
+  <div class="ccm-form">
+    <label class="ccm-field">
+      <span class="ccm-label">Untuk siapa? (nama)</span>
+      <input type="text" class="ccm-input" data-ccm-name placeholder="mis. Sarah" maxlength="40" />
+    </label>
+    <label class="ccm-field">
+      <span class="ccm-label">Dalam rangka apa?</span>
+      <select class="ccm-input" data-ccm-occasion>
+        {occasions.map((o) => <option value={o}>{o}</option>)}
+      </select>
+    </label>
+    <div class="ccm-field">
+      <span class="ccm-label">Pesan (bahasa Inggris) -- klik contoh di bawah untuk menyisipkannya</span>
+      <div class="ccm-starters">
+        {starters.map((s) => (
+          <button type="button" class="ccm-starter-chip" data-ccm-starter={s}>
+            {s}
+          </button>
+        ))}
+      </div>
+      <textarea
+        class="ccm-input ccm-textarea"
+        data-ccm-message
+        rows="4"
+        maxlength="220"
+        placeholder="Tulis ucapanmu di sini, atau klik salah satu contoh di atas..."
+      ></textarea>
+    </div>
+  </div>
+
+  <div class="ccm-preview-wrap">
+    <canvas class="ccm-canvas" data-ccm-canvas width="800" height="500" aria-label="Pratinjau kartu ucapan"></canvas>
+    <button type="button" class="btn btn-primary ccm-download" data-ccm-download>⬇️ Unduh Kartu (PNG)</button>
+  </div>
+</div>
+
+<script>
+  function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number) {
+    const words = text.split(' ');
+    let line = '';
+    const lines: string[] = [];
+    for (const word of words) {
+      const testLine = line ? `${line} ${word}` : word;
+      if (ctx.measureText(testLine).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = testLine;
+      }
+    }
+    if (line) lines.push(line);
+    lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-ccm]').forEach((wrap) => {
+    const nameInput = wrap.querySelector<HTMLInputElement>('[data-ccm-name]');
+    const occasionSelect = wrap.querySelector<HTMLSelectElement>('[data-ccm-occasion]');
+    const messageInput = wrap.querySelector<HTMLTextAreaElement>('[data-ccm-message]');
+    const canvas = wrap.querySelector<HTMLCanvasElement>('[data-ccm-canvas]');
+    const downloadBtn = wrap.querySelector<HTMLButtonElement>('[data-ccm-download]');
+    const starterBtns = wrap.querySelectorAll<HTMLButtonElement>('[data-ccm-starter]');
+    if (!canvas || !nameInput || !occasionSelect || !messageInput) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    function draw() {
+      if (!ctx || !canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+      const name = nameInput!.value.trim() || 'Friend';
+      const occasion = occasionSelect!.value;
+      const message = messageInput!.value.trim() || 'Congratulations on your achievement!';
+
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, '#059669');
+      grad.addColorStop(1, '#34d399');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(24, 24, w - 48, h - 48);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+
+      ctx.font = '48px sans-serif';
+      ctx.fillText('🎉', w / 2, 100);
+
+      ctx.font = '600 22px sans-serif';
+      ctx.fillText(occasion.toUpperCase(), w / 2, 150);
+
+      ctx.font = '700 40px sans-serif';
+      ctx.fillText(`Congratulations, ${name}!`, w / 2, 220);
+
+      ctx.font = '22px sans-serif';
+      ctx.textAlign = 'left';
+      wrapText(ctx, message, 80, 280, w - 160, 32);
+
+      ctx.textAlign = 'center';
+      ctx.font = '16px sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.fillText('— pancaedu.web.id —', w / 2, h - 40);
+    }
+
+    [nameInput, occasionSelect, messageInput].forEach((el) => {
+      el.addEventListener('input', draw);
+      el.addEventListener('change', draw);
+    });
+
+    starterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const text = btn.dataset.ccmStarter || '';
+        messageInput!.value = messageInput!.value.trim() ? `${messageInput!.value.trim()} ${text}` : text;
+        draw();
+      });
+    });
+
+    downloadBtn?.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'kartu-ucapan.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    draw();
+  });
+</script>
+
+<style>
+  .ccm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-block: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 42rem) {
+    .ccm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ccm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ccm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ccm-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .ccm-input {
+    min-height: 44px;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .ccm-textarea {
+    resize: vertical;
+  }
+
+  .ccm-starters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .ccm-starter-chip {
+    min-height: 36px;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+
+  .ccm-starter-chip:hover {
+    border-color: var(--emerald);
+    color: var(--emerald);
+  }
+
+  .ccm-preview-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ccm-canvas {
+    width: 100%;
+    max-width: 28rem;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .ccm-download {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+</style>

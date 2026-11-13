@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isFisikaMateri } from '../../lib/materi';
 
 // Dua tool custom yang dibangun sendiri (bukan lewat content collection) —
 // tambahkan baris baru di sini kalau bikin lab-maya/*.astro baru lagi.
@@ -449,7 +450,7 @@ const materiSimAlreadyWrapped = new Set<string>([]);
 const materiWithSim = (
   await getCollection(
     'blog',
-    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.simulasi)
+    ({ data }) => data.category === 'materi' && !data.draft && Boolean(data.simulasi) && isFisikaMateri(data)
   )
 )
   .filter((post) => {

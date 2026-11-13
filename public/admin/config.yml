@@ -126,6 +126,49 @@ collections:
             pattern: ['^$|^https?://\S+$', 'Harus link http(s) yang valid -- atau KOSONGKAN saja kalau belum ada (jangan diisi tanda "-" atau semacamnya, itu bikin situs gagal update)']
             hint: "Satu Form yang berlaku untuk SEMUA sesi Ruang Belajar (kelas berapa pun, mapel apa pun), kecuali sesi itu punya 'Link Refleksi' sendiri yang beda (itu tetap menang). Kalau belum ada, KOSONGKAN saja -- jangan diisi tanda '-'."
 
+  - name: "profil-pabakti"
+    label: "Halaman Tentang (Profil)"
+    # Singleton -- redaksi halaman /candra-pabakti ("Tentang"). Grid
+    # "Yang saya bangun di PancaEdu" di halaman itu SENGAJA tidak ada di
+    # sini (hardcode di kode), cuma prosanya (tagline, bio, badge peran).
+    files:
+      - name: "pengaturan"
+        label: "Tagline & Bio"
+        file: "src/content/profil-pabakti/index.md"
+        fields:
+          - label: "Tagline (di bawah nama)"
+            name: tagline
+            widget: text
+          - label: "Badge Peran"
+            name: roles
+            widget: list
+            summary: "{{fields.label}}"
+            min: 1
+            fields:
+              - { label: "Label", name: label, widget: string }
+              - label: "Warna Badge"
+                name: badge
+                widget: select
+                default: ""
+                options:
+                  - { label: "Default (biru)", value: "" }
+                  - { label: "Teal", value: "badge-teal" }
+                  - { label: "Ungu", value: "badge-purple" }
+          - label: "Paragraf Pembuka"
+            name: bioIntro
+            widget: text
+          - label: "Judul Sub-bagian"
+            name: bioHeading
+            widget: string
+            hint: 'mis. "Tentang PancaEdu"'
+          - label: "Paragraf Tentang PancaEdu"
+            name: bioAbout
+            widget: text
+          - label: "Paragraf Penutup"
+            name: bioClosing
+            widget: text
+            hint: "Ajakan kontak/diskusi -- tombol 'Hubungi Saya' di bawahnya sudah otomatis mengarah ke /kontak, jadi tidak perlu tempel link di sini."
+
   - name: "ruang-belajar"
     label: "Ruang Belajar"
     label_singular: "Sesi Belajar"

@@ -1,0 +1,64 @@
+---
+// Tombol dengar pelafalan pakai Web Speech API bawaan browser (tanpa aset
+// eksternal/hosting audio apa pun). Mulai tersembunyi (`hidden`) --
+// ditampilkan lewat JS HANYA kalau browser mendukung `speechSynthesis`,
+// supaya tidak ada tombol mati atau error console di browser yang tidak
+// dukung.
+interface Props {
+  text: string;
+  lang?: string;
+}
+
+const { text, lang = 'en-US' } = Astro.props;
+---
+
+<button
+  type="button"
+  class="lb-btn"
+  data-lb-text={text}
+  data-lb-lang={lang}
+  aria-label={`Dengarkan pelafalan: ${text}`}
+  hidden
+>
+  🔊
+</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-lb-text]').forEach((btn) => {
+    if (!('speechSynthesis' in window)) return;
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.lbText || '';
+      const lang = btn.dataset.lbLang || 'en-US';
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        window.speechSynthesis.speak(utterance);
+      } catch {
+        // Diamkan -- kegagalan TTS tidak boleh merusak interaksi lain di halaman.
+      }
+    });
+  });
+</script>
+
+<style>
+  .lb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--emerald);
+    font-size: 1.125rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .lb-btn:hover {
+    border-color: var(--emerald);
+  }
+</style>

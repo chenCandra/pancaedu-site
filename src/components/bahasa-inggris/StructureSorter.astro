@@ -1,0 +1,330 @@
+---
+// Text Structure Sorter (JCoT) -- seret (atau ketuk chip, lalu ketuk
+// kategori) tiap paragraf ke kategori struktur teks yang tepat (mis.
+// General Classification / Description untuk report text). Drag
+// sungguhan pakai Pointer Events (pola sama seperti
+// src/components/penugasan/DragDrop.astro & widget src/components/lab/*),
+// DITAMBAH fallback klik-klik penuh supaya tetap bisa dipakai tanpa drag
+// (keyboard/aksesibilitas) -- beda dari DragDrop.astro, seluruh logika
+// penilaian di sini client-side murni, TIDAK bergantung backend Penugasan.
+interface Category {
+  id: string;
+  label: string;
+}
+
+interface Paragraph {
+  id: string;
+  text: string;
+  correctCategory: string;
+}
+
+interface Props {
+  categories: Category[];
+  paragraphs: Paragraph[];
+}
+
+const { categories, paragraphs } = Astro.props;
+const dataJson = JSON.stringify({ categories, paragraphs }).replace(/<\//g, '<\\/');
+---
+
+<div class="ss" data-ss>
+  <script type="application/json" data-ss-data set:html={dataJson} />
+  <p class="ss-instruction">Seret (atau ketuk paragrafnya, lalu ketuk kategorinya) tiap paragraf ke kategori yang tepat.</p>
+  <div class="ss-tray" data-ss-tray role="list" aria-label="Paragraf yang belum ditempatkan"></div>
+  <div class="ss-zones" data-ss-zones></div>
+  <div class="ss-actions">
+    <button type="button" class="btn ss-check" data-ss-check>Periksa Jawaban</button>
+    <button type="button" class="btn ss-reset" data-ss-reset hidden>Coba Lagi</button>
+  </div>
+  <p class="ss-score" data-ss-score hidden></p>
+</div>
+
+<script>
+  interface Category {
+    id: string;
+    label: string;
+  }
+  interface Paragraph {
+    id: string;
+    text: string;
+    correctCategory: string;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-ss]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-ss-data]');
+    const tray = wrap.querySelector<HTMLElement>('[data-ss-tray]');
+    const zonesWrap = wrap.querySelector<HTMLElement>('[data-ss-zones]');
+    const checkBtn = wrap.querySelector<HTMLButtonElement>('[data-ss-check]');
+    const resetBtn = wrap.querySelector<HTMLButtonElement>('[data-ss-reset]');
+    const scoreEl = wrap.querySelector<HTMLElement>('[data-ss-score]');
+    if (!dataScript || !tray || !zonesWrap) return;
+
+    let data: { categories: Category[]; paragraphs: Paragraph[] };
+    try {
+      data = JSON.parse(dataScript.textContent || '{"categories":[],"paragraphs":[]}');
+    } catch {
+      return;
+    }
+    if (data.categories.length === 0 || data.paragraphs.length === 0) return;
+
+    let selectedChip: HTMLElement | null = null;
+
+    function clearSelection() {
+      selectedChip?.classList.remove('ss-chip--selected');
+      selectedChip?.setAttribute('aria-pressed', 'false');
+      selectedChip = null;
+    }
+
+    function selectChip(chip: HTMLElement) {
+      if (selectedChip === chip) {
+        clearSelection();
+        return;
+      }
+      clearSelection();
+      selectedChip = chip;
+      chip.classList.add('ss-chip--selected');
+      chip.setAttribute('aria-pressed', 'true');
+    }
+
+    function placeChip(chip: HTMLElement, container: HTMLElement) {
+      container.appendChild(chip);
+      chip.classList.remove('ss-chip--correct', 'ss-chip--incorrect');
+      clearSelection();
+    }
+
+    function makeChip(paragraph: Paragraph): HTMLElement {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'ss-chip';
+      chip.dataset.ssId = paragraph.id;
+      chip.dataset.ssCorrect = paragraph.correctCategory;
+      chip.setAttribute('aria-pressed', 'false');
+      chip.textContent = paragraph.text;
+      chip.addEventListener('click', () => selectChip(chip));
+
+      // Drag (Pointer Events) -- progressive enhancement di atas interaksi
+      // klik-klik yang sudah berfungsi penuh tanpa ini.
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+      chip.addEventListener('pointerdown', (e) => {
+        dragging = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        chip.setPointerCapture(e.pointerId);
+      });
+      chip.addEventListener('pointermove', (e) => {
+        if (!chip.hasPointerCapture(e.pointerId)) return;
+        if (!dragging && (Math.abs(e.clientX - startX) > 8 || Math.abs(e.clientY - startY) > 8)) {
+          dragging = true;
+          chip.classList.add('ss-chip--dragging');
+        }
+        if (dragging) {
+          chip.style.position = 'fixed';
+          chip.style.left = `${e.clientX - chip.offsetWidth / 2}px`;
+          chip.style.top = `${e.clientY - 20}px`;
+          chip.style.zIndex = '50';
+          chip.style.pointerEvents = 'none';
+        }
+      });
+      chip.addEventListener('pointerup', (e) => {
+        chip.releasePointerCapture(e.pointerId);
+        chip.style.pointerEvents = '';
+        if (!dragging) return;
+        dragging = false;
+        chip.classList.remove('ss-chip--dragging');
+        chip.style.position = '';
+        chip.style.left = '';
+        chip.style.top = '';
+        chip.style.zIndex = '';
+        chip.hidden = true;
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        chip.hidden = false;
+        const dropZone = (under as HTMLElement | null)?.closest<HTMLElement>('[data-ss-drop]');
+        if (dropZone) placeChip(chip, dropZone);
+      });
+
+      return chip;
+    }
+
+    data.categories.forEach((cat) => {
+      const zone = document.createElement('div');
+      zone.className = 'ss-zone';
+      const label = document.createElement('p');
+      label.className = 'ss-zone-label';
+      label.textContent = cat.label;
+      zone.appendChild(label);
+      const items = document.createElement('div');
+      items.className = 'ss-zone-items';
+      items.dataset.ssDrop = cat.id;
+      zone.appendChild(items);
+      zone.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.ss-chip')) return; // klik chip ditangani handler chip sendiri
+        if (selectedChip) placeChip(selectedChip, items);
+      });
+      zonesWrap!.appendChild(zone);
+    });
+
+    tray.dataset.ssDrop = 'tray';
+    tray.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.ss-chip')) return;
+      if (selectedChip) placeChip(selectedChip, tray);
+    });
+
+    shuffle(data.paragraphs).forEach((p) => tray!.appendChild(makeChip(p)));
+
+    checkBtn?.addEventListener('click', () => {
+      const chips = wrap.querySelectorAll<HTMLElement>('.ss-chip');
+      let correct = 0;
+      let placed = 0;
+      chips.forEach((chip) => {
+        const parentZone = chip.closest<HTMLElement>('[data-ss-drop]');
+        const placedIn = parentZone?.dataset.ssDrop;
+        if (!placedIn || placedIn === 'tray') return;
+        placed++;
+        const isCorrect = placedIn === chip.dataset.ssCorrect;
+        chip.classList.toggle('ss-chip--correct', isCorrect);
+        chip.classList.toggle('ss-chip--incorrect', !isCorrect);
+        if (isCorrect) correct++;
+      });
+      if (scoreEl) {
+        scoreEl.hidden = false;
+        scoreEl.textContent =
+          placed < chips.length
+            ? `Baru ${placed} dari ${chips.length} paragraf ditempatkan -- lengkapi dulu semuanya.`
+            : `Skor: ${correct} dari ${chips.length} benar`;
+      }
+      if (resetBtn) resetBtn.hidden = false;
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      const chips = Array.from(wrap.querySelectorAll<HTMLElement>('.ss-chip'));
+      chips.forEach((chip) => {
+        chip.classList.remove('ss-chip--correct', 'ss-chip--incorrect');
+        tray!.appendChild(chip);
+      });
+      if (scoreEl) scoreEl.hidden = true;
+      if (resetBtn) resetBtn.hidden = true;
+    });
+  });
+</script>
+
+<style>
+  .ss {
+    margin-block: 1.5rem;
+  }
+
+  .ss-instruction {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1rem;
+  }
+
+  .ss-tray {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-height: 3.5rem;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
+  }
+
+  .ss-zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+  }
+
+  .ss-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-height: 6rem;
+    padding: 1rem;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .ss-zone-label {
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    margin: 0;
+    color: var(--emerald);
+  }
+
+  .ss-zone-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex-grow: 1;
+    min-height: 2rem;
+  }
+
+  .ss-chip {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .ss-chip--selected {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 2px var(--emerald-soft);
+  }
+
+  .ss-chip--dragging {
+    box-shadow: var(--shadow-md);
+  }
+
+  .ss-chip--correct {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+
+  .ss-chip--incorrect {
+    border-color: var(--rose);
+    background: var(--rose-soft);
+  }
+
+  .ss-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .ss-actions .btn {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .ss-score {
+    margin-top: 0.75rem;
+    font-weight: 700;
+    color: var(--emerald);
+  }
+</style>

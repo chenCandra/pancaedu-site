@@ -1,0 +1,161 @@
+---
+// Latihan isian rumpang (JCoT, "Let's Practice Together"). `text` pakai
+// token {{blankId}} (konvensi templating sama seperti promptKategori.template
+// di content.config.ts). Penilaian (trim + case-insensitive, menerima
+// beberapa varian jawaban) ditulis ulang di sini secara client-side --
+// SENGAJA tidak mengimpor src/lib/penugasan/grading.ts (dependency backend
+// yang dihindari untuk Bahasa Inggris, lihat catatan di content.config.ts).
+interface Blank {
+  id: string;
+  answer: string[];
+  options?: string[];
+}
+
+interface Props {
+  text: string;
+  blanks: Blank[];
+}
+
+const { text, blanks } = Astro.props;
+
+// String.split dengan grup capture menyisipkan grup yang cocok ke hasil --
+// indeks genap = teks biasa, indeks ganjil = id blank yang ditemukan.
+const parts = text.split(/\{\{(\w+)\}\}/g);
+const segments = parts.map((part, i) => {
+  if (i % 2 === 0) return { kind: 'text' as const, value: part };
+  const blank = blanks.find((b) => b.id === part);
+  return { kind: 'blank' as const, blank };
+});
+---
+
+<div class="gf" data-gf>
+  <p class="gf-text">
+    {segments.map((seg) => {
+      if (seg.kind === 'text') return seg.value;
+      const { blank } = seg;
+      if (!blank) return null;
+      return blank.options && blank.options.length > 0 ? (
+        <select class="gf-input" data-gf-blank={blank.id} data-gf-answer={JSON.stringify(blank.answer)}>
+          <option value="">— pilih —</option>
+          {blank.options.map((opt) => (
+            <option value={opt}>{opt}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type="text"
+          class="gf-input"
+          data-gf-blank={blank.id}
+          data-gf-answer={JSON.stringify(blank.answer)}
+          autocomplete="off"
+        />
+      );
+    })}
+  </p>
+  <div class="gf-actions">
+    <button type="button" class="btn gf-check" data-gf-check>Periksa Jawaban</button>
+    <button type="button" class="btn gf-reset" data-gf-reset hidden>Coba Lagi</button>
+  </div>
+  <p class="gf-score" data-gf-score hidden></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gf]').forEach((wrap) => {
+    const inputs = Array.from(
+      wrap.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-gf-blank]')
+    );
+    const checkBtn = wrap.querySelector<HTMLButtonElement>('[data-gf-check]');
+    const resetBtn = wrap.querySelector<HTMLButtonElement>('[data-gf-reset]');
+    const scoreEl = wrap.querySelector<HTMLElement>('[data-gf-score]');
+
+    function normalize(v: string) {
+      return v.trim().toLowerCase();
+    }
+
+    checkBtn?.addEventListener('click', () => {
+      let correct = 0;
+      inputs.forEach((input) => {
+        let accepted: string[] = [];
+        try {
+          accepted = JSON.parse(input.dataset.gfAnswer || '[]');
+        } catch {
+          accepted = [];
+        }
+        const isCorrect = accepted.some((a) => normalize(a) === normalize(input.value));
+        input.classList.toggle('gf-correct', isCorrect);
+        input.classList.toggle('gf-incorrect', !isCorrect && input.value.trim() !== '');
+        input.disabled = true;
+        if (isCorrect) correct++;
+      });
+      if (scoreEl) {
+        scoreEl.hidden = false;
+        scoreEl.textContent = `Skor: ${correct} dari ${inputs.length} benar`;
+      }
+      if (checkBtn) checkBtn.hidden = true;
+      if (resetBtn) resetBtn.hidden = false;
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      inputs.forEach((input) => {
+        input.value = '';
+        input.disabled = false;
+        input.classList.remove('gf-correct', 'gf-incorrect');
+      });
+      if (scoreEl) scoreEl.hidden = true;
+      if (checkBtn) checkBtn.hidden = false;
+      if (resetBtn) resetBtn.hidden = true;
+    });
+  });
+</script>
+
+<style>
+  .gf {
+    margin-block: 1.5rem;
+  }
+
+  .gf-text {
+    line-height: 2.2;
+    font-size: 1rem;
+  }
+
+  .gf-input {
+    display: inline-block;
+    min-width: 6rem;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.6rem;
+    margin: 0 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .gf-input.gf-correct {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+
+  .gf-input.gf-incorrect {
+    border-color: var(--rose);
+    background: var(--rose-soft);
+  }
+
+  .gf-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .gf-actions .btn {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .gf-score {
+    margin-top: 0.75rem;
+    font-weight: 700;
+    color: var(--emerald);
+  }
+</style>

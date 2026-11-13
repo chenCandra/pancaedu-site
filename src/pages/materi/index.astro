@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import { isFisikaMateri } from '../../lib/materi';
 
 const posts = (
-  await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft)
+  await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft && isFisikaMateri(data))
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // Materi terbaru jadi kartu unggulan di atas, sisanya grid biasa — pola sama

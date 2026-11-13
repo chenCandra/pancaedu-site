@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { isFisikaMateri } from '../../lib/materi';
 // `node:fs` TIDAK dibundel di adapter Cloudflare (prerender gagal, "No
 // such module 'node:fs'") -- games.json di-import langsung sebagai modul
 // ES (Vite otomatis parse JSON jadi objek saat build), bukan dibaca lewat
@@ -10,7 +11,7 @@ import allGamesData from '../../../public/game/games.json';
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-const materiTerbaru = allPosts.filter((p) => p.data.category === 'materi').slice(0, 5);
+const materiTerbaru = allPosts.filter((p) => p.data.category === 'materi' && isFisikaMateri(p.data)).slice(0, 5);
 const artikelTerbaru = allPosts.filter((p) => p.data.category === 'artikel').slice(0, 4);
 
 // 4 dari sekian lab custom di /lab-maya (lihat customLabs di

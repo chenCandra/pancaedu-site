@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Kuis from '../../../components/Kuis.astro';
 import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
+import { isFisikaMateri } from '../../../lib/materi';
 
 // Uji Pemahaman sengaja dipisah ke laman sendiri (bukan ditempel di
 // bawah materi) -- masukan dari murid: kuis yang nyatu di laman materi
@@ -15,7 +16,7 @@ import { kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 // melompati satu jenis langkah pun. Tampilkan placeholder "belum tersedia"
 // kalau kuisnya belum diisi guru lewat CMS.
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft);
+  const posts = await getCollection('blog', ({ data }) => data.category === 'materi' && !data.draft && isFisikaMateri(data));
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },

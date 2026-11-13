@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ModulLayout from '../../../components/bahasa-inggris/ModulLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    'blog',
+    ({ data }) => data.category === 'materi' && data.mapel === 'Bahasa Inggris' && !data.draft
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, description } = entry.data;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container">
+    <ModulLayout entry={entry}>
+      <Content slot="warmup-body" />
+    </ModulLayout>
+  </div>
+</BaseLayout>

@@ -21,9 +21,17 @@ interface SoalKuis {
 interface Props {
   soal: SoalKuis[] | undefined;
   jumlahTampil?: number;
+  // Opsional -- dipakai kalau Kuis.astro dirender LEBIH dari sekali di satu
+  // laman (mis. modul Bahasa Inggris yang memakai Kuis.astro ulang untuk
+  // latihan JCoT "Which expression fits?" SEKALIGUS kuis formatif Reflect &
+  // Check), supaya id & anchor-nya tidak bentrok. Default "kuis" & "🧠 Uji
+  // Pemahaman" MENJAGA PERILAKU LAMA PERSIS SAMA untuk pemanggil yang sudah
+  // ada (mis. materi/[slug]/uji-pemahaman.astro) yang tidak mengisi prop ini.
+  id?: string;
+  heading?: string;
 }
 
-const { soal, jumlahTampil = 6 } = Astro.props;
+const { soal, jumlahTampil = 6, id = 'kuis', heading = '🧠 Uji Pemahaman' } = Astro.props;
 const totalStok = soal?.length ?? 0;
 const jumlahDitampilkan = Math.min(jumlahTampil, totalStok);
 // escape "</" biar teks soal yang (kebetulan) mengandung itu nggak nutup tag <script> lebih awal
@@ -31,9 +39,9 @@ const poolJson = soal ? JSON.stringify(soal).replace(/<\//g, '<\\/') : '[]';
 ---
 
 {soal && soal.length > 0 && (
-  <section class="kuis card" data-kuis data-jumlah-tampil={jumlahDitampilkan} id="kuis">
+  <section class="kuis card" data-kuis data-jumlah-tampil={jumlahDitampilkan} id={id}>
     <div class="kuis-header">
-      <h2>🧠 Uji Pemahaman</h2>
+      <h2>{heading}</h2>
       <p class="kuis-score" data-kuis-score hidden></p>
     </div>
     {totalStok > jumlahDitampilkan && (

@@ -92,6 +92,92 @@ const blog = defineCollection({
         })
       )
       .optional(),
+    // --- Field opsional khusus modul bahasa (Genre-Based Approach) ---
+    // SEMUA field di bawah ini opsional/default kosong -- entri
+    // category:materi Fisika yang sudah ada TIDAK PERLU mengisi apa pun di
+    // sini, tidak terdampak sama sekali. Dipakai saat category:materi &
+    // mapel BUKAN "Fisika" (mis. "Bahasa Inggris") untuk menyimpan struktur
+    // pendekatan berbasis teks (BKoF->MoT->JCoT->ICoT->Refleksi). Dirender
+    // lewat src/components/bahasa-inggris/ModulLayout.astro di laman
+    // /bahasa-inggris/materi/[slug] -- BUKAN di /materi/[slug] (itu tetap
+    // laman khusus Fisika, lihat filter mapel di src/pages/materi/*.astro).
+    elemen: z.array(z.string()).default([]), // mis. "Menyimak-Berbicara"
+    // 8 dimensi profil lulusan resmi (Kerangka Kerja Pembelajaran Mendalam,
+    // panduan kurikulum Kemendikdasmen 2025) -- ditampilkan sebagai
+    // label/badge di tiap modul.
+    profilLulusan: z
+      .array(
+        z.enum([
+          'Keimanan dan Ketakwaan terhadap Tuhan YME',
+          'Kewargaan',
+          'Penalaran Kritis',
+          'Kreativitas',
+          'Kolaborasi',
+          'Kemandirian',
+          'Kesehatan',
+          'Komunikasi',
+        ])
+      )
+      .default([]),
+    fokusKebahasaan: z.array(z.string()).default([]), // mis. "Simple Present Tense"
+    konteksTema: z.string().optional(), // konteks/tema Warm-up (BKoF)
+    urutan: z.number().int().optional(), // urutan tampil di listing kelas -- kosong = fallback pubDate
+    vocabulary: z
+      .array(
+        z.object({
+          word: z.string(),
+          maknaId: z.string(),
+          example: z.string().optional(),
+        })
+      )
+      .default([]),
+    modelTexts: z
+      .array(
+        z.object({
+          title: z.string(),
+          body: z.string(),
+          annotations: z.array(z.object({ text: z.string(), note: z.string() })).default([]),
+          // Daftar kata kerja Simple Present (atau fokus kebahasaan lain)
+          // yang muncul PERSIS seperti ini di `body` -- dipakai tombol
+          // "Grammar Spotlight" (GrammarSpotlight.astro) buat menyorot
+          // SEMUA kemunculannya sekaligus, beda dari `annotations` yang
+          // cuma menyorot kemunculan pertama tiap istilah (sengaja dipisah,
+          // dua mekanisme highlight yang berbeda tujuan).
+          grammarTerms: z.array(z.string()).default([]),
+        })
+      )
+      .default([]),
+    // Aktivitas latihan terbimbing (JCoT, bagian "Let's Practice
+    // Together"). `type` sengaja longgar (bukan discriminated union) --
+    // baru dikunci per tipe spesifik begitu tiap tipe sudah stabil dipakai
+    // (tipe yang didukung saat ini: "gapfill", lihat GapFill.astro; tipe
+    // lain dirender sebagai placeholder "akan tersedia di tahap
+    // berikutnya").
+    activities: z
+      .array(
+        z.object({
+          type: z.string(),
+          config: z.record(z.string(), z.unknown()).default({}),
+        })
+      )
+      .default([]),
+    // Tugas produksi mandiri (ICoT, bagian "Your Turn"). BELUM ada backend
+    // pengumpulan tugas (itu tahap lanjut) -- untuk sementara cuma
+    // scratchpad lokal di browser (localStorage) untuk submissionType
+    // "text", atau catatan "segera hadir" untuk "audio".
+    task: z
+      .object({
+        prompt: z.string(),
+        rubric: z.array(z.string()).default([]),
+        submissionType: z.enum(['text', 'audio']),
+      })
+      .optional(),
+    reflection: z.array(z.string()).default([]), // daftar pernyataan ceklis "I can…"
+    // Disiapkan dari awal supaya generator laporan admin-panca/laporan.astro
+    // bisa membacanya nanti (tahap integrasi laporan) tanpa perlu migrasi
+    // skema lagi -- BELUM dibaca di mana pun sekarang.
+    aksesRuangBelajar: z.string().optional(),
+    reviewStatus: z.enum(['draft', 'reviewed']).default('draft'),
     draft: z.boolean().default(false),
   }),
 });
@@ -291,6 +377,32 @@ const ruangBelajarPengaturan = defineCollection({
   loader: glob({ pattern: 'index.md', base: './src/content/ruang-belajar-pengaturan' }),
   schema: z.object({
     refleksiUrlGlobal: optionalUrl(),
+  }),
+});
+
+// Singleton (pola sama seperti di atas). Redaksi halaman /candra-pabakti
+// ("Tentang", lihat src/pages/candra-pabakti.astro) -- cuma yang berupa
+// PROSA (tagline, bio, badge peran) yang dipindah ke sini supaya bisa
+// diedit lewat CMS tanpa sentuh kode. Grid "works" (kartu Ruang
+// Belajar/Materi/Lab Maya/dst, tiap item nunjuk ke rute asli situs)
+// SENGAJA TETAP hardcode di halaman itu sendiri -- bukan "isi" dalam
+// pengertian prosa, dan salah ketik href di situ bisa bikin link patah.
+const profilPabakti = defineCollection({
+  loader: glob({ pattern: 'index.md', base: './src/content/profil-pabakti' }),
+  schema: z.object({
+    tagline: z.string(), // kalimat di bawah nama, atas badge peran
+    roles: z
+      .array(
+        z.object({
+          label: z.string(),
+          badge: z.enum(['', 'badge-teal', 'badge-purple']).default(''),
+        })
+      )
+      .min(1),
+    bioIntro: z.string(), // paragraf pembuka
+    bioHeading: z.string(), // judul sub-bagian (mis. "Tentang PancaEdu")
+    bioAbout: z.string(), // paragraf tentang PancaEdu
+    bioClosing: z.string(), // paragraf penutup/ajakan kontak
   }),
 });
 
@@ -527,6 +639,7 @@ export const collections = {
   ruangBelajar,
   modeDaring,
   ruangBelajarPengaturan,
+  profilPabakti,
   penugasan,
   penugasanPengaturan,
   promptKategori,

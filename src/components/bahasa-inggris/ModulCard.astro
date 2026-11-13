@@ -1,0 +1,98 @@
+---
+// Kartu satu modul Bahasa Inggris -- dipakai di grid listing per-kelas
+// (lihat src/pages/bahasa-inggris/kelas/[kelas].astro). Pola sama seperti
+// RuangBelajarCard.astro, tapi entry-nya dari koleksi `blog` (materi).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, estimasiMenit, elemen, reviewStatus } = entry.data;
+---
+
+<a href={`/bahasa-inggris/materi/${entry.id}`} class="bi-card">
+  <div class="bi-card-tag">
+    <span class="badge bi-badge-accent">Bahasa Inggris</span>
+    {reviewStatus === 'draft' && <span class="badge badge-gold">Draf</span>}
+  </div>
+  <h3 class="bi-card-title">{title}</h3>
+  {description && <p class="bi-card-desc">{description}</p>}
+  <div class="bi-card-footer">
+    <span class="bi-card-meta">
+      {elemen && elemen.length > 0 ? elemen.join(', ') : ''}
+      {estimasiMenit ? ` · ⏱ ${estimasiMenit} menit` : ''}
+    </span>
+    <span class="bi-card-cta">Mulai &rarr;</span>
+  </div>
+</a>
+
+<style>
+  .bi-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .bi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--emerald);
+  }
+
+  .bi-card-tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .bi-badge-accent {
+    background: var(--emerald-soft);
+    color: var(--emerald);
+  }
+
+  .bi-card-title {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .bi-card-desc {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .bi-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .bi-card-meta {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .bi-card-cta {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--emerald);
+  }
+</style>

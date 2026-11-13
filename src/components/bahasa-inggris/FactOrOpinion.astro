@@ -1,0 +1,231 @@
+---
+// "Fact or Opinion?" -- satu pernyataan ditampilkan sebagai kartu, murid
+// memilih Fact/Opinion lewat tombol (bukan gestur geser murni) supaya
+// tetap bisa dioperasikan lewat keyboard & tanpa pointer presisi --
+// kartunya sendiri tetap digaya "kartu geser" (shadow bertumpuk) sesuai
+// media yang diminta, interaksi intinya tetap tombol yang dapat diakses.
+interface Statement {
+  text: string;
+  isFact: boolean;
+  explanation?: string;
+}
+
+interface Props {
+  statements: Statement[];
+}
+
+const { statements } = Astro.props;
+const dataJson = JSON.stringify(statements).replace(/<\//g, '<\\/');
+---
+
+{statements.length > 0 && (
+  <div class="fo" data-fo>
+    <script type="application/json" data-fo-data set:html={dataJson} />
+    <div class="fo-stack" data-fo-stack></div>
+    <div class="fo-actions">
+      <button type="button" class="btn fo-btn fo-btn-opinion" data-fo-choose="opinion">💭 Opinion</button>
+      <button type="button" class="btn fo-btn fo-btn-fact" data-fo-choose="fact">✅ Fact</button>
+    </div>
+    <p class="fo-explanation" data-fo-explanation hidden></p>
+    <p class="fo-progress" data-fo-progress></p>
+    <button type="button" class="btn fo-reset" data-fo-reset hidden>Coba Lagi</button>
+  </div>
+)}
+
+<script>
+  interface Statement {
+    text: string;
+    isFact: boolean;
+    explanation?: string;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-fo]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-fo-data]');
+    const stack = wrap.querySelector<HTMLElement>('[data-fo-stack]');
+    const explanationEl = wrap.querySelector<HTMLElement>('[data-fo-explanation]');
+    const progressEl = wrap.querySelector<HTMLElement>('[data-fo-progress]');
+    const resetBtn = wrap.querySelector<HTMLButtonElement>('[data-fo-reset]');
+    const chooseBtns = Array.from(wrap.querySelectorAll<HTMLButtonElement>('[data-fo-choose]'));
+    if (!dataScript || !stack) return;
+
+    let pool: Statement[] = [];
+    try {
+      pool = JSON.parse(dataScript.textContent || '[]');
+    } catch {
+      pool = [];
+    }
+    if (pool.length === 0) return;
+
+    let order: Statement[] = [];
+    let index = 0;
+    let correct = 0;
+    let answered = false;
+
+    function renderCard() {
+      if (!stack) return;
+      stack.innerHTML = '';
+      explanationEl!.hidden = true;
+      answered = false;
+      chooseBtns.forEach((b) => (b.disabled = false));
+
+      if (index >= order.length) {
+        stack.innerHTML = '';
+        const done = document.createElement('p');
+        done.className = 'fo-done';
+        done.textContent = `Selesai! Skor: ${correct} dari ${order.length} benar.`;
+        stack.appendChild(done);
+        chooseBtns.forEach((b) => (b.hidden = true));
+        if (resetBtn) resetBtn.hidden = false;
+        if (progressEl) progressEl.textContent = '';
+        return;
+      }
+
+      const card = document.createElement('p');
+      card.className = 'fo-card';
+      card.textContent = order[index].text;
+      stack.appendChild(card);
+      if (progressEl) progressEl.textContent = `Pernyataan ${index + 1} dari ${order.length}`;
+    }
+
+    function start() {
+      order = shuffle(pool);
+      index = 0;
+      correct = 0;
+      chooseBtns.forEach((b) => (b.hidden = false));
+      if (resetBtn) resetBtn.hidden = true;
+      renderCard();
+    }
+
+    chooseBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (answered || index >= order.length) return;
+        answered = true;
+        const chosenFact = btn.dataset.foChoose === 'fact';
+        const current = order[index];
+        const isCorrect = chosenFact === current.isFact;
+        if (isCorrect) correct++;
+
+        const card = stack?.querySelector<HTMLElement>('.fo-card');
+        card?.classList.add(isCorrect ? 'fo-card--correct' : 'fo-card--incorrect');
+
+        if (current.explanation && explanationEl) {
+          explanationEl.hidden = false;
+          explanationEl.textContent = `${isCorrect ? '✅' : '❌'} ${current.explanation}`;
+        }
+        chooseBtns.forEach((b) => (b.disabled = true));
+
+        window.setTimeout(() => {
+          index++;
+          renderCard();
+        }, 1400);
+      });
+    });
+
+    resetBtn?.addEventListener('click', start);
+    start();
+  });
+</script>
+
+<style>
+  .fo {
+    margin-block: 1.5rem;
+  }
+
+  .fo-stack {
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .fo-card {
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md), 0 8px 0 -4px var(--surface), 0 14px 0 -8px var(--border);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .fo-card--correct {
+    border-color: var(--teal);
+  }
+
+  .fo-card--incorrect {
+    border-color: var(--rose);
+  }
+
+  .fo-done {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--emerald);
+  }
+
+  .fo-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .fo-btn {
+    min-height: 44px;
+    padding: 0.65rem 1.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .fo-btn-fact:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  .fo-btn-opinion:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+  }
+
+  .fo-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .fo-explanation {
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .fo-progress {
+    text-align: center;
+    margin-top: 0.75rem;
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+  }
+
+  .fo-reset {
+    display: block;
+    margin: 1rem auto 0;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ModulCard from '../../../components/bahasa-inggris/ModulCard.astro';
+
+// Hardcode cuma "x" -- Fase E/Kelas X satu-satunya yang digarap sekarang
+// (lihat /bahasa-inggris/index.astro, kartu Kelas XI/XII masih "Segera
+// Hadir"). Sengaja TIDAK diturunkan dari entri yang ada (beda dari pola
+// ruang-belajar/kelas/[kelas].astro) supaya laman ini tidak 404 sebelum ada
+// modul nyata (modul pertama ditulis di tahap berikutnya).
+export async function getStaticPaths() {
+  return [{ params: { kelas: 'x' } }];
+}
+
+const modul = (
+  await getCollection(
+    'blog',
+    ({ data }) =>
+      data.category === 'materi' && data.mapel === 'Bahasa Inggris' && data.kelas === 'X' && !data.draft
+  )
+).sort(
+  (a, b) => (a.data.urutan ?? 999) - (b.data.urutan ?? 999) || a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Bahasa Inggris Kelas X" description="Modul Bahasa Inggris Kelas X (Fase E) PancaEdu, tersusun berurutan.">
+  <section class="container bi-hero">
+    <a href="/bahasa-inggris" class="bi-small-back">&larr; Bahasa Inggris</a>
+    <p class="eyebrow">🇬🇧 Bahasa Inggris</p>
+    <h1>Kelas X</h1>
+    <p class="bi-hero-lede">Fase E -- ikuti modulnya berurutan dari atas ke bawah.</p>
+  </section>
+
+  <section class="container bi-grid-section">
+    {modul.length > 0 ? (
+      <div class="bi-grid">
+        {modul.map((entry) => <ModulCard entry={entry} />)}
+      </div>
+    ) : (
+      <p class="bi-empty">
+        Belum ada modul Bahasa Inggris untuk Kelas X -- modul pertama (Report Text) sedang
+        disiapkan.
+      </p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .bi-hero {
+    padding-block: 3rem 1.5rem;
+    max-width: var(--measure);
+  }
+
+  .bi-small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .bi-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .bi-grid-section {
+    padding-block: 1rem 3rem;
+  }
+
+  .bi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .bi-empty {
+    color: var(--ink-soft);
+    padding-block: 1rem;
+  }
+</style>

@@ -1,0 +1,296 @@
+---
+// Conversation Simulator -- dialog bercabang: murid memilih salah satu
+// respons di tiap giliran, dapat umpan balik kesopanan/kesesuaian konteks
+// (formal vs informal), lalu lanjut ke giliran berikutnya (`next`, bisa
+// sama untuk semua opsi atau beda per opsi -- data-driven, bukan hardcode
+// di komponen). Audio tiap baris pakai Web Speech API langsung (BUKAN
+// reuse ListenButton.astro -- baris dialog dirender dinamis di client,
+// scan sekali-jalan punya ListenButton tidak akan menangkap elemen baru
+// yang dibuat belakangan, jadi logika TTS ditulis ulang khusus di sini).
+interface Option {
+  text: string;
+  tone?: 'formal' | 'informal';
+  appropriate: boolean;
+  feedback?: string;
+  next: string;
+}
+
+interface Turn {
+  id: string;
+  speaker?: string;
+  line: string;
+  options: Option[];
+}
+
+interface Props {
+  turns: Turn[];
+  startId: string;
+}
+
+const { turns, startId } = Astro.props;
+const dataJson = JSON.stringify({ turns, startId }).replace(/<\//g, '<\\/');
+---
+
+{turns.length > 0 && (
+  <div class="ds" data-ds>
+    <script type="application/json" data-ds-data set:html={dataJson} />
+    <div class="ds-bubble">
+      <p class="ds-speaker" data-ds-speaker></p>
+      <div class="ds-line-row">
+        <p class="ds-line" data-ds-line></p>
+        <span class="ds-listen-slot" data-ds-listen></span>
+      </div>
+    </div>
+    <div class="ds-options" data-ds-options></div>
+    <p class="ds-feedback" data-ds-feedback hidden></p>
+    <button type="button" class="btn ds-continue" data-ds-continue hidden>Lanjut &rarr;</button>
+    <div class="ds-done" data-ds-done hidden>
+      <p class="ds-done-text" data-ds-done-text></p>
+      <button type="button" class="btn ds-restart" data-ds-restart>Mulai Ulang</button>
+    </div>
+  </div>
+)}
+
+<script>
+  interface Option {
+    text: string;
+    tone?: 'formal' | 'informal';
+    appropriate: boolean;
+    feedback?: string;
+    next: string;
+  }
+  interface Turn {
+    id: string;
+    speaker?: string;
+    line: string;
+    options: Option[];
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-ds]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-ds-data]');
+    const speakerEl = wrap.querySelector<HTMLElement>('[data-ds-speaker]');
+    const lineEl = wrap.querySelector<HTMLElement>('[data-ds-line]');
+    const listenSlot = wrap.querySelector<HTMLElement>('[data-ds-listen]');
+    const optionsEl = wrap.querySelector<HTMLElement>('[data-ds-options]');
+    const feedbackEl = wrap.querySelector<HTMLElement>('[data-ds-feedback]');
+    const continueBtn = wrap.querySelector<HTMLButtonElement>('[data-ds-continue]');
+    const doneEl = wrap.querySelector<HTMLElement>('[data-ds-done]');
+    const doneTextEl = wrap.querySelector<HTMLElement>('[data-ds-done-text]');
+    const restartBtn = wrap.querySelector<HTMLButtonElement>('[data-ds-restart]');
+    if (!dataScript || !speakerEl || !lineEl || !optionsEl || !feedbackEl || !continueBtn || !doneEl || !doneTextEl) return;
+
+    let data: { turns: Turn[]; startId: string };
+    try {
+      data = JSON.parse(dataScript.textContent || '{"turns":[],"startId":""}');
+    } catch {
+      return;
+    }
+    const turnsById = new Map(data.turns.map((t) => [t.id, t]));
+    if (turnsById.size === 0) return;
+
+    let totalChosen = 0;
+    let totalAppropriate = 0;
+
+    function speak(text: string) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        window.speechSynthesis.speak(u);
+      } catch {
+        // Diamkan -- kegagalan TTS tidak boleh merusak interaksi lain.
+      }
+    }
+
+    function renderTurn(id: string) {
+      const turn = turnsById.get(id);
+      if (!turn) return;
+
+      speakerEl!.textContent = turn.speaker || '';
+      lineEl!.textContent = turn.line;
+
+      if (listenSlot) {
+        listenSlot.innerHTML = '';
+        if ('speechSynthesis' in window) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'ds-listen-btn';
+          btn.setAttribute('aria-label', 'Dengarkan kalimat ini');
+          btn.textContent = '🔊';
+          btn.addEventListener('click', () => speak(turn.line));
+          listenSlot.appendChild(btn);
+        }
+      }
+
+      optionsEl!.innerHTML = '';
+      feedbackEl!.hidden = true;
+      continueBtn!.hidden = true;
+      doneEl!.hidden = true;
+
+      if (!turn.options || turn.options.length === 0) {
+        doneEl!.hidden = false;
+        const pct = totalChosen > 0 ? Math.round((totalAppropriate / totalChosen) * 100) : 0;
+        doneTextEl!.textContent = `Percakapan selesai! ${totalAppropriate} dari ${totalChosen} pilihanmu sesuai konteks (${pct}%).`;
+        return;
+      }
+
+      turn.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ds-option';
+        btn.textContent = opt.text;
+        btn.addEventListener('click', () => chooseOption(opt, btn));
+        optionsEl!.appendChild(btn);
+      });
+    }
+
+    function chooseOption(opt: Option, btn: HTMLButtonElement) {
+      totalChosen++;
+      if (opt.appropriate) totalAppropriate++;
+
+      Array.from(optionsEl!.children).forEach((b) => ((b as HTMLButtonElement).disabled = true));
+      btn.classList.add(opt.appropriate ? 'ds-option--good' : 'ds-option--meh');
+
+      feedbackEl!.hidden = false;
+      const icon = opt.appropriate ? '✅' : '💡';
+      const toneLabel = opt.tone ? ` (${opt.tone === 'formal' ? 'formal' : 'informal'})` : '';
+      feedbackEl!.textContent = `${icon}${toneLabel} ${opt.feedback || ''}`;
+
+      continueBtn!.hidden = false;
+      continueBtn!.onclick = () => renderTurn(opt.next);
+    }
+
+    restartBtn?.addEventListener('click', () => {
+      totalChosen = 0;
+      totalAppropriate = 0;
+      renderTurn(data.startId);
+    });
+
+    renderTurn(data.startId);
+  });
+</script>
+
+<style>
+  .ds {
+    margin-block: 1.5rem;
+  }
+
+  .ds-bubble {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ds-speaker {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--emerald);
+    margin: 0 0 0.4rem;
+    min-height: 1.1em;
+  }
+
+  .ds-line-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ds-line {
+    margin: 0;
+    font-size: 1.0625rem;
+    flex-grow: 1;
+  }
+
+  .ds-listen-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--emerald);
+    font-size: 1.125rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .ds-listen-btn:hover {
+    border-color: var(--emerald);
+  }
+
+  .ds-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .ds-option {
+    text-align: left;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+
+  .ds-option:hover:not(:disabled) {
+    border-color: var(--emerald);
+  }
+
+  .ds-option:disabled {
+    cursor: default;
+  }
+
+  .ds-option--good {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .ds-option--meh {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+  }
+
+  .ds-feedback {
+    margin: 1rem 0 0;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .ds-continue {
+    margin-top: 1rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .ds-done {
+    text-align: center;
+    padding: 1.25rem;
+  }
+
+  .ds-done-text {
+    font-weight: 700;
+    color: var(--emerald);
+    margin: 0 0 1rem;
+  }
+
+  .ds-restart {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+</style>

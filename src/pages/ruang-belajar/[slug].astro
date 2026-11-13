@@ -29,6 +29,13 @@ const isTka = kelas === 'TKA';
 // ceritanya -- lihat catatan youtubeId di content.config.ts.
 const materi = materiSlug ? await getEntry('blog', materiSlug) : undefined;
 const deskripsiTampil = deskripsi || materi?.data.description;
+// Materi non-Fisika (mis. "Bahasa Inggris") punya rute & tema sendiri di
+// /bahasa-inggris/materi/[slug] (lihat filter mapel di src/pages/materi/*.astro
+// & ModulLayout.astro) -- link "Pelajari Materi" & fallback kuis di bawah
+// perlu tahu harus mengarah ke rute mana. Toleran kalau `mapel` kosong
+// (anggap Fisika), konsisten dengan filter di /materi/*.
+const isFisikaMateri = !materi || !materi.data.mapel || materi.data.mapel === 'Fisika';
+const materiHref = materi ? (isFisikaMateri ? `/materi/${materi.id}` : `/bahasa-inggris/materi/${materi.id}`) : undefined;
 
 // Link Refleksi GLOBAL (satu Form buat semua sesi) dipakai kalau sesi ini
 // tidak isi refleksiUrl sendiri -- lihat ruangBelajarPengaturan di
@@ -119,7 +126,7 @@ const langkah = [
     ikon: '📖',
     tersedia: Boolean(materi),
     cta: 'Buka Materi',
-    href: materi ? `/materi/${materi.id}` : undefined,
+    href: materiHref,
     externalTarget: false,
     keterangan: materi ? materi.data.description : 'Materi belum tersedia untuk pembelajaran ini.',
   },
@@ -153,7 +160,17 @@ const langkah = [
     // jangan duplikasi). latihanUrl diutamakan kalau dua-duanya ada.
     tersedia: Boolean(latihanUrl) || Boolean(materi?.data.kuis?.length),
     cta: latihanUrl ? 'Kerjakan Latihan' : 'Kerjakan Kuis',
-    href: latihanUrl || (materi?.data.kuis?.length ? `/materi/${materi.id}/uji-pemahaman` : undefined),
+    // Materi Fisika punya laman kuis fokus tersendiri (/materi/[slug]/uji-pemahaman);
+    // materi Bahasa Inggris (dkk.) belum -- kuis-nya dirender inline di
+    // bagian "Reflect & Check" pada laman modul itu sendiri, jadi diarahkan
+    // ke anchor #kuis di laman yang sama (lihat id="kuis" di Kuis.astro).
+    href:
+      latihanUrl ||
+      (materi?.data.kuis?.length
+        ? isFisikaMateri
+          ? `/materi/${materi.id}/uji-pemahaman`
+          : `${materiHref}#kuis`
+        : undefined),
     externalTarget: Boolean(latihanUrl),
     // Link Google Form/Wayground dkk sering gagal login kalau dibuka dari
     // in-app browser (WhatsApp/Instagram/dll) di Android -- lihat script

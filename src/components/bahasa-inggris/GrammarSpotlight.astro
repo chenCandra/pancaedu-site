@@ -1,0 +1,131 @@
+---
+// Tombol "Grammar Spotlight" -- menyorot SEMUA kemunculan kata kerja
+// Simple Present (atau fokus kebahasaan lain) dalam sebuah teks model yang
+// SUDAH dirender (lihat prop `id` di HighlightText.astro). Beda dari
+// highlight istilah kosakata di HighlightText (klik satu-satu, cuma
+// kemunculan pertama) -- ini toggle SEKALI KLIK buat semua kemunculan
+// sekaligus, dioperasikan lewat DOM text-walking di client, TANPA
+// mengubah markup HighlightText itu sendiri.
+interface Props {
+  terms: string[];
+  targetId: string;
+}
+
+const { terms, targetId } = Astro.props;
+---
+
+{terms.length > 0 && (
+  <button
+    type="button"
+    class="gs-toggle"
+    data-gs-toggle
+    data-gs-target={targetId}
+    data-gs-terms={JSON.stringify(terms)}
+    aria-pressed="false"
+  >
+    ✏️ Sorot Kata Kerja (Simple Present)
+  </button>
+)}
+
+<script>
+  function escapeRegExp(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-gs-toggle]').forEach((btn) => {
+    let terms: string[] = [];
+    try {
+      terms = JSON.parse(btn.dataset.gsTerms || '[]');
+    } catch {
+      terms = [];
+    }
+    const targetId = btn.dataset.gsTarget;
+    const target = targetId ? document.getElementById(targetId) : null;
+    if (!target || terms.length === 0) return;
+
+    const pattern = new RegExp(`\\b(${terms.map(escapeRegExp).join('|')})\\b`, 'gi');
+
+    function highlight() {
+      if (!target) return;
+      const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          // Lewati teks di dalam tombol istilah kosakata (.ht-term) -- biar
+          // highlight grammar tidak bertumpuk/bentrok dengan highlight
+          // kosakata yang sudah ada.
+          return (node.parentElement as HTMLElement | null)?.closest('button')
+            ? NodeFilter.FILTER_REJECT
+            : NodeFilter.FILTER_ACCEPT;
+        },
+      });
+      const nodes: Text[] = [];
+      let node: Node | null;
+      while ((node = walker.nextNode())) nodes.push(node as Text);
+
+      nodes.forEach((textNode) => {
+        const text = textNode.textContent || '';
+        pattern.lastIndex = 0;
+        if (!pattern.test(text)) return;
+        pattern.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
+        while ((match = pattern.exec(text))) {
+          if (match.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          const mark = document.createElement('mark');
+          mark.className = 'gs-mark';
+          mark.textContent = match[0];
+          frag.appendChild(mark);
+          lastIndex = match.index + match[0].length;
+        }
+        if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        textNode.parentNode?.replaceChild(frag, textNode);
+      });
+    }
+
+    function unhighlight() {
+      if (!target) return;
+      target.querySelectorAll('mark.gs-mark').forEach((mark) => {
+        const text = document.createTextNode(mark.textContent || '');
+        mark.parentNode?.replaceChild(text, mark);
+      });
+      target.normalize();
+    }
+
+    btn.addEventListener('click', () => {
+      const active = btn.getAttribute('aria-pressed') === 'true';
+      if (active) unhighlight();
+      else highlight();
+      btn.setAttribute('aria-pressed', String(!active));
+    });
+  });
+</script>
+
+<style>
+  .gs-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .gs-toggle[aria-pressed='true'] {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  :global(mark.gs-mark) {
+    background: var(--gold-soft);
+    color: var(--ink);
+    padding: 0.05rem 0.2rem;
+    border-radius: 0.2rem;
+    font-weight: 600;
+  }
+</style>

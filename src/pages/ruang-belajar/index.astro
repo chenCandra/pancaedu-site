@@ -50,9 +50,31 @@ const kelasCards = KELAS_URUT.map((kelas) => {
     </a>
   </section>
 
+  <section class="container pd-mapel-section">
+    <h2 class="pd-section-title">Pilih Mata Pelajaran</h2>
+    <p class="pd-section-lede">Setiap mapel punya ruang belajarnya sendiri, tersusun rapi per Kelas.</p>
+
+    <div class="pd-mapel-grid">
+      <a href="#kelas-fisika" class="pd-mapel-card">
+        <img src="/images/mapel-fisika-cover.png" alt="" class="pd-mapel-card-cover" loading="eager" />
+        <span class="pd-mapel-card-label">
+          Fisika
+          <span class="pd-mapel-card-cta">Lihat Kelas &darr;</span>
+        </span>
+      </a>
+      <a href="/bahasa-inggris" class="pd-mapel-card">
+        <img src="/images/mapel-bahasa-inggris-cover.png" alt="" class="pd-mapel-card-cover" loading="lazy" />
+        <span class="pd-mapel-card-label">
+          Bahasa Inggris
+          <span class="pd-mapel-card-cta">Lihat Kelas &rarr;</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
   {kelasCards.length > 0 && (
-    <section class="container pd-kelas-section">
-      <h2 class="pd-section-title">Pilih Kelas</h2>
+    <section class="container pd-kelas-section" id="kelas-fisika">
+      <h2 class="pd-section-title">Pilih Kelas &mdash; Fisika</h2>
       <p class="pd-section-lede">Materi tersusun rapi per Bab, urut dari sesi pertama sampai terakhir.</p>
 
       <div class="pd-kelas-grid">
@@ -127,6 +149,63 @@ const kelasCards = KELAS_URUT.map((kelas) => {
     color: var(--ink-soft);
     font-size: 0.9375rem;
     margin: 0 0 1.75rem;
+  }
+
+  .pd-mapel-section {
+    padding-block: 1rem 2rem;
+  }
+
+  .pd-mapel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+    max-width: 40rem;
+  }
+
+  .pd-mapel-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--glass-border);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .pd-mapel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pd-mapel-card-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pd-mapel-card-label {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.85rem 1.1rem;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  }
+
+  .pd-mapel-card-cta {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    opacity: 0.9;
   }
 
   .pd-kelas-section {
@@ -224,6 +303,20 @@ const kelasCards = KELAS_URUT.map((kelas) => {
   @media (max-width: 30rem) {
     .pd-panduan-link {
       white-space: normal;
+    }
+  }
+
+  /* HP sempit -- judul mapel & CTA ditumpuk vertikal (bukan space-between
+     sejajar) supaya tidak mepet/terpotong di layar paling kecil (<=360px). */
+  @media (max-width: 26rem) {
+    .pd-mapel-card-label {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    .pd-mapel-card-cta {
+      font-size: 0.75rem;
     }
   }
 </style>

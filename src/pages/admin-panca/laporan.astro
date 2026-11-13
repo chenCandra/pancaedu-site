@@ -11,7 +11,7 @@ import { ambilSesi } from '../../lib/adminPanca/auth';
 import { ambilLaporanSiswa } from '../../lib/adminPanca/db';
 import { daftarSesi } from '../../lib/penugasan/sesi';
 import { env } from 'cloudflare:workers';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 export const prerender = false;
 
@@ -23,8 +23,14 @@ const qs = Astro.url.searchParams;
 // diarahkan BALIK ke laporan yang sama persis (Penugasan/Kelas/Sesi/KKM/dst
 // tetap terisi), bukan balik ke form kosong.
 const urlKembali = `${Astro.url.pathname}${Astro.url.search}`;
+// `jenis` membedakan 2 alur laporan: "penugasan" (alur lama, dengan data
+// nilai dari D1 -- khusus mapel yang pakai Penugasan, saat ini cuma Fisika)
+// vs "mandiri" (baru, Tahap 6 Bahasa Inggris -- baca Ruang Belajar langsung,
+// TANPA data nilai karena mapel ini memang tidak pakai Penugasan/PIN).
+const jenis = qs.get('jenis') === 'mandiri' ? 'mandiri' : 'penugasan';
 const slug = qs.get('slug') ?? '';
-const kelasDipilih = qs.get('kelas') ?? '';
+const rbSlug = qs.get('rbSlug') ?? '';
+const kelasDipilih = jenis === 'mandiri' ? (qs.get('kelasManual') ?? '') : (qs.get('kelas') ?? '');
 const kkm = Number(qs.get('kkm') ?? '70') || 70;
 const tanggal = qs.get('tanggal') ?? '';
 const namaSekolah = qs.get('sekolah') ?? '';
@@ -81,6 +87,34 @@ for (const p of semuaPenugasan) {
     kelasBroad: p.data.kelas,
     materiSlug: p.data.materiSlug,
   };
+}
+
+// --- Alur "Modul Mandiri" (Tahap 6 BI) -- pilih Ruang Belajar LANGSUNG,
+// lintas mapel (tidak dibatasi ke mapel tertentu, supaya mapel lain yang
+// kelak juga tidak pakai Penugasan bisa ikut pakai alur ini tanpa kode baru).
+const ruangBelajarUntukMandiri = [...semuaRuangBelajar].sort(
+  (a, b) => a.data.mapel.localeCompare(b.data.mapel, 'id') || a.data.judul.localeCompare(b.data.judul, 'id')
+);
+const prefillRb: Record<string, { topik: string; tujuan: string[]; tanggal: string }> = {};
+for (const r of ruangBelajarUntukMandiri) {
+  prefillRb[r.id] = {
+    topik: r.data.judul,
+    tujuan: r.data.tujuanPembelajaran,
+    tanggal: r.data.tanggal.toISOString().slice(0, 10),
+  };
+}
+
+let laporanMandiri: {
+  entry: CollectionEntry<'ruangBelajar'>;
+  materi: CollectionEntry<'blog'> | undefined;
+} | null = null;
+
+if (jenis === 'mandiri' && rbSlug) {
+  const entry = semuaRuangBelajar.find((r) => r.id === rbSlug);
+  if (entry) {
+    const materi = entry.data.materiSlug ? await getEntry('blog', entry.data.materiSlug) : undefined;
+    laporanMandiri = { entry, materi };
+  }
 }
 
 // --- Hitung laporan (cuma kalau slug+kelas sudah dipilih) ---
@@ -292,7 +326,71 @@ FORMAT KELUARAN:
 - Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap, dan JANGAN menambahkan data/angka capaian yang tidak diberikan di atas.`;
 }
 
+// Versi "Modul Mandiri" (Tahap 6 BI) -- TANPA data nilai/ketuntasan sama
+// sekali (mapel ini tidak punya Penugasan/D1), jadi prompt-nya cuma minta
+// Modul Ajar + Rencana Pembelajaran Daring ringkas, dan secara eksplisit
+// melarang AI mengarang bagian analisis capaian/tabel nilai.
+function buatPromptAIMandiri(): string {
+  if (!laporanMandiri) return '';
+  const { entry, materi } = laporanMandiri;
+  const tanggalFormat = tanggal
+    ? new Date(`${tanggal}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : '(tanggal tidak diisi)';
+  const tujuanManual = tujuan.split('\n').map((t) => t.trim()).filter(Boolean);
+  const tujuanSumber = tujuanManual.length ? tujuanManual : entry.data.tujuanPembelajaran;
+  const urlRuangBelajar = `https://pancaedu.web.id/ruang-belajar/${entry.id}`;
+  const aksesInfo = materi?.data.aksesRuangBelajar || '(tidak diisi -- lihat langsung halaman Ruang Belajar di atas)';
+
+  return `Tolong susun MODUL AJAR PEMBELAJARAN DARING dan RENCANA PEMBELAJARAN DARING berdasarkan materi di situs PancaEdu, dalam Bahasa Indonesia baku. HASIL AKHIR HARUS BERUPA SATU FILE DOKUMEN WORD (.docx) yang bisa saya unduh. Mapel ini (${entry.data.mapel}) adalah pembelajaran mandiri berbasis aktivitas interaktif di browser -- TIDAK memakai sistem penilaian otomatis/PIN seperti mapel Fisika, jadi laporan ini TIDAK berisi data skor/ketuntasan siswa.
+
+=== SUMBER MATERI (WAJIB DIBACA DULU) ===
+Situs: https://pancaedu.web.id
+Halaman Ruang Belajar yang dipakai: ${urlRuangBelajar}
+Langkah wajib sebelum menulis apa pun: buka dan baca halaman di atas (cari lewat situs bila perlu). Jika kamu TIDAK bisa membuka situs (tidak ada akses browsing), katakan terus terang di awal dan minta saya menempelkan isi halamannya -- JANGAN mengarang isi materi.
+
+=== DATA PELAKSANAAN ===
+Sekolah: ${namaSekolah || '(isi manual)'}
+Guru Pengampu: ${namaGuru || '(isi manual)'}
+Kelas/Rombel: ${kelasDipilih || '(isi manual)'}
+Mata Pelajaran: ${entry.data.mapel}
+Topik/Materi: ${topik || entry.data.judul}
+Tanggal Pelaksanaan: ${tanggalFormat}
+Durasi: ${entry.data.durasi ? `${entry.data.durasi} menit` : '(tidak diisi)'}
+Tujuan Pembelajaran:
+${tujuanSumber.length ? tujuanSumber.map((t) => `- ${t}`).join('\n') : '- (tidak diisi)'}
+Cara Akses Pembelajaran Daring:
+${aksesInfo}
+
+=== CATATAN GURU ===
+${catatan.trim() || '(tidak ada catatan tambahan dari guru)'}
+
+=== INSTRUKSI PENYUSUNAN ===
+TAHAP A -- MODUL AJAR PEMBELAJARAN DARING
+Setelah membaca halaman Ruang Belajar di atas, susun Modul Ajar yang ISINYA SESUAI materi, tujuan pembelajaran, urutan kegiatan (Warm-up, Model Text, Let's Practice Together, Your Turn, Reflect & Check -- atau struktur lain yang tertera di situs), dan aktivitas yang tertera di situs PancaEdu (jangan menambah materi yang tidak ada di situs). Struktur modul:
+1. Informasi Umum (sekolah, guru, kelas, mapel, topik, alokasi waktu, moda daring)
+2. Tujuan Pembelajaran
+3. Sarana & Cara Akses Pembelajaran Daring (pakai info "Cara Akses" di atas)
+4. Kegiatan Pembelajaran (sesuai alur di Ruang Belajar, sajikan dalam tabel: Tahap | Kegiatan | Waktu | Sumber di PancaEdu)
+5. Asesmen (jelaskan bahwa penilaian bersifat formatif mandiri lewat aktivitas interaktif di halaman tersebut, BUKAN sistem skor otomatis/PIN)
+6. Refleksi Siswa dan Guru
+
+TAHAP B -- RENCANA PEMBELAJARAN DARING (ringkas)
+1. Rencana Pembelajaran Daring (ringkasan dari Modul Ajar di Tahap A, termasuk cara siswa mengakses ruang belajar daring)
+2. Identitas Pelaksanaan (sekolah, guru, kelas, mapel, topik, tanggal)
+3. Ringkasan Pelaksanaan Pembelajaran (1 paragraf, ceritakan apa yang dilakukan siswa di halaman tersebut)
+4. Kendala/Catatan (kalau ada isi dari Catatan Guru di atas, kembangkan; kalau tidak ada, boleh dilewati)
+5. Tindak Lanjut / Rekomendasi (langkah konkret guru selanjutnya)
+Catatan WAJIB: JANGAN membuat bagian "Analisis Capaian/Ketuntasan" atau tabel nilai siswa apa pun -- mapel ini tidak memiliki data skor otomatis, jadi tidak ada angka capaian yang bisa dilaporkan.
+
+FORMAT KELUARAN:
+- Buat SATU file Word (.docx) yang bisa saya unduh, urutan: MODUL AJAR PEMBELAJARAN DARING, lalu RENCANA PEMBELAJARAN DARING. Tiap bagian mulai di halaman baru.
+- Gunakan tabel Word sungguhan untuk Kegiatan Pembelajaran (bukan teks yang disejajarkan dengan spasi). Kertas A4, huruf Times New Roman atau Arial ukuran 12, spasi 1,15.
+- Jika kamu tidak bisa membuat file .docx, tuliskan seluruh isinya dengan tabel Markdown yang rapi agar mudah disalin ke Word, dan katakan hal itu di awal.
+- Gunakan bahasa formal laporan sekolah, ringkas tapi lengkap.`;
+}
+
 const promptAI = buatPromptAI();
+const promptAIMandiri = buatPromptAIMandiri();
 ---
 
 <AdminPancaLayout title="Laporan Belajar Daring" username={sesiAdmin.username}>
@@ -305,52 +403,83 @@ const promptAI = buatPromptAI();
 
     <section class="panca-card">
       <form method="get" data-laporan-form class="laporan-form">
-        <div class="grid-2">
-          <label>
-            Penugasan
-            <select name="slug" required data-slug-select>
-              <option value="">-- Pilih Penugasan --</option>
-              {semuaPenugasan.map((p) => (
-                <option value={p.id} selected={p.id === slug}>
-                  {p.data.kelas} · {p.data.mapel} — {p.data.judul}
+        <fieldset class="jenis-fieldset">
+          <legend>Jenis Laporan</legend>
+          <label class="jenis-radio">
+            <input type="radio" name="jenis" value="penugasan" checked={jenis !== 'mandiri'} data-jenis-radio />
+            Penugasan <span class="opsional">(dengan data nilai — Fisika)</span>
+          </label>
+          <label class="jenis-radio">
+            <input type="radio" name="jenis" value="mandiri" checked={jenis === 'mandiri'} data-jenis-radio />
+            Modul Mandiri <span class="opsional">(Ruang Belajar langsung, tanpa nilai — mis. Bahasa Inggris)</span>
+          </label>
+        </fieldset>
+
+        <div class="jenis-group" data-jenis-penugasan hidden={jenis === 'mandiri'}>
+          <div class="grid-2">
+            <label>
+              Penugasan
+              <select name="slug" required={jenis !== 'mandiri'} data-slug-select>
+                <option value="">-- Pilih Penugasan --</option>
+                {semuaPenugasan.map((p) => (
+                  <option value={p.id} selected={p.id === slug}>
+                    {p.data.kelas} · {p.data.mapel} — {p.data.judul}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Kelas / Rombel
+              <select name="kelas" required={jenis !== 'mandiri'}>
+                <option value="">-- Pilih Kelas --</option>
+                {daftarKelas.map((k) => (
+                  <option value={k.kelas} selected={k.kelas === kelasDipilih}>{k.kelas} ({k.siswa.length} siswa)</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <label data-sesi-wrap hidden={daftarSesiPenugasan.length === 0}>
+            Sesi <span class="opsional">(opsional -- Penugasan ini punya sesi, filter kalau perlu pisahkan hasil remedial)</span>
+            <select name="sesi" data-sesi-select>
+              <option value="" selected={sesiParam === ''}>Semua Sesi (digabung)</option>
+              <option value="tanpa-sesi" selected={sesiParam === 'tanpa-sesi'}>Tanpa Sesi (sebelum ada sesi)</option>
+              {daftarSesiPenugasan.map((s) => (
+                <option value={s.id} selected={String(s.id) === sesiParam}>
+                  {s.label} {s.revoked_at ? '(dicabut)' : ''}
                 </option>
               ))}
             </select>
           </label>
-          <label>
-            Kelas / Rombel
-            <select name="kelas" required>
-              <option value="">-- Pilih Kelas --</option>
-              {daftarKelas.map((k) => (
-                <option value={k.kelas} selected={k.kelas === kelasDipilih}>{k.kelas} ({k.siswa.length} siswa)</option>
-              ))}
-            </select>
-          </label>
-        </div>
 
-        <label data-sesi-wrap hidden={daftarSesiPenugasan.length === 0}>
-          Sesi <span class="opsional">(opsional -- Penugasan ini punya sesi, filter kalau perlu pisahkan hasil remedial)</span>
-          <select name="sesi" data-sesi-select>
-            <option value="" selected={sesiParam === ''}>Semua Sesi (digabung)</option>
-            <option value="tanpa-sesi" selected={sesiParam === 'tanpa-sesi'}>Tanpa Sesi (sebelum ada sesi)</option>
-            {daftarSesiPenugasan.map((s) => (
-              <option value={s.id} selected={String(s.id) === sesiParam}>
-                {s.label} {s.revoked_at ? '(dicabut)' : ''}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div class="grid-2">
-          <label>
-            Tanggal Pelaksanaan
-            <input type="date" name="tanggal" value={tanggal} data-tanggal-input />
-          </label>
           <label>
             KKM / Batas Tuntas (%)
             <input type="number" name="kkm" min="0" max="100" value={kkm} />
           </label>
         </div>
+
+        <div class="jenis-group" data-jenis-mandiri hidden={jenis !== 'mandiri'}>
+          <label>
+            Ruang Belajar
+            <select name="rbSlug" required={jenis === 'mandiri'} data-rb-select>
+              <option value="">-- Pilih Ruang Belajar --</option>
+              {ruangBelajarUntukMandiri.map((r) => (
+                <option value={r.id} selected={r.id === rbSlug}>
+                  {r.data.mapel} · {r.data.kelas} — {r.data.judul}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Kelas / Rombel <span class="opsional">(ketik manual, opsional)</span>
+            <input type="text" name="kelasManual" value={jenis === 'mandiri' ? kelasDipilih : ''} placeholder="mis. X-3" />
+          </label>
+        </div>
+
+        <label>
+          Tanggal Pelaksanaan
+          <input type="date" name="tanggal" value={tanggal} data-tanggal-input />
+        </label>
 
         <div class="grid-2">
           <label>
@@ -555,8 +684,75 @@ const promptAI = buatPromptAI();
     </section>
   )}
 
-  {slug && kelasDipilih && !laporan && (
+  {jenis === 'penugasan' && slug && kelasDipilih && !laporan && (
     <p class="panca-card pin-empty">Penugasan tidak ditemukan. Coba pilih lagi dari form di atas.</p>
+  )}
+
+  {laporanMandiri && (
+    <section class="laporan-hasil">
+      <div class="laporan-actions no-print">
+        <button type="button" class="panca-btn panca-btn-primary" data-print-btn>🖨️ Cetak / Simpan PDF</button>
+      </div>
+
+      <div class="panca-card laporan-kop">
+        <h2 class="laporan-judul">Rencana Pembelajaran Daring (Modul Mandiri)</h2>
+        {namaSekolah && <p><strong>Sekolah:</strong> {namaSekolah}</p>}
+        {namaGuru && <p><strong>Guru:</strong> {namaGuru}</p>}
+        <p><strong>Kelas:</strong> {kelasDipilih || '(belum diisi)'} &nbsp;·&nbsp; <strong>Mapel:</strong> {laporanMandiri.entry.data.mapel}</p>
+        {tanggal && <p><strong>Tanggal:</strong> {new Date(`${tanggal}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>}
+        <p><strong>Topik / Materi:</strong> {topik || laporanMandiri.entry.data.judul}</p>
+        {laporanMandiri.entry.data.durasi && <p><strong>Durasi:</strong> {laporanMandiri.entry.data.durasi} menit</p>}
+        <p class="catatan-kkm">
+          📌 Mapel ini pembelajaran mandiri berbasis aktivitas interaktif di Ruang Belajar -- tidak memakai sistem
+          penilaian otomatis/PIN seperti Penugasan Fisika, jadi laporan ini tidak memuat data skor/ketuntasan siswa.
+        </p>
+        {(tujuan.trim() || laporanMandiri.entry.data.tujuanPembelajaran.length > 0) && (
+          <>
+            <p><strong>Tujuan Pembelajaran:</strong></p>
+            <ul class="tujuan-list">
+              {(tujuan.trim()
+                ? tujuan.split('\n').map((t) => t.trim()).filter(Boolean)
+                : laporanMandiri.entry.data.tujuanPembelajaran
+              ).map((t) => <li>{t}</li>)}
+            </ul>
+          </>
+        )}
+        <p><strong>Cara Akses Ruang Belajar:</strong> {laporanMandiri.materi?.data.aksesRuangBelajar || '(lihat halaman Ruang Belajar)'}</p>
+      </div>
+
+      {catatan.trim() && (
+        <div class="panca-card">
+          <h3 class="section-title">Catatan / Kesimpulan Guru</h3>
+          <p class="catatan-guru">{catatan}</p>
+        </div>
+      )}
+
+      <div class="panca-card no-print">
+        <h3 class="section-title">🤖 Prompt untuk AI (ChatGPT / Claude / dll)</h3>
+        <p class="prompt-desc">
+          Salin teks di bawah, tempel ke chat AI pilihanmu (sebaiknya yang bisa membuka situs/browsing) -- AI akan
+          membuka halaman Ruang Belajar di pancaedu.web.id lalu menyusun Modul Ajar dan Rencana Pembelajaran Daring
+          (tanpa data nilai, karena mapel ini tidak memakai Penugasan/PIN), dalam bentuk file Word (.docx). Data yang
+          dikirim cuma yang ada di kotak ini, TIDAK ada yang otomatis terkirim ke AI mana pun dari halaman ini -- kamu
+          yang tempel manual.
+        </p>
+        <textarea class="prompt-box" readonly rows="10" data-prompt-text>{promptAIMandiri}</textarea>
+        <div class="prompt-actions">
+          <button type="button" class="panca-btn panca-btn-primary" data-copy-prompt>📋 Salin Prompt</button>
+          <span class="prompt-copied" data-prompt-copied hidden>✅ Tersalin!</span>
+          <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" class="panca-btn panca-btn-ghost">Buka ChatGPT ↗</a>
+          <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" class="panca-btn panca-btn-ghost">Buka Claude ↗</a>
+        </div>
+      </div>
+
+      <p class="laporan-footer no-print">
+        Dibuat otomatis dari Admin Panca &middot; {new Date().toLocaleString('id-ID')}
+      </p>
+    </section>
+  )}
+
+  {jenis === 'mandiri' && rbSlug && !laporanMandiri && (
+    <p class="panca-card pin-empty">Ruang Belajar tidak ditemukan. Coba pilih lagi dari form di atas.</p>
   )}
 </AdminPancaLayout>
 
@@ -575,6 +771,43 @@ const promptAI = buatPromptAI();
       const p = prefillMap[slugSelect.value];
       if (!p) return;
       // Cuma isi field yang MASIH KOSONG -- jangan timpa yang sudah diketik guru.
+      if (topikInput && !topikInput.value) topikInput.value = p.topik;
+      if (tujuanInput && !tujuanInput.value && p.tujuan.length) tujuanInput.value = p.tujuan.join('\n');
+      if (tanggalInput && !tanggalInput.value && p.tanggal) tanggalInput.value = p.tanggal;
+    });
+  }
+
+  // Toggle "Jenis Laporan" -- tampil/sembunyi 2 grup field (Penugasan vs
+  // Ruang Belajar mandiri) & sinkronkan `required` biar yang tersembunyi
+  // tidak ikut diblokir validasi browser (elemen [hidden] memang otomatis
+  // dikecualikan dari constraint validation, tapi required di-toggle juga
+  // supaya konsisten kalau suatu saat elemen ini dibaca ulang lewat JS lain).
+  const jenisRadios = document.querySelectorAll<HTMLInputElement>('[data-jenis-radio]');
+  const penugasanGroup = document.querySelector<HTMLElement>('[data-jenis-penugasan]');
+  const mandiriGroup = document.querySelector<HTMLElement>('[data-jenis-mandiri]');
+  const kelasPenugasanSelect = document.querySelector<HTMLSelectElement>('select[name="kelas"]');
+  const rbSelect = document.querySelector<HTMLSelectElement>('[data-rb-select]');
+
+  function syncJenis() {
+    const checked = document.querySelector<HTMLInputElement>('[data-jenis-radio]:checked')?.value ?? 'penugasan';
+    const mandiriMode = checked === 'mandiri';
+    if (penugasanGroup) penugasanGroup.hidden = mandiriMode;
+    if (mandiriGroup) mandiriGroup.hidden = !mandiriMode;
+    if (slugSelect) slugSelect.required = !mandiriMode;
+    if (kelasPenugasanSelect) kelasPenugasanSelect.required = !mandiriMode;
+    if (rbSelect) rbSelect.required = mandiriMode;
+  }
+  jenisRadios.forEach((r) => r.addEventListener('change', syncJenis));
+  syncJenis();
+
+  // Prefill topik/tujuan/tanggal dari Ruang Belajar yang dipilih di alur
+  // Modul Mandiri -- pola sama persis seperti `prefillMap` Penugasan di atas.
+  const rbDataEl = document.querySelector<HTMLScriptElement>('#prefill-rb-data');
+  if (rbDataEl && rbSelect) {
+    const prefillRbMap = JSON.parse(rbDataEl.textContent || '{}') as Record<string, Prefill>;
+    rbSelect.addEventListener('change', () => {
+      const p = prefillRbMap[rbSelect.value];
+      if (!p) return;
       if (topikInput && !topikInput.value) topikInput.value = p.topik;
       if (tujuanInput && !tujuanInput.value && p.tujuan.length) tujuanInput.value = p.tujuan.join('\n');
       if (tanggalInput && !tanggalInput.value && p.tanggal) tanggalInput.value = p.tanggal;
@@ -647,6 +880,7 @@ const promptAI = buatPromptAI();
 
 <script type="application/json" id="prefill-data" set:html={JSON.stringify(prefillPerSlug)} />
 <script type="application/json" id="sesi-data" set:html={JSON.stringify(sesiPerSlug)} />
+<script type="application/json" id="prefill-rb-data" set:html={JSON.stringify(prefillRb)} />
 
 <style>
   .laporan-form {
@@ -675,6 +909,47 @@ const promptAI = buatPromptAI();
      berganti, jadi butuh guard ini supaya [hidden] benar-benar berlaku. */
   .laporan-form label[hidden] {
     display: none;
+  }
+
+  .laporan-form .jenis-group[hidden] {
+    display: none;
+  }
+
+  .jenis-fieldset {
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .jenis-fieldset legend {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0 0.3rem;
+  }
+
+  .jenis-radio {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .jenis-radio input {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .jenis-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .opsional {

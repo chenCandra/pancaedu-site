@@ -1,0 +1,222 @@
+---
+// Story Sequencing Game -- urutkan kartu adegan sesuai alur cerita. Sengaja
+// pakai tombol pindah ▲▼ (bukan drag) -- interaksi paling sederhana yang
+// tetap 100% bisa dipakai lewat sentuhan/tap MAUPUN keyboard tanpa logika
+// drag tambahan, beda dari StructureSorter (kategorisasi ke beberapa
+// kelompok) yang memang butuh drag/klik-klik karena ada banyak "tempat
+// tujuan". Di sini cuma ada 1 urutan, jadi tombol pindah posisi sudah cukup.
+interface Scene {
+  id: string;
+  text: string;
+}
+
+interface Props {
+  // Diberikan dalam URUTAN YANG BENAR -- diacak di client saat render.
+  scenes: Scene[];
+}
+
+const { scenes } = Astro.props;
+const dataJson = JSON.stringify(scenes).replace(/<\//g, '<\\/');
+---
+
+{scenes.length > 0 && (
+  <div class="sg" data-sg>
+    <script type="application/json" data-sg-data set:html={dataJson} />
+    <p class="sg-instruction">Urutkan adegan-adegan ini sesuai jalan cerita, pakai tombol ▲▼.</p>
+    <ol class="sg-list" data-sg-list></ol>
+    <div class="sg-actions">
+      <button type="button" class="btn sg-check" data-sg-check>Periksa Urutan</button>
+      <button type="button" class="btn sg-reset" data-sg-reset hidden>Acak Ulang</button>
+    </div>
+    <p class="sg-score" data-sg-score hidden></p>
+  </div>
+)}
+
+<script>
+  interface Scene {
+    id: string;
+    text: string;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-sg]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-sg-data]');
+    const list = wrap.querySelector<HTMLOListElement>('[data-sg-list]');
+    const checkBtn = wrap.querySelector<HTMLButtonElement>('[data-sg-check]');
+    const resetBtn = wrap.querySelector<HTMLButtonElement>('[data-sg-reset]');
+    const scoreEl = wrap.querySelector<HTMLElement>('[data-sg-score]');
+    if (!dataScript || !list || !checkBtn) return;
+
+    let original: Scene[] = [];
+    try {
+      original = JSON.parse(dataScript.textContent || '[]');
+    } catch {
+      return;
+    }
+    if (original.length === 0) return;
+
+    let order: Scene[] = [];
+
+    function render() {
+      list!.innerHTML = '';
+      order.forEach((scene, i) => {
+        const li = document.createElement('li');
+        li.className = 'sg-item';
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'sg-item-text';
+        textSpan.textContent = scene.text;
+
+        const controls = document.createElement('div');
+        controls.className = 'sg-item-controls';
+
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.className = 'sg-move-btn';
+        upBtn.textContent = '▲';
+        upBtn.setAttribute('aria-label', 'Pindah ke atas');
+        upBtn.disabled = i === 0;
+        upBtn.addEventListener('click', () => {
+          [order[i - 1], order[i]] = [order[i], order[i - 1]];
+          render();
+        });
+
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.className = 'sg-move-btn';
+        downBtn.textContent = '▼';
+        downBtn.setAttribute('aria-label', 'Pindah ke bawah');
+        downBtn.disabled = i === order.length - 1;
+        downBtn.addEventListener('click', () => {
+          [order[i + 1], order[i]] = [order[i], order[i + 1]];
+          render();
+        });
+
+        controls.appendChild(upBtn);
+        controls.appendChild(downBtn);
+        li.appendChild(textSpan);
+        li.appendChild(controls);
+        list!.appendChild(li);
+      });
+      if (scoreEl) scoreEl.hidden = true;
+      if (resetBtn) resetBtn.hidden = true;
+    }
+
+    checkBtn.addEventListener('click', () => {
+      let correct = 0;
+      Array.from(list!.children).forEach((li, i) => {
+        const isCorrect = order[i].id === original[i].id;
+        li.classList.toggle('sg-item--correct', isCorrect);
+        li.classList.toggle('sg-item--incorrect', !isCorrect);
+        if (isCorrect) correct++;
+      });
+      if (scoreEl) {
+        scoreEl.hidden = false;
+        scoreEl.textContent = `Skor: ${correct} dari ${order.length} posisi benar`;
+      }
+      if (resetBtn) resetBtn.hidden = false;
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      order = shuffle(original);
+      render();
+    });
+
+    order = shuffle(original);
+    render();
+  });
+</script>
+
+<style>
+  .sg {
+    margin-block: 1.5rem;
+  }
+
+  .sg-instruction {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1rem;
+  }
+
+  .sg-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sg-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+  }
+
+  .sg-item--correct {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+
+  .sg-item--incorrect {
+    border-color: var(--rose);
+    background: var(--rose-soft);
+  }
+
+  .sg-item-text {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .sg-item-controls {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .sg-move-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--emerald);
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .sg-move-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .sg-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .sg-actions .btn {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .sg-score {
+    margin-top: 0.75rem;
+    font-weight: 700;
+    color: var(--emerald);
+  }
+</style>

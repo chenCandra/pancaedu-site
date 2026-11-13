@@ -1,0 +1,552 @@
+---
+// Layout 5-bagian modul Bahasa Inggris (pendekatan Genre-Based: Warm-up/BKoF
+// -> Model Text/MoT -> Let's Practice Together/JCoT -> Your Turn/ICoT ->
+// Reflect & Check). Menerima 1 entry koleksi `blog` (category:materi,
+// mapel:"Bahasa Inggris") -- field-field khusus modul bahasa ada di
+// content.config.ts. Konten markdown (body .md) ditempatkan di slot
+// "warmup-body", dirender sebagai elaborasi Warm-up.
+import type { CollectionEntry } from 'astro:content';
+import Kuis from '../Kuis.astro';
+import Flashcards from './Flashcards.astro';
+import HighlightText from './HighlightText.astro';
+import GrammarSpotlight from './GrammarSpotlight.astro';
+import GapFill from './GapFill.astro';
+import StructureSorter from './StructureSorter.astro';
+import FactOrOpinion from './FactOrOpinion.astro';
+import DialogSimulator from './DialogSimulator.astro';
+import ComplimentCardMaker from './ComplimentCardMaker.astro';
+import OpinionCards from './OpinionCards.astro';
+import SequencingGame from './SequencingGame.astro';
+import StoryMap from './StoryMap.astro';
+import TimelineBuilder from './TimelineBuilder.astro';
+import ListenButton from './ListenButton.astro';
+import { kelasToSlug, type Kelas } from '../../lib/ruangBelajar';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const {
+  title,
+  kelas,
+  elemen,
+  profilLulusan,
+  fokusKebahasaan,
+  konteksTema,
+  estimasiMenit,
+  vocabulary,
+  modelTexts,
+  activities,
+  task,
+  reflection,
+  reviewStatus,
+  simulasi,
+  simulasiTambahan,
+  kuis,
+} = entry.data;
+
+const backHref = kelas ? `/bahasa-inggris/kelas/${kelasToSlug(kelas as Kelas)}` : '/bahasa-inggris';
+const latihanAktivitas = (activities ?? []).filter((a) => a.type !== 'quiz');
+const adaMediaInteraktif = Boolean(simulasi) || Boolean(simulasiTambahan && simulasiTambahan.length > 0);
+---
+
+<article class="bi-modul" data-bi-help="false">
+  <a href={backHref} class="bi-small-back">&larr; Bahasa Inggris{kelas ? ` Kelas ${kelas}` : ''}</a>
+
+  <header class="bi-modul-header">
+    <div class="bi-modul-tags">
+      <span class="badge bi-badge-accent">Bahasa Inggris{kelas ? ` — Kelas ${kelas}` : ''}</span>
+      <span class={`badge ${reviewStatus === 'reviewed' ? 'bi-badge-reviewed' : 'badge-gold'}`}>
+        {reviewStatus === 'reviewed' ? '✅ Direview' : '📝 Draf — menunggu review guru'}
+      </span>
+      {estimasiMenit && <span class="badge">⏱ {estimasiMenit} menit</span>}
+    </div>
+    <h1>{title}</h1>
+    {elemen && elemen.length > 0 && <p class="bi-elemen">{elemen.join(' · ')}</p>}
+    {fokusKebahasaan && fokusKebahasaan.length > 0 && (
+      <p class="bi-fokus">Fokus kebahasaan: {fokusKebahasaan.join(', ')}</p>
+    )}
+    {profilLulusan && profilLulusan.length > 0 && (
+      <ul class="bi-profil-list" aria-label="Dimensi Profil Lulusan yang dilatih">
+        {profilLulusan.map((p) => (
+          <li class="badge bi-badge-profil">{p}</li>
+        ))}
+      </ul>
+    )}
+    <button type="button" class="bi-helper-toggle" id="bi-helper-toggle" aria-pressed="false">
+      🇮🇩 Bantuan Bahasa Indonesia
+    </button>
+  </header>
+
+  <section class="bi-section" aria-labelledby="bi-warmup-title">
+    <h2 id="bi-warmup-title">🔥 Warm-up</h2>
+    {konteksTema && <p class="bi-konteks">{konteksTema}</p>}
+    <div class="prose bi-warmup-body">
+      <slot name="warmup-body" />
+    </div>
+    {vocabulary && vocabulary.length > 0 && <Flashcards items={vocabulary} />}
+  </section>
+
+  {modelTexts && modelTexts.length > 0 && (
+    <section class="bi-section" aria-labelledby="bi-model-title">
+      <h2 id="bi-model-title">📖 Model Text</h2>
+      {modelTexts.map((mt, i) => {
+        const textId = `bi-modeltext-${entry.id}-${i}`;
+        return (
+          <div class="bi-model-text">
+            <div class="bi-model-text-head">
+              <h3>{mt.title}</h3>
+              <ListenButton text={mt.body} />
+            </div>
+            {mt.grammarTerms && mt.grammarTerms.length > 0 && (
+              <GrammarSpotlight terms={mt.grammarTerms} targetId={textId} />
+            )}
+            <HighlightText id={textId} body={mt.body} annotations={mt.annotations} />
+          </div>
+        );
+      })}
+    </section>
+  )}
+
+  {adaMediaInteraktif && (
+    <section class="bi-section" aria-labelledby="bi-media-title">
+      <h2 id="bi-media-title">🎮 Media Interaktif</h2>
+      {simulasi && (
+        <div class="bi-embed-wrap">
+          <iframe src={simulasi.url} title={simulasi.judul} height={simulasi.tinggi} loading="lazy"></iframe>
+          {simulasi.sumber && <p class="bi-embed-sumber">Sumber: {simulasi.sumber}</p>}
+        </div>
+      )}
+      {simulasiTambahan &&
+        simulasiTambahan.map((s) => (
+          <div class="bi-embed-wrap">
+            <iframe src={s.url} title={s.judul} height={s.tinggi} loading="lazy"></iframe>
+            <p class="bi-embed-sumber">Sumber: {s.sumber}</p>
+          </div>
+        ))}
+    </section>
+  )}
+
+  {latihanAktivitas.length > 0 && (
+    <section class="bi-section" aria-labelledby="bi-practice-title">
+      <h2 id="bi-practice-title">🤝 Let's Practice Together</h2>
+      {latihanAktivitas.map((a) => {
+        if (a.type === 'gapfill') {
+          return <GapFill text={String(a.config.text ?? '')} blanks={(a.config.blanks as any) ?? []} />;
+        }
+        if (a.type === 'structuresorter') {
+          return (
+            <StructureSorter
+              categories={(a.config.categories as any) ?? []}
+              paragraphs={(a.config.paragraphs as any) ?? []}
+            />
+          );
+        }
+        if (a.type === 'factopinion') {
+          return <FactOrOpinion statements={(a.config.statements as any) ?? []} />;
+        }
+        if (a.type === 'dialog') {
+          return (
+            <DialogSimulator
+              turns={(a.config.turns as any) ?? []}
+              startId={String(a.config.startId ?? '')}
+            />
+          );
+        }
+        if (a.type === 'compliment-card') {
+          return (
+            <ComplimentCardMaker
+              occasions={(a.config.occasions as any) ?? undefined}
+              starters={(a.config.starters as any) ?? undefined}
+            />
+          );
+        }
+        if (a.type === 'opinion-cards') {
+          return <OpinionCards cards={(a.config.cards as any) ?? []} />;
+        }
+        if (a.type === 'sequencing') {
+          return <SequencingGame scenes={(a.config.scenes as any) ?? []} />;
+        }
+        if (a.type === 'story-map') {
+          return (
+            <StoryMap
+              characters={(a.config.characters as any) ?? []}
+              setting={String(a.config.setting ?? '')}
+              conflict={String(a.config.conflict ?? '')}
+              resolution={String(a.config.resolution ?? '')}
+            />
+          );
+        }
+        if (a.type === 'timeline') {
+          return <TimelineBuilder events={(a.config.events as any) ?? []} />;
+        }
+        if (a.type === 'situational-quiz') {
+          // Reuse Kuis.astro -- "Which expression fits?" secara bentuk data
+          // SAMA PERSIS seperti kuis[] formatif di Reflect & Check, cuma
+          // ditaruh di JCoT sebagai latihan terbimbing, bukan kuis akhir.
+          return (
+            <Kuis
+              soal={a.config.soal as any}
+              jumlahTampil={(a.config.jumlahTampil as number) ?? 99}
+              id={`practice-quiz-${entry.id}`}
+              heading="🤔 Which Expression Fits?"
+            />
+          );
+        }
+        return (
+          <p class="bi-activity-placeholder">
+            Aktivitas jenis &ldquo;{a.type}&rdquo; akan tersedia di tahap berikutnya.
+          </p>
+        );
+      })}
+    </section>
+  )}
+
+  {task && (
+    <section class="bi-section" aria-labelledby="bi-task-title">
+      <h2 id="bi-task-title">✍️ Your Turn</h2>
+      <p class="bi-task-prompt">{task.prompt}</p>
+      {task.rubric.length > 0 && (
+        <div class="bi-rubric">
+          <p class="bi-rubric-label">Rubrik</p>
+          <ul>
+            {task.rubric.map((r) => (
+              <li>{r}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {task.submissionType === 'text' ? (
+        <div class="bi-scratchpad-wrap">
+          <textarea
+            class="bi-scratchpad"
+            id={`bi-scratchpad-${entry.id}`}
+            rows="6"
+            placeholder="Tulis jawabanmu di sini (tersimpan otomatis di perangkat ini)…"
+          ></textarea>
+          <p class="bi-scratchpad-note">
+            📌 Draf ini tersimpan di perangkatmu saja. Fitur kumpulkan tugas ke guru akan aktif di
+            tahap berikutnya.
+          </p>
+        </div>
+      ) : (
+        <p class="bi-task-notice">🎙️ Fitur rekam suara akan aktif di tahap berikutnya.</p>
+      )}
+    </section>
+  )}
+
+  <section class="bi-section" aria-labelledby="bi-reflect-title">
+    <h2 id="bi-reflect-title">💭 Reflect &amp; Check</h2>
+    {reflection && reflection.length > 0 && (
+      <ul class="bi-reflection-list" id={`bi-reflection-${entry.id}`}>
+        {reflection.map((r, i) => (
+          <li>
+            <label class="bi-reflection-item">
+              <input type="checkbox" data-bi-reflection-index={i} />
+              <span>I can {r}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    )}
+    <Kuis soal={kuis} />
+  </section>
+</article>
+
+<script define:vars={{ entryId: entry.id }}>
+  // Toggle "Bantuan Bahasa Indonesia" -- pola sama persis toggle tema
+  // gelap/terang di Header.astro: localStorage try/catch, atribut di
+  // container pembungkus, 1 aturan CSS nampilin/nyembunyiin semua
+  // `.bi-helper` sekaligus (tidak perlu listener per elemen).
+  const STORAGE_KEY = 'pancaedu-bi-helper';
+  const container = document.querySelector('.bi-modul');
+  const toggleBtn = document.getElementById('bi-helper-toggle');
+
+  function setHelper(on) {
+    if (container) container.setAttribute('data-bi-help', on ? 'true' : 'false');
+    if (toggleBtn) toggleBtn.setAttribute('aria-pressed', String(on));
+    try {
+      localStorage.setItem(STORAGE_KEY, on ? '1' : '0');
+    } catch {}
+  }
+
+  let saved = '0';
+  try {
+    saved = localStorage.getItem(STORAGE_KEY) || '0';
+  } catch {}
+  setHelper(saved === '1');
+
+  toggleBtn?.addEventListener('click', () => {
+    const now = container?.getAttribute('data-bi-help') === 'true';
+    setHelper(!now);
+  });
+
+  // Ceklis refleksi "I can…" -- progres per modul disimpan localStorage,
+  // try/catch-wrapped (bisa gagal di private mode/situasi storage diblok --
+  // halaman tetap harus jalan normal kalau itu terjadi).
+  const REFLECT_KEY = `pancaedu-bi-reflect-${entryId}`;
+  const reflectList = document.getElementById(`bi-reflection-${entryId}`);
+  if (reflectList) {
+    let savedState = [];
+    try {
+      savedState = JSON.parse(localStorage.getItem(REFLECT_KEY) || '[]');
+    } catch {}
+    const boxes = reflectList.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach((box, i) => {
+      box.checked = Boolean(savedState[i]);
+      box.addEventListener('change', () => {
+        const state = Array.from(boxes).map((b) => b.checked);
+        try {
+          localStorage.setItem(REFLECT_KEY, JSON.stringify(state));
+        } catch {}
+      });
+    });
+  }
+
+  // Scratchpad "Your Turn" -- draf tersimpan lokal saja (belum ada backend
+  // pengumpulan tugas, lihat catatan di frontmatter `task`).
+  const scratchpad = document.getElementById(`bi-scratchpad-${entryId}`);
+  if (scratchpad) {
+    const SCRATCH_KEY = `pancaedu-bi-scratch-${entryId}`;
+    try {
+      scratchpad.value = localStorage.getItem(SCRATCH_KEY) || '';
+    } catch {}
+    scratchpad.addEventListener('input', () => {
+      try {
+        localStorage.setItem(SCRATCH_KEY, scratchpad.value);
+      } catch {}
+    });
+  }
+</script>
+
+<style>
+  .bi-modul {
+    padding-block: 3rem 4rem;
+    max-width: var(--measure);
+  }
+
+  .bi-small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .bi-modul-header {
+    margin-bottom: 2rem;
+  }
+
+  .bi-modul-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bi-badge-accent {
+    background: var(--emerald-soft);
+    color: var(--emerald);
+  }
+
+  .bi-badge-reviewed {
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .bi-elemen {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0.35rem 0 0;
+  }
+
+  .bi-fokus {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0.35rem 0;
+  }
+
+  .bi-profil-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0;
+  }
+
+  .bi-badge-profil {
+    background: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .bi-helper-toggle {
+    margin-top: 0.75rem;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .bi-helper-toggle[aria-pressed='true'] {
+    border-color: var(--emerald);
+    color: var(--emerald);
+  }
+
+  .bi-section {
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(1.25rem, 4vw, 2rem);
+    margin-bottom: 1.75rem;
+  }
+
+  .bi-section h2 {
+    font-size: 1.25rem;
+    margin: 0 0 1rem;
+  }
+
+  .bi-konteks {
+    color: var(--ink-soft);
+    margin: 0 0 1rem;
+  }
+
+  .bi-warmup-body:empty {
+    display: none;
+  }
+
+  .bi-model-text {
+    margin-bottom: 1.5rem;
+  }
+
+  .bi-model-text:last-child {
+    margin-bottom: 0;
+  }
+
+  .bi-model-text-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .bi-model-text-head h3 {
+    font-size: 1.0625rem;
+    margin: 0;
+  }
+
+  .bi-embed-wrap {
+    margin-bottom: 1.25rem;
+  }
+
+  .bi-embed-wrap:last-child {
+    margin-bottom: 0;
+  }
+
+  .bi-embed-wrap iframe {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .bi-embed-sumber {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin: 0.4rem 0 0;
+  }
+
+  .bi-activity-placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    font-size: 0.9375rem;
+  }
+
+  .bi-task-prompt {
+    font-size: 1rem;
+    margin: 0 0 1rem;
+  }
+
+  .bi-rubric {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .bi-rubric-label {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .bi-rubric ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .bi-scratchpad {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink);
+    resize: vertical;
+  }
+
+  .bi-scratchpad-note {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin: 0.5rem 0 0;
+  }
+
+  .bi-task-notice {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  .bi-reflection-list {
+    list-style: none;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .bi-reflection-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 44px;
+    cursor: pointer;
+    font-size: 0.9375rem;
+  }
+
+  .bi-reflection-item input[type='checkbox'] {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--emerald);
+    flex-shrink: 0;
+  }
+
+  /* Toggle Bantuan Bahasa Indonesia -- sembunyikan/tampilkan SEMUA
+     .bi-helper sekaligus lewat 1 aturan, bukan listener per elemen. */
+  .bi-helper {
+    display: none;
+  }
+
+  .bi-modul[data-bi-help='true'] .bi-helper {
+    display: inline;
+  }
+</style>

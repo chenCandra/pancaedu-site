@@ -1,0 +1,262 @@
+---
+// Opinion Cards -- pengganti "Opinion Wall" dari spec asli (yang butuh
+// backend + moderasi guru, lihat catatan laporan Modul 3). Di sini murid
+// membaca pendapat CONTOH (bukan pendapat teman sekelas sungguhan) satu per
+// satu, memilih sikap (Agree/Partially Agree/Disagree), lalu menulis
+// alasannya sendiri dalam bahasa Inggris -- disimpan localStorage per
+// perangkat, BUKAN wall bersama lintas murid (itu butuh D1, belum dibangun).
+interface Card {
+  persona: string;
+  issue: string;
+  opinion: string;
+}
+
+interface Props {
+  cards: Card[];
+}
+
+const { cards } = Astro.props;
+const dataJson = JSON.stringify(cards).replace(/<\//g, '<\\/');
+---
+
+{cards.length > 0 && (
+  <div class="oc" data-oc id="opinion-cards">
+    <script type="application/json" data-oc-data set:html={dataJson} />
+    <p class="oc-progress" data-oc-progress></p>
+    <div class="oc-card" data-oc-card hidden>
+      <p class="oc-persona" data-oc-persona></p>
+      <p class="oc-issue" data-oc-issue></p>
+      <p class="oc-opinion" data-oc-opinion></p>
+    </div>
+    <div class="oc-stance-row" data-oc-stance-row>
+      <button type="button" class="btn oc-stance-btn" data-oc-stance="agree">👍 I Agree</button>
+      <button type="button" class="btn oc-stance-btn" data-oc-stance="partial">🤔 Partially Agree</button>
+      <button type="button" class="btn oc-stance-btn" data-oc-stance="disagree">👎 I Disagree</button>
+    </div>
+    <div class="oc-reason-wrap" data-oc-reason-wrap hidden>
+      <p class="oc-reason-label" data-oc-reason-prompt></p>
+      <textarea class="oc-reason-input" data-oc-reason rows="3" placeholder="Write your reason in English..."></textarea>
+      <p class="oc-reason-note">📌 Tanggapanmu tersimpan di perangkat ini saja -- bukan dibagikan ke teman sekelas.</p>
+      <button type="button" class="btn btn-primary oc-next" data-oc-next>Next &rarr;</button>
+    </div>
+    <div class="oc-done" data-oc-done hidden>
+      <p class="oc-done-text" data-oc-done-text></p>
+      <button type="button" class="btn oc-restart" data-oc-restart>Start Over</button>
+    </div>
+  </div>
+)}
+
+<script>
+  interface Card {
+    persona: string;
+    issue: string;
+    opinion: string;
+  }
+  type Stance = 'agree' | 'partial' | 'disagree';
+
+  const STANCE_PROMPT: Record<Stance, string> = {
+    agree: 'Why do you agree?',
+    partial: "What part do you agree with, and what part don't you?",
+    disagree: "What's your different point of view?",
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-oc]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-oc-data]');
+    const progressEl = wrap.querySelector<HTMLElement>('[data-oc-progress]');
+    const cardEl = wrap.querySelector<HTMLElement>('[data-oc-card]');
+    const personaEl = wrap.querySelector<HTMLElement>('[data-oc-persona]');
+    const issueEl = wrap.querySelector<HTMLElement>('[data-oc-issue]');
+    const opinionEl = wrap.querySelector<HTMLElement>('[data-oc-opinion]');
+    const stanceRow = wrap.querySelector<HTMLElement>('[data-oc-stance-row]');
+    const stanceBtns = wrap.querySelectorAll<HTMLButtonElement>('[data-oc-stance]');
+    const reasonWrap = wrap.querySelector<HTMLElement>('[data-oc-reason-wrap]');
+    const reasonPrompt = wrap.querySelector<HTMLElement>('[data-oc-reason-prompt]');
+    const reasonInput = wrap.querySelector<HTMLTextAreaElement>('[data-oc-reason]');
+    const nextBtn = wrap.querySelector<HTMLButtonElement>('[data-oc-next]');
+    const doneEl = wrap.querySelector<HTMLElement>('[data-oc-done]');
+    const doneTextEl = wrap.querySelector<HTMLElement>('[data-oc-done-text]');
+    const restartBtn = wrap.querySelector<HTMLButtonElement>('[data-oc-restart]');
+    if (!dataScript || !cardEl || !personaEl || !issueEl || !opinionEl || !stanceRow || !reasonWrap || !reasonPrompt || !reasonInput || !nextBtn || !doneEl) return;
+
+    let cards: Card[] = [];
+    try {
+      cards = JSON.parse(dataScript.textContent || '[]');
+    } catch {
+      cards = [];
+    }
+    if (cards.length === 0) return;
+
+    const STORAGE_KEY = 'pancaedu-bi-opinion-cards';
+    let saved: Record<string, { stance: Stance; reason: string }> = {};
+    try {
+      saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch {
+      saved = {};
+    }
+
+    let index = 0;
+    let currentStance: Stance | null = null;
+
+    function showCard() {
+      if (index >= cards.length) {
+        cardEl!.hidden = true;
+        stanceRow!.hidden = true;
+        reasonWrap!.hidden = true;
+        doneEl!.hidden = false;
+        if (doneTextEl) doneTextEl.textContent = `🎉 Great job! You shared your opinion on ${cards.length} issue${cards.length > 1 ? 's' : ''}.`;
+        if (progressEl) progressEl.textContent = '';
+        return;
+      }
+      const card = cards[index];
+      cardEl!.hidden = false;
+      doneEl!.hidden = true;
+      personaEl!.textContent = card.persona;
+      issueEl!.textContent = card.issue;
+      opinionEl!.textContent = `"${card.opinion}"`;
+      if (progressEl) progressEl.textContent = `Opinion ${index + 1} of ${cards.length}`;
+
+      currentStance = null;
+      stanceRow!.hidden = false;
+      reasonWrap!.hidden = true;
+      reasonInput!.value = '';
+      stanceBtns.forEach((b) => b.classList.remove('oc-stance-btn--active'));
+    }
+
+    stanceBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        currentStance = btn.dataset.ocStance as Stance;
+        stanceBtns.forEach((b) => b.classList.toggle('oc-stance-btn--active', b === btn));
+        stanceRow!.hidden = true;
+        reasonWrap!.hidden = false;
+        reasonPrompt!.textContent = STANCE_PROMPT[currentStance];
+        reasonInput!.focus();
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (!currentStance) return;
+      saved[String(index)] = { stance: currentStance, reason: reasonInput!.value.trim() };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      } catch {}
+      index++;
+      showCard();
+    });
+
+    restartBtn?.addEventListener('click', () => {
+      index = 0;
+      showCard();
+    });
+
+    showCard();
+  });
+</script>
+
+<style>
+  .oc {
+    margin-block: 1.5rem;
+  }
+
+  .oc-progress {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin: 0 0 0.75rem;
+  }
+
+  .oc-card {
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .oc-persona {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--emerald);
+    margin: 0 0 0.3rem;
+  }
+
+  .oc-issue {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink-faint);
+    margin: 0 0 0.6rem;
+  }
+
+  .oc-opinion {
+    font-size: 1.0625rem;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .oc-stance-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .oc-stance-btn {
+    min-height: 44px;
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  .oc-stance-btn:hover,
+  .oc-stance-btn--active {
+    border-color: var(--emerald);
+    color: var(--emerald);
+  }
+
+  .oc-reason-label {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  .oc-reason-input {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--ink);
+    resize: vertical;
+  }
+
+  .oc-reason-note {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin: 0.5rem 0 1rem;
+  }
+
+  .oc-next {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .oc-done {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .oc-done-text {
+    font-weight: 700;
+    color: var(--emerald);
+    margin: 0 0 1rem;
+  }
+
+  .oc-restart {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+</style>

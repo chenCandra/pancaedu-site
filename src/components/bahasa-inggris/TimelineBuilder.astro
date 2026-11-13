@@ -1,0 +1,285 @@
+---
+// Timeline Builder -- susun peristiwa hidup seseorang sesuai urutan waktu
+// (pola reorder sama seperti SequencingGame, pakai tombol ▲▼), lalu begitu
+// urutannya BENAR, tombol "Buat Kerangka Paragraf" muncul dan merangkai
+// peristiwa-peristiwa itu jadi draf paragraf pakai time connectors
+// (In .../After that.../Finally...) -- ini bagian "sistem membuat kerangka
+// paragraf" dari spec Modul 6.
+interface Event {
+  id: string;
+  year: string;
+  event: string;
+}
+
+interface Props {
+  // Diberikan dalam URUTAN KRONOLOGIS YANG BENAR -- diacak di client saat render.
+  events: Event[];
+}
+
+const { events } = Astro.props;
+const dataJson = JSON.stringify(events).replace(/<\//g, '<\\/');
+---
+
+{events.length > 0 && (
+  <div class="tb" data-tb>
+    <script type="application/json" data-tb-data set:html={dataJson} />
+    <p class="tb-instruction">Urutkan peristiwa ini sesuai garis waktu (dari paling awal), pakai tombol ▲▼.</p>
+    <ol class="tb-timeline" data-tb-timeline></ol>
+    <div class="tb-actions">
+      <button type="button" class="btn tb-check" data-tb-check>Periksa Urutan</button>
+      <button type="button" class="btn tb-reset" data-tb-reset hidden>Acak Ulang</button>
+    </div>
+    <p class="tb-score" data-tb-score hidden></p>
+    <button type="button" class="btn btn-primary tb-generate" data-tb-generate hidden>✨ Buat Kerangka Paragraf</button>
+    <div class="tb-outline" data-tb-outline hidden>
+      <p class="tb-outline-label">Kerangka paragraf dari susunanmu:</p>
+      <p class="tb-outline-text" data-tb-outline-text></p>
+    </div>
+  </div>
+)}
+
+<script>
+  interface Event {
+    id: string;
+    year: string;
+    event: string;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-tb]').forEach((wrap) => {
+    const dataScript = wrap.querySelector<HTMLScriptElement>('[data-tb-data]');
+    const list = wrap.querySelector<HTMLOListElement>('[data-tb-timeline]');
+    const checkBtn = wrap.querySelector<HTMLButtonElement>('[data-tb-check]');
+    const resetBtn = wrap.querySelector<HTMLButtonElement>('[data-tb-reset]');
+    const scoreEl = wrap.querySelector<HTMLElement>('[data-tb-score]');
+    const generateBtn = wrap.querySelector<HTMLButtonElement>('[data-tb-generate]');
+    const outlineWrap = wrap.querySelector<HTMLElement>('[data-tb-outline]');
+    const outlineText = wrap.querySelector<HTMLElement>('[data-tb-outline-text]');
+    if (!dataScript || !list || !checkBtn) return;
+
+    let original: Event[] = [];
+    try {
+      original = JSON.parse(dataScript.textContent || '[]');
+    } catch {
+      return;
+    }
+    if (original.length === 0) return;
+
+    let order: Event[] = [];
+
+    function render() {
+      list!.innerHTML = '';
+      order.forEach((ev, i) => {
+        const li = document.createElement('li');
+        li.className = 'tb-item';
+
+        const year = document.createElement('span');
+        year.className = 'tb-item-year';
+        year.textContent = ev.year;
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'tb-item-text';
+        textSpan.textContent = ev.event;
+
+        const controls = document.createElement('div');
+        controls.className = 'tb-item-controls';
+
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.className = 'tb-move-btn';
+        upBtn.textContent = '▲';
+        upBtn.setAttribute('aria-label', 'Pindah ke atas');
+        upBtn.disabled = i === 0;
+        upBtn.addEventListener('click', () => {
+          [order[i - 1], order[i]] = [order[i], order[i - 1]];
+          render();
+        });
+
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.className = 'tb-move-btn';
+        downBtn.textContent = '▼';
+        downBtn.setAttribute('aria-label', 'Pindah ke bawah');
+        downBtn.disabled = i === order.length - 1;
+        downBtn.addEventListener('click', () => {
+          [order[i + 1], order[i]] = [order[i], order[i + 1]];
+          render();
+        });
+
+        controls.appendChild(upBtn);
+        controls.appendChild(downBtn);
+        li.appendChild(year);
+        li.appendChild(textSpan);
+        li.appendChild(controls);
+        list!.appendChild(li);
+      });
+      if (scoreEl) scoreEl.hidden = true;
+      if (resetBtn) resetBtn.hidden = true;
+      if (generateBtn) generateBtn.hidden = true;
+      if (outlineWrap) outlineWrap.hidden = true;
+    }
+
+    checkBtn.addEventListener('click', () => {
+      let correct = 0;
+      Array.from(list!.children).forEach((li, i) => {
+        const isCorrect = order[i].id === original[i].id;
+        li.classList.toggle('tb-item--correct', isCorrect);
+        li.classList.toggle('tb-item--incorrect', !isCorrect);
+        if (isCorrect) correct++;
+      });
+      if (scoreEl) {
+        scoreEl.hidden = false;
+        scoreEl.textContent = `Skor: ${correct} dari ${order.length} posisi benar`;
+      }
+      if (resetBtn) resetBtn.hidden = false;
+      if (generateBtn) generateBtn.hidden = correct !== order.length;
+      if (outlineWrap) outlineWrap.hidden = true;
+    });
+
+    generateBtn?.addEventListener('click', () => {
+      const sentences = order.map((ev, i) => {
+        const connector = i === 0 ? 'In' : i === order.length - 1 ? 'Finally, in' : 'After that, in';
+        return `${connector} ${ev.year}, ${ev.event.charAt(0).toLowerCase()}${ev.event.slice(1).replace(/\.$/, '')}.`;
+      });
+      if (outlineText) outlineText.textContent = sentences.join(' ');
+      if (outlineWrap) outlineWrap.hidden = false;
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      order = shuffle(original);
+      render();
+    });
+
+    order = shuffle(original);
+    render();
+  });
+</script>
+
+<style>
+  .tb {
+    margin-block: 1.5rem;
+  }
+
+  .tb-instruction {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1rem;
+  }
+
+  .tb-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .tb-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--emerald);
+    border-radius: var(--radius-sm);
+    background: var(--surface-solid);
+  }
+
+  .tb-item--correct {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+
+  .tb-item--incorrect {
+    border-color: var(--rose);
+    background: var(--rose-soft);
+  }
+
+  .tb-item-year {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--emerald);
+    min-width: 3.5rem;
+    flex-shrink: 0;
+  }
+
+  .tb-item-text {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .tb-item-controls {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .tb-move-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--emerald);
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .tb-move-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .tb-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .tb-actions .btn,
+  .tb-generate {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  .tb-score {
+    margin-top: 0.75rem;
+    font-weight: 700;
+    color: var(--emerald);
+  }
+
+  .tb-generate {
+    margin-top: 1rem;
+  }
+
+  .tb-outline {
+    margin-top: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+  }
+
+  .tb-outline-label {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .tb-outline-text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,121 @@
+---
+// Teks model (Model Text/MoT) dengan istilah kunci yang bisa di-highlight --
+// klik/Enter pada istilah menampilkan catatan singkat inline. Highlight
+// cuma kemunculan PERTAMA tiap istilah (penyederhanaan Tahap 2 yang
+// disengaja -- istilah berulang di teks yang sama tidak di-highlight ulang).
+interface Annotation {
+  text: string;
+  note: string;
+}
+
+interface Props {
+  body: string;
+  annotations: Annotation[];
+  id?: string;
+}
+
+const { body, annotations, id } = Astro.props;
+
+type Segment =
+  | { kind: 'text'; value: string }
+  | { kind: 'term'; value: string; note: string; index: number };
+
+function buildSegments(text: string, anns: Annotation[]): Segment[] {
+  let segments: Segment[] = [{ kind: 'text', value: text }];
+  anns.forEach((ann, i) => {
+    if (!ann.text) return;
+    const next: Segment[] = [];
+    let used = false;
+    for (const seg of segments) {
+      if (used || seg.kind !== 'text') {
+        next.push(seg);
+        continue;
+      }
+      const idx = seg.value.indexOf(ann.text);
+      if (idx === -1) {
+        next.push(seg);
+        continue;
+      }
+      used = true;
+      const before = seg.value.slice(0, idx);
+      const after = seg.value.slice(idx + ann.text.length);
+      if (before) next.push({ kind: 'text', value: before });
+      next.push({ kind: 'term', value: ann.text, note: ann.note, index: i });
+      if (after) next.push({ kind: 'text', value: after });
+    }
+    segments = next;
+  });
+  return segments;
+}
+
+const segments = buildSegments(body, annotations);
+---
+
+<p class="ht-text" id={id}>
+  {segments.map((seg) =>
+    seg.kind === 'term' ? (
+      <>
+        <button
+          type="button"
+          class="ht-term"
+          aria-describedby={`ht-note-${seg.index}`}
+          aria-expanded="false"
+        >
+          {seg.value}
+        </button>
+        <span class="ht-note" id={`ht-note-${seg.index}`} hidden>
+          {seg.note}
+        </span>
+      </>
+    ) : (
+      seg.value
+    )
+  )}
+</p>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.ht-term').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('aria-describedby');
+      const note = id ? document.getElementById(id) : null;
+      if (!note) return;
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      note.hidden = expanded;
+    });
+  });
+</script>
+
+<style>
+  .ht-text {
+    line-height: 1.75;
+    font-size: 1rem;
+  }
+
+  .ht-term {
+    display: inline;
+    font: inherit;
+    color: var(--emerald);
+    background: var(--emerald-soft);
+    border: none;
+    border-radius: 0.25rem;
+    /* Istilah highlight inline di tengah alur teks -- target sentuh 44px
+       penuh akan merusak line-height paragraf. Padding diperbesar sebagai
+       kompromi praktis (pola umum untuk anotasi kata inline), bukan
+       pengecualian diam-diam. */
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .ht-note {
+    display: block;
+    margin: 0.35rem 0 0.75rem;
+    padding: 0.6rem 0.85rem;
+    background: var(--surface);
+    border-left: 3px solid var(--emerald);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+</style>

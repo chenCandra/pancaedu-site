@@ -1,0 +1,95 @@
+---
+// Story Map -- peta cerita visual 4-kuadran (Characters/Setting/Conflict/
+// Resolution). Sengaja dirender statis (tanpa JS) -- "interaktif" di sini
+// berarti terstruktur & bisa dieksplor per bagian di layar (beda dari
+// lembar kerja cetak biasa), bukan butuh animasi/toggle buat jadi berguna
+// secara pedagogis (pola graphic organizer standar pembelajaran bahasa).
+interface Character {
+  name: string;
+  role: string;
+}
+
+interface Props {
+  characters: Character[];
+  setting: string;
+  conflict: string;
+  resolution: string;
+}
+
+const { characters, setting, conflict, resolution } = Astro.props;
+---
+
+<div class="sm">
+  <div class="sm-quadrant">
+    <p class="sm-label">🎭 Characters</p>
+    <ul class="sm-char-list">
+      {characters.map((c) => (
+        <li><strong>{c.name}</strong> — {c.role}</li>
+      ))}
+    </ul>
+  </div>
+  <div class="sm-quadrant">
+    <p class="sm-label">🗺️ Setting</p>
+    <p class="sm-text">{setting}</p>
+  </div>
+  <div class="sm-quadrant">
+    <p class="sm-label">⚡ Conflict</p>
+    <p class="sm-text">{conflict}</p>
+  </div>
+  <div class="sm-quadrant">
+    <p class="sm-label">✅ Resolution</p>
+    <p class="sm-text">{resolution}</p>
+  </div>
+</div>
+
+<style>
+  .sm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  @media (max-width: 32rem) {
+    .sm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sm-quadrant {
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+  }
+
+  .sm-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: var(--emerald);
+    margin: 0 0 0.6rem;
+  }
+
+  .sm-text {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .sm-char-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .sm-char-list li {
+    margin-bottom: 0.3rem;
+  }
+
+  .sm-char-list li:last-child {
+    margin-bottom: 0;
+  }
+</style>
