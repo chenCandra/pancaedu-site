@@ -1,6 +1,6 @@
 ---
 title: "Narrative: Screens Between Friends"
-description: "Teks narasi orisinal tentang dampak media sosial terhadap persahabatan -- belajar struktur Orientation-Complication-Resolution, Simple Past Tense, dan direct speech."
+description: "Teks narasi orisinal tentang dampak media sosial terhadap persahabatan -- belajar struktur Orientation-Complication-Evaluation-Resolution, Simple Past Tense, dan direct speech."
 category: materi
 mapel: Bahasa Inggris
 kelas: XI
@@ -41,6 +41,8 @@ modelTexts:
         note: "Meminta maaf atas kesalahan."
       - text: "reconnect"
         note: "Terhubung kembali setelah sempat renggang."
+      - text: "Dinda felt hurt and ignored"
+        note: "Evaluation -- bagian cerita yang menunjukkan perasaan tokoh tentang masalah yang terjadi, sebelum masuk ke penyelesaian (Resolution)."
     grammarTerms: ["had been", "did", "got", "was", "started", "waited", "said", "felt", "realized", "visited", "smiled", "talked", "agreed"]
 
 activities:
@@ -56,8 +58,10 @@ activities:
         - id: "s4"
           text: "Dinda told Rani that she always had time for her phone, but never for her friend."
         - id: "s5"
-          text: "Rani visited Dinda with a cake and apologized sincerely."
+          text: "Dinda felt hurt and ignored, while Rani felt terrible once she realized what she had done."
         - id: "s6"
+          text: "Rani visited Dinda with a cake and apologized sincerely."
+        - id: "s7"
           text: "They agreed to have a weekly 'phone-free hour' to reconnect."
   - type: "story-map"
     config:
@@ -85,16 +89,16 @@ activities:
           answer: ["apologized"]
 
 task:
-  prompt: "Now it's your turn! Write your own short narrative text (150-200 words) about a friendship that faces a problem related to technology or social media -- it could be about a misunderstanding from a chat message, comparing lives on social media, or something else you can imagine. Make sure your story has three parts: Orientation (who, where, when), Complication (the problem), and Resolution (how it ends). Use Simple Past Tense and at least one line of direct speech (dialogue)."
+  prompt: "Now it's your turn! Write your own short narrative text (150-200 words) about a friendship that faces a problem related to technology or social media -- it could be about a misunderstanding from a chat message, comparing lives on social media, or something else you can imagine. Make sure your story has four parts: Orientation (who, where, when), Complication (the problem), Evaluation (how the characters feel about the problem), and Resolution (how it ends). Use Simple Past Tense and at least one line of direct speech (dialogue)."
   rubric:
-    - "Struktur cerita jelas: Orientation, Complication, Resolution."
+    - "Struktur cerita jelas: Orientation, Complication, Evaluation, Resolution."
     - "Konsisten menggunakan Simple Past Tense."
     - "Ada minimal satu dialog langsung (direct speech) yang ditulis dengan tanda kutip yang benar."
     - "Cerita orisinal (bukan menyalin dari sumber lain) dan mudah dipahami."
   submissionType: "text"
 
 reflection:
-  - "identify the Orientation, Complication, and Resolution of a narrative text."
+  - "identify the Orientation, Complication, Evaluation, and Resolution of a narrative text."
   - "recognize direct speech (dialogue) in a story and how it is punctuated."
   - "use Simple Past Tense correctly when telling a story."
   - "write a short original narrative about a problem between friends."
@@ -124,6 +128,14 @@ kuis:
       - "She bought Dinda a new phone"
     jawaban: 1
     penjelasan: "Teks menyebutkan: 'That evening, Rani visited Dinda's house with a small cake and said, I'm so sorry...'"
+  - soal: "Which sentence represents the Evaluation stage of the story (how the characters feel about the problem)?"
+    pilihan:
+      - "Rani and Dinda had been best friends since elementary school."
+      - "Dinda felt hurt and ignored, while Rani felt terrible once she realized what she had done."
+      - "They agreed to have a weekly 'phone-free hour' to reconnect."
+      - "Rani got her first smartphone."
+    jawaban: 1
+    penjelasan: "Evaluation adalah bagian yang menunjukkan perasaan/reaksi tokoh terhadap masalah (Complication), sebelum cerita bergerak ke penyelesaian (Resolution) -- di sini ditunjukkan lewat perasaan Dinda dan Rani."
   - soal: "What is the moral message of this story?"
     pilihan:
       - "Social media should be banned completely for students"
