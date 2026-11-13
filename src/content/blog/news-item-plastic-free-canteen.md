@@ -1,6 +1,6 @@
 ---
 title: "News Item: Plastic-Free Canteen Policy"
-description: "Teks news item tentang kebijakan kantin bebas plastik di sekolah -- belajar struktur Headline-Lead-Body, Simple Past Tense, dan cara membaca berita secara kritis."
+description: "Teks news item tentang kebijakan kantin bebas plastik di sekolah -- belajar struktur Lead-Events-End, Simple Past Tense, dan cara membaca berita secara kritis."
 category: materi
 mapel: Bahasa Inggris
 kelas: XII
@@ -49,21 +49,26 @@ activities:
       categories:
         - id: "lead"
           label: "Lead"
-        - id: "body"
-          label: "Body"
+        - id: "events"
+          label: "Events"
+        - id: "end"
+          label: "End"
       paragraphs:
         - id: "p1"
           text: "SMA Panca Jaya officially launched a plastic-free canteen policy last Monday, banning all single-use plastic cups, straws, and bags from the school canteen."
           correctCategory: "lead"
         - id: "p2"
           text: "Under the new rule, every student and staff member must bring a reusable bottle or container when buying food or drinks at the canteen. Canteen vendors were also asked to use paper or banana-leaf packaging instead of plastic."
-          correctCategory: "body"
+          correctCategory: "events"
         - id: "p3"
           text: "Not all students were excited at first. Several complained that bringing containers every day was inconvenient, especially when they forgot."
-          correctCategory: "body"
+          correctCategory: "events"
         - id: "p4"
           text: "After two weeks, the school reported that plastic waste in the canteen area had dropped by almost 60 percent."
-          correctCategory: "body"
+          correctCategory: "events"
+        - id: "p5"
+          text: "The principal, Mrs. Yuni, stated, 'We are proud of how quickly our students adapted. We hope this policy will also be implemented in other schools nearby.' The student council plans to monitor the program for one semester before deciding whether to expand it further."
+          correctCategory: "end"
   - type: "factopinion"
     config:
       statements:
@@ -99,16 +104,16 @@ activities:
           answer: ["had dropped", "dropped"]
 
 task:
-  prompt: "Now it's your turn! Write a short news item (150-200 words) about an event or new policy at your own school -- it could be real (a competition your school won, a new rule, an event) or realistic fiction. Make sure your text has three parts: Lead (the most important information: what, who, when, where, summarized in one or two sentences), Body/Events (supporting details, in order of importance), and include at least one quote (direct or reported speech) from someone involved."
+  prompt: "Now it's your turn! Write a short news item (150-200 words) about an event or new policy at your own school -- it could be real (a competition your school won, a new rule, an event) or realistic fiction. Make sure your text has three parts: Lead (the most important information: what, who, when, where, summarized in one or two sentences), Events (supporting details, in order of importance), and End (a closing statement, outcome, or quote looking ahead), and include at least one quote (direct or reported speech) from someone involved."
   rubric:
-    - "Struktur teks: ada Lead yang merangkum inti berita, diikuti Body dengan detail pendukung."
+    - "Struktur teks: ada Lead yang merangkum inti berita, Events dengan detail pendukung, dan End sebagai penutup."
     - "Tata bahasa: konsisten menggunakan Simple Past Tense dan minimal satu kutipan (direct/reported speech)."
     - "Objektivitas: informasi disampaikan secara faktual, bukan opini pribadi penulis."
     - "Kelengkapan: mencakup unsur 5W (what, who, when, where, why) yang relevan."
   submissionType: "text"
 
 reflection:
-  - "identify the Lead and Body parts of a news item."
+  - "identify the Lead, Events, and End parts of a news item."
   - "tell the difference between a fact and an opinion when reading news."
   - "recognize direct and reported speech (quotes) in a news report."
   - "write a short news item about an event using Simple Past Tense."
@@ -121,7 +126,7 @@ kuis:
       - "A long list of everyone who attended the event"
       - "Background history from many years ago"
     jawaban: 1
-    penjelasan: "Lead merangkum inti berita secara singkat di awal -- apa, siapa, kapan, di mana -- sebelum masuk ke detail di Body."
+    penjelasan: "Lead merangkum inti berita secara singkat di awal -- apa, siapa, kapan, di mana -- sebelum masuk ke detail kejadian (Events) dan penutup (End)."
   - soal: "Which sentence is an example of reported speech?"
     pilihan:
       - "Farid said, \"This is a small step.\""

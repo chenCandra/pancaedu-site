@@ -1,6 +1,6 @@
 ---
 title: "Description: Our School Garden"
-description: "Teks deskripsi tentang taman sekolah -- belajar struktur General Identification & Description, linking verbs, dan kata sifat deskriptif (descriptive adjectives)."
+description: "Teks deskripsi tentang taman sekolah -- belajar struktur General Statement & Description, linking verbs, dan kata sifat deskriptif (descriptive adjectives)."
 category: materi
 mapel: Bahasa Inggris
 kelas: XI
@@ -47,14 +47,14 @@ activities:
   - type: "structuresorter"
     config:
       categories:
-        - id: "general-identification"
-          label: "General Identification"
+        - id: "general-statement"
+          label: "General Statement"
         - id: "description"
           label: "Description"
       paragraphs:
         - id: "p1"
           text: "Behind our classroom building, there is a small garden that many students love to visit. It is not very big, but it feels calm and colorful."
-          correctCategory: "general-identification"
+          correctCategory: "general-statement"
         - id: "p2"
           text: "The garden has a narrow pathway in the middle, with flower beds on both sides. Several trees grow around the edges, and their shade is perfect for reading or chatting during break time."
           correctCategory: "description"
@@ -78,16 +78,16 @@ activities:
           answer: ["are", "look"]
 
 task:
-  prompt: "Now it's your turn! Choose your favorite place at school or at home (it could be a garden, a reading corner, your bedroom, or a small café near your house). Write a short descriptive text (120-180 words) using the structure you just learned: start with a General Identification (what/where it is), then write the Description (how it looks, sounds, smells, or feels -- use your five senses!). Use Simple Present Tense and at least 5 descriptive adjectives or linking verbs (is, are, looks, feels, smells)."
+  prompt: "Now it's your turn! Choose your favorite place at school or at home (it could be a garden, a reading corner, your bedroom, or a small café near your house). Write a short descriptive text (120-180 words) using the structure you just learned: start with a General Statement (what/where it is), then write the Description (how it looks, sounds, smells, or feels -- use your five senses!). Use Simple Present Tense and at least 5 descriptive adjectives or linking verbs (is, are, looks, feels, smells)."
   rubric:
-    - "Struktur teks: ada General Identification dan Description yang jelas."
+    - "Struktur teks: ada General Statement dan Description yang jelas."
     - "Tata bahasa: konsisten menggunakan Simple Present Tense dan linking verbs yang tepat."
     - "Kosakata: memakai kata sifat deskriptif dan detail dari panca indera (sensory details)."
     - "Kelancaran: kalimat mudah dipahami dan mengalir secara logis."
   submissionType: "text"
 
 reflection:
-  - "identify the General Identification and Description parts of a descriptive text."
+  - "identify the General Statement and Description parts of a descriptive text."
   - "find linking verbs (is, are, looks, feels, smells) in a text."
   - "use descriptive adjectives and sensory details in my own writing."
   - "write a short descriptive text about a place using Simple Present Tense."
