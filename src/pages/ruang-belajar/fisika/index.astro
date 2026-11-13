@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { kelasToSlug, kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
+
+const semua = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).filter(
+  (p) => p.data.mapel === 'Fisika'
+);
+
+const KELAS_URUT: Kelas[] = ['X', 'XI', 'XII', 'TKA'];
+const kelasCards = KELAS_URUT.map((kelas) => {
+  const entries = semua.filter((p) => p.data.kelas === kelas);
+  const babCount = new Set(entries.map((p) => p.data.bab).filter(Boolean)).size;
+  return { kelas, slug: kelasToSlug(kelas), entries, babCount };
+}).filter((k) => k.entries.length > 0);
+---
+
+<BaseLayout
+  title="Fisika — Ruang Belajar"
+  description="Ruang Belajar Fisika PancaEdu -- pilih kelasmu, ikuti bab demi bab secara berurutan, lalu kerjakan latihan/tugasnya. Tersedia kapan saja."
+>
+  <section class="container pd-hero">
+    <a href="/ruang-belajar" class="small-back">&larr; Pilih Mapel</a>
+    <p class="eyebrow">🎓 Ruang Belajar</p>
+    <h1>Fisika</h1>
+    <p class="pd-hero-lede">Pilih kelasmu, lalu ikuti bab-babnya secara berurutan dari yang paling awal.</p>
+  </section>
+
+  {kelasCards.length > 0 && (
+    <section class="container pd-kelas-section">
+      <h2 class="pd-section-title">Pilih Kelas</h2>
+      <p class="pd-section-lede">Materi tersusun rapi per Bab, urut dari sesi pertama sampai terakhir.</p>
+
+      <div class="pd-kelas-grid">
+        {kelasCards.map(({ kelas, slug, entries, babCount }) => (
+          <a href={`/ruang-belajar/kelas/${slug}`} class="pd-kelas-card">
+            <div class="pd-kelas-card-tag">
+              <span class="badge">FISIKA</span>
+            </div>
+            <h3 class="pd-kelas-card-title">{kelasLabel(kelas)}</h3>
+            <p class="pd-kelas-card-desc">
+              {babCount > 0 ? `${babCount} bab` : `${entries.length} sesi`} tersusun berurutan, siap dipelajari kapan saja.
+            </p>
+            <div class="pd-kelas-card-footer">
+              <span class="pd-kelas-card-stat">{entries.length} sesi</span>
+              <span class="pd-kelas-card-cta">Lihat Bab &rarr;</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .pd-hero {
+    padding-block: 3rem 1.5rem;
+    max-width: var(--measure);
+  }
+
+  .small-back {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .pd-hero-lede {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+  }
+
+  .pd-section-title {
+    font-size: 1.375rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .pd-section-lede {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0 0 1.75rem;
+  }
+
+  .pd-kelas-section {
+    padding-block: 1rem 3rem;
+  }
+
+  .pd-kelas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pd-kelas-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pd-kelas-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+
+  .pd-kelas-card-title {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .pd-kelas-card-desc {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .pd-kelas-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pd-kelas-card-stat {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .pd-kelas-card-cta {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

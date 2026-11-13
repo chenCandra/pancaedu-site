@@ -1,39 +1,12 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { kelasToSlug, kelasLabel, type Kelas } from '../../lib/ruangBelajar';
 
 // modeDaring cuma buat nampilin catatan darurat (mis. kabut asap) --
 // kalau ada. Ruang Belajar sendiri PERMANEN, tidak digerbangi field ini.
 const modeDaring = await getEntry('modeDaring', 'index');
 const aktif = modeDaring?.data.aktif ?? false;
 const keterangan = modeDaring?.data.keterangan;
-
-// Section "Pilih Kelas" di bawah ini SENGAJA cuma Fisika -- sejak kartu
-// mapel Bahasa Inggris juga menaruh entrinya di koleksi `ruangBelajar`
-// yang sama (lihat src/content/ruang-belajar/x-bahasa-inggris-*.md),
-// grid ini harus difilter per mapel, kalau tidak Bab/sesi Bahasa Inggris
-// ikut kehitung di kartu Kelas Fisika (badge jadi "Bahasa Inggris,
-// Fisika" dkk, salah). Grouping per-mapel yang sebenarnya (buat Kelas
-// yang mapelnya lebih dari satu) sudah ditangani terpisah di
-// /ruang-belajar/kelas/[kelas].
-const semua = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).filter(
-  (p) => p.data.mapel === 'Fisika'
-);
-
-// Ruang Belajar ditata sebagai kartu per Kelas (X/XI/XII, + TKA sebagai
-// ruang belajar khusus persiapan Tes Kompetensi Akademik) -- bukan lagi
-// jadwal "hari ini" yang butuh sesi dibuka tepat pas tanggalnya (fitur
-// "belajar daring" lama). Setiap kartu Kelas cuma perlu jumlah Bab &
-// sesi buat ditampilkan di sini -- daftar lengkap urutan Bab ada di
-// halaman /ruang-belajar/kelas/[kelas].
-const KELAS_URUT: Kelas[] = ['X', 'XI', 'XII', 'TKA'];
-const kelasCards = KELAS_URUT.map((kelas) => {
-  const entries = semua.filter((p) => p.data.kelas === kelas);
-  const babCount = new Set(entries.map((p) => p.data.bab).filter(Boolean)).size;
-  const mapelList = [...new Set(entries.map((p) => p.data.mapel))].sort((a, b) => a.localeCompare(b, 'id'));
-  return { kelas, slug: kelasToSlug(kelas), entries, babCount, mapelList };
-}).filter((k) => k.entries.length > 0);
 ---
 
 <BaseLayout
@@ -65,11 +38,11 @@ const kelasCards = KELAS_URUT.map((kelas) => {
     <p class="pd-section-lede">Setiap mapel punya ruang belajarnya sendiri, tersusun rapi per Kelas.</p>
 
     <div class="pd-mapel-grid">
-      <a href="#kelas-fisika" class="pd-mapel-card">
+      <a href="/ruang-belajar/fisika" class="pd-mapel-card">
         <img src="/images/mapel-fisika-cover.png" alt="" class="pd-mapel-card-cover" loading="eager" />
         <span class="pd-mapel-card-label">
           Fisika
-          <span class="pd-mapel-card-cta">Lihat Kelas &darr;</span>
+          <span class="pd-mapel-card-cta">Lihat Kelas &rarr;</span>
         </span>
       </a>
       <a href="/bahasa-inggris" class="pd-mapel-card">
@@ -81,31 +54,6 @@ const kelasCards = KELAS_URUT.map((kelas) => {
       </a>
     </div>
   </section>
-
-  {kelasCards.length > 0 && (
-    <section class="container pd-kelas-section" id="kelas-fisika">
-      <h2 class="pd-section-title">Pilih Kelas &mdash; Fisika</h2>
-      <p class="pd-section-lede">Materi tersusun rapi per Bab, urut dari sesi pertama sampai terakhir.</p>
-
-      <div class="pd-kelas-grid">
-        {kelasCards.map(({ kelas, slug, entries, babCount, mapelList }) => (
-          <a href={`/ruang-belajar/kelas/${slug}`} class="pd-kelas-card">
-            <div class="pd-kelas-card-tag">
-              <span class="badge">{mapelList.join(', ').toUpperCase()}</span>
-            </div>
-            <h3 class="pd-kelas-card-title">{kelasLabel(kelas)}</h3>
-            <p class="pd-kelas-card-desc">
-              {babCount > 0 ? `${babCount} bab` : `${entries.length} sesi`} tersusun berurutan, siap dipelajari kapan saja.
-            </p>
-            <div class="pd-kelas-card-footer">
-              <span class="pd-kelas-card-stat">{entries.length} sesi</span>
-              <span class="pd-kelas-card-cta">Lihat Bab &rarr;</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-  )}
 </BaseLayout>
 
 <style>
@@ -216,72 +164,6 @@ const kelasCards = KELAS_URUT.map((kelas) => {
     font-size: 0.8125rem;
     font-weight: 600;
     opacity: 0.9;
-  }
-
-  .pd-kelas-section {
-    padding-block: 1rem 3rem;
-  }
-
-  .pd-kelas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1.5rem;
-  }
-
-  .pd-kelas-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding: 1.75rem;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  }
-
-  .pd-kelas-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-strong);
-  }
-
-  .pd-kelas-card-title {
-    font-size: 1.5rem;
-    margin: 0;
-  }
-
-  .pd-kelas-card-desc {
-    color: var(--ink-soft);
-    font-size: 0.9375rem;
-    margin: 0;
-    flex-grow: 1;
-  }
-
-  .pd-kelas-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-    padding-top: 0.85rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .pd-kelas-card-stat {
-    font-size: 0.8125rem;
-    color: var(--ink-soft);
-    font-weight: 500;
-  }
-
-  .pd-kelas-card-cta {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--accent);
   }
 
   .pd-panduan-link {
