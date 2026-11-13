@@ -9,7 +9,17 @@ const modeDaring = await getEntry('modeDaring', 'index');
 const aktif = modeDaring?.data.aktif ?? false;
 const keterangan = modeDaring?.data.keterangan;
 
-const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+// Section "Pilih Kelas" di bawah ini SENGAJA cuma Fisika -- sejak kartu
+// mapel Bahasa Inggris juga menaruh entrinya di koleksi `ruangBelajar`
+// yang sama (lihat src/content/ruang-belajar/x-bahasa-inggris-*.md),
+// grid ini harus difilter per mapel, kalau tidak Bab/sesi Bahasa Inggris
+// ikut kehitung di kartu Kelas Fisika (badge jadi "Bahasa Inggris,
+// Fisika" dkk, salah). Grouping per-mapel yang sebenarnya (buat Kelas
+// yang mapelnya lebih dari satu) sudah ditangani terpisah di
+// /ruang-belajar/kelas/[kelas].
+const semua = (await getCollection('ruangBelajar', ({ data }) => !data.draft)).filter(
+  (p) => p.data.mapel === 'Fisika'
+);
 
 // Ruang Belajar ditata sebagai kartu per Kelas (X/XI/XII, + TKA sebagai
 // ruang belajar khusus persiapan Tes Kompetensi Akademik) -- bukan lagi
