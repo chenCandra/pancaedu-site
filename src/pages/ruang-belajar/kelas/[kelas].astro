@@ -4,8 +4,20 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import RuangBelajarCard from '../../../components/RuangBelajarCard.astro';
 import { kelasToSlug, kelasLabel, type Kelas } from '../../../lib/ruangBelajar';
 
+// Halaman ini KHUSUS Fisika -- dijangkau hanya lewat /ruang-belajar/fisika
+// (lihat index.astro di situ). Mapel lain (mis. "Bahasa Inggris", yang juga
+// punya entri sesi di koleksi `ruangBelajar` buat keperluan lain) PUNYA
+// rute & listing sendiri-sendiri (lihat /bahasa-inggris/kelas/[kelas]) dan
+// SENGAJA difilter keluar di sini -- kalau tidak, satu laman kelas ini bisa
+// nampilin materi dari lebih dari satu mapel sekaligus karena keduanya
+// berbagi kelas yang sama (mis. Kelas X Fisika + Kelas X Bahasa Inggris).
+// String 'Fisika' DITULIS ULANG di tiap tempat (bukan const module-scope
+// yang di-closure) -- adapter Cloudflare menjalankan getStaticPaths
+// terisolasi dari sisa scope modul ini saat prerender (lihat catatan sama
+// di bahasa-inggris/kelas/[kelas].astro).
+
 export async function getStaticPaths() {
-  const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+  const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft && data.mapel === 'Fisika');
   const kelasList = (['X', 'XI', 'XII', 'TKA'] as Kelas[]).filter((k) => semua.some((p) => p.data.kelas === k));
   return kelasList.map((kelas) => ({
     params: { kelas: kelasToSlug(kelas) },
@@ -15,32 +27,28 @@ export async function getStaticPaths() {
 
 const { kelas } = Astro.props as { kelas: Kelas };
 
-const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft);
+const semua = await getCollection('ruangBelajar', ({ data }) => !data.draft && data.mapel === 'Fisika');
 
-// Dikelompokkan per Mata Pelajaran (saat ini selalu "Fisika", tapi field
-// `mapel` tetap bebas teks -- lihat content.config.ts), lalu di dalamnya
-// per Bab, urut tanggal ASCENDING (progres belajar dari sesi pertama ke
-// terakhir). Nomor Bab dihitung dari urutan MUNCUL PERTAMA KALI, sama
-// seperti babInfo di [slug].astro (lihat komentar di sana).
-const mapelGroups = [...new Set(semua.filter((p) => p.data.kelas === kelas).map((p) => p.data.mapel))]
-  .sort((a, b) => a.localeCompare(b, 'id'))
-  .map((mapel) => {
-    const entries = semua
-      .filter((p) => p.data.mapel === mapel && p.data.kelas === kelas)
-      .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
+// Dikelompokkan per Bab, urut tanggal ASCENDING (progres belajar dari sesi
+// pertama ke terakhir). Nomor Bab dihitung dari urutan MUNCUL PERTAMA KALI,
+// sama seperti babInfo di [slug].astro (lihat komentar di sana).
+const mapelGroups = ['Fisika'].map((mapel) => {
+  const entries = semua
+    .filter((p) => p.data.kelas === kelas)
+    .sort((a, b) => a.data.tanggal.valueOf() - b.data.tanggal.valueOf());
 
-    const babGroups: { nama: string; entries: typeof entries }[] = [];
-    const tanpaBab: typeof entries = [];
-    for (const entry of entries) {
-      const nama = entry.data.bab;
-      if (!nama) { tanpaBab.push(entry); continue; }
-      let grup = babGroups.find((g) => g.nama === nama);
-      if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
-      grup.entries.push(entry);
-    }
+  const babGroups: { nama: string; entries: typeof entries }[] = [];
+  const tanpaBab: typeof entries = [];
+  for (const entry of entries) {
+    const nama = entry.data.bab;
+    if (!nama) { tanpaBab.push(entry); continue; }
+    let grup = babGroups.find((g) => g.nama === nama);
+    if (!grup) { grup = { nama, entries: [] }; babGroups.push(grup); }
+    grup.entries.push(entry);
+  }
 
-    return { mapel, entries, babGroups, tanpaBab };
-  });
+  return { mapel, entries, babGroups, tanpaBab };
+}).filter((g) => g.entries.length > 0);
 ---
 
 <BaseLayout
