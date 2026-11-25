@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Kenzie</title>
+<meta name="description" content="Latihan soal pilihan ganda untuk Kenzie -- Paskibra, Matematika, Bahasa Indonesia, dan Bahasa Inggris. Langsung dikerjakan di HP, tanpa login.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/latihan/gaya.css">
+</head>
+<body>
+  <div class="bentuk-dekor" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+
+  <main class="kontainer">
+    <header class="beranda-header">
+      <p class="eyebrow">🎯 Latihan Kenzie</p>
+      <h1>Siap-siap Ujian &amp; Seleksi Paskibra!</h1>
+      <p>Isi namamu, pilih latihan di bawah, lalu kerjakan langsung di HP. Hasilnya langsung kelihatan, lengkap dengan pembahasan.</p>
+    </header>
+
+    <section class="panel-nama kartu">
+      <label for="input-nama-beranda">👤 Nama kamu</label>
+      <input type="text" id="input-nama-beranda" placeholder="Tulis namamu di sini" maxlength="60" autocomplete="name">
+    </section>
+
+    <div id="grid-latihan" aria-live="polite">
+      <p class="pesan-kosong">Memuat daftar latihan...</p>
+    </div>
+
+    <h2 class="judul-kategori">📊 Riwayat Nilai</h2>
+    <div class="riwayat-list" id="daftar-riwayat"></div>
+    <p class="pesan-kosong" id="riwayat-kosong">Belum ada riwayat latihan di perangkat ini. Yuk mulai latihan pertamamu!</p>
+    <div style="text-align:center;margin-top:0.85rem">
+      <button type="button" class="tombol-luar tombol" id="btn-hapus-riwayat" hidden style="font-size:0.8125rem;padding:0.6rem 1.25rem">🗑️ Hapus Riwayat</button>
+    </div>
+
+    <footer class="footer-beranda">
+      <p>Nama &amp; riwayat nilai tersimpan di perangkat ini saja (localStorage) -- tidak dikirim ke server mana pun.</p>
+      <a href="https://pancaedu.web.id" style="text-decoration:underline">← Kembali ke PancaEdu</a>
+    </footer>
+  </main>
+
+  <script src="/latihan/mesin.js"></script>
+  <script>
+    LatihanKenzie.mulaiBeranda();
+  </script>
+</body>
+</html>

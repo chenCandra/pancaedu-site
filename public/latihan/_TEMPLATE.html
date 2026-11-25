@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--
+  TEMPLATE LATIHAN KENZIE -- salin file ini jadi latihan baru.
+
+  CARA PAKAI (lihat juga public/latihan/CARA-MENAMBAH.md):
+  1. Salin (copy-paste) file ini dengan nama baru, pola: "<kategori>-<nomor>.html"
+     mis. "matematika-01.html", "paskibra-02.html". Gunakan huruf kecil &
+     tanda hubung saja (tanpa spasi), SAMA PERSIS dengan field "id" di bawah.
+  2. Ubah SEMUA bagian bertanda [GANTI INI] -- ada di 2 tempat yang HARUS
+     diisi SAMA PERSIS (judul, kategori, dst): blok <script type=
+     "application/json" id="latihan-meta"> (dibaca skrip build saja, JSON
+     murni, TIDAK BOLEH ada komentar di dalamnya) dan window.DATA_LATIHAN
+     (dibaca browser saat latihan dikerjakan, boleh ada komentar JS biasa).
+  3. Isi array `soal` dengan 20 soal (atau sesuaikan "jumlahSoal" di kedua
+     tempat kalau jumlahnya beda).
+  4. Jalankan `npm run build` (atau `node scripts/generate-latihan-daftar.mjs`
+     saja kalau cuma mau tes lokal cepat) -- file baru otomatis muncul di
+     daftar.json, lalu otomatis muncul di beranda /latihan/.
+  5. Hapus komentar panjang ini (boleh disisakan komentar pendek per soal
+     kalau perlu) sebelum commit, supaya file latihan final tetap ringkas.
+-->
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[GANTI INI: Judul Latihan] — Latihan Kenzie</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/latihan/gaya.css">
+
+<!--
+  Blok JSON di bawah ini WAJIB JSON murni (tanpa komentar, tanpa trailing
+  comma) -- HANYA ini yang dibaca scripts/generate-latihan-daftar.mjs saat
+  build untuk menyusun daftar.json. Field "id" HARUS SAMA PERSIS dengan
+  nama file ini (tanpa ".html").
+-->
+<script type="application/json" id="latihan-meta">
+{
+  "id": "GANTI-INI-sama-seperti-nama-file",
+  "judul": "[GANTI INI: Judul Latihan, mis. \"Paskibra — Latihan 3\"]",
+  "kategori": "[GANTI INI: mis. \"Paskibra\", \"Matematika\", \"Bahasa Indonesia\", \"Bahasa Inggris\"]",
+  "deskripsi": "[GANTI INI: satu kalimat singkat tentang isi latihan ini]",
+  "ikon": "📝",
+  "warna": "biru",
+  "jumlahSoal": 20,
+  "waktuMenit": 30
+}
+</script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // Data lengkap latihan ini -- dibaca MESIN.JS saat latihan dikerjakan
+    // di browser (field id/judul/kategori/jumlahSoal/waktuMenit di sini
+    // SEBAIKNYA sama dengan blok JSON "latihan-meta" di atas, biar tidak
+    // membingungkan, walau teknisnya hanya field di bawah ini yang benar-
+    // benar dipakai saat kuis berjalan).
+    window.DATA_LATIHAN = {
+      id: "GANTI-INI-sama-seperti-nama-file",
+      judul: "[GANTI INI: Judul Latihan]",
+      kategori: "[GANTI INI]",
+      deskripsi: "[GANTI INI]",
+      waktuMenit: 30,
+
+      // Array soal -- isi 20 butir. Tiap soal WAJIB:
+      //   teks      : pertanyaannya
+      //   opsi      : objek { A, B, C, D, E } -- lima pilihan jawaban
+      //   jawaban   : huruf kunci jawaban BENAR (mis. "C") -- huruf ini
+      //               HARUS cocok dengan salah satu key di `opsi`
+      //   topik     : nama topik/sub-bab soal ini (dipakai buat hasil
+      //               "penguasaan per topik" & "topik perlu diulang")
+      //   tingkat   : "mudah" | "sedang" | "sulit" (sekadar penanda,
+      //               belum memengaruhi nilai -- cuma supaya kamu bisa
+      //               mengecek sebaran kesulitan soal sendiri)
+      //   pembahasan: kenapa jawaban itu benar
+      //   trik      : (opsional) trik cepat buat soal sejenis
+      //   jebakan   : (opsional) kesalahan yang sering terjadi
+      //
+      // CATATAN: urutan soal & urutan opsi A-E akan DIACAK OTOMATIS oleh
+      // mesin.js setiap kali latihan dimulai -- kamu tidak perlu mengacak
+      // apa pun secara manual di sini, tulis saja apa adanya.
+      soal: [
+        {
+          teks: "[GANTI INI: tulis pertanyaan di sini]",
+          opsi: {
+            A: "[opsi A]",
+            B: "[opsi B]",
+            C: "[opsi C]",
+            D: "[opsi D]",
+            E: "[opsi E]"
+          },
+          jawaban: "A",
+          topik: "[Nama Topik]",
+          tingkat: "mudah",
+          pembahasan: "[GANTI INI: penjelasan kenapa jawaban benar]",
+          trik: "[opsional: trik cepat]",
+          jebakan: "[opsional: jebakan umum]"
+        }
+        // ...tambahkan soal lain di sini, pisahkan dengan koma...
+      ]
+    };
+  </script>
+  <script src="/latihan/mesin.js"></script>
+  <script>
+    LatihanKenzie.mulaiKuis(window.DATA_LATIHAN);
+  </script>
+</body>
+</html>

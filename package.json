@@ -8,10 +8,11 @@
   "scripts": {
     "dev": "astro dev",
     "fetch-top-viewed": "node scripts/fetch-top-viewed.mjs",
-    "build": "astro build",
+    "build": "node scripts/generate-latihan-daftar.mjs && astro build",
+    "latihan:daftar": "node scripts/generate-latihan-daftar.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && wrangler deploy",
+    "deploy": "npm run build && wrangler deploy",
     "test:duel-meriam": "node scripts/test-fisika-duel-meriam.mjs",
     "test:balap-mobil": "node scripts/test-fisika-balap-mobil.mjs",
     "test:perang-cacing": "node scripts/test-fisika-perang-cacing.mjs",

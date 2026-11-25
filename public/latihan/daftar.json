@@ -1,0 +1,57 @@
+[
+  {
+    "id": "bahasa-indonesia-00",
+    "judul": "Bahasa Indonesia — Latihan 1",
+    "kategori": "Bahasa Indonesia",
+    "deskripsi": "Materi semester ganjil Kelas X: teks laporan hasil observasi, eksposisi, anekdot, kaidah kebahasaan, dan puisi.",
+    "ikon": "📖",
+    "warna": "hijau",
+    "jumlahSoal": 20,
+    "waktuMenit": 30,
+    "path": "/latihan/bahasa-indonesia-00.html"
+  },
+  {
+    "id": "bahasa-inggris-00",
+    "judul": "Bahasa Inggris — Latihan 1",
+    "kategori": "Bahasa Inggris",
+    "deskripsi": "Materi semester ganjil Kelas X: Simple Present & Past Tense, vocabulary, ungkapan percakapan, dan struktur teks (recount, narrative, report).",
+    "ikon": "🇬🇧",
+    "warna": "ungu",
+    "jumlahSoal": 20,
+    "waktuMenit": 30,
+    "path": "/latihan/bahasa-inggris-00.html"
+  },
+  {
+    "id": "matematika-00",
+    "judul": "Matematika — Latihan 1",
+    "kategori": "Matematika",
+    "deskripsi": "Materi semester ganjil Kelas X: eksponen, barisan & deret, persamaan & fungsi kuadrat, SPLTV, dan vektor.",
+    "ikon": "📐",
+    "warna": "biru",
+    "jumlahSoal": 20,
+    "waktuMenit": 30,
+    "path": "/latihan/matematika-00.html"
+  },
+  {
+    "id": "paskibra-00",
+    "judul": "Paskibra — Latihan 1",
+    "kategori": "Paskibra",
+    "deskripsi": "Wawasan kebangsaan, sejarah proklamasi, Pancasila, UUD 1945, lambang negara, lembaga negara, dan Perpres Paskibraka.",
+    "ikon": "🇮🇩",
+    "warna": "merah",
+    "jumlahSoal": 20,
+    "waktuMenit": 30,
+    "path": "/latihan/paskibra-00.html"
+  },
+  {
+    "id": "paskibra-01",
+    "judul": "Paskibra — Latihan 2",
+    "kategori": "Paskibra",
+    "deskripsi": "Lanjutan: wawasan kebangsaan, sejarah, Pancasila, UUD 1945, lambang negara, lembaga negara, Perpres Paskibraka, dan PBB.",
+    "ikon": "🇮🇩",
+    "warna": "merah",
+    "jumlahSoal": 20,
+    "waktuMenit": 30,
+    "path": "/latihan/paskibra-01.html"
+  }
+]

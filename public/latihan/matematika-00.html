@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matematika — Latihan 1 — Latihan Kenzie</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/latihan/gaya.css">
+<script type="application/json" id="latihan-meta">
+{
+  "id": "matematika-00",
+  "judul": "Matematika — Latihan 1",
+  "kategori": "Matematika",
+  "deskripsi": "Materi semester ganjil Kelas X: eksponen, barisan & deret, persamaan & fungsi kuadrat, SPLTV, dan vektor.",
+  "ikon": "📐",
+  "warna": "biru",
+  "jumlahSoal": 20,
+  "waktuMenit": 30
+}
+</script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    window.DATA_LATIHAN = {
+      id: "matematika-00",
+      judul: "Matematika — Latihan 1",
+      kategori: "Matematika",
+      deskripsi: "Materi semester ganjil Kelas X: eksponen, barisan & deret, persamaan & fungsi kuadrat, SPLTV, dan vektor.",
+      waktuMenit: 30,
+      soal: [
+        {
+          teks: "Hasil dari 2³ × 2⁴ adalah...",
+          opsi: { A: "2⁷ = 128", B: "2¹² = 4096", C: "2¹ = 2", D: "64", E: "16" },
+          jawaban: "A",
+          topik: "Eksponen",
+          tingkat: "mudah",
+          pembahasan: "Perkalian bilangan berpangkat dengan basis sama: aᵐ × aⁿ = aᵐ⁺ⁿ. Jadi 2³ × 2⁴ = 2³⁺⁴ = 2⁷ = 128.",
+          trik: "Kalau BASIS sama dan operasinya KALI, pangkatnya dijumlahkan.",
+          jebakan: "2¹² muncul kalau pangkatnya keliru dikalikan (3×4), padahal untuk perkalian basis sama, pangkatnya dijumlahkan (3+4), bukan dikalikan."
+        },
+        {
+          teks: "Hasil dari (3²)³ adalah...",
+          opsi: { A: "3⁵ = 243", B: "3⁶ = 729", C: "3⁹ = 19683", D: "9", E: "27" },
+          jawaban: "B",
+          topik: "Eksponen",
+          tingkat: "mudah",
+          pembahasan: "Pangkat dari pangkat: (aᵐ)ⁿ = aᵐˣⁿ. Jadi (3²)³ = 3²ˣ³ = 3⁶ = 729.",
+          trik: "Kalau ada 'pangkat dari pangkat', dua pangkatnya DIKALIKAN, bukan dijumlahkan.",
+          jebakan: "3⁵ adalah jebakan karena pangkatnya dijumlahkan (2+3) -- padahal untuk pangkat berpangkat, seharusnya dikalikan (2×3)."
+        },
+        {
+          teks: "Bentuk sederhana dari a⁵ ÷ a² adalah...",
+          opsi: { A: "a³", B: "a⁷", C: "a^2.5", D: "a¹⁰", E: "a" },
+          jawaban: "A",
+          topik: "Eksponen",
+          tingkat: "mudah",
+          pembahasan: "Pembagian bilangan berpangkat dengan basis sama: aᵐ ÷ aⁿ = aᵐ⁻ⁿ. Jadi a⁵ ÷ a² = a⁵⁻² = a³.",
+          trik: "Kalau BASIS sama dan operasinya BAGI, pangkatnya dikurangkan.",
+          jebakan: "a⁷ adalah jebakan karena pangkatnya dijumlahkan (seperti aturan perkalian) -- padahal ini pembagian, jadi harus dikurangkan."
+        },
+        {
+          teks: "Nilai dari 5⁻² adalah...",
+          opsi: { A: "-25", B: "-10", C: "1/25", D: "1/10", E: "25" },
+          jawaban: "C",
+          topik: "Eksponen",
+          tingkat: "sedang",
+          pembahasan: "Pangkat negatif berarti kebalikan (invers): a⁻ⁿ = 1/aⁿ. Jadi 5⁻² = 1/5² = 1/25.",
+          trik: "Pangkat negatif TIDAK membuat hasilnya negatif -- itu artinya 'pindah ke penyebut (jadi pecahan)'.",
+          jebakan: "-25 adalah jebakan paling umum -- pangkat negatif sering disalahartikan membuat hasil akhirnya negatif, padahal maknanya beda total (jadi pecahan)."
+        },
+        {
+          teks: "Bentuk sederhana dari (2x³y²)² ÷ (4x²y) adalah...",
+          opsi: { A: "x⁴y³", B: "2x⁴y³", C: "x⁸y⁴", D: "x⁴y⁴", E: "4x⁴y³" },
+          jawaban: "A",
+          topik: "Eksponen",
+          tingkat: "sulit",
+          pembahasan: "(2x³y²)² = 4x⁶y⁴ (pangkatkan setiap faktor: 2²=4, x^(3×2)=x⁶, y^(2×2)=y⁴). Lalu 4x⁶y⁴ ÷ 4x²y = x⁶⁻²y⁴⁻¹ = x⁴y³.",
+          trik: "Kerjakan bertahap: pangkatkan dulu isi kurung sepenuhnya, baru lakukan pembagian basis per basis.",
+          jebakan: "x⁸y⁴ muncul kalau lupa membagi dengan 4x²y dan cuma menghitung (2x³y²)² saja tanpa pembagian akhirnya."
+        },
+        {
+          teks: "Diketahui barisan aritmetika: 2, 5, 8, 11, .... Suku ke-10 dari barisan tersebut adalah...",
+          opsi: { A: "23", B: "26", C: "29", D: "32", E: "35" },
+          jawaban: "C",
+          topik: "Barisan dan Deret",
+          tingkat: "mudah",
+          pembahasan: "Beda (b) = 5-2 = 3. Rumus suku ke-n: Uₙ = a + (n-1)b. U₁₀ = 2 + (10-1)×3 = 2 + 27 = 29.",
+          trik: "Hafalkan rumus Uₙ = a + (n-1)×b, lalu tinggal masukkan angkanya.",
+          jebakan: "26 muncul kalau salah hitung (n-1) jadi n, sehingga 2 + 10×3 = 32 atau variasi kesalahan serupa -- selalu pastikan pakai (n-1), bukan n."
+        },
+        {
+          teks: "Diketahui barisan geometri: 3, 6, 12, 24, .... Suku ke-7 dari barisan tersebut adalah...",
+          opsi: { A: "96", B: "128", C: "144", D: "192", E: "216" },
+          jawaban: "D",
+          topik: "Barisan dan Deret",
+          tingkat: "sedang",
+          pembahasan: "Rasio (r) = 6÷3 = 2. Rumus suku ke-n: Uₙ = a × r^(n-1). U₇ = 3 × 2⁶ = 3 × 64 = 192.",
+          trik: "Hafalkan rumus Uₙ = a × r^(n-1) untuk barisan GEOMETRI (beda rumus dengan aritmetika yang pakai perkalian, bukan penjumlahan).",
+          jebakan: "96 muncul kalau salah hitung pangkat (pakai r⁵ bukan r⁶, karena lupa (n-1))."
+        },
+        {
+          teks: "Jumlah 10 suku pertama dari barisan aritmetika 2, 5, 8, 11, ... adalah...",
+          opsi: { A: "145", B: "150", C: "155", D: "160", E: "165" },
+          jawaban: "C",
+          topik: "Barisan dan Deret",
+          tingkat: "sedang",
+          pembahasan: "a=2, b=3, n=10. Rumus jumlah n suku pertama: Sₙ = n/2 × (2a + (n-1)b) = 10/2 × (4 + 9×3) = 5 × (4+27) = 5 × 31 = 155.",
+          trik: "Pastikan urutan operasi: hitung dulu isi kurung (2a + (n-1)b) sepenuhnya, baru kalikan dengan n/2.",
+          jebakan: "145 atau 150 biasanya muncul akibat salah menghitung (n-1)b -- pastikan (10-1)×3 = 27, bukan 10×3 = 30."
+        },
+        {
+          teks: "Suatu deret geometri tak hingga memiliki suku pertama a=8 dan rasio r=1/2. Jumlah deret geometri tak hingga tersebut adalah...",
+          opsi: { A: "4", B: "8", C: "12", D: "16", E: "20" },
+          jawaban: "D",
+          topik: "Barisan dan Deret",
+          tingkat: "sulit",
+          pembahasan: "Rumus deret geometri tak hingga: S∞ = a ÷ (1-r), berlaku untuk -1 < r < 1. S∞ = 8 ÷ (1 - 1/2) = 8 ÷ 1/2 = 16.",
+          trik: "Ingat: membagi dengan 1/2 sama dengan mengalikan dengan 2.",
+          jebakan: "4 muncul kalau salah kalikan 8×(1/2) alih-alih membagi 8÷(1/2) -- perhatikan betul rumusnya adalah PEMBAGIAN."
+        },
+        {
+          teks: "Diketahui barisan aritmetika dengan suku pertama U₁=4 dan suku kelima U₅=20. Beda barisan tersebut adalah...",
+          opsi: { A: "2", B: "3", C: "4", D: "5", E: "6" },
+          jawaban: "C",
+          topik: "Barisan dan Deret",
+          tingkat: "sedang",
+          pembahasan: "U₅ = U₁ + 4b, sehingga 20 = 4 + 4b → 4b = 16 → b = 4.",
+          trik: "Dari U₁ ke U₅ ada 4 'langkah' beda (karena 5-1=4), bukan 5 langkah.",
+          jebakan: "Jika salah memakai 5 langkah (bukan 4), hasilnya jadi beda = 16/5 yang tidak bulat -- tanda bahwa jumlah langkahnya keliru."
+        },
+        {
+          teks: "Akar-akar dari persamaan kuadrat x² - 5x + 6 = 0 adalah...",
+          opsi: { A: "x=2 atau x=3", B: "x=1 atau x=6", C: "x=-2 atau x=-3", D: "x=2 atau x=-3", E: "x=-1 atau x=-6" },
+          jawaban: "A",
+          topik: "Persamaan dan Fungsi Kuadrat",
+          tingkat: "mudah",
+          pembahasan: "Faktorkan: x² - 5x + 6 = (x-2)(x-3) = 0, karena (-2)×(-3)=6 dan (-2)+(-3)=-5. Jadi x=2 atau x=3.",
+          trik: "Cari dua angka yang hasil kalinya = c (6) dan hasil jumlahnya = -b (5, lalu beri tanda minus pada keduanya karena b positif).",
+          jebakan: "Opsi dengan tanda negatif keduanya (-2,-3) adalah jebakan tanda -- perhatikan lagi bahwa (-2)+(-3)=-5 cocok untuk koefisien -5x, tapi akarnya sendiri harus x=2 dan x=3 (positif), karena x-2=0 berarti x=2."
+        },
+        {
+          teks: "Diskriminan dari persamaan kuadrat x² + 4x + 4 = 0 adalah...",
+          opsi: { A: "-16", B: "0", C: "8", D: "16", E: "32" },
+          jawaban: "B",
+          topik: "Persamaan dan Fungsi Kuadrat",
+          tingkat: "sedang",
+          pembahasan: "D = b² - 4ac = 4² - 4(1)(4) = 16 - 16 = 0. Diskriminan 0 berarti persamaan memiliki akar kembar (akar real yang sama).",
+          trik: "Diskriminan = 0 adalah ciri khas bentuk kuadrat sempurna seperti (x+2)² = 0.",
+          jebakan: "16 muncul kalau lupa mengurangkan 4ac, hanya menghitung b² saja."
+        },
+        {
+          teks: "Sumbu simetri dari grafik fungsi kuadrat y = x² - 6x + 5 adalah garis...",
+          opsi: { A: "x = -3", B: "x = -6", C: "x = 3", D: "x = 6", E: "x = 5" },
+          jawaban: "C",
+          topik: "Persamaan dan Fungsi Kuadrat",
+          tingkat: "sedang",
+          pembahasan: "Rumus sumbu simetri: x = -b/(2a) = -(-6)/(2×1) = 6/2 = 3.",
+          trik: "Perhatikan tanda minus ganda: -b berarti tanda koefisien b dibalik dulu sebelum dibagi 2a.",
+          jebakan: "x = -3 adalah jebakan tanda -- lupa membalik tanda negatif pada -b sebelum dibagi."
+        },
+        {
+          teks: "Fungsi kuadrat y = -x² + 4x + 1 memiliki nilai maksimum sebesar...",
+          opsi: { A: "1", B: "3", C: "5", D: "7", E: "9" },
+          jawaban: "C",
+          topik: "Persamaan dan Fungsi Kuadrat",
+          tingkat: "sulit",
+          pembahasan: "Titik puncak di x = -b/(2a) = -4/(2×-1) = -4/-2 = 2. Nilai y di titik itu: y = -(2)² + 4(2) + 1 = -4+8+1 = 5. Karena a=-1 (negatif), parabola terbuka ke bawah sehingga nilai puncak ini adalah nilai MAKSIMUM.",
+          trik: "Kalau koefisien a NEGATIF, titik puncak adalah nilai MAKSIMUM (parabola terbuka ke bawah, seperti gunung).",
+          jebakan: "Nilai 1 muncul kalau cuma memasukkan x=0 (konstanta saja) tanpa mencari titik puncak sesungguhnya."
+        },
+        {
+          teks: "Hasil kali akar-akar dari persamaan kuadrat x² - 7x + 12 = 0 adalah...",
+          opsi: { A: "-12", B: "-7", C: "7", D: "12", E: "19" },
+          jawaban: "D",
+          topik: "Persamaan dan Fungsi Kuadrat",
+          tingkat: "sedang",
+          pembahasan: "Untuk ax²+bx+c=0, hasil kali akar-akar = c/a. Di sini a=1, c=12, jadi hasil kali akar = 12/1 = 12.",
+          trik: "Hafalkan dua rumus sekaligus: jumlah akar = -b/a, hasil kali akar = c/a.",
+          jebakan: "7 adalah jebakan karena itu nilai JUMLAH akar (-b/a = 7), bukan hasil kali akar yang ditanyakan."
+        },
+        {
+          teks: "Metode yang BUKAN cara umum untuk menyelesaikan Sistem Persamaan Linear Tiga Variabel (SPLTV) adalah...",
+          opsi: { A: "Metode substitusi", B: "Metode eliminasi", C: "Gabungan eliminasi dan substitusi", D: "Metode determinan/matriks", E: "Menebak jawaban tanpa perhitungan" },
+          jawaban: "E",
+          topik: "SPLTV",
+          tingkat: "sedang",
+          pembahasan: "SPLTV umumnya diselesaikan dengan metode substitusi, eliminasi, gabungan keduanya, atau metode matriks/determinan -- bukan dengan menebak tanpa perhitungan sistematis.",
+          trik: "Soal ini menanyakan yang BUKAN metode -- baca soal dua kali supaya tidak terbalik memilih jawaban.",
+          jebakan: "Karena soal bertanya 'BUKAN', banyak yang tetap memilih salah satu metode yang VALID -- selalu perhatikan kata 'bukan' atau 'kecuali' di soal."
+        },
+        {
+          teks: "Diketahui sistem persamaan: x+y+z=6, x-y+z=2, dan x+y-z=0. Nilai x dari sistem tersebut adalah...",
+          opsi: { A: "0", B: "1", C: "2", D: "3", E: "4" },
+          jawaban: "B",
+          topik: "SPLTV",
+          tingkat: "sulit",
+          pembahasan: "Dari (x+y+z) - (x+y-z) = 6-0, diperoleh 2z=6 sehingga z=3. Dari (x+y+z) - (x-y+z) = 6-2, diperoleh 2y=4 sehingga y=2. Substitusi ke persamaan pertama: x+2+3=6, sehingga x=1.",
+          trik: "Kurangkan dua persamaan yang mirip untuk langsung menghilangkan satu/dua variabel sekaligus -- cara ini lebih cepat daripada substitusi berantai.",
+          jebakan: "x=3 adalah jebakan karena tertukar dengan nilai z yang menjadi langkah antara dalam perhitungan -- pastikan membaca variabel yang benar-benar ditanyakan."
+        },
+        {
+          teks: "Masih dari sistem persamaan: x+y+z=6, x-y+z=2, dan x+y-z=0 (dengan hasil x=1, y=2, z=3), nilai dari 2x + y - z adalah...",
+          opsi: { A: "-1", B: "0", C: "1", D: "2", E: "3" },
+          jawaban: "C",
+          topik: "SPLTV",
+          tingkat: "sedang",
+          pembahasan: "2x + y - z = 2(1) + 2 - 3 = 2 + 2 - 3 = 1.",
+          trik: "Setelah ketemu x, y, z, soal lanjutan biasanya tinggal substitusi -- kerjakan operasi hitung dengan hati-hati sesuai urutan (kali dulu, baru tambah/kurang).",
+          jebakan: "0 muncul kalau salah urutan operasi, misalnya menghitung 2(1+2-3) alih-alih 2(1)+2-3."
+        },
+        {
+          teks: "Diketahui vektor a=(2,3) dan vektor b=(-1,4). Hasil dari a+b adalah...",
+          opsi: { A: "(1,7)", B: "(1,-1)", C: "(3,-1)", D: "(-2,12)", E: "(1,1)" },
+          jawaban: "A",
+          topik: "Vektor",
+          tingkat: "mudah",
+          pembahasan: "Penjumlahan vektor dilakukan komponen per komponen: a+b = (2+(-1), 3+4) = (1, 7).",
+          trik: "Jumlahkan komponen x dengan x, dan komponen y dengan y -- jangan pernah dicampur silang.",
+          jebakan: "(3,-1) muncul kalau komponennya malah dikurangkan, padahal operasinya penjumlahan."
+        },
+        {
+          teks: "Panjang (besar) dari vektor a=(3,4) adalah...",
+          opsi: { A: "3", B: "4", C: "5", D: "7", E: "25" },
+          jawaban: "C",
+          topik: "Vektor",
+          tingkat: "sedang",
+          pembahasan: "Panjang vektor dihitung dengan rumus |a| = √(x² + y²) = √(3² + 4²) = √(9+16) = √25 = 5.",
+          trik: "Pola (3,4,5) adalah 'tripel Pythagoras' paling umum -- begitu lihat komponen 3 dan 4, langsung ingat hasilnya 5.",
+          jebakan: "25 adalah jebakan karena lupa menarik akar di langkah terakhir -- 25 itu hasil DI DALAM akar, bukan jawaban akhirnya."
+        }
+      ]
+    };
+  </script>
+  <script src="/latihan/mesin.js"></script>
+  <script>
+    LatihanKenzie.mulaiKuis(window.DATA_LATIHAN);
+  </script>
+</body>
+</html>
