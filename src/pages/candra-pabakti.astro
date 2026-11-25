@@ -92,6 +92,44 @@ const jsonLd = {
       <p>{bioClosing}</p>
     </div>
 
+    {/*
+      Kartu rekomendasi TataKarya (VALID) -- ditambahkan 2026-11-26 atas
+      permintaan user. SENGAJA hardcode di sini (bukan field CMS
+      profilPabakti), karena ini satu kartu khusus terkait latar belakang
+      pribadi penulis sebagai mantan operator Dapodik, bukan prosa bio
+      umum. Link masih PLACEHOLDER -- ganti dengan kode referral asli dari
+      teman penulis (lihat obrolan WhatsApp yang jadi pemicu fitur ini)
+      sebelum publish ke production.
+    */}
+    <section class="rekomendasi-tools" data-reveal>
+      <div class="rekomendasi-card card">
+        <p class="eyebrow">🗂️ Pengalaman Lain</p>
+        <h2>Pernah Jadi Operator Dapodik</h2>
+        <p>
+          Sebelum fokus mengajar Fisika, saya juga pernah ikut Satuan Tugas (Satgas) Data
+          Pendidikan Provinsi Jambi sebagai operator Dapodik. Dari situ saya tahu betul betapa
+          repotnya verifikasi data Dapodik kalau masih dikerjakan manual satu per satu.
+        </p>
+        <p>
+          Karena itu saya merekomendasikan <strong>VALID</strong> dari
+          <a href="https://tatakarya.id/valid/" target="_blank" rel="noopener noreferrer">TataKarya</a>
+          — aplikasi yang membantu sekolah memverifikasi data Dapodik langsung oleh siswa, jadi operator
+          tidak perlu kerja sendirian lagi.
+        </p>
+        <a
+          class="btn btn-primary"
+          href="https://tatakarya.id/valid/?ref=GANTI_KODE_REFERRAL"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Lihat VALID dari TataKarya →
+        </a>
+        <p class="rekomendasi-disclosure">
+          Tautan rekomendasi -- saya mendapat komisi jika sekolah Anda berlangganan lewat tautan ini.
+        </p>
+      </div>
+    </section>
+
     <section class="works" data-reveal>
       <p class="eyebrow">Yang saya bangun di PancaEdu</p>
       <div class="works-grid">
@@ -175,6 +213,39 @@ const jsonLd = {
 
   .bio {
     max-width: var(--measure);
+  }
+
+  .rekomendasi-tools {
+    margin-top: 2.5rem;
+    max-width: var(--measure);
+  }
+
+  .rekomendasi-card {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .rekomendasi-card h2 {
+    margin: 0.35rem 0 0.75rem;
+    font-size: 1.1875rem;
+  }
+
+  .rekomendasi-card p {
+    color: var(--ink-soft);
+    margin: 0 0 0.85rem;
+  }
+
+  .rekomendasi-card p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .rekomendasi-card .btn {
+    margin-top: 0.25rem;
+  }
+
+  .rekomendasi-disclosure {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+    margin-top: 0.75rem !important;
   }
 
   .works {
