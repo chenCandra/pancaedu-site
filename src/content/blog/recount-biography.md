@@ -175,7 +175,7 @@ kuis:
     penjelasan: "1995 - 1974 = 21 -- menggabungkan informasi dari dua teks model untuk menghitung selisih tahun."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Recount: Biography'. Semua aktivitas dikerjakan langsung di browser; garis waktu, ceklis refleksi, dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

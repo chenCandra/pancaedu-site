@@ -203,7 +203,7 @@ kuis:
     penjelasan: "92 - 88 = 4 -- latihan numerasi sederhana: mengurangkan dua skor untuk menemukan selisihnya."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Congratulating & Complimenting'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

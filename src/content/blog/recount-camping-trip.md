@@ -28,6 +28,12 @@ vocabulary:
   - word: "unforgettable"
     maknaId: "tak terlupakan -- sesuatu yang membekas kuat di ingatan"
     example: "That trip became one of my most unforgettable memories."
+  - word: "supplies"
+    maknaId: "perbekalan -- barang/bahan yang disiapkan untuk suatu kegiatan"
+    example: "The school prepared enough food supplies for three days."
+  - word: "distance"
+    maknaId: "jarak"
+    example: "The campsite is located roughly 120 kilometers from our school."
 
 modelTexts:
   - title: "My Unforgettable Camping Trip"
@@ -42,6 +48,14 @@ modelTexts:
       - text: "unforgettable"
         note: "Tak terlupakan -- kesan yang bertahan lama di ingatan."
     grammarTerms: ["went", "was", "arrived", "set up", "took", "collected", "prepared", "woke up", "hiked", "reached", "took", "ate", "organized", "sang", "told", "roasted", "packed", "cleaned", "said", "became"]
+  - title: "Camping Trip by the Numbers"
+    body: "Our camping trip involved 90 students from three classes, divided into 15 small groups of 6 students each. We traveled by bus for about 3 hours to reach the campsite, which is located roughly 120 kilometers from our school. Each group was given one large tent and enough food supplies for three days. Looking back, it took a lot of planning just to make sure 90 students could camp safely together for three days."
+    annotations:
+      - text: "supplies"
+        note: "Perbekalan makanan yang disiapkan untuk tiga hari."
+      - text: "distance"
+        note: "Jarak lokasi kemah dari sekolah, sekitar 120 kilometer."
+    grammarTerms: ["involved", "traveled", "is located", "was given", "took"]
 
 activities:
   - type: "timeline"
@@ -91,6 +105,7 @@ reflection:
   - "use Simple Past Tense correctly when telling a personal story."
   - "use time connectors (first, after that, then, finally) to order events."
   - "write a short personal recount about a memorable experience."
+  - "calculate simple numbers (division, average speed) from logistics data in an English text."
 
 kuis:
   - soal: "What is the main difference between a personal recount and a biography (factual recount)?"
@@ -125,9 +140,25 @@ kuis:
       - "A step-by-step instruction for other readers"
     jawaban: 1
     penjelasan: "Reorientation biasanya berisi kesan atau perasaan penulis tentang pengalaman itu, seperti kalimat penutup 'that trip became one of the most unforgettable experiences...'"
+  - soal: "According to 'Camping Trip by the Numbers', 90 students were divided into groups of 6. How many groups were there?"
+    pilihan:
+      - "9 groups"
+      - "15 groups"
+      - "18 groups"
+      - "45 groups"
+    jawaban: 1
+    penjelasan: "90 / 6 = 15 -- latihan numerasi sederhana: membagi jumlah siswa dengan jumlah per kelompok."
+  - soal: "The campsite is about 120 kilometers away, and the bus ride takes about 3 hours. Roughly what was the bus's average speed?"
+    pilihan:
+      - "20 km/h"
+      - "40 km/h"
+      - "60 km/h"
+      - "90 km/h"
+    jawaban: 1
+    penjelasan: "120 km / 3 jam = 40 km/jam -- latihan numerasi menghitung kecepatan rata-rata dari jarak dan waktu."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas XI, lalu memilih sesi Bahasa Inggris 'Recount: My Unforgettable Camping Trip'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

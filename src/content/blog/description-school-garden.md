@@ -28,6 +28,12 @@ vocabulary:
   - word: "well-maintained"
     maknaId: "terawat dengan baik -- dijaga dan dirawat secara rutin sehingga tetap rapi dan sehat"
     example: "The garden looks well-maintained because the gardening club waters it every day."
+  - word: "member"
+    maknaId: "anggota"
+    example: "The gardening club has 12 active members."
+  - word: "area"
+    maknaId: "luas/area -- ukuran permukaan suatu tempat"
+    example: "The garden covers an area of about 150 square meters."
 
 modelTexts:
   - title: "Our School Garden"
@@ -42,6 +48,14 @@ modelTexts:
       - text: "well-maintained"
         note: "Terawat baik -- hasil perawatan rutin dari klub berkebun."
     grammarTerms: ["is", "has", "grow", "are", "looks", "takes", "can hear", "feel", "is covered", "makes"]
+  - title: "The Gardening Club by the Numbers"
+    body: "The gardening club that maintains the school garden has 12 active members from different classes. They planted more than 30 different kinds of flowers and plants, including roses, marigolds, and jasmine. The garden covers an area of about 150 square meters -- roughly the size of six classrooms put together. Club members work in the garden three times a week, usually for 30 minutes each session, which adds up to about 90 minutes of gardening every week. Thanks to their regular care, the garden has stayed healthy and colorful for more than two years."
+    annotations:
+      - text: "member"
+        note: "Anggota klub -- di sini totalnya 12 orang."
+      - text: "area"
+        note: "Luas taman, dibandingkan dengan ukuran enam ruang kelas."
+    grammarTerms: ["has", "planted", "covers", "work", "adds up", "has stayed"]
 
 activities:
   - type: "structuresorter"
@@ -91,6 +105,7 @@ reflection:
   - "find linking verbs (is, are, looks, feels, smells) in a text."
   - "use descriptive adjectives and sensory details in my own writing."
   - "write a short descriptive text about a place using Simple Present Tense."
+  - "calculate simple totals (e.g., minutes per week) from numbers mentioned in an English text."
 
 kuis:
   - soal: "What is the main purpose of a descriptive text?"
@@ -125,9 +140,25 @@ kuis:
       - "The reader's memory of historical dates"
     jawaban: 1
     penjelasan: "Teks deskripsi yang baik melibatkan panca indera pembaca -- apa yang terlihat, terdengar, tercium, atau terasa -- supaya gambarannya terasa hidup."
+  - soal: "According to 'The Gardening Club by the Numbers', how many members does the gardening club have?"
+    pilihan:
+      - "6"
+      - "12"
+      - "30"
+      - "150"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: 'The gardening club that maintains the school garden has 12 active members.'"
+  - soal: "Club members work in the garden 3 times a week, for 30 minutes each time. How many minutes do they spend gardening per week in total?"
+    pilihan:
+      - "60 minutes"
+      - "90 minutes"
+      - "120 minutes"
+      - "150 minutes"
+    jawaban: 1
+    penjelasan: "3 x 30 menit = 90 menit -- latihan numerasi sederhana: perkalian untuk menghitung total waktu."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas XI, lalu memilih sesi Bahasa Inggris 'Description: Our School Garden'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

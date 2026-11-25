@@ -261,7 +261,7 @@ kuis:
     penjelasan: "90 - 60 = 30 menit -- latihan numerasi sederhana membandingkan dua durasi."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Opening & Closing Conversation'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

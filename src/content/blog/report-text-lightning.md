@@ -49,7 +49,7 @@ modelTexts:
         note: "Partikel -- butiran sangat kecil, di sini maksudnya es dan air di dalam awan."
     grammarTerms: ["is", "happens", "forms", "creates", "becomes", "releases", "travels", "heats", "causes", "produces"]
   - title: "Lightning by the Numbers"
-    body: "Lightning might look random, but scientists have measured it closely using satellites and ground sensors. Scientists estimate that lightning strikes the Earth about 44 times every second <!-- CEK FAKTA -->. That works out to roughly 3.8 million lightning flashes every single day around the world. Most of this lightning happens over land near the equator, in places with warm, humid air -- including countries like Indonesia. Indonesia is actually one of the places with the highest lightning activity on the planet, especially during the rainy season. Even though lightning is extremely common, the chance of one particular person being struck is still very small -- but the numbers remind us just how active our planet's atmosphere really is."
+    body: "Lightning might look random, but scientists have measured it closely using satellites and ground sensors. Scientists estimate that lightning strikes the Earth about 44 times every second. That works out to roughly 3.8 million lightning flashes every single day around the world. Most of this lightning happens over land near the equator, in places with warm, humid air -- including countries like Indonesia. Indonesia is actually one of the places with the highest lightning activity on the planet, especially during the rainy season. Even though lightning is extremely common, the chance of one particular person being struck is still very small -- but the numbers remind us just how active our planet's atmosphere really is."
     annotations:
       - text: "estimate"
         note: "Memperkirakan -- angka ini bukan hitungan pasti, melainkan perkiraan ilmiah."
@@ -176,7 +176,7 @@ kuis:
     penjelasan: "44 x 60 detik = 2.640 -- latihan numerasi sederhana: mengalikan laju per detik dengan jumlah detik dalam semenit."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Report Text: Lightning'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

@@ -153,7 +153,7 @@ kuis:
     penjelasan: "Kata 'the best' adalah penilaian subjektif yang tidak bisa diukur secara objektif -- ini opini, bukan fakta."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas XII, lalu memilih sesi Bahasa Inggris 'News Item: Plastic-Free Canteen Policy'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

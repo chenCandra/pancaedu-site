@@ -28,6 +28,12 @@ vocabulary:
   - word: "reconnect"
     maknaId: "terhubung kembali -- memulihkan hubungan yang sempat renggang"
     example: "The two friends decided to reconnect over a simple cup of tea."
+  - word: "screen time"
+    maknaId: "waktu layar -- total waktu yang dihabiskan menatap layar HP/gawai"
+    example: "Rani's screen time dropped after she made the phone-free agreement."
+  - word: "reduction"
+    maknaId: "pengurangan"
+    example: "A reduction of two hours a day adds up over a week."
 
 modelTexts:
   - title: "Screens Between Friends"
@@ -44,6 +50,14 @@ modelTexts:
       - text: "Dinda felt hurt and ignored"
         note: "Evaluation -- bagian cerita yang menunjukkan perasaan tokoh tentang masalah yang terjadi, sebelum masuk ke penyelesaian (Resolution)."
     grammarTerms: ["had been", "did", "got", "was", "started", "waited", "said", "felt", "realized", "visited", "smiled", "talked", "agreed"]
+  - title: "Phone Use by the Numbers"
+    body: "Before Rani and Dinda made up, Rani was spending almost 5 hours a day on her phone, and more than half of that time -- about 3 hours -- was spent on social media apps alone. After their 'phone-free hour' agreement, Rani started tracking her screen time and noticed it dropped to about 3 hours a day within a month. That is a reduction of 2 hours daily, or roughly 14 hours saved every week -- time she could now spend with real friends, studying, or simply resting."
+    annotations:
+      - text: "screen time"
+        note: "Total waktu menatap layar HP dalam sehari, mulai dilacak Rani setelah kesepakatan 'phone-free hour'."
+      - text: "reduction"
+        note: "Pengurangan waktu layar dari 5 jam menjadi 3 jam sehari."
+    grammarTerms: ["was spending", "was spent", "started", "noticed", "dropped", "could spend"]
 
 activities:
   - type: "sequencing"
@@ -102,6 +116,7 @@ reflection:
   - "recognize direct speech (dialogue) in a story and how it is punctuated."
   - "use Simple Past Tense correctly when telling a story."
   - "write a short original narrative about a problem between friends."
+  - "convert a daily time difference into a weekly total (simple multiplication) from an English text."
 
 kuis:
   - soal: "What is the Complication in the story 'Screens Between Friends'?"
@@ -144,9 +159,25 @@ kuis:
       - "Apologizing with a cake always fixes every problem"
     jawaban: 1
     penjelasan: "Pesan moral cerita ini: persahabatan sejati butuh perhatian nyata, bukan sekadar 'terhubung' secara digital -- ditunjukkan lewat kesadaran Rani dan kesepakatan 'phone-free hour' mereka."
+  - soal: "According to 'Phone Use by the Numbers', how many hours a day was Rani spending on her phone BEFORE the phone-free hour agreement?"
+    pilihan:
+      - "3 hours"
+      - "5 hours"
+      - "7 hours"
+      - "14 hours"
+    jawaban: 1
+    penjelasan: "Teks menyebutkan: 'Rani was spending almost 5 hours a day on her phone' sebelum kesepakatan itu."
+  - soal: "Rani's screen time dropped from 5 hours to 3 hours a day. How many hours per WEEK did she save?"
+    pilihan:
+      - "7 hours"
+      - "14 hours"
+      - "21 hours"
+      - "28 hours"
+    jawaban: 1
+    penjelasan: "Pengurangan 2 jam/hari x 7 hari = 14 jam/minggu -- latihan numerasi mengubah selisih harian jadi total mingguan."
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas XI, lalu memilih sesi Bahasa Inggris 'Narrative: Screens Between Friends'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

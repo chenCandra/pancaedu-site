@@ -11,7 +11,7 @@ draft: false
 elemen: ["Membaca-Memirsa", "Menulis-Mempresentasikan"]
 profilLulusan: ["Komunikasi", "Kreativitas", "Kewargaan"]
 fokusKebahasaan: ["Simple Past Tense", "Time Connectors", "Action Verbs", "Narrative Structure"]
-konteksTema: "Indonesia punya ratusan legenda yang diturunkan dari generasi ke generasi -- dari Sangkuriang, Roro Jonggrang, sampai cerita rakyat daerahmu sendiri. Setiap legenda biasanya punya pesan moral penting di baliknya. Yuk pelajari struktur cerita legenda (Orientation-Complication-Resolution) lewat kisah Malin Kundang, lalu coba ceritakan ulang legenda favoritmu sendiri dalam bahasa Inggris!"
+konteksTema: "Indonesia punya ratusan legenda yang diturunkan dari generasi ke generasi -- dari Sangkuriang, Roro Jonggrang, sampai cerita rakyat daerahmu sendiri. Setiap legenda biasanya punya pesan moral penting di baliknya. Yuk pelajari struktur cerita legenda (Orientation-Complication-Evaluation-Resolution) lewat kisah Malin Kundang, lalu coba ceritakan ulang legenda favoritmu sendiri dalam bahasa Inggris!"
 urutan: 5
 estimasiMenit: 90
 
@@ -57,7 +57,7 @@ modelTexts:
         note: "Evaluation -- bagian cerita yang menunjukkan perasaan tokoh tentang masalah yang terjadi, sebelum masuk ke penyelesaian (Resolution)."
     grammarTerms: ["lived", "decided", "sailed", "became", "arrived", "pushed", "denied", "cursed", "hit", "turned"]
   - title: "Fun Facts: The Real Malin Kundang Rock"
-    body: "Many Indonesians believe the Malin Kundang legend is connected to a real rock formation at Air Manis Beach in Padang, West Sumatra. The rocks are said to look like a kneeling man, broken pieces of a ship, and even a dog -- shapes that match characters and objects from the story. The beach is located roughly 15 kilometers from the center of Padang city <!-- CEK FAKTA -->, making it a popular stop for tourists who want to see the legend 'in real life'. Thousands of tourists visit Air Manis Beach every year, not just to see the rock formation, but also to enjoy the sunset view across the Indian Ocean."
+    body: "Many Indonesians believe the Malin Kundang legend is connected to a real rock formation at Air Manis Beach in Padang, West Sumatra. The rocks are said to look like a kneeling man, broken pieces of a ship, and even a dog -- shapes that match characters and objects from the story. The beach is located roughly 10 kilometers from the center of Padang city, making it a popular stop for tourists who want to see the legend 'in real life'. Thousands of tourists visit Air Manis Beach every year, not just to see the rock formation, but also to enjoy the sunset view across the Indian Ocean."
     annotations:
       - text: "rock formation"
         note: "Bentukan batu di Pantai Air Manis yang dipercaya sebagai jelmaan Malin Kundang."
@@ -166,14 +166,14 @@ kuis:
   - soal: "According to 'Fun Facts: The Real Malin Kundang Rock', roughly how far is Air Manis Beach from the center of Padang city?"
     pilihan:
       - "About 5 kilometers"
-      - "About 15 kilometers"
+      - "About 10 kilometers"
       - "About 50 kilometers"
       - "About 150 kilometers"
     jawaban: 1
-    penjelasan: "Teks menyebutkan: 'The beach is located roughly 15 kilometers from the center of Padang city.'"
+    penjelasan: "Teks menyebutkan: 'The beach is located roughly 10 kilometers from the center of Padang city.'"
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas X, lalu memilih sesi Bahasa Inggris 'Narrative: Indonesian Legends'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**

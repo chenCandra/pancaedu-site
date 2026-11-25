@@ -129,7 +129,7 @@ kuis:
     penjelasan: "Teks menyebutkan: 'Many scholarships, online courses, and international exchange programs require a good level of English... companies increasingly look for employees who can communicate in English.'"
 
 aksesRuangBelajar: "Siswa membuka pancaedu.web.id/ruang-belajar, memilih Kelas XII, lalu memilih sesi Bahasa Inggris 'Exposition: The Importance of Learning English in the Digital Age'. Semua aktivitas dikerjakan langsung di browser; hasil ceklis refleksi dan draf tugas tersimpan otomatis di perangkat masing-masing siswa."
-reviewStatus: "draft"
+reviewStatus: "reviewed"
 ---
 
 **Think about it:**
